@@ -42,7 +42,13 @@ class LogFoodUseCase {
 
 ## Dependency injection
 
-`GetIt.instance` is aliased as `G` (`lib/app/core/di/dependencies.dart`). Register dependencies in `setupDependencies()`, called once from `main()`. Resolve with `G<Type>()`. Currently only `AppCubit` is registered.
+`GetIt.instance` is aliased as `G` (`lib/app/core/di/dependencies.dart`). Register dependencies in `setupDependencies()`, called once from `bootstrap()`. Resolve with `G<Type>()`.
+
+## Local storage
+
+`hive_ce` (+ `hive_ce_flutter` for `Hive.initFlutter()`) for anything that must survive an app restart but doesn't belong in Supabase (device-local preferences, not user data). Boxes are per-feature, not one shared box: `bootstrap()` opens a `settings` `Box<dynamic>` and passes it into `setupDependencies({required Box<dynamic> settingsBox})` since opening a box is async and DI registration isn't; each is registered in GetIt with an `instanceName` (`settingsBoxInstanceName`) so multiple `Box<dynamic>` instances don't collide. `data/settings/settings_local_datasource.dart`'s `SettingsLocalDataSource` is the first local datasource — same shape as a feature's Supabase datasource (concrete class, no interface), storing `locale`/`themeMode` as plain strings (no `TypeAdapter`/`build_runner` needed for primitives). `AppCubit` reads its initial state from it synchronously at construction and writes through on every change. The next feature that needs local-only storage (e.g. onboarding-seen, unit system) opens its own named box in `bootstrap()` and gets its own `data/<feature>/<feature>_local_datasource.dart` — don't add more state to `SettingsLocalDataSource`/the `settings` box unless it's genuinely a settings-page preference.
+
+Tests open a real Hive box against a temp directory (`Hive.init(tempDir.path)`, no platform channels needed) rather than mocking the box — see `test/app/data/settings/settings_local_datasource_test.dart` and `test/widget_test.dart`.
 
 ## State management
 
@@ -62,7 +68,7 @@ Routes are never referenced by raw path string outside of `app_router.dart`. `Ap
 
 ## App-level state
 
-`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. The choice is in-memory only — it resets on app restart until local persistence is added.
+`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. Persisted via `AppLocalDataSource` (see Local storage) — survives app restart.
 
 ## Internationalization
 
@@ -80,8 +86,8 @@ Standard Flutter `gen-l10n` (not a custom solution). ARB files live in `lib/l10n
 
 Mirrors `lib/`. No `late` variables — build dependencies inline or through factories.
 
-- `test/mocks/`: one file per layer (`repositories_mocks.dart`, `use_cases_mocks.dart`, ...), each a one-line `class MockX extends Mock implements X {}` — not created yet, add once a repository/use case exists.
-- `test/factories/`: builders with sensible defaults and named-optional overrides. Entity factories live in `test/factories/entities/`; use case and cubit factories in `test/factories/use_cases_factories.dart` / `cubits_factories.dart` — only add a cubit factory once the cubit takes constructor dependencies worth defaulting (`AppCubit` doesn't, so it's built inline in its test).
+- `test/mocks/`: one file per layer (`repositories_mocks.dart`, `use_cases_mocks.dart`, `datasources_mocks.dart`, ...), each a one-line `class MockX extends Mock implements X {}`.
+- `test/factories/`: builders with sensible defaults and named-optional overrides. Entity factories live in `test/factories/entities/`; use case and cubit factories in `test/factories/use_cases_factories.dart` / `cubits_factories.dart` — only add a cubit factory once the cubit takes constructor dependencies worth defaulting.
 - Cubits: `bloc_test`'s `blocTest`, building the cubit (and any mocks it needs) inside `build:`.
 
 ## Growing this file

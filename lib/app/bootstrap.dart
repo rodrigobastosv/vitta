@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/env/env.dart';
@@ -11,5 +12,7 @@ Future<void> bootstrap() async {
   if (Supabase.instance.client.auth.currentSession == null) {
     await Supabase.instance.client.auth.signInAnonymously();
   }
-  setupDependencies();
+  await Hive.initFlutter();
+  final settingsBox = await Hive.openBox<dynamic>('settings');
+  setupDependencies(settingsBox: settingsBox);
 }

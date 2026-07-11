@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/main.dart';
 
 void main() {
-  setUpAll(setupDependencies);
+  setUpAll(() async {
+    final tempDir = await Directory.systemTemp.createTemp('vitta_test_hive');
+    Hive.init(tempDir.path);
+    final settingsBox = await Hive.openBox<dynamic>('settings_test');
+    setupDependencies(settingsBox: settingsBox);
+  });
 
   testWidgets('renders the home page with its feature tiles and a settings action', (tester) async {
     await tester.pumpWidget(const VittaApp());
