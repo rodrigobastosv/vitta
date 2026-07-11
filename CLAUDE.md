@@ -1,6 +1,18 @@
 # Vitta
 
-Lifestyle companion app: diet and workout tracking. Flutter, SDK ^3.10.7. No backend/data source chosen yet — currently a scaffold + design system with placeholder feature pages.
+Lifestyle companion app: diet and workout tracking. Flutter, SDK ^3.10.7.
+
+## Backend
+
+Supabase (Postgres). Chosen over Firebase because the diet domain is inherently relational — a day's macro totals are a `SUM()`/`GROUP BY` over `food_logs` joined to `foods`, which Postgres does natively; Firestore would push that aggregation into the client. `supabase_flutter` talks to it directly from the app (no custom backend server).
+
+- `supabase/schema.sql`: source of truth for the `foods` and `food_logs` tables, run manually in the Supabase SQL editor (no migration tooling yet). Both tables have row-level security scoped to `auth.uid()`, so each user only ever sees their own rows.
+- Auth is anonymous (`signInAnonymously`, wired in `main.dart`) so RLS has a stable `user_id` without building a login UI yet. Swapping in real accounts later means adding email/OAuth sign-in on top of the same anonymous-session-per-device bootstrap — existing anonymous data can be linked via Supabase's `linkIdentity`.
+- Credentials live in a gitignored `.env` (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`), loaded via `flutter_dotenv` and read through `lib/app/core/env/env.dart`. Copy `.env.example` to `.env` and fill in a real project's values — the placeholder committed values won't connect to anything.
+
+## Food data
+
+No proprietary food database. Foods are sourced from the [Open Food Facts](https://world.openfoodfacts.org) public API at search time (`OpenFoodFactsDataSource`, `lib/app/data/diet/datasources/`) rather than mirrored locally — the full OFF export is several GB and would dwarf Supabase's free-tier storage. A search result is only persisted (into the user's own `foods` row) once they actually log it; `LogFoodUseCase` does the save-then-log in one step for any `Food` without an `id`. Users can also add a fully custom food (name + macros per 100g) through the same flow — see `CustomFoodSheet`. There is deliberately no shared/global food catalog yet: every user's `foods` table is scoped to them by RLS, so the same product gets re-imported per user rather than deduplicated across accounts.
 
 ## Architecture
 
@@ -8,22 +20,22 @@ Clean Architecture, without repository/datasource interfaces and without a separ
 
 ```
 lib/app/
-  core/            DI (get_it), navigation extensions — grows as features need networking/error handling/logging
-  data/<feature>/   Repository (concrete class), datasources/, datasources/requests/ — not created yet
-  domain/<feature>/ Entities, use cases (plain classes with a `call` method) — not created yet
+  core/            DI (get_it), navigation extensions, error (Result/VTError), http, env
+  data/<feature>/   Repository (concrete class), datasources/, datasources/requests/
+  domain/<feature>/ Entities, use cases (plain classes with a `call` method)
   design_system/    VT-prefixed tokens, themes and components
   presentation/     Pages (Cubit + VTPage), routing
 ```
 
-`data/`/`domain/` don't exist yet — no feature has a concrete data source. When the diet feature's data source is chosen (a public nutrition API vs. local persistence), add `core/error` (`Result`/`VTError`), `core/http` (if remote) or a local persistence layer, and `core/logging`, following the same shape as this project's sibling `dofus_buddy` (see its CLAUDE.md for the exact pattern: `DBHttpRequest`/`DBHttpClient`/`Result<F, S>`). Entities should double as the wire format (`@JsonSerializable` directly on the entity, generated via `build_runner`) rather than introducing a separate model layer — only add one if a feature's wire format and domain shape genuinely diverge.
+`data/diet/` and `domain/diet/` are the first feature built out this way, composing two datasources behind one `DietRepository`: `SupabaseDietDataSource` (persistence) and `OpenFoodFactsDataSource` (remote search, via `core/http`'s `VTHttpClient`). Entities double as the wire format for Supabase rows (plain `fromRow`/`toJson`-shaped mapping in the datasource, no `@JsonSerializable`/`build_runner` — Supabase's client already returns decoded maps, so generated (de)serialization would just add ceremony). Follow this same shape for the next feature (workout): one repository per feature composing whatever datasources it needs, entities mapped by hand in the datasource.
 
-A domain use case will depend directly on the concrete repository class from `data/`, e.g.:
+A domain use case depends directly on the concrete repository class from `data/`, e.g.:
 
 ```dart
-class LogMealUseCase {
-  LogMealUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
+class LogFoodUseCase {
+  LogFoodUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
   final DietRepository _dietRepository;
-  Future<Result<VTError, Meal>> call({required Meal meal}) => _dietRepository.logMeal(meal: meal);
+  Future<Result<VTError, FoodLog>> call({required Food food, ...}) => _dietRepository.logFood(...);
 }
 ```
 

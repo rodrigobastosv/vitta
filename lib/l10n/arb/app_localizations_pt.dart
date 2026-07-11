@@ -61,4 +61,97 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get workoutComingSoonMessage => 'O acompanhamento de treino está a caminho.';
+
+  @override
+  String get retry => 'Tentar novamente';
+
+  @override
+  String dietCaloriesLabel(int calories) {
+    return '$calories kcal hoje';
+  }
+
+  @override
+  String get dietProteinLabel => 'Proteína';
+
+  @override
+  String get dietCarbsLabel => 'Carboidratos';
+
+  @override
+  String get dietFatLabel => 'Gordura';
+
+  @override
+  String dietLogSubtitle(int grams, int calories) {
+    return '$grams g - $calories kcal';
+  }
+
+  @override
+  String get dietDeleteLogTooltip => 'Remover';
+
+  @override
+  String get dietEmptyTitle => 'Nada registrado ainda';
+
+  @override
+  String get dietEmptyMessage => 'Toque no botão + para adicionar o primeiro alimento do dia.';
+
+  @override
+  String get dietInvalidQuantity => 'Informe uma quantidade maior que zero.';
+
+  @override
+  String get dietQuantityGramsLabel => 'Quantidade (g)';
+
+  @override
+  String get dietLogFoodAction => 'Adicionar ao dia';
+
+  @override
+  String get dietInvalidCustomFood => 'Preencha o nome e todos os macros com números válidos.';
+
+  @override
+  String get dietCustomFoodTitle => 'Cadastrar alimento';
+
+  @override
+  String get dietFoodNameLabel => 'Nome';
+
+  @override
+  String get dietCaloriesPer100gLabel => 'Calorias por 100g';
+
+  @override
+  String get dietProteinPer100gLabel => 'Proteína por 100g';
+
+  @override
+  String get dietCarbsPer100gLabel => 'Carboidratos por 100g';
+
+  @override
+  String get dietFatPer100gLabel => 'Gordura por 100g';
+
+  @override
+  String get dietContinueAction => 'Continuar';
+
+  @override
+  String dietCaloriesPer100g(int calories) {
+    return '$calories kcal / 100g';
+  }
+
+  @override
+  String get dietFoodSearchTitle => 'Buscar alimentos';
+
+  @override
+  String get dietSearchFieldLabel => 'Buscar no Open Food Facts';
+
+  @override
+  String get dietSearchPrompt => 'Busque um alimento para registrá-lo.';
+
+  @override
+  String get dietSearchNoResults => 'Nenhum resultado. Tente outra busca ou cadastre manualmente.';
+
+  @override
+  String get mealTypeBreakfast => 'Café da manhã';
+
+  @override
+  String get mealTypeLunch => 'Almoço';
+
+  @override
+  String get mealTypeDinner => 'Jantar';
+
+  @override
+  String get mealTypeSnack => 'Lanche';
 }

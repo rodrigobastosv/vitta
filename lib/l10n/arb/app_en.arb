@@ -17,5 +17,50 @@
   "themeDark": "Dark",
   "comingSoonTitle": "Coming soon",
   "dietComingSoonMessage": "Diet tracking is on its way.",
-  "workoutComingSoonMessage": "Workout tracking is on its way."
+  "workoutComingSoonMessage": "Workout tracking is on its way.",
+  "retry": "Retry",
+  "dietCaloriesLabel": "{calories} kcal today",
+  "@dietCaloriesLabel": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietProteinLabel": "Protein",
+  "dietCarbsLabel": "Carbs",
+  "dietFatLabel": "Fat",
+  "dietLogSubtitle": "{grams} g - {calories} kcal",
+  "@dietLogSubtitle": {
+    "placeholders": {
+      "grams": {"type": "int"},
+      "calories": {"type": "int"}
+    }
+  },
+  "dietDeleteLogTooltip": "Remove",
+  "dietEmptyTitle": "Nothing logged yet",
+  "dietEmptyMessage": "Tap the + button to add the first food of the day.",
+  "dietInvalidQuantity": "Enter a quantity greater than zero.",
+  "dietQuantityGramsLabel": "Quantity (g)",
+  "dietLogFoodAction": "Add to today",
+  "dietInvalidCustomFood": "Fill in the name and all macros with valid numbers.",
+  "dietCustomFoodTitle": "Add a food",
+  "dietFoodNameLabel": "Name",
+  "dietCaloriesPer100gLabel": "Calories per 100g",
+  "dietProteinPer100gLabel": "Protein per 100g",
+  "dietCarbsPer100gLabel": "Carbs per 100g",
+  "dietFatPer100gLabel": "Fat per 100g",
+  "dietContinueAction": "Continue",
+  "dietCaloriesPer100g": "{calories} kcal / 100g",
+  "@dietCaloriesPer100g": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietFoodSearchTitle": "Search foods",
+  "dietSearchFieldLabel": "Search Open Food Facts",
+  "dietSearchPrompt": "Search for a food to log it.",
+  "dietSearchNoResults": "No results. Try another search or add it manually.",
+  "mealTypeBreakfast": "Breakfast",
+  "mealTypeLunch": "Lunch",
+  "mealTypeDinner": "Dinner",
+  "mealTypeSnack": "Snack"
 }
