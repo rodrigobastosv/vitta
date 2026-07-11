@@ -1,0 +1,21 @@
+{
+  "@@locale": "en",
+  "appTitle": "Vitta",
+  "homeTagline": "Your companion for diet and training.",
+  "dietFeatureTitle": "Diet",
+  "dietFeatureSubtitle": "Track meals and reach your nutrition goals",
+  "workoutFeatureTitle": "Workout",
+  "workoutFeatureSubtitle": "Plan and log your training sessions",
+  "settingsTitle": "Settings",
+  "settingsLanguageLabel": "Language",
+  "languageSystemDefault": "System default",
+  "languageEnglish": "English",
+  "languagePortuguese": "Portuguese",
+  "settingsThemeLabel": "Theme",
+  "themeSystemDefault": "System default",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "comingSoonTitle": "Coming soon",
+  "dietComingSoonMessage": "Diet tracking is on its way.",
+  "workoutComingSoonMessage": "Workout tracking is on its way."
+}

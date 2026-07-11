@@ -1,0 +1,18 @@
+import 'package:go_router/go_router.dart';
+import 'package:vitta/app/presentation/pages/diet/diet_page.dart';
+import 'package:vitta/app/presentation/pages/home/home_page.dart';
+import 'package:vitta/app/presentation/pages/settings/settings_page.dart';
+import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
+import 'package:vitta/app/presentation/routing/app_route.dart';
+
+abstract class AppRouter {
+  static final GoRouter router = GoRouter(
+    initialLocation: AppRoute.home.path,
+    routes: [
+      GoRoute(path: AppRoute.home.path, name: AppRoute.home.name, builder: (context, state) => const HomePage()),
+      GoRoute(path: AppRoute.diet.path, name: AppRoute.diet.name, builder: (context, state) => const DietPage()),
+      GoRoute(path: AppRoute.workout.path, name: AppRoute.workout.name, builder: (context, state) => const WorkoutPage()),
+      GoRoute(path: AppRoute.settings.path, name: AppRoute.settings.name, builder: (context, state) => const SettingsPage()),
+    ],
+  );
+}

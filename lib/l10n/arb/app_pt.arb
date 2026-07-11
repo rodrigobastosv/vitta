@@ -1,0 +1,21 @@
+{
+  "@@locale": "pt",
+  "appTitle": "Vitta",
+  "homeTagline": "Seu companheiro de dieta e treino.",
+  "dietFeatureTitle": "Dieta",
+  "dietFeatureSubtitle": "Acompanhe refeições e atinja suas metas nutricionais",
+  "workoutFeatureTitle": "Treino",
+  "workoutFeatureSubtitle": "Planeje e registre seus treinos",
+  "settingsTitle": "Configurações",
+  "settingsLanguageLabel": "Idioma",
+  "languageSystemDefault": "Padrão do sistema",
+  "languageEnglish": "Inglês",
+  "languagePortuguese": "Português",
+  "settingsThemeLabel": "Tema",
+  "themeSystemDefault": "Padrão do sistema",
+  "themeLight": "Claro",
+  "themeDark": "Escuro",
+  "comingSoonTitle": "Em breve",
+  "dietComingSoonMessage": "O acompanhamento de dieta está a caminho.",
+  "workoutComingSoonMessage": "O acompanhamento de treino está a caminho."
+}
