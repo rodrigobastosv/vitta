@@ -182,6 +182,24 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @settingsUnitSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit system'**
+  String get settingsUnitSystemLabel;
+
+  /// No description provided for @unitSystemMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric (g/kg)'**
+  String get unitSystemMetric;
+
+  /// No description provided for @unitSystemImperial.
+  ///
+  /// In en, this message translates to:
+  /// **'Imperial (oz/lb)'**
+  String get unitSystemImperial;
+
   /// No description provided for @comingSoonTitle.
   ///
   /// In en, this message translates to:
@@ -260,11 +278,11 @@ abstract class AppLocalizations {
   /// **'Enter a quantity greater than zero.'**
   String get dietInvalidQuantity;
 
-  /// No description provided for @dietQuantityGramsLabel.
+  /// No description provided for @dietQuantityLabel.
   ///
   /// In en, this message translates to:
-  /// **'Quantity (g)'**
-  String get dietQuantityGramsLabel;
+  /// **'Quantity ({unit})'**
+  String dietQuantityLabel(String unit);
 
   /// No description provided for @dietLogFoodAction.
   ///

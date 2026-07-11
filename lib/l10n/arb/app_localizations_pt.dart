@@ -54,6 +54,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get themeDark => 'Escuro';
 
   @override
+  String get settingsUnitSystemLabel => 'Sistema de unidades';
+
+  @override
+  String get unitSystemMetric => 'Métrico (g/kg)';
+
+  @override
+  String get unitSystemImperial => 'Imperial (oz/lb)';
+
+  @override
   String get comingSoonTitle => 'Em breve';
 
   @override
@@ -97,7 +106,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietInvalidQuantity => 'Informe uma quantidade maior que zero.';
 
   @override
-  String get dietQuantityGramsLabel => 'Quantidade (g)';
+  String dietQuantityLabel(String unit) {
+    return 'Quantidade ($unit)';
+  }
 
   @override
   String get dietLogFoodAction => 'Adicionar ao dia';
