@@ -13,6 +13,6 @@ Future<void> bootstrap() async {
     await Supabase.instance.client.auth.signInAnonymously();
   }
   await Hive.initFlutter();
-  final settingsBox = await Hive.openBox<dynamic>('settings');
-  setupDependencies(settingsBox: settingsBox);
+  final appBox = await Hive.openBox<dynamic>('app');
+  setupDependencies(appBox: appBox);
 }

@@ -10,8 +10,8 @@ void main() {
   setUpAll(() async {
     final tempDir = await Directory.systemTemp.createTemp('vitta_test_hive');
     Hive.init(tempDir.path);
-    final settingsBox = await Hive.openBox<dynamic>('settings_test');
-    setupDependencies(settingsBox: settingsBox);
+    final appBox = await Hive.openBox<dynamic>('app_test');
+    setupDependencies(appBox: appBox);
   });
 
   testWidgets('renders the home page with its feature tiles and a settings action', (tester) async {

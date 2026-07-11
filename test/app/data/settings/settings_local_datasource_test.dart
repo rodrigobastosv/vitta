@@ -13,7 +13,7 @@ void main() {
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('vitta_test_hive');
     Hive.init(tempDir.path);
-    box = await Hive.openBox<dynamic>('settings_test');
+    box = await Hive.openBox<dynamic>('app_test');
     dataSource = SettingsLocalDataSource(box: box);
   });
 
