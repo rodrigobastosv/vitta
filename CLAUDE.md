@@ -21,7 +21,7 @@ Clean Architecture, without repository/datasource interfaces and without a separ
 
 ```
 lib/app/
-  core/            DI (get_it), navigation extensions, error (Result/VTError), http, env
+  core/            DI (get_it), navigation extensions, error (Result/VTError), http, env, services/
   data/<feature>/   Repository (concrete class), datasources/, datasources/requests/
   domain/<feature>/ Entities, use cases (plain classes with a `call` method)
   design_system/    VT-prefixed tokens, themes and components
@@ -40,9 +40,19 @@ class LogFoodUseCase {
 }
 ```
 
+One deliberate exception to "no interfaces": the thin adapter that directly wraps a third-party SDK gets its own concrete class under `core/services/<vendor>/`, so datasources depend on it rather than on the vendor's client type directly (`core/services/storage/local_storage_service.dart`'s `LocalStorageService`; `core/services/supabase/supabase_service.dart`'s `SupabaseService`). Repositories/datasources/use cases above that boundary stay concrete-only as usual.
+
 ## Dependency injection
 
-`GetIt.instance` is aliased as `G` (`lib/app/core/di/dependencies.dart`). Register dependencies in `setupDependencies()`, called once from `main()`. Resolve with `G<Type>()`. Currently only `AppCubit` is registered.
+`GetIt.instance` is aliased as `G` (`lib/app/core/di/dependencies.dart`). Register dependencies in `setupDependencies()`, called once from `bootstrap()`. Resolve with `G<Type>()`.
+
+## Local storage
+
+`hive_ce` (+ `hive_ce_flutter` for `Hive.initFlutter()`) for anything that must survive an app restart but doesn't belong in Supabase (device-local preferences, not user data), sitting behind `core/services/storage/local_storage_service.dart`'s `LocalStorageService` (`get<T>`/`put<T>`/`delete`, backed by a Hive `Box<dynamic>`) — datasources never touch `package:hive_ce` directly, only `LocalStorageService`'s constructor does. One shared `app` `Box<dynamic>`, opened once in `bootstrap()` and wrapped in a single `LocalStorageService` registered in DI (opening a box is async, DI registration isn't) — not one box/service per feature. Each feature still gets its own local datasource class (concrete, no interface, same shape as a feature's Supabase datasource) depending on `LocalStorageService`; keys are prefixed with the feature name (e.g. `SettingsLocalDataSource`'s `settings.locale`, `settings.themeMode` in `data/settings/settings_local_datasource.dart`) so datasources can't collide with each other in the shared box. Primitives only (`String`, `int`, `bool`, ...) — no `TypeAdapter`/`build_runner`. `AppCubit` reads its initial state from `SettingsLocalDataSource` synchronously at construction and writes through on every change. The next feature that needs local-only storage (e.g. onboarding-seen, unit system) gets its own `data/<feature>/<feature>_local_datasource.dart` depending on `LocalStorageService`, with its own key prefix — don't add unrelated state to `SettingsLocalDataSource`.
+
+Supabase gets the same treatment: `core/services/supabase/supabase_service.dart`'s `SupabaseService` wraps `SupabaseClient`, exposing `auth`, `currentUserId`, `hasSession`, and `from(table)` — datasources depend on `SupabaseService`, never on `package:supabase_flutter`'s `SupabaseClient` directly (`SupabaseDietDataSource` is the example). This isn't a full abstraction of Postgrest's fluent query builder (that's not a real swap boundary and would just add ceremony) — it centralizes construction and the one piece of logic every datasource needed (`currentUserId`), consistent with `LocalStorageService`.
+
+Tests exercise `LocalStorageService` against a real Hive box in a temp directory (`Hive.init(tempDir.path)`, no platform channels needed) rather than mocking it — see `test/app/core/services/storage/local_storage_service_test.dart`, `test/app/data/settings/settings_local_datasource_test.dart`, and `test/widget_test.dart` (all via the `test/fixtures/local_storage_fixture.dart` fixture). `SupabaseService` is mocked instead (`test/mocks/services_mocks.dart`) since standing up a real Supabase client in tests isn't practical.
 
 ## State management
 
@@ -62,7 +72,7 @@ Routes are never referenced by raw path string outside of `app_router.dart`. `Ap
 
 ## App-level state
 
-`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. The choice is in-memory only — it resets on app restart until local persistence is added.
+`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. Persisted via `SettingsLocalDataSource` (see Local storage) — survives app restart.
 
 ## Internationalization
 
@@ -78,11 +88,12 @@ Standard Flutter `gen-l10n` (not a custom solution). ARB files live in `lib/l10n
 
 ## Testing
 
-Mirrors `lib/`. No `late` variables — build dependencies inline or through factories.
+Mirrors `lib/`. No `late` variables, ever — no `setUp`-populated shared state either. Every test builds its own instances inline, at the top of the `test`/`build:` body that uses them, via the factories/fixtures below. This is stricter than "avoid `late`": a `final` declared in `setUp()` and closed over by every test in the file is the same shared-mutable-state problem `late` causes, just spelled differently.
 
-- `test/mocks/`: one file per layer (`repositories_mocks.dart`, `use_cases_mocks.dart`, ...), each a one-line `class MockX extends Mock implements X {}` — not created yet, add once a repository/use case exists.
-- `test/factories/`: builders with sensible defaults and named-optional overrides. Entity factories live in `test/factories/entities/`; use case and cubit factories in `test/factories/use_cases_factories.dart` / `cubits_factories.dart` — only add a cubit factory once the cubit takes constructor dependencies worth defaulting (`AppCubit` doesn't, so it's built inline in its test).
-- Cubits: `bloc_test`'s `blocTest`, building the cubit (and any mocks it needs) inside `build:`.
+- `test/mocks/`: one file per layer (`repositories_mocks.dart`, `use_cases_mocks.dart`, `datasources_mocks.dart`, `services_mocks.dart`, ...), each a one-line `class MockX extends Mock implements X {}`.
+- `test/factories/`: one `abstract class XFactory`/`XFactories` per file, `static` build methods only — never instantiate the class, and it reads better in autocomplete (`FoodFactory.build(...)`, `CubitsFactories.buildDietCubit(...)`) than a pile of same-named top-level functions. **No stubbing inside a factory, ever** — a factory either takes an already-configured instance or defaults to a bare, unstubbed `MockX()`; all `when()`/`verify()` setup happens in the test that needs it. Entity factories in `test/factories/entities/` (`FoodFactory`, `FoodLogFactory`, ...); use case factories in `UseCasesFactories` (`test/factories/use_cases_factories.dart`); cubit factories in `CubitsFactories` (`test/factories/cubits_factories.dart`) — only add a cubit factory once the cubit takes constructor dependencies worth defaulting. Note the consequence: if a cubit's constructor calls a mocked dependency synchronously (`AppCubit` calls `getThemeMode()` at construction), the bare-default path isn't usable as-is — the test must always pass a pre-stubbed mock, same as every other case.
+- `test/fixtures/`: builders that need real I/O a mock can't stand in for (e.g. `local_storage_fixture.dart`'s `openTestHiveBox()`/`buildTestLocalStorageService()`, which open a real Hive box against a temp directory). Register cleanup with `addTearDown()` *inside* the fixture function itself — it hooks into whichever test is currently running, so callers never juggle a paired teardown.
+- Cubits: `bloc_test`'s `blocTest`, building every mock and the cubit inside `build:` (not a separate `setUp:` — that would need `late` to share the mock between the two callbacks). If a mock must also be reached from `verify:`, declare it as a `final` local right above that one `blocTest(...)` call, not hoisted to the file/group level.
 
 ## Growing this file
 

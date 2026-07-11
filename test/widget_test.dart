@@ -3,8 +3,13 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/main.dart';
 
+import 'fixtures/local_storage_fixture.dart';
+import 'mocks/services_mocks.dart';
+
 void main() {
-  setUpAll(setupDependencies);
+  setUpAll(() async {
+    setupDependencies(appBox: await openTestHiveBox(), supabaseService: MockSupabaseService());
+  });
 
   testWidgets('renders the home page with its feature tiles and a settings action', (tester) async {
     await tester.pumpWidget(const VittaApp());
