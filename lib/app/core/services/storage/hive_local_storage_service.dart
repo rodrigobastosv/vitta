@@ -1,5 +1,5 @@
 import 'package:hive_ce/hive.dart';
-import 'package:vitta/app/core/storage/local_storage_service.dart';
+import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 
 class HiveLocalStorageService implements LocalStorageService {
   HiveLocalStorageService({required Box<dynamic> box}) : _box = box;

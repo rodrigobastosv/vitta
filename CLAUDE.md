@@ -21,7 +21,7 @@ Clean Architecture, without repository/datasource interfaces and without a separ
 
 ```
 lib/app/
-  core/            DI (get_it), navigation extensions, error (Result/VTError), http, env
+  core/            DI (get_it), navigation extensions, error (Result/VTError), http, env, services/
   data/<feature>/   Repository (concrete class), datasources/, datasources/requests/
   domain/<feature>/ Entities, use cases (plain classes with a `call` method)
   design_system/    VT-prefixed tokens, themes and components
@@ -40,7 +40,7 @@ class LogFoodUseCase {
 }
 ```
 
-One deliberate exception to "no interfaces": the thin adapter that directly wraps a third-party SDK gets an abstract class + one concrete implementation, so datasources depend on the abstraction rather than the vendor's client type — that's the actual swappable boundary (e.g. `core/storage/local_storage_service.dart`'s `LocalStorageService`/`HiveLocalStorageService`; `SupabaseService` follows the same shape). Repositories/datasources/use cases above that boundary stay concrete-only as usual.
+One deliberate exception to "no interfaces": the thin adapter that directly wraps a third-party SDK gets an abstract class + one concrete implementation, so datasources depend on the abstraction rather than the vendor's client type — that's the actual swappable boundary. These live under `core/services/<vendor>/` (`core/services/storage/local_storage_service.dart`'s `LocalStorageService`/`HiveLocalStorageService`; `core/services/supabase/supabase_service.dart`'s `SupabaseService`). Repositories/datasources/use cases above that boundary stay concrete-only as usual.
 
 ## Dependency injection
 
@@ -48,9 +48,11 @@ One deliberate exception to "no interfaces": the thin adapter that directly wrap
 
 ## Local storage
 
-`hive_ce` (+ `hive_ce_flutter` for `Hive.initFlutter()`) for anything that must survive an app restart but doesn't belong in Supabase (device-local preferences, not user data), sitting behind `core/storage/local_storage_service.dart`'s `LocalStorageService` (`get<T>`/`put<T>`/`delete`) — datasources never import `package:hive_ce` directly, only `HiveLocalStorageService`'s constructor does. One shared `app` `Box<dynamic>`, opened once in `bootstrap()` and wrapped in a single `HiveLocalStorageService` registered in DI (opening a box is async, DI registration isn't) — not one box/service per feature. Each feature still gets its own local datasource class (concrete, no interface, same shape as a feature's Supabase datasource) depending on `LocalStorageService`; keys are prefixed with the feature name (e.g. `SettingsLocalDataSource`'s `settings.locale`, `settings.themeMode` in `data/settings/settings_local_datasource.dart`) so datasources can't collide with each other in the shared box. Primitives only (`String`, `int`, `bool`, ...) — no `TypeAdapter`/`build_runner`. `AppCubit` reads its initial state from `SettingsLocalDataSource` synchronously at construction and writes through on every change. The next feature that needs local-only storage (e.g. onboarding-seen, unit system) gets its own `data/<feature>/<feature>_local_datasource.dart` depending on `LocalStorageService`, with its own key prefix — don't add unrelated state to `SettingsLocalDataSource`.
+`hive_ce` (+ `hive_ce_flutter` for `Hive.initFlutter()`) for anything that must survive an app restart but doesn't belong in Supabase (device-local preferences, not user data), sitting behind `core/services/storage/local_storage_service.dart`'s `LocalStorageService` (`get<T>`/`put<T>`/`delete`) — datasources never import `package:hive_ce` directly, only `HiveLocalStorageService`'s constructor does. One shared `app` `Box<dynamic>`, opened once in `bootstrap()` and wrapped in a single `HiveLocalStorageService` registered in DI (opening a box is async, DI registration isn't) — not one box/service per feature. Each feature still gets its own local datasource class (concrete, no interface, same shape as a feature's Supabase datasource) depending on `LocalStorageService`; keys are prefixed with the feature name (e.g. `SettingsLocalDataSource`'s `settings.locale`, `settings.themeMode` in `data/settings/settings_local_datasource.dart`) so datasources can't collide with each other in the shared box. Primitives only (`String`, `int`, `bool`, ...) — no `TypeAdapter`/`build_runner`. `AppCubit` reads its initial state from `SettingsLocalDataSource` synchronously at construction and writes through on every change. The next feature that needs local-only storage (e.g. onboarding-seen, unit system) gets its own `data/<feature>/<feature>_local_datasource.dart` depending on `LocalStorageService`, with its own key prefix — don't add unrelated state to `SettingsLocalDataSource`.
 
-Tests exercise `HiveLocalStorageService` against a real Hive box in a temp directory (`Hive.init(tempDir.path)`, no platform channels needed) rather than mocking it — see `test/app/core/storage/hive_local_storage_service_test.dart`, `test/app/data/settings/settings_local_datasource_test.dart`, and `test/widget_test.dart`.
+Supabase gets the same treatment: `core/services/supabase/supabase_service.dart`'s `SupabaseService` wraps `SupabaseClient`, exposing `auth`, `currentUserId`, `hasSession`, and `from(table)` — datasources depend on `SupabaseService`, never on `package:supabase_flutter`'s `SupabaseClient` directly (`SupabaseDietDataSource` is the example). This isn't a full abstraction of Postgrest's fluent query builder (that's not a real swap boundary and would just add ceremony) — it centralizes construction and the one piece of logic every datasource needed (`currentUserId`), consistent with `LocalStorageService`.
+
+Tests exercise `HiveLocalStorageService` against a real Hive box in a temp directory (`Hive.init(tempDir.path)`, no platform channels needed) rather than mocking it — see `test/app/core/services/storage/hive_local_storage_service_test.dart`, `test/app/data/settings/settings_local_datasource_test.dart`, and `test/widget_test.dart`. `SupabaseService` is mocked instead (`test/mocks/services_mocks.dart`) since standing up a real Supabase client in tests isn't practical.
 
 ## State management
 
@@ -70,7 +72,7 @@ Routes are never referenced by raw path string outside of `app_router.dart`. `Ap
 
 ## App-level state
 
-`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. Persisted via `AppLocalDataSource` (see Local storage) — survives app restart.
+`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. Persisted via `SettingsLocalDataSource` (see Local storage) — survives app restart.
 
 ## Internationalization
 
