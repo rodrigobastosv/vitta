@@ -17,5 +17,50 @@
   "themeDark": "Escuro",
   "comingSoonTitle": "Em breve",
   "dietComingSoonMessage": "O acompanhamento de dieta está a caminho.",
-  "workoutComingSoonMessage": "O acompanhamento de treino está a caminho."
+  "workoutComingSoonMessage": "O acompanhamento de treino está a caminho.",
+  "retry": "Tentar novamente",
+  "dietCaloriesLabel": "{calories} kcal hoje",
+  "@dietCaloriesLabel": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietProteinLabel": "Proteína",
+  "dietCarbsLabel": "Carboidratos",
+  "dietFatLabel": "Gordura",
+  "dietLogSubtitle": "{grams} g - {calories} kcal",
+  "@dietLogSubtitle": {
+    "placeholders": {
+      "grams": {"type": "int"},
+      "calories": {"type": "int"}
+    }
+  },
+  "dietDeleteLogTooltip": "Remover",
+  "dietEmptyTitle": "Nada registrado ainda",
+  "dietEmptyMessage": "Toque no botão + para adicionar o primeiro alimento do dia.",
+  "dietInvalidQuantity": "Informe uma quantidade maior que zero.",
+  "dietQuantityGramsLabel": "Quantidade (g)",
+  "dietLogFoodAction": "Adicionar ao dia",
+  "dietInvalidCustomFood": "Preencha o nome e todos os macros com números válidos.",
+  "dietCustomFoodTitle": "Cadastrar alimento",
+  "dietFoodNameLabel": "Nome",
+  "dietCaloriesPer100gLabel": "Calorias por 100g",
+  "dietProteinPer100gLabel": "Proteína por 100g",
+  "dietCarbsPer100gLabel": "Carboidratos por 100g",
+  "dietFatPer100gLabel": "Gordura por 100g",
+  "dietContinueAction": "Continuar",
+  "dietCaloriesPer100g": "{calories} kcal / 100g",
+  "@dietCaloriesPer100g": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietFoodSearchTitle": "Buscar alimentos",
+  "dietSearchFieldLabel": "Buscar no Open Food Facts",
+  "dietSearchPrompt": "Busque um alimento para registrá-lo.",
+  "dietSearchNoResults": "Nenhum resultado. Tente outra busca ou cadastre manualmente.",
+  "mealTypeBreakfast": "Café da manhã",
+  "mealTypeLunch": "Almoço",
+  "mealTypeDinner": "Jantar",
+  "mealTypeSnack": "Lanche"
 }

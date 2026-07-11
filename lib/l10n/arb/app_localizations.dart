@@ -199,6 +199,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Workout tracking is on its way.'**
   String get workoutComingSoonMessage;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @dietCaloriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal today'**
+  String dietCaloriesLabel(int calories);
+
+  /// No description provided for @dietProteinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein'**
+  String get dietProteinLabel;
+
+  /// No description provided for @dietCarbsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs'**
+  String get dietCarbsLabel;
+
+  /// No description provided for @dietFatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat'**
+  String get dietFatLabel;
+
+  /// No description provided for @dietLogSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{grams} g - {calories} kcal'**
+  String dietLogSubtitle(int grams, int calories);
+
+  /// No description provided for @dietDeleteLogTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get dietDeleteLogTooltip;
+
+  /// No description provided for @dietEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get dietEmptyTitle;
+
+  /// No description provided for @dietEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to add the first food of the day.'**
+  String get dietEmptyMessage;
+
+  /// No description provided for @dietInvalidQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a quantity greater than zero.'**
+  String get dietInvalidQuantity;
+
+  /// No description provided for @dietQuantityGramsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity (g)'**
+  String get dietQuantityGramsLabel;
+
+  /// No description provided for @dietLogFoodAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to today'**
+  String get dietLogFoodAction;
+
+  /// No description provided for @dietInvalidCustomFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in the name and all macros with valid numbers.'**
+  String get dietInvalidCustomFood;
+
+  /// No description provided for @dietCustomFoodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a food'**
+  String get dietCustomFoodTitle;
+
+  /// No description provided for @dietFoodNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get dietFoodNameLabel;
+
+  /// No description provided for @dietCaloriesPer100gLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories per 100g'**
+  String get dietCaloriesPer100gLabel;
+
+  /// No description provided for @dietProteinPer100gLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein per 100g'**
+  String get dietProteinPer100gLabel;
+
+  /// No description provided for @dietCarbsPer100gLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs per 100g'**
+  String get dietCarbsPer100gLabel;
+
+  /// No description provided for @dietFatPer100gLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat per 100g'**
+  String get dietFatPer100gLabel;
+
+  /// No description provided for @dietContinueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get dietContinueAction;
+
+  /// No description provided for @dietCaloriesPer100g.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal / 100g'**
+  String dietCaloriesPer100g(int calories);
+
+  /// No description provided for @dietFoodSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Search foods'**
+  String get dietFoodSearchTitle;
+
+  /// No description provided for @dietSearchFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Open Food Facts'**
+  String get dietSearchFieldLabel;
+
+  /// No description provided for @dietSearchPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Search for a food to log it.'**
+  String get dietSearchPrompt;
+
+  /// No description provided for @dietSearchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No results. Try another search or add it manually.'**
+  String get dietSearchNoResults;
+
+  /// No description provided for @mealTypeBreakfast.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get mealTypeBreakfast;
+
+  /// No description provided for @mealTypeLunch.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get mealTypeLunch;
+
+  /// No description provided for @mealTypeDinner.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get mealTypeDinner;
+
+  /// No description provided for @mealTypeSnack.
+  ///
+  /// In en, this message translates to:
+  /// **'Snack'**
+  String get mealTypeSnack;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
