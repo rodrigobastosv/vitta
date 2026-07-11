@@ -2,6 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
+import 'package:vitta/app/core/storage/hive_local_storage_service.dart';
+import 'package:vitta/app/core/storage/local_storage_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/data/diet/datasources/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase_diet_datasource.dart';
@@ -17,8 +19,8 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart'
 final G = GetIt.instance;
 
 void setupDependencies({required Box<dynamic> appBox}) {
-  G.registerLazySingleton(() => appBox);
-  G.registerLazySingleton(() => SettingsLocalDataSource(box: G()));
+  G.registerLazySingleton<LocalStorageService>(() => HiveLocalStorageService(box: appBox));
+  G.registerLazySingleton(() => SettingsLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => AppCubit(settingsLocalDataSource: G()));
 
   G.registerLazySingleton(() => Supabase.instance.client);

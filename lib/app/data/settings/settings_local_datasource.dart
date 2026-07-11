@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:hive_ce/hive.dart';
+import 'package:vitta/app/core/storage/local_storage_service.dart';
 
 class SettingsLocalDataSource {
-  SettingsLocalDataSource({required Box<dynamic> box}) : _box = box;
+  SettingsLocalDataSource({required LocalStorageService localStorageService}) : _localStorageService = localStorageService;
 
-  final Box<dynamic> _box;
+  final LocalStorageService _localStorageService;
 
   static const _localeKey = 'settings.locale';
   static const _themeModeKey = 'settings.themeMode';
 
   Locale? getLocale() {
-    final languageCode = _box.get(_localeKey) as String?;
+    final languageCode = _localStorageService.get<String>(_localeKey);
     return languageCode == null ? null : Locale(languageCode);
   }
 
-  Future<void> saveLocale(Locale? locale) => locale == null ? _box.delete(_localeKey) : _box.put(_localeKey, locale.languageCode);
+  Future<void> saveLocale(Locale? locale) =>
+      locale == null ? _localStorageService.delete(_localeKey) : _localStorageService.put(_localeKey, locale.languageCode);
 
   ThemeMode getThemeMode() {
-    final name = _box.get(_themeModeKey) as String?;
-    return ThemeMode.values.firstWhere((mode) => mode.name == name, orElse: () => .system);
+    final name = _localStorageService.get<String>(_themeModeKey);
+    return ThemeMode.values.firstWhere((mode) => mode.name == name, orElse: () => ThemeMode.system);
   }
 
-  Future<void> saveThemeMode(ThemeMode themeMode) => _box.put(_themeModeKey, themeMode.name);
+  Future<void> saveThemeMode(ThemeMode themeMode) => _localStorageService.put(_themeModeKey, themeMode.name);
 }
