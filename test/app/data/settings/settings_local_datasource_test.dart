@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_ce/hive.dart';
-import 'package:vitta/app/core/storage/hive_local_storage_service.dart';
+import 'package:vitta/app/core/services/storage/hive_local_storage_service.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
 
 void main() {

@@ -1,6 +1,6 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/data/diet/datasources/requests/create_food_log_request.dart';
 import 'package:vitta/app/data/diet/datasources/requests/create_food_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
@@ -10,15 +10,15 @@ import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class SupabaseDietDataSource {
-  SupabaseDietDataSource({required SupabaseClient supabaseClient}) : _supabaseClient = supabaseClient;
+  SupabaseDietDataSource({required SupabaseService supabaseService}) : _supabaseService = supabaseService;
 
-  final SupabaseClient _supabaseClient;
+  final SupabaseService _supabaseService;
 
-  String get _userId => _supabaseClient.auth.currentUser!.id;
+  String get _userId => _supabaseService.currentUserId;
 
   Future<Result<VTError, Food>> saveFood({required Food food}) async {
     try {
-      final row = await _supabaseClient
+      final row = await _supabaseService
           .from('foods')
           .insert(CreateFoodRequest(food: food, userId: _userId).toJson())
           .select()
@@ -36,7 +36,7 @@ class SupabaseDietDataSource {
     required double quantityGrams,
   }) async {
     try {
-      final row = await _supabaseClient
+      final row = await _supabaseService
           .from('food_logs')
           .insert(
             CreateFoodLogRequest(
@@ -57,7 +57,7 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, List<FoodLogEntry>>> getDailyLog({required DateTime date}) async {
     try {
-      final rows = await _supabaseClient
+      final rows = await _supabaseService
           .from('food_logs')
           .select('*, foods(*)')
           .eq('user_id', _userId)
@@ -71,7 +71,7 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) async {
     try {
-      await _supabaseClient.from('food_logs').delete().eq('id', logId).eq('user_id', _userId);
+      await _supabaseService.from('food_logs').delete().eq('id', logId).eq('user_id', _userId);
       return const Success(null);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to delete food log $logId', cause: error));

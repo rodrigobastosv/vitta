@@ -6,12 +6,14 @@ import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/main.dart';
 
+import 'mocks/services_mocks.dart';
+
 void main() {
   setUpAll(() async {
     final tempDir = await Directory.systemTemp.createTemp('vitta_test_hive');
     Hive.init(tempDir.path);
     final appBox = await Hive.openBox<dynamic>('app_test');
-    setupDependencies(appBox: appBox);
+    setupDependencies(appBox: appBox, supabaseService: MockSupabaseService());
   });
 
   testWidgets('renders the home page with its feature tiles and a settings action', (tester) async {
