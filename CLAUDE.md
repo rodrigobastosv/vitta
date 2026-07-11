@@ -7,7 +7,8 @@ Lifestyle companion app: diet and workout tracking. Flutter, SDK ^3.10.7.
 Supabase (Postgres). Chosen over Firebase because the diet domain is inherently relational — a day's macro totals are a `SUM()`/`GROUP BY` over `food_logs` joined to `foods`, which Postgres does natively; Firestore would push that aggregation into the client. `supabase_flutter` talks to it directly from the app (no custom backend server).
 
 - `supabase/schema.sql`: source of truth for the `foods` and `food_logs` tables, run manually in the Supabase SQL editor (no migration tooling yet). Both tables have row-level security scoped to `auth.uid()`, so each user only ever sees their own rows.
-- Auth is anonymous (`signInAnonymously`, wired in `main.dart`) so RLS has a stable `user_id` without building a login UI yet. Swapping in real accounts later means adding email/OAuth sign-in on top of the same anonymous-session-per-device bootstrap — existing anonymous data can be linked via Supabase's `linkIdentity`.
+- Auth is anonymous (`signInAnonymously`, wired in `lib/app/bootstrap.dart`) so RLS has a stable `user_id` without building a login UI yet. Swapping in real accounts later means adding email/OAuth sign-in on top of the same anonymous-session-per-device bootstrap — existing anonymous data can be linked via Supabase's `linkIdentity`.
+- `main()` only calls `bootstrap()` (dotenv, Supabase init, anonymous sign-in, `setupDependencies()`) and `runApp()` — infrastructure bootstrap is deliberately kept out of `AppCubit`/widget code so it stays a single, synchronously-ordered sequence and `AppCubit` stays pure presentation state.
 - Credentials live in a gitignored `.env` (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`), loaded via `flutter_dotenv` and read through `lib/app/core/env/env.dart`. Copy `.env.example` to `.env` and fill in a real project's values — the placeholder committed values won't connect to anything.
 
 ## Food data
