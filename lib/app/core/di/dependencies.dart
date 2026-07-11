@@ -16,11 +16,9 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart'
 
 final G = GetIt.instance;
 
-const settingsBoxInstanceName = 'settingsBox';
-
-void setupDependencies({required Box<dynamic> settingsBox}) {
-  G.registerLazySingleton<Box<dynamic>>(() => settingsBox, instanceName: settingsBoxInstanceName);
-  G.registerLazySingleton(() => SettingsLocalDataSource(box: G(instanceName: settingsBoxInstanceName)));
+void setupDependencies({required Box<dynamic> appBox}) {
+  G.registerLazySingleton(() => appBox);
+  G.registerLazySingleton(() => SettingsLocalDataSource(box: G()));
   G.registerLazySingleton(() => AppCubit(settingsLocalDataSource: G()));
 
   G.registerLazySingleton(() => Supabase.instance.client);

@@ -6,20 +6,19 @@ class SettingsLocalDataSource {
 
   final Box<dynamic> _box;
 
-  static const _localeKey = 'locale';
-  static const _themeModeKey = 'themeMode';
+  static const _localeKey = 'settings.locale';
+  static const _themeModeKey = 'settings.themeMode';
 
   Locale? getLocale() {
     final languageCode = _box.get(_localeKey) as String?;
     return languageCode == null ? null : Locale(languageCode);
   }
 
-  Future<void> saveLocale(Locale? locale) =>
-      locale == null ? _box.delete(_localeKey) : _box.put(_localeKey, locale.languageCode);
+  Future<void> saveLocale(Locale? locale) => locale == null ? _box.delete(_localeKey) : _box.put(_localeKey, locale.languageCode);
 
   ThemeMode getThemeMode() {
     final name = _box.get(_themeModeKey) as String?;
-    return ThemeMode.values.firstWhere((mode) => mode.name == name, orElse: () => ThemeMode.system);
+    return ThemeMode.values.firstWhere((mode) => mode.name == name, orElse: () => .system);
   }
 
   Future<void> saveThemeMode(ThemeMode themeMode) => _box.put(_themeModeKey, themeMode.name);
