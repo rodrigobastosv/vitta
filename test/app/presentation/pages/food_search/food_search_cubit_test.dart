@@ -17,16 +17,9 @@ void main() {
     registerFallbackValue(DateTime(2000));
   });
 
-  late MockSearchFoodsUseCase searchFoodsUseCase;
-  late MockLogFoodUseCase logFoodUseCase;
-
-  setUp(() {
-    searchFoodsUseCase = MockSearchFoodsUseCase();
-    logFoodUseCase = MockLogFoodUseCase();
-  });
-
   test('search with a blank query stays idle without hitting the use case', () async {
-    final cubit = buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, logFoodUseCase: logFoodUseCase);
+    final searchFoodsUseCase = MockSearchFoodsUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
 
     await cubit.search(query: '   ');
 
@@ -36,28 +29,31 @@ void main() {
 
   blocTest<FoodSearchCubit, FoodSearchState>(
     'emits [FoodSearchLoading, FoodSearchLoaded] when the search succeeds',
-    setUp: () {
-      when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([buildFood()]));
+    build: () {
+      final searchFoodsUseCase = MockSearchFoodsUseCase();
+      when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
+      return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
-    build: () => buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, logFoodUseCase: logFoodUseCase),
     act: (cubit) => cubit.search(query: 'banana'),
     expect: () => [const FoodSearchLoading(), isA<FoodSearchLoaded>()],
   );
 
   blocTest<FoodSearchCubit, FoodSearchState>(
     'emits [FoodSearchLoading, FoodSearchError] when the search fails',
-    setUp: () {
+    build: () {
+      final searchFoodsUseCase = MockSearchFoodsUseCase();
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
-    build: () => buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, logFoodUseCase: logFoodUseCase),
     act: (cubit) => cubit.search(query: 'banana'),
     expect: () => [const FoodSearchLoading(), const FoodSearchError(message: 'boom')],
   );
 
   test('logFood delegates to the use case with today logged for the given meal', () async {
-    final cubit = buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, logFoodUseCase: logFoodUseCase);
-    final food = buildFood();
-    final foodLog = buildFoodLog();
+    final logFoodUseCase = MockLogFoodUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    final food = FoodFactory.build();
+    final foodLog = FoodLogFactory.build();
     when(
       () => logFoodUseCase(food: food, loggedDate: any(named: 'loggedDate'), mealType: MealType.dinner, quantityGrams: 250),
     ).thenAnswer((_) async => Success(foodLog));
