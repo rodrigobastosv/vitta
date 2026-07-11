@@ -72,7 +72,9 @@ Routes are never referenced by raw path string outside of `app_router.dart`. `Ap
 
 ## App-level state
 
-`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — currently just the locale override (`AppState.locale`, null = follow system) and `themeMode`. It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page can reach it with `context.read<AppCubit>()`. `SettingsPage` is its only consumer today, changing locale/theme through `RadioGroup`s. Persisted via `SettingsLocalDataSource` (see Local storage) — survives app restart.
+`AppCubit` (`lib/app/cubit/app_cubit.dart`) holds cross-cutting app state — the locale override (`AppState.locale`, null = follow system), `themeMode`, and `unitSystem` (`core/units/unit_system.dart`'s `UnitSystem.metric`/`.imperial`, default metric). It's a GetIt singleton provided once at the root in `main.dart` via `BlocProvider.value(value: G<AppCubit>(), ...)` wrapping `MaterialApp.router`, so any page — including a modal route like `LogFoodSheet`, since it's still a descendant of that root provider through the `Navigator`'s `Overlay` — can reach it with `context.read<AppCubit>()` without being re-provided. `SettingsPage` is its only consumer today, changing locale/theme/units through `RadioGroup`s. Persisted via `SettingsLocalDataSource` (see Local storage) — survives app restart.
+
+`UnitSystem` only converts *food quantity consumed* (`LogFoodSheet`'s grams/ounces field) between metric and imperial, converting to grams before it ever reaches the domain/`FoodLog.quantityGrams` — grams stays the source of truth end-to-end, same principle as storing locale/theme as their real types rather than display strings. It deliberately does not touch a food's per-100g macros (`CustomFoodSheet`, `dietCaloriesPer100gLabel`, ...) — "per 100g" is a nutrition-label convention independent of the reader's preferred unit system, not a quantity to convert.
 
 ## Internationalization
 
