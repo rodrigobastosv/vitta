@@ -15,6 +15,9 @@
   "themeSystemDefault": "System default",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "settingsUnitSystemLabel": "Unit system",
+  "unitSystemMetric": "Metric (g/kg)",
+  "unitSystemImperial": "Imperial (oz/lb)",
   "comingSoonTitle": "Coming soon",
   "dietComingSoonMessage": "Diet tracking is on its way.",
   "workoutComingSoonMessage": "Workout tracking is on its way.",
@@ -39,7 +42,12 @@
   "dietEmptyTitle": "Nothing logged yet",
   "dietEmptyMessage": "Tap the + button to add the first food of the day.",
   "dietInvalidQuantity": "Enter a quantity greater than zero.",
-  "dietQuantityGramsLabel": "Quantity (g)",
+  "dietQuantityLabel": "Quantity ({unit})",
+  "@dietQuantityLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
   "dietLogFoodAction": "Add to today",
   "dietInvalidCustomFood": "Fill in the name and all macros with valid numbers.",
   "dietCustomFoodTitle": "Add a food",
