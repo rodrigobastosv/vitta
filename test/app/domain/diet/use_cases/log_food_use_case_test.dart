@@ -3,31 +3,25 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
-import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
+import '../../../../factories/use_cases_factories.dart';
 import '../../../../mocks/repositories_mocks.dart';
 
 void main() {
   setUpAll(() {
-    registerFallbackValue(buildFood());
+    registerFallbackValue(FoodFactory.build());
     registerFallbackValue(MealType.breakfast);
     registerFallbackValue(DateTime(2000));
   });
 
-  late MockDietRepository dietRepository;
-  late LogFoodUseCase useCase;
-
-  setUp(() {
-    dietRepository = MockDietRepository();
-    useCase = LogFoodUseCase(dietRepository: dietRepository);
-  });
-
   test('logs the food directly when it already has an id', () async {
-    final food = buildFood();
+    final dietRepository = MockDietRepository();
+    final useCase = UseCasesFactories.buildLogFoodUseCase(dietRepository: dietRepository);
+    final food = FoodFactory.build();
     final loggedDate = DateTime(2026, 7, 11);
-    final foodLog = buildFoodLog();
+    final foodLog = FoodLogFactory.build();
     when(
       () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: MealType.lunch, quantityGrams: 120),
     ).thenAnswer((_) async => Success(foodLog));
@@ -44,10 +38,12 @@ void main() {
   });
 
   test('saves the food first when it has no id yet, then logs it', () async {
-    final unsavedFood = buildFood(id: null);
-    final savedFood = buildFood(id: 'food-2');
+    final dietRepository = MockDietRepository();
+    final useCase = UseCasesFactories.buildLogFoodUseCase(dietRepository: dietRepository);
+    final unsavedFood = FoodFactory.build(id: null);
+    final savedFood = FoodFactory.build(id: 'food-2');
     final loggedDate = DateTime(2026, 7, 11);
-    final foodLog = buildFoodLog(foodId: 'food-2');
+    final foodLog = FoodLogFactory.build(foodId: 'food-2');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => Success(savedFood));
     when(
       () => dietRepository.logFood(foodId: 'food-2', loggedDate: loggedDate, mealType: MealType.snack, quantityGrams: 50),
@@ -64,7 +60,9 @@ void main() {
   });
 
   test('does not attempt to log when saving the food fails', () async {
-    final unsavedFood = buildFood(id: null);
+    final dietRepository = MockDietRepository();
+    final useCase = UseCasesFactories.buildLogFoodUseCase(dietRepository: dietRepository);
+    final unsavedFood = FoodFactory.build(id: null);
     const error = VTError(message: 'could not save food');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => const Failure(error));
 

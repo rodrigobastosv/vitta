@@ -16,14 +16,26 @@ void main() {
 
   blocTest<AppCubit, AppState>(
     'emits state with the new locale when changeLocale is called',
-    build: buildAppCubit,
+    build: () {
+      final settingsLocalDataSource = MockSettingsLocalDataSource();
+      when(settingsLocalDataSource.getLocale).thenReturn(null);
+      when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
+      when(() => settingsLocalDataSource.saveLocale(any())).thenAnswer((_) async {});
+      return CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource);
+    },
     act: (cubit) => cubit.changeLocale(const Locale('pt')),
     expect: () => [const AppState(locale: Locale('pt'))],
   );
 
   blocTest<AppCubit, AppState>(
     'emits state with a null locale when useSystemLocale is called',
-    build: buildAppCubit,
+    build: () {
+      final settingsLocalDataSource = MockSettingsLocalDataSource();
+      when(settingsLocalDataSource.getLocale).thenReturn(null);
+      when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
+      when(() => settingsLocalDataSource.saveLocale(any())).thenAnswer((_) async {});
+      return CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource);
+    },
     seed: () => const AppState(locale: Locale('pt')),
     act: (cubit) => cubit.useSystemLocale(),
     expect: () => [const AppState()],
@@ -31,7 +43,13 @@ void main() {
 
   blocTest<AppCubit, AppState>(
     'emits state with the new theme mode when changeThemeMode is called',
-    build: buildAppCubit,
+    build: () {
+      final settingsLocalDataSource = MockSettingsLocalDataSource();
+      when(settingsLocalDataSource.getLocale).thenReturn(null);
+      when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
+      when(() => settingsLocalDataSource.saveThemeMode(any())).thenAnswer((_) async {});
+      return CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource);
+    },
     act: (cubit) => cubit.changeThemeMode(.dark),
     expect: () => [const AppState(themeMode: .dark)],
   );
@@ -41,7 +59,7 @@ void main() {
     when(settingsLocalDataSource.getLocale).thenReturn(const Locale('pt'));
     when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.dark);
 
-    final cubit = buildAppCubit(settingsLocalDataSource: settingsLocalDataSource);
+    final cubit = CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource);
 
     expect(cubit.state, const AppState(locale: Locale('pt'), themeMode: ThemeMode.dark));
   });
@@ -52,7 +70,7 @@ void main() {
     when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
     when(() => settingsLocalDataSource.saveLocale(any())).thenAnswer((_) async {});
 
-    buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).changeLocale(const Locale('pt'));
+    CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).changeLocale(const Locale('pt'));
 
     verify(() => settingsLocalDataSource.saveLocale(const Locale('pt'))).called(1);
   });
@@ -63,7 +81,7 @@ void main() {
     when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
     when(() => settingsLocalDataSource.saveLocale(any())).thenAnswer((_) async {});
 
-    buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).useSystemLocale();
+    CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).useSystemLocale();
 
     verify(() => settingsLocalDataSource.saveLocale(null)).called(1);
   });
@@ -74,7 +92,7 @@ void main() {
     when(settingsLocalDataSource.getThemeMode).thenReturn(ThemeMode.system);
     when(() => settingsLocalDataSource.saveThemeMode(any())).thenAnswer((_) async {});
 
-    buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).changeThemeMode(ThemeMode.dark);
+    CubitsFactories.buildAppCubit(settingsLocalDataSource: settingsLocalDataSource).changeThemeMode(ThemeMode.dark);
 
     verify(() => settingsLocalDataSource.saveThemeMode(ThemeMode.dark)).called(1);
   });

@@ -1,7 +1,13 @@
-abstract class LocalStorageService {
-  T? get<T>(String key);
+import 'package:hive_ce/hive.dart';
 
-  Future<void> put<T>(String key, T value);
+class LocalStorageService {
+  LocalStorageService({required Box<dynamic> box}) : _box = box;
 
-  Future<void> delete(String key);
+  final Box<dynamic> _box;
+
+  T? get<T>(String key) => _box.get(key) as T?;
+
+  Future<void> put<T>(String key, T value) => _box.put(key, value);
+
+  Future<void> delete(String key) => _box.delete(key);
 }
