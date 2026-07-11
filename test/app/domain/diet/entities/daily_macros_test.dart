@@ -9,10 +9,10 @@ void main() {
   test('sums macros across all entries', () {
     final dailyMacros = DailyMacros(
       entries: [
-        buildFoodLogEntry(food: buildFood(caloriesPer100g: 100, proteinPer100g: 10, carbsPer100g: 5, fatPer100g: 2), log: buildFoodLog()),
-        buildFoodLogEntry(
-          food: buildFood(caloriesPer100g: 200, proteinPer100g: 20, carbsPer100g: 10, fatPer100g: 4),
-          log: buildFoodLog(quantityGrams: 50),
+        FoodLogEntryFactory.build(food: FoodFactory.build(caloriesPer100g: 100, proteinPer100g: 10, carbsPer100g: 5, fatPer100g: 2), log: FoodLogFactory.build()),
+        FoodLogEntryFactory.build(
+          food: FoodFactory.build(caloriesPer100g: 200, proteinPer100g: 20, carbsPer100g: 10, fatPer100g: 4),
+          log: FoodLogFactory.build(quantityGrams: 50),
         ),
       ],
     );
