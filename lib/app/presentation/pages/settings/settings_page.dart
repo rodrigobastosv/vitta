@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/cubit/app_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -57,6 +58,22 @@ class _SettingsView extends StatelessWidget {
                   RadioListTile<ThemeMode>(title: Text(l10n.themeSystemDefault), value: .system),
                   RadioListTile<ThemeMode>(title: Text(l10n.themeLight), value: .light),
                   RadioListTile<ThemeMode>(title: Text(l10n.themeDark), value: .dark),
+                ],
+              ),
+            ),
+            const VTGap.m(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
+              child: Text(l10n.settingsUnitSystemLabel, style: VTTextStyles.title(context)),
+            ),
+            const VTGap.s(),
+            RadioGroup<UnitSystem>(
+              groupValue: state.unitSystem,
+              onChanged: (unitSystem) => cubit.changeUnitSystem(unitSystem!),
+              child: Column(
+                children: [
+                  RadioListTile<UnitSystem>(title: Text(l10n.unitSystemMetric), value: .metric),
+                  RadioListTile<UnitSystem>(title: Text(l10n.unitSystemImperial), value: .imperial),
                 ],
               ),
             ),
