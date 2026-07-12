@@ -14,6 +14,18 @@ class Food extends Equatable {
     this.barcode,
   });
 
+  factory Food.fromMap(Map<String, dynamic> row) => Food(
+    id: row['id'] as String,
+    name: row['name'] as String,
+    brand: row['brand'] as String?,
+    barcode: row['barcode'] as String?,
+    source: FoodSource.fromWireValue(row['source'] as String),
+    caloriesPer100g: (row['calories_per_100g'] as num).toDouble(),
+    proteinPer100g: (row['protein_per_100g'] as num).toDouble(),
+    carbsPer100g: (row['carbs_per_100g'] as num).toDouble(),
+    fatPer100g: (row['fat_per_100g'] as num).toDouble(),
+  );
+
   /// Null until the food has been persisted (e.g. a fresh Open Food Facts search
   /// result or a custom food the user hasn't saved yet).
   final String? id;

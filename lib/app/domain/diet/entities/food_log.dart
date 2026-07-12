@@ -10,6 +10,14 @@ class FoodLog extends Equatable {
     required this.quantityGrams,
   });
 
+  factory FoodLog.fromMap(Map<String, dynamic> row) => FoodLog(
+    id: row['id'] as String,
+    foodId: row['food_id'] as String,
+    loggedDate: DateTime.parse(row['logged_date'] as String),
+    mealType: MealType.fromWireValue(row['meal_type'] as String),
+    quantityGrams: (row['quantity_grams'] as num).toDouble(),
+  );
+
   final String id;
   final String foodId;
   final DateTime loggedDate;

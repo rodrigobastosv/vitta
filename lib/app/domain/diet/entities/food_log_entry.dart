@@ -5,6 +5,9 @@ import 'package:vitta/app/domain/diet/entities/food_log.dart';
 class FoodLogEntry extends Equatable {
   const FoodLogEntry({required this.log, required this.food});
 
+  factory FoodLogEntry.fromMap(Map<String, dynamic> row) =>
+      FoodLogEntry(log: FoodLog.fromMap(row), food: Food.fromMap(row['foods'] as Map<String, dynamic>));
+
   final FoodLog log;
   final Food food;
 
