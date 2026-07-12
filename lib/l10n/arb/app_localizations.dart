@@ -391,6 +391,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snack'**
   String get mealTypeSnack;
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelAction;
+
+  /// No description provided for @saveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveAction;
+
+  /// No description provided for @waterFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get waterFeatureTitle;
+
+  /// No description provided for @waterFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track how much water you drink each day'**
+  String get waterFeatureSubtitle;
+
+  /// No description provided for @waterProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} / {goal} {unit}'**
+  String waterProgressLabel(String consumed, String goal, String unit);
+
+  /// No description provided for @waterDeleteLogTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get waterDeleteLogTooltip;
+
+  /// No description provided for @waterEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get waterEmptyTitle;
+
+  /// No description provided for @waterEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to log the first glass of water.'**
+  String get waterEmptyMessage;
+
+  /// No description provided for @waterQuickAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add water'**
+  String get waterQuickAddTitle;
+
+  /// No description provided for @waterCustomAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom amount ({unit})'**
+  String waterCustomAmountLabel(String unit);
+
+  /// No description provided for @waterLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get waterLogAction;
+
+  /// No description provided for @waterInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount greater than zero.'**
+  String get waterInvalidAmount;
+
+  /// No description provided for @waterGoalDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get waterGoalDialogTitle;
+
+  /// No description provided for @waterGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal ({unit})'**
+  String waterGoalLabel(String unit);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

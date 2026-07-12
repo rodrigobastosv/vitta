@@ -23,6 +23,7 @@ void main() {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 
+    await tester.ensureVisible(find.text('Workout'));
     await tester.tap(find.text('Workout'));
     await tester.pumpAndSettle();
 

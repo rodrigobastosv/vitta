@@ -1,5 +1,7 @@
--- Vitta diet feature schema.
--- Run this once in the Supabase project's SQL editor (Project > SQL Editor > New query).
+-- Vitta schema. Source of truth for every feature's tables.
+-- Run in the Supabase project's SQL editor (Project > SQL Editor > New query).
+-- Safe to re-run in full: tables/indexes use if not exists, and policies are
+-- dropped and recreated (Postgres has no "create policy if not exists").
 
 create table if not exists foods (
   id uuid primary key default gen_random_uuid(),
@@ -29,15 +31,34 @@ create table if not exists food_logs (
 
 create index if not exists food_logs_user_id_logged_date_idx on food_logs (user_id, logged_date);
 
+create table if not exists water_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  logged_date date not null,
+  amount_ml numeric not null check (amount_ml > 0),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists water_logs_user_id_logged_date_idx on water_logs (user_id, logged_date);
+
 alter table foods enable row level security;
 alter table food_logs enable row level security;
+alter table water_logs enable row level security;
 
+drop policy if exists "Users manage their own foods" on foods;
 create policy "Users manage their own foods" on foods
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
 
+drop policy if exists "Users manage their own food logs" on food_logs;
 create policy "Users manage their own food logs" on food_logs
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own water logs" on water_logs;
+create policy "Users manage their own water logs" on water_logs
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
