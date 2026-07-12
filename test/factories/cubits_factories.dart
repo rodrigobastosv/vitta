@@ -1,6 +1,7 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 
 import '../mocks/datasources_mocks.dart';
@@ -21,6 +22,9 @@ abstract class CubitsFactories {
         searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
         logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
       );
+
+  static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>
+      OnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase());
 
   static WaterCubit buildWaterCubit({
     MockGetDailyWaterUseCase? getDailyWaterUseCase,

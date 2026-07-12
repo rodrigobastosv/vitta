@@ -213,4 +213,30 @@ class AppLocalizationsPt extends AppLocalizations {
   String waterGoalLabel(String unit) {
     return 'Meta diária ($unit)';
   }
+
+  @override
+  String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
+
+  @override
+  String get onboardingWelcomeMessage =>
+      'Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.';
+
+  @override
+  String get onboardingSleepFeatureTitle => 'Sono';
+
+  @override
+  String get onboardingSleepFeatureSubtitle => 'Acompanhe seus padrões de sono';
+
+  @override
+  String get onboardingAccountBenefitMessage =>
+      'Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.';
+
+  @override
+  String get onboardingCreateAccountAction => 'Criar conta';
+
+  @override
+  String get onboardingCreateAccountComingSoonMessage => 'A criação de conta está a caminho.';
+
+  @override
+  String get onboardingContinueWithoutAccountAction => 'Continuar sem conta';
 }
