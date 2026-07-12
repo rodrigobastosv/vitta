@@ -1,11 +1,5 @@
-import 'package:vitta/app/presentation/general/vt_presentation_event.dart';
-
 sealed class WaterPresentationEvent {}
 
-class WaterShowLoading extends VTShowLoading implements WaterPresentationEvent {
-  const WaterShowLoading();
-}
+class WaterShowLoading implements WaterPresentationEvent {}
 
-class WaterHideLoading extends VTHideLoading implements WaterPresentationEvent {
-  const WaterHideLoading();
-}
+class WaterHideLoading implements WaterPresentationEvent {}

@@ -1,4 +1,8 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:vitta/app/domain/auth/use_cases/get_auth_status_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -32,3 +36,11 @@ class MockGetRecentSleepLogsUseCase extends Mock implements GetRecentSleepLogsUs
 class MockDeleteSleepLogUseCase extends Mock implements DeleteSleepLogUseCase {}
 
 class MockCompleteOnboardingUseCase extends Mock implements CompleteOnboardingUseCase {}
+
+class MockGetAuthStatusUseCase extends Mock implements GetAuthStatusUseCase {}
+
+class MockSignUpUseCase extends Mock implements SignUpUseCase {}
+
+class MockSignInUseCase extends Mock implements SignInUseCase {}
+
+class MockSignOutUseCase extends Mock implements SignOutUseCase {}

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -15,6 +16,14 @@ class SleepPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VTPage<SleepCubit, SleepState, SleepPresentationEvent>(
+    onPresentation: (context, event) {
+      switch (event) {
+        case SleepShowLoading():
+          context.showLoading();
+        case SleepHideLoading():
+          context.hideLoading();
+      }
+    },
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       return Scaffold(
@@ -33,7 +42,10 @@ class SleepPage extends StatelessWidget {
                     separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
                     itemBuilder: (context, index) {
                       final log = logs[index];
-                      return SleepLogTile(log: log, onDelete: () => cubit.deleteLog(logId: log.id));
+                      return SleepLogTile(
+                        log: log,
+                        onDelete: () => cubit.deleteLog(logId: log.id),
+                      );
                     },
                   ),
           ),

@@ -1,10 +1,12 @@
 import 'package:go_router/go_router.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/presentation/pages/auth/auth_page.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_page.dart';
 import 'package:vitta/app/presentation/pages/home/home_page.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_page.dart';
+import 'package:vitta/app/presentation/pages/profile/profile_page.dart';
 import 'package:vitta/app/presentation/pages/settings/settings_page.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_page.dart';
 import 'package:vitta/app/presentation/pages/water/water_page.dart';
@@ -16,8 +18,9 @@ abstract class AppRouter {
     initialLocation: AppRoute.home.path,
     redirect: (context, state) {
       final hasSeenOnboarding = G<OnboardingRepository>().hasSeenOnboarding();
-      final isGoingToOnboarding = state.matchedLocation == AppRoute.onboarding.path;
-      if (!hasSeenOnboarding && !isGoingToOnboarding) {
+      final isExemptFromOnboardingGate =
+          state.matchedLocation == AppRoute.onboarding.path || state.matchedLocation == AppRoute.auth.path;
+      if (!hasSeenOnboarding && !isExemptFromOnboardingGate) {
         return AppRoute.onboarding.path;
       }
       return null;
@@ -34,7 +37,13 @@ abstract class AppRouter {
       GoRoute(path: AppRoute.water.path, name: AppRoute.water.name, builder: (context, state) => const WaterPage()),
       GoRoute(path: AppRoute.sleep.path, name: AppRoute.sleep.name, builder: (context, state) => const SleepPage()),
       GoRoute(path: AppRoute.workout.path, name: AppRoute.workout.name, builder: (context, state) => const WorkoutPage()),
+      GoRoute(path: AppRoute.profile.path, name: AppRoute.profile.name, builder: (context, state) => const ProfilePage()),
       GoRoute(path: AppRoute.settings.path, name: AppRoute.settings.name, builder: (context, state) => const SettingsPage()),
+      GoRoute(
+        path: AppRoute.auth.path,
+        name: AppRoute.auth.name,
+        builder: (context, state) => AuthPage(initialIsSignUp: state.extra as bool? ?? true),
+      ),
     ],
   );
 }
