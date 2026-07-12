@@ -9,15 +9,11 @@ import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
 class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   WaterCubit({
-    required GetDailyWaterUseCase getDailyWaterUseCase,
-    required LogWaterUseCase logWaterUseCase,
-    required DeleteWaterLogUseCase deleteWaterLogUseCase,
-    required WaterLocalDataSource waterLocalDataSource,
-  }) : _getDailyWaterUseCase = getDailyWaterUseCase,
-       _logWaterUseCase = logWaterUseCase,
-       _deleteWaterLogUseCase = deleteWaterLogUseCase,
-       _waterLocalDataSource = waterLocalDataSource,
-       super(
+    required this._getDailyWaterUseCase,
+    required this._logWaterUseCase,
+    required this._deleteWaterLogUseCase,
+    required this._waterLocalDataSource,
+  }) : super(
          WaterLoaded(
            date: _dateOnly(DateTime.now()),
            dailyWater: const DailyWater(entries: []),

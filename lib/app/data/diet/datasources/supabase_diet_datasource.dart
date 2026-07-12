@@ -10,7 +10,7 @@ import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class SupabaseDietDataSource {
-  SupabaseDietDataSource({required SupabaseService supabaseService}) : _supabaseService = supabaseService;
+  SupabaseDietDataSource({required this._supabaseService});
 
   final SupabaseService _supabaseService;
 
@@ -18,11 +18,8 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, Food>> saveFood({required Food food}) async {
     try {
-      final row = await _supabaseService
-          .from('foods')
-          .insert(CreateFoodRequest(food: food, userId: _userId).toJson())
-          .select()
-          .single();
+      final request = CreateFoodRequest(food: food, userId: _userId);
+      final row = await _supabaseService.from('foods').insert(request.toJson()).select().single();
       return Success(_foodFromRow(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to save food "${food.name}"', cause: error));
@@ -36,19 +33,14 @@ class SupabaseDietDataSource {
     required double quantityGrams,
   }) async {
     try {
-      final row = await _supabaseService
-          .from('food_logs')
-          .insert(
-            CreateFoodLogRequest(
-              userId: _userId,
-              foodId: foodId,
-              loggedDate: loggedDate,
-              mealType: mealType,
-              quantityGrams: quantityGrams,
-            ).toJson(),
-          )
-          .select()
-          .single();
+      final request = CreateFoodLogRequest(
+        userId: _userId,
+        foodId: foodId,
+        loggedDate: loggedDate,
+        mealType: mealType,
+        quantityGrams: quantityGrams,
+      );
+      final row = await _supabaseService.from('food_logs').insert(request.toJson()).select().single();
       return Success(_foodLogFromRow(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log food', cause: error));

@@ -1,7 +1,7 @@
 import 'package:hive_ce/hive.dart';
 
 class LocalStorageService {
-  LocalStorageService({required Box<dynamic> box}) : _box = box;
+  LocalStorageService({required this._box});
 
   final Box<dynamic> _box;
 
