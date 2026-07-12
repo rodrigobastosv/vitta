@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:vitta/app/bootstrap.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/cubit/app_state.dart';
+import 'package:vitta/app/design_system/components/general/vt_loading_overlay_indicator.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/presentation/routing/app_router.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
@@ -30,6 +32,8 @@ class VittaApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         routerConfig: AppRouter.router,
+        builder: (context, child) =>
+            LoaderOverlay(overlayWidgetBuilder: (_) => const VTLoadingOverlayIndicator(), child: child!),
       ),
     ),
   );

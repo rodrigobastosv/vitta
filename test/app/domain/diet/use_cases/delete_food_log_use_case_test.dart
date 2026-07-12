@@ -11,14 +11,9 @@ void main() {
     final useCase = UseCasesFactories.buildDeleteFoodLogUseCase(dietRepository: dietRepository);
     when(() => dietRepository.deleteFoodLog(logId: 'log-1')).thenAnswer((_) async => const Success(null));
 
-    final result = await useCase(logId: 'log-1');
+    final deletedResult = await useCase(logId: 'log-1');
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success():
-        break;
-    }
+    deletedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => dietRepository.deleteFoodLog(logId: 'log-1')).called(1);
   });
 }

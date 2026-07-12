@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/result.dart';
+import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -27,7 +28,10 @@ class _LogFoodSheet extends StatefulWidget {
 }
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
-  final _quantityController = TextEditingController(text: '100');
+  late final UnitSystem _unitSystem = context.read<AppCubit>().state.unitSystem;
+  late final TextEditingController _quantityController = TextEditingController(
+    text: _formatNumber(_unitSystem.gramsToDisplayWeight(100)),
+  );
   MealType _mealType = MealType.breakfast;
   bool _isSaving = false;
   String? _errorMessage;
@@ -38,10 +42,15 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
     super.dispose();
   }
 
+  String _formatNumber(double value) {
+    final rounded = double.parse(value.toStringAsFixed(1));
+    return rounded == rounded.roundToDouble() ? rounded.toInt().toString() : rounded.toString();
+  }
+
   Future<void> _submit() async {
-    final quantityGrams = double.tryParse(_quantityController.text.replaceAll(',', '.'));
+    final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     final l10n = AppLocalizations.of(context);
-    if (quantityGrams == null || quantityGrams <= 0) {
+    if (quantityDisplayValue == null || quantityDisplayValue <= 0) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -51,24 +60,22 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       _errorMessage = null;
     });
 
-    final logged = await context.read<FoodSearchCubit>().logFood(
+    final loggedResult = await context.read<FoodSearchCubit>().logFood(
       food: widget.food,
       mealType: _mealType,
-      quantityGrams: quantityGrams,
+      quantityGrams: _unitSystem.displayWeightToGrams(quantityDisplayValue),
     );
 
     if (!mounted) {
       return;
     }
-    switch (logged) {
-      case Failure(:final error):
-        setState(() {
-          _isSaving = false;
-          _errorMessage = error.message;
-        });
-      case Success():
-        Navigator.of(context).pop();
-    }
+    loggedResult.when(
+      (error) => setState(() {
+        _isSaving = false;
+        _errorMessage = error.message;
+      }),
+      (_) => Navigator.of(context).pop(),
+    );
   }
 
   @override
@@ -90,7 +97,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
           TextField(
             controller: _quantityController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: l10n.dietQuantityGramsLabel),
+            decoration: InputDecoration(labelText: l10n.dietQuantityLabel(_unitSystem.weightUnitLabel)),
           ),
           const VTGap.m(),
           Wrap(
