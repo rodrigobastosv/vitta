@@ -165,4 +165,52 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mealTypeSnack => 'Lanche';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get saveAction => 'Salvar';
+
+  @override
+  String get waterFeatureTitle => 'Água';
+
+  @override
+  String get waterFeatureSubtitle => 'Acompanhe quanta água você bebe por dia';
+
+  @override
+  String waterProgressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
+  String get waterDeleteLogTooltip => 'Remover';
+
+  @override
+  String get waterEmptyTitle => 'Nada registrado ainda';
+
+  @override
+  String get waterEmptyMessage => 'Toque no botão + para registrar o primeiro copo d\'água.';
+
+  @override
+  String get waterQuickAddTitle => 'Adicionar água';
+
+  @override
+  String waterCustomAmountLabel(String unit) {
+    return 'Quantidade personalizada ($unit)';
+  }
+
+  @override
+  String get waterLogAction => 'Adicionar';
+
+  @override
+  String get waterInvalidAmount => 'Informe uma quantidade maior que zero.';
+
+  @override
+  String get waterGoalDialogTitle => 'Meta diária';
+
+  @override
+  String waterGoalLabel(String unit) {
+    return 'Meta diária ($unit)';
+  }
 }

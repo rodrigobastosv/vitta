@@ -70,5 +70,36 @@
   "mealTypeBreakfast": "Café da manhã",
   "mealTypeLunch": "Almoço",
   "mealTypeDinner": "Jantar",
-  "mealTypeSnack": "Lanche"
+  "mealTypeSnack": "Lanche",
+  "cancelAction": "Cancelar",
+  "saveAction": "Salvar",
+  "waterFeatureTitle": "Água",
+  "waterFeatureSubtitle": "Acompanhe quanta água você bebe por dia",
+  "waterProgressLabel": "{consumed} / {goal} {unit}",
+  "@waterProgressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterDeleteLogTooltip": "Remover",
+  "waterEmptyTitle": "Nada registrado ainda",
+  "waterEmptyMessage": "Toque no botão + para registrar o primeiro copo d'água.",
+  "waterQuickAddTitle": "Adicionar água",
+  "waterCustomAmountLabel": "Quantidade personalizada ({unit})",
+  "@waterCustomAmountLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLogAction": "Adicionar",
+  "waterInvalidAmount": "Informe uma quantidade maior que zero.",
+  "waterGoalDialogTitle": "Meta diária",
+  "waterGoalLabel": "Meta diária ({unit})",
+  "@waterGoalLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  }
 }

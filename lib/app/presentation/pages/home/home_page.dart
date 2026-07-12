@@ -49,6 +49,12 @@ class HomePage extends StatelessWidget {
                   onTap: () => context.pushRoute(.diet),
                 ),
                 VTFeatureTile(
+                  icon: Icons.water_drop_outlined,
+                  title: l10n.waterFeatureTitle,
+                  subtitle: l10n.waterFeatureSubtitle,
+                  onTap: () => context.pushRoute(.water),
+                ),
+                VTFeatureTile(
                   icon: Icons.fitness_center_outlined,
                   title: l10n.workoutFeatureTitle,
                   subtitle: l10n.workoutFeatureSubtitle,
