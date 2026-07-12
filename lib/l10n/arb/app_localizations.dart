@@ -572,17 +572,95 @@ abstract class AppLocalizations {
   /// **'Create account'**
   String get onboardingCreateAccountAction;
 
-  /// No description provided for @onboardingCreateAccountComingSoonMessage.
-  ///
-  /// In en, this message translates to:
-  /// **'Account creation is on its way.'**
-  String get onboardingCreateAccountComingSoonMessage;
-
   /// No description provided for @onboardingContinueWithoutAccountAction.
   ///
   /// In en, this message translates to:
   /// **'Continue without an account'**
   String get onboardingContinueWithoutAccountAction;
+
+  /// No description provided for @settingsAuthLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Account'**
+  String get settingsAuthLabel;
+
+  /// No description provided for @profileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profileTitle;
+
+  /// No description provided for @profileSignInAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign in or create account'**
+  String get profileSignInAction;
+
+  /// No description provided for @authAnonymousMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your data stays on this device only. Create an account to keep it safe and access it from any device.'**
+  String get authAnonymousMessage;
+
+  /// No description provided for @authSignedInAsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in as {email}'**
+  String authSignedInAsLabel(String email);
+
+  /// No description provided for @authCreateAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get authCreateAction;
+
+  /// No description provided for @authLoginAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get authLoginAction;
+
+  /// No description provided for @authLogoutAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log out'**
+  String get authLogoutAction;
+
+  /// No description provided for @authEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get authEmailLabel;
+
+  /// No description provided for @authPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get authPasswordLabel;
+
+  /// No description provided for @authSignUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign up'**
+  String get authSignUpAction;
+
+  /// No description provided for @authSignInAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get authSignInAction;
+
+  /// No description provided for @authInvalidEmailMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid email address.'**
+  String get authInvalidEmailMessage;
+
+  /// No description provided for @authInvalidPasswordMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get authInvalidPasswordMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

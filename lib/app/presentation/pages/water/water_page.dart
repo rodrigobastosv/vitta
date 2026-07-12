@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
@@ -20,6 +21,14 @@ class WaterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VTPage<WaterCubit, WaterState, WaterPresentationEvent>(
+    onPresentation: (context, event) {
+      switch (event) {
+        case WaterShowLoading():
+          context.showLoading();
+        case WaterHideLoading():
+          context.hideLoading();
+      }
+    },
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       final unitSystem = context.watch<AppCubit>().state.unitSystem;
@@ -64,7 +73,11 @@ class WaterPage extends StatelessWidget {
                       WaterProgressCard(dailyWater: dailyWater, dailyGoalMl: dailyGoalMl, unitSystem: unitSystem),
                       const VTGap.l(),
                       for (final log in dailyWater.entries) ...[
-                        WaterLogTile(log: log, unitSystem: unitSystem, onDelete: () => cubit.deleteLog(logId: log.id)),
+                        WaterLogTile(
+                          log: log,
+                          unitSystem: unitSystem,
+                          onDelete: () => cubit.deleteLog(logId: log.id),
+                        ),
                         const VTGap.s(),
                       ],
                     ],

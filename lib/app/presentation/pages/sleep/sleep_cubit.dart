@@ -19,9 +19,9 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   void onInit() => loadRecent();
 
   Future<void> loadRecent() async {
-    emitPresentation(const SleepShowLoading());
+    emitPresentation(SleepShowLoading());
     final recentLogsResult = await _getRecentSleepLogsUseCase(days: _recentDays);
-    emitPresentation(const SleepHideLoading());
+    emitPresentation(SleepHideLoading());
     recentLogsResult.when((error) => emit(SleepError(message: error.message)), (value) => emit(SleepLoaded(logs: value)));
   }
 

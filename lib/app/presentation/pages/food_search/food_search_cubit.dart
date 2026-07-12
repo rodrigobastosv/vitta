@@ -20,9 +20,9 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
       emit(const FoodSearchIdle());
       return;
     }
-    emitPresentation(const FoodSearchShowLoading());
+    emitPresentation(FoodSearchShowLoading());
     final foodsResult = await _searchFoodsUseCase(query: query);
-    emitPresentation(const FoodSearchHideLoading());
+    emitPresentation(FoodSearchHideLoading());
     foodsResult.when((error) => emit(FoodSearchError(message: error.message)), (value) => emit(FoodSearchLoaded(results: value)));
   }
 
