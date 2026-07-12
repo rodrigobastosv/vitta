@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
@@ -6,9 +5,11 @@ import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/presentation/general/presentation_cubit.dart';
+import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 
-class FoodSearchCubit extends Cubit<FoodSearchState> {
+class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPresentationEvent> {
   FoodSearchCubit({required SearchFoodsUseCase searchFoodsUseCase, required LogFoodUseCase logFoodUseCase})
     : _searchFoodsUseCase = searchFoodsUseCase,
       _logFoodUseCase = logFoodUseCase,
@@ -22,8 +23,9 @@ class FoodSearchCubit extends Cubit<FoodSearchState> {
       emit(const FoodSearchIdle());
       return;
     }
-    emit(const FoodSearchLoading());
+    emitPresentation(const FoodSearchShowLoading());
     final foods = await _searchFoodsUseCase(query: query);
+    emitPresentation(const FoodSearchHideLoading());
     switch (foods) {
       case Failure(:final error):
         emit(FoodSearchError(message: error.message));

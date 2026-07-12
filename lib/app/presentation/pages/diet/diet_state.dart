@@ -8,10 +8,6 @@ sealed class DietState extends Equatable {
   List<Object?> get props => [];
 }
 
-class DietLoading extends DietState {
-  const DietLoading();
-}
-
 class DietLoaded extends DietState {
   const DietLoaded({required this.date, required this.dailyMacros});
 

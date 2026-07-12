@@ -8,10 +8,6 @@ sealed class WaterState extends Equatable {
   List<Object?> get props => [];
 }
 
-class WaterLoading extends WaterState {
-  const WaterLoading();
-}
-
 class WaterLoaded extends WaterState {
   const WaterLoaded({required this.date, required this.dailyWater, required this.dailyGoalMl});
 
