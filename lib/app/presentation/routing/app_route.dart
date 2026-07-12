@@ -1,4 +1,5 @@
 enum AppRoute {
+  onboarding('/onboarding'),
   home('/'),
   diet('/diet'),
   foodSearch('/diet/food-search'),
