@@ -13,11 +13,8 @@ class WaterRepository {
       _supabaseWaterDataSource.logWater(loggedDate: loggedDate, amountMl: amountMl);
 
   Future<Result<VTError, DailyWater>> getDailyWater({required DateTime date}) async {
-    final dailyLog = await _supabaseWaterDataSource.getDailyLog(date: date);
-    return switch (dailyLog) {
-      Failure(:final error) => Failure(error),
-      Success(:final value) => Success(DailyWater(entries: value)),
-    };
+    final dailyLogResult = await _supabaseWaterDataSource.getDailyLog(date: date);
+    return dailyLogResult.when(Failure.new, (value) => Success(DailyWater(entries: value)));
   }
 
   Future<Result<VTError, void>> deleteWaterLog({required String logId}) => _supabaseWaterDataSource.deleteWaterLog(logId: logId);

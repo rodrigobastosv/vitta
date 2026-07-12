@@ -14,13 +14,8 @@ void main() {
     const dailyMacros = DailyMacros(entries: []);
     when(() => dietRepository.getDailyMacros(date: date)).thenAnswer((_) async => const Success(dailyMacros));
 
-    final result = await useCase(date: date);
+    final dailyMacrosResult = await useCase(date: date);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, dailyMacros);
-    }
+    dailyMacrosResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, dailyMacros));
   });
 }
