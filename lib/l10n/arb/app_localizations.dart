@@ -476,6 +476,78 @@ abstract class AppLocalizations {
   /// **'Daily goal ({unit})'**
   String waterGoalLabel(String unit);
 
+  /// No description provided for @sleepFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep'**
+  String get sleepFeatureTitle;
+
+  /// No description provided for @sleepFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your sleep patterns'**
+  String get sleepFeatureSubtitle;
+
+  /// No description provided for @sleepEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get sleepEmptyTitle;
+
+  /// No description provided for @sleepEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to log your first night of sleep.'**
+  String get sleepEmptyMessage;
+
+  /// No description provided for @sleepDeleteLogTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get sleepDeleteLogTooltip;
+
+  /// No description provided for @sleepLogSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log sleep'**
+  String get sleepLogSheetTitle;
+
+  /// No description provided for @sleepBedTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bed time'**
+  String get sleepBedTimeLabel;
+
+  /// No description provided for @sleepWakeTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake time'**
+  String get sleepWakeTimeLabel;
+
+  /// No description provided for @sleepQualityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality (optional)'**
+  String get sleepQualityLabel;
+
+  /// No description provided for @sleepInvalidRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Wake time must be after bed time.'**
+  String get sleepInvalidRange;
+
+  /// No description provided for @sleepLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log sleep'**
+  String get sleepLogAction;
+
+  /// No description provided for @sleepDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}m'**
+  String sleepDurationLabel(int hours, int minutes);
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
@@ -487,18 +559,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.'**
   String get onboardingWelcomeMessage;
-
-  /// No description provided for @onboardingSleepFeatureTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Sleep'**
-  String get onboardingSleepFeatureTitle;
-
-  /// No description provided for @onboardingSleepFeatureSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Track your sleep patterns'**
-  String get onboardingSleepFeatureSubtitle;
 
   /// No description provided for @onboardingAccountBenefitMessage.
   ///

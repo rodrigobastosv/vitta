@@ -4,6 +4,7 @@ enum AppRoute {
   diet('/diet'),
   foodSearch('/diet/food-search'),
   water('/water'),
+  sleep('/sleep'),
   workout('/workout'),
   settings('/settings');
 

@@ -4,6 +4,9 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
@@ -21,5 +24,11 @@ class MockLogWaterUseCase extends Mock implements LogWaterUseCase {}
 class MockGetDailyWaterUseCase extends Mock implements GetDailyWaterUseCase {}
 
 class MockDeleteWaterLogUseCase extends Mock implements DeleteWaterLogUseCase {}
+
+class MockLogSleepUseCase extends Mock implements LogSleepUseCase {}
+
+class MockGetRecentSleepLogsUseCase extends Mock implements GetRecentSleepLogsUseCase {}
+
+class MockDeleteSleepLogUseCase extends Mock implements DeleteSleepLogUseCase {}
 
 class MockCompleteOnboardingUseCase extends Mock implements CompleteOnboardingUseCase {}

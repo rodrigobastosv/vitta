@@ -10,6 +10,8 @@ import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
+import 'package:vitta/app/data/sleep/datasources/supabase_sleep_datasource.dart';
+import 'package:vitta/app/data/sleep/sleep_repository.dart';
 import 'package:vitta/app/data/water/datasources/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
@@ -18,12 +20,16 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
+import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 
 final G = GetIt.instance;
@@ -43,6 +49,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => DietRepository(openFoodFactsDataSource: G(), supabaseDietDataSource: G()));
   G.registerLazySingleton(() => SupabaseWaterDataSource(supabaseService: G()));
   G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G()));
+  G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G()));
 
   G.registerFactory(() => SearchFoodsUseCase(dietRepository: G()));
   G.registerFactory(() => LogFoodUseCase(dietRepository: G()));
@@ -51,6 +59,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => LogWaterUseCase(waterRepository: G()));
   G.registerFactory(() => GetDailyWaterUseCase(waterRepository: G()));
   G.registerFactory(() => DeleteWaterLogUseCase(waterRepository: G()));
+  G.registerFactory(() => LogSleepUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
+  G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
 
   G.registerFactory(() => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G()));
@@ -63,5 +74,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       deleteWaterLogUseCase: G(),
       waterLocalDataSource: G(),
     ),
+  );
+  G.registerFactory(
+    () => SleepCubit(getRecentSleepLogsUseCase: G(), logSleepUseCase: G(), deleteSleepLogUseCase: G()),
   );
 }
