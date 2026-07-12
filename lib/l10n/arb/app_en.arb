@@ -102,10 +102,26 @@
       "unit": {"type": "String"}
     }
   },
+  "sleepFeatureTitle": "Sleep",
+  "sleepFeatureSubtitle": "Track your sleep patterns",
+  "sleepEmptyTitle": "Nothing logged yet",
+  "sleepEmptyMessage": "Tap the + button to log your first night of sleep.",
+  "sleepDeleteLogTooltip": "Remove",
+  "sleepLogSheetTitle": "Log sleep",
+  "sleepBedTimeLabel": "Bed time",
+  "sleepWakeTimeLabel": "Wake time",
+  "sleepQualityLabel": "Quality (optional)",
+  "sleepInvalidRange": "Wake time must be after bed time.",
+  "sleepLogAction": "Log sleep",
+  "sleepDurationLabel": "{hours}h {minutes}m",
+  "@sleepDurationLabel": {
+    "placeholders": {
+      "hours": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
   "onboardingWelcomeTitle": "Welcome to Vitta",
   "onboardingWelcomeMessage": "Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.",
-  "onboardingSleepFeatureTitle": "Sleep",
-  "onboardingSleepFeatureSubtitle": "Track your sleep patterns",
   "onboardingAccountBenefitMessage": "Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.",
   "onboardingCreateAccountAction": "Create account",
   "onboardingCreateAccountComingSoonMessage": "Account creation is on its way.",

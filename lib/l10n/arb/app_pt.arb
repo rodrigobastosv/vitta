@@ -102,10 +102,26 @@
       "unit": {"type": "String"}
     }
   },
+  "sleepFeatureTitle": "Sono",
+  "sleepFeatureSubtitle": "Acompanhe seus padrões de sono",
+  "sleepEmptyTitle": "Nada registrado ainda",
+  "sleepEmptyMessage": "Toque no botão + para registrar sua primeira noite de sono.",
+  "sleepDeleteLogTooltip": "Remover",
+  "sleepLogSheetTitle": "Registrar sono",
+  "sleepBedTimeLabel": "Horário de dormir",
+  "sleepWakeTimeLabel": "Horário de acordar",
+  "sleepQualityLabel": "Qualidade (opcional)",
+  "sleepInvalidRange": "O horário de acordar deve ser depois do horário de dormir.",
+  "sleepLogAction": "Registrar sono",
+  "sleepDurationLabel": "{hours}h {minutes}m",
+  "@sleepDurationLabel": {
+    "placeholders": {
+      "hours": {"type": "int"},
+      "minutes": {"type": "int"}
+    }
+  },
   "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
   "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
-  "onboardingSleepFeatureTitle": "Sono",
-  "onboardingSleepFeatureSubtitle": "Acompanhe seus padrões de sono",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",
   "onboardingCreateAccountAction": "Criar conta",
   "onboardingCreateAccountComingSoonMessage": "A criação de conta está a caminho.",

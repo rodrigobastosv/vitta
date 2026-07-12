@@ -215,17 +215,49 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get sleepFeatureTitle => 'Sono';
+
+  @override
+  String get sleepFeatureSubtitle => 'Acompanhe seus padrões de sono';
+
+  @override
+  String get sleepEmptyTitle => 'Nada registrado ainda';
+
+  @override
+  String get sleepEmptyMessage => 'Toque no botão + para registrar sua primeira noite de sono.';
+
+  @override
+  String get sleepDeleteLogTooltip => 'Remover';
+
+  @override
+  String get sleepLogSheetTitle => 'Registrar sono';
+
+  @override
+  String get sleepBedTimeLabel => 'Horário de dormir';
+
+  @override
+  String get sleepWakeTimeLabel => 'Horário de acordar';
+
+  @override
+  String get sleepQualityLabel => 'Qualidade (opcional)';
+
+  @override
+  String get sleepInvalidRange => 'O horário de acordar deve ser depois do horário de dormir.';
+
+  @override
+  String get sleepLogAction => 'Registrar sono';
+
+  @override
+  String sleepDurationLabel(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
   String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
 
   @override
   String get onboardingWelcomeMessage =>
       'Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.';
-
-  @override
-  String get onboardingSleepFeatureTitle => 'Sono';
-
-  @override
-  String get onboardingSleepFeatureSubtitle => 'Acompanhe seus padrões de sono';
 
   @override
   String get onboardingAccountBenefitMessage =>
