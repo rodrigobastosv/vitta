@@ -6,7 +6,7 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 
 class OpenFoodFactsDataSource {
-  OpenFoodFactsDataSource({required VTHttpClient httpClient}) : _httpClient = httpClient;
+  OpenFoodFactsDataSource({required this._httpClient});
 
   final VTHttpClient _httpClient;
 
@@ -61,5 +61,8 @@ class OpenFoodFactsDataSource {
     );
   }
 
-  double? _numOrNull(dynamic value) => switch (value) { final num n => n.toDouble(), _ => null };
+  double? _numOrNull(dynamic value) => switch (value) {
+    final num n => n.toDouble(),
+    _ => null,
+  };
 }

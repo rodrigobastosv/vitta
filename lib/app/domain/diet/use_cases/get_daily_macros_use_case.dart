@@ -4,7 +4,7 @@ import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 
 class GetDailyMacrosUseCase {
-  GetDailyMacrosUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
+  GetDailyMacrosUseCase({required this._dietRepository});
 
   final DietRepository _dietRepository;
 

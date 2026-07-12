@@ -1,7 +1,7 @@
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 
 class CompleteOnboardingUseCase {
-  CompleteOnboardingUseCase({required OnboardingRepository onboardingRepository}) : _onboardingRepository = onboardingRepository;
+  CompleteOnboardingUseCase({required this._onboardingRepository});
 
   final OnboardingRepository _onboardingRepository;
 

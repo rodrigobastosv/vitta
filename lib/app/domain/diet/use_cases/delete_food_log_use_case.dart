@@ -3,7 +3,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
 
 class DeleteFoodLogUseCase {
-  DeleteFoodLogUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
+  DeleteFoodLogUseCase({required this._dietRepository});
 
   final DietRepository _dietRepository;
 

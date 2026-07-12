@@ -4,7 +4,7 @@ import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 
 class SearchFoodsUseCase {
-  SearchFoodsUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
+  SearchFoodsUseCase({required this._dietRepository});
 
   final DietRepository _dietRepository;
 
