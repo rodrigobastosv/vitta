@@ -1,4 +1,5 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
+import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -11,6 +12,18 @@ import '../mocks/use_cases_mocks.dart';
 abstract class CubitsFactories {
   static AppCubit buildAppCubit({MockSettingsLocalDataSource? settingsLocalDataSource}) =>
       AppCubit(settingsLocalDataSource: settingsLocalDataSource ?? MockSettingsLocalDataSource());
+
+  static AuthCubit buildAuthCubit({
+    MockGetAuthStatusUseCase? getAuthStatusUseCase,
+    MockSignUpUseCase? signUpUseCase,
+    MockSignInUseCase? signInUseCase,
+    MockSignOutUseCase? signOutUseCase,
+  }) => AuthCubit(
+    getAuthStatusUseCase: getAuthStatusUseCase ?? MockGetAuthStatusUseCase(),
+    signUpUseCase: signUpUseCase ?? MockSignUpUseCase(),
+    signInUseCase: signInUseCase ?? MockSignInUseCase(),
+    signOutUseCase: signOutUseCase ?? MockSignOutUseCase(),
+  );
 
   static DietCubit buildDietCubit({MockGetDailyMacrosUseCase? getDailyMacrosUseCase, MockDeleteFoodLogUseCase? deleteFoodLogUseCase}) =>
       DietCubit(

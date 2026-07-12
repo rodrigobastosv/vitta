@@ -6,7 +6,9 @@ enum AppRoute {
   water('/water'),
   sleep('/sleep'),
   workout('/workout'),
-  settings('/settings');
+  profile('/profile'),
+  settings('/settings'),
+  auth('/auth');
 
   const AppRoute(this.path);
 

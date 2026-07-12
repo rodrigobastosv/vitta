@@ -11,5 +11,9 @@ class SupabaseService {
 
   String get currentUserId => _client.auth.currentUser!.id;
 
+  bool get isAnonymous => _client.auth.currentUser?.isAnonymous ?? true;
+
+  String? get currentUserEmail => _client.auth.currentUser?.email;
+
   SupabaseQueryBuilder from(String table) => _client.from(table);
 }

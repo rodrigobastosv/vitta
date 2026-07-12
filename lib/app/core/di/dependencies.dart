@@ -4,6 +4,8 @@ import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
+import 'package:vitta/app/data/auth/auth_repository.dart';
+import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
@@ -15,6 +17,10 @@ import 'package:vitta/app/data/sleep/sleep_repository.dart';
 import 'package:vitta/app/data/water/datasources/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
+import 'package:vitta/app/domain/auth/use_cases/get_auth_status_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -26,6 +32,7 @@ import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -51,6 +58,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G()));
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G()));
+  G.registerLazySingleton(() => SupabaseAuthDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => AuthRepository(supabaseAuthDataSource: G()));
 
   G.registerFactory(() => SearchFoodsUseCase(dietRepository: G()));
   G.registerFactory(() => LogFoodUseCase(dietRepository: G()));
@@ -63,10 +72,17 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
+  G.registerFactory(() => GetAuthStatusUseCase(authRepository: G()));
+  G.registerFactory(() => SignUpUseCase(authRepository: G()));
+  G.registerFactory(() => SignInUseCase(authRepository: G()));
+  G.registerFactory(() => SignOutUseCase(authRepository: G()));
 
   G.registerFactory(() => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G()));
   G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G()));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
+  G.registerFactory(
+    () => AuthCubit(getAuthStatusUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()),
+  );
   G.registerFactory(
     () => WaterCubit(
       getDailyWaterUseCase: G(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -16,6 +17,14 @@ class FoodSearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VTPage<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
+    onPresentation: (context, event) {
+      switch (event) {
+        case FoodSearchShowLoading():
+          context.showLoading();
+        case FoodSearchHideLoading():
+          context.hideLoading();
+      }
+    },
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       return Scaffold(
@@ -55,7 +64,10 @@ class FoodSearchPage extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
                   itemBuilder: (context, index) {
                     final food = results[index];
-                    return FoodSearchResultTile(food: food, onTap: () => showLogFoodSheet(context: context, food: food));
+                    return FoodSearchResultTile(
+                      food: food,
+                      onTap: () => showLogFoodSheet(context: context, food: food),
+                    );
                   },
                 ),
               },
