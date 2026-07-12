@@ -12,10 +12,6 @@ class FoodSearchIdle extends FoodSearchState {
   const FoodSearchIdle();
 }
 
-class FoodSearchLoading extends FoodSearchState {
-  const FoodSearchLoading();
-}
-
 class FoodSearchLoaded extends FoodSearchState {
   const FoodSearchLoaded({required this.results});
 
