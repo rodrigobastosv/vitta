@@ -1,4 +1,4 @@
-import 'package:vitta/app/domain/auth/use_cases/get_auth_status_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
@@ -7,6 +7,8 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
@@ -17,6 +19,12 @@ import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import '../mocks/repositories_mocks.dart';
 
 abstract class UseCasesFactories {
+  static GetAppSettingsUseCase buildGetAppSettingsUseCase({MockSettingsRepository? settingsRepository}) =>
+      GetAppSettingsUseCase(settingsRepository: settingsRepository ?? MockSettingsRepository());
+
+  static SaveAppSettingsUseCase buildSaveAppSettingsUseCase({MockSettingsRepository? settingsRepository}) =>
+      SaveAppSettingsUseCase(settingsRepository: settingsRepository ?? MockSettingsRepository());
+
   static SearchFoodsUseCase buildSearchFoodsUseCase({MockDietRepository? dietRepository}) =>
       SearchFoodsUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
@@ -50,8 +58,8 @@ abstract class UseCasesFactories {
   static CompleteOnboardingUseCase buildCompleteOnboardingUseCase({MockOnboardingRepository? onboardingRepository}) =>
       CompleteOnboardingUseCase(onboardingRepository: onboardingRepository ?? MockOnboardingRepository());
 
-  static GetAuthStatusUseCase buildGetAuthStatusUseCase({MockAuthRepository? authRepository}) =>
-      GetAuthStatusUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static GetUserUseCase buildGetUserUseCase({MockAuthRepository? authRepository}) =>
+      GetUserUseCase(authRepository: authRepository ?? MockAuthRepository());
 
   static SignUpUseCase buildSignUpUseCase({MockAuthRepository? authRepository}) =>
       SignUpUseCase(authRepository: authRepository ?? MockAuthRepository());

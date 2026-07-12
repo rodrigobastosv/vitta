@@ -22,6 +22,7 @@
   "dietComingSoonMessage": "O acompanhamento de dieta está a caminho.",
   "workoutComingSoonMessage": "O acompanhamento de treino está a caminho.",
   "retry": "Tentar novamente",
+  "ok": "OK",
   "dietCaloriesLabel": "{calories} kcal hoje",
   "@dietCaloriesLabel": {
     "placeholders": {

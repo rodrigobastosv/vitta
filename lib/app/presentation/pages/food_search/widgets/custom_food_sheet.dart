@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<Food?> showCustomFoodSheet({required BuildContext context}) =>
     showModalBottomSheet<Food>(context: context, isScrollControlled: true, builder: (context) => const _CustomFoodSheet());
@@ -38,7 +38,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
   double? _parse(String text) => double.tryParse(text.replaceAll(',', '.'));
 
   void _submit() {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final name = _nameController.text.trim();
     final calories = _parse(_caloriesController.text);
     final protein = _parse(_proteinController.text);
@@ -57,7 +57,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Padding(
       padding: EdgeInsets.only(
         left: VTSpacing.m,
@@ -72,7 +72,10 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
           children: [
             Text(l10n.dietCustomFoodTitle, style: VTTextStyles.title(context)),
             const VTGap.m(),
-            TextField(controller: _nameController, decoration: InputDecoration(labelText: l10n.dietFoodNameLabel)),
+            TextField(
+              controller: _nameController,
+              decoration: InputDecoration(labelText: l10n.dietFoodNameLabel),
+            ),
             const VTGap.s(),
             TextField(
               controller: _caloriesController,
@@ -97,7 +100,10 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.dietFatPer100gLabel),
             ),
-            if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+            if (_errorMessage != null) ...[
+              const VTGap.s(),
+              Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            ],
             const VTGap.l(),
             VTPrimaryButton(label: l10n.dietContinueAction, onPressed: _submit),
           ],

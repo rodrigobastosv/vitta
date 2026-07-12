@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
-Future<double?> showEditWaterGoalDialog({
-  required BuildContext context,
-  required double currentGoalMl,
-  required UnitSystem unitSystem,
-}) => showDialog<double>(
-  context: context,
-  builder: (context) => _EditWaterGoalDialog(currentGoalMl: currentGoalMl, unitSystem: unitSystem),
-);
+Future<double?> showEditWaterGoalDialog({required BuildContext context, required double currentGoalMl, required UnitSystem unitSystem}) =>
+    showDialog<double>(
+      context: context,
+      builder: (context) => _EditWaterGoalDialog(currentGoalMl: currentGoalMl, unitSystem: unitSystem),
+    );
 
 class _EditWaterGoalDialog extends StatefulWidget {
   const _EditWaterGoalDialog({required this.currentGoalMl, required this.unitSystem});
@@ -35,7 +32,7 @@ class _EditWaterGoalDialogState extends State<_EditWaterGoalDialog> {
 
   void _save() {
     final displayValue = double.tryParse(_goalController.text.replaceAll(',', '.'));
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (displayValue == null || displayValue <= 0) {
       setState(() => _errorMessage = l10n.waterInvalidAmount);
       return;
@@ -45,7 +42,7 @@ class _EditWaterGoalDialogState extends State<_EditWaterGoalDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return AlertDialog(
       title: Text(l10n.waterGoalDialogTitle),
       content: TextField(

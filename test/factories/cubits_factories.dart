@@ -10,16 +10,19 @@ import '../mocks/datasources_mocks.dart';
 import '../mocks/use_cases_mocks.dart';
 
 abstract class CubitsFactories {
-  static AppCubit buildAppCubit({MockSettingsLocalDataSource? settingsLocalDataSource}) =>
-      AppCubit(settingsLocalDataSource: settingsLocalDataSource ?? MockSettingsLocalDataSource());
+  static AppCubit buildAppCubit({MockGetAppSettingsUseCase? getAppSettingsUseCase, MockSaveAppSettingsUseCase? saveAppSettingsUseCase}) =>
+      AppCubit(
+        getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+        saveAppSettingsUseCase: saveAppSettingsUseCase ?? MockSaveAppSettingsUseCase(),
+      );
 
   static AuthCubit buildAuthCubit({
-    MockGetAuthStatusUseCase? getAuthStatusUseCase,
+    MockGetUserUseCase? getUserUseCase,
     MockSignUpUseCase? signUpUseCase,
     MockSignInUseCase? signInUseCase,
     MockSignOutUseCase? signOutUseCase,
   }) => AuthCubit(
-    getAuthStatusUseCase: getAuthStatusUseCase ?? MockGetAuthStatusUseCase(),
+    getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
     signUpUseCase: signUpUseCase ?? MockSignUpUseCase(),
     signInUseCase: signInUseCase ?? MockSignInUseCase(),
     signOutUseCase: signOutUseCase ?? MockSignOutUseCase(),
@@ -31,11 +34,15 @@ abstract class CubitsFactories {
         deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
       );
 
-  static FoodSearchCubit buildFoodSearchCubit({MockSearchFoodsUseCase? searchFoodsUseCase, MockLogFoodUseCase? logFoodUseCase}) =>
-      FoodSearchCubit(
-        searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
-        logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
-      );
+  static FoodSearchCubit buildFoodSearchCubit({
+    MockSearchFoodsUseCase? searchFoodsUseCase,
+    MockLogFoodUseCase? logFoodUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => FoodSearchCubit(
+    searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
+    logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
 
   static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>
       OnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase());
@@ -45,11 +52,13 @@ abstract class CubitsFactories {
     MockLogWaterUseCase? logWaterUseCase,
     MockDeleteWaterLogUseCase? deleteWaterLogUseCase,
     MockWaterLocalDataSource? waterLocalDataSource,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
   }) => WaterCubit(
     getDailyWaterUseCase: getDailyWaterUseCase ?? MockGetDailyWaterUseCase(),
     logWaterUseCase: logWaterUseCase ?? MockLogWaterUseCase(),
     deleteWaterLogUseCase: deleteWaterLogUseCase ?? MockDeleteWaterLogUseCase(),
     waterLocalDataSource: waterLocalDataSource ?? MockWaterLocalDataSource(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
   static SleepCubit buildSleepCubit({

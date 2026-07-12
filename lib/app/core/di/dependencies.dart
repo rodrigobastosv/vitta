@@ -12,12 +12,13 @@ import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
+import 'package:vitta/app/data/settings/settings_repository.dart';
 import 'package:vitta/app/data/sleep/datasources/supabase_sleep_datasource.dart';
 import 'package:vitta/app/data/sleep/sleep_repository.dart';
 import 'package:vitta/app/data/water/datasources/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
-import 'package:vitta/app/domain/auth/use_cases/get_auth_status_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
@@ -26,6 +27,8 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
@@ -47,7 +50,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => WaterLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => OnboardingLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => OnboardingRepository(onboardingLocalDataSource: G()));
-  G.registerLazySingleton(() => AppCubit(settingsLocalDataSource: G()));
+  G.registerLazySingleton(() => SettingsRepository(settingsLocalDataSource: G()));
+  G.registerFactory(() => GetAppSettingsUseCase(settingsRepository: G()));
+  G.registerFactory(() => SaveAppSettingsUseCase(settingsRepository: G()));
+  G.registerLazySingleton(() => AppCubit(getAppSettingsUseCase: G(), saveAppSettingsUseCase: G()));
 
   G.registerLazySingleton(() => supabaseService);
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
@@ -72,26 +78,23 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
-  G.registerFactory(() => GetAuthStatusUseCase(authRepository: G()));
+  G.registerFactory(() => GetUserUseCase(authRepository: G()));
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
 
   G.registerFactory(() => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G()));
-  G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G()));
+  G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
-  G.registerFactory(
-    () => AuthCubit(getAuthStatusUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()),
-  );
+  G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(
     () => WaterCubit(
       getDailyWaterUseCase: G(),
       logWaterUseCase: G(),
       deleteWaterLogUseCase: G(),
       waterLocalDataSource: G(),
+      getAppSettingsUseCase: G(),
     ),
   );
-  G.registerFactory(
-    () => SleepCubit(getRecentSleepLogsUseCase: G(), logSleepUseCase: G(), deleteSleepLogUseCase: G()),
-  );
+  G.registerFactory(() => SleepCubit(getRecentSleepLogsUseCase: G(), logSleepUseCase: G(), deleteSleepLogUseCase: G()));
 }

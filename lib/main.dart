@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:vitta/app/bootstrap.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
-import 'package:vitta/app/cubit/app_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_loading_overlay_indicator.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/routing/app_router.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -21,10 +22,10 @@ class VittaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocProvider<AppCubit>.value(
     value: G<AppCubit>(),
-    child: BlocBuilder<AppCubit, AppState>(
+    child: BlocBuilder<AppCubit, AppSettings>(
       builder: (context, state) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        onGenerateTitle: (context) => AppLocalizations.of(context).appTitle,
+        onGenerateTitle: (context) => context.l10n.appTitle,
         theme: VTTheme.light,
         darkTheme: VTTheme.dark,
         themeMode: state.themeMode,
@@ -32,8 +33,7 @@ class VittaApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         routerConfig: AppRouter.router,
-        builder: (context, child) =>
-            LoaderOverlay(overlayWidgetBuilder: (_) => const VTLoadingOverlayIndicator(), child: child!),
+        builder: (context, child) => LoaderOverlay(overlayWidgetBuilder: (_) => const VTLoadingOverlayIndicator(), child: child!),
       ),
     ),
   );

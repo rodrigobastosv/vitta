@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 const _quickAddPresetsMl = [200.0, 300.0, 500.0, 750.0];
 
 Future<void> showAddWaterSheet({required BuildContext context, required UnitSystem unitSystem}) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(value: context.read<WaterCubit>(), child: _AddWaterSheet(unitSystem: unitSystem)),
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<WaterCubit>(),
+    child: _AddWaterSheet(unitSystem: unitSystem),
+  ),
 );
 
 class _AddWaterSheet extends StatefulWidget {
@@ -44,7 +47,7 @@ class _AddWaterSheetState extends State<_AddWaterSheet> {
 
   void _addCustomAmount() {
     final displayValue = double.tryParse(_amountController.text.replaceAll(',', '.'));
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (displayValue == null || displayValue <= 0) {
       setState(() => _errorMessage = l10n.waterInvalidAmount);
       return;
@@ -54,7 +57,7 @@ class _AddWaterSheetState extends State<_AddWaterSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Padding(
       padding: EdgeInsets.only(
         left: VTSpacing.m,
@@ -84,7 +87,10 @@ class _AddWaterSheetState extends State<_AddWaterSheet> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(labelText: l10n.waterCustomAmountLabel(widget.unitSystem.volumeUnitLabel)),
           ),
-          if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+          if (_errorMessage != null) ...[
+            const VTGap.s(),
+            Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.waterLogAction, onPressed: _addCustomAmount),
         ],

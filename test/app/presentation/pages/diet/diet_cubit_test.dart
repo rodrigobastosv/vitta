@@ -18,14 +18,14 @@ void main() {
   });
 
   blocTest<DietCubit, DietState>(
-    'emits DietLoaded when loadToday succeeds',
+    'emits a loaded state when loadToday succeeds',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [isA<DietLoaded>()],
+    expect: () => [isA<DietState>()],
   );
 
   blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
@@ -39,7 +39,18 @@ void main() {
     expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
   );
 
-  blocTest<DietCubit, DietState>(
+  test('loadToday keeps the previous state when it fails', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
+    final initialState = cubit.state;
+
+    await cubit.loadToday();
+
+    expect(cubit.state, initialState);
+  });
+
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
     'emits DietError when loadToday fails',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
@@ -47,7 +58,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [const DietError(message: 'boom')],
+    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>(), isA<DietError>()],
   );
 
   blocTest<DietCubit, DietState>(
@@ -60,11 +71,11 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, deleteFoodLogUseCase: deleteFoodLogUseCase);
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [isA<DietLoaded>()],
+    expect: () => [isA<DietState>()],
   );
 
   final getDailyMacrosUseCaseSpy = MockGetDailyMacrosUseCase();
-  blocTest<DietCubit, DietState>(
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
     'emits DietError without reloading when deletion fails',
     build: () {
       final deleteFoodLogUseCase = MockDeleteFoodLogUseCase();
@@ -72,7 +83,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCaseSpy, deleteFoodLogUseCase: deleteFoodLogUseCase);
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [const DietError(message: 'boom')],
+    expectPresentation: () => [isA<DietError>()],
     verify: (_) => verifyNever(() => getDailyMacrosUseCaseSpy(date: any(named: 'date'))),
   );
 }

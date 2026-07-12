@@ -1,45 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 import 'package:vitta/app/presentation/pages/auth/widgets/auth_form.dart';
 import 'package:vitta/app/presentation/pages/auth/widgets/signed_in_view.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class AuthPage extends StatelessWidget {
-  const AuthPage({super.key, this.initialIsSignUp = true});
-
-  final bool initialIsSignUp;
+  const AuthPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<AuthCubit, AuthState, AuthPresentationEvent>(
-    onPresentation: (context, event) {
-      switch (event) {
-        case AuthShowLoading():
-          context.showLoading();
-        case AuthHideLoading():
-          context.hideLoading();
-        case AuthActionFailed(:final message):
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-        case AuthSignedIn():
-          Navigator.of(context).pop(true);
-      }
-    },
-    builder: (context, cubit, state) {
-      final l10n = AppLocalizations.of(context);
-      final status = (state as AuthLoaded).status;
-      return Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return VTPage<AuthCubit, AuthState, AuthPresentationEvent>(
+      onPresentation: (context, event) {
+        switch (event) {
+          case AuthShowLoading():
+            context.showLoading();
+          case AuthHideLoading():
+            context.hideLoading();
+          case AuthActionFailed(:final message):
+            context.showErrorDialog(message: message);
+          case AuthSignedIn():
+            Navigator.of(context).pop(true);
+        }
+      },
+      builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.settingsAuthLabel)),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(VTSpacing.m),
-          child: status.isAnonymous
-              ? AuthForm(initialIsSignUp: initialIsSignUp, onSignUp: cubit.signUp, onSignIn: cubit.signIn)
-              : SignedInView(email: status.email ?? '', onSignOut: cubit.signOut),
+          child: switch (state.user) {
+            AnonymousUser() => AuthForm(isSignUp: state.isSignUpMode, onModeChanged: cubit.setSignUpMode, onSubmit: cubit.submit),
+            AuthenticatedUser(:final email) => SignedInView(email: email, onSignOut: cubit.signOut),
+          },
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }

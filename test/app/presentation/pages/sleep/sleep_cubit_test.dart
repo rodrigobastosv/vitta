@@ -18,14 +18,14 @@ void main() {
   });
 
   blocTest<SleepCubit, SleepState>(
-    'emits SleepLoaded when loadRecent succeeds',
+    'emits a loaded state when loadRecent succeeds',
     build: () {
       final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
       when(() => getRecentSleepLogsUseCase(days: 7)).thenAnswer((_) async => const Success([]));
       return CubitsFactories.buildSleepCubit(getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
     },
     act: (cubit) => cubit.loadRecent(),
-    expect: () => [isA<SleepLoaded>()],
+    expect: () => [isA<SleepState>()],
   );
 
   blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
@@ -39,7 +39,7 @@ void main() {
     expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHideLoading>()],
   );
 
-  blocTest<SleepCubit, SleepState>(
+  blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
     'emits SleepError when loadRecent fails',
     build: () {
       final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
@@ -47,7 +47,7 @@ void main() {
       return CubitsFactories.buildSleepCubit(getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
     },
     act: (cubit) => cubit.loadRecent(),
-    expect: () => [const SleepError(message: 'boom')],
+    expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHideLoading>(), isA<SleepError>()],
   );
 
   blocTest<SleepCubit, SleepState>(
@@ -66,7 +66,7 @@ void main() {
       return CubitsFactories.buildSleepCubit(logSleepUseCase: logSleepUseCase, getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
     },
     act: (cubit) => cubit.logSleep(bedTime: DateTime(2026, 7, 10, 22, 30), wakeTime: DateTime(2026, 7, 11, 6, 45)),
-    expect: () => [isA<SleepLoaded>()],
+    expect: () => [isA<SleepState>()],
   );
 
   blocTest<SleepCubit, SleepState>(
@@ -82,11 +82,11 @@ void main() {
       );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [isA<SleepLoaded>()],
+    expect: () => [isA<SleepState>()],
   );
 
   final getRecentSleepLogsUseCaseSpy = MockGetRecentSleepLogsUseCase();
-  blocTest<SleepCubit, SleepState>(
+  blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
     'emits SleepError without reloading when deletion fails',
     build: () {
       final deleteSleepLogUseCase = MockDeleteSleepLogUseCase();
@@ -97,7 +97,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [const SleepError(message: 'boom')],
+    expectPresentation: () => [isA<SleepError>()],
     verify: (_) => verifyNever(() => getRecentSleepLogsUseCaseSpy(days: any(named: 'days'))),
   );
 }
