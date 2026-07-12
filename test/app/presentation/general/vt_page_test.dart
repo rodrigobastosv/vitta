@@ -5,9 +5,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/design_system/components/general/vt_loading_overlay_indicator.dart';
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/general/vt_presentation_event.dart';
 
 sealed class _TestState {}
 
@@ -15,14 +15,18 @@ class _Idle implements _TestState {}
 
 class _Loaded implements _TestState {}
 
-enum _TestPresentationEvent implements LoadingPresentationEvent {
-  showLoading(isLoading: true),
-  hideLoading(isLoading: false);
+sealed class _TestPresentationEvent {}
 
-  const _TestPresentationEvent({required this.isLoading});
+class _ShowLoading extends VTShowLoading implements _TestPresentationEvent {
+  const _ShowLoading();
+}
 
-  @override
-  final bool isLoading;
+class _HideLoading extends VTHideLoading implements _TestPresentationEvent {
+  const _HideLoading();
+}
+
+class _CustomEvent implements _TestPresentationEvent {
+  const _CustomEvent();
 }
 
 class _TestCubit extends PresentationCubit<_TestState, _TestPresentationEvent> {
@@ -34,17 +38,17 @@ class _TestCubit extends PresentationCubit<_TestState, _TestPresentationEvent> {
   void onInit() => load();
 
   Future<void> load() async {
-    emitPresentation(_TestPresentationEvent.showLoading);
+    emitPresentation(const _ShowLoading());
     await gate.future;
-    emitPresentation(_TestPresentationEvent.hideLoading);
+    emitPresentation(const _HideLoading());
     emit(_Loaded());
   }
+
+  void fireCustomEvent() => emitPresentation(const _CustomEvent());
 }
 
 void main() {
-  testWidgets('calls onInit on mount and shows the overlay for its pending show/hide, not losing the first event', (
-    tester,
-  ) async {
+  testWidgets("shows/hides the overlay for onInit()'s loading events even with no onPresentation callback", (tester) async {
     final gate = Completer<void>();
     await G.reset();
     G.registerFactory(() => _TestCubit(gate: gate));
@@ -66,5 +70,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(VTLoadingOverlayIndicator), findsNothing);
+  });
+
+  testWidgets('also forwards non-loading presentation events to an optional onPresentation callback', (tester) async {
+    final gate = Completer<void>()..complete();
+    await G.reset();
+    G.registerFactory(() => _TestCubit(gate: gate));
+    addTearDown(G.reset);
+
+    _TestPresentationEvent? received;
+    late _TestCubit cubit;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        builder: (context, child) => LoaderOverlay(overlayWidgetBuilder: (_) => const VTLoadingOverlayIndicator(), child: child!),
+        home: VTPage<_TestCubit, _TestState, _TestPresentationEvent>(
+          onPresentation: (context, event) => received = event,
+          builder: (context, thisCubit, state) {
+            cubit = thisCubit;
+            return const Scaffold(body: SizedBox());
+          },
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    cubit.fireCustomEvent();
+    await tester.pump();
+
+    expect(received, isA<_CustomEvent>());
   });
 }

@@ -1,11 +1,11 @@
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
+import 'package:vitta/app/presentation/general/vt_presentation_event.dart';
 
-enum WaterPresentationEvent implements LoadingPresentationEvent {
-  showLoading(isLoading: true),
-  hideLoading(isLoading: false);
+sealed class WaterPresentationEvent {}
 
-  const WaterPresentationEvent({required this.isLoading});
+class WaterShowLoading extends VTShowLoading implements WaterPresentationEvent {
+  const WaterShowLoading();
+}
 
-  @override
-  final bool isLoading;
+class WaterHideLoading extends VTHideLoading implements WaterPresentationEvent {
+  const WaterHideLoading();
 }

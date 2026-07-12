@@ -1,11 +1,7 @@
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
+import 'package:vitta/app/presentation/general/vt_presentation_event.dart';
 
-enum DietPresentationEvent implements LoadingPresentationEvent {
-  showLoading(isLoading: true),
-  hideLoading(isLoading: false);
+sealed class DietPresentationEvent {}
 
-  const DietPresentationEvent({required this.isLoading});
+class DietShowLoading extends VTShowLoading implements DietPresentationEvent {}
 
-  @override
-  final bool isLoading;
-}
+class DietHideLoading extends VTHideLoading implements DietPresentationEvent {}
