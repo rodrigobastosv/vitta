@@ -14,14 +14,9 @@ void main() {
     final foods = [FoodFactory.build()];
     when(() => dietRepository.searchFoods(query: 'banana')).thenAnswer((_) async => Success(foods));
 
-    final result = await useCase(query: 'banana');
+    final searchResult = await useCase(query: 'banana');
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, foods);
-    }
+    searchResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foods));
   });
 
   test('propagates a repository failure', () async {
@@ -30,13 +25,11 @@ void main() {
     const error = VTError(message: 'network error');
     when(() => dietRepository.searchFoods(query: 'banana')).thenAnswer((_) async => const Failure(error));
 
-    final result = await useCase(query: 'banana');
+    final searchResult = await useCase(query: 'banana');
 
-    switch (result) {
-      case Failure(:final error):
-        expect(error, const VTError(message: 'network error'));
-      case Success():
-        fail('expected Failure, got Success');
-    }
+    searchResult.when(
+      (error) => expect(error, const VTError(message: 'network error')),
+      (_) => fail('expected Failure, got Success'),
+    );
   });
 }

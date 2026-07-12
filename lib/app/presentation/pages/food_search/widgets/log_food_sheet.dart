@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
@@ -61,7 +60,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       _errorMessage = null;
     });
 
-    final logged = await context.read<FoodSearchCubit>().logFood(
+    final loggedResult = await context.read<FoodSearchCubit>().logFood(
       food: widget.food,
       mealType: _mealType,
       quantityGrams: _unitSystem.displayWeightToGrams(quantityDisplayValue),
@@ -70,15 +69,13 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
     if (!mounted) {
       return;
     }
-    switch (logged) {
-      case Failure(:final error):
-        setState(() {
-          _isSaving = false;
-          _errorMessage = error.message;
-        });
-      case Success():
-        Navigator.of(context).pop();
-    }
+    loggedResult.when(
+      (error) => setState(() {
+        _isSaving = false;
+        _errorMessage = error.message;
+      }),
+      (_) => Navigator.of(context).pop(),
+    );
   }
 
   @override
