@@ -182,6 +182,24 @@ abstract class AppLocalizations {
   /// **'Dark'**
   String get themeDark;
 
+  /// No description provided for @settingsUnitSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit system'**
+  String get settingsUnitSystemLabel;
+
+  /// No description provided for @unitSystemMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Metric (g/kg)'**
+  String get unitSystemMetric;
+
+  /// No description provided for @unitSystemImperial.
+  ///
+  /// In en, this message translates to:
+  /// **'Imperial (oz/lb)'**
+  String get unitSystemImperial;
+
   /// No description provided for @comingSoonTitle.
   ///
   /// In en, this message translates to:
@@ -260,11 +278,11 @@ abstract class AppLocalizations {
   /// **'Enter a quantity greater than zero.'**
   String get dietInvalidQuantity;
 
-  /// No description provided for @dietQuantityGramsLabel.
+  /// No description provided for @dietQuantityLabel.
   ///
   /// In en, this message translates to:
-  /// **'Quantity (g)'**
-  String get dietQuantityGramsLabel;
+  /// **'Quantity ({unit})'**
+  String dietQuantityLabel(String unit);
 
   /// No description provided for @dietLogFoodAction.
   ///
@@ -373,6 +391,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Snack'**
   String get mealTypeSnack;
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelAction;
+
+  /// No description provided for @saveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveAction;
+
+  /// No description provided for @waterFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get waterFeatureTitle;
+
+  /// No description provided for @waterFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track how much water you drink each day'**
+  String get waterFeatureSubtitle;
+
+  /// No description provided for @waterProgressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} / {goal} {unit}'**
+  String waterProgressLabel(String consumed, String goal, String unit);
+
+  /// No description provided for @waterDeleteLogTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get waterDeleteLogTooltip;
+
+  /// No description provided for @waterEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get waterEmptyTitle;
+
+  /// No description provided for @waterEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the + button to log the first glass of water.'**
+  String get waterEmptyMessage;
+
+  /// No description provided for @waterQuickAddTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add water'**
+  String get waterQuickAddTitle;
+
+  /// No description provided for @waterCustomAmountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom amount ({unit})'**
+  String waterCustomAmountLabel(String unit);
+
+  /// No description provided for @waterLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add'**
+  String get waterLogAction;
+
+  /// No description provided for @waterInvalidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an amount greater than zero.'**
+  String get waterInvalidAmount;
+
+  /// No description provided for @waterGoalDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get waterGoalDialogTitle;
+
+  /// No description provided for @waterGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal ({unit})'**
+  String waterGoalLabel(String unit);
+
+  /// No description provided for @onboardingWelcomeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Vitta'**
+  String get onboardingWelcomeTitle;
+
+  /// No description provided for @onboardingWelcomeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.'**
+  String get onboardingWelcomeMessage;
+
+  /// No description provided for @onboardingSleepFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep'**
+  String get onboardingSleepFeatureTitle;
+
+  /// No description provided for @onboardingSleepFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your sleep patterns'**
+  String get onboardingSleepFeatureSubtitle;
+
+  /// No description provided for @onboardingAccountBenefitMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.'**
+  String get onboardingAccountBenefitMessage;
+
+  /// No description provided for @onboardingCreateAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get onboardingCreateAccountAction;
+
+  /// No description provided for @onboardingCreateAccountComingSoonMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Account creation is on its way.'**
+  String get onboardingCreateAccountComingSoonMessage;
+
+  /// No description provided for @onboardingContinueWithoutAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue without an account'**
+  String get onboardingContinueWithoutAccountAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

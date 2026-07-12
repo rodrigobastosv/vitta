@@ -15,6 +15,9 @@
   "themeSystemDefault": "System default",
   "themeLight": "Light",
   "themeDark": "Dark",
+  "settingsUnitSystemLabel": "Unit system",
+  "unitSystemMetric": "Metric (g/kg)",
+  "unitSystemImperial": "Imperial (oz/lb)",
   "comingSoonTitle": "Coming soon",
   "dietComingSoonMessage": "Diet tracking is on its way.",
   "workoutComingSoonMessage": "Workout tracking is on its way.",
@@ -39,7 +42,12 @@
   "dietEmptyTitle": "Nothing logged yet",
   "dietEmptyMessage": "Tap the + button to add the first food of the day.",
   "dietInvalidQuantity": "Enter a quantity greater than zero.",
-  "dietQuantityGramsLabel": "Quantity (g)",
+  "dietQuantityLabel": "Quantity ({unit})",
+  "@dietQuantityLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
   "dietLogFoodAction": "Add to today",
   "dietInvalidCustomFood": "Fill in the name and all macros with valid numbers.",
   "dietCustomFoodTitle": "Add a food",
@@ -62,5 +70,44 @@
   "mealTypeBreakfast": "Breakfast",
   "mealTypeLunch": "Lunch",
   "mealTypeDinner": "Dinner",
-  "mealTypeSnack": "Snack"
+  "mealTypeSnack": "Snack",
+  "cancelAction": "Cancel",
+  "saveAction": "Save",
+  "waterFeatureTitle": "Water",
+  "waterFeatureSubtitle": "Track how much water you drink each day",
+  "waterProgressLabel": "{consumed} / {goal} {unit}",
+  "@waterProgressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterDeleteLogTooltip": "Remove",
+  "waterEmptyTitle": "Nothing logged yet",
+  "waterEmptyMessage": "Tap the + button to log the first glass of water.",
+  "waterQuickAddTitle": "Add water",
+  "waterCustomAmountLabel": "Custom amount ({unit})",
+  "@waterCustomAmountLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLogAction": "Add",
+  "waterInvalidAmount": "Enter an amount greater than zero.",
+  "waterGoalDialogTitle": "Daily goal",
+  "waterGoalLabel": "Daily goal ({unit})",
+  "@waterGoalLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "onboardingWelcomeTitle": "Welcome to Vitta",
+  "onboardingWelcomeMessage": "Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.",
+  "onboardingSleepFeatureTitle": "Sleep",
+  "onboardingSleepFeatureSubtitle": "Track your sleep patterns",
+  "onboardingAccountBenefitMessage": "Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.",
+  "onboardingCreateAccountAction": "Create account",
+  "onboardingCreateAccountComingSoonMessage": "Account creation is on its way.",
+  "onboardingContinueWithoutAccountAction": "Continue without an account"
 }

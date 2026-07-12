@@ -54,6 +54,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get themeDark => 'Escuro';
 
   @override
+  String get settingsUnitSystemLabel => 'Sistema de unidades';
+
+  @override
+  String get unitSystemMetric => 'Métrico (g/kg)';
+
+  @override
+  String get unitSystemImperial => 'Imperial (oz/lb)';
+
+  @override
   String get comingSoonTitle => 'Em breve';
 
   @override
@@ -97,7 +106,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietInvalidQuantity => 'Informe uma quantidade maior que zero.';
 
   @override
-  String get dietQuantityGramsLabel => 'Quantidade (g)';
+  String dietQuantityLabel(String unit) {
+    return 'Quantidade ($unit)';
+  }
 
   @override
   String get dietLogFoodAction => 'Adicionar ao dia';
@@ -154,4 +165,78 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get mealTypeSnack => 'Lanche';
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get saveAction => 'Salvar';
+
+  @override
+  String get waterFeatureTitle => 'Água';
+
+  @override
+  String get waterFeatureSubtitle => 'Acompanhe quanta água você bebe por dia';
+
+  @override
+  String waterProgressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
+  String get waterDeleteLogTooltip => 'Remover';
+
+  @override
+  String get waterEmptyTitle => 'Nada registrado ainda';
+
+  @override
+  String get waterEmptyMessage => 'Toque no botão + para registrar o primeiro copo d\'água.';
+
+  @override
+  String get waterQuickAddTitle => 'Adicionar água';
+
+  @override
+  String waterCustomAmountLabel(String unit) {
+    return 'Quantidade personalizada ($unit)';
+  }
+
+  @override
+  String get waterLogAction => 'Adicionar';
+
+  @override
+  String get waterInvalidAmount => 'Informe uma quantidade maior que zero.';
+
+  @override
+  String get waterGoalDialogTitle => 'Meta diária';
+
+  @override
+  String waterGoalLabel(String unit) {
+    return 'Meta diária ($unit)';
+  }
+
+  @override
+  String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
+
+  @override
+  String get onboardingWelcomeMessage =>
+      'Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.';
+
+  @override
+  String get onboardingSleepFeatureTitle => 'Sono';
+
+  @override
+  String get onboardingSleepFeatureSubtitle => 'Acompanhe seus padrões de sono';
+
+  @override
+  String get onboardingAccountBenefitMessage =>
+      'Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.';
+
+  @override
+  String get onboardingCreateAccountAction => 'Criar conta';
+
+  @override
+  String get onboardingCreateAccountComingSoonMessage => 'A criação de conta está a caminho.';
+
+  @override
+  String get onboardingContinueWithoutAccountAction => 'Continuar sem conta';
 }

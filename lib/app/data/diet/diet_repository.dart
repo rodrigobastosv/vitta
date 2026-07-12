@@ -28,11 +28,8 @@ class DietRepository {
   }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams);
 
   Future<Result<VTError, DailyMacros>> getDailyMacros({required DateTime date}) async {
-    final dailyLog = await _supabaseDietDataSource.getDailyLog(date: date);
-    return switch (dailyLog) {
-      Failure(:final error) => Failure(error),
-      Success(:final value) => Success(DailyMacros(entries: value)),
-    };
+    final dailyLogResult = await _supabaseDietDataSource.getDailyLog(date: date);
+    return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));
   }
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);

@@ -15,6 +15,9 @@
   "themeSystemDefault": "Padrão do sistema",
   "themeLight": "Claro",
   "themeDark": "Escuro",
+  "settingsUnitSystemLabel": "Sistema de unidades",
+  "unitSystemMetric": "Métrico (g/kg)",
+  "unitSystemImperial": "Imperial (oz/lb)",
   "comingSoonTitle": "Em breve",
   "dietComingSoonMessage": "O acompanhamento de dieta está a caminho.",
   "workoutComingSoonMessage": "O acompanhamento de treino está a caminho.",
@@ -39,7 +42,12 @@
   "dietEmptyTitle": "Nada registrado ainda",
   "dietEmptyMessage": "Toque no botão + para adicionar o primeiro alimento do dia.",
   "dietInvalidQuantity": "Informe uma quantidade maior que zero.",
-  "dietQuantityGramsLabel": "Quantidade (g)",
+  "dietQuantityLabel": "Quantidade ({unit})",
+  "@dietQuantityLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
   "dietLogFoodAction": "Adicionar ao dia",
   "dietInvalidCustomFood": "Preencha o nome e todos os macros com números válidos.",
   "dietCustomFoodTitle": "Cadastrar alimento",
@@ -62,5 +70,44 @@
   "mealTypeBreakfast": "Café da manhã",
   "mealTypeLunch": "Almoço",
   "mealTypeDinner": "Jantar",
-  "mealTypeSnack": "Lanche"
+  "mealTypeSnack": "Lanche",
+  "cancelAction": "Cancelar",
+  "saveAction": "Salvar",
+  "waterFeatureTitle": "Água",
+  "waterFeatureSubtitle": "Acompanhe quanta água você bebe por dia",
+  "waterProgressLabel": "{consumed} / {goal} {unit}",
+  "@waterProgressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterDeleteLogTooltip": "Remover",
+  "waterEmptyTitle": "Nada registrado ainda",
+  "waterEmptyMessage": "Toque no botão + para registrar o primeiro copo d'água.",
+  "waterQuickAddTitle": "Adicionar água",
+  "waterCustomAmountLabel": "Quantidade personalizada ({unit})",
+  "@waterCustomAmountLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLogAction": "Adicionar",
+  "waterInvalidAmount": "Informe uma quantidade maior que zero.",
+  "waterGoalDialogTitle": "Meta diária",
+  "waterGoalLabel": "Meta diária ({unit})",
+  "@waterGoalLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
+  "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
+  "onboardingSleepFeatureTitle": "Sono",
+  "onboardingSleepFeatureSubtitle": "Acompanhe seus padrões de sono",
+  "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",
+  "onboardingCreateAccountAction": "Criar conta",
+  "onboardingCreateAccountComingSoonMessage": "A criação de conta está a caminho.",
+  "onboardingContinueWithoutAccountAction": "Continuar sem conta"
 }

@@ -54,6 +54,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get themeDark => 'Dark';
 
   @override
+  String get settingsUnitSystemLabel => 'Unit system';
+
+  @override
+  String get unitSystemMetric => 'Metric (g/kg)';
+
+  @override
+  String get unitSystemImperial => 'Imperial (oz/lb)';
+
+  @override
   String get comingSoonTitle => 'Coming soon';
 
   @override
@@ -97,7 +106,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietInvalidQuantity => 'Enter a quantity greater than zero.';
 
   @override
-  String get dietQuantityGramsLabel => 'Quantity (g)';
+  String dietQuantityLabel(String unit) {
+    return 'Quantity ($unit)';
+  }
 
   @override
   String get dietLogFoodAction => 'Add to today';
@@ -154,4 +165,77 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mealTypeSnack => 'Snack';
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String get saveAction => 'Save';
+
+  @override
+  String get waterFeatureTitle => 'Water';
+
+  @override
+  String get waterFeatureSubtitle => 'Track how much water you drink each day';
+
+  @override
+  String waterProgressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
+  String get waterDeleteLogTooltip => 'Remove';
+
+  @override
+  String get waterEmptyTitle => 'Nothing logged yet';
+
+  @override
+  String get waterEmptyMessage => 'Tap the + button to log the first glass of water.';
+
+  @override
+  String get waterQuickAddTitle => 'Add water';
+
+  @override
+  String waterCustomAmountLabel(String unit) {
+    return 'Custom amount ($unit)';
+  }
+
+  @override
+  String get waterLogAction => 'Add';
+
+  @override
+  String get waterInvalidAmount => 'Enter an amount greater than zero.';
+
+  @override
+  String get waterGoalDialogTitle => 'Daily goal';
+
+  @override
+  String waterGoalLabel(String unit) {
+    return 'Daily goal ($unit)';
+  }
+
+  @override
+  String get onboardingWelcomeTitle => 'Welcome to Vitta';
+
+  @override
+  String get onboardingWelcomeMessage => 'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.';
+
+  @override
+  String get onboardingSleepFeatureTitle => 'Sleep';
+
+  @override
+  String get onboardingSleepFeatureSubtitle => 'Track your sleep patterns';
+
+  @override
+  String get onboardingAccountBenefitMessage =>
+      'Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.';
+
+  @override
+  String get onboardingCreateAccountAction => 'Create account';
+
+  @override
+  String get onboardingCreateAccountComingSoonMessage => 'Account creation is on its way.';
+
+  @override
+  String get onboardingContinueWithoutAccountAction => 'Continue without an account';
 }
