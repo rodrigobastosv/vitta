@@ -10,7 +10,12 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   DietCubit({required GetDailyMacrosUseCase getDailyMacrosUseCase, required DeleteFoodLogUseCase deleteFoodLogUseCase})
     : _getDailyMacrosUseCase = getDailyMacrosUseCase,
       _deleteFoodLogUseCase = deleteFoodLogUseCase,
-      super(DietLoaded(date: _dateOnly(DateTime.now()), dailyMacros: const DailyMacros(entries: [])));
+      super(
+        DietLoaded(
+          date: _dateOnly(DateTime.now()),
+          dailyMacros: const DailyMacros(entries: []),
+        ),
+      );
 
   final GetDailyMacrosUseCase _getDailyMacrosUseCase;
   final DeleteFoodLogUseCase _deleteFoodLogUseCase;
@@ -23,9 +28,9 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   void onInit() => loadToday();
 
   Future<void> loadToday() async {
-    emitPresentation(DietPresentationEvent.showLoading);
+    emitPresentation(DietShowLoading());
     final dailyMacros = await _getDailyMacrosUseCase(date: _today);
-    emitPresentation(DietPresentationEvent.hideLoading);
+    emitPresentation(DietHideLoading());
     switch (dailyMacros) {
       case Failure(:final error):
         emit(DietError(message: error.message));

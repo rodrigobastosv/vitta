@@ -42,7 +42,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [WaterPresentationEvent.showLoading, WaterPresentationEvent.hideLoading],
+    expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>()],
   );
 
   blocTest<WaterCubit, WaterState>(

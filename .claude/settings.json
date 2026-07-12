@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(tail -c 500 /tmp/loading_migration_test.log | tr '\\\\r' '\\\\n')",
+      "Read(//private/tmp/**)",
+      "Bash(xcrun simctl *)"
+    ]
+  }
+}

@@ -48,7 +48,7 @@ void main() {
       return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
     act: (cubit) => cubit.search(query: 'banana'),
-    expectPresentation: () => [FoodSearchPresentationEvent.showLoading, FoodSearchPresentationEvent.hideLoading],
+    expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>()],
   );
 
   blocTest<FoodSearchCubit, FoodSearchState>(

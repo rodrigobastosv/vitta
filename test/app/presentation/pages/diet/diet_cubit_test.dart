@@ -36,7 +36,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [DietPresentationEvent.showLoading, DietPresentationEvent.hideLoading],
+    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
   );
 
   blocTest<DietCubit, DietState>(
