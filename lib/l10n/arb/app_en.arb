@@ -70,5 +70,36 @@
   "mealTypeBreakfast": "Breakfast",
   "mealTypeLunch": "Lunch",
   "mealTypeDinner": "Dinner",
-  "mealTypeSnack": "Snack"
+  "mealTypeSnack": "Snack",
+  "cancelAction": "Cancel",
+  "saveAction": "Save",
+  "waterFeatureTitle": "Water",
+  "waterFeatureSubtitle": "Track how much water you drink each day",
+  "waterProgressLabel": "{consumed} / {goal} {unit}",
+  "@waterProgressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterDeleteLogTooltip": "Remove",
+  "waterEmptyTitle": "Nothing logged yet",
+  "waterEmptyMessage": "Tap the + button to log the first glass of water.",
+  "waterQuickAddTitle": "Add water",
+  "waterCustomAmountLabel": "Custom amount ({unit})",
+  "@waterCustomAmountLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLogAction": "Add",
+  "waterInvalidAmount": "Enter an amount greater than zero.",
+  "waterGoalDialogTitle": "Daily goal",
+  "waterGoalLabel": "Daily goal ({unit})",
+  "@waterGoalLabel": {
+    "placeholders": {
+      "unit": {"type": "String"}
+    }
+  }
 }

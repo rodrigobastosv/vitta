@@ -165,4 +165,52 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get mealTypeSnack => 'Snack';
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String get saveAction => 'Save';
+
+  @override
+  String get waterFeatureTitle => 'Water';
+
+  @override
+  String get waterFeatureSubtitle => 'Track how much water you drink each day';
+
+  @override
+  String waterProgressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
+  String get waterDeleteLogTooltip => 'Remove';
+
+  @override
+  String get waterEmptyTitle => 'Nothing logged yet';
+
+  @override
+  String get waterEmptyMessage => 'Tap the + button to log the first glass of water.';
+
+  @override
+  String get waterQuickAddTitle => 'Add water';
+
+  @override
+  String waterCustomAmountLabel(String unit) {
+    return 'Custom amount ($unit)';
+  }
+
+  @override
+  String get waterLogAction => 'Add';
+
+  @override
+  String get waterInvalidAmount => 'Enter an amount greater than zero.';
+
+  @override
+  String get waterGoalDialogTitle => 'Daily goal';
+
+  @override
+  String waterGoalLabel(String unit) {
+    return 'Daily goal ($unit)';
+  }
 }
