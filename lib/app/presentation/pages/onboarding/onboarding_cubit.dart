@@ -4,9 +4,7 @@ import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
 
 class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPresentationEvent> {
-  OnboardingCubit({required CompleteOnboardingUseCase completeOnboardingUseCase})
-    : _completeOnboardingUseCase = completeOnboardingUseCase,
-      super(const OnboardingState());
+  OnboardingCubit({required this._completeOnboardingUseCase}) : super(const OnboardingState());
 
   final CompleteOnboardingUseCase _completeOnboardingUseCase;
 

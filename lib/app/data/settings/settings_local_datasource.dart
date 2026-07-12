@@ -3,7 +3,7 @@ import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 
 class SettingsLocalDataSource {
-  SettingsLocalDataSource({required LocalStorageService localStorageService}) : _localStorageService = localStorageService;
+  SettingsLocalDataSource({required this._localStorageService});
 
   final LocalStorageService _localStorageService;
 

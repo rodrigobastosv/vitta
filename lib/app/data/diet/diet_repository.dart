@@ -8,15 +8,12 @@ import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class DietRepository {
-  DietRepository({required OpenFoodFactsDataSource openFoodFactsDataSource, required SupabaseDietDataSource supabaseDietDataSource})
-    : _openFoodFactsDataSource = openFoodFactsDataSource,
-      _supabaseDietDataSource = supabaseDietDataSource;
+  DietRepository({required this._openFoodFactsDataSource, required this._supabaseDietDataSource});
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
 
-  Future<Result<VTError, List<Food>>> searchFoods({required String query}) =>
-      _openFoodFactsDataSource.searchFoods(query: query);
+  Future<Result<VTError, List<Food>>> searchFoods({required String query}) => _openFoodFactsDataSource.searchFoods(query: query);
 
   Future<Result<VTError, Food>> saveFood({required Food food}) => _supabaseDietDataSource.saveFood(food: food);
 

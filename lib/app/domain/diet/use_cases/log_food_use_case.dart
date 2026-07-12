@@ -5,11 +5,8 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
-/// Logs [food] for [loggedDate]. Foods without an [Food.id] (a fresh Open Food
-/// Facts result or a brand-new custom food) are persisted to the user's
-/// catalog first, so every log always points at a saved food.
 class LogFoodUseCase {
-  LogFoodUseCase({required DietRepository dietRepository}) : _dietRepository = dietRepository;
+  LogFoodUseCase({required this._dietRepository});
 
   final DietRepository _dietRepository;
 
@@ -25,12 +22,7 @@ class LogFoodUseCase {
     };
     return foodIdResult.when(
       (error) => Future.value(Failure(error)),
-      (value) => _dietRepository.logFood(
-        foodId: value,
-        loggedDate: loggedDate,
-        mealType: mealType,
-        quantityGrams: quantityGrams,
-      ),
+      (value) => _dietRepository.logFood(foodId: value, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams),
     );
   }
 

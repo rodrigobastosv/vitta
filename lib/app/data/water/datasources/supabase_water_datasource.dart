@@ -5,17 +5,14 @@ import 'package:vitta/app/data/water/datasources/requests/create_water_log_reque
 import 'package:vitta/app/domain/water/entities/water_log.dart';
 
 class SupabaseWaterDataSource {
-  SupabaseWaterDataSource({required SupabaseService supabaseService}) : _supabaseService = supabaseService;
+  SupabaseWaterDataSource({required this._supabaseService});
 
   final SupabaseService _supabaseService;
 
   Future<Result<VTError, WaterLog>> logWater({required DateTime loggedDate, required double amountMl}) async {
     try {
-      final row = await _supabaseService
-          .from('water_logs')
-          .insert(CreateWaterLogRequest(userId: _supabaseService.currentUserId, loggedDate: loggedDate, amountMl: amountMl).toJson())
-          .select()
-          .single();
+      final request = CreateWaterLogRequest(userId: _supabaseService.currentUserId, loggedDate: loggedDate, amountMl: amountMl);
+      final row = await _supabaseService.from('water_logs').insert(request.toJson()).select().single();
       return Success(_waterLogFromRow(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log water', cause: error));

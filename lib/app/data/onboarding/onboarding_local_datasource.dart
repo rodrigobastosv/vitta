@@ -1,7 +1,7 @@
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 
 class OnboardingLocalDataSource {
-  OnboardingLocalDataSource({required LocalStorageService localStorageService}) : _localStorageService = localStorageService;
+  OnboardingLocalDataSource({required this._localStorageService});
 
   final LocalStorageService _localStorageService;
 

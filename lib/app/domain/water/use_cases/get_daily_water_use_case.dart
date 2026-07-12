@@ -4,7 +4,7 @@ import 'package:vitta/app/data/water/water_repository.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 
 class GetDailyWaterUseCase {
-  GetDailyWaterUseCase({required WaterRepository waterRepository}) : _waterRepository = waterRepository;
+  GetDailyWaterUseCase({required this._waterRepository});
 
   final WaterRepository _waterRepository;
 

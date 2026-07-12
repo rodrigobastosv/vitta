@@ -4,7 +4,7 @@ import 'package:vitta/app/data/water/water_repository.dart';
 import 'package:vitta/app/domain/water/entities/water_log.dart';
 
 class LogWaterUseCase {
-  LogWaterUseCase({required WaterRepository waterRepository}) : _waterRepository = waterRepository;
+  LogWaterUseCase({required this._waterRepository});
 
   final WaterRepository _waterRepository;
 
