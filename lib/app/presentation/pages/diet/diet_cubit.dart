@@ -1,4 +1,3 @@
-import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
@@ -29,23 +28,16 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
 
   Future<void> loadToday() async {
     emitPresentation(DietShowLoading());
-    final dailyMacros = await _getDailyMacrosUseCase(date: _today);
+    final dailyMacrosResult = await _getDailyMacrosUseCase(date: _today);
     emitPresentation(DietHideLoading());
-    switch (dailyMacros) {
-      case Failure(:final error):
-        emit(DietError(message: error.message));
-      case Success(:final value):
-        emit(DietLoaded(date: _today, dailyMacros: value));
-    }
+    dailyMacrosResult.when(
+      (error) => emit(DietError(message: error.message)),
+      (value) => emit(DietLoaded(date: _today, dailyMacros: value)),
+    );
   }
 
   Future<void> deleteLog({required String logId}) async {
-    final deleted = await _deleteFoodLogUseCase(logId: logId);
-    switch (deleted) {
-      case Failure(:final error):
-        emit(DietError(message: error.message));
-      case Success():
-        await loadToday();
-    }
+    final deletedResult = await _deleteFoodLogUseCase(logId: logId);
+    await deletedResult.when((error) => Future.sync(() => emit(DietError(message: error.message))), (_) => loadToday());
   }
 }

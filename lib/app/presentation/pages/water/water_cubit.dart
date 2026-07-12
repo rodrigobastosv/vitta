@@ -1,4 +1,3 @@
-import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
@@ -41,34 +40,22 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   Future<void> loadToday() async {
     emitPresentation(const WaterShowLoading());
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
-    final dailyWater = await _getDailyWaterUseCase(date: _today);
+    final dailyWaterResult = await _getDailyWaterUseCase(date: _today);
     emitPresentation(const WaterHideLoading());
-    switch (dailyWater) {
-      case Failure(:final error):
-        emit(WaterError(message: error.message));
-      case Success(:final value):
-        emit(WaterLoaded(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl));
-    }
+    dailyWaterResult.when(
+      (error) => emit(WaterError(message: error.message)),
+      (value) => emit(WaterLoaded(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),
+    );
   }
 
   Future<void> addWater({required double amountMl}) async {
-    final logged = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
-    switch (logged) {
-      case Failure(:final error):
-        emit(WaterError(message: error.message));
-      case Success():
-        await loadToday();
-    }
+    final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
+    await loggedResult.when((error) => Future.sync(() => emit(WaterError(message: error.message))), (_) => loadToday());
   }
 
   Future<void> deleteLog({required String logId}) async {
-    final deleted = await _deleteWaterLogUseCase(logId: logId);
-    switch (deleted) {
-      case Failure(:final error):
-        emit(WaterError(message: error.message));
-      case Success():
-        await loadToday();
-    }
+    final deletedResult = await _deleteWaterLogUseCase(logId: logId);
+    await deletedResult.when((error) => Future.sync(() => emit(WaterError(message: error.message))), (_) => loadToday());
   }
 
   Future<void> changeDailyGoal({required double goalMl}) async {

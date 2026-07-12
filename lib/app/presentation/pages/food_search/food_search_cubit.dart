@@ -24,14 +24,12 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
       return;
     }
     emitPresentation(const FoodSearchShowLoading());
-    final foods = await _searchFoodsUseCase(query: query);
+    final foodsResult = await _searchFoodsUseCase(query: query);
     emitPresentation(const FoodSearchHideLoading());
-    switch (foods) {
-      case Failure(:final error):
-        emit(FoodSearchError(message: error.message));
-      case Success(:final value):
-        emit(FoodSearchLoaded(results: value));
-    }
+    foodsResult.when(
+      (error) => emit(FoodSearchError(message: error.message)),
+      (value) => emit(FoodSearchLoaded(results: value)),
+    );
   }
 
   Future<Result<VTError, FoodLog>> logFood({

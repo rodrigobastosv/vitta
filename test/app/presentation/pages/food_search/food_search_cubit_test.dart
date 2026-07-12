@@ -71,13 +71,8 @@ void main() {
       () => logFoodUseCase(food: food, loggedDate: any(named: 'loggedDate'), mealType: MealType.dinner, quantityGrams: 250),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final result = await cubit.logFood(food: food, mealType: MealType.dinner, quantityGrams: 250);
+    final loggedResult = await cubit.logFood(food: food, mealType: MealType.dinner, quantityGrams: 250);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, foodLog);
-    }
+    loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
   });
 }

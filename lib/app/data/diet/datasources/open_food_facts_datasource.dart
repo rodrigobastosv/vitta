@@ -11,7 +11,7 @@ class OpenFoodFactsDataSource {
   final VTHttpClient _httpClient;
 
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
-    final response = await _httpClient.get(
+    final responseResult = await _httpClient.get(
       VTHttpRequest(
         path: '/cgi/search.pl',
         queryParameters: {
@@ -25,10 +25,7 @@ class OpenFoodFactsDataSource {
       ),
     );
 
-    return switch (response) {
-      Failure(:final error) => Failure(error),
-      Success(:final value) => Success(_parseProducts(value)),
-    };
+    return responseResult.when(Failure.new, (value) => Success(_parseProducts(value)));
   }
 
   List<Food> _parseProducts(Map<String, dynamic> body) {
