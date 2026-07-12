@@ -13,7 +13,7 @@ class SupabaseWaterDataSource {
     try {
       final request = CreateWaterLogRequest(userId: _supabaseService.currentUserId, loggedDate: loggedDate, amountMl: amountMl);
       final row = await _supabaseService.from('water_logs').insert(request.toJson()).select().single();
-      return Success(_waterLogFromRow(row));
+      return Success(WaterLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log water', cause: error));
     }
@@ -27,7 +27,7 @@ class SupabaseWaterDataSource {
           .eq('user_id', _supabaseService.currentUserId)
           .eq('logged_date', date.toIso8601String().split('T').first)
           .order('created_at');
-      return Success(rows.map(_waterLogFromRow).toList());
+      return Success(rows.map(WaterLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load water logs for $date', cause: error));
     }
@@ -41,10 +41,4 @@ class SupabaseWaterDataSource {
       return Failure(VTError(message: 'Failed to delete water log $logId', cause: error));
     }
   }
-
-  WaterLog _waterLogFromRow(Map<String, dynamic> row) => WaterLog(
-    id: row['id'] as String,
-    loggedDate: DateTime.parse(row['logged_date'] as String),
-    amountMl: (row['amount_ml'] as num).toDouble(),
-  );
 }

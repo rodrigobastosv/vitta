@@ -18,7 +18,7 @@ class SupabaseSleepDataSource {
         qualityRating: qualityRating,
       );
       final row = await _supabaseService.from('sleep_logs').insert(request.toJson()).select().single();
-      return Success(_sleepLogFromRow(row));
+      return Success(SleepLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log sleep', cause: error));
     }
@@ -34,7 +34,7 @@ class SupabaseSleepDataSource {
           .eq('user_id', _supabaseService.currentUserId)
           .gte('logged_date', sinceDate.toIso8601String().split('T').first)
           .order('logged_date', ascending: false);
-      return Success(rows.map(_sleepLogFromRow).toList());
+      return Success(rows.map(SleepLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load recent sleep logs', cause: error));
     }
@@ -48,12 +48,4 @@ class SupabaseSleepDataSource {
       return Failure(VTError(message: 'Failed to delete sleep log $logId', cause: error));
     }
   }
-
-  SleepLog _sleepLogFromRow(Map<String, dynamic> row) => SleepLog(
-    id: row['id'] as String,
-    loggedDate: DateTime.parse(row['logged_date'] as String),
-    bedTime: DateTime.parse(row['bed_time'] as String).toLocal(),
-    wakeTime: DateTime.parse(row['wake_time'] as String).toLocal(),
-    qualityRating: row['quality_rating'] as int?,
-  );
 }
