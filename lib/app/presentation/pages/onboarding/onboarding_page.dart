@@ -55,11 +55,7 @@ class _OnboardingView extends StatelessWidget {
               const VTGap.m(),
               _OnboardingFeatureRow(icon: Icons.water_drop_outlined, title: l10n.waterFeatureTitle, subtitle: l10n.waterFeatureSubtitle),
               const VTGap.m(),
-              _OnboardingFeatureRow(
-                icon: Icons.bedtime_outlined,
-                title: l10n.onboardingSleepFeatureTitle,
-                subtitle: l10n.onboardingSleepFeatureSubtitle,
-              ),
+              _OnboardingFeatureRow(icon: Icons.bedtime_outlined, title: l10n.sleepFeatureTitle, subtitle: l10n.sleepFeatureSubtitle),
               const VTGap.m(),
               _OnboardingFeatureRow(
                 icon: Icons.fitness_center_outlined,

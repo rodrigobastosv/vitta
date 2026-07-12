@@ -215,16 +215,48 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get sleepFeatureTitle => 'Sleep';
+
+  @override
+  String get sleepFeatureSubtitle => 'Track your sleep patterns';
+
+  @override
+  String get sleepEmptyTitle => 'Nothing logged yet';
+
+  @override
+  String get sleepEmptyMessage => 'Tap the + button to log your first night of sleep.';
+
+  @override
+  String get sleepDeleteLogTooltip => 'Remove';
+
+  @override
+  String get sleepLogSheetTitle => 'Log sleep';
+
+  @override
+  String get sleepBedTimeLabel => 'Bed time';
+
+  @override
+  String get sleepWakeTimeLabel => 'Wake time';
+
+  @override
+  String get sleepQualityLabel => 'Quality (optional)';
+
+  @override
+  String get sleepInvalidRange => 'Wake time must be after bed time.';
+
+  @override
+  String get sleepLogAction => 'Log sleep';
+
+  @override
+  String sleepDurationLabel(int hours, int minutes) {
+    return '${hours}h ${minutes}m';
+  }
+
+  @override
   String get onboardingWelcomeTitle => 'Welcome to Vitta';
 
   @override
   String get onboardingWelcomeMessage => 'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.';
-
-  @override
-  String get onboardingSleepFeatureTitle => 'Sleep';
-
-  @override
-  String get onboardingSleepFeatureSubtitle => 'Track your sleep patterns';
 
   @override
   String get onboardingAccountBenefitMessage =>

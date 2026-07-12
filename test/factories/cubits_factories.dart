@@ -2,6 +2,7 @@ import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
+import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 
 import '../mocks/datasources_mocks.dart';
@@ -36,5 +37,15 @@ abstract class CubitsFactories {
     logWaterUseCase: logWaterUseCase ?? MockLogWaterUseCase(),
     deleteWaterLogUseCase: deleteWaterLogUseCase ?? MockDeleteWaterLogUseCase(),
     waterLocalDataSource: waterLocalDataSource ?? MockWaterLocalDataSource(),
+  );
+
+  static SleepCubit buildSleepCubit({
+    MockGetRecentSleepLogsUseCase? getRecentSleepLogsUseCase,
+    MockLogSleepUseCase? logSleepUseCase,
+    MockDeleteSleepLogUseCase? deleteSleepLogUseCase,
+  }) => SleepCubit(
+    getRecentSleepLogsUseCase: getRecentSleepLogsUseCase ?? MockGetRecentSleepLogsUseCase(),
+    logSleepUseCase: logSleepUseCase ?? MockLogSleepUseCase(),
+    deleteSleepLogUseCase: deleteSleepLogUseCase ?? MockDeleteSleepLogUseCase(),
   );
 }
