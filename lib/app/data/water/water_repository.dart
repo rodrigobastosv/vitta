@@ -5,7 +5,7 @@ import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/entities/water_log.dart';
 
 class WaterRepository {
-  WaterRepository({required SupabaseWaterDataSource supabaseWaterDataSource}) : _supabaseWaterDataSource = supabaseWaterDataSource;
+  WaterRepository({required this._supabaseWaterDataSource});
 
   final SupabaseWaterDataSource _supabaseWaterDataSource;
 

@@ -1,7 +1,7 @@
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 
 class WaterLocalDataSource {
-  WaterLocalDataSource({required LocalStorageService localStorageService}) : _localStorageService = localStorageService;
+  WaterLocalDataSource({required this._localStorageService});
 
   final LocalStorageService _localStorageService;
 

@@ -10,10 +10,7 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_presentatio
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 
 class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPresentationEvent> {
-  FoodSearchCubit({required SearchFoodsUseCase searchFoodsUseCase, required LogFoodUseCase logFoodUseCase})
-    : _searchFoodsUseCase = searchFoodsUseCase,
-      _logFoodUseCase = logFoodUseCase,
-      super(const FoodSearchIdle());
+  FoodSearchCubit({required this._searchFoodsUseCase, required this._logFoodUseCase}) : super(const FoodSearchIdle());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
   final LogFoodUseCase _logFoodUseCase;
@@ -26,17 +23,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     emitPresentation(const FoodSearchShowLoading());
     final foodsResult = await _searchFoodsUseCase(query: query);
     emitPresentation(const FoodSearchHideLoading());
-    foodsResult.when(
-      (error) => emit(FoodSearchError(message: error.message)),
-      (value) => emit(FoodSearchLoaded(results: value)),
-    );
+    foodsResult.when((error) => emit(FoodSearchError(message: error.message)), (value) => emit(FoodSearchLoaded(results: value)));
   }
 
-  Future<Result<VTError, FoodLog>> logFood({
-    required Food food,
-    required MealType mealType,
-    required double quantityGrams,
-  }) {
+  Future<Result<VTError, FoodLog>> logFood({required Food food, required MealType mealType, required double quantityGrams}) {
     final now = DateTime.now();
     return _logFoodUseCase(
       food: food,

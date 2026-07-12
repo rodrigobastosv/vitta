@@ -6,10 +6,8 @@ import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
-  DietCubit({required GetDailyMacrosUseCase getDailyMacrosUseCase, required DeleteFoodLogUseCase deleteFoodLogUseCase})
-    : _getDailyMacrosUseCase = getDailyMacrosUseCase,
-      _deleteFoodLogUseCase = deleteFoodLogUseCase,
-      super(
+  DietCubit({required this._getDailyMacrosUseCase, required this._deleteFoodLogUseCase})
+    : super(
         DietLoaded(
           date: _dateOnly(DateTime.now()),
           dailyMacros: const DailyMacros(entries: []),
