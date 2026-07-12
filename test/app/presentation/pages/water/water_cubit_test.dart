@@ -5,8 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
+import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
@@ -32,7 +32,7 @@ void main() {
     expect: () => [isA<WaterLoaded>()],
   );
 
-  blocPresentationTest<WaterCubit, WaterState, LoadingPresentationEvent>(
+  blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
     'shows then hides loading while loadToday runs',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
@@ -42,7 +42,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [LoadingPresentationEvent.show, LoadingPresentationEvent.hide],
+    expectPresentation: () => [WaterPresentationEvent.showLoading, WaterPresentationEvent.hideLoading],
   );
 
   blocTest<WaterCubit, WaterState>(

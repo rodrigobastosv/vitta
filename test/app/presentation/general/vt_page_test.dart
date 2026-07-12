@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:loader_overlay/loader_overlay.dart';
+import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/design_system/components/general/vt_loading_overlay_indicator.dart';
 import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
@@ -14,37 +15,49 @@ class _Idle implements _TestState {}
 
 class _Loaded implements _TestState {}
 
-class _TestCubit extends PresentationCubit<_TestState> {
-  _TestCubit() : super(_Idle());
+enum _TestPresentationEvent implements LoadingPresentationEvent {
+  showLoading(isLoading: true),
+  hideLoading(isLoading: false);
 
-  Future<void> load(Completer<void> gate) async {
-    emitPresentation(LoadingPresentationEvent.show);
+  const _TestPresentationEvent({required this.isLoading});
+
+  @override
+  final bool isLoading;
+}
+
+class _TestCubit extends PresentationCubit<_TestState, _TestPresentationEvent> {
+  _TestCubit({required this.gate}) : super(_Idle());
+
+  final Completer<void> gate;
+
+  @override
+  void onInit() => load();
+
+  Future<void> load() async {
+    emitPresentation(_TestPresentationEvent.showLoading);
     await gate.future;
-    emitPresentation(LoadingPresentationEvent.hide);
+    emitPresentation(_TestPresentationEvent.hideLoading);
     emit(_Loaded());
   }
 }
 
 void main() {
-  testWidgets('shows the loading overlay while a LoadingPresentationEvent.show is pending, hides it on .hide', (tester) async {
+  testWidgets('calls onInit on mount and shows the overlay for its pending show/hide, not losing the first event', (
+    tester,
+  ) async {
     final gate = Completer<void>();
-    late _TestCubit cubit;
+    await G.reset();
+    G.registerFactory(() => _TestCubit(gate: gate));
+    addTearDown(G.reset);
 
     await tester.pumpWidget(
       MaterialApp(
         builder: (context, child) => LoaderOverlay(overlayWidgetBuilder: (_) => const VTLoadingOverlayIndicator(), child: child!),
-        home: VTPage<_TestCubit, _TestState>(
-          create: () => cubit = _TestCubit(),
+        home: VTPage<_TestCubit, _TestState, _TestPresentationEvent>(
           builder: (context, cubit, state) => const Scaffold(body: SizedBox()),
         ),
       ),
     );
-    await tester.pump();
-
-    expect(find.byType(VTLoadingOverlayIndicator), findsNothing);
-
-    unawaited(cubit.load(gate));
-    await tester.pump();
     await tester.pump();
 
     expect(find.byType(VTLoadingOverlayIndicator), findsOneWidget);

@@ -4,11 +4,11 @@ import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
+import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
-class WaterCubit extends PresentationCubit<WaterState> {
+class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   WaterCubit({
     required GetDailyWaterUseCase getDailyWaterUseCase,
     required LogWaterUseCase logWaterUseCase,
@@ -35,11 +35,14 @@ class WaterCubit extends PresentationCubit<WaterState> {
 
   DateTime get _today => _dateOnly(DateTime.now());
 
+  @override
+  void onInit() => loadToday();
+
   Future<void> loadToday() async {
-    emitPresentation(LoadingPresentationEvent.show);
+    emitPresentation(WaterPresentationEvent.showLoading);
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
     final dailyWater = await _getDailyWaterUseCase(date: _today);
-    emitPresentation(LoadingPresentationEvent.hide);
+    emitPresentation(WaterPresentationEvent.hideLoading);
     switch (dailyWater) {
       case Failure(:final error):
         emit(WaterError(message: error.message));

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
@@ -7,6 +6,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_log_tile.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
@@ -16,8 +16,7 @@ class DietPage extends StatelessWidget {
   const DietPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<DietCubit, DietState>(
-    create: () => G<DietCubit>()..loadToday(),
+  Widget build(BuildContext context) => VTPage<DietCubit, DietState, DietPresentationEvent>(
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       return Scaffold(
