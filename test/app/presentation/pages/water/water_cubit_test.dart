@@ -1,9 +1,11 @@
+import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
+import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
@@ -18,7 +20,7 @@ void main() {
   });
 
   blocTest<WaterCubit, WaterState>(
-    'emits [WaterLoading, WaterLoaded] when loadToday succeeds',
+    'emits WaterLoaded when loadToday succeeds',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
       final waterLocalDataSource = MockWaterLocalDataSource();
@@ -27,11 +29,24 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [const WaterLoading(), isA<WaterLoaded>()],
+    expect: () => [isA<WaterLoaded>()],
+  );
+
+  blocPresentationTest<WaterCubit, WaterState, LoadingPresentationEvent>(
+    'shows then hides loading while loadToday runs',
+    build: () {
+      final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+      final waterLocalDataSource = MockWaterLocalDataSource();
+      when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+      when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
+      return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
+    },
+    act: (cubit) => cubit.loadToday(),
+    expectPresentation: () => [LoadingPresentationEvent.show, LoadingPresentationEvent.hide],
   );
 
   blocTest<WaterCubit, WaterState>(
-    'emits [WaterLoading, WaterError] when loadToday fails',
+    'emits WaterError when loadToday fails',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
       final waterLocalDataSource = MockWaterLocalDataSource();
@@ -40,7 +55,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [const WaterLoading(), const WaterError(message: 'boom')],
+    expect: () => [const WaterError(message: 'boom')],
   );
 
   blocTest<WaterCubit, WaterState>(
@@ -61,7 +76,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.addWater(amountMl: 250),
-    expect: () => [const WaterLoading(), isA<WaterLoaded>()],
+    expect: () => [isA<WaterLoaded>()],
   );
 
   blocTest<WaterCubit, WaterState>(
@@ -80,7 +95,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [const WaterLoading(), isA<WaterLoaded>()],
+    expect: () => [isA<WaterLoaded>()],
   );
 
   final getDailyWaterUseCaseSpy = MockGetDailyWaterUseCase();
@@ -112,6 +127,6 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.changeDailyGoal(goalMl: 3000),
-    expect: () => [const WaterLoading(), isA<WaterLoaded>()],
+    expect: () => [isA<WaterLoaded>()],
   );
 }
