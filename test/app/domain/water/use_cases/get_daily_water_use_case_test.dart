@@ -14,13 +14,8 @@ void main() {
     const dailyWater = DailyWater(entries: []);
     when(() => waterRepository.getDailyWater(date: date)).thenAnswer((_) async => const Success(dailyWater));
 
-    final result = await useCase(date: date);
+    final dailyWaterResult = await useCase(date: date);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, dailyWater);
-    }
+    dailyWaterResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, dailyWater));
   });
 }

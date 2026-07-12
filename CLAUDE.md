@@ -91,7 +91,8 @@ Standard Flutter `gen-l10n` (not a custom solution). ARB files live in `lib/l10n
 ## Code style
 
 - No comments. Code must be self-explanatory through naming; if it isn't, restructure it rather than annotate it.
-- No variables named `result` (or similarly generic — `data`, `response`, `value` as a local var name). Name it after what it actually holds. Prefer destructuring the value straight out of a pattern (`Success(value: final meal)`) over binding the whole `Result` to a throwaway name first.
+- No variables named `result` (or similarly generic — `data`, `response`, `value` as a local var name). Name it after what it actually holds. A local variable holding a not-yet-unwrapped `Result<F, S>` gets a `Result` **suffix** instead — `dailyMacrosResult`, `loggedResult`, `deletedResult` — not a bare/generic name.
+- `Result<F, S>` (`lib/app/core/error/result.dart`) is consumed via `.when(failure, success)`, not a `switch`/pattern match — `T when<T>(T Function(F error) failure, T Function(S value) success)`, positional (not named) with `failure` always first: `dailyMacrosResult.when((error) => emit(XError(message: error.message)), (value) => emit(XLoaded(...)))`. When one branch is synchronous and the other returns a `Future` (e.g. failure just calls `emit(...)`, success awaits a reload), wrap the sync branch to match rather than mixing return types — `Future.sync(() => emit(XError(...)))` for a `void`-returning cubit method, `Future.value(Failure(error))` for one returning `Result` itself — see `DietCubit.deleteLog()`/`LogFoodUseCase.call()`.
 - Use the dot-shorthand operator wherever the target type is inferable (`.center`, `.w700`, `.light`).
 - `flutter analyze` must report zero issues (including `info`-level lints) before considering a change done.
 - Lint rules are the explicit list in `analysis_options.yaml`, carried over from the dofus_buddy project.

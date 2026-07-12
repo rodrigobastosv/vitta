@@ -19,26 +19,23 @@ class LogFoodUseCase {
     required MealType mealType,
     required double quantityGrams,
   }) async {
-    final foodId = switch (food.id) {
+    final foodIdResult = switch (food.id) {
       final String id => Success<VTError, String>(id),
       null => await _saveFood(food),
     };
-    return switch (foodId) {
-      Failure(:final error) => Failure(error),
-      Success(:final value) => await _dietRepository.logFood(
+    return foodIdResult.when(
+      (error) => Future.value(Failure(error)),
+      (value) => _dietRepository.logFood(
         foodId: value,
         loggedDate: loggedDate,
         mealType: mealType,
         quantityGrams: quantityGrams,
       ),
-    };
+    );
   }
 
   Future<Result<VTError, String>> _saveFood(Food food) async {
-    final savedFood = await _dietRepository.saveFood(food: food);
-    return switch (savedFood) {
-      Failure(:final error) => Failure(error),
-      Success(:final value) => Success(value.id!),
-    };
+    final savedFoodResult = await _dietRepository.saveFood(food: food);
+    return savedFoodResult.when(Failure.new, (value) => Success(value.id!));
   }
 }

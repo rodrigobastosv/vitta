@@ -15,14 +15,9 @@ void main() {
     final waterLog = WaterLogFactory.build();
     when(() => waterRepository.logWater(loggedDate: loggedDate, amountMl: 250)).thenAnswer((_) async => Success(waterLog));
 
-    final result = await useCase(loggedDate: loggedDate, amountMl: 250);
+    final loggedResult = await useCase(loggedDate: loggedDate, amountMl: 250);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, waterLog);
-    }
+    loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, waterLog));
   });
 
   test('propagates a repository failure', () async {
@@ -32,13 +27,8 @@ void main() {
     const error = VTError(message: 'network error');
     when(() => waterRepository.logWater(loggedDate: loggedDate, amountMl: 250)).thenAnswer((_) async => const Failure(error));
 
-    final result = await useCase(loggedDate: loggedDate, amountMl: 250);
+    final loggedResult = await useCase(loggedDate: loggedDate, amountMl: 250);
 
-    switch (result) {
-      case Failure(error: final resultError):
-        expect(resultError, error);
-      case Success():
-        fail('expected Failure, got Success');
-    }
+    loggedResult.when((resultError) => expect(resultError, error), (_) => fail('expected Failure, got Success'));
   });
 }

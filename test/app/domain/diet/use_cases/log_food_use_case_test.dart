@@ -26,14 +26,9 @@ void main() {
       () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: MealType.lunch, quantityGrams: 120),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final result = await useCase(food: food, loggedDate: loggedDate, mealType: MealType.lunch, quantityGrams: 120);
+    final loggedResult = await useCase(food: food, loggedDate: loggedDate, mealType: MealType.lunch, quantityGrams: 120);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, foodLog);
-    }
+    loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
     verifyNever(() => dietRepository.saveFood(food: any(named: 'food')));
   });
 
@@ -49,14 +44,9 @@ void main() {
       () => dietRepository.logFood(foodId: 'food-2', loggedDate: loggedDate, mealType: MealType.snack, quantityGrams: 50),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final result = await useCase(food: unsavedFood, loggedDate: loggedDate, mealType: MealType.snack, quantityGrams: 50);
+    final loggedResult = await useCase(food: unsavedFood, loggedDate: loggedDate, mealType: MealType.snack, quantityGrams: 50);
 
-    switch (result) {
-      case Failure(:final error):
-        fail('expected Success, got Failure($error)');
-      case Success(:final value):
-        expect(value, foodLog);
-    }
+    loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
   });
 
   test('does not attempt to log when saving the food fails', () async {
@@ -66,14 +56,14 @@ void main() {
     const error = VTError(message: 'could not save food');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => const Failure(error));
 
-    final result = await useCase(food: unsavedFood, loggedDate: DateTime(2026, 7, 11), mealType: MealType.breakfast, quantityGrams: 100);
+    final loggedResult = await useCase(
+      food: unsavedFood,
+      loggedDate: DateTime(2026, 7, 11),
+      mealType: MealType.breakfast,
+      quantityGrams: 100,
+    );
 
-    switch (result) {
-      case Failure(error: final resultError):
-        expect(resultError, error);
-      case Success():
-        fail('expected Failure, got Success');
-    }
+    loggedResult.when((resultError) => expect(resultError, error), (_) => fail('expected Failure, got Success'));
     verifyNever(
       () => dietRepository.logFood(
         foodId: any(named: 'foodId'),
