@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
@@ -8,6 +7,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
+import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 import 'package:vitta/app/presentation/pages/water/widgets/add_water_sheet.dart';
 import 'package:vitta/app/presentation/pages/water/widgets/edit_water_goal_dialog.dart';
@@ -19,8 +19,7 @@ class WaterPage extends StatelessWidget {
   const WaterPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<WaterCubit, WaterState>(
-    create: () => G<WaterCubit>()..loadToday(),
+  Widget build(BuildContext context) => VTPage<WaterCubit, WaterState, WaterPresentationEvent>(
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       final unitSystem = context.watch<AppCubit>().state.unitSystem;

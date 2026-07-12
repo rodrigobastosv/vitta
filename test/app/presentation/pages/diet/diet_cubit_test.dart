@@ -5,8 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
@@ -28,7 +28,7 @@ void main() {
     expect: () => [isA<DietLoaded>()],
   );
 
-  blocPresentationTest<DietCubit, DietState, LoadingPresentationEvent>(
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
     'shows then hides loading while loadToday runs',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
@@ -36,7 +36,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [LoadingPresentationEvent.show, LoadingPresentationEvent.hide],
+    expectPresentation: () => [DietPresentationEvent.showLoading, DietPresentationEvent.hideLoading],
   );
 
   blocTest<DietCubit, DietState>(

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/custom_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
@@ -15,8 +15,7 @@ class FoodSearchPage extends StatelessWidget {
   const FoodSearchPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<FoodSearchCubit, FoodSearchState>(
-    create: G.call<FoodSearchCubit>,
+  Widget build(BuildContext context) => VTPage<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       return Scaffold(

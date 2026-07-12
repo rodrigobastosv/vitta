@@ -5,8 +5,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
-import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
@@ -40,7 +40,7 @@ void main() {
     expect: () => [isA<FoodSearchLoaded>()],
   );
 
-  blocPresentationTest<FoodSearchCubit, FoodSearchState, LoadingPresentationEvent>(
+  blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
     'shows then hides loading while search runs',
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
@@ -48,7 +48,7 @@ void main() {
       return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
     act: (cubit) => cubit.search(query: 'banana'),
-    expectPresentation: () => [LoadingPresentationEvent.show, LoadingPresentationEvent.hide],
+    expectPresentation: () => [FoodSearchPresentationEvent.showLoading, FoodSearchPresentationEvent.hideLoading],
   );
 
   blocTest<FoodSearchCubit, FoodSearchState>(
