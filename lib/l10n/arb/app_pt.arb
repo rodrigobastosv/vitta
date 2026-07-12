@@ -101,5 +101,13 @@
     "placeholders": {
       "unit": {"type": "String"}
     }
-  }
+  },
+  "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
+  "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
+  "onboardingSleepFeatureTitle": "Sono",
+  "onboardingSleepFeatureSubtitle": "Acompanhe seus padrões de sono",
+  "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",
+  "onboardingCreateAccountAction": "Criar conta",
+  "onboardingCreateAccountComingSoonMessage": "A criação de conta está a caminho.",
+  "onboardingContinueWithoutAccountAction": "Continuar sem conta"
 }

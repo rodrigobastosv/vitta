@@ -1,0 +1,51 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:vitta/app/core/di/dependencies.dart';
+import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/main.dart';
+
+import '../../../../fixtures/local_storage_fixture.dart';
+import '../../../../mocks/repositories_mocks.dart';
+import '../../../../mocks/services_mocks.dart';
+
+void main() {
+  setUpAll(() async {
+    setupDependencies(appBox: await openTestHiveBox(), supabaseService: MockSupabaseService());
+
+    var hasSeenOnboarding = false;
+    final onboardingRepository = MockOnboardingRepository();
+    when(onboardingRepository.hasSeenOnboarding).thenAnswer((_) => hasSeenOnboarding);
+    when(onboardingRepository.completeOnboarding).thenAnswer((_) async => hasSeenOnboarding = true);
+    G.unregister<OnboardingRepository>();
+    G.registerLazySingleton<OnboardingRepository>(() => onboardingRepository);
+  });
+
+  testWidgets('shows onboarding on first launch and tapping create account shows a coming soon message', (tester) async {
+    await tester.pumpWidget(const VittaApp());
+    await tester.pumpAndSettle();
+
+    expect(find.text('Welcome to Vitta'), findsOneWidget);
+    expect(find.byType(GridView), findsNothing);
+
+    await tester.ensureVisible(find.text('Create account'));
+    await tester.tap(find.text('Create account'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Account creation is on its way.'), findsOneWidget);
+    expect(find.byType(GridView), findsNothing);
+    expect(G<OnboardingRepository>().hasSeenOnboarding(), isFalse);
+  });
+
+  testWidgets('continuing without an account reaches home and persists the flag', (tester) async {
+    await tester.pumpWidget(const VittaApp());
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Continue without an account'));
+    await tester.tap(find.text('Continue without an account'));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(GridView), findsOneWidget);
+    expect(G<OnboardingRepository>().hasSeenOnboarding(), isTrue);
+  });
+}
