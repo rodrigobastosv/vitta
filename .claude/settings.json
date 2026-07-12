@@ -3,7 +3,12 @@
     "allow": [
       "Bash(tail -c 500 /tmp/loading_migration_test.log | tr '\\\\r' '\\\\n')",
       "Read(//private/tmp/**)",
-      "Bash(xcrun simctl *)"
+      "Bash(xcrun simctl *)",
+      "Bash(git checkout *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "Bash(gh pr create --title 'Add anonymous-to-real-account auth flow and a Profile hub page' --body ' *)"
     ]
   }
 }

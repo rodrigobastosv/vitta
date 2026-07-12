@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/main.dart';
@@ -9,16 +10,19 @@ import 'mocks/services_mocks.dart';
 
 void main() {
   setUpAll(() async {
-    setupDependencies(appBox: await openTestHiveBox(), supabaseService: MockSupabaseService());
+    final supabaseService = MockSupabaseService();
+    when(() => supabaseService.isAnonymous).thenReturn(true);
+    when(() => supabaseService.currentUserEmail).thenReturn(null);
+    setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
     await G<OnboardingLocalDataSource>().markOnboardingSeen();
   });
 
-  testWidgets('renders the home page with its feature tiles and a settings action', (tester) async {
+  testWidgets('renders the home page with its feature tiles and a profile action', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 
     expect(find.byType(GridView), findsOneWidget);
-    expect(find.byIcon(Icons.settings_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.person_outline), findsOneWidget);
   });
 
   testWidgets('navigates to the workout page when the workout tile is tapped', (tester) async {

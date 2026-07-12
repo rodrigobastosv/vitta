@@ -124,6 +124,24 @@
   "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",
   "onboardingCreateAccountAction": "Criar conta",
-  "onboardingCreateAccountComingSoonMessage": "A criação de conta está a caminho.",
-  "onboardingContinueWithoutAccountAction": "Continuar sem conta"
+  "onboardingContinueWithoutAccountAction": "Continuar sem conta",
+  "settingsAuthLabel": "Conta",
+  "profileTitle": "Perfil",
+  "profileSignInAction": "Entrar ou criar conta",
+  "authAnonymousMessage": "Seus dados ficam só neste dispositivo. Crie uma conta para mantê-los seguros e acessá-los em qualquer aparelho.",
+  "authSignedInAsLabel": "Conectado como {email}",
+  "@authSignedInAsLabel": {
+    "placeholders": {
+      "email": {"type": "String"}
+    }
+  },
+  "authCreateAction": "Criar conta",
+  "authLoginAction": "Entrar",
+  "authLogoutAction": "Sair",
+  "authEmailLabel": "Email",
+  "authPasswordLabel": "Senha",
+  "authSignUpAction": "Criar conta",
+  "authSignInAction": "Entrar",
+  "authInvalidEmailMessage": "Informe um email válido.",
+  "authInvalidPasswordMessage": "A senha deve ter pelo menos 6 caracteres."
 }

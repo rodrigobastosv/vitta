@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
@@ -17,6 +18,14 @@ class DietPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => VTPage<DietCubit, DietState, DietPresentationEvent>(
+    onPresentation: (context, event) {
+      switch (event) {
+        case DietShowLoading():
+          context.showLoading();
+        case DietHideLoading():
+          context.hideLoading();
+      }
+    },
     builder: (context, cubit, state) {
       final l10n = AppLocalizations.of(context);
       return Scaffold(
@@ -41,7 +50,10 @@ class DietPage extends StatelessWidget {
                       MacroSummaryCard(dailyMacros: dailyMacros),
                       const VTGap.l(),
                       for (final entry in dailyMacros.entries) ...[
-                        FoodLogTile(entry: entry, onDelete: () => cubit.deleteLog(logId: entry.log.id)),
+                        FoodLogTile(
+                          entry: entry,
+                          onDelete: () => cubit.deleteLog(logId: entry.log.id),
+                        ),
                         const VTGap.s(),
                       ],
                     ],

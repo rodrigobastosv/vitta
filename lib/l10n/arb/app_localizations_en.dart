@@ -266,8 +266,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingCreateAccountAction => 'Create account';
 
   @override
-  String get onboardingCreateAccountComingSoonMessage => 'Account creation is on its way.';
+  String get onboardingContinueWithoutAccountAction => 'Continue without an account';
 
   @override
-  String get onboardingContinueWithoutAccountAction => 'Continue without an account';
+  String get settingsAuthLabel => 'Account';
+
+  @override
+  String get profileTitle => 'Profile';
+
+  @override
+  String get profileSignInAction => 'Sign in or create account';
+
+  @override
+  String get authAnonymousMessage =>
+      'Your data stays on this device only. Create an account to keep it safe and access it from any device.';
+
+  @override
+  String authSignedInAsLabel(String email) {
+    return 'Signed in as $email';
+  }
+
+  @override
+  String get authCreateAction => 'Create account';
+
+  @override
+  String get authLoginAction => 'Log in';
+
+  @override
+  String get authLogoutAction => 'Log out';
+
+  @override
+  String get authEmailLabel => 'Email';
+
+  @override
+  String get authPasswordLabel => 'Password';
+
+  @override
+  String get authSignUpAction => 'Sign up';
+
+  @override
+  String get authSignInAction => 'Log in';
+
+  @override
+  String get authInvalidEmailMessage => 'Enter a valid email address.';
+
+  @override
+  String get authInvalidPasswordMessage => 'Password must be at least 6 characters.';
 }

@@ -1,3 +1,7 @@
+import 'package:vitta/app/domain/auth/use_cases/get_auth_status_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -45,4 +49,16 @@ abstract class UseCasesFactories {
 
   static CompleteOnboardingUseCase buildCompleteOnboardingUseCase({MockOnboardingRepository? onboardingRepository}) =>
       CompleteOnboardingUseCase(onboardingRepository: onboardingRepository ?? MockOnboardingRepository());
+
+  static GetAuthStatusUseCase buildGetAuthStatusUseCase({MockAuthRepository? authRepository}) =>
+      GetAuthStatusUseCase(authRepository: authRepository ?? MockAuthRepository());
+
+  static SignUpUseCase buildSignUpUseCase({MockAuthRepository? authRepository}) =>
+      SignUpUseCase(authRepository: authRepository ?? MockAuthRepository());
+
+  static SignInUseCase buildSignInUseCase({MockAuthRepository? authRepository}) =>
+      SignInUseCase(authRepository: authRepository ?? MockAuthRepository());
+
+  static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository}) =>
+      SignOutUseCase(authRepository: authRepository ?? MockAuthRepository());
 }

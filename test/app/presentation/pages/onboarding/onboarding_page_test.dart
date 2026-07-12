@@ -11,7 +11,10 @@ import '../../../../mocks/services_mocks.dart';
 
 void main() {
   setUpAll(() async {
-    setupDependencies(appBox: await openTestHiveBox(), supabaseService: MockSupabaseService());
+    final supabaseService = MockSupabaseService();
+    when(() => supabaseService.isAnonymous).thenReturn(true);
+    when(() => supabaseService.currentUserEmail).thenReturn(null);
+    setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
 
     var hasSeenOnboarding = false;
     final onboardingRepository = MockOnboardingRepository();
@@ -21,7 +24,7 @@ void main() {
     G.registerLazySingleton<OnboardingRepository>(() => onboardingRepository);
   });
 
-  testWidgets('shows onboarding on first launch and tapping create account shows a coming soon message', (tester) async {
+  testWidgets('shows onboarding on first launch and tapping create account opens the auth page', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 
@@ -32,9 +35,12 @@ void main() {
     await tester.tap(find.text('Create account'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Account creation is on its way.'), findsOneWidget);
+    expect(find.text('Sign up'), findsWidgets);
     expect(find.byType(GridView), findsNothing);
     expect(G<OnboardingRepository>().hasSeenOnboarding(), isFalse);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('continuing without an account reaches home and persists the flag', (tester) async {
