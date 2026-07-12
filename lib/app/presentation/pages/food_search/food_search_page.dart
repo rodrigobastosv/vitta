@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
-import 'package:vitta/app/design_system/components/general/vt_loading_indicator.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
@@ -17,58 +15,55 @@ class FoodSearchPage extends StatelessWidget {
   const FoodSearchPage({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider<FoodSearchCubit>(
-    create: (context) => G<FoodSearchCubit>(),
-    child: VTPage<FoodSearchCubit, FoodSearchState>(
-      builder: (context, cubit, state) {
-        final l10n = AppLocalizations.of(context);
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(l10n.dietFoodSearchTitle),
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.add_circle_outline),
-                tooltip: l10n.dietCustomFoodTitle,
-                onPressed: () async {
-                  final food = await showCustomFoodSheet(context: context);
-                  if (food != null && context.mounted) {
-                    await showLogFoodSheet(context: context, food: food);
-                  }
-                },
+  Widget build(BuildContext context) => VTPage<FoodSearchCubit, FoodSearchState>(
+    create: G.call<FoodSearchCubit>,
+    builder: (context, cubit, state) {
+      final l10n = AppLocalizations.of(context);
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(l10n.dietFoodSearchTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.add_circle_outline),
+              tooltip: l10n.dietCustomFoodTitle,
+              onPressed: () async {
+                final food = await showCustomFoodSheet(context: context);
+                if (food != null && context.mounted) {
+                  await showLogFoodSheet(context: context, food: food);
+                }
+              },
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(VTSpacing.m),
+              child: TextField(
+                autofocus: true,
+                decoration: InputDecoration(labelText: l10n.dietSearchFieldLabel, prefixIcon: const Icon(Icons.search)),
+                onSubmitted: (query) => cubit.search(query: query),
               ),
-            ],
-          ),
-          body: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(VTSpacing.m),
-                child: TextField(
-                  autofocus: true,
-                  decoration: InputDecoration(labelText: l10n.dietSearchFieldLabel, prefixIcon: const Icon(Icons.search)),
-                  onSubmitted: (query) => cubit.search(query: query),
+            ),
+            Expanded(
+              child: switch (state) {
+                FoodSearchIdle() => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
+                FoodSearchError(:final message) => VTErrorState(message: message),
+                FoodSearchLoaded(:final results) when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
+                FoodSearchLoaded(:final results) => ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
+                  itemCount: results.length,
+                  separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
+                  itemBuilder: (context, index) {
+                    final food = results[index];
+                    return FoodSearchResultTile(food: food, onTap: () => showLogFoodSheet(context: context, food: food));
+                  },
                 ),
-              ),
-              Expanded(
-                child: switch (state) {
-                  FoodSearchIdle() => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
-                  FoodSearchLoading() => const VTLoadingIndicator(),
-                  FoodSearchError(:final message) => VTErrorState(message: message),
-                  FoodSearchLoaded(:final results) when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
-                  FoodSearchLoaded(:final results) => ListView.separated(
-                    padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
-                    itemCount: results.length,
-                    separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
-                    itemBuilder: (context, index) {
-                      final food = results[index];
-                      return FoodSearchResultTile(food: food, onTap: () => showLogFoodSheet(context: context, food: food));
-                    },
-                  ),
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    ),
+              },
+            ),
+          ],
+        ),
+      );
+    },
   );
 }

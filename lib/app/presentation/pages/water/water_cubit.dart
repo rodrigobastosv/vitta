@@ -1,12 +1,14 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
+import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/presentation/general/loading_presentation_event.dart';
+import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
-class WaterCubit extends Cubit<WaterState> {
+class WaterCubit extends PresentationCubit<WaterState> {
   WaterCubit({
     required GetDailyWaterUseCase getDailyWaterUseCase,
     required LogWaterUseCase logWaterUseCase,
@@ -16,22 +18,28 @@ class WaterCubit extends Cubit<WaterState> {
        _logWaterUseCase = logWaterUseCase,
        _deleteWaterLogUseCase = deleteWaterLogUseCase,
        _waterLocalDataSource = waterLocalDataSource,
-       super(const WaterLoading());
+       super(
+         WaterLoaded(
+           date: _dateOnly(DateTime.now()),
+           dailyWater: const DailyWater(entries: []),
+           dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl,
+         ),
+       );
 
   final GetDailyWaterUseCase _getDailyWaterUseCase;
   final LogWaterUseCase _logWaterUseCase;
   final DeleteWaterLogUseCase _deleteWaterLogUseCase;
   final WaterLocalDataSource _waterLocalDataSource;
 
-  DateTime get _today {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, now.day);
-  }
+  static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
+
+  DateTime get _today => _dateOnly(DateTime.now());
 
   Future<void> loadToday() async {
-    emit(const WaterLoading());
+    emitPresentation(LoadingPresentationEvent.show);
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
     final dailyWater = await _getDailyWaterUseCase(date: _today);
+    emitPresentation(LoadingPresentationEvent.hide);
     switch (dailyWater) {
       case Failure(:final error):
         emit(WaterError(message: error.message));
