@@ -22,6 +22,7 @@
   "dietComingSoonMessage": "Diet tracking is on its way.",
   "workoutComingSoonMessage": "Workout tracking is on its way.",
   "retry": "Retry",
+  "ok": "OK",
   "dietCaloriesLabel": "{calories} kcal today",
   "@dietCaloriesLabel": {
     "placeholders": {

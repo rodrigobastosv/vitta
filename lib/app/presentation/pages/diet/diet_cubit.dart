@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   DietCubit({required this._getDailyMacrosUseCase, required this._deleteFoodLogUseCase})
     : super(
-        DietLoaded(
+        DietState(
           date: _dateOnly(DateTime.now()),
           dailyMacros: const DailyMacros(entries: []),
         ),
@@ -29,13 +29,16 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     final dailyMacrosResult = await _getDailyMacrosUseCase(date: _today);
     emitPresentation(DietHideLoading());
     dailyMacrosResult.when(
-      (error) => emit(DietError(message: error.message)),
-      (value) => emit(DietLoaded(date: _today, dailyMacros: value)),
+      (error) => emitPresentation(DietError(message: error.message)),
+      (value) => emit(DietState(date: _today, dailyMacros: value)),
     );
   }
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteFoodLogUseCase(logId: logId);
-    await deletedResult.when((error) => Future.sync(() => emit(DietError(message: error.message))), (_) => loadToday());
+    await deletedResult.when(
+      (error) => Future.sync(() => emitPresentation(DietError(message: error.message))),
+      (_) => loadToday(),
+    );
   }
 }

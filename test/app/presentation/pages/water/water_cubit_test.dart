@@ -20,7 +20,7 @@ void main() {
   });
 
   blocTest<WaterCubit, WaterState>(
-    'emits WaterLoaded when loadToday succeeds',
+    'emits a loaded state when loadToday succeeds',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
       final waterLocalDataSource = MockWaterLocalDataSource();
@@ -29,7 +29,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [isA<WaterLoaded>()],
+    expect: () => [isA<WaterState>()],
   );
 
   blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
@@ -45,7 +45,7 @@ void main() {
     expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>()],
   );
 
-  blocTest<WaterCubit, WaterState>(
+  blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
     'emits WaterError when loadToday fails',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
@@ -55,7 +55,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expect: () => [const WaterError(message: 'boom')],
+    expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>(), isA<WaterError>()],
   );
 
   blocTest<WaterCubit, WaterState>(
@@ -76,7 +76,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.addWater(amountMl: 250),
-    expect: () => [isA<WaterLoaded>()],
+    expect: () => [isA<WaterState>()],
   );
 
   blocTest<WaterCubit, WaterState>(
@@ -95,11 +95,11 @@ void main() {
       );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [isA<WaterLoaded>()],
+    expect: () => [isA<WaterState>()],
   );
 
   final getDailyWaterUseCaseSpy = MockGetDailyWaterUseCase();
-  blocTest<WaterCubit, WaterState>(
+  blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
     'emits WaterError without reloading when deletion fails',
     build: () {
       final deleteWaterLogUseCase = MockDeleteWaterLogUseCase();
@@ -112,7 +112,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [const WaterError(message: 'boom')],
+    expectPresentation: () => [isA<WaterError>()],
     verify: (_) => verifyNever(() => getDailyWaterUseCaseSpy(date: any(named: 'date'))),
   );
 
@@ -127,6 +127,6 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.changeDailyGoal(goalMl: 3000),
-    expect: () => [isA<WaterLoaded>()],
+    expect: () => [isA<WaterState>()],
   );
 }

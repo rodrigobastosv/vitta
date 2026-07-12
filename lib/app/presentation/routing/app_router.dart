@@ -18,19 +18,14 @@ abstract class AppRouter {
     initialLocation: AppRoute.home.path,
     redirect: (context, state) {
       final hasSeenOnboarding = G<OnboardingRepository>().hasSeenOnboarding();
-      final isExemptFromOnboardingGate =
-          state.matchedLocation == AppRoute.onboarding.path || state.matchedLocation == AppRoute.auth.path;
+      final isExemptFromOnboardingGate = state.matchedLocation == AppRoute.onboarding.path || state.matchedLocation == AppRoute.auth.path;
       if (!hasSeenOnboarding && !isExemptFromOnboardingGate) {
         return AppRoute.onboarding.path;
       }
       return null;
     },
     routes: [
-      GoRoute(
-        path: AppRoute.onboarding.path,
-        name: AppRoute.onboarding.name,
-        builder: (context, state) => const OnboardingPage(),
-      ),
+      GoRoute(path: AppRoute.onboarding.path, name: AppRoute.onboarding.name, builder: (context, state) => const OnboardingPage()),
       GoRoute(path: AppRoute.home.path, name: AppRoute.home.name, builder: (context, state) => const HomePage()),
       GoRoute(path: AppRoute.diet.path, name: AppRoute.diet.name, builder: (context, state) => const DietPage()),
       GoRoute(path: AppRoute.foodSearch.path, name: AppRoute.foodSearch.name, builder: (context, state) => const FoodSearchPage()),
@@ -39,11 +34,7 @@ abstract class AppRouter {
       GoRoute(path: AppRoute.workout.path, name: AppRoute.workout.name, builder: (context, state) => const WorkoutPage()),
       GoRoute(path: AppRoute.profile.path, name: AppRoute.profile.name, builder: (context, state) => const ProfilePage()),
       GoRoute(path: AppRoute.settings.path, name: AppRoute.settings.name, builder: (context, state) => const SettingsPage()),
-      GoRoute(
-        path: AppRoute.auth.path,
-        name: AppRoute.auth.name,
-        builder: (context, state) => AuthPage(initialIsSignUp: state.extra as bool? ?? true),
-      ),
+      GoRoute(path: AppRoute.auth.path, name: AppRoute.auth.name, builder: (context, state) => const AuthPage()),
     ],
   );
 }

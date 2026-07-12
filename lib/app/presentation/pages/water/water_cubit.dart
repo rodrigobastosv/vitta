@@ -1,4 +1,6 @@
+import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/data/water/water_local_datasource.dart';
+import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
@@ -13,8 +15,9 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
     required this._logWaterUseCase,
     required this._deleteWaterLogUseCase,
     required this._waterLocalDataSource,
+    required this._getAppSettingsUseCase,
   }) : super(
-         WaterLoaded(
+         WaterState(
            date: _dateOnly(DateTime.now()),
            dailyWater: const DailyWater(entries: []),
            dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl,
@@ -25,10 +28,13 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   final LogWaterUseCase _logWaterUseCase;
   final DeleteWaterLogUseCase _deleteWaterLogUseCase;
   final WaterLocalDataSource _waterLocalDataSource;
+  final GetAppSettingsUseCase _getAppSettingsUseCase;
 
   static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
   DateTime get _today => _dateOnly(DateTime.now());
+
+  UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
   @override
   void onInit() => loadToday();
@@ -39,19 +45,25 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
     final dailyWaterResult = await _getDailyWaterUseCase(date: _today);
     emitPresentation(WaterHideLoading());
     dailyWaterResult.when(
-      (error) => emit(WaterError(message: error.message)),
-      (value) => emit(WaterLoaded(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),
+      (error) => emitPresentation(WaterError(message: error.message)),
+      (value) => emit(WaterState(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),
     );
   }
 
   Future<void> addWater({required double amountMl}) async {
     final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
-    await loggedResult.when((error) => Future.sync(() => emit(WaterError(message: error.message))), (_) => loadToday());
+    await loggedResult.when(
+      (error) => Future.sync(() => emitPresentation(WaterError(message: error.message))),
+      (_) => loadToday(),
+    );
   }
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteWaterLogUseCase(logId: logId);
-    await deletedResult.when((error) => Future.sync(() => emit(WaterError(message: error.message))), (_) => loadToday());
+    await deletedResult.when(
+      (error) => Future.sync(() => emitPresentation(WaterError(message: error.message))),
+      (_) => loadToday(),
+    );
   }
 
   Future<void> changeDailyGoal({required double goalMl}) async {

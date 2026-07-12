@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
-import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -10,12 +10,14 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/meal_type_label.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> showLogFoodSheet({required BuildContext context, required Food food}) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(value: context.read<FoodSearchCubit>(), child: _LogFoodSheet(food: food)),
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<FoodSearchCubit>(),
+    child: _LogFoodSheet(food: food),
+  ),
 );
 
 class _LogFoodSheet extends StatefulWidget {
@@ -28,10 +30,8 @@ class _LogFoodSheet extends StatefulWidget {
 }
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
-  late final UnitSystem _unitSystem = context.read<AppCubit>().state.unitSystem;
-  late final TextEditingController _quantityController = TextEditingController(
-    text: _formatNumber(_unitSystem.gramsToDisplayWeight(100)),
-  );
+  late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
+  late final TextEditingController _quantityController = TextEditingController(text: _formatNumber(_unitSystem.gramsToDisplayWeight(100)));
   MealType _mealType = MealType.breakfast;
   bool _isSaving = false;
   String? _errorMessage;
@@ -49,7 +49,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
 
   Future<void> _submit() async {
     final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (quantityDisplayValue == null || quantityDisplayValue <= 0) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
@@ -80,7 +80,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Padding(
       padding: EdgeInsets.only(
         left: VTSpacing.m,
@@ -111,7 +111,10 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
                 ),
             ],
           ),
-          if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+          if (_errorMessage != null) ...[
+            const VTGap.s(),
+            Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietLogFoodAction, isLoading: _isSaving, onPressed: _submit),
         ],

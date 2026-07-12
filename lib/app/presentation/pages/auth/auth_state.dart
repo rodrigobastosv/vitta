@@ -1,18 +1,15 @@
 import 'package:equatable/equatable.dart';
-import 'package:vitta/app/domain/auth/entities/auth_status.dart';
+import 'package:vitta/app/domain/auth/entities/user.dart';
 
-sealed class AuthState extends Equatable {
-  const AuthState();
+class AuthState extends Equatable {
+  const AuthState({required this.user, this.isSignUpMode = true});
 
-  @override
-  List<Object?> get props => [];
-}
+  final User user;
+  final bool isSignUpMode;
 
-class AuthLoaded extends AuthState {
-  const AuthLoaded({required this.status});
-
-  final AuthStatus status;
+  AuthState copyWith({User? user, bool? isSignUpMode}) =>
+      AuthState(user: user ?? this.user, isSignUpMode: isSignUpMode ?? this.isSignUpMode);
 
   @override
-  List<Object?> get props => [status];
+  List<Object?> get props => [user, isSignUpMode];
 }

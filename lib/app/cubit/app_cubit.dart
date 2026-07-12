@@ -1,39 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
-import 'package:vitta/app/cubit/app_state.dart';
-import 'package:vitta/app/data/settings/settings_local_datasource.dart';
+import 'package:vitta/app/cubit/app_presentation_event.dart';
+import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 
-class AppCubit extends Cubit<AppState> {
-  AppCubit({required SettingsLocalDataSource settingsLocalDataSource})
-    : _settingsLocalDataSource = settingsLocalDataSource,
-      super(
-        AppState(
-          locale: settingsLocalDataSource.getLocale(),
-          themeMode: settingsLocalDataSource.getThemeMode(),
-          unitSystem: settingsLocalDataSource.getUnitSystem(),
-        ),
-      );
+class AppCubit extends PresentationCubit<AppSettings, AppPresentationEvent> {
+  AppCubit({required GetAppSettingsUseCase getAppSettingsUseCase, required this._saveAppSettingsUseCase})
+    : super(getAppSettingsUseCase());
 
-  final SettingsLocalDataSource _settingsLocalDataSource;
+  final SaveAppSettingsUseCase _saveAppSettingsUseCase;
 
   void changeLocale(Locale locale) {
-    emit(AppState(locale: locale, themeMode: state.themeMode, unitSystem: state.unitSystem));
-    _settingsLocalDataSource.saveLocale(locale);
+    emit(state.copyWith(locale: locale));
+    _saveAppSettingsUseCase(state);
   }
 
   void useSystemLocale() {
-    emit(AppState(themeMode: state.themeMode, unitSystem: state.unitSystem));
-    _settingsLocalDataSource.saveLocale(null);
+    emit(AppSettings(themeMode: state.themeMode, unitSystem: state.unitSystem));
+    _saveAppSettingsUseCase(state);
   }
 
   void changeThemeMode(ThemeMode themeMode) {
-    emit(AppState(locale: state.locale, themeMode: themeMode, unitSystem: state.unitSystem));
-    _settingsLocalDataSource.saveThemeMode(themeMode);
+    emit(state.copyWith(themeMode: themeMode));
+    _saveAppSettingsUseCase(state);
   }
 
   void changeUnitSystem(UnitSystem unitSystem) {
-    emit(AppState(locale: state.locale, themeMode: state.themeMode, unitSystem: unitSystem));
-    _settingsLocalDataSource.saveUnitSystem(unitSystem);
+    emit(state.copyWith(unitSystem: unitSystem));
+    _saveAppSettingsUseCase(state);
   }
 }

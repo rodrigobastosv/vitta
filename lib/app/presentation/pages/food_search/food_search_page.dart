@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
-import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
@@ -10,24 +11,25 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart'
 import 'package:vitta/app/presentation/pages/food_search/widgets/custom_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodSearchPage extends StatelessWidget {
   const FoodSearchPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
-    onPresentation: (context, event) {
-      switch (event) {
-        case FoodSearchShowLoading():
-          context.showLoading();
-        case FoodSearchHideLoading():
-          context.hideLoading();
-      }
-    },
-    builder: (context, cubit, state) {
-      final l10n = AppLocalizations.of(context);
-      return Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return VTPage<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
+      onPresentation: (context, event) {
+        switch (event) {
+          case FoodSearchShowLoading():
+            context.showLoading();
+          case FoodSearchHideLoading():
+            context.hideLoading();
+          case FoodSearchError(:final message):
+            context.showErrorDialog(message: message);
+        }
+      },
+      builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
           title: Text(l10n.dietFoodSearchTitle),
           actions: [
@@ -55,10 +57,9 @@ class FoodSearchPage extends StatelessWidget {
             ),
             Expanded(
               child: switch (state) {
-                FoodSearchIdle() => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
-                FoodSearchError(:final message) => VTErrorState(message: message),
-                FoodSearchLoaded(:final results) when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
-                FoodSearchLoaded(:final results) => ListView.separated(
+                FoodSearchState(results: null) => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
+                FoodSearchState(results: final results?) when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
+                FoodSearchState(results: final results?) => ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
                   itemCount: results.length,
                   separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
@@ -74,7 +75,7 @@ class FoodSearchPage extends StatelessWidget {
             ),
           ],
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }

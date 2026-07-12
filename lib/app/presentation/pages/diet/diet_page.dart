@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
-import 'package:vitta/app/design_system/components/general/vt_error_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -11,55 +13,53 @@ import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_log_tile.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<DietCubit, DietState, DietPresentationEvent>(
-    onPresentation: (context, event) {
-      switch (event) {
-        case DietShowLoading():
-          context.showLoading();
-        case DietHideLoading():
-          context.hideLoading();
-      }
-    },
-    builder: (context, cubit, state) {
-      final l10n = AppLocalizations.of(context);
-      return Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return VTPage<DietCubit, DietState, DietPresentationEvent>(
+      onPresentation: (context, event) {
+        switch (event) {
+          case DietShowLoading():
+            context.showLoading();
+          case DietHideLoading():
+            context.hideLoading();
+          case DietError(:final message):
+            context.showErrorDialog(message: message, onRetry: context.read<DietCubit>().loadToday);
+        }
+      },
+      builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.dietFeatureTitle)),
-        body: switch (state) {
-          DietError(:final message) => VTErrorState(message: message, retryLabel: l10n.retry, onRetry: cubit.loadToday),
-          DietLoaded(:final dailyMacros) => RefreshIndicator(
-            onRefresh: cubit.loadToday,
-            child: dailyMacros.entries.isEmpty
-                ? ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(VTSpacing.m),
-                        child: MacroSummaryCard(dailyMacros: dailyMacros),
+        body: RefreshIndicator(
+          onRefresh: cubit.loadToday,
+          child: state.dailyMacros.entries.isEmpty
+              ? ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(VTSpacing.m),
+                      child: MacroSummaryCard(dailyMacros: state.dailyMacros),
+                    ),
+                    VTEmptyState(icon: Icons.restaurant_outlined, title: l10n.dietEmptyTitle, message: l10n.dietEmptyMessage),
+                  ],
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(VTSpacing.m),
+                  children: [
+                    MacroSummaryCard(dailyMacros: state.dailyMacros),
+                    const VTGap.l(),
+                    for (final entry in state.dailyMacros.entries) ...[
+                      FoodLogTile(
+                        entry: entry,
+                        onDelete: () => cubit.deleteLog(logId: entry.log.id),
                       ),
-                      VTEmptyState(icon: Icons.restaurant_outlined, title: l10n.dietEmptyTitle, message: l10n.dietEmptyMessage),
+                      const VTGap.s(),
                     ],
-                  )
-                : ListView(
-                    padding: const EdgeInsets.all(VTSpacing.m),
-                    children: [
-                      MacroSummaryCard(dailyMacros: dailyMacros),
-                      const VTGap.l(),
-                      for (final entry in dailyMacros.entries) ...[
-                        FoodLogTile(
-                          entry: entry,
-                          onDelete: () => cubit.deleteLog(logId: entry.log.id),
-                        ),
-                        const VTGap.s(),
-                      ],
-                    ],
-                  ),
-          ),
-        },
+                  ],
+                ),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
             await context.pushRoute(.foodSearch);
@@ -67,7 +67,7 @@ class DietPage extends StatelessWidget {
           },
           child: const Icon(Icons.add),
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> showLogSleepSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
@@ -44,7 +44,7 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
   }
 
   Future<void> _submit() async {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     if (!_wakeTime.isAfter(_bedTime)) {
       setState(() => _errorMessage = l10n.sleepInvalidRange);
       return;
@@ -57,8 +57,8 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final materialLocalizations = MaterialLocalizations.of(context);
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
     return Padding(
       padding: EdgeInsets.only(
         left: VTSpacing.m,
@@ -97,15 +97,15 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
             children: List.generate(
               5,
               (index) => IconButton(
-                icon: Icon(
-                  index < (_qualityRating ?? 0) ? Icons.star : Icons.star_border,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                icon: Icon(index < (_qualityRating ?? 0) ? Icons.star : Icons.star_border, color: Theme.of(context).colorScheme.primary),
                 onPressed: () => setState(() => _qualityRating = _qualityRating == index + 1 ? null : index + 1),
               ),
             ),
           ),
-          if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+          if (_errorMessage != null) ...[
+            const VTGap.s(),
+            Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.sleepLogAction, onPressed: _submit),
         ],
