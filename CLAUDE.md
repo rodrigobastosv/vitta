@@ -72,6 +72,10 @@ Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacin
 
 Palette: forest green primary (health, nutrition), coral-orange secondary (energy, warmth), warm-neutral surfaces. Typography: Poppins for headings, Inter for body text (both via `google_fonts`).
 
+## App icon and splash screen
+
+The leaf mark (same shape as the `Icons.eco_outlined` avatar on `HomePage`) is the app's visual identity, sourced as three PNGs under `assets/icon/`: `app_icon.png` (full icon, leaf on `VTColors.greenContainerLight`, used for iOS and legacy Android), `app_icon_foreground.png` (transparent background, leaf scaled to fit Android's adaptive-icon safe zone), and `splash_logo.png` (transparent background, reused as the native splash logo). `flutter_launcher_icons` and `flutter_native_splash` (dev dependencies, configured in `pubspec.yaml`) generate the actual platform assets (`android/app/src/main/res/mipmap-*`, `ios/Runner/Assets.xcassets/*`, `android/**/drawable*` splash images) from those three source PNGs — never hand-edit a generated platform icon/splash file directly. After changing a source PNG or either package's config in `pubspec.yaml`, regenerate both with `dart run flutter_launcher_icons` and `dart run flutter_native_splash:create`, then re-run `flutter analyze`/`flutter test`.
+
 ## Navigation
 
 No bottom nav bar — `HomePage` (`/`) is the single entrypoint: a settings action in the `AppBar` plus a grid of `VTFeatureTile`s (one per feature) that push their feature route. Each feature page owns its own `Scaffold`/`AppBar`; there is no shared shell.
