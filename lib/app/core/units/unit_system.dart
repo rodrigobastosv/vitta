@@ -25,3 +25,22 @@ extension WeightConversion on UnitSystem {
     UnitSystem.imperial => value * _gramsPerOunce,
   };
 }
+
+extension VolumeConversion on UnitSystem {
+  static const _mlPerFluidOunce = 29.5735;
+
+  String get volumeUnitLabel => switch (this) {
+    UnitSystem.metric => 'mL',
+    UnitSystem.imperial => 'fl oz',
+  };
+
+  double millilitersToDisplayVolume(double milliliters) => switch (this) {
+    UnitSystem.metric => milliliters,
+    UnitSystem.imperial => milliliters / _mlPerFluidOunce,
+  };
+
+  double displayVolumeToMilliliters(double value) => switch (this) {
+    UnitSystem.metric => value,
+    UnitSystem.imperial => value * _mlPerFluidOunce,
+  };
+}
