@@ -7,7 +7,7 @@ import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
 
 class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   SleepCubit({required this._getRecentSleepLogsUseCase, required this._logSleepUseCase, required this._deleteSleepLogUseCase})
-    : super(const SleepLoaded(logs: []));
+    : super(const SleepState(logs: []));
 
   final GetRecentSleepLogsUseCase _getRecentSleepLogsUseCase;
   final LogSleepUseCase _logSleepUseCase;
@@ -22,16 +22,25 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     emitPresentation(SleepShowLoading());
     final recentLogsResult = await _getRecentSleepLogsUseCase(days: _recentDays);
     emitPresentation(SleepHideLoading());
-    recentLogsResult.when((error) => emit(SleepError(message: error.message)), (value) => emit(SleepLoaded(logs: value)));
+    recentLogsResult.when(
+      (error) => emitPresentation(SleepError(message: error.message)),
+      (value) => emit(SleepState(logs: value)),
+    );
   }
 
   Future<void> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) async {
     final loggedResult = await _logSleepUseCase(bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
-    await loggedResult.when((error) => Future.sync(() => emit(SleepError(message: error.message))), (_) => loadRecent());
+    await loggedResult.when(
+      (error) => Future.sync(() => emitPresentation(SleepError(message: error.message))),
+      (_) => loadRecent(),
+    );
   }
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteSleepLogUseCase(logId: logId);
-    await deletedResult.when((error) => Future.sync(() => emit(SleepError(message: error.message))), (_) => loadRecent());
+    await deletedResult.when(
+      (error) => Future.sync(() => emitPresentation(SleepError(message: error.message))),
+      (_) => loadRecent(),
+    );
   }
 }

@@ -1,51 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<AuthCubit, AuthState, AuthPresentationEvent>(
-    onPresentation: (context, event) {
-      switch (event) {
-        case AuthShowLoading():
-          context.showLoading();
-        case AuthHideLoading():
-          context.hideLoading();
-        case AuthSignedIn():
-          break;
-        case AuthActionFailed(:final message):
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
-      }
-    },
-    builder: (context, cubit, state) {
-      final l10n = AppLocalizations.of(context);
-      final status = (state as AuthLoaded).status;
-      return Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return VTPage<AuthCubit, AuthState, AuthPresentationEvent>(
+      onPresentation: (context, event) {
+        switch (event) {
+          case AuthShowLoading():
+            context.showLoading();
+          case AuthHideLoading():
+            context.hideLoading();
+          case AuthSignedIn():
+            break;
+          case AuthActionFailed(:final message):
+            context.showErrorDialog(message: message);
+        }
+      },
+      builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.profileTitle)),
         body: ListView(
           padding: const EdgeInsets.all(VTSpacing.m),
           children: [
-            if (status.isAnonymous)
-              _AnonymousHeader(
+            switch (state.user) {
+              AnonymousUser() => _AnonymousHeader(
                 onSignIn: () async {
                   await context.pushRoute(.auth);
-                  cubit.refreshStatus();
+                  cubit.refreshUser();
                 },
-              )
-            else
-              _SignedInHeader(email: status.email ?? '', onSignOut: cubit.signOut),
+              ),
+              AuthenticatedUser(:final email) => _SignedInHeader(email: email, onSignOut: cubit.signOut),
+            },
             const VTGap.l(),
             VTCard(
               padding: EdgeInsets.zero,
@@ -58,9 +59,9 @@ class ProfilePage extends StatelessWidget {
             ),
           ],
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }
 
 class _SignedInHeader extends StatelessWidget {
@@ -71,7 +72,7 @@ class _SignedInHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
     return VTCard(
       child: Column(
@@ -106,7 +107,7 @@ class _AnonymousHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
     return VTCard(
       child: Column(

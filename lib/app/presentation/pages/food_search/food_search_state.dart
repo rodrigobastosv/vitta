@@ -1,31 +1,15 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 
-sealed class FoodSearchState extends Equatable {
-  const FoodSearchState();
+class FoodSearchState extends Equatable {
+  const FoodSearchState({this.results});
 
-  @override
-  List<Object?> get props => [];
-}
+  /// `null` means no search has been performed yet (idle); an empty list means
+  /// a search ran and found nothing.
+  final List<Food>? results;
 
-class FoodSearchIdle extends FoodSearchState {
-  const FoodSearchIdle();
-}
-
-class FoodSearchLoaded extends FoodSearchState {
-  const FoodSearchLoaded({required this.results});
-
-  final List<Food> results;
+  FoodSearchState copyWith({List<Food>? results}) => FoodSearchState(results: results ?? this.results);
 
   @override
   List<Object?> get props => [results];
-}
-
-class FoodSearchError extends FoodSearchState {
-  const FoodSearchError({required this.message});
-
-  final String message;
-
-  @override
-  List<Object?> get props => [message];
 }

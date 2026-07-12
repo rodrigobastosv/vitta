@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class MacroSummaryCard extends StatelessWidget {
   const MacroSummaryCard({required this.dailyMacros, super.key});
@@ -12,7 +12,7 @@ class MacroSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return VTCard(
       child: Column(
         crossAxisAlignment: .start,

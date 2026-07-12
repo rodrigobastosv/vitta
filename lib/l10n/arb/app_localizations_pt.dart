@@ -75,6 +75,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get retry => 'Tentar novamente';
 
   @override
+  String get ok => 'OK';
+
+  @override
   String dietCaloriesLabel(int calories) {
     return '$calories kcal hoje';
   }

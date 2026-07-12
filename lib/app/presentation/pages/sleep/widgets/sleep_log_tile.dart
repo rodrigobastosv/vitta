@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class SleepLogTile extends StatelessWidget {
   const SleepLogTile({required this.log, required this.onDelete, super.key});
@@ -13,8 +13,8 @@ class SleepLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-    final materialLocalizations = MaterialLocalizations.of(context);
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
     final duration = log.duration;
     final qualityRating = log.qualityRating;
     return VTCard(
@@ -24,10 +24,7 @@ class SleepLogTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                Text(
-                  l10n.sleepDurationLabel(duration.inHours, duration.inMinutes.remainder(60)),
-                  style: VTTextStyles.bodyStrong(context),
-                ),
+                Text(l10n.sleepDurationLabel(duration.inHours, duration.inMinutes.remainder(60)), style: VTTextStyles.bodyStrong(context)),
                 const VTGap.xs(),
                 Text(
                   '${materialLocalizations.formatShortDate(log.bedTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(log.bedTime))} '

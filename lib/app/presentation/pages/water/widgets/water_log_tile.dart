@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/water/entities/water_log.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class WaterLogTile extends StatelessWidget {
   const WaterLogTile({required this.log, required this.unitSystem, required this.onDelete, super.key});
@@ -14,7 +14,7 @@ class WaterLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return VTCard(
       child: Row(
         children: [

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class SignedInView extends StatelessWidget {
   const SignedInView({required this.email, required this.onSignOut, super.key});
@@ -10,7 +10,7 @@ class SignedInView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     return Column(
       crossAxisAlignment: .start,
       children: [

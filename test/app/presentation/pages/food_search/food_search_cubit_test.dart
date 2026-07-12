@@ -25,19 +25,19 @@ void main() {
 
     await cubit.search(query: '   ');
 
-    expect(cubit.state, const FoodSearchIdle());
+    expect(cubit.state, const FoodSearchState());
     verifyNever(() => searchFoodsUseCase(query: any(named: 'query')));
   });
 
   blocTest<FoodSearchCubit, FoodSearchState>(
-    'emits FoodSearchLoaded when the search succeeds',
+    'emits a loaded state when the search succeeds',
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
       return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
     act: (cubit) => cubit.search(query: 'banana'),
-    expect: () => [isA<FoodSearchLoaded>()],
+    expect: () => [predicate<FoodSearchState>((state) => state.results != null)],
   );
 
   blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
@@ -51,7 +51,7 @@ void main() {
     expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>()],
   );
 
-  blocTest<FoodSearchCubit, FoodSearchState>(
+  blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
     'emits FoodSearchError when the search fails',
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
@@ -59,7 +59,7 @@ void main() {
       return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase);
     },
     act: (cubit) => cubit.search(query: 'banana'),
-    expect: () => [const FoodSearchError(message: 'boom')],
+    expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>(), isA<FoodSearchError>()],
   );
 
   test('logFood delegates to the use case with today logged for the given meal', () async {
@@ -68,7 +68,12 @@ void main() {
     final food = FoodFactory.build();
     final foodLog = FoodLogFactory.build();
     when(
-      () => logFoodUseCase(food: food, loggedDate: any(named: 'loggedDate'), mealType: MealType.dinner, quantityGrams: 250),
+      () => logFoodUseCase(
+        food: food,
+        loggedDate: any(named: 'loggedDate'),
+        mealType: MealType.dinner,
+        quantityGrams: 250,
+      ),
     ).thenAnswer((_) async => Success(foodLog));
 
     final loggedResult = await cubit.logFood(food: food, mealType: MealType.dinner, quantityGrams: 250);

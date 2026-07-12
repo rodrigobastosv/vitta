@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodLogTile extends StatelessWidget {
   const FoodLogTile({required this.entry, required this.onDelete, super.key});
@@ -12,7 +12,7 @@ class FoodLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
+    final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
     return VTCard(
       child: Row(

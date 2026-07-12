@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
@@ -8,17 +9,16 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
 
   @override
-  Widget build(BuildContext context) => VTPage<OnboardingCubit, OnboardingState, OnboardingPresentationEvent>(
-    builder: (context, cubit, state) {
-      final l10n = AppLocalizations.of(context);
-      final colorScheme = Theme.of(context).colorScheme;
-      return Scaffold(
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colorScheme = context.colorScheme;
+    return VTPage<OnboardingCubit, OnboardingState, OnboardingPresentationEvent>(
+      builder: (context, cubit, state) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(VTSpacing.l),
@@ -53,7 +53,7 @@ class OnboardingPage extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      final linked = await context.pushRoute<bool>(.auth, extra: true) ?? false;
+                      final linked = await context.pushRoute<bool>(.auth) ?? false;
                       if (linked && context.mounted) {
                         await cubit.completeOnboarding();
                         if (context.mounted) {
@@ -79,9 +79,9 @@ class OnboardingPage extends StatelessWidget {
             ),
           ),
         ),
-      );
-    },
-  );
+      ),
+    );
+  }
 }
 
 class _OnboardingFeatureRow extends StatelessWidget {
