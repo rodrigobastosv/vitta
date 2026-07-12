@@ -4,11 +4,13 @@
       "Bash(tail -c 500 /tmp/loading_migration_test.log | tr '\\\\r' '\\\\n')",
       "Read(//private/tmp/**)",
       "Bash(xcrun simctl *)",
-      "Bash(git checkout *)",
+      "Bash(git *)",
+      "Bash(gh pr create --title 'Add anonymous-to-real-account auth flow and a Profile hub page' --body ' *)",
+      "Bash(gh issue *)",
+      "Skill(update-config)",
+      "Skill(update-config:*)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)",
-      "Bash(git push *)",
-      "Bash(gh pr create --title 'Add anonymous-to-real-account auth flow and a Profile hub page' --body ' *)"
+      "Bash(git commit -m ' *)"
     ]
   }
 }
