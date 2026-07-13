@@ -16,5 +16,6 @@ class CreateFoodRequest {
     'protein_per_100g': food.proteinPer100g,
     'carbs_per_100g': food.carbsPer100g,
     'fat_per_100g': food.fatPer100g,
+    'fiber_per_100g': food.fiberPer100g,
   };
 }

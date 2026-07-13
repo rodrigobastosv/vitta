@@ -12,7 +12,7 @@ import '../../../../factories/entities/food_log_factory.dart';
 void main() {
   test('scales macros by quantity relative to 100g', () {
     final entry = FoodLogEntryFactory.build(
-      food: FoodFactory.build(caloriesPer100g: 200, proteinPer100g: 20, carbsPer100g: 10, fatPer100g: 5),
+      food: FoodFactory.build(caloriesPer100g: 200, proteinPer100g: 20, carbsPer100g: 10, fatPer100g: 5, fiberPer100g: 4),
       log: FoodLogFactory.build(quantityGrams: 150),
     );
 
@@ -20,6 +20,7 @@ void main() {
     expect(entry.protein, 30);
     expect(entry.carbs, 15);
     expect(entry.fat, 7.5);
+    expect(entry.fiber, 6);
   });
 
   test('fromMap parses a joined food_logs/foods row', () {
@@ -39,6 +40,7 @@ void main() {
         'protein_per_100g': 1.1,
         'carbs_per_100g': 22.8,
         'fat_per_100g': 0.3,
+        'fiber_per_100g': 2.6,
       },
     });
 
@@ -54,6 +56,7 @@ void main() {
           proteinPer100g: 1.1,
           carbsPer100g: 22.8,
           fatPer100g: 0.3,
+          fiberPer100g: 2.6,
         ),
       ),
     );

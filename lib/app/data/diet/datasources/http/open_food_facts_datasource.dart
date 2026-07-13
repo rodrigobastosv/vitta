@@ -58,6 +58,7 @@ class OpenFoodFactsDataSource {
       proteinPer100g: protein,
       carbsPer100g: carbs,
       fatPer100g: fat,
+      fiberPer100g: _numOrNull(nutriments['fiber_100g']) ?? 0,
     );
   }
 

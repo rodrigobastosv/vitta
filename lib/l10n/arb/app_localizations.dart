@@ -230,6 +230,12 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get ok;
 
+  /// No description provided for @progressLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{consumed} / {goal} {unit}'**
+  String progressLabel(String consumed, String goal, String unit);
+
   /// No description provided for @dietCaloriesLabel.
   ///
   /// In en, this message translates to:
@@ -338,6 +344,18 @@ abstract class AppLocalizations {
   /// **'Fat per 100g'**
   String get dietFatPer100gLabel;
 
+  /// No description provided for @dietFiberPer100gLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiber per 100g'**
+  String get dietFiberPer100gLabel;
+
+  /// No description provided for @dietFiberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiber'**
+  String get dietFiberLabel;
+
   /// No description provided for @dietContinueAction.
   ///
   /// In en, this message translates to:
@@ -421,12 +439,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Track how much water you drink each day'**
   String get waterFeatureSubtitle;
-
-  /// No description provided for @waterProgressLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'{consumed} / {goal} {unit}'**
-  String waterProgressLabel(String consumed, String goal, String unit);
 
   /// No description provided for @waterDeleteLogTooltip.
   ///
@@ -601,6 +613,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sign in or create account'**
   String get profileSignInAction;
+
+  /// No description provided for @macroGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Macro goals'**
+  String get macroGoalsTitle;
+
+  /// No description provided for @macroGoalsCalorieLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calorie goal (kcal)'**
+  String get macroGoalsCalorieLabel;
+
+  /// No description provided for @macroGoalsProteinLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Protein goal (g)'**
+  String get macroGoalsProteinLabel;
+
+  /// No description provided for @macroGoalsCarbsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Carbs goal (g)'**
+  String get macroGoalsCarbsLabel;
+
+  /// No description provided for @macroGoalsFatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fat goal (g)'**
+  String get macroGoalsFatLabel;
+
+  /// No description provided for @macroGoalsFiberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Fiber goal (g)'**
+  String get macroGoalsFiberLabel;
+
+  /// No description provided for @macroGoalsInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Fill in all goals with valid numbers greater than zero.'**
+  String get macroGoalsInvalid;
 
   /// No description provided for @authAnonymousMessage.
   ///

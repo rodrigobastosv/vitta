@@ -14,6 +14,7 @@ void main() {
       'protein_per_100g': 1.1,
       'carbs_per_100g': 22.8,
       'fat_per_100g': 0.3,
+      'fiber_per_100g': 2.6,
     });
 
     expect(
@@ -28,6 +29,7 @@ void main() {
         proteinPer100g: 1.1,
         carbsPer100g: 22.8,
         fatPer100g: 0.3,
+        fiberPer100g: 2.6,
       ),
     );
   });
@@ -43,9 +45,26 @@ void main() {
       'protein_per_100g': 10,
       'carbs_per_100g': 10,
       'fat_per_100g': 10,
+      'fiber_per_100g': 5,
     });
 
     expect(food.brand, isNull);
     expect(food.barcode, isNull);
+  });
+
+  test('fromMap defaults fiber to 0 when the column is missing', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Legacy food',
+      'brand': null,
+      'barcode': null,
+      'source': 'custom',
+      'calories_per_100g': 100,
+      'protein_per_100g': 10,
+      'carbs_per_100g': 10,
+      'fat_per_100g': 10,
+    });
+
+    expect(food.fiberPer100g, 0);
   });
 }

@@ -1,17 +1,24 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class DietRepository {
-  DietRepository({required this._openFoodFactsDataSource, required this._supabaseDietDataSource});
+  DietRepository({
+    required this._openFoodFactsDataSource,
+    required this._supabaseDietDataSource,
+    required this._dietGoalsLocalDataSource,
+  });
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
+  final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
 
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) => _openFoodFactsDataSource.searchFoods(query: query);
 
@@ -30,4 +37,8 @@ class DietRepository {
   }
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
+
+  MacroGoals getMacroGoals() => _dietGoalsLocalDataSource.getGoals();
+
+  Future<void> saveMacroGoals(MacroGoals goals) => _dietGoalsLocalDataSource.saveGoals(goals);
 }

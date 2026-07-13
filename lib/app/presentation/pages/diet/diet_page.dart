@@ -40,7 +40,7 @@ class DietPage extends StatelessWidget {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(VTSpacing.m),
-                      child: MacroSummaryCard(dailyMacros: state.dailyMacros),
+                      child: MacroSummaryCard(dailyMacros: state.dailyMacros, macroGoals: state.macroGoals),
                     ),
                     VTEmptyState(icon: Icons.restaurant_outlined, title: l10n.dietEmptyTitle, message: l10n.dietEmptyMessage),
                   ],
@@ -48,7 +48,7 @@ class DietPage extends StatelessWidget {
               : ListView(
                   padding: const EdgeInsets.all(VTSpacing.m),
                   children: [
-                    MacroSummaryCard(dailyMacros: state.dailyMacros),
+                    MacroSummaryCard(dailyMacros: state.dailyMacros, macroGoals: state.macroGoals),
                     const VTGap.l(),
                     for (final entry in state.dailyMacros.entries) ...[
                       FoodLogTile(

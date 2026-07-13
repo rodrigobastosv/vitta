@@ -5,6 +5,7 @@ import 'package:vitta/app/presentation/pages/auth/auth_page.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_page.dart';
 import 'package:vitta/app/presentation/pages/home/home_page.dart';
+import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_page.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_page.dart';
 import 'package:vitta/app/presentation/pages/profile/profile_page.dart';
 import 'package:vitta/app/presentation/pages/settings/settings_page.dart';
@@ -33,6 +34,7 @@ abstract class AppRouter {
       GoRoute(path: AppRoute.sleep.path, name: AppRoute.sleep.name, builder: (context, state) => const SleepPage()),
       GoRoute(path: AppRoute.workout.path, name: AppRoute.workout.name, builder: (context, state) => const WorkoutPage()),
       GoRoute(path: AppRoute.profile.path, name: AppRoute.profile.name, builder: (context, state) => const ProfilePage()),
+      GoRoute(path: AppRoute.macroGoals.path, name: AppRoute.macroGoals.name, builder: (context, state) => const MacroGoalsPage()),
       GoRoute(path: AppRoute.settings.path, name: AppRoute.settings.name, builder: (context, state) => const SettingsPage()),
       GoRoute(path: AppRoute.auth.path, name: AppRoute.auth.name, builder: (context, state) => const AuthPage()),
     ],

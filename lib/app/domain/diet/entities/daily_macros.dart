@@ -14,6 +14,8 @@ class DailyMacros extends Equatable {
 
   double get totalFat => entries.fold(0, (sum, entry) => sum + entry.fat);
 
+  double get totalFiber => entries.fold(0, (sum, entry) => sum + entry.fiber);
+
   @override
   List<Object?> get props => [entries];
 }

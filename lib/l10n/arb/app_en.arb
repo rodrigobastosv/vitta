@@ -23,6 +23,14 @@
   "workoutComingSoonMessage": "Workout tracking is on its way.",
   "retry": "Retry",
   "ok": "OK",
+  "progressLabel": "{consumed} / {goal} {unit}",
+  "@progressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
   "dietCaloriesLabel": "{calories} kcal today",
   "@dietCaloriesLabel": {
     "placeholders": {
@@ -57,6 +65,8 @@
   "dietProteinPer100gLabel": "Protein per 100g",
   "dietCarbsPer100gLabel": "Carbs per 100g",
   "dietFatPer100gLabel": "Fat per 100g",
+  "dietFiberPer100gLabel": "Fiber per 100g",
+  "dietFiberLabel": "Fiber",
   "dietContinueAction": "Continue",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
@@ -76,14 +86,6 @@
   "saveAction": "Save",
   "waterFeatureTitle": "Water",
   "waterFeatureSubtitle": "Track how much water you drink each day",
-  "waterProgressLabel": "{consumed} / {goal} {unit}",
-  "@waterProgressLabel": {
-    "placeholders": {
-      "consumed": {"type": "String"},
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
-    }
-  },
   "waterDeleteLogTooltip": "Remove",
   "waterEmptyTitle": "Nothing logged yet",
   "waterEmptyMessage": "Tap the + button to log the first glass of water.",
@@ -129,6 +131,13 @@
   "settingsAuthLabel": "Account",
   "profileTitle": "Profile",
   "profileSignInAction": "Sign in or create account",
+  "macroGoalsTitle": "Macro goals",
+  "macroGoalsCalorieLabel": "Calorie goal (kcal)",
+  "macroGoalsProteinLabel": "Protein goal (g)",
+  "macroGoalsCarbsLabel": "Carbs goal (g)",
+  "macroGoalsFatLabel": "Fat goal (g)",
+  "macroGoalsFiberLabel": "Fiber goal (g)",
+  "macroGoalsInvalid": "Fill in all goals with valid numbers greater than zero.",
   "authAnonymousMessage": "Your data stays on this device only. Create an account to keep it safe and access it from any device.",
   "authSignedInAsLabel": "Signed in as {email}",
   "@authSignedInAsLabel": {

@@ -21,6 +21,8 @@ class FoodLogEntry extends Equatable {
 
   double get fat => food.fatPer100g * _ratio;
 
+  double get fiber => food.fiberPer100g * _ratio;
+
   @override
   List<Object?> get props => [log, food];
 }

@@ -78,6 +78,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
+  String progressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
   String dietCaloriesLabel(int calories) {
     return '$calories kcal today';
   }
@@ -138,6 +143,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietFatPer100gLabel => 'Fat per 100g';
 
   @override
+  String get dietFiberPer100gLabel => 'Fiber per 100g';
+
+  @override
+  String get dietFiberLabel => 'Fiber';
+
+  @override
   String get dietContinueAction => 'Continue';
 
   @override
@@ -180,11 +191,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waterFeatureSubtitle => 'Track how much water you drink each day';
-
-  @override
-  String waterProgressLabel(String consumed, String goal, String unit) {
-    return '$consumed / $goal $unit';
-  }
 
   @override
   String get waterDeleteLogTooltip => 'Remove';
@@ -279,6 +285,27 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileSignInAction => 'Sign in or create account';
+
+  @override
+  String get macroGoalsTitle => 'Macro goals';
+
+  @override
+  String get macroGoalsCalorieLabel => 'Calorie goal (kcal)';
+
+  @override
+  String get macroGoalsProteinLabel => 'Protein goal (g)';
+
+  @override
+  String get macroGoalsCarbsLabel => 'Carbs goal (g)';
+
+  @override
+  String get macroGoalsFatLabel => 'Fat goal (g)';
+
+  @override
+  String get macroGoalsFiberLabel => 'Fiber goal (g)';
+
+  @override
+  String get macroGoalsInvalid => 'Fill in all goals with valid numbers greater than zero.';
 
   @override
   String get authAnonymousMessage =>

@@ -12,6 +12,7 @@ abstract class FoodFactory {
     double proteinPer100g = 1.1,
     double carbsPer100g = 22.8,
     double fatPer100g = 0.3,
+    double fiberPer100g = 2.6,
   }) => Food(
     id: id,
     name: name,
@@ -22,5 +23,6 @@ abstract class FoodFactory {
     proteinPer100g: proteinPer100g,
     carbsPer100g: carbsPer100g,
     fatPer100g: fatPer100g,
+    fiberPer100g: fiberPer100g,
   );
 }

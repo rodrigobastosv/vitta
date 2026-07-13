@@ -50,6 +50,16 @@ class ProfilePage extends StatelessWidget {
             const VTGap.l(),
             VTCard(
               padding: EdgeInsets.zero,
+              onTap: () => context.pushRoute(.macroGoals),
+              child: ListTile(
+                leading: const Icon(Icons.flag_outlined),
+                title: Text(l10n.macroGoalsTitle),
+                trailing: const Icon(Icons.chevron_right),
+              ),
+            ),
+            const VTGap.m(),
+            VTCard(
+              padding: EdgeInsets.zero,
               onTap: () => context.pushRoute(.settings),
               child: ListTile(
                 leading: const Icon(Icons.settings_outlined),

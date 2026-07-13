@@ -9,6 +9,7 @@ class Food extends Equatable {
     required this.proteinPer100g,
     required this.carbsPer100g,
     required this.fatPer100g,
+    this.fiberPer100g = 0,
     this.id,
     this.brand,
     this.barcode,
@@ -24,6 +25,7 @@ class Food extends Equatable {
     proteinPer100g: (row['protein_per_100g'] as num).toDouble(),
     carbsPer100g: (row['carbs_per_100g'] as num).toDouble(),
     fatPer100g: (row['fat_per_100g'] as num).toDouble(),
+    fiberPer100g: (row['fiber_per_100g'] as num?)?.toDouble() ?? 0,
   );
 
   /// Null until the food has been persisted (e.g. a fresh Open Food Facts search
@@ -37,7 +39,19 @@ class Food extends Equatable {
   final double proteinPer100g;
   final double carbsPer100g;
   final double fatPer100g;
+  final double fiberPer100g;
 
   @override
-  List<Object?> get props => [id, name, brand, barcode, source, caloriesPer100g, proteinPer100g, carbsPer100g, fatPer100g];
+  List<Object?> get props => [
+    id,
+    name,
+    brand,
+    barcode,
+    source,
+    caloriesPer100g,
+    proteinPer100g,
+    carbsPer100g,
+    fatPer100g,
+    fiberPer100g,
+  ];
 }

@@ -23,6 +23,14 @@
   "workoutComingSoonMessage": "O acompanhamento de treino está a caminho.",
   "retry": "Tentar novamente",
   "ok": "OK",
+  "progressLabel": "{consumed} / {goal} {unit}",
+  "@progressLabel": {
+    "placeholders": {
+      "consumed": {"type": "String"},
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
   "dietCaloriesLabel": "{calories} kcal hoje",
   "@dietCaloriesLabel": {
     "placeholders": {
@@ -57,6 +65,8 @@
   "dietProteinPer100gLabel": "Proteína por 100g",
   "dietCarbsPer100gLabel": "Carboidratos por 100g",
   "dietFatPer100gLabel": "Gordura por 100g",
+  "dietFiberPer100gLabel": "Fibra por 100g",
+  "dietFiberLabel": "Fibra",
   "dietContinueAction": "Continuar",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
@@ -76,14 +86,6 @@
   "saveAction": "Salvar",
   "waterFeatureTitle": "Água",
   "waterFeatureSubtitle": "Acompanhe quanta água você bebe por dia",
-  "waterProgressLabel": "{consumed} / {goal} {unit}",
-  "@waterProgressLabel": {
-    "placeholders": {
-      "consumed": {"type": "String"},
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
-    }
-  },
   "waterDeleteLogTooltip": "Remover",
   "waterEmptyTitle": "Nada registrado ainda",
   "waterEmptyMessage": "Toque no botão + para registrar o primeiro copo d'água.",
@@ -129,6 +131,13 @@
   "settingsAuthLabel": "Conta",
   "profileTitle": "Perfil",
   "profileSignInAction": "Entrar ou criar conta",
+  "macroGoalsTitle": "Metas de macros",
+  "macroGoalsCalorieLabel": "Meta de calorias (kcal)",
+  "macroGoalsProteinLabel": "Meta de proteína (g)",
+  "macroGoalsCarbsLabel": "Meta de carboidratos (g)",
+  "macroGoalsFatLabel": "Meta de gordura (g)",
+  "macroGoalsFiberLabel": "Meta de fibra (g)",
+  "macroGoalsInvalid": "Preencha todas as metas com números válidos maiores que zero.",
   "authAnonymousMessage": "Seus dados ficam só neste dispositivo. Crie uma conta para mantê-los seguros e acessá-los em qualquer aparelho.",
   "authSignedInAsLabel": "Conectado como {email}",
   "@authSignedInAsLabel": {

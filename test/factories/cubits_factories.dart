@@ -2,6 +2,7 @@ import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
@@ -28,11 +29,23 @@ abstract class CubitsFactories {
     signOutUseCase: signOutUseCase ?? MockSignOutUseCase(),
   );
 
-  static DietCubit buildDietCubit({MockGetDailyMacrosUseCase? getDailyMacrosUseCase, MockDeleteFoodLogUseCase? deleteFoodLogUseCase}) =>
-      DietCubit(
-        getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
-        deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
-      );
+  static DietCubit buildDietCubit({
+    MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
+    MockDeleteFoodLogUseCase? deleteFoodLogUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+  }) => DietCubit(
+    getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
+    deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+  );
+
+  static MacroGoalsCubit buildMacroGoalsCubit({
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
+  }) => MacroGoalsCubit(
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+  );
 
   static FoodSearchCubit buildFoodSearchCubit({
     MockSearchFoodsUseCase? searchFoodsUseCase,

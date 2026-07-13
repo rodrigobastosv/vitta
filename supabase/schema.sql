@@ -14,8 +14,12 @@ create table if not exists foods (
   protein_per_100g numeric not null check (protein_per_100g >= 0),
   carbs_per_100g numeric not null check (carbs_per_100g >= 0),
   fat_per_100g numeric not null check (fat_per_100g >= 0),
+  fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0),
   created_at timestamptz not null default now()
 );
+
+-- Added after the initial release; existing tables get backfilled with 0.
+alter table foods add column if not exists fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0);
 
 create index if not exists foods_user_id_idx on foods (user_id);
 

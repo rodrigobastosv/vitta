@@ -1,21 +1,25 @@
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
-  DietCubit({required this._getDailyMacrosUseCase, required this._deleteFoodLogUseCase})
+  DietCubit({required this._getDailyMacrosUseCase, required this._deleteFoodLogUseCase, required this._getMacroGoalsUseCase})
     : super(
         DietState(
           date: _dateOnly(DateTime.now()),
           dailyMacros: const DailyMacros(entries: []),
+          macroGoals: MacroGoals.defaultGoals,
         ),
       );
 
   final GetDailyMacrosUseCase _getDailyMacrosUseCase;
   final DeleteFoodLogUseCase _deleteFoodLogUseCase;
+  final GetMacroGoalsUseCase _getMacroGoalsUseCase;
 
   static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
@@ -26,11 +30,12 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
 
   Future<void> loadToday() async {
     emitPresentation(DietShowLoading());
+    final macroGoals = _getMacroGoalsUseCase();
     final dailyMacrosResult = await _getDailyMacrosUseCase(date: _today);
     emitPresentation(DietHideLoading());
     dailyMacrosResult.when(
       (error) => emitPresentation(DietError(message: error.message)),
-      (value) => emit(DietState(date: _today, dailyMacros: value)),
+      (value) => emit(DietState(date: _today, dailyMacros: value, macroGoals: macroGoals)),
     );
   }
 

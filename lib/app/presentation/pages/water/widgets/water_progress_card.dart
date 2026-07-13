@@ -3,6 +3,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_progress_bar.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 
@@ -23,7 +24,7 @@ class WaterProgressCard extends StatelessWidget {
         crossAxisAlignment: .start,
         children: [
           Text(
-            l10n.waterProgressLabel(
+            l10n.progressLabel(
               unitSystem.millilitersToDisplayVolume(consumedMl).round().toString(),
               unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(),
               unitSystem.volumeUnitLabel,
@@ -31,10 +32,7 @@ class WaterProgressCard extends StatelessWidget {
             style: VTTextStyles.headline(context),
           ),
           const VTGap.m(),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: LinearProgressIndicator(value: progress, minHeight: 8),
-          ),
+          VTProgressBar(value: progress),
         ],
       ),
     );

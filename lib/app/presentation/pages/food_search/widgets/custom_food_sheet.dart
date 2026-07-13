@@ -23,6 +23,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
   final _proteinController = TextEditingController();
   final _carbsController = TextEditingController();
   final _fatController = TextEditingController();
+  final _fiberController = TextEditingController();
   String? _errorMessage;
 
   @override
@@ -32,6 +33,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
     _proteinController.dispose();
     _carbsController.dispose();
     _fatController.dispose();
+    _fiberController.dispose();
     super.dispose();
   }
 
@@ -44,14 +46,23 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
     final protein = _parse(_proteinController.text);
     final carbs = _parse(_carbsController.text);
     final fat = _parse(_fatController.text);
+    final fiber = _parse(_fiberController.text);
 
-    if (name.isEmpty || calories == null || protein == null || carbs == null || fat == null) {
+    if (name.isEmpty || calories == null || protein == null || carbs == null || fat == null || fiber == null) {
       setState(() => _errorMessage = l10n.dietInvalidCustomFood);
       return;
     }
 
     Navigator.of(context).pop(
-      Food(name: name, source: FoodSource.custom, caloriesPer100g: calories, proteinPer100g: protein, carbsPer100g: carbs, fatPer100g: fat),
+      Food(
+        name: name,
+        source: FoodSource.custom,
+        caloriesPer100g: calories,
+        proteinPer100g: protein,
+        carbsPer100g: carbs,
+        fatPer100g: fat,
+        fiberPer100g: fiber,
+      ),
     );
   }
 
@@ -99,6 +110,12 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
               controller: _fatController,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.dietFatPer100gLabel),
+            ),
+            const VTGap.s(),
+            TextField(
+              controller: _fiberController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.dietFiberPer100gLabel),
             ),
             if (_errorMessage != null) ...[
               const VTGap.s(),

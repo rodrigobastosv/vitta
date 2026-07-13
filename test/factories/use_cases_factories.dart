@@ -4,7 +4,9 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
@@ -36,6 +38,12 @@ abstract class UseCasesFactories {
 
   static DeleteFoodLogUseCase buildDeleteFoodLogUseCase({MockDietRepository? dietRepository}) =>
       DeleteFoodLogUseCase(dietRepository: dietRepository ?? MockDietRepository());
+
+  static GetMacroGoalsUseCase buildGetMacroGoalsUseCase({MockDietRepository? dietRepository}) =>
+      GetMacroGoalsUseCase(dietRepository: dietRepository ?? MockDietRepository());
+
+  static SaveMacroGoalsUseCase buildSaveMacroGoalsUseCase({MockDietRepository? dietRepository}) =>
+      SaveMacroGoalsUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
   static LogWaterUseCase buildLogWaterUseCase({MockWaterRepository? waterRepository}) =>
       LogWaterUseCase(waterRepository: waterRepository ?? MockWaterRepository());

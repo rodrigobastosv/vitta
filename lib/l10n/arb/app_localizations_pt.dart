@@ -78,6 +78,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get ok => 'OK';
 
   @override
+  String progressLabel(String consumed, String goal, String unit) {
+    return '$consumed / $goal $unit';
+  }
+
+  @override
   String dietCaloriesLabel(int calories) {
     return '$calories kcal hoje';
   }
@@ -138,6 +143,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietFatPer100gLabel => 'Gordura por 100g';
 
   @override
+  String get dietFiberPer100gLabel => 'Fibra por 100g';
+
+  @override
+  String get dietFiberLabel => 'Fibra';
+
+  @override
   String get dietContinueAction => 'Continuar';
 
   @override
@@ -180,11 +191,6 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get waterFeatureSubtitle => 'Acompanhe quanta água você bebe por dia';
-
-  @override
-  String waterProgressLabel(String consumed, String goal, String unit) {
-    return '$consumed / $goal $unit';
-  }
 
   @override
   String get waterDeleteLogTooltip => 'Remover';
@@ -280,6 +286,27 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get profileSignInAction => 'Entrar ou criar conta';
+
+  @override
+  String get macroGoalsTitle => 'Metas de macros';
+
+  @override
+  String get macroGoalsCalorieLabel => 'Meta de calorias (kcal)';
+
+  @override
+  String get macroGoalsProteinLabel => 'Meta de proteína (g)';
+
+  @override
+  String get macroGoalsCarbsLabel => 'Meta de carboidratos (g)';
+
+  @override
+  String get macroGoalsFatLabel => 'Meta de gordura (g)';
+
+  @override
+  String get macroGoalsFiberLabel => 'Meta de fibra (g)';
+
+  @override
+  String get macroGoalsInvalid => 'Preencha todas as metas com números válidos maiores que zero.';
 
   @override
   String get authAnonymousMessage =>

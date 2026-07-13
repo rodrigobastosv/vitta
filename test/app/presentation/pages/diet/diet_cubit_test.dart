@@ -10,6 +10,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../factories/entities/macro_goals_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
@@ -21,8 +22,10 @@ void main() {
     'emits a loaded state when loadToday succeeds',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
     act: (cubit) => cubit.loadToday(),
     expect: () => [isA<DietState>()],
@@ -32,8 +35,10 @@ void main() {
     'shows then hides loading while loadToday runs',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
     act: (cubit) => cubit.loadToday(),
     expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
@@ -41,8 +46,10 @@ void main() {
 
   test('loadToday keeps the previous state when it fails', () async {
     final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     final initialState = cubit.state;
 
     await cubit.loadToday();
@@ -54,8 +61,10 @@ void main() {
     'emits DietError when loadToday fails',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase);
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
     act: (cubit) => cubit.loadToday(),
     expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>(), isA<DietError>()],
@@ -66,9 +75,15 @@ void main() {
     build: () {
       final deleteFoodLogUseCase = MockDeleteFoodLogUseCase();
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => deleteFoodLogUseCase(logId: 'log-1')).thenAnswer((_) async => const Success(null));
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, deleteFoodLogUseCase: deleteFoodLogUseCase);
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        deleteFoodLogUseCase: deleteFoodLogUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
     expect: () => [isA<DietState>()],
