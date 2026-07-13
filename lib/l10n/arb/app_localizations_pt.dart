@@ -105,6 +105,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remover';
 
   @override
+  String get dietToday => 'Hoje';
+
+  @override
+  String get dietYesterday => 'Ontem';
+
+  @override
+  String get dietPreviousDayTooltip => 'Dia anterior';
+
+  @override
+  String get dietNextDayTooltip => 'Próximo dia';
+
+  @override
   String get dietEmptyTitle => 'Nada registrado ainda';
 
   @override

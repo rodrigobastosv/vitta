@@ -68,4 +68,18 @@ class SupabaseDietDataSource {
       return Failure(VTError(message: 'Failed to delete food log $logId', cause: error));
     }
   }
+
+  Future<Result<VTError, Set<DateTime>>> getLoggedDates({required DateTime from, required DateTime to}) async {
+    try {
+      final rows = await _supabaseService
+          .from('food_logs')
+          .select('logged_date')
+          .eq('user_id', _userId)
+          .gte('logged_date', from.toIso8601String().split('T').first)
+          .lte('logged_date', to.toIso8601String().split('T').first);
+      return Success(rows.map((row) => DateTime.parse(row['logged_date'] as String)).toSet());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load logged dates', cause: error));
+    }
+  }
 }

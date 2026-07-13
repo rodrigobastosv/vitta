@@ -272,6 +272,30 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get dietDeleteLogTooltip;
 
+  /// No description provided for @dietToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get dietToday;
+
+  /// No description provided for @dietYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get dietYesterday;
+
+  /// No description provided for @dietPreviousDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get dietPreviousDayTooltip;
+
+  /// No description provided for @dietNextDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get dietNextDayTooltip;
+
   /// No description provided for @dietEmptyTitle.
   ///
   /// In en, this message translates to:

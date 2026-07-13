@@ -41,4 +41,7 @@ class DietRepository {
   MacroGoals getMacroGoals() => _dietGoalsLocalDataSource.getGoals();
 
   Future<void> saveMacroGoals(MacroGoals goals) => _dietGoalsLocalDataSource.saveGoals(goals);
+
+  Future<Result<VTError, Set<DateTime>>> getLoggedDates({required DateTime from, required DateTime to}) =>
+      _supabaseDietDataSource.getLoggedDates(from: from, to: to);
 }

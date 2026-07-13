@@ -33,10 +33,12 @@ abstract class CubitsFactories {
     MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
     MockDeleteFoodLogUseCase? deleteFoodLogUseCase,
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockGetLoggedDatesUseCase? getLoggedDatesUseCase,
   }) => DietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
     deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    getLoggedDatesUseCase: getLoggedDatesUseCase ?? MockGetLoggedDatesUseCase(),
   );
 
   static MacroGoalsCubit buildMacroGoalsCubit({

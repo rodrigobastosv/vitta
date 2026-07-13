@@ -10,6 +10,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../factories/entities/food_log_entry_factory.dart';
 import '../../../../factories/entities/macro_goals_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
@@ -101,4 +102,115 @@ void main() {
     expectPresentation: () => [isA<DietError>()],
     verify: (_) => verifyNever(() => getDailyMacrosUseCaseSpy(date: any(named: 'date'))),
   );
+
+  test('isViewingToday is true right after construction', () {
+    final cubit = CubitsFactories.buildDietCubit();
+    final today = DateTime.now();
+
+    expect(cubit.state.date, DateTime(today.year, today.month, today.day));
+    expect(cubit.isViewingToday, isTrue);
+  });
+
+  blocTest<DietCubit, DietState>(
+    'goToPreviousDay emits the new date immediately, then the loaded state',
+    build: () {
+      final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+      when(
+        () => getDailyMacrosUseCase(date: any(named: 'date')),
+      ).thenAnswer((_) async => Success(DailyMacros(entries: [FoodLogEntryFactory.build()])));
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    },
+    act: (cubit) => cubit.goToPreviousDay(),
+    expect: () {
+      final yesterday = DateTime.now();
+      final expectedDate = DateTime(yesterday.year, yesterday.month, yesterday.day).subtract(const Duration(days: 1));
+      return [
+        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isEmpty),
+        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
+      ];
+    },
+  );
+
+  test('goToPreviousDay loads the day before the currently selected date', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final today = cubit.state.date;
+
+    await cubit.goToPreviousDay();
+
+    expect(cubit.state.date, today.subtract(const Duration(days: 1)));
+    expect(cubit.isViewingToday, isFalse);
+  });
+
+  test('goToNextDay loads the day after the currently selected date', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final today = cubit.state.date;
+    await cubit.goToPreviousDay();
+
+    await cubit.goToNextDay();
+
+    expect(cubit.state.date, today);
+    expect(cubit.isViewingToday, isTrue);
+  });
+
+  test('goToDate jumps directly to an arbitrary date', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+
+    await cubit.goToDate(DateTime(2026, 1, 5, 13, 30));
+
+    expect(cubit.state.date, DateTime(2026, 1, 5));
+  });
+
+  test('refresh reloads the currently selected date', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    await cubit.goToDate(DateTime(2026, 1, 5));
+
+    await cubit.refresh();
+
+    expect(cubit.state.date, DateTime(2026, 1, 5));
+    verify(() => getDailyMacrosUseCase(date: DateTime(2026, 1, 5))).called(2);
+  });
+
+  test('loadLoggedDatesForMonth stores the dates returned for the month', () async {
+    final getLoggedDatesUseCase = MockGetLoggedDatesUseCase();
+    final loggedDates = {DateTime(2026, 7, 5), DateTime(2026, 7, 11)};
+    when(
+      () => getLoggedDatesUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => Success(loggedDates));
+    final cubit = CubitsFactories.buildDietCubit(getLoggedDatesUseCase: getLoggedDatesUseCase);
+
+    await cubit.loadLoggedDatesForMonth(DateTime(2026, 7));
+
+    expect(cubit.state.loggedDatesInMonth, loggedDates);
+    verify(() => getLoggedDatesUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
+  });
+
+  test('loadLoggedDatesForMonth keeps the previous dates when it fails', () async {
+    final getLoggedDatesUseCase = MockGetLoggedDatesUseCase();
+    when(
+      () => getLoggedDatesUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    final cubit = CubitsFactories.buildDietCubit(getLoggedDatesUseCase: getLoggedDatesUseCase);
+
+    await cubit.loadLoggedDatesForMonth(DateTime(2026, 7));
+
+    expect(cubit.state.loggedDatesInMonth, isEmpty);
+  });
 }

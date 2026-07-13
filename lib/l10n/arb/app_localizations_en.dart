@@ -105,6 +105,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remove';
 
   @override
+  String get dietToday => 'Today';
+
+  @override
+  String get dietYesterday => 'Yesterday';
+
+  @override
+  String get dietPreviousDayTooltip => 'Previous day';
+
+  @override
+  String get dietNextDayTooltip => 'Next day';
+
+  @override
   String get dietEmptyTitle => 'Nothing logged yet';
 
   @override

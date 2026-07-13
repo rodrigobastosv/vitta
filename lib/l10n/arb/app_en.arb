@@ -48,6 +48,10 @@
     }
   },
   "dietDeleteLogTooltip": "Remove",
+  "dietToday": "Today",
+  "dietYesterday": "Yesterday",
+  "dietPreviousDayTooltip": "Previous day",
+  "dietNextDayTooltip": "Next day",
   "dietEmptyTitle": "Nothing logged yet",
   "dietEmptyMessage": "Tap the + button to add the first food of the day.",
   "dietInvalidQuantity": "Enter a quantity greater than zero.",

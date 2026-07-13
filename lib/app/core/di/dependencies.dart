@@ -25,6 +25,7 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_logged_dates_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -81,6 +82,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => DeleteFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => GetMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => SaveMacroGoalsUseCase(dietRepository: G()));
+  G.registerFactory(() => GetLoggedDatesUseCase(dietRepository: G()));
   G.registerFactory(() => LogWaterUseCase(waterRepository: G()));
   G.registerFactory(() => GetDailyWaterUseCase(waterRepository: G()));
   G.registerFactory(() => DeleteWaterLogUseCase(waterRepository: G()));
@@ -94,7 +96,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SignInUseCase(authRepository: G()));
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
 
-  G.registerFactory(() => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G(), getMacroGoalsUseCase: G()));
+  G.registerFactory(
+    () => DietCubit(
+      getDailyMacrosUseCase: G(),
+      deleteFoodLogUseCase: G(),
+      getMacroGoalsUseCase: G(),
+      getLoggedDatesUseCase: G(),
+    ),
+  );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
