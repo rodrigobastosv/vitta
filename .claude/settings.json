@@ -5,7 +5,7 @@
       "Read(//private/tmp/**)",
       "Bash(xcrun simctl *)",
       "Bash(git *)",
-      "Bash(gh pr create --title 'Add anonymous-to-real-account auth flow and a Profile hub page' --body ' *)",
+      "Bash(gh pr create *)",
       "Bash(gh issue *)",
       "Skill(update-config)",
       "Skill(update-config:*)",
