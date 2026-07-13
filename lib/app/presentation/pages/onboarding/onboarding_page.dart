@@ -93,7 +93,7 @@ class _OnboardingFeatureRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Row(
       children: [
         Container(

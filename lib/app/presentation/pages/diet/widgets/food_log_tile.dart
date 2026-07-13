@@ -14,7 +14,7 @@ class FoodLogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Row(
       children: [
         VTFoodImage(imageUrl: entry.food.imageUrl),

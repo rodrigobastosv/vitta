@@ -27,11 +27,7 @@ class MacroSummaryCard extends StatelessWidget {
           const VTGap.s(),
           VTProgressBar(value: _progress(dailyMacros.totalCalories, macroGoals.calorieGoal)),
           const VTGap.m(),
-          _MacroProgressRow(
-            label: l10n.dietProteinLabel,
-            consumed: dailyMacros.totalProtein,
-            goal: macroGoals.proteinGoalGrams,
-          ),
+          _MacroProgressRow(label: l10n.dietProteinLabel, consumed: dailyMacros.totalProtein, goal: macroGoals.proteinGoalGrams),
           const VTGap.s(),
           _MacroProgressRow(label: l10n.dietCarbsLabel, consumed: dailyMacros.totalCarbs, goal: macroGoals.carbsGoalGrams),
           const VTGap.s(),
@@ -56,7 +52,7 @@ class _MacroProgressRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Column(
       crossAxisAlignment: .start,
       children: [

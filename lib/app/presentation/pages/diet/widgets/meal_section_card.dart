@@ -25,7 +25,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     final section = widget.section;
     return VTCard(
       onTap: () => setState(() => _isExpanded = !_isExpanded),

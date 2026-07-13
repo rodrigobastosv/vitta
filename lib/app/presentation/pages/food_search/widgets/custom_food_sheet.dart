@@ -125,10 +125,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
       _errorMessage = null;
     });
 
-    final uploadResult = await context.read<FoodSearchCubit>().uploadFoodImage(
-      bytes: imageBytes,
-      fileExtension: _pickedImageExtension,
-    );
+    final uploadResult = await context.read<FoodSearchCubit>().uploadFoodImage(bytes: imageBytes, fileExtension: _pickedImageExtension);
     final uploadError = uploadResult.when((error) => error, (_) => null);
     if (uploadError != null) {
       setState(() {
@@ -163,7 +160,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     final imageBytes = _pickedImageBytes;
     return Padding(
       padding: EdgeInsets.only(
@@ -232,10 +229,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(labelText: l10n.dietFiberPer100gLabel),
             ),
-            if (_errorMessage != null) ...[
-              const VTGap.s(),
-              Text(_errorMessage!, style: TextStyle(color: colorScheme.error)),
-            ],
+            if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: colorScheme.error))],
             const VTGap.l(),
             VTPrimaryButton(label: l10n.dietContinueAction, isLoading: _isSaving, onPressed: _submit),
           ],

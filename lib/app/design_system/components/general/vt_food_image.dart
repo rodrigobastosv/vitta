@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 
 class VTFoodImage extends StatelessWidget {
@@ -9,7 +10,7 @@ class VTFoodImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     final url = imageUrl;
     return ClipRRect(
       borderRadius: VTRadius.borderRadiusS,

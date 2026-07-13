@@ -15,7 +15,7 @@ class FoodSearchResultTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return VTCard(
       onTap: onTap,
       child: Row(

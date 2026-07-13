@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -68,7 +69,10 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
             _WeekdayHeader(materialLocalizations: materialLocalizations),
             const VTGap.s(),
             if (_isLoading)
-              const Padding(padding: EdgeInsets.symmetric(vertical: VTSpacing.l), child: CircularProgressIndicator())
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: VTSpacing.l),
+                child: CircularProgressIndicator(),
+              )
             else
               BlocBuilder<DietCubit, DietState>(
                 builder: (context, state) => _MonthGrid(
@@ -94,7 +98,7 @@ class _WeekdayHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
     return Row(
       children: [
         for (var i = 0; i < 7; i++)
@@ -128,13 +132,12 @@ class _MonthGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
     final firstWeekdaySundayIndex = DateTime(month.year, month.month).weekday % 7;
     final leadingBlanks = (firstWeekdaySundayIndex - firstDayOfWeekIndex + 7) % 7;
     final today = DateTime.now();
     final todayOnly = DateTime(today.year, today.month, today.day);
-    final colorScheme = Theme.of(context).colorScheme;
-
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
