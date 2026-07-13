@@ -1,7 +1,7 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
-import 'package:vitta/app/data/water/datasources/requests/create_water_log_request.dart';
+import 'package:vitta/app/data/water/datasources/supabase/requests/create_water_log_request.dart';
 import 'package:vitta/app/domain/water/entities/water_log.dart';
 
 class SupabaseWaterDataSource {

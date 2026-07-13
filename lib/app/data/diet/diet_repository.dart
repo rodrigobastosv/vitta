@@ -1,7 +1,7 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
-import 'package:vitta/app/data/diet/datasources/open_food_facts_datasource.dart';
-import 'package:vitta/app/data/diet/datasources/supabase_diet_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';

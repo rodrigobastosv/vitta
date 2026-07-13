@@ -1,8 +1,8 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
-import 'package:vitta/app/data/diet/datasources/requests/create_food_log_request.dart';
-import 'package:vitta/app/data/diet/datasources/requests/create_food_request.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_log_request.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';

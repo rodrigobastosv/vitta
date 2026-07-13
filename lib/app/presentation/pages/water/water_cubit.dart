@@ -1,5 +1,5 @@
 import 'package:vitta/app/core/units/unit_system.dart';
-import 'package:vitta/app/data/water/water_local_datasource.dart';
+import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';

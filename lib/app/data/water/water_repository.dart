@@ -1,6 +1,6 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
-import 'package:vitta/app/data/water/datasources/supabase_water_datasource.dart';
+import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/water/entities/water_log.dart';
 
