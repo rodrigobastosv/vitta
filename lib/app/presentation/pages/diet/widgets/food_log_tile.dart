@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -16,26 +15,24 @@ class FoodLogTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = Theme.of(context).colorScheme;
-    return VTCard(
-      child: Row(
-        children: [
-          VTFoodImage(imageUrl: entry.food.imageUrl),
-          const VTGap.m(),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                Text(entry.food.name, style: VTTextStyles.bodyStrong(context)),
-                Text(
-                  l10n.dietLogSubtitle(entry.log.quantityGrams.round(), entry.calories.round()),
-                  style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
-                ),
-              ],
-            ),
+    return Row(
+      children: [
+        VTFoodImage(imageUrl: entry.food.imageUrl),
+        const VTGap.m(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              Text(entry.food.name, style: VTTextStyles.bodyStrong(context)),
+              Text(
+                l10n.dietLogSubtitle(entry.log.quantityGrams.round(), entry.calories.round()),
+                style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+              ),
+            ],
           ),
-          IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
-        ],
-      ),
+        ),
+        IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
+      ],
     );
   }
 }

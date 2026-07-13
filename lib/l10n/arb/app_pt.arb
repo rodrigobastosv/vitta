@@ -88,6 +88,27 @@
   "mealTypeLunch": "Almoço",
   "mealTypeDinner": "Jantar",
   "mealTypeSnack": "Lanche",
+  "dietMealCalories": "{calories} kcal",
+  "@dietMealCalories": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
+  "dietMealMacros": "P {protein}g · C {carbs}g · G {fat}g · Fibra {fiber}g",
+  "@dietMealMacros": {
+    "placeholders": {
+      "protein": { "type": "int" },
+      "carbs": { "type": "int" },
+      "fat": { "type": "int" },
+      "fiber": { "type": "int" }
+    }
+  },
+  "dietAddToMeal": "Adicionar em {meal}",
+  "@dietAddToMeal": {
+    "placeholders": {
+      "meal": { "type": "String" }
+    }
+  },
   "cancelAction": "Cancelar",
   "saveAction": "Salvar",
   "waterFeatureTitle": "Água",

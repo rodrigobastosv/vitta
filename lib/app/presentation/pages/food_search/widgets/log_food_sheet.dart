@@ -8,22 +8,24 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/meal_type_label.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/meal_type_label.dart';
 
-Future<void> showLogFoodSheet({required BuildContext context, required Food food}) => showModalBottomSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(
-    value: context.read<FoodSearchCubit>(),
-    child: _LogFoodSheet(food: food),
-  ),
-);
+Future<void> showLogFoodSheet({required BuildContext context, required Food food, MealType? initialMealType}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => BlocProvider.value(
+        value: context.read<FoodSearchCubit>(),
+        child: _LogFoodSheet(food: food, initialMealType: initialMealType ?? MealType.breakfast),
+      ),
+    );
 
 class _LogFoodSheet extends StatefulWidget {
-  const _LogFoodSheet({required this.food});
+  const _LogFoodSheet({required this.food, required this.initialMealType});
 
   final Food food;
+  final MealType initialMealType;
 
   @override
   State<_LogFoodSheet> createState() => _LogFoodSheetState();
@@ -32,7 +34,7 @@ class _LogFoodSheet extends StatefulWidget {
 class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
   late final TextEditingController _quantityController = TextEditingController(text: _formatNumber(_unitSystem.gramsToDisplayWeight(100)));
-  MealType _mealType = MealType.breakfast;
+  late MealType _mealType = widget.initialMealType;
   bool _isSaving = false;
   String? _errorMessage;
 

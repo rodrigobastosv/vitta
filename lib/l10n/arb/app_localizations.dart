@@ -452,6 +452,24 @@ abstract class AppLocalizations {
   /// **'Snack'**
   String get mealTypeSnack;
 
+  /// No description provided for @dietMealCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal'**
+  String dietMealCalories(int calories);
+
+  /// No description provided for @dietMealMacros.
+  ///
+  /// In en, this message translates to:
+  /// **'P {protein}g · C {carbs}g · F {fat}g · Fiber {fiber}g'**
+  String dietMealMacros(int protein, int carbs, int fat, int fiber);
+
+  /// No description provided for @dietAddToMeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to {meal}'**
+  String dietAddToMeal(String meal);
+
   /// No description provided for @cancelAction.
   ///
   /// In en, this message translates to:

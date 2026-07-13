@@ -4,6 +4,7 @@ import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
@@ -13,7 +14,9 @@ import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_res
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
 
 class FoodSearchPage extends StatelessWidget {
-  const FoodSearchPage({super.key});
+  const FoodSearchPage({this.initialMealType, super.key});
+
+  final MealType? initialMealType;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,7 @@ class FoodSearchPage extends StatelessWidget {
               onPressed: () async {
                 final food = await showCustomFoodSheet(context: context);
                 if (food != null && context.mounted) {
-                  await showLogFoodSheet(context: context, food: food);
+                  await showLogFoodSheet(context: context, food: food, initialMealType: initialMealType);
                 }
               },
             ),
@@ -67,7 +70,7 @@ class FoodSearchPage extends StatelessWidget {
                     final food = results[index];
                     return FoodSearchResultTile(
                       food: food,
-                      onTap: () => showLogFoodSheet(context: context, food: food),
+                      onTap: () => showLogFoodSheet(context: context, food: food, initialMealType: initialMealType),
                     );
                   },
                 ),

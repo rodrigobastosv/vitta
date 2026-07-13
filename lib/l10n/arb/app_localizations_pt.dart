@@ -199,6 +199,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealTypeSnack => 'Lanche';
 
   @override
+  String dietMealCalories(int calories) {
+    return '$calories kcal';
+  }
+
+  @override
+  String dietMealMacros(int protein, int carbs, int fat, int fiber) {
+    return 'P ${protein}g · C ${carbs}g · G ${fat}g · Fibra ${fiber}g';
+  }
+
+  @override
+  String dietAddToMeal(String meal) {
+    return 'Adicionar em $meal';
+  }
+
+  @override
   String get cancelAction => 'Cancelar';
 
   @override

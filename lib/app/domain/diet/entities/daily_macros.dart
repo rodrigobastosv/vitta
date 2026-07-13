@@ -1,20 +1,25 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/macro_totals.dart';
+import 'package:vitta/app/domain/diet/entities/meal_section.dart';
+import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
-class DailyMacros extends Equatable {
+class DailyMacros extends Equatable with MacroTotals {
   const DailyMacros({required this.entries});
 
+  @override
   final List<FoodLogEntry> entries;
 
-  double get totalCalories => entries.fold(0, (sum, entry) => sum + entry.calories);
-
-  double get totalProtein => entries.fold(0, (sum, entry) => sum + entry.protein);
-
-  double get totalCarbs => entries.fold(0, (sum, entry) => sum + entry.carbs);
-
-  double get totalFat => entries.fold(0, (sum, entry) => sum + entry.fat);
-
-  double get totalFiber => entries.fold(0, (sum, entry) => sum + entry.fiber);
+  List<MealSection> get meals {
+    final sections = <MealSection>[];
+    for (final mealType in MealType.values) {
+      final mealEntries = entries.where((entry) => entry.log.mealType == mealType).toList();
+      if (mealEntries.isNotEmpty) {
+        sections.add(MealSection(mealType: mealType, entries: mealEntries));
+      }
+    }
+    return sections;
+  }
 
   @override
   List<Object?> get props => [entries];
