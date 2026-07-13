@@ -30,6 +30,7 @@ import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
@@ -87,6 +88,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
+  G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));

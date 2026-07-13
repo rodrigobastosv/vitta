@@ -1,42 +1,33 @@
 import 'package:go_router/go_router.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
-import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
-import 'package:vitta/app/presentation/pages/auth/auth_page.dart';
-import 'package:vitta/app/presentation/pages/diet/diet_page.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_page.dart';
-import 'package:vitta/app/presentation/pages/home/home_page.dart';
-import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_page.dart';
-import 'package:vitta/app/presentation/pages/onboarding/onboarding_page.dart';
-import 'package:vitta/app/presentation/pages/profile/profile_page.dart';
-import 'package:vitta/app/presentation/pages/settings/settings_page.dart';
-import 'package:vitta/app/presentation/pages/sleep/sleep_page.dart';
-import 'package:vitta/app/presentation/pages/water/water_page.dart';
-import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
+import 'package:vitta/app/presentation/routing/routes/auth_route.dart';
+import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
+import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
+import 'package:vitta/app/presentation/routing/routes/home_route.dart';
+import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
+import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
+import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
+import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
+import 'package:vitta/app/presentation/routing/routes/sleep_route.dart';
+import 'package:vitta/app/presentation/routing/routes/water_route.dart';
+import 'package:vitta/app/presentation/routing/routes/workout_route.dart';
+import 'package:vitta/app/presentation/routing/vt_route.dart';
 
 abstract class AppRouter {
-  static final GoRouter router = GoRouter(
-    initialLocation: AppRoute.home.path,
-    redirect: (context, state) {
-      final hasSeenOnboarding = G<OnboardingRepository>().hasSeenOnboarding();
-      final isExemptFromOnboardingGate = state.matchedLocation == AppRoute.onboarding.path || state.matchedLocation == AppRoute.auth.path;
-      if (!hasSeenOnboarding && !isExemptFromOnboardingGate) {
-        return AppRoute.onboarding.path;
-      }
-      return null;
-    },
-    routes: [
-      GoRoute(path: AppRoute.onboarding.path, name: AppRoute.onboarding.name, builder: (context, state) => const OnboardingPage()),
-      GoRoute(path: AppRoute.home.path, name: AppRoute.home.name, builder: (context, state) => const HomePage()),
-      GoRoute(path: AppRoute.diet.path, name: AppRoute.diet.name, builder: (context, state) => const DietPage()),
-      GoRoute(path: AppRoute.foodSearch.path, name: AppRoute.foodSearch.name, builder: (context, state) => const FoodSearchPage()),
-      GoRoute(path: AppRoute.water.path, name: AppRoute.water.name, builder: (context, state) => const WaterPage()),
-      GoRoute(path: AppRoute.sleep.path, name: AppRoute.sleep.name, builder: (context, state) => const SleepPage()),
-      GoRoute(path: AppRoute.workout.path, name: AppRoute.workout.name, builder: (context, state) => const WorkoutPage()),
-      GoRoute(path: AppRoute.profile.path, name: AppRoute.profile.name, builder: (context, state) => const ProfilePage()),
-      GoRoute(path: AppRoute.macroGoals.path, name: AppRoute.macroGoals.name, builder: (context, state) => const MacroGoalsPage()),
-      GoRoute(path: AppRoute.settings.path, name: AppRoute.settings.name, builder: (context, state) => const SettingsPage()),
-      GoRoute(path: AppRoute.auth.path, name: AppRoute.auth.name, builder: (context, state) => const AuthPage()),
-    ],
-  );
+  static final List<VTRoute> _routes = [
+    OnboardingRoute(),
+    HomeRoute(hasSeenOnboardingUseCase: G()),
+    DietRoute(),
+    FoodSearchRoute(),
+    WaterRoute(),
+    SleepRoute(),
+    WorkoutRoute(),
+    ProfileRoute(),
+    MacroGoalsRoute(),
+    SettingsRoute(),
+    AuthRoute(),
+  ];
+
+  static final GoRouter router = GoRouter(initialLocation: AppRoute.home.path, routes: _routes.map((route) => route.toGoRoute()).toList());
 }
