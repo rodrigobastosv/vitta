@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -79,5 +81,21 @@ void main() {
     final loggedResult = await cubit.logFood(food: food, mealType: MealType.dinner, quantityGrams: 250);
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
+  });
+
+  test('uploadFoodImage delegates to the use case', () async {
+    final uploadFoodImageUseCase = MockUploadFoodImageUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(uploadFoodImageUseCase: uploadFoodImageUseCase);
+    final bytes = Uint8List.fromList([1, 2, 3]);
+    when(
+      () => uploadFoodImageUseCase(bytes: bytes, fileExtension: 'jpg'),
+    ).thenAnswer((_) async => const Success('https://example.com/food.jpg'));
+
+    final uploadResult = await cubit.uploadFoodImage(bytes: bytes, fileExtension: 'jpg');
+
+    uploadResult.when(
+      (error) => fail('expected Success, got Failure($error)'),
+      (value) => expect(value, 'https://example.com/food.jpg'),
+    );
   });
 }
