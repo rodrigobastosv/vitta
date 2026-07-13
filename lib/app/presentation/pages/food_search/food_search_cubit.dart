@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
@@ -6,18 +8,24 @@ import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 
 class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPresentationEvent> {
-  FoodSearchCubit({required this._searchFoodsUseCase, required this._logFoodUseCase, required this._getAppSettingsUseCase})
-    : super(const FoodSearchState());
+  FoodSearchCubit({
+    required this._searchFoodsUseCase,
+    required this._logFoodUseCase,
+    required this._getAppSettingsUseCase,
+    required this._uploadFoodImageUseCase,
+  }) : super(const FoodSearchState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
   final LogFoodUseCase _logFoodUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
+  final UploadFoodImageUseCase _uploadFoodImageUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -44,4 +52,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
       quantityGrams: quantityGrams,
     );
   }
+
+  Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>
+      _uploadFoodImageUseCase(bytes: bytes, fileExtension: fileExtension);
 }

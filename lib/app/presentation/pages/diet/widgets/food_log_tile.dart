@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
+import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 
@@ -17,6 +19,8 @@ class FoodLogTile extends StatelessWidget {
     return VTCard(
       child: Row(
         children: [
+          VTFoodImage(imageUrl: entry.food.imageUrl),
+          const VTGap.m(),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

@@ -380,6 +380,18 @@ abstract class AppLocalizations {
   /// **'Fiber'**
   String get dietFiberLabel;
 
+  /// No description provided for @dietTakePhotoAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Take photo'**
+  String get dietTakePhotoAction;
+
+  /// No description provided for @dietChooseFromGalleryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from gallery'**
+  String get dietChooseFromGalleryAction;
+
   /// No description provided for @dietContinueAction.
   ///
   /// In en, this message translates to:

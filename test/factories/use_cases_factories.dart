@@ -9,6 +9,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
@@ -49,6 +50,9 @@ abstract class UseCasesFactories {
 
   static GetLoggedDatesUseCase buildGetLoggedDatesUseCase({MockDietRepository? dietRepository}) =>
       GetLoggedDatesUseCase(dietRepository: dietRepository ?? MockDietRepository());
+
+  static UploadFoodImageUseCase buildUploadFoodImageUseCase({MockDietRepository? dietRepository}) =>
+      UploadFoodImageUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
   static LogWaterUseCase buildLogWaterUseCase({MockWaterRepository? waterRepository}) =>
       LogWaterUseCase(waterRepository: waterRepository ?? MockWaterRepository());

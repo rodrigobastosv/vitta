@@ -161,6 +161,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietFiberLabel => 'Fibra';
 
   @override
+  String get dietTakePhotoAction => 'Tirar foto';
+
+  @override
+  String get dietChooseFromGalleryAction => 'Escolher da galeria';
+
+  @override
   String get dietContinueAction => 'Continuar';
 
   @override

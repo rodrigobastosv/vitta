@@ -161,6 +161,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietFiberLabel => 'Fiber';
 
   @override
+  String get dietTakePhotoAction => 'Take photo';
+
+  @override
+  String get dietChooseFromGalleryAction => 'Choose from gallery';
+
+  @override
   String get dietContinueAction => 'Continue';
 
   @override

@@ -3,6 +3,10 @@
 -- Safe to re-run in full: tables/indexes use if not exists, and policies are
 -- dropped and recreated (Postgres has no "create policy if not exists").
 
+-- `foods` is a catalog shared across every user, not a per-user table: `user_id`
+-- only records who first added a row (for the update/delete policies below),
+-- it doesn't scope visibility. `barcode` is deduplicated so the same product
+-- looked up by different users reuses one row (see foods_barcode_unique_idx).
 create table if not exists foods (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -15,13 +19,16 @@ create table if not exists foods (
   carbs_per_100g numeric not null check (carbs_per_100g >= 0),
   fat_per_100g numeric not null check (fat_per_100g >= 0),
   fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0),
+  image_url text,
   created_at timestamptz not null default now()
 );
 
--- Added after the initial release; existing tables get backfilled with 0.
+-- Added after the initial release; existing tables get backfilled with 0/null.
 alter table foods add column if not exists fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0);
+alter table foods add column if not exists image_url text;
 
 create index if not exists foods_user_id_idx on foods (user_id);
+create unique index if not exists foods_barcode_unique_idx on foods (barcode) where barcode is not null;
 
 create table if not exists food_logs (
   id uuid primary key default gen_random_uuid(),
@@ -63,11 +70,31 @@ alter table food_logs enable row level security;
 alter table water_logs enable row level security;
 alter table sleep_logs enable row level security;
 
+-- foods is a shared catalog (see comment on the table above): anyone
+-- authenticated can read every row, but only the row's own author can
+-- change or remove it.
 drop policy if exists "Users manage their own foods" on foods;
-create policy "Users manage their own foods" on foods
-  for all
+
+drop policy if exists "Anyone can read foods" on foods;
+create policy "Anyone can read foods" on foods
+  for select
+  using (true);
+
+drop policy if exists "Users insert their own foods" on foods;
+create policy "Users insert their own foods" on foods
+  for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users update their own foods" on foods;
+create policy "Users update their own foods" on foods
+  for update
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+drop policy if exists "Users delete their own foods" on foods;
+create policy "Users delete their own foods" on foods
+  for delete
+  using (auth.uid() = user_id);
 
 drop policy if exists "Users manage their own food logs" on food_logs;
 create policy "Users manage their own food logs" on food_logs
@@ -86,3 +113,21 @@ create policy "Users manage their own sleep logs" on sleep_logs
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- Storage bucket for food photos attached via CustomFoodSheet. Public read
+-- (images are shown in the shared foods catalog to every user), write
+-- restricted to authenticated users (anonymous sessions count as
+-- authenticated here, same as every other auth.uid() check above).
+insert into storage.buckets (id, name, public)
+values ('food-images', 'food-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "Anyone can view food images" on storage.objects;
+create policy "Anyone can view food images" on storage.objects
+  for select
+  using (bucket_id = 'food-images');
+
+drop policy if exists "Authenticated users can upload food images" on storage.objects;
+create policy "Authenticated users can upload food images" on storage.objects
+  for insert
+  with check (bucket_id = 'food-images' and auth.uid() is not null);

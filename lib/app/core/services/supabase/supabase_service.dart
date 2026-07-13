@@ -16,4 +16,6 @@ class SupabaseService {
   String? get currentUserEmail => _client.auth.currentUser?.email;
 
   SupabaseQueryBuilder from(String table) => _client.from(table);
+
+  StorageFileApi storage(String bucket) => _client.storage.from(bucket);
 }

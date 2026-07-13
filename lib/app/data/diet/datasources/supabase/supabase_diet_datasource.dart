@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
@@ -17,11 +19,27 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, Food>> saveFood({required Food food}) async {
     try {
+      final barcode = food.barcode;
+      if (barcode != null) {
+        final existingRow = await _supabaseService.from('foods').select().eq('barcode', barcode).maybeSingle();
+        if (existingRow != null) {
+          return Success(Food.fromMap(existingRow));
+        }
+      }
       final request = CreateFoodRequest(food: food, userId: _userId);
       final row = await _supabaseService.from('foods').insert(request.toJson()).select().single();
       return Success(Food.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to save food "${food.name}"', cause: error));
+    }
+  }
+
+  Future<Result<VTError, List<Food>>> searchCatalog({required String query}) async {
+    try {
+      final rows = await _supabaseService.from('foods').select().ilike('name', '%$query%').order('name').limit(20);
+      return Success(rows.map(Food.fromMap).toList());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to search food catalog', cause: error));
     }
   }
 
@@ -80,6 +98,17 @@ class SupabaseDietDataSource {
       return Success(rows.map((row) => DateTime.parse(row['logged_date'] as String)).toSet());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load logged dates', cause: error));
+    }
+  }
+
+  Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) async {
+    try {
+      final path = '$_userId/${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
+      final storage = _supabaseService.storage('food-images');
+      await storage.uploadBinary(path, bytes);
+      return Success(storage.getPublicUrl(path));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to upload food image', cause: error));
     }
   }
 }

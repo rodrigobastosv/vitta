@@ -15,6 +15,7 @@ void main() {
       'carbs_per_100g': 22.8,
       'fat_per_100g': 0.3,
       'fiber_per_100g': 2.6,
+      'image_url': 'https://example.com/banana.jpg',
     });
 
     expect(
@@ -30,6 +31,7 @@ void main() {
         carbsPer100g: 22.8,
         fatPer100g: 0.3,
         fiberPer100g: 2.6,
+        imageUrl: 'https://example.com/banana.jpg',
       ),
     );
   });
@@ -50,6 +52,7 @@ void main() {
 
     expect(food.brand, isNull);
     expect(food.barcode, isNull);
+    expect(food.imageUrl, isNull);
   });
 
   test('fromMap defaults fiber to 0 when the column is missing', () {

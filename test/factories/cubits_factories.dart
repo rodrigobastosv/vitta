@@ -53,10 +53,12 @@ abstract class CubitsFactories {
     MockSearchFoodsUseCase? searchFoodsUseCase,
     MockLogFoodUseCase? logFoodUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockUploadFoodImageUseCase? uploadFoodImageUseCase,
   }) => FoodSearchCubit(
     searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
     logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    uploadFoodImageUseCase: uploadFoodImageUseCase ?? MockUploadFoodImageUseCase(),
   );
 
   static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>

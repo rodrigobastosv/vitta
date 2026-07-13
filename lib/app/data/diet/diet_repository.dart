@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
@@ -20,7 +22,14 @@ class DietRepository {
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
 
-  Future<Result<VTError, List<Food>>> searchFoods({required String query}) => _openFoodFactsDataSource.searchFoods(query: query);
+  Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
+    final catalogResult = await _supabaseDietDataSource.searchCatalog(query: query);
+    final catalogFoods = catalogResult.when((_) => null, (foods) => foods);
+    if (catalogFoods != null && catalogFoods.isNotEmpty) {
+      return Success(catalogFoods);
+    }
+    return _openFoodFactsDataSource.searchFoods(query: query);
+  }
 
   Future<Result<VTError, Food>> saveFood({required Food food}) => _supabaseDietDataSource.saveFood(food: food);
 
@@ -44,4 +53,7 @@ class DietRepository {
 
   Future<Result<VTError, Set<DateTime>>> getLoggedDates({required DateTime from, required DateTime to}) =>
       _supabaseDietDataSource.getLoggedDates(from: from, to: to);
+
+  Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>
+      _supabaseDietDataSource.uploadFoodImage(bytes: bytes, fileExtension: fileExtension);
 }

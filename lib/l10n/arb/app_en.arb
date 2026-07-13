@@ -71,6 +71,8 @@
   "dietFatPer100gLabel": "Fat per 100g",
   "dietFiberPer100gLabel": "Fiber per 100g",
   "dietFiberLabel": "Fiber",
+  "dietTakePhotoAction": "Take photo",
+  "dietChooseFromGalleryAction": "Choose from gallery",
   "dietContinueAction": "Continue",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {

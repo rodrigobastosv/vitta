@@ -10,6 +10,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
@@ -21,6 +22,8 @@ import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 
 class MockSearchFoodsUseCase extends Mock implements SearchFoodsUseCase {}
+
+class MockUploadFoodImageUseCase extends Mock implements UploadFoodImageUseCase {}
 
 class MockLogFoodUseCase extends Mock implements LogFoodUseCase {}
 

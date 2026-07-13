@@ -13,6 +13,7 @@ class Food extends Equatable {
     this.id,
     this.brand,
     this.barcode,
+    this.imageUrl,
   });
 
   factory Food.fromMap(Map<String, dynamic> row) => Food(
@@ -26,6 +27,7 @@ class Food extends Equatable {
     carbsPer100g: (row['carbs_per_100g'] as num).toDouble(),
     fatPer100g: (row['fat_per_100g'] as num).toDouble(),
     fiberPer100g: (row['fiber_per_100g'] as num?)?.toDouble() ?? 0,
+    imageUrl: row['image_url'] as String?,
   );
 
   /// Null until the food has been persisted (e.g. a fresh Open Food Facts search
@@ -40,6 +42,7 @@ class Food extends Equatable {
   final double carbsPer100g;
   final double fatPer100g;
   final double fiberPer100g;
+  final String? imageUrl;
 
   @override
   List<Object?> get props => [
@@ -53,5 +56,6 @@ class Food extends Equatable {
     carbsPer100g,
     fatPer100g,
     fiberPer100g,
+    imageUrl,
   ];
 }
