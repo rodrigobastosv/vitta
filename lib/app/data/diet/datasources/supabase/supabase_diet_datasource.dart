@@ -88,17 +88,18 @@ class SupabaseDietDataSource {
     }
   }
 
-  Future<Result<VTError, Set<DateTime>>> getLoggedDates({required DateTime from, required DateTime to}) async {
+  Future<Result<VTError, List<FoodLogEntry>>> getMonthlyLog({required DateTime from, required DateTime to}) async {
     try {
       final rows = await _supabaseService
           .from(.foodLogs)
-          .select('logged_date')
+          .select('*, ${SupabaseTable.foods.wireName}(*)')
           .eq('user_id', _userId)
           .gte('logged_date', from.toIso8601String().split('T').first)
-          .lte('logged_date', to.toIso8601String().split('T').first);
-      return Success(rows.map((row) => DateTime.parse(row['logged_date'] as String)).toSet());
+          .lte('logged_date', to.toIso8601String().split('T').first)
+          .order('created_at');
+      return Success(rows.map(FoodLogEntry.fromMap).toList());
     } on Exception catch (error) {
-      return Failure(VTError(message: 'Failed to load logged dates', cause: error));
+      return Failure(VTError(message: 'Failed to load monthly food logs', cause: error));
     }
   }
 

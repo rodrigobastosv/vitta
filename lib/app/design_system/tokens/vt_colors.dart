@@ -29,6 +29,7 @@ abstract class VTColors {
   static const Color outlineDark = Color(0xFF3A423C);
 
   static const Color success = Color(0xFF2F8F7A);
+  static const Color warning = Color(0xFFE8A317);
   static const Color error = Color(0xFFBA1A1A);
   static const Color onError = Color(0xFFFFFFFF);
   static const Color errorContainerLight = Color(0xFFFFDAD6);

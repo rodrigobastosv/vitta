@@ -1,11 +1,34 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/entities/goal_adherence.dart';
+import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
+
+DailyMacros _dayWith({
+  required double calories,
+  required double protein,
+  required double carbs,
+  required double fat,
+  required double fiber,
+}) => DailyMacros(
+  entries: [
+    FoodLogEntryFactory.build(
+      food: FoodFactory.build(
+        caloriesPer100g: calories,
+        proteinPer100g: protein,
+        carbsPer100g: carbs,
+        fatPer100g: fat,
+        fiberPer100g: fiber,
+      ),
+      log: FoodLogFactory.build(),
+    ),
+  ],
+);
 
 void main() {
   test('sums macros across all entries', () {
@@ -94,5 +117,44 @@ void main() {
     expect(breakfast.totalCarbs, 5);
     expect(breakfast.totalFat, 2);
     expect(breakfast.totalFiber, 3);
+  });
+
+  test('adherenceTo is met when every macro sits inside the goal band', () {
+    const goals = MacroGoals.defaultGoals;
+    final dailyMacros = _dayWith(
+      calories: goals.calorieGoal,
+      protein: goals.proteinGoalGrams,
+      carbs: goals.carbsGoalGrams,
+      fat: goals.fatGoalGrams,
+      fiber: goals.fiberGoalGrams,
+    );
+
+    expect(dailyMacros.adherenceTo(goals), GoalAdherence.met);
+  });
+
+  test('adherenceTo is close when macros are moderately over the goal', () {
+    const goals = MacroGoals.defaultGoals;
+    final dailyMacros = _dayWith(
+      calories: goals.calorieGoal * 1.2,
+      protein: goals.proteinGoalGrams * 1.2,
+      carbs: goals.carbsGoalGrams * 1.2,
+      fat: goals.fatGoalGrams * 1.2,
+      fiber: goals.fiberGoalGrams * 1.2,
+    );
+
+    expect(dailyMacros.adherenceTo(goals), GoalAdherence.close);
+  });
+
+  test('adherenceTo is off when a macro is far from the goal', () {
+    const goals = MacroGoals.defaultGoals;
+    final dailyMacros = _dayWith(
+      calories: goals.calorieGoal,
+      protein: goals.proteinGoalGrams,
+      carbs: goals.carbsGoalGrams,
+      fat: goals.fatGoalGrams * 2,
+      fiber: goals.fiberGoalGrams,
+    );
+
+    expect(dailyMacros.adherenceTo(goals), GoalAdherence.off);
   });
 }

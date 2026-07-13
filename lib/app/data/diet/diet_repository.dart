@@ -8,6 +8,7 @@ import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasourc
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
@@ -51,8 +52,21 @@ class DietRepository {
 
   Future<void> saveMacroGoals(MacroGoals goals) => _dietGoalsLocalDataSource.saveGoals(goals);
 
-  Future<Result<VTError, Set<DateTime>>> getLoggedDates({required DateTime from, required DateTime to}) =>
-      _supabaseDietDataSource.getLoggedDates(from: from, to: to);
+  Future<Result<VTError, Map<DateTime, DailyMacros>>> getMonthlyMacros({required DateTime from, required DateTime to}) async {
+    final monthlyLogResult = await _supabaseDietDataSource.getMonthlyLog(from: from, to: to);
+    return monthlyLogResult.when(Failure.new, (entries) => Success(_groupByDate(entries)));
+  }
+
+  Map<DateTime, DailyMacros> _groupByDate(List<FoodLogEntry> entries) {
+    final entriesByDate = <DateTime, List<FoodLogEntry>>{};
+    for (final entry in entries) {
+      final date = entry.log.loggedDate;
+      entriesByDate.putIfAbsent(date, () => []).add(entry);
+    }
+    return {
+      for (final MapEntry(:key, :value) in entriesByDate.entries) key: DailyMacros(entries: value),
+    };
+  }
 
   Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>
       _supabaseDietDataSource.uploadFoodImage(bytes: bytes, fileExtension: fileExtension);

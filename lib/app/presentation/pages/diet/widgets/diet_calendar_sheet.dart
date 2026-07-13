@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/entities/goal_adherence.dart';
+import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
@@ -34,7 +38,7 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
 
   Future<void> _loadMonth(DateTime month) async {
     setState(() => _isLoading = true);
-    await context.read<DietCubit>().loadLoggedDatesForMonth(month);
+    await context.read<DietCubit>().loadMonthMacros(month);
     if (mounted) {
       setState(() => _isLoading = false);
     }
@@ -78,7 +82,8 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
                 builder: (context, state) => _MonthGrid(
                   month: _displayedMonth,
                   selectedDate: state.date,
-                  loggedDates: state.loggedDatesInMonth,
+                  loggedMacros: state.loggedMacrosInMonth,
+                  macroGoals: state.macroGoals,
                   firstDayOfWeekIndex: materialLocalizations.firstDayOfWeekIndex,
                   onDaySelected: (day) => Navigator.of(context).pop(day),
                 ),
@@ -119,14 +124,16 @@ class _MonthGrid extends StatelessWidget {
   const _MonthGrid({
     required this.month,
     required this.selectedDate,
-    required this.loggedDates,
+    required this.loggedMacros,
+    required this.macroGoals,
     required this.firstDayOfWeekIndex,
     required this.onDaySelected,
   });
 
   final DateTime month;
   final DateTime selectedDate;
-  final Set<DateTime> loggedDates;
+  final Map<DateTime, DailyMacros> loggedMacros;
+  final MacroGoals macroGoals;
   final int firstDayOfWeekIndex;
   final ValueChanged<DateTime> onDaySelected;
 
@@ -150,7 +157,7 @@ class _MonthGrid extends StatelessWidget {
         final day = DateTime(month.year, month.month, index - leadingBlanks + 1);
         final isSelected = day == selectedDate;
         final isFuture = day.isAfter(todayOnly);
-        final hasLog = loggedDates.contains(day);
+        final dayMacros = loggedMacros[day];
 
         return InkWell(
           onTap: isFuture ? null : () => onDaySelected(day),
@@ -167,12 +174,12 @@ class _MonthGrid extends StatelessWidget {
                     : colorScheme.onSurface,
                 child: Text('${day.day}'),
               ),
-              if (hasLog)
+              if (dayMacros != null)
                 Container(
                   margin: const EdgeInsets.only(top: 2),
                   width: 4,
                   height: 4,
-                  decoration: BoxDecoration(color: colorScheme.primary, shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: _adherenceColor(dayMacros.adherenceTo(macroGoals)), shape: BoxShape.circle),
                 )
               else
                 const SizedBox(height: 6),
@@ -182,4 +189,10 @@ class _MonthGrid extends StatelessWidget {
       },
     );
   }
+
+  Color _adherenceColor(GoalAdherence adherence) => switch (adherence) {
+    .met => VTColors.green,
+    .close => VTColors.warning,
+    .off => VTColors.error,
+  };
 }

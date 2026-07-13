@@ -188,29 +188,32 @@ void main() {
     verify(() => getDailyMacrosUseCase(date: DateTime(2026, 1, 5))).called(2);
   });
 
-  test('loadLoggedDatesForMonth stores the dates returned for the month', () async {
-    final getLoggedDatesUseCase = MockGetLoggedDatesUseCase();
-    final loggedDates = {DateTime(2026, 7, 5), DateTime(2026, 7, 11)};
+  test('loadMonthMacros stores the macros-by-date returned for the month', () async {
+    final getMonthlyMacrosUseCase = MockGetMonthlyMacrosUseCase();
+    final macrosByDate = {
+      DateTime(2026, 7, 5): DailyMacros(entries: [FoodLogEntryFactory.build()]),
+      DateTime(2026, 7, 11): const DailyMacros(entries: []),
+    };
     when(
-      () => getLoggedDatesUseCase(from: any(named: 'from'), to: any(named: 'to')),
-    ).thenAnswer((_) async => Success(loggedDates));
-    final cubit = CubitsFactories.buildDietCubit(getLoggedDatesUseCase: getLoggedDatesUseCase);
+      () => getMonthlyMacrosUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => Success(macrosByDate));
+    final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
 
-    await cubit.loadLoggedDatesForMonth(DateTime(2026, 7));
+    await cubit.loadMonthMacros(DateTime(2026, 7));
 
-    expect(cubit.state.loggedDatesInMonth, loggedDates);
-    verify(() => getLoggedDatesUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
+    expect(cubit.state.loggedMacrosInMonth, macrosByDate);
+    verify(() => getMonthlyMacrosUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
   });
 
-  test('loadLoggedDatesForMonth keeps the previous dates when it fails', () async {
-    final getLoggedDatesUseCase = MockGetLoggedDatesUseCase();
+  test('loadMonthMacros keeps the previous macros when it fails', () async {
+    final getMonthlyMacrosUseCase = MockGetMonthlyMacrosUseCase();
     when(
-      () => getLoggedDatesUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMonthlyMacrosUseCase(from: any(named: 'from'), to: any(named: 'to')),
     ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-    final cubit = CubitsFactories.buildDietCubit(getLoggedDatesUseCase: getLoggedDatesUseCase);
+    final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
 
-    await cubit.loadLoggedDatesForMonth(DateTime(2026, 7));
+    await cubit.loadMonthMacros(DateTime(2026, 7));
 
-    expect(cubit.state.loggedDatesInMonth, isEmpty);
+    expect(cubit.state.loggedMacrosInMonth, isEmpty);
   });
 }
