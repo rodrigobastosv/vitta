@@ -7,9 +7,15 @@
 -- only records who first added a row (for the update/delete policies below),
 -- it doesn't scope visibility. `barcode` is deduplicated so the same product
 -- looked up by different users reuses one row (see foods_barcode_unique_idx).
+-- `user_id` is null for rows bulk-imported from an external database (see
+-- tool/import_food_catalog.dart) rather than added by a specific user - those
+-- writes go through the service_role key, which bypasses RLS entirely, so the
+-- insert/update/delete policies below never need to account for a null user_id
+-- themselves (they simply never match one, which is the point: nobody using
+-- the app can edit or delete an imported row through it).
 create table if not exists foods (
   id uuid primary key default gen_random_uuid(),
-  user_id uuid not null references auth.users (id) on delete cascade,
+  user_id uuid references auth.users (id) on delete cascade,
   name text not null,
   brand text,
   barcode text,
@@ -26,9 +32,19 @@ create table if not exists foods (
 -- Added after the initial release; existing tables get backfilled with 0/null.
 alter table foods add column if not exists fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0);
 alter table foods add column if not exists image_url text;
+alter table foods alter column user_id drop not null;
 
 create index if not exists foods_user_id_idx on foods (user_id);
-create unique index if not exists foods_barcode_unique_idx on foods (barcode) where barcode is not null;
+
+-- A plain (non-partial) unique index: Postgres already treats every NULL as
+-- distinct from every other NULL, so custom foods (no barcode) are naturally
+-- unrestricted without needing a `where barcode is not null` predicate - and
+-- a partial index can't be used as a PostgREST on_conflict target anyway
+-- (see tool/import_food_catalog.dart's upsert), so this also has to be the
+-- plain form for that to work. Drop+recreate covers projects that already
+-- created the old partial version.
+drop index if exists foods_barcode_unique_idx;
+create unique index if not exists foods_barcode_unique_idx on foods (barcode);
 
 create table if not exists food_logs (
   id uuid primary key default gen_random_uuid(),
