@@ -242,6 +242,30 @@ abstract class AppLocalizations {
   /// **'{calories} kcal today'**
   String dietCaloriesLabel(int calories);
 
+  /// No description provided for @dietCaloriesOfGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'of {goal} kcal'**
+  String dietCaloriesOfGoal(int goal);
+
+  /// No description provided for @dietCaloriesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal left'**
+  String dietCaloriesLeft(int calories);
+
+  /// No description provided for @dietCaloriesOver.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal over'**
+  String dietCaloriesOver(int calories);
+
+  /// No description provided for @dietAddFood.
+  ///
+  /// In en, this message translates to:
+  /// **'Add food'**
+  String get dietAddFood;
+
   /// No description provided for @dietProteinLabel.
   ///
   /// In en, this message translates to:
@@ -302,11 +326,23 @@ abstract class AppLocalizations {
   /// **'Nothing logged yet'**
   String get dietEmptyTitle;
 
+  /// No description provided for @dietNotTodayEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged on that day'**
+  String get dietNotTodayEmptyTitle;
+
   /// No description provided for @dietEmptyMessage.
   ///
   /// In en, this message translates to:
   /// **'Tap the + button to add the first food of the day.'**
   String get dietEmptyMessage;
+
+  /// No description provided for @dietNotTodayEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You cannot log meals on past days.'**
+  String get dietNotTodayEmptyMessage;
 
   /// No description provided for @dietInvalidQuantity.
   ///

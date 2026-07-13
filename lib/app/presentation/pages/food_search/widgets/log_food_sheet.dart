@@ -8,18 +8,16 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/meal_type_label.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
-Future<void> showLogFoodSheet({required BuildContext context, required Food food, MealType? initialMealType}) =>
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => BlocProvider.value(
-        value: context.read<FoodSearchCubit>(),
-        child: _LogFoodSheet(food: food, initialMealType: initialMealType ?? MealType.breakfast),
-      ),
-    );
+Future<void> showLogFoodSheet({required BuildContext context, required Food food, MealType? initialMealType}) => showModalBottomSheet<void>(
+  context: context,
+  isScrollControlled: true,
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<FoodSearchCubit>(),
+    child: _LogFoodSheet(food: food, initialMealType: initialMealType ?? MealType.breakfast),
+  ),
+);
 
 class _LogFoodSheet extends StatefulWidget {
   const _LogFoodSheet({required this.food, required this.initialMealType});
@@ -107,7 +105,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
             children: [
               for (final mealType in MealType.values)
                 ChoiceChip(
-                  label: Text(mealTypeLabel(l10n, mealType)),
+                  label: Text(mealType.getLabel(l10n)),
                   selected: _mealType == mealType,
                   onSelected: (_) => setState(() => _mealType = mealType),
                 ),

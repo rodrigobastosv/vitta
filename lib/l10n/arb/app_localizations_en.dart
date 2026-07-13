@@ -88,6 +88,24 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String dietCaloriesOfGoal(int goal) {
+    return 'of $goal kcal';
+  }
+
+  @override
+  String dietCaloriesLeft(int calories) {
+    return '$calories kcal left';
+  }
+
+  @override
+  String dietCaloriesOver(int calories) {
+    return '$calories kcal over';
+  }
+
+  @override
+  String get dietAddFood => 'Add food';
+
+  @override
   String get dietProteinLabel => 'Protein';
 
   @override
@@ -120,7 +138,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietEmptyTitle => 'Nothing logged yet';
 
   @override
+  String get dietNotTodayEmptyTitle => 'Nothing logged on that day';
+
+  @override
   String get dietEmptyMessage => 'Tap the + button to add the first food of the day.';
+
+  @override
+  String get dietNotTodayEmptyMessage => 'You cannot log meals on past days.';
 
   @override
   String get dietInvalidQuantity => 'Enter a quantity greater than zero.';

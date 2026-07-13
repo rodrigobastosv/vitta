@@ -37,6 +37,25 @@
       "calories": {"type": "int"}
     }
   },
+  "dietCaloriesOfGoal": "of {goal} kcal",
+  "@dietCaloriesOfGoal": {
+    "placeholders": {
+      "goal": {"type": "int"}
+    }
+  },
+  "dietCaloriesLeft": "{calories} kcal left",
+  "@dietCaloriesLeft": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietCaloriesOver": "{calories} kcal over",
+  "@dietCaloriesOver": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietAddFood": "Add food",
   "dietProteinLabel": "Protein",
   "dietCarbsLabel": "Carbs",
   "dietFatLabel": "Fat",
@@ -53,7 +72,9 @@
   "dietPreviousDayTooltip": "Previous day",
   "dietNextDayTooltip": "Next day",
   "dietEmptyTitle": "Nothing logged yet",
+  "dietNotTodayEmptyTitle": "Nothing logged on that day",
   "dietEmptyMessage": "Tap the + button to add the first food of the day.",
+  "dietNotTodayEmptyMessage": "You cannot log meals on past days.",
   "dietInvalidQuantity": "Enter a quantity greater than zero.",
   "dietQuantityLabel": "Quantity ({unit})",
   "@dietQuantityLabel": {

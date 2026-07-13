@@ -54,7 +54,6 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
   Widget build(BuildContext context) {
     final materialLocalizations = MaterialLocalizations.of(context);
     final isCurrentMonth = _displayedMonth == _monthOf(DateTime.now());
-
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(VTSpacing.m),

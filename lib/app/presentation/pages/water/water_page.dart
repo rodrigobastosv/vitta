@@ -41,11 +41,7 @@ class WaterPage extends StatelessWidget {
               icon: const Icon(Icons.flag_outlined),
               tooltip: l10n.waterGoalDialogTitle,
               onPressed: () async {
-                final newGoalMl = await showEditWaterGoalDialog(
-                  context: context,
-                  currentGoalMl: state.dailyGoalMl,
-                  unitSystem: unitSystem,
-                );
+                final newGoalMl = await showEditWaterGoalDialog(context: context, currentGoalMl: state.dailyGoalMl, unitSystem: unitSystem);
                 if (newGoalMl != null) {
                   await cubit.changeDailyGoal(goalMl: newGoalMl);
                 }

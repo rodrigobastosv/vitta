@@ -52,18 +52,12 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
 
   Future<void> addWater({required double amountMl}) async {
     final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
-    await loggedResult.when(
-      (error) => Future.sync(() => emitPresentation(WaterError(message: error.message))),
-      (_) => loadToday(),
-    );
+    await loggedResult.when((error) => Future.sync(() => emitPresentation(WaterError(message: error.message))), (_) => loadToday());
   }
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteWaterLogUseCase(logId: logId);
-    await deletedResult.when(
-      (error) => Future.sync(() => emitPresentation(WaterError(message: error.message))),
-      (_) => loadToday(),
-    );
+    await deletedResult.when((error) => Future.sync(() => emitPresentation(WaterError(message: error.message))), (_) => loadToday());
   }
 
   Future<void> changeDailyGoal({required double goalMl}) async {

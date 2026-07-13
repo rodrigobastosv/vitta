@@ -11,8 +11,7 @@ class SleepRepository {
   Future<Result<VTError, SleepLog>> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) =>
       _supabaseSleepDataSource.logSleep(bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
 
-  Future<Result<VTError, List<SleepLog>>> getRecentSleepLogs({required int days}) =>
-      _supabaseSleepDataSource.getRecentLogs(days: days);
+  Future<Result<VTError, List<SleepLog>>> getRecentSleepLogs({required int days}) => _supabaseSleepDataSource.getRecentLogs(days: days);
 
   Future<Result<VTError, void>> deleteSleepLog({required String logId}) => _supabaseSleepDataSource.deleteSleepLog(logId: logId);
 }

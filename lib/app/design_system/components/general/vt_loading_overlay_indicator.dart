@@ -28,9 +28,7 @@ class _VTLoadingOverlayIndicatorState extends State<VTLoadingOverlayIndicator> w
         child: Stack(
           alignment: Alignment.center,
           children: [
-            const SizedBox.expand(
-              child: CircularProgressIndicator(strokeWidth: 3, color: VTColors.greenLight),
-            ),
+            const SizedBox.expand(child: CircularProgressIndicator(strokeWidth: 3, color: VTColors.greenLight)),
             ScaleTransition(
               scale: Tween(begin: 0.85, end: 1.05).animate(pulse),
               child: FadeTransition(

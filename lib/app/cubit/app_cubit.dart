@@ -7,8 +7,7 @@ import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.d
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 
 class AppCubit extends PresentationCubit<AppSettings, AppPresentationEvent> {
-  AppCubit({required GetAppSettingsUseCase getAppSettingsUseCase, required this._saveAppSettingsUseCase})
-    : super(getAppSettingsUseCase());
+  AppCubit({required GetAppSettingsUseCase getAppSettingsUseCase, required this._saveAppSettingsUseCase}) : super(getAppSettingsUseCase());
 
   final SaveAppSettingsUseCase _saveAppSettingsUseCase;
 

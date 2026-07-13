@@ -27,9 +27,6 @@ void main() {
 
     final searchResult = await useCase(query: 'banana');
 
-    searchResult.when(
-      (error) => expect(error, const VTError(message: 'network error')),
-      (_) => fail('expected Failure, got Success'),
-    );
+    searchResult.when((error) => expect(error, const VTError(message: 'network error')), (_) => fail('expected Failure, got Success'));
   });
 }

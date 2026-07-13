@@ -5,8 +5,9 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_section.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/calorie_pill.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_log_tile.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/meal_type_label.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/meal_avatar.dart';
 
 class MealSectionCard extends StatefulWidget {
   const MealSectionCard({required this.section, required this.onAddFood, required this.onDeleteEntry, super.key});
@@ -20,7 +21,7 @@ class MealSectionCard extends StatefulWidget {
 }
 
 class _MealSectionCardState extends State<MealSectionCard> {
-  bool _isExpanded = true;
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +35,13 @@ class _MealSectionCardState extends State<MealSectionCard> {
         children: [
           Row(
             children: [
+              MealAvatar(icon: section.mealType.icon, color: section.mealType.color),
+              const VTGap.m(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: .start,
                   children: [
-                    Text(mealTypeLabel(l10n, section.mealType), style: VTTextStyles.title(context)),
+                    Text(section.mealType.getLabel(l10n), style: VTTextStyles.title(context)),
                     const VTGap.xs(),
                     Text(
                       l10n.dietMealMacros(
@@ -53,7 +56,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
                 ),
               ),
               const VTGap.s(),
-              Text(l10n.dietMealCalories(section.totalCalories.round()), style: VTTextStyles.bodyStrong(context)),
+              CaloriePill(calories: section.totalCalories.round(), color: section.mealType.color),
               Icon(_isExpanded ? Icons.expand_less : Icons.expand_more, color: colorScheme.onSurfaceVariant),
             ],
           ),
@@ -69,7 +72,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
                 child: TextButton.icon(
                   onPressed: widget.onAddFood,
                   icon: const Icon(Icons.add),
-                  label: Text(l10n.dietAddToMeal(mealTypeLabel(l10n, section.mealType))),
+                  label: Text(l10n.dietAddToMeal(section.mealType.getLabel(l10n))),
                 ),
               ),
           ],

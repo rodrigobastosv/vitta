@@ -9,11 +9,8 @@ class AppSettings extends Equatable {
   final ThemeMode themeMode;
   final UnitSystem unitSystem;
 
-  AppSettings copyWith({Locale? locale, ThemeMode? themeMode, UnitSystem? unitSystem}) => AppSettings(
-    locale: locale ?? this.locale,
-    themeMode: themeMode ?? this.themeMode,
-    unitSystem: unitSystem ?? this.unitSystem,
-  );
+  AppSettings copyWith({Locale? locale, ThemeMode? themeMode, UnitSystem? unitSystem}) =>
+      AppSettings(locale: locale ?? this.locale, themeMode: themeMode ?? this.themeMode, unitSystem: unitSystem ?? this.unitSystem);
 
   @override
   List<Object?> get props => [locale, themeMode, unitSystem];

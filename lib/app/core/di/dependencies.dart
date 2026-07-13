@@ -67,9 +67,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
   G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
   G.registerLazySingleton(() => DietGoalsLocalDataSource(localStorageService: G()));
-  G.registerLazySingleton(
-    () => DietRepository(openFoodFactsDataSource: G(), supabaseDietDataSource: G(), dietGoalsLocalDataSource: G()),
-  );
+  G.registerLazySingleton(() => DietRepository(openFoodFactsDataSource: G(), supabaseDietDataSource: G(), dietGoalsLocalDataSource: G()));
   G.registerLazySingleton(() => SupabaseWaterDataSource(supabaseService: G()));
   G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G()));
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
@@ -99,21 +97,11 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
 
   G.registerFactory(
-    () => DietCubit(
-      getDailyMacrosUseCase: G(),
-      deleteFoodLogUseCase: G(),
-      getMacroGoalsUseCase: G(),
-      getMonthlyMacrosUseCase: G(),
-    ),
+    () => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G(), getMacroGoalsUseCase: G(), getMonthlyMacrosUseCase: G()),
   );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(
-    () => FoodSearchCubit(
-      searchFoodsUseCase: G(),
-      logFoodUseCase: G(),
-      getAppSettingsUseCase: G(),
-      uploadFoodImageUseCase: G(),
-    ),
+    () => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G(), uploadFoodImageUseCase: G()),
   );
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));

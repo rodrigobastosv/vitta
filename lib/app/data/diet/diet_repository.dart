@@ -13,11 +13,7 @@ import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class DietRepository {
-  DietRepository({
-    required this._openFoodFactsDataSource,
-    required this._supabaseDietDataSource,
-    required this._dietGoalsLocalDataSource,
-  });
+  DietRepository({required this._openFoodFactsDataSource, required this._supabaseDietDataSource, required this._dietGoalsLocalDataSource});
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
@@ -63,9 +59,7 @@ class DietRepository {
       final date = entry.log.loggedDate;
       entriesByDate.putIfAbsent(date, () => []).add(entry);
     }
-    return {
-      for (final MapEntry(:key, :value) in entriesByDate.entries) key: DailyMacros(entries: value),
-    };
+    return {for (final MapEntry(:key, :value) in entriesByDate.entries) key: DailyMacros(entries: value)};
   }
 
   Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>

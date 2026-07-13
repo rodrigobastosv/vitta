@@ -20,11 +20,7 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: MealSectionCard(
-          section: section,
-          onAddFood: onAddFood,
-          onDeleteEntry: (entry) => onDeleteEntry?.call(entry),
-        ),
+        body: MealSectionCard(section: section, onAddFood: onAddFood, onDeleteEntry: (entry) => onDeleteEntry?.call(entry)),
       ),
     ),
   );
@@ -32,26 +28,32 @@ void main() {
   MealSection buildBreakfast() => MealSection(
     mealType: MealType.breakfast,
     entries: [
-      FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Oatmeal'), log: FoodLogFactory.build()),
+      FoodLogEntryFactory.build(
+        food: FoodFactory.build(name: 'Oatmeal'),
+        log: FoodLogFactory.build(),
+      ),
     ],
   );
 
-  testWidgets('starts expanded showing its entries, then collapses on tap', (tester) async {
+  testWidgets('starts collapsed and then expands on tap', (tester) async {
     await pumpMealSectionCard(tester, section: buildBreakfast());
 
     expect(find.text('Breakfast'), findsOneWidget);
-    expect(find.text('Oatmeal'), findsOneWidget);
+    expect(find.text('Oatmeal'), findsNothing);
 
     await tester.tap(find.text('Breakfast'));
     await tester.pumpAndSettle();
 
     expect(find.text('Breakfast'), findsOneWidget);
-    expect(find.text('Oatmeal'), findsNothing);
+    expect(find.text('Oatmeal'), findsOneWidget);
   });
 
   testWidgets('shows the add-to-meal cta and reports taps when onAddFood is provided', (tester) async {
     var added = false;
     await pumpMealSectionCard(tester, section: buildBreakfast(), onAddFood: () => added = true);
+
+    await tester.tap(find.text('Breakfast'));
+    await tester.pumpAndSettle();
 
     final addCta = find.text('Add to Breakfast');
     expect(addCta, findsOneWidget);

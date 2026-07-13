@@ -1,12 +1,25 @@
-// One-time/occasional bulk import of Open Food Facts products into the
-// shared `foods` catalog (see supabase/schema.sql), so search can eventually
-// stop hitting the Open Food Facts API at runtime. Safe to re-run: the upsert
-// keys on `barcode` (merge-duplicates), so a second run backfills columns
-// added since the first import (e.g. `micronutrients`) into existing rows
-// without duplicating them or disturbing user-owned fields.
+// One-time/occasional bulk import of Open Food Facts products into the shared
+// `foods` catalog (see supabase/schema.sql), so search can eventually stop
+// hitting the Open Food Facts API at runtime. Safe to re-run: the upsert keys
+// on `barcode` (merge-duplicates), so a second run backfills columns added
+// since the first import (e.g. `micronutrients`) into existing rows without
+// duplicating them or disturbing user-owned fields.
 //
-// Run with:
+// This reads Open Food Facts' bulk JSONL data export rather than scraping the
+// search API - the export has no rate limit, which the search endpoint does.
+// It streams the gzipped file line by line (one product JSON per line) so it
+// never holds the whole multi-GB dataset in memory, filtering to a curated
+// subset (target countries + a popularity floor) so the catalog stays a
+// relevant slice, not a mirror of the whole export.
+//
+// The export is several GB. Download it once (resumable) and point the tool at
+// the local file - far more robust than streaming it over HTTP in one shot:
+//   wget -c https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz
+//   OFF_EXPORT_PATH=openfoodfacts-products.jsonl.gz \
 //   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... dart run tool/import_food_catalog.dart
+//
+// Without OFF_EXPORT_PATH it streams straight from OFF_EXPORT_URL (default the
+// public export), which works but can't resume if the connection drops.
 //
 // SUPABASE_SERVICE_ROLE_KEY bypasses RLS - never put it in .env (flutter_dotenv
 // loads that file into the shipped app) or commit it anywhere. Pass it as a
@@ -14,6 +27,14 @@
 //
 // Requires supabase/schema.sql to have been re-run first (foods.user_id must
 // be nullable - imported rows have no specific user).
+//
+// Optional env vars:
+//   OFF_EXPORT_PATH=...                      local .jsonl(.gz) export to read
+//   OFF_EXPORT_URL=...                       remote export (default OFF public)
+//   IMPORT_COUNTRIES=Brazil,United States    keep products sold here (empty = all)
+//   IMPORT_MIN_SCANS=5                        keep products scanned at least N times
+//   IMPORT_MAX_PRODUCTS=...                   stop after ~N imported (default: all)
+//   IMPORT_BATCH_SIZE=500                     rows per upsert request
 
 import 'dart:convert';
 import 'dart:io';
@@ -21,14 +42,12 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
-const _countries = ['Brazil', 'United States'];
-const _pageSize = 100;
-const _maxPagesPerCountry = 50;
+const _exportUrl = 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz';
 const _userAgent = 'Vitta - Flutter - Version 1.0 - https://github.com/rodrigobastosv/vitta';
-const _requestDelay = Duration(seconds: 2);
-const _maxFetchAttempts = 4;
-const _retryDelay = Duration(seconds: 4);
-const _countryCooldown = Duration(seconds: 10);
+const _defaultCountries = ['Brazil', 'United States'];
+const _defaultMinScans = 5;
+const _defaultBatchSize = 500;
+const _progressEvery = 100000;
 
 Future<void> main() async {
   final supabaseUrl = Platform.environment['SUPABASE_URL'];
@@ -38,78 +57,128 @@ Future<void> main() async {
     exit(1);
   }
 
+  final countryTags = (_envList('IMPORT_COUNTRIES') ?? _defaultCountries).map(_toCountryTag).toSet();
+  final minScans = _envInt('IMPORT_MIN_SCANS') ?? _defaultMinScans;
+  final maxProducts = _envInt('IMPORT_MAX_PRODUCTS');
+  final batchSize = _envInt('IMPORT_BATCH_SIZE') ?? _defaultBatchSize;
+  final exportPath = Platform.environment['OFF_EXPORT_PATH'];
+  final exportUrl = Platform.environment['OFF_EXPORT_URL'] ?? _exportUrl;
+  stdout.writeln(
+    'Filter: countries ${countryTags.isEmpty ? '(all)' : countryTags.join(', ')}, min scans $minScans'
+    '${maxProducts == null ? '' : ', cap ~$maxProducts'}.',
+  );
+
   final client = http.Client();
+  var scanned = 0;
   var imported = 0;
   var skipped = 0;
+  final batch = <Map<String, dynamic>>[];
+
+  Future<void> flush() async {
+    if (batch.isEmpty) {
+      return;
+    }
+    await _upsertRows(client, supabaseUrl: supabaseUrl, serviceRoleKey: serviceRoleKey, rows: batch);
+    imported += batch.length;
+    batch.clear();
+    stdout.writeln('  imported $imported (scanned $scanned, skipped $skipped)');
+  }
 
   try {
-    for (final country in _countries) {
-      if (country != _countries.first) {
-        stdout.writeln('Cooling down ${_countryCooldown.inSeconds}s before the next country...');
-        await Future.delayed(_countryCooldown);
+    final lines = await _openExportLines(client, exportPath: exportPath, exportUrl: exportUrl);
+    await for (final line in lines) {
+      if (line.trim().isEmpty) {
+        continue;
       }
-      stdout.writeln('Importing products for $country...');
-      for (var page = 1; page <= _maxPagesPerCountry; page++) {
-        final products = await _fetchPage(client, country: country, page: page);
-        if (products == null) {
-          stdout.writeln('  page $page: giving up after $_maxFetchAttempts attempts, skipping to next page');
-          continue;
-        }
-        if (products.isEmpty) {
+      scanned++;
+      if (scanned % _progressEvery == 0) {
+        stdout.writeln('  scanned $scanned lines...');
+      }
+
+      final product = _decodeLine(line);
+      if (product == null || !_matchesCountry(product, countryTags) || !_isPopularEnough(product, minScans)) {
+        skipped++;
+        continue;
+      }
+      final row = _toFoodRow(product);
+      if (row == null) {
+        skipped++;
+        continue;
+      }
+
+      batch.add(row);
+      if (batch.length >= batchSize) {
+        await flush();
+        if (maxProducts != null && imported >= maxProducts) {
           break;
         }
-
-        final rows = products.map(_toFoodRow).nonNulls.toList();
-        skipped += products.length - rows.length;
-        if (rows.isNotEmpty) {
-          await _upsertRows(client, supabaseUrl: supabaseUrl, serviceRoleKey: serviceRoleKey, rows: rows);
-          imported += rows.length;
-        }
-        stdout.writeln('  page $page: +${rows.length} (total imported: $imported, skipped: $skipped)');
-        await Future.delayed(_requestDelay);
       }
     }
+    await flush();
   } finally {
     client.close();
   }
 
-  stdout.writeln('Done. Imported $imported products, skipped $skipped (missing name/barcode/macros).');
+  stdout.writeln('Done. Scanned $scanned, imported $imported, skipped $skipped (wrong country, too few scans, or missing macros).');
 }
 
-// Returns null if every attempt failed (transient error, give up on this
-// page but keep going); an empty list means the country genuinely has no
-// more products (stop paginating for it).
-Future<List<Map<String, dynamic>>?> _fetchPage(http.Client client, {required String country, required int page}) async {
-  // /api/v2/search returns 503s as of this writing; /cgi/search.pl is the
-  // same legacy endpoint OpenFoodFactsDataSource already uses for in-app
-  // search, and it's what's actually reliable, though still prone to
-  // occasional transient 503s under load - hence the retry loop below.
-  // sort_by=unique_scans_n biases the import towards well-known/well-scanned
-  // products first, which tend to have more complete nutriment data.
-  final uri = Uri.https('world.openfoodfacts.org', '/cgi/search.pl', {
-    'action': 'process',
-    'json': '1',
-    'page_size': '$_pageSize',
-    'page': '$page',
-    'tagtype_0': 'countries',
-    'tag_contains_0': 'contains',
-    'tag_0': country,
-    'sort_by': 'unique_scans_n',
-    'fields': 'code,product_name,brands,nutriments,image_url',
-  });
-
-  for (var attempt = 1; attempt <= _maxFetchAttempts; attempt++) {
-    final response = await client.get(uri, headers: {'User-Agent': _userAgent});
-    if (response.statusCode == 200) {
-      final body = jsonDecode(response.body) as Map<String, dynamic>;
-      return (body['products'] as List<dynamic>? ?? []).cast<Map<String, dynamic>>();
+Future<Stream<String>> _openExportLines(http.Client client, {required String? exportPath, required String exportUrl}) async {
+  Stream<List<int>> bytes;
+  var gzipped = true;
+  if (exportPath != null) {
+    stdout.writeln('Reading export from $exportPath');
+    bytes = File(exportPath).openRead();
+    gzipped = exportPath.endsWith('.gz');
+  } else {
+    stdout.writeln('Streaming export from $exportUrl (several GB; set OFF_EXPORT_PATH to a local download for a resumable run)');
+    final request = http.Request('GET', Uri.parse(exportUrl))..headers['User-Agent'] = _userAgent;
+    final response = await client.send(request);
+    if (response.statusCode != 200) {
+      stderr.writeln('Failed to download export (${response.statusCode}).');
+      exit(1);
     }
-    stderr.writeln('  request failed (${response.statusCode}), attempt $attempt/$_maxFetchAttempts');
-    if (attempt < _maxFetchAttempts) {
-      await Future.delayed(_retryDelay);
-    }
+    bytes = response.stream;
   }
-  return null;
+  final decompressed = gzipped ? bytes.transform(gzip.decoder) : bytes;
+  return decompressed.transform(utf8.decoder).transform(const LineSplitter());
+}
+
+Map<String, dynamic>? _decodeLine(String line) {
+  try {
+    return jsonDecode(line) as Map<String, dynamic>;
+  } on FormatException {
+    return null;
+  }
+}
+
+String _toCountryTag(String country) => 'en:${country.trim().toLowerCase().replaceAll(' ', '-')}';
+
+bool _matchesCountry(Map<String, dynamic> product, Set<String> countryTags) {
+  if (countryTags.isEmpty) {
+    return true;
+  }
+  final tags = product['countries_tags'];
+  return tags is List && tags.any(countryTags.contains);
+}
+
+bool _isPopularEnough(Map<String, dynamic> product, int minScans) {
+  if (minScans <= 0) {
+    return true;
+  }
+  return (_numOrNull(product['unique_scans_n']) ?? 0) >= minScans;
+}
+
+List<String>? _envList(String key) {
+  final raw = Platform.environment[key];
+  if (raw == null || raw.trim().isEmpty) {
+    return null;
+  }
+  return raw.split(',').map((value) => value.trim()).where((value) => value.isNotEmpty).toList();
+}
+
+int? _envInt(String key) {
+  final raw = Platform.environment[key];
+  return raw == null ? null : int.tryParse(raw.trim());
 }
 
 Map<String, dynamic>? _toFoodRow(Map<String, dynamic> product) {
@@ -144,10 +213,8 @@ Map<String, dynamic>? _toFoodRow(Map<String, dynamic> product) {
     'carbs_per_100g': carbs,
     'fat_per_100g': fat,
     'fiber_per_100g': _numOrNull(nutriments['fiber_100g']) ?? 0,
-    'micronutrients': {
-      for (final nutrient in Nutrient.values) nutrient.wireKey: ?_numOrNull(nutriments[nutrient.offKey]),
-    },
-    'image_url': product['image_url'] as String?,
+    'micronutrients': {for (final nutrient in Nutrient.values) nutrient.wireKey: ?_numOrNull(nutriments[nutrient.offKey])},
+    'image_url': (product['image_url'] ?? product['image_front_url'] ?? product['image_front_small_url']) as String?,
   };
 }
 

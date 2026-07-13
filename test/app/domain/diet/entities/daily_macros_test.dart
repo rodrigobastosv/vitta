@@ -82,9 +82,13 @@ void main() {
   test('groups entries into meal sections in meal-type order, skipping empty meals', () {
     final dailyMacros = DailyMacros(
       entries: [
-        FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'dinner-1', mealType: MealType.dinner)),
+        FoodLogEntryFactory.build(
+          log: FoodLogFactory.build(id: 'dinner-1', mealType: MealType.dinner),
+        ),
         FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'breakfast-1')),
-        FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'dinner-2', mealType: MealType.dinner)),
+        FoodLogEntryFactory.build(
+          log: FoodLogFactory.build(id: 'dinner-2', mealType: MealType.dinner),
+        ),
       ],
     );
 

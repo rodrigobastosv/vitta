@@ -13,8 +13,10 @@ class HomeRoute extends VTRoute {
   AppRoute get route => .home;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const HomePage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const HomePage();
 
   @override
-  GoRouterRedirect get redirect => (context, state) => _hasSeenOnboardingUseCase() ? null : AppRoute.onboarding.path;
+  GoRouterRedirect get redirect =>
+      (context, state) => _hasSeenOnboardingUseCase() ? null : AppRoute.onboarding.path;
 }

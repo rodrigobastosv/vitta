@@ -6,10 +6,7 @@ import 'package:vitta/app/core/http/vt_http_request.dart';
 
 void main() {
   test('get returns the decoded body on a 200 response', () async {
-    final client = VTHttpClient(
-      baseUrl: 'https://example.com',
-      client: MockClient((request) async => http.Response('{"ok":true}', 200)),
-    );
+    final client = VTHttpClient(baseUrl: 'https://example.com', client: MockClient((request) async => http.Response('{"ok":true}', 200)));
 
     final bodyResult = await client.get(const VTHttpRequest(path: '/foo'));
 

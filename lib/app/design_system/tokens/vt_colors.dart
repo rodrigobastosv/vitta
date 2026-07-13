@@ -28,6 +28,11 @@ abstract class VTColors {
   static const Color outlineLight = Color(0xFFD6D2C4);
   static const Color outlineDark = Color(0xFF3A423C);
 
+  static const Color macroProtein = Color(0xFFE2622B);
+  static const Color macroCarbs = Color(0xFFE8A317);
+  static const Color macroFat = Color(0xFF4F8DF6);
+  static const Color macroFiber = Color(0xFF2F8F7A);
+
   static const Color success = Color(0xFF2F8F7A);
   static const Color warning = Color(0xFFE8A317);
   static const Color error = Color(0xFFBA1A1A);

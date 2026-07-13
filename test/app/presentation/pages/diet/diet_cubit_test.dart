@@ -127,8 +127,12 @@ void main() {
       final yesterday = DateTime.now();
       final expectedDate = DateTime(yesterday.year, yesterday.month, yesterday.day).subtract(const Duration(days: 1));
       return [
-        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isEmpty),
-        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
+        isA<DietState>()
+            .having((state) => state.date, 'date', expectedDate)
+            .having((state) => state.dailyMacros.entries, 'entries', isEmpty),
+        isA<DietState>()
+            .having((state) => state.date, 'date', expectedDate)
+            .having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
       ];
     },
   );
@@ -195,7 +199,10 @@ void main() {
       DateTime(2026, 7, 11): const DailyMacros(entries: []),
     };
     when(
-      () => getMonthlyMacrosUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMonthlyMacrosUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => Success(macrosByDate));
     final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
 
@@ -208,7 +215,10 @@ void main() {
   test('loadMonthMacros keeps the previous macros when it fails', () async {
     final getMonthlyMacrosUseCase = MockGetMonthlyMacrosUseCase();
     when(
-      () => getMonthlyMacrosUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMonthlyMacrosUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
 

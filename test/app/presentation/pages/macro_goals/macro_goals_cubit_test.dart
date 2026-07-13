@@ -30,10 +30,7 @@ void main() {
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
       final saveMacroGoalsUseCase = MockSaveMacroGoalsUseCase();
       when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
-      return CubitsFactories.buildMacroGoalsCubit(
-        getMacroGoalsUseCase: getMacroGoalsUseCase,
-        saveMacroGoalsUseCase: saveMacroGoalsUseCase,
-      );
+      return CubitsFactories.buildMacroGoalsCubit(getMacroGoalsUseCase: getMacroGoalsUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase);
     },
     act: (cubit) => cubit.saveGoals(MacroGoalsFactory.build(calorieGoal: 2500)),
     expect: () => [MacroGoalsFactory.build(calorieGoal: 2500)],

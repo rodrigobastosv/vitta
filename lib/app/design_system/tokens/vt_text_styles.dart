@@ -19,4 +19,7 @@ abstract class VTTextStyles {
 
   static TextStyle caption(BuildContext context) =>
       GoogleFonts.inter(fontSize: 13, fontWeight: .w500, height: 1.3, color: Theme.of(context).colorScheme.onSurfaceVariant);
+
+  static TextStyle overline(BuildContext context) =>
+      GoogleFonts.inter(fontSize: 11, fontWeight: .w500, height: 1.3, color: Theme.of(context).colorScheme.onSurfaceVariant);
 }

@@ -37,6 +37,25 @@
       "calories": {"type": "int"}
     }
   },
+  "dietCaloriesOfGoal": "de {goal} kcal",
+  "@dietCaloriesOfGoal": {
+    "placeholders": {
+      "goal": {"type": "int"}
+    }
+  },
+  "dietCaloriesLeft": "faltam {calories} kcal",
+  "@dietCaloriesLeft": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietCaloriesOver": "{calories} kcal acima",
+  "@dietCaloriesOver": {
+    "placeholders": {
+      "calories": {"type": "int"}
+    }
+  },
+  "dietAddFood": "Adicionar alimento",
   "dietProteinLabel": "Proteína",
   "dietCarbsLabel": "Carboidratos",
   "dietFatLabel": "Gordura",
@@ -53,7 +72,9 @@
   "dietPreviousDayTooltip": "Dia anterior",
   "dietNextDayTooltip": "Próximo dia",
   "dietEmptyTitle": "Nada registrado ainda",
+  "dietNotTodayEmptyTitle": "Nada registrado nesse dia",
   "dietEmptyMessage": "Toque no botão + para adicionar o primeiro alimento do dia.",
+  "dietNotTodayEmptyMessage": "Você nao pode adicionar refeições em dias passados.",
   "dietInvalidQuantity": "Informe uma quantidade maior que zero.",
   "dietQuantityLabel": "Quantidade ({unit})",
   "@dietQuantityLabel": {

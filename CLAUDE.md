@@ -88,9 +88,21 @@ Like loading, an error is never part of `XState` — it's a presentation event, 
 
 ## Design system
 
-Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
+Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`, `VTMacroRing`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
 
 Palette: forest green primary (health, nutrition), coral-orange secondary (energy, warmth), warm-neutral surfaces. Typography: Poppins for headings, Inter for body text (both via `google_fonts`).
+
+The screens are meant to feel modern and visually appealing, not just functional — the diet page (see below) is the reference bar for that polish; new features should aim for the same level. Beauty comes from the design system, never from raw Material widgets in a page: when a screen needs a richer visual (a progress ring, a colored badge, a gradient header), add a reusable `VT`-prefixed component for it rather than one-off styling inline, the same rule as spacing/color tokens. The visual vocabulary already established — favor these over inventing a parallel look: circular progress (`VTMacroRing`) for a single headline metric against a goal, `VTProgressBar` (now colorable via its `color`) for secondary/list metrics, soft rounded cards (`VTCard`), a leading circular icon avatar tinted with a category's accent color at ~16% alpha for section headers, and pill-shaped badges (rounded-full container, accent color at ~16% alpha with the accent as text/icon color) for compact figures like a meal's calorie total.
+
+## Diet page visual language
+
+The diet page (`DietPage`) is the app's showcase screen — the intended look is a modern nutrition tracker (MyFitnessPal / Lifesum family), and it sets the polish bar every other feature should match. Its structure:
+
+- **Macro hero (`MacroSummaryCard`)** — a `VTMacroRing` calorie ring (progress = calories / goal, colored `colorScheme.primary`) sits left with the consumed total, `dietCaloriesOfGoal`, and a `dietCaloriesLeft`/`dietCaloriesOver` delta stacked in its center; the four macros sit right as color-coded `_MacroProgressRow`s (colored dot + label + `progressLabel` + a tinted `VTProgressBar`). Each macro has a fixed accent from `VTColors` — `macroProtein` (coral), `macroCarbs` (amber), `macroFat` (blue), `macroFiber` (teal); reuse these exact colors anywhere macros are shown so the color↔macro mapping stays learnable. The "Vitamins & minerals" toggle is a centered `TextButton.icon` (`unfold_more`/`unfold_less`) below a divider, expanding the sparse micronutrient list — same two-version idea as before (issue #54), just relocated out of the header.
+- **Meal sections (`MealSectionCard`)** — each meal leads with a `_MealAvatar` (circular icon tinted by `mealTypeColor`, icon from `mealTypeIcon`, both in `meal_type_icon.dart`) and shows its calorie total as a `_CaloriePill` in the same accent; the whole card stays tap-to-collapse.
+- **FAB** — a `FloatingActionButton.extended` (`dietAddFood` label), not a bare icon, so the primary action reads clearly.
+
+`VTMacroRing` and the colorable `VTProgressBar` are deliberately generic (a ring/bar against any goal, any color) so the workout and water features can reuse them for their own headline metrics rather than each rolling its own progress visual.
 
 ## App icon and splash screen
 

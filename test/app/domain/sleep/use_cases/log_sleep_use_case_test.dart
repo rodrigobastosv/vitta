@@ -14,9 +14,7 @@ void main() {
     final bedTime = DateTime(2026, 7, 10, 22, 30);
     final wakeTime = DateTime(2026, 7, 11, 6, 45);
     final sleepLog = SleepLogFactory.build();
-    when(
-      () => sleepRepository.logSleep(bedTime: bedTime, wakeTime: wakeTime, qualityRating: 4),
-    ).thenAnswer((_) async => Success(sleepLog));
+    when(() => sleepRepository.logSleep(bedTime: bedTime, wakeTime: wakeTime, qualityRating: 4)).thenAnswer((_) async => Success(sleepLog));
 
     final loggedResult = await useCase(bedTime: bedTime, wakeTime: wakeTime, qualityRating: 4);
 

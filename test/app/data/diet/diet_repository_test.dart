@@ -15,23 +15,26 @@ void main() {
     final from = DateTime(2026, 7);
     final to = DateTime(2026, 7, 31);
     final entries = [
-      FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'a', loggedDate: DateTime(2026, 7, 5))),
-      FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'b', loggedDate: DateTime(2026, 7, 5))),
-      FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'c', loggedDate: DateTime(2026, 7, 11))),
+      FoodLogEntryFactory.build(
+        log: FoodLogFactory.build(id: 'a', loggedDate: DateTime(2026, 7, 5)),
+      ),
+      FoodLogEntryFactory.build(
+        log: FoodLogFactory.build(id: 'b', loggedDate: DateTime(2026, 7, 5)),
+      ),
+      FoodLogEntryFactory.build(
+        log: FoodLogFactory.build(id: 'c', loggedDate: DateTime(2026, 7, 11)),
+      ),
     ];
     when(() => supabaseDietDataSource.getMonthlyLog(from: from, to: to)).thenAnswer((_) async => Success(entries));
     final repository = RepositoriesFactories.buildDietRepository(supabaseDietDataSource: supabaseDietDataSource);
 
     final macrosResult = await repository.getMonthlyMacros(from: from, to: to);
 
-    macrosResult.when(
-      (error) => fail('expected Success, got Failure($error)'),
-      (macrosByDate) {
-        expect(macrosByDate.keys.toSet(), {DateTime(2026, 7, 5), DateTime(2026, 7, 11)});
-        expect(macrosByDate[DateTime(2026, 7, 5)]!.entries, hasLength(2));
-        expect(macrosByDate[DateTime(2026, 7, 11)]!.entries, hasLength(1));
-      },
-    );
+    macrosResult.when((error) => fail('expected Success, got Failure($error)'), (macrosByDate) {
+      expect(macrosByDate.keys.toSet(), {DateTime(2026, 7, 5), DateTime(2026, 7, 11)});
+      expect(macrosByDate[DateTime(2026, 7, 5)]!.entries, hasLength(2));
+      expect(macrosByDate[DateTime(2026, 7, 11)]!.entries, hasLength(1));
+    });
   });
 
   test('searchFoods returns catalog matches without querying Open Food Facts', () async {
@@ -70,9 +73,7 @@ void main() {
     final supabaseDietDataSource = MockSupabaseDietDataSource();
     final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
     final offFoods = [FoodFactory.build()];
-    when(
-      () => supabaseDietDataSource.searchCatalog(query: 'banana'),
-    ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    when(() => supabaseDietDataSource.searchCatalog(query: 'banana')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     when(() => openFoodFactsDataSource.searchFoods(query: 'banana')).thenAnswer((_) async => Success(offFoods));
     final repository = RepositoriesFactories.buildDietRepository(
       supabaseDietDataSource: supabaseDietDataSource,

@@ -22,9 +22,6 @@ void main() {
 
     final uploadResult = await useCase(bytes: bytes, fileExtension: 'jpg');
 
-    uploadResult.when(
-      (error) => fail('expected Success, got Failure($error)'),
-      (value) => expect(value, 'https://example.com/food.jpg'),
-    );
+    uploadResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, 'https://example.com/food.jpg'));
   });
 }

@@ -19,6 +19,22 @@ class DietDateSelector extends StatelessWidget {
   final VoidCallback onNextDay;
   final ValueChanged<DateTime> onPickDate;
 
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    return Row(
+      mainAxisAlignment: .spaceBetween,
+      children: [
+        IconButton(icon: const Icon(Icons.chevron_left), tooltip: l10n.dietPreviousDayTooltip, onPressed: onPreviousDay),
+        TextButton(
+          onPressed: () => _pickDate(context),
+          child: Text(_label(context), style: VTTextStyles.title(context)),
+        ),
+        IconButton(icon: const Icon(Icons.chevron_right), tooltip: l10n.dietNextDayTooltip, onPressed: canGoToNextDay ? onNextDay : null),
+      ],
+    );
+  }
+
   Future<void> _pickDate(BuildContext context) async {
     final picked = await showDietCalendarSheet(context: context);
     if (picked != null) {
@@ -36,25 +52,5 @@ class DietDateSelector extends StatelessWidget {
       final d when d == yesterday => l10n.dietYesterday,
       _ => context.materialLocalizations.formatMediumDate(date),
     };
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Row(
-      mainAxisAlignment: .spaceBetween,
-      children: [
-        IconButton(icon: const Icon(Icons.chevron_left), tooltip: l10n.dietPreviousDayTooltip, onPressed: onPreviousDay),
-        TextButton(
-          onPressed: () => _pickDate(context),
-          child: Text(_label(context), style: VTTextStyles.title(context)),
-        ),
-        IconButton(
-          icon: const Icon(Icons.chevron_right),
-          tooltip: l10n.dietNextDayTooltip,
-          onPressed: canGoToNextDay ? onNextDay : null,
-        ),
-      ],
-    );
   }
 }

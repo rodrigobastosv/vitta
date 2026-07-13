@@ -116,10 +116,7 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
           decoration: InputDecoration(labelText: l10n.macroGoalsFiberLabel),
         ),
-        if (_errorMessage != null) ...[
-          const VTGap.s(),
-          Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-        ],
+        if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
         const VTGap.l(),
         VTPrimaryButton(label: l10n.saveAction, onPressed: _submit),
       ],
