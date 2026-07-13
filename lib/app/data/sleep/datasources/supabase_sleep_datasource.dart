@@ -17,7 +17,7 @@ class SupabaseSleepDataSource {
         wakeTime: wakeTime,
         qualityRating: qualityRating,
       );
-      final row = await _supabaseService.from('sleep_logs').insert(request.toJson()).select().single();
+      final row = await _supabaseService.from(.sleepLogs).insert(request.toJson()).select().single();
       return Success(SleepLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log sleep', cause: error));
@@ -29,7 +29,7 @@ class SupabaseSleepDataSource {
       final since = DateTime.now().subtract(Duration(days: days));
       final sinceDate = DateTime(since.year, since.month, since.day);
       final rows = await _supabaseService
-          .from('sleep_logs')
+          .from(.sleepLogs)
           .select()
           .eq('user_id', _supabaseService.currentUserId)
           .gte('logged_date', sinceDate.toIso8601String().split('T').first)
@@ -42,7 +42,7 @@ class SupabaseSleepDataSource {
 
   Future<Result<VTError, void>> deleteSleepLog({required String logId}) async {
     try {
-      await _supabaseService.from('sleep_logs').delete().eq('id', logId).eq('user_id', _supabaseService.currentUserId);
+      await _supabaseService.from(.sleepLogs).delete().eq('id', logId).eq('user_id', _supabaseService.currentUserId);
       return const Success(null);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to delete sleep log $logId', cause: error));

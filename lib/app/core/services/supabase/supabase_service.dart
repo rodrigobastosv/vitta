@@ -1,4 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:vitta/app/core/services/supabase/supabase_bucket.dart';
+import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 
 class SupabaseService {
   SupabaseService({required this._client});
@@ -15,7 +17,7 @@ class SupabaseService {
 
   String? get currentUserEmail => _client.auth.currentUser?.email;
 
-  SupabaseQueryBuilder from(String table) => _client.from(table);
+  SupabaseQueryBuilder from(SupabaseTable table) => _client.from(table.wireName);
 
-  StorageFileApi storage(String bucket) => _client.storage.from(bucket);
+  StorageFileApi storage(SupabaseBucket bucket) => _client.storage.from(bucket.wireName);
 }

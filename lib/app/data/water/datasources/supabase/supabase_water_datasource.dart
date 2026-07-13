@@ -12,7 +12,7 @@ class SupabaseWaterDataSource {
   Future<Result<VTError, WaterLog>> logWater({required DateTime loggedDate, required double amountMl}) async {
     try {
       final request = CreateWaterLogRequest(userId: _supabaseService.currentUserId, loggedDate: loggedDate, amountMl: amountMl);
-      final row = await _supabaseService.from('water_logs').insert(request.toJson()).select().single();
+      final row = await _supabaseService.from(.waterLogs).insert(request.toJson()).select().single();
       return Success(WaterLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log water', cause: error));
@@ -22,7 +22,7 @@ class SupabaseWaterDataSource {
   Future<Result<VTError, List<WaterLog>>> getDailyLog({required DateTime date}) async {
     try {
       final rows = await _supabaseService
-          .from('water_logs')
+          .from(.waterLogs)
           .select()
           .eq('user_id', _supabaseService.currentUserId)
           .eq('logged_date', date.toIso8601String().split('T').first)
@@ -35,7 +35,7 @@ class SupabaseWaterDataSource {
 
   Future<Result<VTError, void>> deleteWaterLog({required String logId}) async {
     try {
-      await _supabaseService.from('water_logs').delete().eq('id', logId).eq('user_id', _supabaseService.currentUserId);
+      await _supabaseService.from(.waterLogs).delete().eq('id', logId).eq('user_id', _supabaseService.currentUserId);
       return const Success(null);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to delete water log $logId', cause: error));
