@@ -26,6 +26,7 @@ dependencies:
   hive_ce_flutter: ^2.3.4
   bloc_presentation: ^1.1.2+3
   loader_overlay: ^5.0.0
+  sentry_flutter: ^8.14.2
 
 dev_dependencies:
   flutter_test:

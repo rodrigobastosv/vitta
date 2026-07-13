@@ -8,8 +8,14 @@ Supabase (Postgres). Chosen over Firebase because the diet domain is inherently 
 
 - `supabase/schema.sql`: source of truth for the `foods` and `food_logs` tables, run manually in the Supabase SQL editor (no migration tooling yet). Both tables have row-level security scoped to `auth.uid()`, so each user only ever sees their own rows.
 - Auth is anonymous (`signInAnonymously`, wired in `lib/app/bootstrap.dart`) so RLS has a stable `user_id` without building a login UI yet. Swapping in real accounts later means adding email/OAuth sign-in on top of the same anonymous-session-per-device bootstrap — existing anonymous data can be linked via Supabase's `linkIdentity`.
-- `main()` only calls `bootstrap()` (dotenv, Supabase init, anonymous sign-in, `setupDependencies()`) and `runApp()` — infrastructure bootstrap is deliberately kept out of `AppCubit`/widget code so it stays a single, synchronously-ordered sequence and `AppCubit` stays pure presentation state.
-- Credentials live in a gitignored `.env` (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`), loaded via `flutter_dotenv` and read through `lib/app/core/env/env.dart`. Copy `.env.example` to `.env` and fill in a real project's values — the placeholder committed values won't connect to anything.
+- `main()` only calls `bootstrap(appRunner: () => runApp(const VittaApp()))` — infrastructure bootstrap (dotenv, Sentry init, Supabase init, anonymous sign-in, `setupDependencies()`) is deliberately kept out of `AppCubit`/widget code so it stays a single, synchronously-ordered sequence and `AppCubit` stays pure presentation state. `appRunner` is threaded through rather than `main()` calling `bootstrap()` then `runApp()` as two separate statements, so every init step (not just the widget tree) runs inside Sentry's zone — see Error tracking below.
+- Credentials live in a gitignored `.env` (`SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SENTRY_DSN`), loaded via `flutter_dotenv` and read through `lib/app/core/env/env.dart`. Copy `.env.example` to `.env` and fill in a real project's values — the placeholder committed values won't connect to anything.
+
+## Error tracking
+
+`sentry_flutter`, initialized inside `bootstrap()` (`lib/app/bootstrap.dart`) via `SentryFlutter.init((options) => options.dsn = Env.sentryDsn, appRunner: ...)` — the package's own `runZonedGuarded`/`FlutterError.onError` wiring is what actually captures uncaught exceptions, so nothing else in the app needs to touch `runZonedGuarded` directly. `appRunner` wraps the rest of bootstrap (Supabase init, Hive init, `setupDependencies()`) and finally calls the `appRunner` passed in from `main()`, so a startup crash in any of those steps is captured too, not just runtime errors after the widget tree is up.
+
+**Errors surfaced through `Result`/`VTError` (network failures, validation, ...) are not reported to Sentry.** Those are expected, already-handled failure paths shown to the user via `VTErrorDialog` — forwarding every one to Sentry would mostly report noise (e.g. a user opening Diet with no internet connection). Sentry is scoped to genuinely unexpected crashes only. If a specific `VTError` case turns out to be worth tracking, capture it explicitly at that call site (`Sentry.captureException(error.cause)`) rather than wiring every `Failure` generically.
 
 ## Food data
 

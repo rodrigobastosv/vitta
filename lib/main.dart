@@ -12,8 +12,7 @@ import 'package:vitta/app/presentation/routing/app_router.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> main() async {
-  await bootstrap();
-  runApp(const VittaApp());
+  await bootstrap(appRunner: () => runApp(const VittaApp()));
 }
 
 class VittaApp extends StatelessWidget {

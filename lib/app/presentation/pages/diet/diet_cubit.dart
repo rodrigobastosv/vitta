@@ -63,23 +63,12 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   }
 
   Future<void> loadLoggedDatesForMonth(DateTime month) async {
-    final datesResult = await _getLoggedDatesUseCase(
-      from: DateTime(month.year, month.month),
-      to: DateTime(month.year, month.month + 1, 0),
-    );
-    final dates = datesResult.when((_) => null, (value) => value);
-    if (dates != null) {
-      emit(state.copyWith(loggedDatesInMonth: dates));
-    }
+    final datesResult = await _getLoggedDatesUseCase(from: DateTime(month.year, month.month), to: DateTime(month.year, month.month + 1, 0));
+    datesResult.when((_) => null, (dates) => emit(state.copyWith(loggedDatesInMonth: dates)));
   }
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteFoodLogUseCase(logId: logId);
-    final error = deletedResult.when((error) => error, (_) => null);
-    if (error != null) {
-      emitPresentation(DietError(message: error.message, date: state.date));
-      return;
-    }
-    await _loadDate(state.date);
+    deletedResult.when((error) => emitPresentation(DietError(message: error.message, date: state.date)), (_) => _loadDate(state.date));
   }
 }
