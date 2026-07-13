@@ -99,7 +99,7 @@ class _SignedInHeader extends StatelessWidget {
                 ),
               ),
               const VTGap.m(),
-              Expanded(child: Text(email, style: VTTextStyles.title(context))),
+              Expanded(child: Text(email, style: VTTextStyles.bodyStrong(context))),
             ],
           ),
           const VTGap.m(),
