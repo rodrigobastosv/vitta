@@ -4,6 +4,7 @@ import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
@@ -21,6 +22,15 @@ void main() {
     expect(entry.carbs, 15);
     expect(entry.fat, 7.5);
     expect(entry.fiber, 6);
+  });
+
+  test('scales micronutrients by quantity relative to 100g', () {
+    final entry = FoodLogEntryFactory.build(
+      food: FoodFactory.build(micronutrientsPer100g: const {Nutrient.vitaminC: 0.01, Nutrient.iron: 0.002}),
+      log: FoodLogFactory.build(quantityGrams: 50),
+    );
+
+    expect(entry.micronutrients, {Nutrient.vitaminC: 0.005, Nutrient.iron: 0.001});
   });
 
   test('fromMap parses a joined food_logs/foods row', () {

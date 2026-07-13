@@ -161,6 +161,65 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietFiberLabel => 'Fiber';
 
   @override
+  String get dietMicronutrientsTitle => 'Vitamins & minerals';
+
+  @override
+  String dietMicronutrientAmount(String amount, String unit) {
+    return '$amount $unit';
+  }
+
+  @override
+  String get nutrientVitaminA => 'Vitamin A';
+
+  @override
+  String get nutrientVitaminC => 'Vitamin C';
+
+  @override
+  String get nutrientVitaminD => 'Vitamin D';
+
+  @override
+  String get nutrientVitaminE => 'Vitamin E';
+
+  @override
+  String get nutrientVitaminK => 'Vitamin K';
+
+  @override
+  String get nutrientVitaminB1 => 'Vitamin B1';
+
+  @override
+  String get nutrientVitaminB2 => 'Vitamin B2';
+
+  @override
+  String get nutrientVitaminB3 => 'Vitamin B3';
+
+  @override
+  String get nutrientVitaminB6 => 'Vitamin B6';
+
+  @override
+  String get nutrientFolate => 'Folate';
+
+  @override
+  String get nutrientVitaminB12 => 'Vitamin B12';
+
+  @override
+  String get nutrientCalcium => 'Calcium';
+
+  @override
+  String get nutrientIron => 'Iron';
+
+  @override
+  String get nutrientMagnesium => 'Magnesium';
+
+  @override
+  String get nutrientPotassium => 'Potassium';
+
+  @override
+  String get nutrientSodium => 'Sodium';
+
+  @override
+  String get nutrientZinc => 'Zinc';
+
+  @override
   String get dietTakePhotoAction => 'Take photo';
 
   @override

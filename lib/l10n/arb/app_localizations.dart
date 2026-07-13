@@ -380,6 +380,120 @@ abstract class AppLocalizations {
   /// **'Fiber'**
   String get dietFiberLabel;
 
+  /// No description provided for @dietMicronutrientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamins & minerals'**
+  String get dietMicronutrientsTitle;
+
+  /// No description provided for @dietMicronutrientAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} {unit}'**
+  String dietMicronutrientAmount(String amount, String unit);
+
+  /// No description provided for @nutrientVitaminA.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin A'**
+  String get nutrientVitaminA;
+
+  /// No description provided for @nutrientVitaminC.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin C'**
+  String get nutrientVitaminC;
+
+  /// No description provided for @nutrientVitaminD.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin D'**
+  String get nutrientVitaminD;
+
+  /// No description provided for @nutrientVitaminE.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin E'**
+  String get nutrientVitaminE;
+
+  /// No description provided for @nutrientVitaminK.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin K'**
+  String get nutrientVitaminK;
+
+  /// No description provided for @nutrientVitaminB1.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin B1'**
+  String get nutrientVitaminB1;
+
+  /// No description provided for @nutrientVitaminB2.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin B2'**
+  String get nutrientVitaminB2;
+
+  /// No description provided for @nutrientVitaminB3.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin B3'**
+  String get nutrientVitaminB3;
+
+  /// No description provided for @nutrientVitaminB6.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin B6'**
+  String get nutrientVitaminB6;
+
+  /// No description provided for @nutrientFolate.
+  ///
+  /// In en, this message translates to:
+  /// **'Folate'**
+  String get nutrientFolate;
+
+  /// No description provided for @nutrientVitaminB12.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamin B12'**
+  String get nutrientVitaminB12;
+
+  /// No description provided for @nutrientCalcium.
+  ///
+  /// In en, this message translates to:
+  /// **'Calcium'**
+  String get nutrientCalcium;
+
+  /// No description provided for @nutrientIron.
+  ///
+  /// In en, this message translates to:
+  /// **'Iron'**
+  String get nutrientIron;
+
+  /// No description provided for @nutrientMagnesium.
+  ///
+  /// In en, this message translates to:
+  /// **'Magnesium'**
+  String get nutrientMagnesium;
+
+  /// No description provided for @nutrientPotassium.
+  ///
+  /// In en, this message translates to:
+  /// **'Potassium'**
+  String get nutrientPotassium;
+
+  /// No description provided for @nutrientSodium.
+  ///
+  /// In en, this message translates to:
+  /// **'Sodium'**
+  String get nutrientSodium;
+
+  /// No description provided for @nutrientZinc.
+  ///
+  /// In en, this message translates to:
+  /// **'Zinc'**
+  String get nutrientZinc;
+
   /// No description provided for @dietTakePhotoAction.
   ///
   /// In en, this message translates to:

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 class Food extends Equatable {
   const Food({
@@ -10,6 +11,7 @@ class Food extends Equatable {
     required this.carbsPer100g,
     required this.fatPer100g,
     this.fiberPer100g = 0,
+    this.micronutrientsPer100g = const {},
     this.id,
     this.brand,
     this.barcode,
@@ -27,8 +29,19 @@ class Food extends Equatable {
     carbsPer100g: (row['carbs_per_100g'] as num).toDouble(),
     fatPer100g: (row['fat_per_100g'] as num).toDouble(),
     fiberPer100g: (row['fiber_per_100g'] as num?)?.toDouble() ?? 0,
+    micronutrientsPer100g: _micronutrientsFromMap(row['micronutrients']),
     imageUrl: row['image_url'] as String?,
   );
+
+  static Map<Nutrient, double> _micronutrientsFromMap(dynamic raw) {
+    if (raw is! Map<String, dynamic>) {
+      return const {};
+    }
+    return {
+      for (final MapEntry(:key, :value) in raw.entries)
+        if (Nutrient.fromWireKey(key) case final nutrient? when value is num) nutrient: value.toDouble(),
+    };
+  }
 
   /// Null until the food has been persisted (e.g. a fresh Open Food Facts search
   /// result or a custom food the user hasn't saved yet).
@@ -42,6 +55,7 @@ class Food extends Equatable {
   final double carbsPer100g;
   final double fatPer100g;
   final double fiberPer100g;
+  final Map<Nutrient, double> micronutrientsPer100g;
   final String? imageUrl;
 
   @override
@@ -56,6 +70,7 @@ class Food extends Equatable {
     carbsPer100g,
     fatPer100g,
     fiberPer100g,
+    micronutrientsPer100g,
     imageUrl,
   ];
 }

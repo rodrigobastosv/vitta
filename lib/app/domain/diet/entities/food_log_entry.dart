@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 class FoodLogEntry extends Equatable {
   const FoodLogEntry({required this.log, required this.food});
@@ -22,6 +23,10 @@ class FoodLogEntry extends Equatable {
   double get fat => food.fatPer100g * _ratio;
 
   double get fiber => food.fiberPer100g * _ratio;
+
+  Map<Nutrient, double> get micronutrients => {
+    for (final MapEntry(:key, :value) in food.micronutrientsPer100g.entries) key: value * _ratio,
+  };
 
   @override
   List<Object?> get props => [log, food];

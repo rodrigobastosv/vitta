@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
@@ -36,6 +37,23 @@ void main() {
     expect(dailyMacros.totalCarbs, 0);
     expect(dailyMacros.totalFat, 0);
     expect(dailyMacros.totalFiber, 0);
+  });
+
+  test('sums micronutrients across entries, keeping only present nutrients', () {
+    final dailyMacros = DailyMacros(
+      entries: [
+        FoodLogEntryFactory.build(
+          food: FoodFactory.build(micronutrientsPer100g: const {Nutrient.vitaminC: 0.01, Nutrient.iron: 0.002}),
+          log: FoodLogFactory.build(),
+        ),
+        FoodLogEntryFactory.build(
+          food: FoodFactory.build(micronutrientsPer100g: const {Nutrient.vitaminC: 0.005}),
+          log: FoodLogFactory.build(quantityGrams: 200),
+        ),
+      ],
+    );
+
+    expect(dailyMacros.micronutrientTotals, {Nutrient.vitaminC: 0.02, Nutrient.iron: 0.002});
   });
 
   test('groups entries into meal sections in meal-type order, skipping empty meals', () {

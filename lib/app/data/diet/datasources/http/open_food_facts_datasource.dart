@@ -4,6 +4,7 @@ import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/http/vt_http_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 class OpenFoodFactsDataSource {
   OpenFoodFactsDataSource({required this._httpClient});
@@ -59,8 +60,13 @@ class OpenFoodFactsDataSource {
       carbsPer100g: carbs,
       fatPer100g: fat,
       fiberPer100g: _numOrNull(nutriments['fiber_100g']) ?? 0,
+      micronutrientsPer100g: _micronutrients(nutriments),
     );
   }
+
+  Map<Nutrient, double> _micronutrients(Map<String, dynamic> nutriments) => {
+    for (final nutrient in Nutrient.values) nutrient: ?_numOrNull(nutriments[nutrient.offKey]),
+  };
 
   double? _numOrNull(dynamic value) => switch (value) {
     final num n => n.toDouble(),

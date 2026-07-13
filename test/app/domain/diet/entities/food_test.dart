@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 void main() {
   test('fromMap parses a Supabase foods row', () {
@@ -69,5 +70,38 @@ void main() {
     });
 
     expect(food.fiberPer100g, 0);
+  });
+
+  test('fromMap parses known micronutrients and ignores unknown keys', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Banana',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 89,
+      'protein_per_100g': 1.1,
+      'carbs_per_100g': 22.8,
+      'fat_per_100g': 0.3,
+      'micronutrients': {'vitamin_c': 0.0087, 'potassium': 0.358, 'made_up_nutrient': 1.0},
+    });
+
+    expect(food.micronutrientsPer100g, {Nutrient.vitaminC: 0.0087, Nutrient.potassium: 0.358});
+  });
+
+  test('fromMap defaults micronutrients to empty when the column is missing', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Legacy food',
+      'brand': null,
+      'barcode': null,
+      'source': 'custom',
+      'calories_per_100g': 100,
+      'protein_per_100g': 10,
+      'carbs_per_100g': 10,
+      'fat_per_100g': 10,
+    });
+
+    expect(food.micronutrientsPer100g, isEmpty);
   });
 }

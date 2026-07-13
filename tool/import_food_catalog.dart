@@ -1,6 +1,9 @@
 // One-time/occasional bulk import of Open Food Facts products into the
 // shared `foods` catalog (see supabase/schema.sql), so search can eventually
-// stop hitting the Open Food Facts API at runtime.
+// stop hitting the Open Food Facts API at runtime. Safe to re-run: the upsert
+// keys on `barcode` (merge-duplicates), so a second run backfills columns
+// added since the first import (e.g. `micronutrients`) into existing rows
+// without duplicating them or disturbing user-owned fields.
 //
 // Run with:
 //   SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... dart run tool/import_food_catalog.dart
@@ -16,6 +19,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 const _countries = ['Brazil', 'United States'];
 const _pageSize = 100;
@@ -124,8 +128,13 @@ Map<String, dynamic>? _toFoodRow(Map<String, dynamic> product) {
     return null;
   }
 
+  // user_id is intentionally omitted, not set to null: on INSERT the column
+  // falls back to its null default (imported rows are unowned, as the schema
+  // intends), and on the barcode DO UPDATE (see _upsertRows' merge-duplicates)
+  // an absent column is left untouched. So re-running the import to backfill a
+  // newly added column like `micronutrients` refreshes the Open Food Facts
+  // fields without resetting the owner of a row a user first logged themselves.
   return {
-    'user_id': null,
     'name': name,
     'brand': product['brands'] as String?,
     'barcode': barcode,
@@ -135,6 +144,9 @@ Map<String, dynamic>? _toFoodRow(Map<String, dynamic> product) {
     'carbs_per_100g': carbs,
     'fat_per_100g': fat,
     'fiber_per_100g': _numOrNull(nutriments['fiber_100g']) ?? 0,
+    'micronutrients': {
+      for (final nutrient in Nutrient.values) nutrient.wireKey: ?_numOrNull(nutriments[nutrient.offKey]),
+    },
     'image_url': product['image_url'] as String?,
   };
 }

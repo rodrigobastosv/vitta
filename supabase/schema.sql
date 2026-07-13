@@ -25,12 +25,19 @@ create table if not exists foods (
   carbs_per_100g numeric not null check (carbs_per_100g >= 0),
   fat_per_100g numeric not null check (fat_per_100g >= 0),
   fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0),
+  -- Vitamins and minerals per 100g, keyed by Nutrient.wireKey (see
+  -- lib/app/domain/diet/entities/nutrient.dart). A keyed JSONB blob rather than
+  -- one column per nutrient: there are ~dozens, coverage is sparse (most Open
+  -- Food Facts rows only carry macros), and new nutrients shouldn't need a
+  -- migration - each is just another enum case on the app side.
+  micronutrients jsonb not null default '{}',
   image_url text,
   created_at timestamptz not null default now()
 );
 
 -- Added after the initial release; existing tables get backfilled with 0/null.
 alter table foods add column if not exists fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0);
+alter table foods add column if not exists micronutrients jsonb not null default '{}';
 alter table foods add column if not exists image_url text;
 alter table foods alter column user_id drop not null;
 
