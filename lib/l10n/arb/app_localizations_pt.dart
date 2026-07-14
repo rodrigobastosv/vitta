@@ -258,6 +258,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietContinueAction => 'Continuar';
 
   @override
+  String get dietScanLabelAction => 'Escanear tabela nutricional';
+
+  @override
+  String get dietNutritionScanNoData => 'Não foi possível ler a tabela nutricional. Preencha os valores manualmente.';
+
+  @override
   String dietCaloriesPer100g(int calories) {
     return '$calories kcal / 100g';
   }

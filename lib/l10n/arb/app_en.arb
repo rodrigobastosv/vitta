@@ -126,6 +126,8 @@
   "dietTakePhotoAction": "Take photo",
   "dietChooseFromGalleryAction": "Choose from gallery",
   "dietContinueAction": "Continue",
+  "dietScanLabelAction": "Scan nutrition label",
+  "dietNutritionScanNoData": "Couldn't read the nutrition label. Enter the values manually.",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
