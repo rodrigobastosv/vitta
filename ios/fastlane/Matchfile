@@ -1,0 +1,7 @@
+# The certificates repo is passed in rather than committed: it's a separate
+# private repo and its URL is deployment config, not source. Run
+# `bundle exec fastlane match appstore` once locally to seed it.
+git_url(ENV.fetch('MATCH_GIT_URL'))
+storage_mode('git')
+type('appstore')
+app_identifier(['com.rodrigobastosv.vitta'])

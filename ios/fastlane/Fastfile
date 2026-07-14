@@ -1,0 +1,81 @@
+default_platform(:ios)
+
+APP_IDENTIFIER = 'com.rodrigobastosv.vitta'.freeze
+TEAM_ID = 'SDRL4XQA74'.freeze
+PROFILE_NAME = "match AppStore #{APP_IDENTIFIER}".freeze
+REPO_ROOT = File.expand_path('../..', __dir__).freeze
+
+platform :ios do
+  desc 'Build the tagged version and upload it to TestFlight'
+  lane :beta do
+    api_key = app_store_connect_api_key(
+      key_id: ENV.fetch('APP_STORE_CONNECT_KEY_ID'),
+      issuer_id: ENV.fetch('APP_STORE_CONNECT_ISSUER_ID'),
+      key_content: ENV.fetch('APP_STORE_CONNECT_KEY_CONTENT'),
+      is_key_content_base64: true
+    )
+
+    version = version_from_tag
+    # Asking TestFlight rather than counting CI runs: this is the only number
+    # that can't collide with a build already up there, whatever the tag says.
+    build_number = latest_testflight_build_number(api_key: api_key, initial_build_number: 0) + 1
+    UI.message("Building #{version} (#{build_number})")
+
+    # Creates a throwaway keychain so match has somewhere to put the
+    # certificate; a no-op off CI, where the login keychain is used.
+    setup_ci
+
+    # readonly: CI consumes what `match appstore` seeded locally and must never
+    # mint a new certificate - that would silently invalidate the existing one.
+    match(type: 'appstore', readonly: true, api_key: api_key)
+
+    flutter_build(version: version, build_number: build_number)
+
+    # The checked-in project signs automatically so local `flutter run` keeps
+    # working; the archive needs the match profile instead, applied here and
+    # left dirty since CI throws the checkout away.
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: 'Runner.xcodeproj',
+      team_id: TEAM_ID,
+      code_sign_identity: 'Apple Distribution',
+      profile_name: PROFILE_NAME,
+      bundle_identifier: APP_IDENTIFIER,
+      targets: ['Runner']
+    )
+
+    build_app(
+      workspace: 'Runner.xcworkspace',
+      scheme: 'Runner',
+      export_method: 'app-store',
+      export_options: { provisioningProfiles: { APP_IDENTIFIER => PROFILE_NAME } }
+    )
+
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      changelog: "#{version} (#{build_number})"
+    )
+  end
+
+  # `flutter build ios` is what compiles the Dart and refreshes the generated
+  # Xcode config; --no-codesign leaves signing to build_app above, so the
+  # archive is produced once, by fastlane, rather than twice.
+  def flutter_build(version:, build_number:)
+    Dir.chdir(REPO_ROOT) do
+      sh(
+        'flutter', 'build', 'ios', '--release', '--no-codesign',
+        "--build-name=#{version}", "--build-number=#{build_number}"
+      )
+    end
+  end
+
+  # The tag is the source of truth for the version; pubspec's is only a default
+  # for local builds, so it is deliberately never read here.
+  def version_from_tag
+    tag = ENV.fetch('VERSION_TAG')
+    match = tag.match(/\Av?(\d+\.\d+\.\d+)\z/)
+    UI.user_error!("Tag #{tag.inspect} is not a vX.Y.Z version tag") if match.nil?
+    match[1]
+  end
+end

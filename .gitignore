@@ -46,3 +46,11 @@ app.*.map.json
 
 # Environment secrets (Supabase URL/anon key) - copy .env.example to .env locally
 .env
+
+# fastlane build artifacts and run reports (see ios/fastlane/)
+ios/fastlane/report.xml
+ios/fastlane/README.md
+ios/fastlane/test_output/
+ios/vendor/bundle/
+*.ipa
+*.dSYM.zip

@@ -211,6 +211,29 @@ Mirrors `lib/`. No `late` variables, ever — no `setUp`-populated shared state 
 - `test/fixtures/`: builders that need real I/O a mock can't stand in for (e.g. `local_storage_fixture.dart`'s `openTestHiveBox()`/`buildTestLocalStorageService()`, which open a real Hive box against a temp directory). Register cleanup with `addTearDown()` *inside* the fixture function itself — it hooks into whichever test is currently running, so callers never juggle a paired teardown.
 - Cubits: `bloc_test`'s `blocTest`, building every mock and the cubit inside `build:` (not a separate `setUp:` — that would need `late` to share the mock between the two callbacks). If a mock must also be reached from `verify:`, declare it as a `final` local right above that one `blocTest(...)` call, not hoisted to the file/group level. A `PresentationCubit`'s state-transition tests stay in `blocTest` as usual (its `expect:` no longer includes a loading state, since there isn't one); its loading events get their own `blocPresentationTest` (from `bloc_presentation_test`, same file, same `build:` shape) asserting `expectPresentation: () => [isA<XShowLoading>(), isA<XHideLoading>()]` for that cubit's own presentation event type — see `diet_cubit_test.dart`/`water_cubit_test.dart`/`food_search_cubit_test.dart`.
 
+## Releases (TestFlight)
+
+`git tag v1.2.3 && git push origin v1.2.3` is the whole release ritual (issue #81). `.github/workflows/testflight.yml` fires on `v*` tags, runs on `macos-15`, and hands off to `ios/fastlane`'s `beta` lane — all the build logic lives in the Fastfile, the workflow only supplies secrets and the tag.
+
+**The tag is the source of truth for the version**, not `pubspec.yaml`: the lane parses `v1.2.3` → `1.2.3` and rejects anything else outright, so a typo'd tag fails in seconds instead of uploading a mislabelled build. pubspec's `version:` stays a default for local builds and is deliberately never read by the lane. The build number comes from `latest_testflight_build_number + 1` — asking TestFlight is the only source that can't collide with a build already up there, whichever tag is being cut.
+
+The version reaches the binary through Flutter, not Xcode: `flutter build ios --release --no-codesign --build-name/--build-number` writes `ios/Flutter/Generated.xcconfig`, which `Info.plist`'s `$(FLUTTER_BUILD_NAME)`/`$(FLUTTER_BUILD_NUMBER)` read. That's why the lane shells out to Flutter first and lets `build_app` do the archiving — the archive is produced once, by fastlane.
+
+**Signing is `match`** (certs/profiles in a separate private git repo, encrypted), and CI runs it `readonly: true` — CI must never mint a certificate, since that silently invalidates the existing one. The checked-in Xcode project keeps `CODE_SIGN_STYLE = Automatic` so local `flutter run` works untouched; the lane flips it to manual with the match profile just before archiving and leaves the checkout dirty, which is free on a throwaway CI runner.
+
+`.env` is a **bundled asset** (see `pubspec.yaml`) and gitignored, so the workflow writes it from secrets — a build without it ships an app that can't reach Supabase. A missing secret reads as an empty string rather than an error and `Env` would only blow up once a tester launches the build, so the step fails fast on an empty one instead.
+
+`ITSAppUsesNonExemptEncryption = false` in `Info.plist` matters more than it looks: without it every upload stops in TestFlight waiting for the export compliance form to be answered by hand before testers can install. Vitta only talks HTTPS, which is exempt.
+
+**One-time setup, none of which is in the repo:**
+
+1. Register the `com.rodrigobastosv.vitta` bundle id in App Store Connect and create the app record (team `SDRL4XQA74`).
+2. Create a **private** git repo for certificates, then run `cd ios && MATCH_GIT_URL=<repo> bundle exec fastlane match appstore` once locally to seed it.
+3. Create an App Store Connect API key (Users and Access > Integrations), keep the `.p8`.
+4. Add repo secrets: `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY_CONTENT` (the `.p8` base64-encoded — `base64 -i key.p8`), `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION` (base64 of `user:personal-access-token` for the certs repo), plus `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SENTRY_DSN`.
+
+Android's `applicationId` is still `com.example.vitta` — deliberately untouched, since it's the Play identity and there's no Play pipeline yet.
+
 ## Growing this file
 
 This file is intentionally thin right now — it covers only the scaffold and design system. Add a section whenever a new pattern is established: the diet feature's data source and networking layer, local persistence, a new design-system category, the workout feature, etc.
