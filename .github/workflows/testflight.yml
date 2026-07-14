@@ -52,6 +52,27 @@ jobs:
 
       - run: flutter pub get
 
+      # match clones the certificates repo over HTTPS with a Basic auth header.
+      # Building it here from a plain token rather than keeping the base64 in a
+      # secret: hand-encoding it is a trap - a stray newline (`echo` instead of
+      # `printf`, or a careless paste) rides along into the header and GitHub
+      # answers a bare 400 that never mentions the credential.
+      - name: Build the certificates repo auth header
+        env:
+          MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Trimmed because a token pasted with a trailing newline would encode
+          # into the credential itself, which fails as a 401 just as opaquely.
+          token=$(printf '%s' "$MATCH_GIT_TOKEN" | tr -d '[:space:]')
+          if [ -z "$token" ]; then
+            echo "::error::Secret MATCH_GIT_TOKEN is empty; match cannot clone the certificates repo."
+            exit 1
+          fi
+          header=$(printf 'x-access-token:%s' "$token" | base64 | tr -d '\n')
+          echo "::add-mask::$header"
+          echo "MATCH_GIT_BASIC_AUTHORIZATION=$header" >> "$GITHUB_ENV"
+
       - name: Build and upload to TestFlight
         working-directory: ios
         run: bundle exec fastlane ios beta
@@ -62,7 +83,7 @@ jobs:
           APP_STORE_CONNECT_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}
           MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
           MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
-          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          # MATCH_GIT_BASIC_AUTHORIZATION comes from the step above via GITHUB_ENV.
           FASTLANE_SKIP_UPDATE_CHECK: 'true'
           # fastlane warns and can misbehave on a non-UTF-8 locale.
           LANG: en_US.UTF-8

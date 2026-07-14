@@ -64,15 +64,23 @@ certificate.
    `MATCH_PASSWORD`. Run this before the first release; CI is `readonly: true` and will fail
    rather than create a certificate itself.
 
-3. Create a personal access token that can read that repo:
-   <https://github.com/settings/tokens> → Fine-grained → repo `vitta-certificates`,
-   **Contents: Read-only**.
+3. Create a token that can read that repo:
+   <https://github.com/settings/personal-access-tokens/new> → Repository access: only
+   `vitta-certificates` → **Contents: Read-only** (CI only ever reads). Copy the
+   `github_pat_...`, it's shown once.
 
 | GitHub secret | Value |
 | --- | --- |
 | `MATCH_GIT_URL` | `https://github.com/rodrigobastosv/vitta-certificates.git` |
 | `MATCH_PASSWORD` | The passphrase from step 2 |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | `printf 'rodrigobastosv:<token>' \| base64` |
+| `MATCH_GIT_TOKEN` | The `github_pat_...` from step 3, pasted raw |
+
+Paste the token as-is: the workflow base64s it into the `Authorization: Basic` header that
+match needs. Encoding it by hand is a trap that already cost one red build — a newline from
+`echo`, or a careless paste, travels into the header and GitHub answers a bare `400` that
+never mentions the credential. The workflow trims and encodes, so neither can happen.
+
+That header is also why `MATCH_GIT_URL` must be `https://` and not SSH.
 
 ## 4. App credentials → 3 secrets
 
@@ -97,7 +105,7 @@ APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_KEY_CONTENT
 MATCH_GIT_URL
 MATCH_PASSWORD
-MATCH_GIT_BASIC_AUTHORIZATION
+MATCH_GIT_TOKEN
 SUPABASE_URL
 SUPABASE_PUBLISHABLE_KEY
 SENTRY_DSN
