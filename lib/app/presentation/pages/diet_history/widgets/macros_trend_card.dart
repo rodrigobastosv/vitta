@@ -4,12 +4,12 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
+import 'package:vitta/app/design_system/components/charts/vt_legend_dot.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
-import 'package:vitta/app/presentation/pages/diet_history/widgets/trend_legend_dot.dart';
 
 class MacrosTrendCard extends StatelessWidget {
   const MacrosTrendCard({required this.days, required this.macrosByDate, super.key});
@@ -36,9 +36,9 @@ class MacrosTrendCard extends StatelessWidget {
               spacing: VTSpacing.m,
               runSpacing: VTSpacing.s,
               children: [
-                TrendLegendDot(label: l10n.dietProteinLabel, color: VTColors.macroProtein),
-                TrendLegendDot(label: l10n.dietCarbsLabel, color: VTColors.macroCarbs),
-                TrendLegendDot(label: l10n.dietFatLabel, color: VTColors.macroFat),
+                VTLegendDot(label: l10n.dietProteinLabel, color: VTColors.macroProtein),
+                VTLegendDot(label: l10n.dietCarbsLabel, color: VTColors.macroCarbs),
+                VTLegendDot(label: l10n.dietFatLabel, color: VTColors.macroFat),
               ],
             ),
           ],

@@ -10,6 +10,7 @@ import 'package:vitta/app/data/diet/datasources/supabase/requests/update_food_lo
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class SupabaseDietDataSource {
@@ -38,7 +39,14 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, List<Food>>> searchCatalog({required String query}) async {
     try {
-      final rows = await _supabaseService.from(.foods).select().ilike('name', '%$query%').order('times_logged', ascending: false).order('name').limit(20);
+      final rows = await _supabaseService
+          .from(.foods)
+          .select()
+          .ilike('name', '%$query%')
+          .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
+          .order('times_logged', ascending: false)
+          .order('name')
+          .limit(20);
       return Success(rows.map(Food.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to search food catalog', cause: error));

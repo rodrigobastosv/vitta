@@ -372,6 +372,67 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get dietRecipesTitle => 'My recipes';
+
+  @override
+  String get dietRecipesEmptyTitle => 'No recipes yet';
+
+  @override
+  String get dietRecipesEmptyMessage => 'Tap + to combine foods into a recipe you can log in one go.';
+
+  @override
+  String get dietCreateRecipeTitle => 'New recipe';
+
+  @override
+  String get dietRecipeNameLabel => 'Recipe name';
+
+  @override
+  String get dietRecipeNameHint => 'Sunday lasagna, protein shake, ...';
+
+  @override
+  String get dietRecipeIngredientsTitle => 'Ingredients';
+
+  @override
+  String get dietRecipeAddIngredientAction => 'Add ingredient';
+
+  @override
+  String get dietRecipeNoIngredientsMessage => 'Add the foods this recipe is made of.';
+
+  @override
+  String get dietRecipeIncomplete => 'Give the recipe a name and at least one ingredient.';
+
+  @override
+  String get dietRecipeTotalsTitle => 'Recipe totals';
+
+  @override
+  String dietRecipeTotalGrams(int grams) {
+    return '$grams g total';
+  }
+
+  @override
+  String get dietRecipeSaveAction => 'Save recipe';
+
+  @override
+  String get dietRecipeSavedToast => 'Saved as a food you can log';
+
+  @override
+  String get dietRecipeDeleteTooltip => 'Remove';
+
+  @override
+  String dietRecipeIngredientCount(int count, int grams) {
+    return '$count ingredients - $grams g';
+  }
+
+  @override
+  String get dietPickIngredientTitle => 'Pick a food';
+
+  @override
+  String get dietRecipeSubtitle => 'Recipes are yours only and never show up in anyone else\'s search.';
+
+  @override
+  String get dietRecipeLogHint => 'Search it by name in Add food to log it on any day.';
+
+  @override
   String get mealTypeBreakfast => 'Breakfast';
 
   @override

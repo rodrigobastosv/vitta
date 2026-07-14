@@ -205,6 +205,36 @@
       "calories": { "type": "int" }
     }
   },
+  "dietRecipesTitle": "My recipes",
+  "dietRecipesEmptyTitle": "No recipes yet",
+  "dietRecipesEmptyMessage": "Tap + to combine foods into a recipe you can log in one go.",
+  "dietCreateRecipeTitle": "New recipe",
+  "dietRecipeNameLabel": "Recipe name",
+  "dietRecipeNameHint": "Sunday lasagna, protein shake, ...",
+  "dietRecipeIngredientsTitle": "Ingredients",
+  "dietRecipeAddIngredientAction": "Add ingredient",
+  "dietRecipeNoIngredientsMessage": "Add the foods this recipe is made of.",
+  "dietRecipeIncomplete": "Give the recipe a name and at least one ingredient.",
+  "dietRecipeTotalsTitle": "Recipe totals",
+  "dietRecipeTotalGrams": "{grams} g total",
+  "dietRecipeSaveAction": "Save recipe",
+  "dietRecipeSavedToast": "Saved as a food you can log",
+  "dietRecipeDeleteTooltip": "Remove",
+  "dietRecipeIngredientCount": "{count} ingredients - {grams} g",
+  "dietPickIngredientTitle": "Pick a food",
+  "dietRecipeSubtitle": "Recipes are yours only and never show up in anyone else's search.",
+  "dietRecipeLogHint": "Search it by name in Add food to log it on any day.",
+  "@dietRecipeTotalGrams": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "@dietRecipeIngredientCount": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "grams": { "type": "int" }
+    }
+  },
   "mealTypeBreakfast": "Breakfast",
   "mealTypeLunch": "Lunch",
   "mealTypeDinner": "Dinner",

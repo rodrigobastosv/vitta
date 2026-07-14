@@ -372,6 +372,67 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get dietRecipesTitle => 'Minhas receitas';
+
+  @override
+  String get dietRecipesEmptyTitle => 'Nenhuma receita ainda';
+
+  @override
+  String get dietRecipesEmptyMessage => 'Toque em + para juntar alimentos numa receita e registrar de uma vez.';
+
+  @override
+  String get dietCreateRecipeTitle => 'Nova receita';
+
+  @override
+  String get dietRecipeNameLabel => 'Nome da receita';
+
+  @override
+  String get dietRecipeNameHint => 'Lasanha de domingo, shake de proteína, ...';
+
+  @override
+  String get dietRecipeIngredientsTitle => 'Ingredientes';
+
+  @override
+  String get dietRecipeAddIngredientAction => 'Adicionar ingrediente';
+
+  @override
+  String get dietRecipeNoIngredientsMessage => 'Adicione os alimentos que compõem a receita.';
+
+  @override
+  String get dietRecipeIncomplete => 'Dê um nome à receita e adicione ao menos um ingrediente.';
+
+  @override
+  String get dietRecipeTotalsTitle => 'Totais da receita';
+
+  @override
+  String dietRecipeTotalGrams(int grams) {
+    return '$grams g no total';
+  }
+
+  @override
+  String get dietRecipeSaveAction => 'Salvar receita';
+
+  @override
+  String get dietRecipeSavedToast => 'Salva como um alimento que você pode registrar';
+
+  @override
+  String get dietRecipeDeleteTooltip => 'Remover';
+
+  @override
+  String dietRecipeIngredientCount(int count, int grams) {
+    return '$count ingredientes - $grams g';
+  }
+
+  @override
+  String get dietPickIngredientTitle => 'Escolher um alimento';
+
+  @override
+  String get dietRecipeSubtitle => 'Receitas são só suas e nunca aparecem na busca de outra pessoa.';
+
+  @override
+  String get dietRecipeLogHint => 'Busque pelo nome em Adicionar alimento para registrar em qualquer dia.';
+
+  @override
   String get mealTypeBreakfast => 'Café da manhã';
 
   @override

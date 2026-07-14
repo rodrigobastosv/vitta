@@ -6,12 +6,15 @@ import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/ocr/nutrition_ocr_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/recipe.dart';
+import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 import 'package:vitta/app/domain/diet/nutrition_label_parser.dart';
 
@@ -21,12 +24,14 @@ class DietRepository {
     required this._supabaseDietDataSource,
     required this._dietGoalsLocalDataSource,
     required this._nutritionOcrDataSource,
+    required this._supabaseRecipeDataSource,
   });
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
   final NutritionOcrDataSource _nutritionOcrDataSource;
+  final SupabaseRecipeDataSource _supabaseRecipeDataSource;
 
   // Below this many catalog hits, the shared catalog is too thin to stand on its
   // own (e.g. a Portuguese term the OFF import barely covers), so Open Food Facts
@@ -74,6 +79,13 @@ class DietRepository {
       _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
+
+  Future<Result<VTError, List<Recipe>>> getRecipes() => _supabaseRecipeDataSource.getRecipes();
+
+  Future<Result<VTError, Recipe>> createRecipe({required String foodId, required List<RecipeIngredient> ingredients}) =>
+      _supabaseRecipeDataSource.createRecipe(foodId: foodId, ingredients: ingredients);
+
+  Future<Result<VTError, void>> deleteRecipe({required String recipeId}) => _supabaseRecipeDataSource.deleteRecipe(recipeId: recipeId);
 
   MacroGoals getMacroGoals() => _dietGoalsLocalDataSource.getGoals();
 

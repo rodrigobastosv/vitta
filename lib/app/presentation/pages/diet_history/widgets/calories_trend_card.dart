@@ -4,13 +4,13 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
+import 'package:vitta/app/design_system/components/charts/vt_legend_dot.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/calorie_average.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
-import 'package:vitta/app/presentation/pages/diet_history/widgets/trend_legend_dot.dart';
 
 class CaloriesTrendCard extends StatelessWidget {
   const CaloriesTrendCard({required this.days, required this.macrosByDate, required this.macroGoals, super.key});
@@ -47,7 +47,7 @@ class CaloriesTrendCard extends StatelessWidget {
           else ...[
             VTBarChart(bars: _bars(), referenceValue: macroGoals.calorieGoal, referenceColor: colorScheme.onSurfaceVariant),
             const VTGap.s(),
-            TrendLegendDot(label: l10n.dietGoalLineLabel, color: colorScheme.onSurfaceVariant, isDashed: true),
+            VTLegendDot(label: l10n.dietGoalLineLabel, color: colorScheme.onSurfaceVariant, isDashed: true),
           ],
         ],
       ),

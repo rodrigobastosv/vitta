@@ -9,9 +9,12 @@ import 'package:vitta/app/presentation/routing/routes/diet_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
 import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
+import 'package:vitta/app/presentation/routing/routes/ingredient_picker_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
 import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
+import 'package:vitta/app/presentation/routing/routes/recipe_form_route.dart';
+import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';
 import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_route.dart';
 import 'package:vitta/app/presentation/routing/routes/water_route.dart';
@@ -25,6 +28,9 @@ abstract class AppRouter {
     DietRoute(),
     DietHistoryRoute(),
     DietDayRoute(),
+    RecipesRoute(),
+    RecipeFormRoute(),
+    IngredientPickerRoute(),
     FoodSearchRoute(),
     CustomFoodRoute(),
     WaterRoute(),

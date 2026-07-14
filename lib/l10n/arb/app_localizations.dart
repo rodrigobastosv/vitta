@@ -746,6 +746,120 @@ abstract class AppLocalizations {
   /// **'{calories} kcal/day'**
   String dietMealSplitAverage(int calories);
 
+  /// No description provided for @dietRecipesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My recipes'**
+  String get dietRecipesTitle;
+
+  /// No description provided for @dietRecipesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No recipes yet'**
+  String get dietRecipesEmptyTitle;
+
+  /// No description provided for @dietRecipesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to combine foods into a recipe you can log in one go.'**
+  String get dietRecipesEmptyMessage;
+
+  /// No description provided for @dietCreateRecipeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New recipe'**
+  String get dietCreateRecipeTitle;
+
+  /// No description provided for @dietRecipeNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe name'**
+  String get dietRecipeNameLabel;
+
+  /// No description provided for @dietRecipeNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sunday lasagna, protein shake, ...'**
+  String get dietRecipeNameHint;
+
+  /// No description provided for @dietRecipeIngredientsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Ingredients'**
+  String get dietRecipeIngredientsTitle;
+
+  /// No description provided for @dietRecipeAddIngredientAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add ingredient'**
+  String get dietRecipeAddIngredientAction;
+
+  /// No description provided for @dietRecipeNoIngredientsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add the foods this recipe is made of.'**
+  String get dietRecipeNoIngredientsMessage;
+
+  /// No description provided for @dietRecipeIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the recipe a name and at least one ingredient.'**
+  String get dietRecipeIncomplete;
+
+  /// No description provided for @dietRecipeTotalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe totals'**
+  String get dietRecipeTotalsTitle;
+
+  /// No description provided for @dietRecipeTotalGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'{grams} g total'**
+  String dietRecipeTotalGrams(int grams);
+
+  /// No description provided for @dietRecipeSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save recipe'**
+  String get dietRecipeSaveAction;
+
+  /// No description provided for @dietRecipeSavedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved as a food you can log'**
+  String get dietRecipeSavedToast;
+
+  /// No description provided for @dietRecipeDeleteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get dietRecipeDeleteTooltip;
+
+  /// No description provided for @dietRecipeIngredientCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} ingredients - {grams} g'**
+  String dietRecipeIngredientCount(int count, int grams);
+
+  /// No description provided for @dietPickIngredientTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a food'**
+  String get dietPickIngredientTitle;
+
+  /// No description provided for @dietRecipeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipes are yours only and never show up in anyone else\'s search.'**
+  String get dietRecipeSubtitle;
+
+  /// No description provided for @dietRecipeLogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search it by name in Add food to log it on any day.'**
+  String get dietRecipeLogHint;
+
   /// No description provided for @mealTypeBreakfast.
   ///
   /// In en, this message translates to:

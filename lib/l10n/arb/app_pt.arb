@@ -205,6 +205,36 @@
       "calories": { "type": "int" }
     }
   },
+  "dietRecipesTitle": "Minhas receitas",
+  "dietRecipesEmptyTitle": "Nenhuma receita ainda",
+  "dietRecipesEmptyMessage": "Toque em + para juntar alimentos numa receita e registrar de uma vez.",
+  "dietCreateRecipeTitle": "Nova receita",
+  "dietRecipeNameLabel": "Nome da receita",
+  "dietRecipeNameHint": "Lasanha de domingo, shake de proteína, ...",
+  "dietRecipeIngredientsTitle": "Ingredientes",
+  "dietRecipeAddIngredientAction": "Adicionar ingrediente",
+  "dietRecipeNoIngredientsMessage": "Adicione os alimentos que compõem a receita.",
+  "dietRecipeIncomplete": "Dê um nome à receita e adicione ao menos um ingrediente.",
+  "dietRecipeTotalsTitle": "Totais da receita",
+  "dietRecipeTotalGrams": "{grams} g no total",
+  "dietRecipeSaveAction": "Salvar receita",
+  "dietRecipeSavedToast": "Salva como um alimento que você pode registrar",
+  "dietRecipeDeleteTooltip": "Remover",
+  "dietRecipeIngredientCount": "{count} ingredientes - {grams} g",
+  "dietPickIngredientTitle": "Escolher um alimento",
+  "dietRecipeSubtitle": "Receitas são só suas e nunca aparecem na busca de outra pessoa.",
+  "dietRecipeLogHint": "Busque pelo nome em Adicionar alimento para registrar em qualquer dia.",
+  "@dietRecipeTotalGrams": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "@dietRecipeIngredientCount": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "grams": { "type": "int" }
+    }
+  },
   "mealTypeBreakfast": "Café da manhã",
   "mealTypeLunch": "Almoço",
   "mealTypeDinner": "Jantar",

@@ -102,7 +102,7 @@ A success confirmation follows the same presentation-event shape as loading/erro
 
 ## Design system
 
-Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`, `VTMacroRing`, `VTToast`, `VTSearchField`, `VTAppearEffect`, `VTBadge`, `VTBarChart`, `VTDistributionBar`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
+Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`, `VTMacroRing`, `VTToast`, `VTSearchField`, `VTAppearEffect`, `VTBadge`, `VTBarChart`, `VTDistributionBar`, `VTLegendDot`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
 
 Palette: forest green primary (health, nutrition), coral-orange secondary (energy, warmth), warm-neutral surfaces. Typography: Poppins for headings, Inter for body text (both via `google_fonts`).
 
@@ -113,9 +113,28 @@ The screens are meant to feel modern and visually appealing, not just functional
 Charts are hand-rolled `VT` components under `design_system/components/charts/`, not a charting package (`fl_chart` was considered and dropped for issue #55) — `VTMacroRing` already set the precedent that a `CustomPainter` we own beats a dependency whose look isn't ours, and the two shapes the app needs are simple enough that the package's tooltips/axes would be paid for in theming fights.
 
 - **`VTBarChart`** — vertical bars over time. Every bar is a `VTBarChartBar` holding a list of `VTBarChartSegment`s (`value` + `color`), so a plain bar (one segment) and a stacked bar (protein/carbs/fat) are the same widget on one scale; `VTBarChartBar.empty()` is a day with no data and paints a faint stub rather than a zero-height bar, which keeps gaps legible. An optional `referenceValue` draws a dashed goal line, and the scale always includes it so the goal can't fall off the top.
-- **`VTDistributionBar`** — one rounded horizontal bar of shares (segments again), for "what is this made of". Used by `CustomFoodEnergySplitCard` (protein/carbs/fat energy split) and `MealSplitCard` (calories per meal).
+- **`VTDistributionBar`** — one rounded horizontal bar of shares (segments again), for "what is this made of". Used by `CustomFoodEnergySplitCard` (protein/carbs/fat energy split), `MealSplitCard` (calories per meal) and `RecipeTotalsCard`.
+- **`VTLegendDot`** — the colour swatch + label that goes under a chart (`isDashed` for a reference line rather than a series).
 
 Both take `VTBarChartSegment`, so a colour+value pair is the one chart primitive. Bars animate in via `TweenAnimationBuilder` like the rest of the design system. Reach for these before writing a one-off `CustomPainter` in a page.
+
+## Recipes
+
+A recipe is a set of foods eaten together (issue #63). The modelling decision that makes everything else small: **a recipe is stored as an ordinary `foods` row** with `source: 'recipe'`, whose per-100g macros are the roll-up of its ingredients. Logging a recipe is therefore the plain `logFood` path — search, the log sheet, editing, the calendar, adherence and the history charts all keep working untouched, and "add a recipe to my day" needs no new write path at all. The two alternatives were dropped for good reasons: expanding a recipe into one `food_log` per ingredient loses the recipe's identity in the day view, and hanging a nullable `recipe_id` off `food_logs` would force `food_id` nullable and give `FoodLogEntry`/`DailyMacros`/`MacroTotals`/history two cases to handle forever.
+
+`recipes` (user_id + food_id) and `recipe_ingredients` (recipe_id + food_id + quantity_grams) only record **what the recipe was built from**, so it can be listed and its ingredients shown; they carry no macros of their own — the foods row is the single source of truth for the name and the numbers. `recipe_ingredients` has no `user_id`: its RLS policy checks the parent recipe's owner instead of duplicating the column.
+
+**Recipes are personal**, unlike the shared catalog they read from: `searchCatalog` adds `.or('source.neq.recipe,user_id.eq.<me>')`, so a row is kept when it isn't a recipe *or* it's mine. That one predicate is the whole visibility rule — recipes still live in the shared `foods` table, they're just filtered out of everyone else's search.
+
+**Deleting a recipe deliberately leaves its foods row behind.** Past `food_logs` reference it and must keep resolving; the leftover food is no different from any other food you logged once and stopped using.
+
+`CreateRecipeUseCase` is the one place with real orchestration: an ingredient picked from an Open Food Facts search has no `id` yet, so each id-less ingredient is `saveFood`ed first (the same save-then-log idea as `LogFoodUseCase`), then the rolled-up `RecipeDraft.toFood()` is saved, then `recipes` + `recipe_ingredients` are written. These are sequential writes, not a transaction — there's no RPC in the project and this matches the existing save-then-log shape, so a mid-way failure can leave an orphan foods row (harmless: it's an unreferenced catalog entry).
+
+`RecipeDraft` (name + ingredients, no id) is what the form edits and what computes the roll-up; `Recipe` (id + food + ingredients) is what comes back persisted. Both mix in `MacroTotals`.
+
+**`MacroTotals` was generalised for this**: it now folds over `FoodPortion` (a mixin pairing a `Food` with `quantityGrams`, and deriving calories/protein/carbs/fat/fiber/micronutrients from it) rather than `FoodLogEntry` specifically, so a recipe ingredient and a logged food total up through the exact same code. `FoodLogEntry` and `RecipeIngredient` both mix in `FoodPortion`; `DailyMacros` still narrows `entries` back to `List<FoodLogEntry>` via a covariant override. `MacroTotals` also gained `totalGrams`, which is what the issue's "somar ... gramas" asks for and is meaningful for a day too.
+
+UI: a book icon in the diet `AppBar` opens `RecipesPage` (`/diet/recipes`, list + delete + FAB), whose FAB opens `RecipeFormPage` (`/diet/recipes/new`). The form's "add ingredient" pushes `IngredientPickerPage` (`/diet/recipes/new/ingredient`), which reuses `FoodSearchCubit` and `FoodSearchResultTile` but pops a `RecipeIngredient` instead of logging — `FoodSearchPage` stays single-purpose rather than growing a "pick" mode. `RecipeTotalsCard` shows the live roll-up as the draft grows.
 
 ## Diet history page
 
