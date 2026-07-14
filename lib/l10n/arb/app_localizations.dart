@@ -554,6 +554,18 @@ abstract class AppLocalizations {
   /// **'Continue'**
   String get dietContinueAction;
 
+  /// No description provided for @dietScanLabelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan nutrition label'**
+  String get dietScanLabelAction;
+
+  /// No description provided for @dietNutritionScanNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the nutrition label. Enter the values manually.'**
+  String get dietNutritionScanNoData;
+
   /// No description provided for @dietCaloriesPer100g.
   ///
   /// In en, this message translates to:

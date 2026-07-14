@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/text_recognition/ocr_text_line.dart';
 
 import '../../../factories/entities/food_factory.dart';
 import '../../../factories/entities/food_log_entry_factory.dart';
@@ -117,5 +118,38 @@ void main() {
     final foodsResult = await repository.searchFoods(query: 'patinho');
 
     foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, catalogFoods));
+  });
+
+  test('scanNutritionLabel parses the recognized lines into per-100g facts', () async {
+    final nutritionOcrDataSource = MockNutritionOcrDataSource();
+    const lines = [
+      OcrTextLine(text: 'Valor energético 250 kcal', top: 0, bottom: 8, left: 0),
+      OcrTextLine(text: 'Proteínas 12 g', top: 10, bottom: 18, left: 0),
+      OcrTextLine(text: 'Carboidratos 30 g', top: 20, bottom: 28, left: 0),
+      OcrTextLine(text: 'Gorduras totais 8 g', top: 30, bottom: 38, left: 0),
+    ];
+    when(() => nutritionOcrDataSource.recognizeText(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Success(lines));
+    final repository = RepositoriesFactories.buildDietRepository(nutritionOcrDataSource: nutritionOcrDataSource);
+
+    final scanResult = await repository.scanNutritionLabel(imagePath: '/tmp/label.jpg');
+
+    scanResult.when((error) => fail('expected Success, got Failure($error)'), (facts) {
+      expect(facts.caloriesPer100g, 250);
+      expect(facts.proteinPer100g, 12);
+      expect(facts.carbsPer100g, 30);
+      expect(facts.fatPer100g, 8);
+    });
+  });
+
+  test('scanNutritionLabel forwards a datasource failure', () async {
+    final nutritionOcrDataSource = MockNutritionOcrDataSource();
+    when(
+      () => nutritionOcrDataSource.recognizeText(imagePath: '/tmp/label.jpg'),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'ocr boom')));
+    final repository = RepositoriesFactories.buildDietRepository(nutritionOcrDataSource: nutritionOcrDataSource);
+
+    final scanResult = await repository.scanNutritionLabel(imagePath: '/tmp/label.jpg');
+
+    scanResult.when((error) => expect(error.message, 'ocr boom'), (facts) => fail('expected Failure, got Success($facts)'));
   });
 }

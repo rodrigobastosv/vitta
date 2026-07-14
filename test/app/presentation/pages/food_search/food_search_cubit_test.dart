@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
@@ -148,5 +149,16 @@ void main() {
     final uploadResult = await cubit.uploadFoodImage(bytes: bytes, fileExtension: 'jpg');
 
     uploadResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, 'https://example.com/food.jpg'));
+  });
+
+  test('scanNutritionLabel delegates to the use case', () async {
+    final scanNutritionLabelUseCase = MockScanNutritionLabelUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(scanNutritionLabelUseCase: scanNutritionLabelUseCase);
+    const facts = ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10);
+    when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Success(facts));
+
+    final scanResult = await cubit.scanNutritionLabel(imagePath: '/tmp/label.jpg');
+
+    scanResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, facts));
   });
 }

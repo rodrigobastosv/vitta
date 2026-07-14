@@ -10,7 +10,7 @@ import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
-import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
 Future<Food?> showCustomFoodSheet({required BuildContext context}) => showModalBottomSheet<Food>(
@@ -37,6 +37,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
   String _pickedImageExtension = 'jpg';
   String? _errorMessage;
   bool _isSaving = false;
+  bool _isScanning = false;
 
   @override
   void dispose() {
@@ -51,9 +52,9 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
 
   double? _parse(String text) => double.tryParse(text.replaceAll(',', '.'));
 
-  Future<void> _pickImage() async {
+  Future<ImageSource?> _pickImageSource() {
     final l10n = context.l10n;
-    final source = await showModalBottomSheet<ImageSource>(
+    return showModalBottomSheet<ImageSource>(
       context: context,
       builder: (sheetContext) => SafeArea(
         child: Column(
@@ -73,6 +74,10 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    final source = await _pickImageSource();
     if (source == null) {
       return;
     }
@@ -88,6 +93,54 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
       _pickedImageBytes = bytes;
       _pickedImageExtension = pickedFile.name.contains('.') ? pickedFile.name.split('.').last : 'jpg';
     });
+  }
+
+  Future<void> _scanNutritionLabel() async {
+    final source = await _pickImageSource();
+    if (source == null) {
+      return;
+    }
+    final pickedFile = await ImagePicker().pickImage(source: source, maxWidth: 1600);
+    if (pickedFile == null || !mounted) {
+      return;
+    }
+    setState(() {
+      _isScanning = true;
+      _errorMessage = null;
+    });
+    final scanResult = await context.read<FoodSearchCubit>().scanNutritionLabel(imagePath: pickedFile.path);
+    if (!mounted) {
+      return;
+    }
+    final l10n = context.l10n;
+    scanResult.when(
+      (error) => setState(() {
+        _isScanning = false;
+        _errorMessage = error.message;
+      }),
+      (facts) => setState(() {
+        _isScanning = false;
+        if (facts.hasAnyValue) {
+          _applyScannedFacts(facts);
+        } else {
+          _errorMessage = l10n.dietNutritionScanNoData;
+        }
+      }),
+    );
+  }
+
+  void _applyScannedFacts(ScannedNutritionFacts facts) {
+    _fillNutrient(_caloriesController, facts.caloriesPer100g);
+    _fillNutrient(_proteinController, facts.proteinPer100g);
+    _fillNutrient(_carbsController, facts.carbsPer100g);
+    _fillNutrient(_fatController, facts.fatPer100g);
+    _fillNutrient(_fiberController, facts.fiberPer100g);
+  }
+
+  void _fillNutrient(TextEditingController controller, double? value) {
+    if (value != null) {
+      controller.text = value == value.roundToDouble() ? value.toInt().toString() : value.toString();
+    }
   }
 
   Future<void> _submit() async {
@@ -109,7 +162,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
       _finish(
         Food(
           name: name,
-          source: FoodSource.custom,
+          source: .custom,
           caloriesPer100g: calories,
           proteinPer100g: protein,
           carbsPer100g: carbs,
@@ -139,7 +192,7 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
     _finish(
       Food(
         name: name,
-        source: FoodSource.custom,
+        source: .custom,
         caloriesPer100g: calories,
         proteinPer100g: protein,
         carbsPer100g: carbs,
@@ -198,6 +251,17 @@ class _CustomFoodSheetState extends State<_CustomFoodSheet> {
             TextField(
               controller: _nameController,
               decoration: InputDecoration(labelText: l10n.dietFoodNameLabel),
+            ),
+            const VTGap.s(),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _isScanning ? null : _scanNutritionLabel,
+                icon: _isScanning
+                    ? const SizedBox(width: 18, height: 18, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.document_scanner_outlined),
+                label: Text(l10n.dietScanLabelAction),
+              ),
             ),
             const VTGap.s(),
             TextField(
