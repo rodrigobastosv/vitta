@@ -13,6 +13,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Apple rejects any upload built with an SDK older than iOS 26, and the
+      # macos-15 image still defaults to Xcode 16.4 (iOS 18.5 SDK). Pinned to a
+      # version rather than "latest" so an image refresh can't silently move the
+      # SDK under a release build.
+      - name: Select Xcode 26
+        run: |
+          set -euo pipefail
+          xcode=/Applications/Xcode_26.3.app
+          if [ ! -d "$xcode" ]; then
+            echo "::error::$xcode is gone from the runner image. Available: $(ls -d /Applications/Xcode_2*.app 2>/dev/null | tr '\n' ' ')"
+            exit 1
+          fi
+          sudo xcode-select -switch "$xcode"
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-version
+
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
