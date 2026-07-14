@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
+import 'package:vitta/app/presentation/routing/logging_navigator_observer.dart';
 import 'package:vitta/app/presentation/routing/routes/auth_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
 import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
@@ -29,5 +30,9 @@ abstract class AppRouter {
     AuthRoute(),
   ];
 
-  static final GoRouter router = GoRouter(initialLocation: AppRoute.home.path, routes: _routes.map((route) => route.toGoRoute()).toList());
+  static final GoRouter router = GoRouter(
+    initialLocation: AppRoute.home.path,
+    observers: [LoggingNavigatorObserver()],
+    routes: _routes.map((route) => route.toGoRoute()).toList(),
+  );
 }

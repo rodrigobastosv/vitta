@@ -14,11 +14,13 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart'
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
+import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
+    registerFallbackValue(<String, Object?>{});
   });
 
   test('search with a blank query stays idle without hitting the use case', () async {
@@ -78,6 +80,21 @@ void main() {
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
     verify(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250)).called(1);
+  });
+
+  test('logFood logs a food_logged user action on success', () async {
+    final loggingService = useMockLog();
+    final logFoodUseCase = MockLogFoodUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    final food = FoodFactory.build();
+    when(
+      () => logFoodUseCase(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+
+    await cubit.logFood(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250);
+
+    final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
+    expect(captured, ['food_logged', {'food': food.name, 'meal': 'dinner'}]);
   });
 
   blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(

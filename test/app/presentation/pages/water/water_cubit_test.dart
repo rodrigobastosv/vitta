@@ -11,12 +11,14 @@ import 'package:vitta/app/presentation/pages/water/water_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/water_log_factory.dart';
+import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/datasources_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
+    registerFallbackValue(<String, Object?>{});
   });
 
   blocTest<WaterCubit, WaterState>(
@@ -78,6 +80,26 @@ void main() {
     act: (cubit) => cubit.addWater(amountMl: 250),
     expect: () => [isA<WaterState>()],
   );
+
+  test('logs a water_logged user action after adding water', () async {
+    final loggingService = useMockLog();
+    final logWaterUseCase = MockLogWaterUseCase();
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    final waterLocalDataSource = MockWaterLocalDataSource();
+    when(() => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250)).thenAnswer((_) async => Success(WaterLogFactory.build()));
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
+    final cubit = CubitsFactories.buildWaterCubit(
+      getDailyWaterUseCase: getDailyWaterUseCase,
+      logWaterUseCase: logWaterUseCase,
+      waterLocalDataSource: waterLocalDataSource,
+    );
+
+    await cubit.addWater(amountMl: 250);
+
+    final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
+    expect(captured, ['water_logged', {'amount_ml': 250.0}]);
+  });
 
   blocTest<WaterCubit, WaterState>(
     'reloads today after successfully deleting a log',

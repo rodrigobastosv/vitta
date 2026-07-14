@@ -1,3 +1,4 @@
+import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -13,5 +14,6 @@ class MacroGoalsCubit extends PresentationCubit<MacroGoals, MacroGoalsPresentati
   Future<void> saveGoals(MacroGoals goals) async {
     emit(goals);
     await _saveMacroGoalsUseCase(goals);
+    Log.action('macro_goals_saved');
   }
 }

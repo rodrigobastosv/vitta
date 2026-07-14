@@ -1,3 +1,4 @@
+import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -31,6 +32,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
         : await _signInUseCase(email: email, password: password);
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (value) {
+      Log.action(state.isSignUpMode ? 'sign_up' : 'sign_in');
       emit(state.copyWith(user: value));
       emitPresentation(AuthSignedIn());
     });
@@ -40,6 +42,9 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     emitPresentation(AuthShowLoading());
     final statusResult = await _signOutUseCase();
     emitPresentation(AuthHideLoading());
-    statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) => emit(state.copyWith(user: user)));
+    statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
+      Log.action('sign_out');
+      emit(state.copyWith(user: user));
+    });
   }
 }

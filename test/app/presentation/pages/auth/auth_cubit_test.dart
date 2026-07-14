@@ -10,9 +10,38 @@ import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
+  test('logs a sign_in user action when signIn succeeds', () async {
+    final loggingService = useMockLog();
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AnonymousUser());
+    final signInUseCase = MockSignInUseCase();
+    when(
+      () => signInUseCase(email: 'a@b.com', password: 'secret1'),
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase)
+      ..setSignUpMode(isSignUp: false);
+
+    await cubit.submit(email: 'a@b.com', password: 'secret1');
+
+    verify(() => loggingService.logAction('sign_in')).called(1);
+  });
+
+  test('logs a sign_out user action when signOut succeeds', () async {
+    final loggingService = useMockLog();
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    final signOutUseCase = MockSignOutUseCase();
+    when(signOutUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signOutUseCase: signOutUseCase);
+
+    await cubit.signOut();
+
+    verify(() => loggingService.logAction('sign_out')).called(1);
+  });
   test('loads the current auth status on construction, defaulting to sign-up mode', () {
     final getUserUseCase = MockGetUserUseCase();
     when(getUserUseCase.call).thenReturn(const AnonymousUser());

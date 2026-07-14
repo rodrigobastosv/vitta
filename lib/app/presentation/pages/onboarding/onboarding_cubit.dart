@@ -1,3 +1,4 @@
+import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_event.dart';
@@ -8,5 +9,8 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
 
   final CompleteOnboardingUseCase _completeOnboardingUseCase;
 
-  Future<void> completeOnboarding() => _completeOnboardingUseCase();
+  Future<void> completeOnboarding() async {
+    await _completeOnboardingUseCase();
+    Log.action('onboarding_completed');
+  }
 }

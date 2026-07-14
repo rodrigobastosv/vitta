@@ -1,3 +1,4 @@
+import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
@@ -72,6 +73,9 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
 
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteFoodLogUseCase(logId: logId);
-    deletedResult.when((error) => emitPresentation(DietError(message: error.message, date: state.date)), (_) => _loadDate(state.date));
+    deletedResult.when((error) => emitPresentation(DietError(message: error.message, date: state.date)), (_) {
+      Log.action('food_log_deleted');
+      return _loadDate(state.date);
+    });
   }
 }

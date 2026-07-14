@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
@@ -55,7 +56,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
       mealType: mealType,
       quantityGrams: quantityGrams,
     );
-    loggedResult.when((_) {}, (_) => emitPresentation(FoodLogged(foodName: food.name, mealType: mealType)));
+    loggedResult.when((_) {}, (_) {
+      Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});
+      emitPresentation(FoodLogged(foodName: food.name, mealType: mealType));
+    });
     return loggedResult;
   }
 
