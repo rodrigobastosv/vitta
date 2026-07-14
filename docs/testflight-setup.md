@@ -73,19 +73,14 @@ certificate.
 | --- | --- |
 | `MATCH_GIT_URL` | `https://github.com/rodrigobastosv/vitta-certificates.git` |
 | `MATCH_PASSWORD` | The passphrase from step 2 |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | base64 of `user:token`, see below |
+| `MATCH_GIT_TOKEN` | The `github_pat_...` from step 3, pasted raw |
 
-`MATCH_GIT_BASIC_AUTHORIZATION` is an HTTP Basic header, which is why `MATCH_GIT_URL` has to
-be `https://` and not SSH:
+Paste the token as-is: the workflow base64s it into the `Authorization: Basic` header that
+match needs. Encoding it by hand is a trap that already cost one red build — a newline from
+`echo`, or a careless paste, travels into the header and GitHub answers a bare `400` that
+never mentions the credential. The workflow trims and encodes, so neither can happen.
 
-```sh
-printf 'rodrigobastosv:github_pat_XXXX' | base64 | pbcopy
-```
-
-**`printf`, not `echo`.** `echo` appends a newline, the newline gets encoded, and the header
-is then quietly wrong — git fails with a bare `403` that says nothing about base64. (macOS
-`base64` doesn't wrap long lines, so nothing else is needed here; GNU `base64` on Linux wraps
-at 76 columns and would want `| tr -d '\n'`.)
+That header is also why `MATCH_GIT_URL` must be `https://` and not SSH.
 
 ## 4. App credentials → 3 secrets
 
@@ -110,7 +105,7 @@ APP_STORE_CONNECT_ISSUER_ID
 APP_STORE_CONNECT_KEY_CONTENT
 MATCH_GIT_URL
 MATCH_PASSWORD
-MATCH_GIT_BASIC_AUTHORIZATION
+MATCH_GIT_TOKEN
 SUPABASE_URL
 SUPABASE_PUBLISHABLE_KEY
 SENTRY_DSN
