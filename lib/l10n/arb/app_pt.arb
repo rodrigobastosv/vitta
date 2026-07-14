@@ -96,8 +96,8 @@
   "dietFoodNameHint": "Iogurte grego, aveia em flocos, ...",
   "dietBrandLabel": "Marca (opcional)",
   "dietBrandHint": "Quem fabrica",
-  "dietAddPhotoAction": "Adicionar foto",
-  "dietChangePhotoAction": "Trocar foto",
+  "addPhotoAction": "Adicionar foto",
+  "changePhotoAction": "Trocar foto",
   "dietScanLabelHint": "Fotografe a tabela nutricional e preenchemos os valores para você.",
   "dietEnergyLabel": "Calorias",
   "dietKcalUnit": "kcal",
@@ -135,8 +135,8 @@
   "nutrientPotassium": "Potássio",
   "nutrientSodium": "Sódio",
   "nutrientZinc": "Zinco",
-  "dietTakePhotoAction": "Tirar foto",
-  "dietChooseFromGalleryAction": "Escolher da galeria",
+  "takePhotoAction": "Tirar foto",
+  "chooseFromGalleryAction": "Escolher da galeria",
   "dietContinueAction": "Continuar",
   "dietScanLabelAction": "Escanear tabela nutricional",
   "dietNutritionScanNoData": "Não foi possível ler a tabela nutricional. Preencha os valores manualmente.",
@@ -203,6 +203,37 @@
   "@dietMealSplitAverage": {
     "placeholders": {
       "calories": { "type": "int" }
+    }
+  },
+  "dietRecipesTitle": "Minhas receitas",
+  "dietRecipesEmptyTitle": "Nenhuma receita ainda",
+  "dietRecipesEmptyMessage": "Toque em + para juntar alimentos numa receita e registrar de uma vez.",
+  "dietEditRecipeTitle": "Editar receita",
+  "dietCreateRecipeTitle": "Nova receita",
+  "dietRecipeNameLabel": "Nome da receita",
+  "dietRecipeNameHint": "Lasanha de domingo, shake de proteína, ...",
+  "dietRecipeIngredientsTitle": "Ingredientes",
+  "dietRecipeAddIngredientAction": "Adicionar ingrediente",
+  "dietRecipeNoIngredientsMessage": "Adicione os alimentos que compõem a receita.",
+  "dietRecipeIncomplete": "Dê um nome à receita e adicione ao menos um ingrediente.",
+  "dietRecipeTotalsTitle": "Totais da receita",
+  "dietRecipeTotalGrams": "{grams} g no total",
+  "dietRecipeSaveAction": "Salvar receita",
+  "dietRecipeSavedToast": "Salva como um alimento que você pode registrar",
+  "dietRecipeDeleteTooltip": "Remover",
+  "dietRecipeIngredientCount": "{count} ingredientes - {grams} g",
+  "dietPickIngredientTitle": "Escolher um alimento",
+  "dietRecipeSubtitle": "Receitas são só suas e nunca aparecem na busca de outra pessoa.",
+  "dietRecipeLogHint": "Busque pelo nome em Adicionar alimento para registrar em qualquer dia.",
+  "@dietRecipeTotalGrams": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "@dietRecipeIngredientCount": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "grams": { "type": "int" }
     }
   },
   "mealTypeBreakfast": "Café da manhã",

@@ -96,8 +96,8 @@
   "dietFoodNameHint": "Greek yogurt, rolled oats, ...",
   "dietBrandLabel": "Brand (optional)",
   "dietBrandHint": "Who makes it",
-  "dietAddPhotoAction": "Add a photo",
-  "dietChangePhotoAction": "Change photo",
+  "addPhotoAction": "Add a photo",
+  "changePhotoAction": "Change photo",
   "dietScanLabelHint": "Snap the nutrition table and we fill in the values for you.",
   "dietEnergyLabel": "Calories",
   "dietKcalUnit": "kcal",
@@ -135,8 +135,8 @@
   "nutrientPotassium": "Potassium",
   "nutrientSodium": "Sodium",
   "nutrientZinc": "Zinc",
-  "dietTakePhotoAction": "Take photo",
-  "dietChooseFromGalleryAction": "Choose from gallery",
+  "takePhotoAction": "Take photo",
+  "chooseFromGalleryAction": "Choose from gallery",
   "dietContinueAction": "Continue",
   "dietScanLabelAction": "Scan nutrition label",
   "dietNutritionScanNoData": "Couldn't read the nutrition label. Enter the values manually.",
@@ -203,6 +203,37 @@
   "@dietMealSplitAverage": {
     "placeholders": {
       "calories": { "type": "int" }
+    }
+  },
+  "dietRecipesTitle": "My recipes",
+  "dietRecipesEmptyTitle": "No recipes yet",
+  "dietRecipesEmptyMessage": "Tap + to combine foods into a recipe you can log in one go.",
+  "dietEditRecipeTitle": "Edit recipe",
+  "dietCreateRecipeTitle": "New recipe",
+  "dietRecipeNameLabel": "Recipe name",
+  "dietRecipeNameHint": "Sunday lasagna, protein shake, ...",
+  "dietRecipeIngredientsTitle": "Ingredients",
+  "dietRecipeAddIngredientAction": "Add ingredient",
+  "dietRecipeNoIngredientsMessage": "Add the foods this recipe is made of.",
+  "dietRecipeIncomplete": "Give the recipe a name and at least one ingredient.",
+  "dietRecipeTotalsTitle": "Recipe totals",
+  "dietRecipeTotalGrams": "{grams} g total",
+  "dietRecipeSaveAction": "Save recipe",
+  "dietRecipeSavedToast": "Saved as a food you can log",
+  "dietRecipeDeleteTooltip": "Remove",
+  "dietRecipeIngredientCount": "{count} ingredients - {grams} g",
+  "dietPickIngredientTitle": "Pick a food",
+  "dietRecipeSubtitle": "Recipes are yours only and never show up in anyone else's search.",
+  "dietRecipeLogHint": "Search it by name in Add food to log it on any day.",
+  "@dietRecipeTotalGrams": {
+    "placeholders": {
+      "grams": { "type": "int" }
+    }
+  },
+  "@dietRecipeIngredientCount": {
+    "placeholders": {
+      "count": { "type": "int" },
+      "grams": { "type": "int" }
     }
   },
   "mealTypeBreakfast": "Breakfast",

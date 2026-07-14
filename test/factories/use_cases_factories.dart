@@ -8,6 +8,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
@@ -35,6 +36,9 @@ abstract class UseCasesFactories {
 
   static LogFoodUseCase buildLogFoodUseCase({MockDietRepository? dietRepository}) =>
       LogFoodUseCase(dietRepository: dietRepository ?? MockDietRepository());
+
+  static SaveRecipeUseCase buildSaveRecipeUseCase({MockDietRepository? dietRepository}) =>
+      SaveRecipeUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
   static GetDailyMacrosUseCase buildGetDailyMacrosUseCase({MockDietRepository? dietRepository}) =>
       GetDailyMacrosUseCase(dietRepository: dietRepository ?? MockDietRepository());

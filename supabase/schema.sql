@@ -47,6 +47,13 @@ alter table foods add column if not exists image_url text;
 alter table foods add column if not exists times_logged integer not null default 0 check (times_logged >= 0);
 alter table foods alter column user_id drop not null;
 
+-- 'recipe' was added for issue #63: a recipe is stored as an ordinary foods row
+-- whose macros are the per-100g roll-up of its ingredients, so logging a recipe
+-- is the plain logFood path and every day/calendar/history view keeps working
+-- untouched. The recipes table below only holds the ingredient list behind it.
+alter table foods drop constraint if exists foods_source_check;
+alter table foods add constraint foods_source_check check (source in ('custom', 'open_food_facts', 'recipe'));
+
 create index if not exists foods_user_id_idx on foods (user_id);
 
 -- A plain (non-partial) unique index: Postgres already treats every NULL as
@@ -132,10 +139,37 @@ create table if not exists sleep_logs (
 
 create index if not exists sleep_logs_user_id_logged_date_idx on sleep_logs (user_id, logged_date);
 
+-- A recipe is a set of foods eaten together. It owns no macros of its own: the
+-- foods row it points at (source = 'recipe') carries the rolled-up per-100g
+-- values, and this table plus recipe_ingredients only records what it was built
+-- from, so it can be listed and rebuilt. Deleting a recipe deliberately leaves
+-- its foods row behind - past food_logs still reference it and must keep
+-- resolving, exactly like any other food you logged once and stopped using.
+create table if not exists recipes (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  food_id uuid not null references foods (id) on delete cascade,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists recipes_user_id_idx on recipes (user_id);
+
+create table if not exists recipe_ingredients (
+  id uuid primary key default gen_random_uuid(),
+  recipe_id uuid not null references recipes (id) on delete cascade,
+  food_id uuid not null references foods (id) on delete cascade,
+  quantity_grams numeric not null check (quantity_grams > 0),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists recipe_ingredients_recipe_id_idx on recipe_ingredients (recipe_id);
+
 alter table foods enable row level security;
 alter table food_logs enable row level security;
 alter table water_logs enable row level security;
 alter table sleep_logs enable row level security;
+alter table recipes enable row level security;
+alter table recipe_ingredients enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -198,3 +232,19 @@ drop policy if exists "Authenticated users can upload food images" on storage.ob
 create policy "Authenticated users can upload food images" on storage.objects
   for insert
   with check (bucket_id = 'food-images' and auth.uid() is not null);
+
+-- Recipes are personal, unlike the foods catalog they read from: only their
+-- author lists them. recipe_ingredients has no user_id of its own - it inherits
+-- the owner of its parent recipe, so the policy checks that instead of
+-- duplicating the column.
+drop policy if exists "Users manage their own recipes" on recipes;
+create policy "Users manage their own recipes" on recipes
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own recipe ingredients" on recipe_ingredients;
+create policy "Users manage their own recipe ingredients" on recipe_ingredients
+  for all
+  using (exists (select 1 from recipes where recipes.id = recipe_ingredients.recipe_id and recipes.user_id = auth.uid()))
+  with check (exists (select 1 from recipes where recipes.id = recipe_ingredients.recipe_id and recipes.user_id = auth.uid()));

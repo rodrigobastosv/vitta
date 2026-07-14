@@ -4,11 +4,14 @@ import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
@@ -36,6 +39,12 @@ class MockGetDailyMacrosUseCase extends Mock implements GetDailyMacrosUseCase {}
 class MockDeleteFoodLogUseCase extends Mock implements DeleteFoodLogUseCase {}
 
 class MockUpdateFoodLogUseCase extends Mock implements UpdateFoodLogUseCase {}
+
+class MockGetRecipesUseCase extends Mock implements GetRecipesUseCase {}
+
+class MockSaveRecipeUseCase extends Mock implements SaveRecipeUseCase {}
+
+class MockDeleteRecipeUseCase extends Mock implements DeleteRecipeUseCase {}
 
 class MockGetMacroGoalsUseCase extends Mock implements GetMacroGoalsUseCase {}
 

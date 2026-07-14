@@ -3,14 +3,14 @@ import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
+import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
+import 'package:vitta/app/design_system/components/general/vt_photo_header.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_form.dart';
-import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_photo_header.dart';
-import 'package:vitta/app/presentation/pages/custom_food/widgets/image_source_sheet.dart';
 
 class CustomFoodPage extends StatelessWidget {
   const CustomFoodPage({super.key});
@@ -48,7 +48,7 @@ class CustomFoodPage extends StatelessWidget {
               backgroundColor: context.colorScheme.surface,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
-                background: CustomFoodPhotoHeader(
+                background: VTPhotoHeader(
                   imageBytes: state.imageBytes,
                   onTap: () => _pickPhoto(context, cubit),
                 ),

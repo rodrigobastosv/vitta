@@ -1,8 +1,10 @@
-import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/food_portion.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 mixin MacroTotals {
-  List<FoodLogEntry> get entries;
+  List<FoodPortion> get entries;
+
+  double get totalGrams => entries.fold(0, (sum, entry) => sum + entry.quantityGrams);
 
   double get totalCalories => entries.fold(0, (sum, entry) => sum + entry.calories);
 

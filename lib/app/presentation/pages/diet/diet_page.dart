@@ -40,6 +40,11 @@ class DietPage extends StatelessWidget {
           title: Text(l10n.dietFeatureTitle),
           actions: [
             IconButton(
+              icon: const Icon(Icons.menu_book_outlined),
+              tooltip: l10n.dietRecipesTitle,
+              onPressed: () => context.pushRoute(.recipes),
+            ),
+            IconButton(
               icon: const Icon(Icons.calendar_month_outlined),
               tooltip: l10n.dietHistoryTitle,
               onPressed: () => context.pushRoute(.dietHistory),
