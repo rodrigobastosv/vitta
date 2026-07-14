@@ -32,6 +32,11 @@ create table if not exists foods (
   -- migration - each is just another enum case on the app side.
   micronutrients jsonb not null default '{}',
   image_url text,
+  -- How many times this food has been logged across every user, maintained by
+  -- the food_logs trigger below so catalog search can rank popular products
+  -- first (see issue #56). Denormalized onto foods because food_logs' RLS scopes
+  -- each user to their own rows, so this count can't be aggregated client-side.
+  times_logged integer not null default 0 check (times_logged >= 0),
   created_at timestamptz not null default now()
 );
 
@@ -39,6 +44,7 @@ create table if not exists foods (
 alter table foods add column if not exists fiber_per_100g numeric not null default 0 check (fiber_per_100g >= 0);
 alter table foods add column if not exists micronutrients jsonb not null default '{}';
 alter table foods add column if not exists image_url text;
+alter table foods add column if not exists times_logged integer not null default 0 check (times_logged >= 0);
 alter table foods alter column user_id drop not null;
 
 create index if not exists foods_user_id_idx on foods (user_id);
@@ -64,6 +70,44 @@ create table if not exists food_logs (
 );
 
 create index if not exists food_logs_user_id_logged_date_idx on food_logs (user_id, logged_date);
+
+-- Keeps foods.times_logged (see the column comment) in sync with food_logs.
+-- security definer so the counter can be bumped on a food row the logging user
+-- doesn't own (imported rows have a null user_id) - foods' own update policy
+-- would otherwise block it. It never touches food_logs itself, so there's no
+-- risk of recursion. greatest(..., 0) keeps the counter from going negative if
+-- a delete ever runs without a matching prior insert.
+create or replace function bump_food_times_logged()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'INSERT' then
+    update foods set times_logged = times_logged + 1 where id = new.food_id;
+  elsif tg_op = 'DELETE' then
+    update foods set times_logged = greatest(times_logged - 1, 0) where id = old.food_id;
+  end if;
+  return null;
+end;
+$$;
+
+drop trigger if exists food_logs_bump_times_logged on food_logs;
+create trigger food_logs_bump_times_logged
+  after insert or delete on food_logs
+  for each row execute function bump_food_times_logged();
+
+-- Reconcile the counter from food_logs (the source of truth). Idempotent:
+-- re-running the whole schema recomputes it from scratch rather than
+-- double-counting - the reset zeroes every row first so a food that has since
+-- lost all its logs is corrected back to 0, then the grouped count re-seeds the
+-- rest.
+update foods set times_logged = 0 where times_logged <> 0;
+update foods f
+set times_logged = sub.cnt
+from (select food_id, count(*) as cnt from food_logs group by food_id) sub
+where f.id = sub.food_id;
 
 create table if not exists water_logs (
   id uuid primary key default gen_random_uuid(),

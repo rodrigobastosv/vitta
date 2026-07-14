@@ -37,7 +37,7 @@ class SupabaseDietDataSource {
 
   Future<Result<VTError, List<Food>>> searchCatalog({required String query}) async {
     try {
-      final rows = await _supabaseService.from(.foods).select().ilike('name', '%$query%').order('name').limit(20);
+      final rows = await _supabaseService.from(.foods).select().ilike('name', '%$query%').order('times_logged', ascending: false).order('name').limit(20);
       return Success(rows.map(Food.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to search food catalog', cause: error));
