@@ -51,11 +51,13 @@ platform :ios do
       export_options: { provisioningProfiles: { APP_IDENTIFIER => PROFILE_NAME } }
     )
 
-    upload_to_testflight(
-      api_key: api_key,
-      skip_waiting_for_build_processing: true,
-      changelog: "#{version} (#{build_number})"
-    )
+    # No changelog on purpose: supplying one silently defeats
+    # skip_waiting_for_build_processing, because fastlane then has to wait for
+    # the build to appear before it can write it. That parks the job for as long
+    # as Apple takes to process, which is minutes at best and hit the job
+    # timeout at worst. The upload itself is the deliverable here; notes can be
+    # written in App Store Connect.
+    upload_to_testflight(api_key: api_key, skip_waiting_for_build_processing: true)
   end
 
   # `flutter build ios` is what compiles the Dart and refreshes the generated
