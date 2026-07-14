@@ -169,22 +169,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietCustomFoodTitle => 'Add a food';
 
   @override
+  String get dietCustomFoodSubtitle => 'It joins the shared catalog for everyone.';
+
+  @override
   String get dietFoodNameLabel => 'Name';
 
   @override
-  String get dietCaloriesPer100gLabel => 'Calories per 100g';
+  String get dietFoodNameHint => 'Greek yogurt, rolled oats, ...';
 
   @override
-  String get dietProteinPer100gLabel => 'Protein per 100g';
+  String get dietBrandLabel => 'Brand (optional)';
 
   @override
-  String get dietCarbsPer100gLabel => 'Carbs per 100g';
+  String get dietBrandHint => 'Who makes it';
 
   @override
-  String get dietFatPer100gLabel => 'Fat per 100g';
+  String get dietAddPhotoAction => 'Add a photo';
 
   @override
-  String get dietFiberPer100gLabel => 'Fiber per 100g';
+  String get dietChangePhotoAction => 'Change photo';
+
+  @override
+  String get dietScanLabelHint => 'Snap the nutrition table and we fill in the values for you.';
+
+  @override
+  String get dietEnergyLabel => 'Calories';
+
+  @override
+  String get dietKcalUnit => 'kcal';
+
+  @override
+  String get dietGramsUnit => 'g';
+
+  @override
+  String get dietEnergySplitTitle => 'Energy split';
+
+  @override
+  String dietMacroPercent(int percent) {
+    return '$percent%';
+  }
 
   @override
   String get dietFiberLabel => 'Fiber';

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/custom_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
@@ -47,7 +48,7 @@ class FoodSearchPage extends StatelessWidget {
               icon: const Icon(Icons.add_circle_outline),
               tooltip: l10n.dietCustomFoodTitle,
               onPressed: () async {
-                final food = await showCustomFoodSheet(context: context);
+                final food = await context.pushRoute<Food>(.customFood);
                 if (food != null && context.mounted) {
                   await showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType);
                 }

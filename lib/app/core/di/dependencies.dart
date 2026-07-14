@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
+import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/logging/console_log_destination.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/logging/logging_service.dart';
@@ -50,6 +51,7 @@ import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart'
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
+import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
@@ -71,6 +73,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => AppCubit(getAppSettingsUseCase: G(), saveAppSettingsUseCase: G()));
 
   G.registerLazySingleton(() => supabaseService);
+  G.registerLazySingleton(ImagePickerService.new);
   Log.service = LoggingService(destinations: const [ConsoleLogDestination(), SentryLogDestination()]);
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
@@ -127,15 +130,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
-  G.registerFactory(
-    () => FoodSearchCubit(
-      searchFoodsUseCase: G(),
-      logFoodUseCase: G(),
-      getAppSettingsUseCase: G(),
-      uploadFoodImageUseCase: G(),
-      scanNutritionLabelUseCase: G(),
-    ),
-  );
+  G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
+  G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(

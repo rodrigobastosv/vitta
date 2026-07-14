@@ -1,5 +1,6 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
+import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
@@ -8,6 +9,7 @@ import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 
 import '../mocks/datasources_mocks.dart';
+import '../mocks/services_mocks.dart';
 import '../mocks/use_cases_mocks.dart';
 
 abstract class CubitsFactories {
@@ -57,14 +59,20 @@ abstract class CubitsFactories {
     MockSearchFoodsUseCase? searchFoodsUseCase,
     MockLogFoodUseCase? logFoodUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
-    MockUploadFoodImageUseCase? uploadFoodImageUseCase,
-    MockScanNutritionLabelUseCase? scanNutritionLabelUseCase,
   }) => FoodSearchCubit(
     searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
     logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static CustomFoodCubit buildCustomFoodCubit({
+    MockUploadFoodImageUseCase? uploadFoodImageUseCase,
+    MockScanNutritionLabelUseCase? scanNutritionLabelUseCase,
+    MockImagePickerService? imagePickerService,
+  }) => CustomFoodCubit(
     uploadFoodImageUseCase: uploadFoodImageUseCase ?? MockUploadFoodImageUseCase(),
     scanNutritionLabelUseCase: scanNutritionLabelUseCase ?? MockScanNutritionLabelUseCase(),
+    imagePickerService: imagePickerService ?? MockImagePickerService(),
   );
 
   static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>

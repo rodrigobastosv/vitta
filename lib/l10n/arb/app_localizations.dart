@@ -380,41 +380,83 @@ abstract class AppLocalizations {
   /// **'Add a food'**
   String get dietCustomFoodTitle;
 
+  /// No description provided for @dietCustomFoodSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'It joins the shared catalog for everyone.'**
+  String get dietCustomFoodSubtitle;
+
   /// No description provided for @dietFoodNameLabel.
   ///
   /// In en, this message translates to:
   /// **'Name'**
   String get dietFoodNameLabel;
 
-  /// No description provided for @dietCaloriesPer100gLabel.
+  /// No description provided for @dietFoodNameHint.
   ///
   /// In en, this message translates to:
-  /// **'Calories per 100g'**
-  String get dietCaloriesPer100gLabel;
+  /// **'Greek yogurt, rolled oats, ...'**
+  String get dietFoodNameHint;
 
-  /// No description provided for @dietProteinPer100gLabel.
+  /// No description provided for @dietBrandLabel.
   ///
   /// In en, this message translates to:
-  /// **'Protein per 100g'**
-  String get dietProteinPer100gLabel;
+  /// **'Brand (optional)'**
+  String get dietBrandLabel;
 
-  /// No description provided for @dietCarbsPer100gLabel.
+  /// No description provided for @dietBrandHint.
   ///
   /// In en, this message translates to:
-  /// **'Carbs per 100g'**
-  String get dietCarbsPer100gLabel;
+  /// **'Who makes it'**
+  String get dietBrandHint;
 
-  /// No description provided for @dietFatPer100gLabel.
+  /// No description provided for @dietAddPhotoAction.
   ///
   /// In en, this message translates to:
-  /// **'Fat per 100g'**
-  String get dietFatPer100gLabel;
+  /// **'Add a photo'**
+  String get dietAddPhotoAction;
 
-  /// No description provided for @dietFiberPer100gLabel.
+  /// No description provided for @dietChangePhotoAction.
   ///
   /// In en, this message translates to:
-  /// **'Fiber per 100g'**
-  String get dietFiberPer100gLabel;
+  /// **'Change photo'**
+  String get dietChangePhotoAction;
+
+  /// No description provided for @dietScanLabelHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap the nutrition table and we fill in the values for you.'**
+  String get dietScanLabelHint;
+
+  /// No description provided for @dietEnergyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get dietEnergyLabel;
+
+  /// No description provided for @dietKcalUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'kcal'**
+  String get dietKcalUnit;
+
+  /// No description provided for @dietGramsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'g'**
+  String get dietGramsUnit;
+
+  /// No description provided for @dietEnergySplitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Energy split'**
+  String get dietEnergySplitTitle;
+
+  /// No description provided for @dietMacroPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent}%'**
+  String dietMacroPercent(int percent);
 
   /// No description provided for @dietFiberLabel.
   ///
