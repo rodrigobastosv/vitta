@@ -57,7 +57,7 @@ Future<void> main() async {
     exit(1);
   }
 
-  final countryTags = (_envList('IMPORT_COUNTRIES') ?? _defaultCountries).map(_toCountryTag).toSet();
+  final countryTags = _countriesFromEnv().map(_toCountryTag).toSet();
   final minScans = _envInt('IMPORT_MIN_SCANS') ?? _defaultMinScans;
   final maxProducts = _envInt('IMPORT_MAX_PRODUCTS');
   final batchSize = _envInt('IMPORT_BATCH_SIZE') ?? _defaultBatchSize;
@@ -168,10 +168,14 @@ bool _isPopularEnough(Map<String, dynamic> product, int minScans) {
   return (_numOrNull(product['unique_scans_n']) ?? 0) >= minScans;
 }
 
-List<String>? _envList(String key) {
-  final raw = Platform.environment[key];
-  if (raw == null || raw.trim().isEmpty) {
-    return null;
+// Unset IMPORT_COUNTRIES falls back to the curated default; an explicitly empty
+// value (IMPORT_COUNTRIES=) means "all countries" - matching the documented
+// "(empty = all)" behaviour, which the presence check here is what distinguishes
+// from the unset case.
+List<String> _countriesFromEnv() {
+  final raw = Platform.environment['IMPORT_COUNTRIES'];
+  if (raw == null) {
+    return _defaultCountries;
   }
   return raw.split(',').map((value) => value.trim()).where((value) => value.isNotEmpty).toList();
 }
