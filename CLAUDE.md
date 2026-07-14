@@ -140,6 +140,18 @@ UI: a book icon in the diet `AppBar` opens `RecipesPage` (`/diet/recipes`, list 
 
 **`VTPage` gained an optional `cubitParam`** for this: `RecipeFormCubit` needs the recipe being edited at construction, and it's handed to `G<C>(param1: ...)` against a `registerFactoryParam` registration. Passing `param1: null` to a plain `registerFactory` is a no-op, so every other page is unaffected. Reach for this rather than a `create:` callback or seeding a cubit from a widget's `initState` — `VTPage` stays the one place that resolves a page's cubit.
 
+## Copying meals
+
+The diet `AppBar`'s copy icon opens `CopyMealsPage` (`/diet/copy`, issue #61): pick a source day on a calendar, tick which of its meals to bring over, and they're appended to the day the diet page is currently showing. The target day rides in on `CopyMealsExtra` and reaches the cubit through `VTPage`'s `cubitParam` (a `registerFactoryParam`, same as `RecipeFormCubit`) — the page never picks the date itself, it copies into whatever day you were already looking at.
+
+**Copying appends, it never replaces.** Meals already logged on the target day stay put and the copied entries land alongside them, so nothing is destroyed by a mistaken tap; deleting the surplus is the user's job. This is also why there's no confirmation dialog.
+
+A copy is **plain `food_logs` inserts**, not a new kind of row: `SupabaseDietDataSource.copyFoodLogs` rebuilds a `CreateFoodLogRequest` per entry against the target date and bulk-inserts them in one round-trip. The copies therefore reference the same `foods` rows, and the `bump_food_times_logged` trigger counts each one — logging via copy is still logging. Nothing marks a log as "copied": once inserted it's indistinguishable from a hand-logged one, which is what makes editing/deleting/adherence keep working untouched.
+
+`CopyMealsState.macrosByDate` **accumulates across months** rather than being replaced per month (`{...state.macrosByDate, ...loaded}`), which is what lets a day picked in June survive browsing to July — the button names the source date, so an off-screen selection still reads clearly. It also means the source day's meals come free from the month load already in memory; picking a day fires no extra query. The target day is deliberately not tappable as its own source (`CopyMealsMonthGrid` passes a null `onTap` for it).
+
+The calendar reuses `MonthNavigator` and `DietCalendarDayCell` from `pages/diet_history/widgets/` — the cell gained an optional `isSelected` (filled primary circle) and a **nullable** `onTap`, following `MealSectionCard`'s "pass no callback to disable" convention. Its existing "not tappable unless the day has a log" rule is exactly what a source picker wants, so days with nothing logged can't be chosen. The weekday header is the one piece not reused: history's carries a week-average column this page has no use for.
+
 ## Diet history page
 
 The diet page's `AppBar` calendar icon opens `DietHistoryPage` (`/diet/history`, issue #55) — a **read-only** analysis surface, deliberately separate from `DietDateSelector`'s `showDietCalendarSheet`, which is a date *picker* for choosing which day to edit. Two calendars, two jobs: one navigates, one explains.

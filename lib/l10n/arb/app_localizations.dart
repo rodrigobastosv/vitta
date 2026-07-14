@@ -734,6 +734,60 @@ abstract class AppLocalizations {
   /// **'Goal'**
   String get dietGoalLineLabel;
 
+  /// No description provided for @dietCopyMealsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy meals'**
+  String get dietCopyMealsTitle;
+
+  /// No description provided for @dietCopyMealsPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick the day you want to copy meals from.'**
+  String get dietCopyMealsPrompt;
+
+  /// No description provided for @dietCopyMealsNoSourceTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No day picked'**
+  String get dietCopyMealsNoSourceTitle;
+
+  /// No description provided for @dietCopyMealsNoSourceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a day with food logged to choose which meals to copy.'**
+  String get dietCopyMealsNoSourceMessage;
+
+  /// No description provided for @dietCopyMealsSelectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals to copy'**
+  String get dietCopyMealsSelectionTitle;
+
+  /// No description provided for @dietCopyMealsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy meals'**
+  String get dietCopyMealsAction;
+
+  /// No description provided for @dietCopyMealFoodCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 food} other{{count} foods}}'**
+  String dietCopyMealFoodCount(int count);
+
+  /// No description provided for @dietMealsCopiedToastTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meals copied'**
+  String get dietMealsCopiedToastTitle;
+
+  /// No description provided for @dietMealsCopiedToastMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 meal added to your day} other{{count} meals added to your day}}'**
+  String dietMealsCopiedToastMessage(int count);
+
   /// No description provided for @dietMealSplitTitle.
   ///
   /// In en, this message translates to:

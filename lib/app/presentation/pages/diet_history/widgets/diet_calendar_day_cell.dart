@@ -13,6 +13,7 @@ class DietCalendarDayCell extends StatelessWidget {
     required this.isToday,
     required this.isFuture,
     required this.onTap,
+    this.isSelected = false,
     super.key,
   });
 
@@ -21,7 +22,8 @@ class DietCalendarDayCell extends StatelessWidget {
   final MacroGoals macroGoals;
   final bool isToday;
   final bool isFuture;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final bool isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +42,18 @@ class DietCalendarDayCell extends StatelessWidget {
             height: 32,
             alignment: .center,
             decoration: BoxDecoration(
-              color: adherenceColor?.withValues(alpha: 0.16),
+              color: isSelected ? colorScheme.primary : adherenceColor?.withValues(alpha: 0.16),
               shape: .circle,
               border: isToday ? Border.all(color: colorScheme.primary, width: 1.5) : null,
             ),
             child: Text(
               '${day.day}',
               style: VTTextStyles.caption(context).copyWith(
-                color: isFuture ? colorScheme.onSurface.withValues(alpha: 0.3) : adherenceColor ?? colorScheme.onSurface,
+                color: isSelected
+                    ? colorScheme.onPrimary
+                    : isFuture
+                    ? colorScheme.onSurface.withValues(alpha: 0.3)
+                    : adherenceColor ?? colorScheme.onSurface,
                 fontWeight: hasLog ? .w700 : .w400,
               ),
             ),

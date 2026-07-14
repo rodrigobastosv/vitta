@@ -171,6 +171,15 @@
   "dietHistoryCalendarEmptyMessage": "Nada registrado nesse mês.",
   "dietDayDetailsEmptyMessage": "Nada foi registrado nesse dia.",
   "dietGoalLineLabel": "Meta",
+  "dietCopyMealsTitle": "Copiar refeições",
+  "dietCopyMealsPrompt": "Escolha o dia de onde quer copiar as refeições.",
+  "dietCopyMealsNoSourceTitle": "Nenhum dia escolhido",
+  "dietCopyMealsNoSourceMessage": "Toque em um dia com alimentos registrados para escolher quais refeições copiar.",
+  "dietCopyMealsSelectionTitle": "Refeições a copiar",
+  "dietCopyMealsAction": "Copiar refeições",
+  "dietCopyMealFoodCount": "{count, plural, =1{1 alimento} other{{count} alimentos}}",
+  "dietMealsCopiedToastTitle": "Refeições copiadas",
+  "dietMealsCopiedToastMessage": "{count, plural, =1{1 refeição adicionada ao seu dia} other{{count} refeições adicionadas ao seu dia}}",
   "@dietWeekAverageTooltip": {
     "placeholders": {
       "calories": { "type": "int" },

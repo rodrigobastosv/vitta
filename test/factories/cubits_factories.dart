@@ -1,6 +1,7 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
+import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
@@ -57,6 +58,18 @@ abstract class CubitsFactories {
   }) => DietHistoryCubit(
     getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+  );
+
+  static CopyMealsCubit buildCopyMealsCubit({
+    MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockCopyFoodLogsUseCase? copyFoodLogsUseCase,
+    DateTime? targetDate,
+  }) => CopyMealsCubit(
+    getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    copyFoodLogsUseCase: copyFoodLogsUseCase ?? MockCopyFoodLogsUseCase(),
+    targetDate: targetDate ?? DateTime(2026, 7, 14),
   );
 
   static MacroGoalsCubit buildMacroGoalsCubit({

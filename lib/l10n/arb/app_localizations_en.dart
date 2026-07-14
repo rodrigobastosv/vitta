@@ -364,6 +364,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietGoalLineLabel => 'Goal';
 
   @override
+  String get dietCopyMealsTitle => 'Copy meals';
+
+  @override
+  String get dietCopyMealsPrompt => 'Pick the day you want to copy meals from.';
+
+  @override
+  String get dietCopyMealsNoSourceTitle => 'No day picked';
+
+  @override
+  String get dietCopyMealsNoSourceMessage => 'Tap a day with food logged to choose which meals to copy.';
+
+  @override
+  String get dietCopyMealsSelectionTitle => 'Meals to copy';
+
+  @override
+  String get dietCopyMealsAction => 'Copy meals';
+
+  @override
+  String dietCopyMealFoodCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count foods', one: '1 food');
+    return '$_temp0';
+  }
+
+  @override
+  String get dietMealsCopiedToastTitle => 'Meals copied';
+
+  @override
+  String dietMealsCopiedToastMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count meals added to your day',
+      one: '1 meal added to your day',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get dietMealSplitTitle => 'Calories by meal';
 
   @override
