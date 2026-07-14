@@ -60,6 +60,10 @@ jobs:
       - name: Build the certificates repo auth header
         env:
           MATCH_GIT_TOKEN: ${{ secrets.MATCH_GIT_TOKEN }}
+          # fastlane documents this header as base64("username:token"), so use
+          # the real owner rather than the x-access-token convention, which is
+          # for GitHub App tokens.
+          MATCH_GIT_USER: ${{ github.repository_owner }}
         run: |
           set -euo pipefail
           # Trimmed because a token pasted with a trailing newline would encode
@@ -69,7 +73,17 @@ jobs:
             echo "::error::Secret MATCH_GIT_TOKEN is empty; match cannot clone the certificates repo."
             exit 1
           fi
-          header=$(printf 'x-access-token:%s' "$token" | base64 | tr -d '\n')
+          # A base64'd or otherwise mangled token still builds a well-formed
+          # header, so git rejects it as a 403 that looks identical to a
+          # permissions problem. Name it here instead.
+          case "$token" in
+            github_pat_* | ghp_* | gho_* | ghs_*) ;;
+            *)
+              echo "::error::MATCH_GIT_TOKEN is not a GitHub token (expected a github_pat_/ghp_ prefix). Paste the token raw - the workflow does the base64 itself."
+              exit 1
+              ;;
+          esac
+          header=$(printf '%s:%s' "$MATCH_GIT_USER" "$token" | base64 | tr -d '\n')
           echo "::add-mask::$header"
           echo "MATCH_GIT_BASIC_AUTHORIZATION=$header" >> "$GITHUB_ENV"
 

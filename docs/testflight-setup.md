@@ -65,9 +65,15 @@ certificate.
    rather than create a certificate itself.
 
 3. Create a token that can read that repo:
-   <https://github.com/settings/personal-access-tokens/new> → Repository access: only
-   `vitta-certificates` → **Contents: Read-only** (CI only ever reads). Copy the
-   `github_pat_...`, it's shown once.
+   <https://github.com/settings/personal-access-tokens/new>
+
+   - **Repository access** → *Only select repositories* → `vitta-certificates`.
+     Not *Public repositories* — that 403s on a private repo no matter what else is set.
+   - **Permissions → Repository permissions → Contents: Read-only**. That is the only one
+     needed; CI never writes. *Metadata: Read-only* gets added automatically and is required —
+     leave it.
+
+   Copy the `github_pat_...`, it's shown once.
 
 | GitHub secret | Value |
 | --- | --- |
