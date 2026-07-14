@@ -24,14 +24,10 @@ class DailyMacros extends Equatable with MacroTotals {
   }
 
   GoalAdherence adherenceTo(MacroGoals goals) {
-    final ratios = [
-      if (goals.calorieGoal > 0) totalCalories / goals.calorieGoal,
-      if (goals.proteinGoalGrams > 0) totalProtein / goals.proteinGoalGrams,
-      if (goals.carbsGoalGrams > 0) totalCarbs / goals.carbsGoalGrams,
-      if (goals.fatGoalGrams > 0) totalFat / goals.fatGoalGrams,
-      if (goals.fiberGoalGrams > 0) totalFiber / goals.fiberGoalGrams,
-    ];
-    return ratios.map(GoalAdherence.forRatio).fold(.met, (worst, status) => worst.combineWorst(status));
+    if (goals.calorieGoal <= 0) {
+      return .met;
+    }
+    return GoalAdherence.forRatio(totalCalories / goals.calorieGoal);
   }
 
   @override

@@ -74,7 +74,7 @@
   "dietEmptyTitle": "Nada registrado ainda",
   "dietNotTodayEmptyTitle": "Nada registrado nesse dia",
   "dietEmptyMessage": "Toque no botão + para adicionar o primeiro alimento do dia.",
-  "dietNotTodayEmptyMessage": "Você nao pode adicionar refeições em dias passados.",
+  "dietNotTodayEmptyMessage": "Toque em + para adicionar um alimento nesse dia.",
   "dietInvalidQuantity": "Informe uma quantidade maior que zero.",
   "dietQuantityLabel": "Quantidade ({unit})",
   "@dietQuantityLabel": {
@@ -83,6 +83,12 @@
     }
   },
   "dietLogFoodAction": "Adicionar ao dia",
+  "dietFoodLoggedToast": "Adicionado a {meal}",
+  "@dietFoodLoggedToast": {
+    "placeholders": {
+      "meal": {"type": "String"}
+    }
+  },
   "dietInvalidCustomFood": "Preencha o nome e todos os macros com números válidos.",
   "dietCustomFoodTitle": "Cadastrar alimento",
   "dietFoodNameLabel": "Nome",

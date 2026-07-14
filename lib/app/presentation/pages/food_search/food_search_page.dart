@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
@@ -14,8 +15,9 @@ import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_res
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
 
 class FoodSearchPage extends StatelessWidget {
-  const FoodSearchPage({this.initialMealType, super.key});
+  const FoodSearchPage({required this.loggedDate, this.initialMealType, super.key});
 
+  final DateTime loggedDate;
   final MealType? initialMealType;
 
   @override
@@ -28,6 +30,8 @@ class FoodSearchPage extends StatelessWidget {
             context.showLoading();
           case FoodSearchHideLoading():
             context.hideLoading();
+          case FoodLogged(:final foodName, :final mealType):
+            context.showToast(title: foodName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)), accentColor: mealType.color);
           case FoodSearchError(:final message):
             context.showErrorDialog(message: message);
         }
@@ -42,7 +46,7 @@ class FoodSearchPage extends StatelessWidget {
               onPressed: () async {
                 final food = await showCustomFoodSheet(context: context);
                 if (food != null && context.mounted) {
-                  await showLogFoodSheet(context: context, food: food, initialMealType: initialMealType);
+                  await showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType);
                 }
               },
             ),
@@ -70,7 +74,7 @@ class FoodSearchPage extends StatelessWidget {
                     final food = results[index];
                     return FoodSearchResultTile(
                       food: food,
-                      onTap: () => showLogFoodSheet(context: context, food: food, initialMealType: initialMealType),
+                      onTap: () => showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType),
                     );
                   },
                 ),

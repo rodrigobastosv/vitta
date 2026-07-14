@@ -74,7 +74,7 @@
   "dietEmptyTitle": "Nothing logged yet",
   "dietNotTodayEmptyTitle": "Nothing logged on that day",
   "dietEmptyMessage": "Tap the + button to add the first food of the day.",
-  "dietNotTodayEmptyMessage": "You cannot log meals on past days.",
+  "dietNotTodayEmptyMessage": "Tap + to log food for this day.",
   "dietInvalidQuantity": "Enter a quantity greater than zero.",
   "dietQuantityLabel": "Quantity ({unit})",
   "@dietQuantityLabel": {
@@ -82,7 +82,13 @@
       "unit": {"type": "String"}
     }
   },
-  "dietLogFoodAction": "Add to today",
+  "dietLogFoodAction": "Add to day",
+  "dietFoodLoggedToast": "Added to {meal}",
+  "@dietFoodLoggedToast": {
+    "placeholders": {
+      "meal": {"type": "String"}
+    }
+  },
   "dietInvalidCustomFood": "Fill in the name and all macros with valid numbers.",
   "dietCustomFoodTitle": "Add a food",
   "dietFoodNameLabel": "Name",

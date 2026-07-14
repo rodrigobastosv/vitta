@@ -36,6 +36,7 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
     final consumed = dailyMacros.totalCalories.round();
     final goal = macroGoals.calorieGoal.round();
     final difference = goal - consumed;
+    final ringColor = dailyMacros.entries.isEmpty ? colorScheme.primary : dailyMacros.adherenceTo(macroGoals).color;
     return VTCard(
       child: Column(
         crossAxisAlignment: .start,
@@ -44,7 +45,7 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
             children: [
               VTMacroRing(
                 value: _getProgress(dailyMacros.totalCalories, macroGoals.calorieGoal),
-                color: colorScheme.primary,
+                color: ringColor,
                 child: Column(
                   mainAxisSize: .min,
                   children: [

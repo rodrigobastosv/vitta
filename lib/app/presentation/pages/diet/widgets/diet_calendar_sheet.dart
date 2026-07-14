@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
-import 'package:vitta/app/domain/diet/entities/goal_adherence.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
@@ -178,7 +176,7 @@ class _MonthGrid extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 2),
                   width: 4,
                   height: 4,
-                  decoration: BoxDecoration(color: _adherenceColor(dayMacros.adherenceTo(macroGoals)), shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: dayMacros.adherenceTo(macroGoals).color, shape: BoxShape.circle),
                 )
               else
                 const SizedBox(height: 6),
@@ -188,10 +186,4 @@ class _MonthGrid extends StatelessWidget {
       },
     );
   }
-
-  Color _adherenceColor(GoalAdherence adherence) => switch (adherence) {
-    .met => VTColors.green,
-    .close => VTColors.warning,
-    .off => VTColors.error,
-  };
 }

@@ -1,5 +1,5 @@
 import 'package:go_router/go_router.dart';
-import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_page.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/app/presentation/routing/vt_route.dart';
@@ -9,6 +9,8 @@ class FoodSearchRoute extends VTRoute {
   AppRoute get route => .foodSearch;
 
   @override
-  GoRouterWidgetBuilder get builder =>
-      (context, state) => FoodSearchPage(initialMealType: state.extra as MealType?);
+  GoRouterWidgetBuilder get builder => (context, state) {
+    final extra = state.extra! as FoodSearchExtra;
+    return FoodSearchPage(loggedDate: extra.loggedDate, initialMealType: extra.initialMealType);
+  };
 }

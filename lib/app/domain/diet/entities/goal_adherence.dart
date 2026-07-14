@@ -1,7 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+
 enum GoalAdherence {
   met,
   close,
   off;
+
+  Color get color => switch (this) {
+    .met => VTColors.green,
+    .close => VTColors.warning,
+    .off => VTColors.error,
+  };
 
   static const _metLowerBound = 0.9;
   static const _metUpperBound = 1.1;

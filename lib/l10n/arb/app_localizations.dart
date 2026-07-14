@@ -341,7 +341,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietNotTodayEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'You cannot log meals on past days.'**
+  /// **'Tap + to log food for this day.'**
   String get dietNotTodayEmptyMessage;
 
   /// No description provided for @dietInvalidQuantity.
@@ -359,8 +359,14 @@ abstract class AppLocalizations {
   /// No description provided for @dietLogFoodAction.
   ///
   /// In en, this message translates to:
-  /// **'Add to today'**
+  /// **'Add to day'**
   String get dietLogFoodAction;
+
+  /// No description provided for @dietFoodLoggedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to {meal}'**
+  String dietFoodLoggedToast(String meal);
 
   /// No description provided for @dietInvalidCustomFood.
   ///

@@ -123,39 +123,39 @@ void main() {
     expect(breakfast.totalFiber, 3);
   });
 
-  test('adherenceTo is met when every macro sits inside the goal band', () {
+  test('adherenceTo is met when calories sit inside the goal band, ignoring other macros', () {
     const goals = MacroGoals.defaultGoals;
     final dailyMacros = _dayWith(
       calories: goals.calorieGoal,
+      protein: goals.proteinGoalGrams * 3,
+      carbs: goals.carbsGoalGrams * 3,
+      fat: goals.fatGoalGrams * 3,
+      fiber: goals.fiberGoalGrams * 3,
+    );
+
+    expect(dailyMacros.adherenceTo(goals), GoalAdherence.met);
+  });
+
+  test('adherenceTo is close when calories are moderately over the goal', () {
+    const goals = MacroGoals.defaultGoals;
+    final dailyMacros = _dayWith(
+      calories: goals.calorieGoal * 1.2,
       protein: goals.proteinGoalGrams,
       carbs: goals.carbsGoalGrams,
       fat: goals.fatGoalGrams,
       fiber: goals.fiberGoalGrams,
     );
 
-    expect(dailyMacros.adherenceTo(goals), GoalAdherence.met);
-  });
-
-  test('adherenceTo is close when macros are moderately over the goal', () {
-    const goals = MacroGoals.defaultGoals;
-    final dailyMacros = _dayWith(
-      calories: goals.calorieGoal * 1.2,
-      protein: goals.proteinGoalGrams * 1.2,
-      carbs: goals.carbsGoalGrams * 1.2,
-      fat: goals.fatGoalGrams * 1.2,
-      fiber: goals.fiberGoalGrams * 1.2,
-    );
-
     expect(dailyMacros.adherenceTo(goals), GoalAdherence.close);
   });
 
-  test('adherenceTo is off when a macro is far from the goal', () {
+  test('adherenceTo is off when calories are far from the goal', () {
     const goals = MacroGoals.defaultGoals;
     final dailyMacros = _dayWith(
-      calories: goals.calorieGoal,
+      calories: goals.calorieGoal * 2,
       protein: goals.proteinGoalGrams,
       carbs: goals.carbsGoalGrams,
-      fat: goals.fatGoalGrams * 2,
+      fat: goals.fatGoalGrams,
       fiber: goals.fiberGoalGrams,
     );
 

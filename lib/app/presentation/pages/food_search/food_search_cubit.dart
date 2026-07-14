@@ -43,14 +43,20 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     );
   }
 
-  Future<Result<VTError, FoodLog>> logFood({required Food food, required MealType mealType, required double quantityGrams}) {
-    final now = DateTime.now();
-    return _logFoodUseCase(
+  Future<Result<VTError, FoodLog>> logFood({
+    required Food food,
+    required DateTime loggedDate,
+    required MealType mealType,
+    required double quantityGrams,
+  }) async {
+    final loggedResult = await _logFoodUseCase(
       food: food,
-      loggedDate: DateTime(now.year, now.month, now.day),
+      loggedDate: DateTime(loggedDate.year, loggedDate.month, loggedDate.day),
       mealType: mealType,
       quantityGrams: quantityGrams,
     );
+    loggedResult.when((_) {}, (_) => emitPresentation(FoodLogged(foodName: food.name, mealType: mealType)));
+    return loggedResult;
   }
 
   Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>

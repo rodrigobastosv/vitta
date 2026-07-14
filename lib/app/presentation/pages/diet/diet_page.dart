@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -14,6 +15,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
+import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
@@ -56,32 +58,35 @@ class DietPage extends StatelessWidget {
                   message: cubit.isViewingToday ? l10n.dietEmptyMessage : l10n.dietNotTodayEmptyMessage,
                 )
               else
-                for (final section in state.dailyMacros.meals) ...[
-                  MealSectionCard(
-                    section: section,
-                    onAddFood: cubit.isViewingToday
-                        ? () async {
-                            await context.pushRoute(.foodSearch, extra: section.mealType);
-                            await cubit.refresh();
-                          }
-                        : null,
-                    onDeleteEntry: (entry) => cubit.deleteLog(logId: entry.log.id),
+                for (final (index, section) in state.dailyMacros.meals.indexed) ...[
+                  VTAppearEffect(
+                    key: ValueKey('${state.date}-${section.mealType}'),
+                    delay: Duration(milliseconds: index * 80),
+                    child: MealSectionCard(
+                      section: section,
+                      onAddFood: () async {
+                        await context.pushRoute(
+                          .foodSearch,
+                          extra: FoodSearchExtra(loggedDate: state.date, initialMealType: section.mealType),
+                        );
+                        await cubit.refresh();
+                      },
+                      onDeleteEntry: (entry) => cubit.deleteLog(logId: entry.log.id),
+                    ),
                   ),
                   const VTGap.m(),
                 ],
             ],
           ),
         ),
-        floatingActionButton: cubit.isViewingToday
-            ? FloatingActionButton.extended(
-                onPressed: () async {
-                  await context.pushRoute(.foodSearch);
-                  await cubit.refresh();
-                },
-                icon: const Icon(Icons.add),
-                label: Text(l10n.dietAddFood),
-              )
-            : null,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
+            await cubit.refresh();
+          },
+          icon: const Icon(Icons.add),
+          label: Text(l10n.dietAddFood),
+        ),
       ),
     );
   }

@@ -64,24 +64,61 @@ void main() {
     expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>(), isA<FoodSearchError>()],
   );
 
-  test('logFood delegates to the use case with today logged for the given meal', () async {
+  test('logFood delegates to the use case with the given past date and meal', () async {
     final logFoodUseCase = MockLogFoodUseCase();
     final cubit = CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
     final food = FoodFactory.build();
     final foodLog = FoodLogFactory.build();
+    final pastDate = DateTime(2026, 7, 10);
     when(
-      () => logFoodUseCase(
-        food: food,
-        loggedDate: any(named: 'loggedDate'),
-        mealType: MealType.dinner,
-        quantityGrams: 250,
-      ),
+      () => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await cubit.logFood(food: food, mealType: MealType.dinner, quantityGrams: 250);
+    final loggedResult = await cubit.logFood(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250);
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
+    verify(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250)).called(1);
   });
+
+  blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
+    'emits FoodLogged when the log succeeds',
+    build: () {
+      final logFoodUseCase = MockLogFoodUseCase();
+      when(
+        () => logFoodUseCase(
+          food: FoodFactory.build(),
+          loggedDate: any(named: 'loggedDate'),
+          mealType: .dinner,
+          quantityGrams: 250,
+        ),
+      ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+      return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    },
+    act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+    expectPresentation: () => [
+      isA<FoodLogged>()
+          .having((event) => event.foodName, 'foodName', 'Banana')
+          .having((event) => event.mealType, 'mealType', MealType.dinner),
+    ],
+  );
+
+  blocPresentationTest<FoodSearchCubit, FoodSearchState, FoodSearchPresentationEvent>(
+    'does not emit FoodLogged when the log fails',
+    build: () {
+      final logFoodUseCase = MockLogFoodUseCase();
+      when(
+        () => logFoodUseCase(
+          food: FoodFactory.build(),
+          loggedDate: any(named: 'loggedDate'),
+          mealType: .dinner,
+          quantityGrams: 250,
+        ),
+      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    },
+    act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+    expectPresentation: () => <FoodSearchPresentationEvent>[],
+  );
 
   test('uploadFoodImage delegates to the use case', () async {
     final uploadFoodImageUseCase = MockUploadFoodImageUseCase();

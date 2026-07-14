@@ -10,19 +10,21 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
-Future<void> showLogFoodSheet({required BuildContext context, required Food food, MealType? initialMealType}) => showModalBottomSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(
-    value: context.read<FoodSearchCubit>(),
-    child: _LogFoodSheet(food: food, initialMealType: initialMealType ?? MealType.breakfast),
-  ),
-);
+Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => BlocProvider.value(
+        value: context.read<FoodSearchCubit>(),
+        child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
+      ),
+    );
 
 class _LogFoodSheet extends StatefulWidget {
-  const _LogFoodSheet({required this.food, required this.initialMealType});
+  const _LogFoodSheet({required this.food, required this.loggedDate, required this.initialMealType});
 
   final Food food;
+  final DateTime loggedDate;
   final MealType initialMealType;
 
   @override
@@ -62,6 +64,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
 
     final loggedResult = await context.read<FoodSearchCubit>().logFood(
       food: widget.food,
+      loggedDate: widget.loggedDate,
       mealType: _mealType,
       quantityGrams: _unitSystem.displayWeightToGrams(quantityDisplayValue),
     );

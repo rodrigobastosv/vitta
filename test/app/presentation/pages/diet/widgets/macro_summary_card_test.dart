@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
@@ -49,5 +51,28 @@ void main() {
 
     expect(find.byIcon(Icons.unfold_more), findsNothing);
     expect(find.text('Vitamins & minerals'), findsNothing);
+  });
+
+  testWidgets('colors the calorie ring red when the day is far off its goals', (tester) async {
+    final farOffDay = DailyMacros(
+      entries: [FoodLogEntryFactory.build(food: FoodFactory.build(caloriesPer100g: 100000), log: FoodLogFactory.build())],
+    );
+    await pumpMacroSummaryCard(tester, dailyMacros: farOffDay);
+
+    expect(tester.widget<VTMacroRing>(find.byType(VTMacroRing)).color, VTColors.error);
+  });
+
+  testWidgets('colors the calorie ring green when the day meets its goals', (tester) async {
+    final metDay = DailyMacros(
+      entries: [
+        FoodLogEntryFactory.build(
+          food: FoodFactory.build(caloriesPer100g: 200, proteinPer100g: 15, carbsPer100g: 25, fatPer100g: 6.5, fiberPer100g: 3),
+          log: FoodLogFactory.build(quantityGrams: 1000),
+        ),
+      ],
+    );
+    await pumpMacroSummaryCard(tester, dailyMacros: metDay);
+
+    expect(tester.widget<VTMacroRing>(find.byType(VTMacroRing)).color, VTColors.green);
   });
 }

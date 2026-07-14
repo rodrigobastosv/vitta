@@ -144,7 +144,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietEmptyMessage => 'Toque no botão + para adicionar o primeiro alimento do dia.';
 
   @override
-  String get dietNotTodayEmptyMessage => 'Você nao pode adicionar refeições em dias passados.';
+  String get dietNotTodayEmptyMessage => 'Toque em + para adicionar um alimento nesse dia.';
 
   @override
   String get dietInvalidQuantity => 'Informe uma quantidade maior que zero.';
@@ -156,6 +156,11 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dietLogFoodAction => 'Adicionar ao dia';
+
+  @override
+  String dietFoodLoggedToast(String meal) {
+    return 'Adicionado a $meal';
+  }
 
   @override
   String get dietInvalidCustomFood => 'Preencha o nome e todos os macros com números válidos.';
