@@ -33,7 +33,7 @@ import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
-import 'package:vitta/app/domain/diet/use_cases/get_monthly_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
@@ -53,6 +53,7 @@ import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -103,7 +104,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => UpdateFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => GetMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => SaveMacroGoalsUseCase(dietRepository: G()));
-  G.registerFactory(() => GetMonthlyMacrosUseCase(dietRepository: G()));
+  G.registerFactory(() => GetMacrosInRangeUseCase(dietRepository: G()));
   G.registerFactory(() => UploadFoodImageUseCase(dietRepository: G()));
   G.registerFactory(() => ScanNutritionLabelUseCase(dietRepository: G()));
   G.registerFactory(() => LogWaterUseCase(waterRepository: G()));
@@ -125,10 +126,11 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       deleteFoodLogUseCase: G(),
       updateFoodLogUseCase: G(),
       getMacroGoalsUseCase: G(),
-      getMonthlyMacrosUseCase: G(),
+      getMacrosInRangeUseCase: G(),
       getAppSettingsUseCase: G(),
     ),
   );
+  G.registerFactory(() => DietHistoryCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G()));
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));

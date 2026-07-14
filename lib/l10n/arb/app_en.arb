@@ -157,6 +157,54 @@
       "grams": {"type": "String"}
     }
   },
+  "dietHistoryTitle": "History",
+  "dietHistoryTrendsTitle": "Trends",
+  "dietWeekAverageShort": "{calories}",
+  "dietWeekAverageTooltip": "Weekly average: {calories} kcal over {days} logged days",
+  "dietWeekColumnLabel": "Avg",
+  "dietTrendRangeDays": "{days}d",
+  "dietCaloriesTrendTitle": "Calories",
+  "dietMacrosTrendTitle": "Macros",
+  "dietTrendAverageLabel": "{calories} kcal/day average",
+  "dietTrendLoggedDays": "{days} of {total} days logged",
+  "dietTrendEmptyMessage": "Nothing logged in this period yet.",
+  "dietHistoryCalendarEmptyMessage": "Nothing logged this month.",
+  "dietDayDetailsEmptyMessage": "Nothing was logged on this day.",
+  "dietGoalLineLabel": "Goal",
+  "@dietWeekAverageTooltip": {
+    "placeholders": {
+      "calories": { "type": "int" },
+      "days": { "type": "int" }
+    }
+  },
+  "@dietTrendRangeDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "@dietWeekAverageShort": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
+  "@dietTrendAverageLabel": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
+  "@dietTrendLoggedDays": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "dietMealSplitTitle": "Calories by meal",
+  "dietMealSplitAverage": "{calories} kcal/day",
+  "@dietMealSplitAverage": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
   "mealTypeBreakfast": "Breakfast",
   "mealTypeLunch": "Lunch",
   "mealTypeDinner": "Dinner",

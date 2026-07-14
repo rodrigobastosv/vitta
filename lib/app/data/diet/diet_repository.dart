@@ -79,8 +79,8 @@ class DietRepository {
 
   Future<void> saveMacroGoals(MacroGoals goals) => _dietGoalsLocalDataSource.saveGoals(goals);
 
-  Future<Result<VTError, Map<DateTime, DailyMacros>>> getMonthlyMacros({required DateTime from, required DateTime to}) async {
-    final monthlyLogResult = await _supabaseDietDataSource.getMonthlyLog(from: from, to: to);
+  Future<Result<VTError, Map<DateTime, DailyMacros>>> getMacrosInRange({required DateTime from, required DateTime to}) async {
+    final monthlyLogResult = await _supabaseDietDataSource.getLogsInRange(from: from, to: to);
     return monthlyLogResult.when(Failure.new, (entries) => Success(_groupByDate(entries)));
   }
 

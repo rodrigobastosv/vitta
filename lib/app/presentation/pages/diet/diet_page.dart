@@ -36,7 +36,16 @@ class DietPage extends StatelessWidget {
         }
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.dietFeatureTitle)),
+        appBar: AppBar(
+          title: Text(l10n.dietFeatureTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.calendar_month_outlined),
+              tooltip: l10n.dietHistoryTitle,
+              onPressed: () => context.pushRoute(.dietHistory),
+            ),
+          ],
+        ),
         body: RefreshIndicator(
           onRefresh: cubit.refresh,
           child: ListView(

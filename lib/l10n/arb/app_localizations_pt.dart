@@ -312,6 +312,66 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get dietHistoryTitle => 'Histórico';
+
+  @override
+  String get dietHistoryTrendsTitle => 'Tendências';
+
+  @override
+  String dietWeekAverageShort(int calories) {
+    return '$calories';
+  }
+
+  @override
+  String dietWeekAverageTooltip(int calories, int days) {
+    return 'Média semanal: $calories kcal em $days dias registrados';
+  }
+
+  @override
+  String get dietWeekColumnLabel => 'Méd';
+
+  @override
+  String dietTrendRangeDays(int days) {
+    return '${days}d';
+  }
+
+  @override
+  String get dietCaloriesTrendTitle => 'Calorias';
+
+  @override
+  String get dietMacrosTrendTitle => 'Macros';
+
+  @override
+  String dietTrendAverageLabel(int calories) {
+    return '$calories kcal/dia em média';
+  }
+
+  @override
+  String dietTrendLoggedDays(int days, int total) {
+    return '$days de $total dias registrados';
+  }
+
+  @override
+  String get dietTrendEmptyMessage => 'Nada registrado nesse período ainda.';
+
+  @override
+  String get dietHistoryCalendarEmptyMessage => 'Nada registrado nesse mês.';
+
+  @override
+  String get dietDayDetailsEmptyMessage => 'Nada foi registrado nesse dia.';
+
+  @override
+  String get dietGoalLineLabel => 'Meta';
+
+  @override
+  String get dietMealSplitTitle => 'Calorias por refeição';
+
+  @override
+  String dietMealSplitAverage(int calories) {
+    return '$calories kcal/dia';
+  }
+
+  @override
   String get mealTypeBreakfast => 'Café da manhã';
 
   @override

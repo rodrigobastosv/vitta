@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
+import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
+import 'package:vitta/app/design_system/components/charts/vt_distribution_bar.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_nutrient.dart';
@@ -35,24 +36,10 @@ class CustomFoodEnergySplitCard extends StatelessWidget {
               ),
             ],
           ),
-          ClipRRect(
-            borderRadius: VTRadius.borderRadiusFull,
-            child: SizedBox(
-              height: 10,
-              child: Row(
-                children: [
-                  for (final entry in shares.entries)
-                    Expanded(
-                      flex: (entry.value * 1000).round(),
-                      child: TweenAnimationBuilder<Color?>(
-                        tween: ColorTween(end: entry.key.getColor(context.colorScheme)),
-                        duration: const Duration(milliseconds: 400),
-                        builder: (context, color, child) => ColoredBox(color: color ?? Colors.transparent),
-                      ),
-                    ),
-                ],
-              ),
-            ),
+          VTDistributionBar(
+            segments: [
+              for (final entry in shares.entries) VTBarChartSegment(value: entry.value, color: entry.key.getColor(context.colorScheme)),
+            ],
           ),
           const VTGap.m(),
           Wrap(

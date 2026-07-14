@@ -157,6 +157,54 @@
       "grams": {"type": "String"}
     }
   },
+  "dietHistoryTitle": "Histórico",
+  "dietHistoryTrendsTitle": "Tendências",
+  "dietWeekAverageShort": "{calories}",
+  "dietWeekAverageTooltip": "Média semanal: {calories} kcal em {days} dias registrados",
+  "dietWeekColumnLabel": "Méd",
+  "dietTrendRangeDays": "{days}d",
+  "dietCaloriesTrendTitle": "Calorias",
+  "dietMacrosTrendTitle": "Macros",
+  "dietTrendAverageLabel": "{calories} kcal/dia em média",
+  "dietTrendLoggedDays": "{days} de {total} dias registrados",
+  "dietTrendEmptyMessage": "Nada registrado nesse período ainda.",
+  "dietHistoryCalendarEmptyMessage": "Nada registrado nesse mês.",
+  "dietDayDetailsEmptyMessage": "Nada foi registrado nesse dia.",
+  "dietGoalLineLabel": "Meta",
+  "@dietWeekAverageTooltip": {
+    "placeholders": {
+      "calories": { "type": "int" },
+      "days": { "type": "int" }
+    }
+  },
+  "@dietTrendRangeDays": {
+    "placeholders": {
+      "days": { "type": "int" }
+    }
+  },
+  "@dietWeekAverageShort": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
+  "@dietTrendAverageLabel": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
+  "@dietTrendLoggedDays": {
+    "placeholders": {
+      "days": { "type": "int" },
+      "total": { "type": "int" }
+    }
+  },
+  "dietMealSplitTitle": "Calorias por refeição",
+  "dietMealSplitAverage": "{calories} kcal/dia",
+  "@dietMealSplitAverage": {
+    "placeholders": {
+      "calories": { "type": "int" }
+    }
+  },
   "mealTypeBreakfast": "Café da manhã",
   "mealTypeLunch": "Almoço",
   "mealTypeDinner": "Jantar",
