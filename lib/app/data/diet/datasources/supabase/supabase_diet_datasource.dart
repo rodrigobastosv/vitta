@@ -90,6 +90,25 @@ class SupabaseDietDataSource {
     }
   }
 
+  Future<Result<VTError, void>> copyFoodLogs({required List<FoodLogEntry> entries, required DateTime targetDate}) async {
+    try {
+      final requests = [
+        for (final entry in entries)
+          CreateFoodLogRequest(
+            userId: _userId,
+            foodId: entry.log.foodId,
+            loggedDate: targetDate,
+            mealType: entry.log.mealType,
+            quantityGrams: entry.log.quantityGrams,
+          ).toJson(),
+      ];
+      await _supabaseService.from(.foodLogs).insert(requests);
+      return const Success(null);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to copy food logs to $targetDate', cause: error));
+    }
+  }
+
   Future<Result<VTError, List<FoodLogEntry>>> getDailyLog({required DateTime date}) async {
     try {
       final rows = await _supabaseService

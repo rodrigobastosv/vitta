@@ -9,6 +9,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_extra.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
@@ -43,6 +44,16 @@ class DietPage extends StatelessWidget {
               icon: const Icon(Icons.menu_book_outlined),
               tooltip: l10n.dietRecipesTitle,
               onPressed: () => context.pushRoute(.recipes),
+            ),
+            IconButton(
+              icon: const Icon(Icons.copy_all_outlined),
+              tooltip: l10n.dietCopyMealsTitle,
+              onPressed: () async {
+                final hasCopied = await context.pushRoute<bool>(.dietCopy, extra: CopyMealsExtra(targetDate: state.date));
+                if (hasCopied ?? false) {
+                  await cubit.refresh();
+                }
+              },
             ),
             IconButton(
               icon: const Icon(Icons.calendar_month_outlined),

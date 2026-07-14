@@ -72,6 +72,9 @@ class DietRepository {
     required double quantityGrams,
   }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams);
 
+  Future<Result<VTError, void>> copyFoodLogs({required List<FoodLogEntry> entries, required DateTime targetDate}) =>
+      _supabaseDietDataSource.copyFoodLogs(entries: entries, targetDate: targetDate);
+
   Future<Result<VTError, DailyMacros>> getDailyMacros({required DateTime date}) async {
     final dailyLogResult = await _supabaseDietDataSource.getDailyLog(date: date);
     return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));

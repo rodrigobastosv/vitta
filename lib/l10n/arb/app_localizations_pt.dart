@@ -364,6 +364,44 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietGoalLineLabel => 'Meta';
 
   @override
+  String get dietCopyMealsTitle => 'Copiar refeições';
+
+  @override
+  String get dietCopyMealsPrompt => 'Escolha o dia de onde quer copiar as refeições.';
+
+  @override
+  String get dietCopyMealsNoSourceTitle => 'Nenhum dia escolhido';
+
+  @override
+  String get dietCopyMealsNoSourceMessage => 'Toque em um dia com alimentos registrados para escolher quais refeições copiar.';
+
+  @override
+  String get dietCopyMealsSelectionTitle => 'Refeições a copiar';
+
+  @override
+  String get dietCopyMealsAction => 'Copiar refeições';
+
+  @override
+  String dietCopyMealFoodCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count alimentos', one: '1 alimento');
+    return '$_temp0';
+  }
+
+  @override
+  String get dietMealsCopiedToastTitle => 'Refeições copiadas';
+
+  @override
+  String dietMealsCopiedToastMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count refeições adicionadas ao seu dia',
+      one: '1 refeição adicionada ao seu dia',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get dietMealSplitTitle => 'Calorias por refeição';
 
   @override
