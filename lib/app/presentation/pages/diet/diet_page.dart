@@ -13,6 +13,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
@@ -71,6 +72,7 @@ class DietPage extends StatelessWidget {
                         );
                         await cubit.refresh();
                       },
+                      onEditEntry: (entry) => showEditFoodLogSheet(context: context, entry: entry),
                       onDeleteEntry: (entry) => cubit.deleteLog(logId: entry.log.id),
                     ),
                   ),

@@ -4,14 +4,18 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
+import '../../../../factories/entities/food_log_factory.dart';
 import '../../../../factories/entities/macro_goals_factory.dart';
+import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
@@ -102,6 +106,60 @@ void main() {
     expectPresentation: () => [isA<DietError>()],
     verify: (_) => verifyNever(() => getDailyMacrosUseCaseSpy(date: any(named: 'date'))),
   );
+
+  test('updateLog reloads the day it is showing and logs a food_log_updated action', () async {
+    final loggingService = useMockLog();
+    final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(
+      () => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantityGrams: 250),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      updateFoodLogUseCase: updateFoodLogUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
+    await cubit.goToDate(DateTime(2026, 7, 10));
+
+    final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantityGrams: 250);
+
+    updatedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
+    verify(() => getDailyMacrosUseCase(date: DateTime(2026, 7, 10))).called(2);
+    final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
+    expect(captured, ['food_log_updated', {'meal': 'dinner'}]);
+  });
+
+  final getDailyMacrosUseCaseUpdateSpy = MockGetDailyMacrosUseCase();
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
+    'updateLog returns the failure without reloading or emitting an error dialog',
+    build: () {
+      final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
+      when(
+        () => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantityGrams: 250),
+      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildDietCubit(
+        getDailyMacrosUseCase: getDailyMacrosUseCaseUpdateSpy,
+        updateFoodLogUseCase: updateFoodLogUseCase,
+      );
+    },
+    act: (cubit) async {
+      final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantityGrams: 250);
+      expect(updatedResult.when((error) => error.message, (_) => null), 'boom');
+    },
+    expectPresentation: () => <DietPresentationEvent>[],
+    verify: (_) => verifyNever(() => getDailyMacrosUseCaseUpdateSpy(date: any(named: 'date'))),
+  );
+
+  test('unitSystem reads the current app settings', () {
+    final getAppSettingsUseCase = MockGetAppSettingsUseCase();
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: UnitSystem.imperial));
+    final cubit = CubitsFactories.buildDietCubit(getAppSettingsUseCase: getAppSettingsUseCase);
+
+    expect(cubit.unitSystem, UnitSystem.imperial);
+  });
 
   test('isViewingToday is true right after construction', () {
     final cubit = CubitsFactories.buildDietCubit();

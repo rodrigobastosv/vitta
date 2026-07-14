@@ -1,10 +1,17 @@
+import 'package:vitta/app/core/error/result.dart';
+import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
+import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
+import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_monthly_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
+import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
@@ -13,8 +20,10 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   DietCubit({
     required this._getDailyMacrosUseCase,
     required this._deleteFoodLogUseCase,
+    required this._updateFoodLogUseCase,
     required this._getMacroGoalsUseCase,
     required this._getMonthlyMacrosUseCase,
+    required this._getAppSettingsUseCase,
   }) : super(
          DietState(
            date: _dateOnly(DateTime.now()),
@@ -25,8 +34,12 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
 
   final GetDailyMacrosUseCase _getDailyMacrosUseCase;
   final DeleteFoodLogUseCase _deleteFoodLogUseCase;
+  final UpdateFoodLogUseCase _updateFoodLogUseCase;
   final GetMacroGoalsUseCase _getMacroGoalsUseCase;
   final GetMonthlyMacrosUseCase _getMonthlyMacrosUseCase;
+  final GetAppSettingsUseCase _getAppSettingsUseCase;
+
+  UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
   static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
@@ -69,6 +82,20 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
       to: DateTime(month.year, month.month + 1, 0),
     );
     monthlyMacrosResult.when((_) => null, (macrosByDate) => emit(state.copyWith(loggedMacrosInMonth: macrosByDate)));
+  }
+
+  Future<Result<VTError, FoodLog>> updateLog({
+    required String logId,
+    required MealType mealType,
+    required double quantityGrams,
+  }) async {
+    final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
+    final error = updatedResult.when((error) => error, (_) => null);
+    if (error == null) {
+      Log.action('food_log_updated', data: {'meal': mealType.wireValue});
+      await _loadDate(state.date);
+    }
+    return updatedResult;
   }
 
   Future<void> deleteLog({required String logId}) async {
