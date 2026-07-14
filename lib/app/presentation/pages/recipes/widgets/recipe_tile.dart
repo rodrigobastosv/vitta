@@ -8,15 +8,17 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 
 class RecipeTile extends StatelessWidget {
-  const RecipeTile({required this.recipe, required this.onDelete, super.key});
+  const RecipeTile({required this.recipe, required this.onEdit, required this.onDelete, super.key});
 
   final Recipe recipe;
+  final VoidCallback onEdit;
   final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return VTCard(
+      onTap: onEdit,
       child: Column(
         crossAxisAlignment: .start,
         children: [

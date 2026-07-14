@@ -50,6 +50,24 @@ class SupabaseRecipeDataSource {
     }
   }
 
+  Future<Result<VTError, Recipe>> replaceIngredients({required String recipeId, required List<RecipeIngredient> ingredients}) async {
+    try {
+      await _supabaseService.from(.recipeIngredients).delete().eq('recipe_id', recipeId);
+      await _supabaseService.from(.recipeIngredients).insert([
+        for (final ingredient in ingredients)
+          CreateRecipeIngredientRequest(
+            recipeId: recipeId,
+            foodId: ingredient.food.id!,
+            quantityGrams: ingredient.quantityGrams,
+          ).toJson(),
+      ]);
+      final updatedRow = await _supabaseService.from(.recipes).select(_recipeSelect).eq('id', recipeId).single();
+      return Success(Recipe.fromMap(updatedRow));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to update recipe $recipeId', cause: error));
+    }
+  }
+
   Future<Result<VTError, void>> deleteRecipe({required String recipeId}) async {
     try {
       await _supabaseService.from(.recipes).delete().eq('id', recipeId).eq('user_id', _userId);

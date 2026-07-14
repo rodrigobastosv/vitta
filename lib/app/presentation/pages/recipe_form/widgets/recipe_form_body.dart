@@ -23,7 +23,7 @@ class RecipeFormBody extends StatefulWidget {
 }
 
 class _RecipeFormBodyState extends State<RecipeFormBody> {
-  final _nameController = TextEditingController();
+  late final _nameController = TextEditingController(text: widget.state.draft.name);
 
   @override
   void dispose() {
@@ -44,62 +44,64 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
     final l10n = context.l10n;
     final cubit = context.read<RecipeFormCubit>();
     final draft = widget.state.draft;
-    return ListView(
+    return Padding(
       padding: const EdgeInsets.all(VTSpacing.m),
-      children: [
-        VTAppearEffect(
-          child: Text(l10n.dietRecipeSubtitle, style: VTTextStyles.caption(context)),
-        ),
-        const VTGap.m(),
-        VTAppearEffect(
-          delay: const Duration(milliseconds: 50),
-          child: TextField(
-            controller: _nameController,
-            onChanged: cubit.nameChanged,
-            textCapitalization: .sentences,
-            decoration: InputDecoration(labelText: l10n.dietRecipeNameLabel, hintText: l10n.dietRecipeNameHint),
-          ),
-        ),
-        const VTGap.l(),
-        VTAppearEffect(
-          delay: const Duration(milliseconds: 100),
-          child: Text(l10n.dietRecipeIngredientsTitle, style: VTTextStyles.title(context)),
-        ),
-        const VTGap.m(),
-        if (draft.ingredients.isEmpty)
-          Text(l10n.dietRecipeNoIngredientsMessage, style: VTTextStyles.caption(context))
-        else
-          VTCard(
-            child: Column(
-              children: [
-                for (final (index, ingredient) in draft.ingredients.indexed) ...[
-                  RecipeIngredientTile(ingredient: ingredient, onRemove: () => cubit.removeIngredientAt(index)),
-                  if (index != draft.ingredients.length - 1) const VTGap.s(),
-                ],
-              ],
+      child: Column(
+        crossAxisAlignment: .start,
+        children: [
+          VTAppearEffect(
+            child: Text(
+              cubit.isEditing ? l10n.dietEditRecipeTitle : l10n.dietRecipeSubtitle,
+              style: cubit.isEditing ? VTTextStyles.title(context) : VTTextStyles.caption(context),
             ),
           ),
-        const VTGap.m(),
-        Align(
-          alignment: .centerLeft,
-          child: TextButton.icon(
-            onPressed: _addIngredient,
-            icon: const Icon(Icons.add),
-            label: Text(l10n.dietRecipeAddIngredientAction),
+          const VTGap.m(),
+          VTAppearEffect(
+            delay: const Duration(milliseconds: 50),
+            child: TextField(
+              controller: _nameController,
+              onChanged: cubit.nameChanged,
+              textCapitalization: .sentences,
+              decoration: InputDecoration(labelText: l10n.dietRecipeNameLabel, hintText: l10n.dietRecipeNameHint),
+            ),
           ),
-        ),
-        AnimatedSize(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOutCubic,
-          alignment: .topCenter,
-          child: draft.ingredients.isEmpty
-              ? const SizedBox(width: double.infinity)
-              : Padding(
-                  padding: const EdgeInsets.only(top: VTSpacing.m),
-                  child: RecipeTotalsCard(draft: draft),
-                ),
-        ),
-      ],
+          const VTGap.l(),
+          VTAppearEffect(
+            delay: const Duration(milliseconds: 100),
+            child: Text(l10n.dietRecipeIngredientsTitle, style: VTTextStyles.title(context)),
+          ),
+          const VTGap.m(),
+          if (draft.ingredients.isEmpty)
+            Text(l10n.dietRecipeNoIngredientsMessage, style: VTTextStyles.caption(context))
+          else
+            VTCard(
+              child: Column(
+                children: [
+                  for (final (index, ingredient) in draft.ingredients.indexed) ...[
+                    RecipeIngredientTile(ingredient: ingredient, onRemove: () => cubit.removeIngredientAt(index)),
+                    if (index != draft.ingredients.length - 1) const VTGap.s(),
+                  ],
+                ],
+              ),
+            ),
+          const VTGap.m(),
+          Align(
+            alignment: .centerLeft,
+            child: TextButton.icon(onPressed: _addIngredient, icon: const Icon(Icons.add), label: Text(l10n.dietRecipeAddIngredientAction)),
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOutCubic,
+            alignment: .topCenter,
+            child: draft.ingredients.isEmpty
+                ? const SizedBox(width: double.infinity)
+                : Padding(
+                    padding: const EdgeInsets.only(top: VTSpacing.m),
+                    child: RecipeTotalsCard(draft: draft),
+                  ),
+          ),
+        ],
+      ),
     );
   }
 }

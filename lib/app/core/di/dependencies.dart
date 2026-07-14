@@ -31,7 +31,7 @@ import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
-import 'package:vitta/app/domain/diet/use_cases/create_recipe_use_case.dart';
+import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
@@ -40,6 +40,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dar
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
@@ -111,7 +112,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => DeleteFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => UpdateFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => GetRecipesUseCase(dietRepository: G()));
-  G.registerFactory(() => CreateRecipeUseCase(dietRepository: G()));
+  G.registerFactory(() => SaveRecipeUseCase(dietRepository: G()));
   G.registerFactory(() => DeleteRecipeUseCase(dietRepository: G()));
   G.registerFactory(() => GetMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => SaveMacroGoalsUseCase(dietRepository: G()));
@@ -146,7 +147,15 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => FoodSearchCubit(searchFoodsUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));
   G.registerFactory(() => RecipesCubit(getRecipesUseCase: G(), deleteRecipeUseCase: G()));
-  G.registerFactory(() => RecipeFormCubit(createRecipeUseCase: G(), getAppSettingsUseCase: G()));
+  G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(
+    (recipe, _) => RecipeFormCubit(
+      saveRecipeUseCase: G(),
+      getAppSettingsUseCase: G(),
+      uploadFoodImageUseCase: G(),
+      imagePickerService: G(),
+      recipe: recipe,
+    ),
+  );
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(

@@ -7,6 +7,7 @@ import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_log_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/update_food_log_request.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/requests/update_food_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
@@ -34,6 +35,21 @@ class SupabaseDietDataSource {
       return Success(Food.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to save food "${food.name}"', cause: error));
+    }
+  }
+
+  Future<Result<VTError, Food>> updateFood({required Food food}) async {
+    try {
+      final row = await _supabaseService
+          .from(.foods)
+          .update(UpdateFoodRequest(food: food).toJson())
+          .eq('id', food.id!)
+          .eq('user_id', _userId)
+          .select()
+          .single();
+      return Success(Food.fromMap(row));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to update food "${food.name}"', cause: error));
     }
   }
 

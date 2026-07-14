@@ -7,6 +7,7 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_draft.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
@@ -21,16 +22,21 @@ import '../../../../mocks/use_cases_mocks.dart';
 
 Future<void> pumpRecipeForm(
   WidgetTester tester, {
-  required MockCreateRecipeUseCase createRecipeUseCase,
+  required MockSaveRecipeUseCase saveRecipeUseCase,
   RecipeIngredient? pickedIngredient,
+  Recipe? recipe,
 }) async {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
   if (G.isRegistered<RecipeFormCubit>()) {
     G.unregister<RecipeFormCubit>();
   }
-  G.registerFactory<RecipeFormCubit>(
-    () => CubitsFactories.buildRecipeFormCubit(createRecipeUseCase: createRecipeUseCase, getAppSettingsUseCase: getAppSettingsUseCase),
+  G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(
+    (param, _) => CubitsFactories.buildRecipeFormCubit(
+      saveRecipeUseCase: saveRecipeUseCase,
+      getAppSettingsUseCase: getAppSettingsUseCase,
+      recipe: param,
+    ),
   );
 
   await tester.pumpWidget(
@@ -48,7 +54,7 @@ Future<void> pumpRecipeForm(
               ),
             ),
           ),
-          GoRoute(path: '/new', builder: (context, state) => const RecipeFormPage()),
+          GoRoute(path: '/new', builder: (context, state) => RecipeFormPage(recipe: recipe)),
           GoRoute(
             path: '/ingredient',
             name: 'ingredientPicker',
@@ -85,7 +91,7 @@ void main() {
   });
 
   testWidgets('starts with a name field and no totals to show yet', (tester) async {
-    await pumpRecipeForm(tester, createRecipeUseCase: MockCreateRecipeUseCase());
+    await pumpRecipeForm(tester, saveRecipeUseCase: MockSaveRecipeUseCase());
 
     expect(find.widgetWithText(TextField, 'Recipe name'), findsOneWidget);
     expect(find.text('Add the foods this recipe is made of.'), findsOneWidget);
@@ -95,7 +101,7 @@ void main() {
   testWidgets('a picked ingredient shows up and brings the recipe totals with it', (tester) async {
     await pumpRecipeForm(
       tester,
-      createRecipeUseCase: MockCreateRecipeUseCase(),
+      saveRecipeUseCase: MockSaveRecipeUseCase(),
       pickedIngredient: RecipeIngredient(food: FoodFactory.build(name: 'Oatmeal', caloriesPer100g: 100), quantityGrams: 200),
     );
 
@@ -110,7 +116,7 @@ void main() {
   testWidgets('an ingredient can be taken back out', (tester) async {
     await pumpRecipeForm(
       tester,
-      createRecipeUseCase: MockCreateRecipeUseCase(),
+      saveRecipeUseCase: MockSaveRecipeUseCase(),
       pickedIngredient: RecipeIngredient(food: FoodFactory.build(name: 'Oatmeal'), quantityGrams: 200),
     );
     await addPickedIngredient(tester);
@@ -123,23 +129,25 @@ void main() {
   });
 
   testWidgets('saving without ingredients explains why instead of saving', (tester) async {
-    final createRecipeUseCase = MockCreateRecipeUseCase();
-    await pumpRecipeForm(tester, createRecipeUseCase: createRecipeUseCase);
+    final saveRecipeUseCase = MockSaveRecipeUseCase();
+    await pumpRecipeForm(tester, saveRecipeUseCase: saveRecipeUseCase);
 
     await tester.enterText(find.widgetWithText(TextField, 'Recipe name'), 'Lasagna');
     await tester.tap(find.text('Save recipe'));
     await tester.pumpAndSettle();
 
     expect(find.text('Give the recipe a name and at least one ingredient.'), findsOneWidget);
-    verifyNever(() => createRecipeUseCase(draft: any(named: 'draft')));
+    verifyNever(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')));
   });
 
   testWidgets('saving a complete recipe sends the whole draft and pops back', (tester) async {
-    final createRecipeUseCase = MockCreateRecipeUseCase();
-    when(() => createRecipeUseCase(draft: any(named: 'draft'))).thenAnswer((_) async => Success(RecipeFactory.build()));
+    final saveRecipeUseCase = MockSaveRecipeUseCase();
+    when(
+      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+    ).thenAnswer((_) async => Success(RecipeFactory.build()));
     await pumpRecipeForm(
       tester,
-      createRecipeUseCase: createRecipeUseCase,
+      saveRecipeUseCase: saveRecipeUseCase,
       pickedIngredient: RecipeIngredient(food: FoodFactory.build(name: 'Oatmeal'), quantityGrams: 200),
     );
     await addPickedIngredient(tester);
@@ -148,10 +156,52 @@ void main() {
     await tester.tap(find.text('Save recipe'));
     await tester.pumpAndSettle();
 
-    final capturedDraft = verify(() => createRecipeUseCase(draft: captureAny(named: 'draft'))).captured.single as RecipeDraft;
+    final capturedDraft =
+        verify(() => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: any(named: 'recipe'))).captured.single as RecipeDraft;
     expect(capturedDraft.name, 'Porridge');
     expect(capturedDraft.ingredients.single.food.name, 'Oatmeal');
     expect(capturedDraft.totalGrams, 200);
     expect(find.text('open'), findsOneWidget);
+  });
+
+  testWidgets('editing opens already filled in with the recipe', (tester) async {
+    await pumpRecipeForm(
+      tester,
+      saveRecipeUseCase: MockSaveRecipeUseCase(),
+      recipe: RecipeFactory.build(
+        food: FoodFactory.build(name: 'Lasagna'),
+        ingredients: [
+          RecipeIngredient(food: FoodFactory.build(name: 'Pasta'), quantityGrams: 250),
+        ],
+      ),
+    );
+
+    expect(find.text('Edit recipe'), findsOneWidget);
+    expect(find.widgetWithText(TextField, 'Lasagna'), findsOneWidget);
+    expect(find.text('Pasta'), findsOneWidget);
+    expect(find.text('Recipe totals'), findsOneWidget);
+  });
+
+  testWidgets('editing sends the recipe back so it updates rather than duplicates', (tester) async {
+    final saveRecipeUseCase = MockSaveRecipeUseCase();
+    when(
+      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+    ).thenAnswer((_) async => Success(RecipeFactory.build()));
+    final recipe = RecipeFactory.build(food: FoodFactory.build(name: 'Lasagna'));
+    await pumpRecipeForm(tester, saveRecipeUseCase: saveRecipeUseCase, recipe: recipe);
+
+    await tester.enterText(find.widgetWithText(TextField, 'Lasagna'), 'Lasagna v2');
+    await tester.tap(find.text('Save recipe'));
+    await tester.pumpAndSettle();
+
+    final capturedDraft =
+        verify(() => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: recipe)).captured.single as RecipeDraft;
+    expect(capturedDraft.name, 'Lasagna v2');
+  });
+
+  testWidgets('a recipe with no photo offers to add one', (tester) async {
+    await pumpRecipeForm(tester, saveRecipeUseCase: MockSaveRecipeUseCase());
+
+    expect(find.text('Add a photo'), findsOneWidget);
   });
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
@@ -11,7 +12,6 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart'
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_energy_split_card.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_nutrient_field.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_scan_card.dart';
-import 'package:vitta/app/presentation/pages/custom_food/widgets/image_source_sheet.dart';
 
 class CustomFoodForm extends StatefulWidget {
   const CustomFoodForm({required this.state, super.key});

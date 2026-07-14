@@ -184,10 +184,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietBrandHint => 'Who makes it';
 
   @override
-  String get dietAddPhotoAction => 'Add a photo';
+  String get addPhotoAction => 'Add a photo';
 
   @override
-  String get dietChangePhotoAction => 'Change photo';
+  String get changePhotoAction => 'Change photo';
 
   @override
   String get dietScanLabelHint => 'Snap the nutrition table and we fill in the values for you.';
@@ -272,10 +272,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nutrientZinc => 'Zinc';
 
   @override
-  String get dietTakePhotoAction => 'Take photo';
+  String get takePhotoAction => 'Take photo';
 
   @override
-  String get dietChooseFromGalleryAction => 'Choose from gallery';
+  String get chooseFromGalleryAction => 'Choose from gallery';
 
   @override
   String get dietContinueAction => 'Continue';
@@ -379,6 +379,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get dietRecipesEmptyMessage => 'Tap + to combine foods into a recipe you can log in one go.';
+
+  @override
+  String get dietEditRecipeTitle => 'Edit recipe';
 
   @override
   String get dietCreateRecipeTitle => 'New recipe';

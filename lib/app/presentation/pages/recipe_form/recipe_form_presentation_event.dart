@@ -8,8 +8,8 @@ class RecipeFormHideLoading implements RecipeFormPresentationEvent {}
 
 class RecipeFormIncomplete implements RecipeFormPresentationEvent {}
 
-class RecipeCreated implements RecipeFormPresentationEvent {
-  const RecipeCreated({required this.recipe});
+class RecipeSaved implements RecipeFormPresentationEvent {
+  const RecipeSaved({required this.recipe});
 
   final Recipe recipe;
 }

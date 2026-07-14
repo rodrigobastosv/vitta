@@ -410,17 +410,17 @@ abstract class AppLocalizations {
   /// **'Who makes it'**
   String get dietBrandHint;
 
-  /// No description provided for @dietAddPhotoAction.
+  /// No description provided for @addPhotoAction.
   ///
   /// In en, this message translates to:
   /// **'Add a photo'**
-  String get dietAddPhotoAction;
+  String get addPhotoAction;
 
-  /// No description provided for @dietChangePhotoAction.
+  /// No description provided for @changePhotoAction.
   ///
   /// In en, this message translates to:
   /// **'Change photo'**
-  String get dietChangePhotoAction;
+  String get changePhotoAction;
 
   /// No description provided for @dietScanLabelHint.
   ///
@@ -578,17 +578,17 @@ abstract class AppLocalizations {
   /// **'Zinc'**
   String get nutrientZinc;
 
-  /// No description provided for @dietTakePhotoAction.
+  /// No description provided for @takePhotoAction.
   ///
   /// In en, this message translates to:
   /// **'Take photo'**
-  String get dietTakePhotoAction;
+  String get takePhotoAction;
 
-  /// No description provided for @dietChooseFromGalleryAction.
+  /// No description provided for @chooseFromGalleryAction.
   ///
   /// In en, this message translates to:
   /// **'Choose from gallery'**
-  String get dietChooseFromGalleryAction;
+  String get chooseFromGalleryAction;
 
   /// No description provided for @dietContinueAction.
   ///
@@ -763,6 +763,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap + to combine foods into a recipe you can log in one go.'**
   String get dietRecipesEmptyMessage;
+
+  /// No description provided for @dietEditRecipeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit recipe'**
+  String get dietEditRecipeTitle;
 
   /// No description provided for @dietCreateRecipeTitle.
   ///

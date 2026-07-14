@@ -63,6 +63,8 @@ class DietRepository {
 
   Future<Result<VTError, Food>> saveFood({required Food food}) => _supabaseDietDataSource.saveFood(food: food);
 
+  Future<Result<VTError, Food>> updateFood({required Food food}) => _supabaseDietDataSource.updateFood(food: food);
+
   Future<Result<VTError, FoodLog>> logFood({
     required String foodId,
     required DateTime loggedDate,
@@ -84,6 +86,9 @@ class DietRepository {
 
   Future<Result<VTError, Recipe>> createRecipe({required String foodId, required List<RecipeIngredient> ingredients}) =>
       _supabaseRecipeDataSource.createRecipe(foodId: foodId, ingredients: ingredients);
+
+  Future<Result<VTError, Recipe>> replaceRecipeIngredients({required String recipeId, required List<RecipeIngredient> ingredients}) =>
+      _supabaseRecipeDataSource.replaceIngredients(recipeId: recipeId, ingredients: ingredients);
 
   Future<Result<VTError, void>> deleteRecipe({required String recipeId}) => _supabaseRecipeDataSource.deleteRecipe(recipeId: recipeId);
 

@@ -1,4 +1,5 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
+import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -93,11 +94,17 @@ abstract class CubitsFactories {
       );
 
   static RecipeFormCubit buildRecipeFormCubit({
-    MockCreateRecipeUseCase? createRecipeUseCase,
+    MockSaveRecipeUseCase? saveRecipeUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockUploadFoodImageUseCase? uploadFoodImageUseCase,
+    MockImagePickerService? imagePickerService,
+    Recipe? recipe,
   }) => RecipeFormCubit(
-    createRecipeUseCase: createRecipeUseCase ?? MockCreateRecipeUseCase(),
+    saveRecipeUseCase: saveRecipeUseCase ?? MockSaveRecipeUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    uploadFoodImageUseCase: uploadFoodImageUseCase ?? MockUploadFoodImageUseCase(),
+    imagePickerService: imagePickerService ?? MockImagePickerService(),
+    recipe: recipe,
   );
 
   static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>

@@ -9,7 +9,9 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_extra.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_state.dart';
@@ -49,23 +51,29 @@ class RecipesPage extends StatelessWidget {
                     VTAppearEffect(
                       key: ValueKey(recipe.id),
                       delay: Duration(milliseconds: index.clamp(0, 10) * 60),
-                      child: RecipeTile(recipe: recipe, onDelete: () => cubit.deleteRecipe(recipeId: recipe.id)),
+                      child: RecipeTile(
+                        recipe: recipe,
+                        onEdit: () => _openForm(context, cubit, recipe: recipe),
+                        onDelete: () => cubit.deleteRecipe(recipeId: recipe.id),
+                      ),
                     ),
                     const VTGap.m(),
                   ],
                 ],
               ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            final created = await context.pushRoute<bool>(.recipeForm);
-            if (created ?? false) {
-              await cubit.loadRecipes();
-            }
-          },
+          onPressed: () => _openForm(context, cubit),
           icon: const Icon(Icons.add),
           label: Text(l10n.dietCreateRecipeTitle),
         ),
       ),
     );
+  }
+
+  Future<void> _openForm(BuildContext context, RecipesCubit cubit, {Recipe? recipe}) async {
+    final saved = await context.pushRoute<bool>(.recipeForm, extra: RecipeFormExtra(recipe: recipe));
+    if (saved ?? false) {
+      await cubit.loadRecipes();
+    }
   }
 }
