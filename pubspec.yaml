@@ -28,7 +28,6 @@ dependencies:
   loader_overlay: ^5.0.0
   sentry_flutter: ^9.24.0
   image_picker: ^1.2.3
-  google_mlkit_text_recognition: ^0.15.0
 
 dev_dependencies:
   flutter_test:

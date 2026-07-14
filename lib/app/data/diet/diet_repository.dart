@@ -4,8 +4,8 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
-import 'package:vitta/app/data/diet/datasources/ocr/nutrition_ocr_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
@@ -16,21 +16,20 @@ import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
-import 'package:vitta/app/domain/diet/nutrition_label_parser.dart';
 
 class DietRepository {
   DietRepository({
     required this._openFoodFactsDataSource,
     required this._supabaseDietDataSource,
     required this._dietGoalsLocalDataSource,
-    required this._nutritionOcrDataSource,
+    required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
   });
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
-  final NutritionOcrDataSource _nutritionOcrDataSource;
+  final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
 
   // Below this many catalog hits, the shared catalog is too thin to stand on its
@@ -116,8 +115,6 @@ class DietRepository {
   Future<Result<VTError, String>> uploadFoodImage({required Uint8List bytes, required String fileExtension}) =>
       _supabaseDietDataSource.uploadFoodImage(bytes: bytes, fileExtension: fileExtension);
 
-  Future<Result<VTError, ScannedNutritionFacts>> scanNutritionLabel({required String imagePath}) async {
-    final linesResult = await _nutritionOcrDataSource.recognizeText(imagePath: imagePath);
-    return linesResult.when(Failure.new, (lines) => Success(NutritionLabelParser.parse(lines)));
-  }
+  Future<Result<VTError, ScannedNutritionFacts>> scanNutritionLabel({required String imagePath}) =>
+      _supabaseNutritionScanDataSource.scanLabel(imagePath: imagePath);
 }

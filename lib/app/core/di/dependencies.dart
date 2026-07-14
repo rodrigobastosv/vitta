@@ -8,14 +8,13 @@ import 'package:vitta/app/core/services/logging/logging_service.dart';
 import 'package:vitta/app/core/services/logging/sentry_log_destination.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
-import 'package:vitta/app/core/services/text_recognition/text_recognition_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
-import 'package:vitta/app/data/diet/datasources/ocr/nutrition_ocr_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
@@ -89,15 +88,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
   G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
   G.registerLazySingleton(() => DietGoalsLocalDataSource(localStorageService: G()));
-  G.registerLazySingleton(TextRecognitionService.new);
-  G.registerLazySingleton(() => NutritionOcrDataSource(textRecognitionService: G()));
+  G.registerLazySingleton(() => SupabaseNutritionScanDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseRecipeDataSource(supabaseService: G()));
   G.registerLazySingleton(
     () => DietRepository(
       openFoodFactsDataSource: G(),
       supabaseDietDataSource: G(),
       dietGoalsLocalDataSource: G(),
-      nutritionOcrDataSource: G(),
+      supabaseNutritionScanDataSource: G(),
       supabaseRecipeDataSource: G(),
     ),
   );

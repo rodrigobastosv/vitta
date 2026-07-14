@@ -1,5 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/services/supabase/supabase_bucket.dart';
+import 'package:vitta/app/core/services/supabase/supabase_function.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 
 class SupabaseService {
@@ -20,4 +21,7 @@ class SupabaseService {
   SupabaseQueryBuilder from(SupabaseTable table) => _client.from(table.wireName);
 
   StorageFileApi storage(SupabaseBucket bucket) => _client.storage.from(bucket.wireName);
+
+  Future<FunctionResponse> invoke(SupabaseFunction function, {required Map<String, dynamic> body}) =>
+      _client.functions.invoke(function.wireName, body: body);
 }
