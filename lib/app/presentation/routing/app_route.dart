@@ -3,6 +3,7 @@ enum AppRoute {
   home('/'),
   diet('/diet'),
   foodSearch('/diet/food-search'),
+  customFood('/diet/food-search/custom-food'),
   water('/water'),
   sleep('/sleep'),
   workout('/workout'),

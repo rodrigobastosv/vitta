@@ -169,22 +169,45 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietCustomFoodTitle => 'Cadastrar alimento';
 
   @override
+  String get dietCustomFoodSubtitle => 'Ele entra no catálogo compartilhado com todo mundo.';
+
+  @override
   String get dietFoodNameLabel => 'Nome';
 
   @override
-  String get dietCaloriesPer100gLabel => 'Calorias por 100g';
+  String get dietFoodNameHint => 'Iogurte grego, aveia em flocos, ...';
 
   @override
-  String get dietProteinPer100gLabel => 'Proteína por 100g';
+  String get dietBrandLabel => 'Marca (opcional)';
 
   @override
-  String get dietCarbsPer100gLabel => 'Carboidratos por 100g';
+  String get dietBrandHint => 'Quem fabrica';
 
   @override
-  String get dietFatPer100gLabel => 'Gordura por 100g';
+  String get dietAddPhotoAction => 'Adicionar foto';
 
   @override
-  String get dietFiberPer100gLabel => 'Fibra por 100g';
+  String get dietChangePhotoAction => 'Trocar foto';
+
+  @override
+  String get dietScanLabelHint => 'Fotografe a tabela nutricional e preenchemos os valores para você.';
+
+  @override
+  String get dietEnergyLabel => 'Calorias';
+
+  @override
+  String get dietKcalUnit => 'kcal';
+
+  @override
+  String get dietGramsUnit => 'g';
+
+  @override
+  String get dietEnergySplitTitle => 'Distribuição de energia';
+
+  @override
+  String dietMacroPercent(int percent) {
+    return '$percent%';
+  }
 
   @override
   String get dietFiberLabel => 'Fibra';
