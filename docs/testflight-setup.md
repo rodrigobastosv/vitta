@@ -64,15 +64,28 @@ certificate.
    `MATCH_PASSWORD`. Run this before the first release; CI is `readonly: true` and will fail
    rather than create a certificate itself.
 
-3. Create a personal access token that can read that repo:
-   <https://github.com/settings/tokens> → Fine-grained → repo `vitta-certificates`,
-   **Contents: Read-only**.
+3. Create a token that can read that repo:
+   <https://github.com/settings/personal-access-tokens/new> → Repository access: only
+   `vitta-certificates` → **Contents: Read-only** (CI only ever reads). Copy the
+   `github_pat_...`, it's shown once.
 
 | GitHub secret | Value |
 | --- | --- |
 | `MATCH_GIT_URL` | `https://github.com/rodrigobastosv/vitta-certificates.git` |
 | `MATCH_PASSWORD` | The passphrase from step 2 |
-| `MATCH_GIT_BASIC_AUTHORIZATION` | `printf 'rodrigobastosv:<token>' \| base64` |
+| `MATCH_GIT_BASIC_AUTHORIZATION` | base64 of `user:token`, see below |
+
+`MATCH_GIT_BASIC_AUTHORIZATION` is an HTTP Basic header, which is why `MATCH_GIT_URL` has to
+be `https://` and not SSH:
+
+```sh
+printf 'rodrigobastosv:github_pat_XXXX' | base64 | pbcopy
+```
+
+**`printf`, not `echo`.** `echo` appends a newline, the newline gets encoded, and the header
+is then quietly wrong — git fails with a bare `403` that says nothing about base64. (macOS
+`base64` doesn't wrap long lines, so nothing else is needed here; GNU `base64` on Linux wraps
+at 76 columns and would want `| tr -d '\n'`.)
 
 ## 4. App credentials → 3 secrets
 
