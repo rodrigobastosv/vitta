@@ -32,13 +32,17 @@ abstract class CubitsFactories {
   static DietCubit buildDietCubit({
     MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
     MockDeleteFoodLogUseCase? deleteFoodLogUseCase,
+    MockUpdateFoodLogUseCase? updateFoodLogUseCase,
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
     MockGetMonthlyMacrosUseCase? getMonthlyMacrosUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
   }) => DietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
     deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
+    updateFoodLogUseCase: updateFoodLogUseCase ?? MockUpdateFoodLogUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
     getMonthlyMacrosUseCase: getMonthlyMacrosUseCase ?? MockGetMonthlyMacrosUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
   static MacroGoalsCubit buildMacroGoalsCubit({

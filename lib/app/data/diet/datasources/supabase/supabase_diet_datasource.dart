@@ -6,6 +6,7 @@ import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_log_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_request.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/requests/update_food_log_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
@@ -76,6 +77,26 @@ class SupabaseDietDataSource {
       return Success(rows.map(FoodLogEntry.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load food logs for $date', cause: error));
+    }
+  }
+
+  Future<Result<VTError, FoodLog>> updateFoodLog({
+    required String logId,
+    required MealType mealType,
+    required double quantityGrams,
+  }) async {
+    try {
+      final request = UpdateFoodLogRequest(mealType: mealType, quantityGrams: quantityGrams);
+      final row = await _supabaseService
+          .from(.foodLogs)
+          .update(request.toJson())
+          .eq('id', logId)
+          .eq('user_id', _userId)
+          .select()
+          .single();
+      return Success(FoodLog.fromMap(row));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to update food log $logId', cause: error));
     }
   }
 

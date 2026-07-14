@@ -10,10 +10,17 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_log_tile.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_avatar.dart';
 
 class MealSectionCard extends StatefulWidget {
-  const MealSectionCard({required this.section, required this.onAddFood, required this.onDeleteEntry, super.key});
+  const MealSectionCard({
+    required this.section,
+    required this.onAddFood,
+    required this.onEditEntry,
+    required this.onDeleteEntry,
+    super.key,
+  });
 
   final MealSection section;
   final VoidCallback? onAddFood;
+  final void Function(FoodLogEntry entry) onEditEntry;
   final void Function(FoodLogEntry entry) onDeleteEntry;
 
   @override
@@ -63,7 +70,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
           if (_isExpanded) ...[
             const VTGap.m(),
             for (final entry in section.entries) ...[
-              FoodLogTile(entry: entry, onDelete: () => widget.onDeleteEntry(entry)),
+              FoodLogTile(entry: entry, onEdit: () => widget.onEditEntry(entry), onDelete: () => widget.onDeleteEntry(entry)),
               const VTGap.s(),
             ],
             if (widget.onAddFood != null)

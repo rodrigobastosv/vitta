@@ -37,6 +37,7 @@ import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
@@ -96,6 +97,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => LogFoodUseCase(dietRepository: G()));
   G.registerFactory(() => GetDailyMacrosUseCase(dietRepository: G()));
   G.registerFactory(() => DeleteFoodLogUseCase(dietRepository: G()));
+  G.registerFactory(() => UpdateFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => GetMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => SaveMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => GetMonthlyMacrosUseCase(dietRepository: G()));
@@ -115,7 +117,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
 
   G.registerFactory(
-    () => DietCubit(getDailyMacrosUseCase: G(), deleteFoodLogUseCase: G(), getMacroGoalsUseCase: G(), getMonthlyMacrosUseCase: G()),
+    () => DietCubit(
+      getDailyMacrosUseCase: G(),
+      deleteFoodLogUseCase: G(),
+      updateFoodLogUseCase: G(),
+      getMacroGoalsUseCase: G(),
+      getMonthlyMacrosUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
   );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(

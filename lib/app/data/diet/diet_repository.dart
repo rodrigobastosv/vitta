@@ -70,6 +70,9 @@ class DietRepository {
     return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));
   }
 
+  Future<Result<VTError, FoodLog>> updateFoodLog({required String logId, required MealType mealType, required double quantityGrams}) =>
+      _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
+
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 
   MacroGoals getMacroGoals() => _dietGoalsLocalDataSource.getGoals();
