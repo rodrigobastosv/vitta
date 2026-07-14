@@ -650,6 +650,102 @@ abstract class AppLocalizations {
   /// **'{grams} g'**
   String dietMacroGrams(String grams);
 
+  /// No description provided for @dietHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get dietHistoryTitle;
+
+  /// No description provided for @dietHistoryTrendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get dietHistoryTrendsTitle;
+
+  /// No description provided for @dietWeekAverageShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories}'**
+  String dietWeekAverageShort(int calories);
+
+  /// No description provided for @dietWeekAverageTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average: {calories} kcal over {days} logged days'**
+  String dietWeekAverageTooltip(int calories, int days);
+
+  /// No description provided for @dietWeekColumnLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg'**
+  String get dietWeekColumnLabel;
+
+  /// No description provided for @dietTrendRangeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days}d'**
+  String dietTrendRangeDays(int days);
+
+  /// No description provided for @dietCaloriesTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories'**
+  String get dietCaloriesTrendTitle;
+
+  /// No description provided for @dietMacrosTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Macros'**
+  String get dietMacrosTrendTitle;
+
+  /// No description provided for @dietTrendAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal/day average'**
+  String dietTrendAverageLabel(int calories);
+
+  /// No description provided for @dietTrendLoggedDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{days} of {total} days logged'**
+  String dietTrendLoggedDays(int days, int total);
+
+  /// No description provided for @dietTrendEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged in this period yet.'**
+  String get dietTrendEmptyMessage;
+
+  /// No description provided for @dietHistoryCalendarEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged this month.'**
+  String get dietHistoryCalendarEmptyMessage;
+
+  /// No description provided for @dietDayDetailsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was logged on this day.'**
+  String get dietDayDetailsEmptyMessage;
+
+  /// No description provided for @dietGoalLineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get dietGoalLineLabel;
+
+  /// No description provided for @dietMealSplitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories by meal'**
+  String get dietMealSplitTitle;
+
+  /// No description provided for @dietMealSplitAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal/day'**
+  String dietMealSplitAverage(int calories);
+
   /// No description provided for @mealTypeBreakfast.
   ///
   /// In en, this message translates to:

@@ -9,7 +9,7 @@ import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
-import 'package:vitta/app/domain/diet/use_cases/get_monthly_macros_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
@@ -22,7 +22,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     required this._deleteFoodLogUseCase,
     required this._updateFoodLogUseCase,
     required this._getMacroGoalsUseCase,
-    required this._getMonthlyMacrosUseCase,
+    required this._getMacrosInRangeUseCase,
     required this._getAppSettingsUseCase,
   }) : super(
          DietState(
@@ -36,7 +36,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   final DeleteFoodLogUseCase _deleteFoodLogUseCase;
   final UpdateFoodLogUseCase _updateFoodLogUseCase;
   final GetMacroGoalsUseCase _getMacroGoalsUseCase;
-  final GetMonthlyMacrosUseCase _getMonthlyMacrosUseCase;
+  final GetMacrosInRangeUseCase _getMacrosInRangeUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
@@ -77,7 +77,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   }
 
   Future<void> loadMonthMacros(DateTime month) async {
-    final monthlyMacrosResult = await _getMonthlyMacrosUseCase(
+    final monthlyMacrosResult = await _getMacrosInRangeUseCase(
       from: DateTime(month.year, month.month),
       to: DateTime(month.year, month.month + 1, 0),
     );

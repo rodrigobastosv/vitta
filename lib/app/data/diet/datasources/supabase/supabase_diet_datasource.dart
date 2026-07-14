@@ -109,7 +109,7 @@ class SupabaseDietDataSource {
     }
   }
 
-  Future<Result<VTError, List<FoodLogEntry>>> getMonthlyLog({required DateTime from, required DateTime to}) async {
+  Future<Result<VTError, List<FoodLogEntry>>> getLogsInRange({required DateTime from, required DateTime to}) async {
     try {
       final rows = await _supabaseService
           .from(.foodLogs)

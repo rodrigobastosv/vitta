@@ -7,11 +7,11 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 
 class FoodLogTile extends StatelessWidget {
-  const FoodLogTile({required this.entry, required this.onEdit, required this.onDelete, super.key});
+  const FoodLogTile({required this.entry, this.onEdit, this.onDelete, super.key});
 
   final FoodLogEntry entry;
-  final VoidCallback onEdit;
-  final VoidCallback onDelete;
+  final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,8 @@ class FoodLogTile extends StatelessWidget {
               ],
             ),
           ),
-          IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
+          if (onDelete != null)
+            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
         ],
       ),
     );

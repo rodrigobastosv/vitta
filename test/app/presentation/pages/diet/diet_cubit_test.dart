@@ -251,34 +251,34 @@ void main() {
   });
 
   test('loadMonthMacros stores the macros-by-date returned for the month', () async {
-    final getMonthlyMacrosUseCase = MockGetMonthlyMacrosUseCase();
+    final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     final macrosByDate = {
       DateTime(2026, 7, 5): DailyMacros(entries: [FoodLogEntryFactory.build()]),
       DateTime(2026, 7, 11): const DailyMacros(entries: []),
     };
     when(
-      () => getMonthlyMacrosUseCase(
+      () => getMacrosInRangeUseCase(
         from: any(named: 'from'),
         to: any(named: 'to'),
       ),
     ).thenAnswer((_) async => Success(macrosByDate));
-    final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
+    final cubit = CubitsFactories.buildDietCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
 
     await cubit.loadMonthMacros(DateTime(2026, 7));
 
     expect(cubit.state.loggedMacrosInMonth, macrosByDate);
-    verify(() => getMonthlyMacrosUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
+    verify(() => getMacrosInRangeUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
   });
 
   test('loadMonthMacros keeps the previous macros when it fails', () async {
-    final getMonthlyMacrosUseCase = MockGetMonthlyMacrosUseCase();
+    final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     when(
-      () => getMonthlyMacrosUseCase(
+      () => getMacrosInRangeUseCase(
         from: any(named: 'from'),
         to: any(named: 'to'),
       ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-    final cubit = CubitsFactories.buildDietCubit(getMonthlyMacrosUseCase: getMonthlyMacrosUseCase);
+    final cubit = CubitsFactories.buildDietCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
 
     await cubit.loadMonthMacros(DateTime(2026, 7));
 

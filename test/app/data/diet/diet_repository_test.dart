@@ -11,7 +11,7 @@ import '../../../factories/repositories_factories.dart';
 import '../../../mocks/datasources_mocks.dart';
 
 void main() {
-  test('getMonthlyMacros groups the monthly log entries by their logged date', () async {
+  test('getMacrosInRange groups the monthly log entries by their logged date', () async {
     final supabaseDietDataSource = MockSupabaseDietDataSource();
     final from = DateTime(2026, 7);
     final to = DateTime(2026, 7, 31);
@@ -26,10 +26,10 @@ void main() {
         log: FoodLogFactory.build(id: 'c', loggedDate: DateTime(2026, 7, 11)),
       ),
     ];
-    when(() => supabaseDietDataSource.getMonthlyLog(from: from, to: to)).thenAnswer((_) async => Success(entries));
+    when(() => supabaseDietDataSource.getLogsInRange(from: from, to: to)).thenAnswer((_) async => Success(entries));
     final repository = RepositoriesFactories.buildDietRepository(supabaseDietDataSource: supabaseDietDataSource);
 
-    final macrosResult = await repository.getMonthlyMacros(from: from, to: to);
+    final macrosResult = await repository.getMacrosInRange(from: from, to: to);
 
     macrosResult.when((error) => fail('expected Success, got Failure($error)'), (macrosByDate) {
       expect(macrosByDate.keys.toSet(), {DateTime(2026, 7, 5), DateTime(2026, 7, 11)});

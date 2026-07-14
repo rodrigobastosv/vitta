@@ -2,6 +2,7 @@ import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -36,15 +37,23 @@ abstract class CubitsFactories {
     MockDeleteFoodLogUseCase? deleteFoodLogUseCase,
     MockUpdateFoodLogUseCase? updateFoodLogUseCase,
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
-    MockGetMonthlyMacrosUseCase? getMonthlyMacrosUseCase,
+    MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
   }) => DietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
     deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
     updateFoodLogUseCase: updateFoodLogUseCase ?? MockUpdateFoodLogUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
-    getMonthlyMacrosUseCase: getMonthlyMacrosUseCase ?? MockGetMonthlyMacrosUseCase(),
+    getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static DietHistoryCubit buildDietHistoryCubit({
+    MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+  }) => DietHistoryCubit(
+    getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
   );
 
   static MacroGoalsCubit buildMacroGoalsCubit({

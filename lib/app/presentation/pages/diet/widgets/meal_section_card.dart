@@ -12,23 +12,25 @@ import 'package:vitta/app/presentation/pages/diet/widgets/meal_avatar.dart';
 class MealSectionCard extends StatefulWidget {
   const MealSectionCard({
     required this.section,
-    required this.onAddFood,
-    required this.onEditEntry,
-    required this.onDeleteEntry,
+    this.onAddFood,
+    this.onEditEntry,
+    this.onDeleteEntry,
+    this.initiallyExpanded = false,
     super.key,
   });
 
   final MealSection section;
   final VoidCallback? onAddFood;
-  final void Function(FoodLogEntry entry) onEditEntry;
-  final void Function(FoodLogEntry entry) onDeleteEntry;
+  final void Function(FoodLogEntry entry)? onEditEntry;
+  final void Function(FoodLogEntry entry)? onDeleteEntry;
+  final bool initiallyExpanded;
 
   @override
   State<MealSectionCard> createState() => _MealSectionCardState();
 }
 
 class _MealSectionCardState extends State<MealSectionCard> {
-  bool _isExpanded = false;
+  late bool _isExpanded = widget.initiallyExpanded;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +72,11 @@ class _MealSectionCardState extends State<MealSectionCard> {
           if (_isExpanded) ...[
             const VTGap.m(),
             for (final entry in section.entries) ...[
-              FoodLogTile(entry: entry, onEdit: () => widget.onEditEntry(entry), onDelete: () => widget.onDeleteEntry(entry)),
+              FoodLogTile(
+                entry: entry,
+                onEdit: widget.onEditEntry == null ? null : () => widget.onEditEntry!(entry),
+                onDelete: widget.onDeleteEntry == null ? null : () => widget.onDeleteEntry!(entry),
+              ),
               const VTGap.s(),
             ],
             if (widget.onAddFood != null)
