@@ -18,8 +18,12 @@ jobs:
           channel: stable
           cache: true
 
+      # ruby-version is required: setup-ruby refuses to guess, and there's no
+      # .ruby-version file to read (pinning one would force the same Ruby on
+      # everyone locally, which nothing here needs).
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: '3.3'
           working-directory: ios
           bundler-cache: true
 
