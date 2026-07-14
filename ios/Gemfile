@@ -1,3 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'fastlane'
+# Flutter shells out to `pod` during `flutter build ios`. The runner ships
+# CocoaPods against its system Ruby, which setup-ruby replaces - so pin it here
+# and let bundler put it on PATH. Matches Podfile.lock's COCOAPODS version.
+gem 'cocoapods', '1.16.2'
