@@ -225,14 +225,9 @@ The version reaches the binary through Flutter, not Xcode: `flutter build ios --
 
 `ITSAppUsesNonExemptEncryption = false` in `Info.plist` matters more than it looks: without it every upload stops in TestFlight waiting for the export compliance form to be answered by hand before testers can install. Vitta only talks HTTPS, which is exempt.
 
-**One-time setup, none of which is in the repo:**
+**One-time setup** (Apple app record, the private `match` certificates repo, the App Store Connect API key, and the nine GitHub secrets) is a runbook in [`docs/testflight-setup.md`](docs/testflight-setup.md) — the pipeline fails until every step there is done, and none of it can live in the repo.
 
-1. Register the `com.rodrigobastosv.vitta` bundle id in App Store Connect and create the app record (team `SDRL4XQA74`).
-2. Create a **private** git repo for certificates, then run `cd ios && MATCH_GIT_URL=<repo> bundle exec fastlane match appstore` once locally to seed it.
-3. Create an App Store Connect API key (Users and Access > Integrations), keep the `.p8`.
-4. Add repo secrets: `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY_CONTENT` (the `.p8` base64-encoded — `base64 -i key.p8`), `MATCH_GIT_URL`, `MATCH_PASSWORD`, `MATCH_GIT_BASIC_AUTHORIZATION` (base64 of `user:personal-access-token` for the certs repo), plus `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SENTRY_DSN`.
-
-Android's `applicationId` is still `com.example.vitta` — deliberately untouched, since it's the Play identity and there's no Play pipeline yet.
+Android carries the same `com.rodrigobastosv.vitta` id (`namespace` + `applicationId` in `android/app/build.gradle.kts`, plus the `MainActivity.kt` package path) purely for consistency — there is no Play pipeline yet, so nothing consumes it.
 
 ## Growing this file
 

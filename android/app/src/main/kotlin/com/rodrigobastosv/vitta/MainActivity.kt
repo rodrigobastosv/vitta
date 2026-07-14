@@ -1,4 +1,4 @@
-package com.example.vitta
+package com.rodrigobastosv.vitta
 
 import io.flutter.embedding.android.FlutterActivity
 
