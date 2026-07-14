@@ -1,0 +1,65 @@
+name: TestFlight
+
+# Tag-driven: `git tag v1.2.3 && git push --tags` is the whole release ritual,
+# and the tag is what fastlane reads the version from.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  testflight:
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          working-directory: ios
+          bundler-cache: true
+
+      # .env is a bundled asset (see pubspec) and gitignored, so a build without
+      # this step ships an app that talks to nothing. A missing secret reads as
+      # an empty string rather than failing, and Env would only blow up once a
+      # tester launches the build - so check here, where it costs nothing.
+      - name: Write .env from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY SENTRY_DSN; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty; the build would ship unable to reach its backend."
+              exit 1
+            fi
+          done
+          cat > .env <<EOF
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY
+          SENTRY_DSN=$SENTRY_DSN
+          EOF
+
+      - run: flutter pub get
+
+      - name: Build and upload to TestFlight
+        working-directory: ios
+        run: bundle exec fastlane ios beta
+        env:
+          VERSION_TAG: ${{ github.ref_name }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+          APP_STORE_CONNECT_KEY_CONTENT: ${{ secrets.APP_STORE_CONNECT_KEY_CONTENT }}
+          MATCH_GIT_URL: ${{ secrets.MATCH_GIT_URL }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          FASTLANE_SKIP_UPDATE_CHECK: 'true'
+          # fastlane warns and can misbehave on a non-UTF-8 locale.
+          LANG: en_US.UTF-8
+          LC_ALL: en_US.UTF-8

@@ -51,5 +51,10 @@
 		<string>Vitta uses your photo library to add a picture to a food you create.</string>
 		<key>NSCameraUsageDescription</key>
 		<string>Vitta uses your camera to take a picture of a food you create.</string>
+		<!-- Vitta only uses HTTPS, which is exempt. Without this key every upload
+		     stops in TestFlight waiting for the export compliance form to be
+		     answered by hand before testers can install it. -->
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
 	</dict>
 </plist>
