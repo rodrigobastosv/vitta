@@ -836,6 +836,24 @@ abstract class AppLocalizations {
   /// **'Sign in or create account'**
   String get profileSignInAction;
 
+  /// No description provided for @profileGuestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Guest'**
+  String get profileGuestTitle;
+
+  /// No description provided for @profileMacroGoalsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your daily calorie and macro targets'**
+  String get profileMacroGoalsSubtitle;
+
+  /// No description provided for @profileSettingsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Language, theme and units'**
+  String get profileSettingsSubtitle;
+
   /// No description provided for @macroGoalsTitle.
   ///
   /// In en, this message translates to:

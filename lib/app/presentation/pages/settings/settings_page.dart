@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
-import 'package:vitta/app/cubit/app_presentation_event.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
-import 'package:vitta/app/presentation/general/vt_page.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -15,10 +14,11 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    return VTPage<AppCubit, AppSettings, AppPresentationEvent>(
-      builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.settingsTitle)),
-        body: ListView(
+    final cubit = context.read<AppCubit>();
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.settingsTitle)),
+      body: BlocBuilder<AppCubit, AppSettings>(
+        builder: (context, state) => ListView(
           padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
           children: [
             Padding(

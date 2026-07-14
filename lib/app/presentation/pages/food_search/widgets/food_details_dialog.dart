@@ -3,12 +3,12 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
-import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/macro_pill.dart';
 
 Future<void> showFoodDetailsDialog({required BuildContext context, required Food food, required Object heroTag}) =>
     Navigator.of(context).push(
@@ -65,10 +65,10 @@ class FoodDetailsDialog extends StatelessWidget {
                       spacing: VTSpacing.s,
                       runSpacing: VTSpacing.xs,
                       children: [
-                        _MacroPill(label: l10n.dietProteinLabel, grams: food.proteinPer100g, color: VTColors.macroProtein),
-                        _MacroPill(label: l10n.dietCarbsLabel, grams: food.carbsPer100g, color: VTColors.macroCarbs),
-                        _MacroPill(label: l10n.dietFatLabel, grams: food.fatPer100g, color: VTColors.macroFat),
-                        _MacroPill(label: l10n.dietFiberLabel, grams: food.fiberPer100g, color: VTColors.macroFiber),
+                        MacroPill(label: l10n.dietProteinLabel, grams: food.proteinPer100g, color: VTColors.macroProtein),
+                        MacroPill(label: l10n.dietCarbsLabel, grams: food.carbsPer100g, color: VTColors.macroCarbs),
+                        MacroPill(label: l10n.dietFatLabel, grams: food.fatPer100g, color: VTColors.macroFat),
+                        MacroPill(label: l10n.dietFiberLabel, grams: food.fiberPer100g, color: VTColors.macroFiber),
                       ],
                     ),
                     if (presentNutrients.isNotEmpty) ...[
@@ -90,31 +90,5 @@ class FoodDetailsDialog extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class _MacroPill extends StatelessWidget {
-  const _MacroPill({required this.label, required this.grams, required this.color});
-
-  final String label;
-  final double grams;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.xs),
-      decoration: BoxDecoration(color: color.withValues(alpha: 0.16), borderRadius: VTRadius.borderRadiusFull),
-      child: Text(
-        '$label ${l10n.dietMacroGrams(_formatGrams(grams))}',
-        style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
-      ),
-    );
-  }
-
-  static String _formatGrams(double value) {
-    final rounded = double.parse(value.toStringAsFixed(1));
-    return rounded == rounded.roundToDouble() ? rounded.toInt().toString() : rounded.toString();
   }
 }

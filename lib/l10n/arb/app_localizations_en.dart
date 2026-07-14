@@ -416,6 +416,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSignInAction => 'Sign in or create account';
 
   @override
+  String get profileGuestTitle => 'Guest';
+
+  @override
+  String get profileMacroGoalsSubtitle => 'Your daily calorie and macro targets';
+
+  @override
+  String get profileSettingsSubtitle => 'Language, theme and units';
+
+  @override
   String get macroGoalsTitle => 'Macro goals';
 
   @override
