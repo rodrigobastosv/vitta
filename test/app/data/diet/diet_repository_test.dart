@@ -37,10 +37,10 @@ void main() {
     });
   });
 
-  test('searchFoods returns catalog matches without querying Open Food Facts', () async {
+  test('searchFoods returns catalog matches alone when the catalog is not sparse', () async {
     final supabaseDietDataSource = MockSupabaseDietDataSource();
     final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
-    final catalogFoods = [FoodFactory.build()];
+    final catalogFoods = List.generate(5, (index) => FoodFactory.build(id: 'food-$index', name: 'Banana $index'));
     when(() => supabaseDietDataSource.searchCatalog(query: 'banana')).thenAnswer((_) async => Success(catalogFoods));
     final repository = RepositoriesFactories.buildDietRepository(
       supabaseDietDataSource: supabaseDietDataSource,
@@ -83,5 +83,39 @@ void main() {
     final foodsResult = await repository.searchFoods(query: 'banana');
 
     foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, offFoods));
+  });
+
+  test('searchFoods merges Open Food Facts results when the catalog is sparse, deduping by barcode', () async {
+    final supabaseDietDataSource = MockSupabaseDietDataSource();
+    final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
+    final catalogFood = FoodFactory.build(id: 'catalog', name: 'Carne Moída Patinho', barcode: 'shared');
+    final duplicateOffFood = FoodFactory.build(id: null, name: 'Patinho', barcode: 'shared');
+    final newOffFood = FoodFactory.build(id: null, name: 'Patinho Bovino', barcode: 'other');
+    when(() => supabaseDietDataSource.searchCatalog(query: 'patinho')).thenAnswer((_) async => Success([catalogFood]));
+    when(() => openFoodFactsDataSource.searchFoods(query: 'patinho')).thenAnswer((_) async => Success([duplicateOffFood, newOffFood]));
+    final repository = RepositoriesFactories.buildDietRepository(
+      supabaseDietDataSource: supabaseDietDataSource,
+      openFoodFactsDataSource: openFoodFactsDataSource,
+    );
+
+    final foodsResult = await repository.searchFoods(query: 'patinho');
+
+    foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, [catalogFood, newOffFood]));
+  });
+
+  test('searchFoods keeps the sparse catalog matches when Open Food Facts fails', () async {
+    final supabaseDietDataSource = MockSupabaseDietDataSource();
+    final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
+    final catalogFoods = [FoodFactory.build(id: 'catalog', name: 'Carne Moída Patinho')];
+    when(() => supabaseDietDataSource.searchCatalog(query: 'patinho')).thenAnswer((_) async => Success(catalogFoods));
+    when(() => openFoodFactsDataSource.searchFoods(query: 'patinho')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    final repository = RepositoriesFactories.buildDietRepository(
+      supabaseDietDataSource: supabaseDietDataSource,
+      openFoodFactsDataSource: openFoodFactsDataSource,
+    );
+
+    final foodsResult = await repository.searchFoods(query: 'patinho');
+
+    foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, catalogFoods));
   });
 }

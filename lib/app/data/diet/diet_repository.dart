@@ -19,13 +19,32 @@ class DietRepository {
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
 
+  // Below this many catalog hits, the shared catalog is too thin to stand on its
+  // own (e.g. a Portuguese term the OFF import barely covers), so Open Food Facts
+  // is queried too and merged in. At or above it, the catalog answers alone.
+  static const _sparseCatalogThreshold = 5;
+
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
     final catalogResult = await _supabaseDietDataSource.searchCatalog(query: query);
     final catalogFoods = catalogResult.when((_) => null, (foods) => foods);
-    if (catalogFoods != null && catalogFoods.isNotEmpty) {
+    if (catalogFoods != null && catalogFoods.length >= _sparseCatalogThreshold) {
       return Success(catalogFoods);
     }
-    return _openFoodFactsDataSource.searchFoods(query: query);
+    final offResult = await _openFoodFactsDataSource.searchFoods(query: query);
+    if (catalogFoods == null || catalogFoods.isEmpty) {
+      return offResult;
+    }
+    final offFoods = offResult.when((_) => null, (foods) => foods);
+    return Success(offFoods == null ? catalogFoods : _mergeByBarcode(catalogFoods, offFoods));
+  }
+
+  List<Food> _mergeByBarcode(List<Food> catalogFoods, List<Food> offFoods) {
+    final catalogBarcodes = catalogFoods.map((food) => food.barcode).whereType<String>().toSet();
+    return [
+      ...catalogFoods,
+      for (final food in offFoods)
+        if (food.barcode == null || !catalogBarcodes.contains(food.barcode)) food,
+    ];
   }
 
   Future<Result<VTError, Food>> saveFood({required Food food}) => _supabaseDietDataSource.saveFood(food: food);
