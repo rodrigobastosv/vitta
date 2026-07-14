@@ -584,6 +584,18 @@ abstract class AppLocalizations {
   /// **'No results. Try another search or add it manually.'**
   String get dietSearchNoResults;
 
+  /// No description provided for @dietNutritionPer100gTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition per 100g'**
+  String get dietNutritionPer100gTitle;
+
+  /// No description provided for @dietMacroGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'{grams} g'**
+  String dietMacroGrams(String grams);
+
   /// No description provided for @mealTypeBreakfast.
   ///
   /// In en, this message translates to:

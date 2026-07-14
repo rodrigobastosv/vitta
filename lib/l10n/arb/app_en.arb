@@ -136,6 +136,13 @@
   "dietSearchFieldLabel": "Search Open Food Facts",
   "dietSearchPrompt": "Search for a food to log it.",
   "dietSearchNoResults": "No results. Try another search or add it manually.",
+  "dietNutritionPer100gTitle": "Nutrition per 100g",
+  "dietMacroGrams": "{grams} g",
+  "@dietMacroGrams": {
+    "placeholders": {
+      "grams": {"type": "String"}
+    }
+  },
   "mealTypeBreakfast": "Breakfast",
   "mealTypeLunch": "Lunch",
   "mealTypeDinner": "Dinner",

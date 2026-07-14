@@ -7,10 +7,12 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 
 class FoodSearchResultTile extends StatelessWidget {
-  const FoodSearchResultTile({required this.food, required this.onTap, super.key});
+  const FoodSearchResultTile({required this.food, required this.heroTag, required this.onTap, required this.onAdd, super.key});
 
   final Food food;
+  final Object heroTag;
   final VoidCallback onTap;
+  final VoidCallback onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class FoodSearchResultTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          VTFoodImage(imageUrl: food.imageUrl),
+          Hero(tag: heroTag, child: VTFoodImage(imageUrl: food.imageUrl)),
           const VTGap.m(),
           Expanded(
             child: Column(
@@ -36,6 +38,8 @@ class FoodSearchResultTile extends StatelessWidget {
               ],
             ),
           ),
+          const VTGap.s(),
+          IconButton.filledTonal(onPressed: onAdd, icon: const Icon(Icons.add), tooltip: l10n.dietLogFoodAction),
         ],
       ),
     );

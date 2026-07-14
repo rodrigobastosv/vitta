@@ -92,7 +92,7 @@ A success confirmation follows the same presentation-event shape as loading/erro
 
 ## Design system
 
-Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`, `VTMacroRing`, `VTToast`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
+Everything under `lib/app/design_system` is prefixed `VT` (`VTColors`, `VTSpacing`, `VTRadius`, `VTTextStyles`, `VTTheme`, `VTGap`, `VTCard`, `VTPrimaryButton`, `VTEmptyState`, `VTErrorDialog`, `VTLoadingOverlayIndicator`, `VTFeatureTile`, `VTProgressBar`, `VTMacroRing`, `VTToast`, `VTSearchField`, `VTAppearEffect`) so design-system pieces are always identifiable at a glance. Never use raw Material spacing/colors/text styles in a page when a `VT` token or component exists — add one if it's missing instead of reaching for `SizedBox`/`Colors.*` directly. Component set is sized to what's actually rendered — add a new one only once a page needs it (e.g. a network image or search field component once the diet feature has food images/search).
 
 Palette: forest green primary (health, nutrition), coral-orange secondary (energy, warmth), warm-neutral surfaces. Typography: Poppins for headings, Inter for body text (both via `google_fonts`).
 

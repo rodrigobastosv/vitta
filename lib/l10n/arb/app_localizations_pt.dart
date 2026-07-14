@@ -275,6 +275,14 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietSearchNoResults => 'Nenhum resultado. Tente outra busca ou cadastre manualmente.';
 
   @override
+  String get dietNutritionPer100gTitle => 'Informação nutricional por 100g';
+
+  @override
+  String dietMacroGrams(String grams) {
+    return '$grams g';
+  }
+
+  @override
   String get mealTypeBreakfast => 'Café da manhã';
 
   @override

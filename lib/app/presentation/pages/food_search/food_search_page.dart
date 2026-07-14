@@ -3,7 +3,9 @@ import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
+import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -11,6 +13,7 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart'
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/custom_food_sheet.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
 
@@ -56,9 +59,9 @@ class FoodSearchPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(VTSpacing.m),
-              child: TextField(
+              child: VTSearchField(
                 autofocus: true,
-                decoration: InputDecoration(labelText: l10n.dietSearchFieldLabel, prefixIcon: const Icon(Icons.search)),
+                hintText: l10n.dietSearchFieldLabel,
                 onSubmitted: (query) => cubit.search(query: query),
               ),
             ),
@@ -72,9 +75,17 @@ class FoodSearchPage extends StatelessWidget {
                   separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
                   itemBuilder: (context, index) {
                     final food = results[index];
-                    return FoodSearchResultTile(
-                      food: food,
-                      onTap: () => showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType),
+                    final heroTag = 'food-search-$index';
+                    return VTAppearEffect(
+                      key: ValueKey('$index-${food.id ?? food.barcode ?? food.name}'),
+                      delay: Duration(milliseconds: index.clamp(0, 10) * 50),
+                      child: FoodSearchResultTile(
+                        food: food,
+                        heroTag: heroTag,
+                        onTap: () => showFoodDetailsDialog(context: context, food: food, heroTag: heroTag),
+                        onAdd: () =>
+                            showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType),
+                      ),
                     );
                   },
                 ),
