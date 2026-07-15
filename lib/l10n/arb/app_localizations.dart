@@ -632,6 +632,24 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get dietSearchTabLabel;
 
+  /// No description provided for @dietRecentSearchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get dietRecentSearchesTitle;
+
+  /// No description provided for @dietClearRecentSearchesAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear'**
+  String get dietClearRecentSearchesAction;
+
+  /// No description provided for @dietRemoveRecentSearchTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from recent searches'**
+  String get dietRemoveRecentSearchTooltip;
+
   /// No description provided for @dietFavoritesEmptyTitle.
   ///
   /// In en, this message translates to:

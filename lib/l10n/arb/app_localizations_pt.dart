@@ -301,6 +301,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietSearchTabLabel => 'Busca';
 
   @override
+  String get dietRecentSearchesTitle => 'Buscas recentes';
+
+  @override
+  String get dietClearRecentSearchesAction => 'Limpar';
+
+  @override
+  String get dietRemoveRecentSearchTooltip => 'Remover das buscas recentes';
+
+  @override
   String get dietFavoritesEmptyTitle => 'Nenhum favorito ainda';
 
   @override

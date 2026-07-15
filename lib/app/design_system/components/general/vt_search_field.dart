@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 class VTSearchField extends StatefulWidget {
-  const VTSearchField({required this.hintText, required this.onSubmitted, this.autofocus = false, super.key});
+  const VTSearchField({required this.hintText, required this.onSubmitted, this.text, this.autofocus = false, super.key});
 
   final String hintText;
   final ValueChanged<String> onSubmitted;
+
+  /// The query the field should show. Only a *change* to this value is pushed
+  /// into the field, so a caller that replays a past search fills the box while
+  /// ordinary typing is never clobbered mid-word.
+  final String? text;
+
   final bool autofocus;
 
   @override
@@ -12,7 +18,15 @@ class VTSearchField extends StatefulWidget {
 }
 
 class _VTSearchFieldState extends State<VTSearchField> {
-  final _controller = TextEditingController();
+  late final _controller = TextEditingController(text: widget.text);
+
+  @override
+  void didUpdateWidget(VTSearchField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.text != oldWidget.text && widget.text != _controller.text) {
+      _controller.text = widget.text ?? '';
+    }
+  }
 
   @override
   void dispose() {

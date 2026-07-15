@@ -158,6 +158,20 @@ The heart is **optional on the tile** (`onToggleFavorite` nullable, the "pass no
 
 `VTSegmentedTabs` (design system) is the tab strip: a pill track with an indicator that slides between segments via `AnimatedAlign`, rather than Material's `SegmentedButton`, which snaps and brings its own chrome. It's generic over the value type, so `TrendRangeSelector` — still on `SegmentedButton` — could move onto it later.
 
+## Recent searches
+
+The Search tab's idle state lists past queries instead of the "search for a food" prompt, which now only shows for someone who has never searched (issue #86). Tapping one replays it; each row has an × and the header a Clear.
+
+**Device-local, no table** — they're a typing shortcut, not user data worth a round-trip. `RecentSearchesLocalDataSource` (`data/diet/datasources/local/`) sits on `LocalStorageService` under the `diet.recentSearches` key, a sibling of `DietGoalsLocalDataSource`. Reads go through `get<List<dynamic>>(...)?.cast<String>()`: Hive stores the element type but hands the list back untyped, so asking it for a `List<String>` directly throws.
+
+**Only a search that found something is kept.** A typo or a dead end is exactly what the list should spare you from replaying, so `FoodSearchCubit.search` records the query after a hit and skips it on an empty result or an error.
+
+The ordering policy — most recent first, case-insensitive de-duplication (the newly typed spelling wins), capped at `_maxRecentSearches` — lives on `DietRepository`, next to `searchFoods`'s catalog/OFF merge, since both are read-then-decide over a datasource. Each mutating method **returns the updated list** so the cubit doesn't re-read to find out where the query landed.
+
+`onInit` emits recent searches (a synchronous local read) *before* awaiting favourites, so the list is there instantly rather than behind a network call. That's two emits, and the first one is delivered even when it equals the initial state — `Cubit.emit` only de-duplicates after its first emission.
+
+`VTSearchField` gained a `text` property synced in `didUpdateWidget` (the `CustomFoodForm` pattern): replaying a recent search has to fill the box, or you'd see results for "banana" over an empty field. Only a *change* to `text` is pushed in, so typing is never clobbered — `FoodSearchState.query` is set when a search runs, never on keystrokes.
+
 ## Copying meals
 
 The diet `AppBar`'s copy icon opens `CopyMealsPage` (`/diet/copy`, issue #61): pick a source day on a calendar, tick which of its meals to bring over, and they're appended to the day the diet page is currently showing. The target day rides in on `CopyMealsExtra` and reaches the cubit through `VTPage`'s `cubitParam` (a `registerFactoryParam`, same as `RecipeFormCubit`) — the page never picks the date itself, it copies into whatever day you were already looking at.

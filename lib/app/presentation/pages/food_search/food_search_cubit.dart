@@ -5,9 +5,13 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
@@ -24,6 +28,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     required this._getFavoriteFoodsUseCase,
     required this._favoriteFoodUseCase,
     required this._unfavoriteFoodUseCase,
+    required this._getRecentSearchesUseCase,
+    required this._addRecentSearchUseCase,
+    required this._removeRecentSearchUseCase,
+    required this._clearRecentSearchesUseCase,
   }) : super(const FoodSearchState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
@@ -32,6 +40,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
   final GetFavoriteFoodsUseCase _getFavoriteFoodsUseCase;
   final FavoriteFoodUseCase _favoriteFoodUseCase;
   final UnfavoriteFoodUseCase _unfavoriteFoodUseCase;
+  final GetRecentSearchesUseCase _getRecentSearchesUseCase;
+  final AddRecentSearchUseCase _addRecentSearchUseCase;
+  final RemoveRecentSearchUseCase _removeRecentSearchUseCase;
+  final ClearRecentSearchesUseCase _clearRecentSearchesUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -40,7 +52,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
   static bool _sameFood(Food a, Food b) => a.id == null || b.id == null ? a == b : a.id == b.id;
 
   @override
-  void onInit() => loadFavorites();
+  void onInit() {
+    emit(state.copyWith(recentSearches: _getRecentSearchesUseCase()));
+    loadFavorites();
+  }
 
   void changeTab(FoodSearchTab tab) => emit(state.copyWith(tab: tab));
 
@@ -56,17 +71,30 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
 
   Future<void> search({required String query}) async {
     if (query.trim().isEmpty) {
-      emit(FoodSearchState(favorites: state.favorites, tab: state.tab));
+      emit(FoodSearchState(favorites: state.favorites, recentSearches: state.recentSearches, tab: state.tab));
       return;
     }
     emitPresentation(FoodSearchShowLoading());
     final foodsResult = await _searchFoodsUseCase(query: query);
     emitPresentation(FoodSearchHideLoading());
-    foodsResult.when(
-      (error) => emitPresentation(FoodSearchError(message: error.message)),
-      (value) => emit(state.copyWith(results: value)),
-    );
+    final foods = foodsResult.when((_) => null, (value) => value);
+    if (foods == null) {
+      emitPresentation(FoodSearchError(message: foodsResult.when((error) => error.message, (_) => '')));
+      return;
+    }
+    emit(state.copyWith(results: foods, query: query));
+    if (foods.isEmpty) {
+      // A typo or a dead end is exactly what the recent list should spare the
+      // user from replaying, so only a search that found something is kept.
+      return;
+    }
+    emit(state.copyWith(recentSearches: await _addRecentSearchUseCase(query: query)));
   }
+
+  Future<void> removeRecentSearch({required String query}) async =>
+      emit(state.copyWith(recentSearches: await _removeRecentSearchUseCase(query: query)));
+
+  Future<void> clearRecentSearches() async => emit(state.copyWith(recentSearches: await _clearRecentSearchesUseCase()));
 
   /// The heart flips before the request is made and is put back if it fails —
   /// favouriting is cheap and reversible, so making the user wait on a

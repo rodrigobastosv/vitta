@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
@@ -23,6 +24,7 @@ class DietRepository {
     required this._openFoodFactsDataSource,
     required this._supabaseDietDataSource,
     required this._dietGoalsLocalDataSource,
+    required this._recentSearchesLocalDataSource,
     required this._supabaseFoodFavoritesDataSource,
     required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
@@ -31,6 +33,7 @@ class DietRepository {
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
+  final RecentSearchesLocalDataSource _recentSearchesLocalDataSource;
   final SupabaseFoodFavoritesDataSource _supabaseFoodFavoritesDataSource;
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
@@ -104,6 +107,37 @@ class DietRepository {
       _supabaseRecipeDataSource.replaceIngredients(recipeId: recipeId, ingredients: ingredients);
 
   Future<Result<VTError, void>> deleteRecipe({required String recipeId}) => _supabaseRecipeDataSource.deleteRecipe(recipeId: recipeId);
+
+  // Recent searches live on the device only (issue #86): they are a typing
+  // shortcut, not user data worth a table and a round-trip.
+  static const _maxRecentSearches = 8;
+
+  List<String> getRecentSearches() => _recentSearchesLocalDataSource.getRecentSearches();
+
+  /// Most recent first, no duplicates, capped. Matching is case-insensitive so
+  /// "Banana" doesn't sit next to "banana", but the newly typed spelling is the
+  /// one kept.
+  Future<List<String>> addRecentSearch({required String query}) {
+    final trimmedQuery = query.trim();
+    final updatedSearches = [
+      trimmedQuery,
+      for (final search in getRecentSearches())
+        if (search.toLowerCase() != trimmedQuery.toLowerCase()) search,
+    ];
+    return _saveRecentSearches(updatedSearches.take(_maxRecentSearches).toList());
+  }
+
+  Future<List<String>> removeRecentSearch({required String query}) => _saveRecentSearches([
+    for (final search in getRecentSearches())
+      if (search != query) search,
+  ]);
+
+  Future<List<String>> clearRecentSearches() => _saveRecentSearches(const []);
+
+  Future<List<String>> _saveRecentSearches(List<String> queries) async {
+    await _recentSearchesLocalDataSource.saveRecentSearches(queries);
+    return queries;
+  }
 
   MacroGoals getMacroGoals() => _dietGoalsLocalDataSource.getGoals();
 
