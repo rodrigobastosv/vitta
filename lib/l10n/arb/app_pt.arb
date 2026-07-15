@@ -147,6 +147,12 @@
     }
   },
   "dietFoodSearchTitle": "Buscar alimentos",
+  "dietFavoritesTitle": "Favoritos",
+  "dietSearchTabLabel": "Busca",
+  "dietFavoritesEmptyTitle": "Nenhum favorito ainda",
+  "dietFavoritesEmptyMessage": "Toque no coração de qualquer alimento para deixá-lo aqui, a um toque de distância.",
+  "dietFavoriteFoodTooltip": "Adicionar aos favoritos",
+  "dietUnfavoriteFoodTooltip": "Remover dos favoritos",
   "dietSearchFieldLabel": "Buscar no Open Food Facts",
   "dietSearchPrompt": "Busque um alimento para registrá-lo.",
   "dietSearchNoResults": "Nenhum resultado. Tente outra busca ou cadastre manualmente.",

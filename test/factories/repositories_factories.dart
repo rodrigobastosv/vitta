@@ -8,11 +8,13 @@ abstract class RepositoriesFactories {
     MockSupabaseDietDataSource? supabaseDietDataSource,
     MockDietGoalsLocalDataSource? dietGoalsLocalDataSource,
     MockSupabaseNutritionScanDataSource? supabaseNutritionScanDataSource,
+    MockSupabaseFoodFavoritesDataSource? supabaseFoodFavoritesDataSource,
     MockSupabaseRecipeDataSource? supabaseRecipeDataSource,
   }) => DietRepository(
     openFoodFactsDataSource: openFoodFactsDataSource ?? MockOpenFoodFactsDataSource(),
     supabaseDietDataSource: supabaseDietDataSource ?? MockSupabaseDietDataSource(),
     dietGoalsLocalDataSource: dietGoalsLocalDataSource ?? MockDietGoalsLocalDataSource(),
+    supabaseFoodFavoritesDataSource: supabaseFoodFavoritesDataSource ?? MockSupabaseFoodFavoritesDataSource(),
     supabaseNutritionScanDataSource: supabaseNutritionScanDataSource ?? MockSupabaseNutritionScanDataSource(),
     supabaseRecipeDataSource: supabaseRecipeDataSource ?? MockSupabaseRecipeDataSource(),
   );

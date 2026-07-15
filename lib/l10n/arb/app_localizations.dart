@@ -620,6 +620,42 @@ abstract class AppLocalizations {
   /// **'Search foods'**
   String get dietFoodSearchTitle;
 
+  /// No description provided for @dietFavoritesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get dietFavoritesTitle;
+
+  /// No description provided for @dietSearchTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get dietSearchTabLabel;
+
+  /// No description provided for @dietFavoritesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorites yet'**
+  String get dietFavoritesEmptyTitle;
+
+  /// No description provided for @dietFavoritesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap the heart on any food to keep it here, one tap away.'**
+  String get dietFavoritesEmptyMessage;
+
+  /// No description provided for @dietFavoriteFoodTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to favorites'**
+  String get dietFavoriteFoodTooltip;
+
+  /// No description provided for @dietUnfavoriteFoodTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from favorites'**
+  String get dietUnfavoriteFoodTooltip;
+
   /// No description provided for @dietSearchFieldLabel.
   ///
   /// In en, this message translates to:

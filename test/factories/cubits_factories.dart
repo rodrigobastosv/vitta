@@ -84,10 +84,16 @@ abstract class CubitsFactories {
     MockSearchFoodsUseCase? searchFoodsUseCase,
     MockLogFoodUseCase? logFoodUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockGetFavoriteFoodsUseCase? getFavoriteFoodsUseCase,
+    MockFavoriteFoodUseCase? favoriteFoodUseCase,
+    MockUnfavoriteFoodUseCase? unfavoriteFoodUseCase,
   }) => FoodSearchCubit(
     searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
     logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    getFavoriteFoodsUseCase: getFavoriteFoodsUseCase ?? MockGetFavoriteFoodsUseCase(),
+    favoriteFoodUseCase: favoriteFoodUseCase ?? MockFavoriteFoodUseCase(),
+    unfavoriteFoodUseCase: unfavoriteFoodUseCase ?? MockUnfavoriteFoodUseCase(),
   );
 
   static CustomFoodCubit buildCustomFoodCubit({

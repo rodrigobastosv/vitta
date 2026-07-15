@@ -37,9 +37,13 @@ class _Placeholder extends StatelessWidget {
   final ColorScheme colorScheme;
   final double size;
 
+  // A faint primary tint rather than surfaceContainerHighest, which is close
+  // enough to VTCard's own fill that the box disappears and the icon reads as
+  // floating loose on the card. Low-contrast on purpose: a missing photo should
+  // recede, not draw the eye away from the food's name.
   @override
   Widget build(BuildContext context) => ColoredBox(
-    color: colorScheme.surfaceContainerHighest,
-    child: Icon(Icons.restaurant_outlined, color: colorScheme.onSurfaceVariant, size: size * 0.5),
+    color: colorScheme.primary.withValues(alpha: 0.08),
+    child: Icon(Icons.restaurant_outlined, color: colorScheme.primary.withValues(alpha: 0.45), size: size * 0.42),
   );
 }
