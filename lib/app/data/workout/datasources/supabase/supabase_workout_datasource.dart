@@ -34,7 +34,9 @@ class SupabaseWorkoutDataSource {
           .eq('user_id', _userId)
           .gte('performed_date', _toDateString(from))
           .lte('performed_date', _toDateString(to))
-          .order('performed_date');
+          // Explicit: order() defaults to descending, and a range of days is
+          // read chronologically.
+          .order('performed_date', ascending: true);
       return Success(rows.map(Workout.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load workouts', cause: error));

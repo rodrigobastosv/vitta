@@ -23,7 +23,10 @@ class SupabaseRoutineDataSource {
           .from(.routines)
           .select(_routineSelect)
           .eq('user_id', _userId)
-          .order('position');
+          // ascending is explicit because postgrest-dart's order() defaults to
+          // DESCENDING - `.order('position')` alone returns the cycle backwards,
+          // which reads as "my reorder didn't save" even though it did.
+          .order('position', ascending: true);
       return Success(rows.map(Routine.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load routines', cause: error));
