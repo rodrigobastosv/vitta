@@ -935,10 +935,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutRepsLabel => 'Reps';
 
   @override
-  String get workoutLoadLabel => 'Load';
+  String workoutLoadLabel(String unit) {
+    return 'Load ($unit)';
+  }
 
   @override
-  String get workoutLoadHelper => 'Leave empty for bodyweight';
+  String get workoutLoadHelper => 'Leave the load empty for a bodyweight set.';
 
   @override
   String get workoutTotalRepsLabel => 'Total reps';
@@ -1018,4 +1020,71 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get exerciseDetailAddAction => 'Add to workout';
+
+  @override
+  String get workoutRoutinesTitle => 'Routines';
+
+  @override
+  String get workoutRoutinesTooltip => 'Routines';
+
+  @override
+  String get workoutRoutinesEmptyTitle => 'No routines yet';
+
+  @override
+  String get workoutRoutinesEmptyMessage => 'Build your A/B/C split and the app tells you which one is next.';
+
+  @override
+  String get workoutRoutineNewAction => 'New routine';
+
+  @override
+  String get workoutRoutineNameLabel => 'Routine name';
+
+  @override
+  String get workoutRoutineNameHint => 'Workout A — Chest and triceps';
+
+  @override
+  String get workoutRoutineExercisesTitle => 'Exercises';
+
+  @override
+  String get workoutRoutineAddExerciseAction => 'Add exercise';
+
+  @override
+  String get workoutRoutineSaveAction => 'Save routine';
+
+  @override
+  String get workoutRoutineDeleteTooltip => 'Remove';
+
+  @override
+  String get workoutRoutineRemoveExerciseTooltip => 'Remove from routine';
+
+  @override
+  String get workoutRoutineIncompleteMessage => 'Give the routine a name and at least one exercise.';
+
+  @override
+  String workoutRoutineExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercises', one: '1 exercise');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutNextRoutineLabel => 'Next up';
+
+  @override
+  String workoutStartRoutineAction(String name) {
+    return 'Start $name';
+  }
+
+  @override
+  String get workoutRoutineLastTrainedNever => 'Not trained yet';
+
+  @override
+  String workoutFromRoutineLabel(String name) {
+    return 'From $name';
+  }
+
+  @override
+  String get workoutStartRoutineHint => 'Sets are pre-filled with your last session — adjust what changed.';
+
+  @override
+  String get reorderHandleLabel => 'Reorder';
 }

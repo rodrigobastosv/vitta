@@ -12,6 +12,7 @@ import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/exercise_detail_extra.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/next_routine_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_date_selector.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_card.dart';
@@ -35,7 +36,23 @@ class WorkoutPage extends StatelessWidget {
         ),
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.workoutFeatureTitle)),
+        appBar: AppBar(
+          title: Text(l10n.workoutFeatureTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.repeat),
+              tooltip: l10n.workoutRoutinesTooltip,
+              onPressed: () async {
+                await context.pushRoute(.routines);
+                // Routines may have been added, reordered or deleted, which
+                // changes what the cycle suggests next.
+                if (context.mounted) {
+                  await cubit.loadDate(cubit.state.date);
+                }
+              },
+            ),
+          ],
+        ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _addExercise(context, cubit),
           icon: const Icon(Icons.add),
@@ -51,9 +68,21 @@ class WorkoutPage extends StatelessWidget {
               onNextDay: () => cubit.goToDate(state.date.add(const Duration(days: 1))),
             ),
             const VTGap.m(),
-            if (state.isEmpty)
-              VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage)
-            else ...[
+            if (state.isEmpty) ...[
+              // Starting a routine is offered only on today, and only on a day
+              // with nothing logged: you can't begin a session in the past, and
+              // once the workout exists, starting it again would duplicate every
+              // exercise. Past days stay editable - fixing a set you forgot to
+              // log is a different thing from starting the workout.
+              if (state.isToday)
+                if (state.cycle.next case final next?) ...[
+                  VTAppearEffect(
+                    child: NextRoutineCard(routine: next, onStart: () => cubit.startRoutine(next)),
+                  ),
+                  const VTGap.m(),
+                ],
+              VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
+            ] else ...[
               VTAppearEffect(
                 child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
               ),

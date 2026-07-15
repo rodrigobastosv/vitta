@@ -1,5 +1,6 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
+import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
@@ -11,6 +12,8 @@ import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart'
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
+import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
+import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
@@ -193,6 +196,8 @@ abstract class CubitsFactories {
     MockUpdateSetUseCase? updateSetUseCase,
     MockDeleteSetUseCase? deleteSetUseCase,
     MockDeleteWorkoutUseCase? deleteWorkoutUseCase,
+    MockGetRoutineCycleUseCase? getRoutineCycleUseCase,
+    MockStartWorkoutFromRoutineUseCase? startWorkoutFromRoutineUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
   }) => WorkoutCubit(
     getWorkoutsForDateUseCase: getWorkoutsForDateUseCase ?? MockGetWorkoutsForDateUseCase(),
@@ -202,9 +207,24 @@ abstract class CubitsFactories {
     updateSetUseCase: updateSetUseCase ?? MockUpdateSetUseCase(),
     deleteSetUseCase: deleteSetUseCase ?? MockDeleteSetUseCase(),
     deleteWorkoutUseCase: deleteWorkoutUseCase ?? MockDeleteWorkoutUseCase(),
+    getRoutineCycleUseCase: getRoutineCycleUseCase ?? MockGetRoutineCycleUseCase(),
+    startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase ?? MockStartWorkoutFromRoutineUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
   static ExerciseSearchCubit buildExerciseSearchCubit({MockSearchExercisesUseCase? searchExercisesUseCase}) =>
       ExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase ?? MockSearchExercisesUseCase());
+
+  static RoutinesCubit buildRoutinesCubit({
+    MockGetRoutinesUseCase? getRoutinesUseCase,
+    MockDeleteRoutineUseCase? deleteRoutineUseCase,
+    MockReorderRoutinesUseCase? reorderRoutinesUseCase,
+  }) => RoutinesCubit(
+    getRoutinesUseCase: getRoutinesUseCase ?? MockGetRoutinesUseCase(),
+    deleteRoutineUseCase: deleteRoutineUseCase ?? MockDeleteRoutineUseCase(),
+    reorderRoutinesUseCase: reorderRoutinesUseCase ?? MockReorderRoutinesUseCase(),
+  );
+
+  static RoutineFormCubit buildRoutineFormCubit({MockSaveRoutineUseCase? saveRoutineUseCase, Routine? routine}) =>
+      RoutineFormCubit(saveRoutineUseCase: saveRoutineUseCase ?? MockSaveRoutineUseCase(), routine: routine);
 }

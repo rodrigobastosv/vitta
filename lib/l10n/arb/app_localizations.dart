@@ -1781,13 +1781,13 @@ abstract class AppLocalizations {
   /// No description provided for @workoutLoadLabel.
   ///
   /// In en, this message translates to:
-  /// **'Load'**
-  String get workoutLoadLabel;
+  /// **'Load ({unit})'**
+  String workoutLoadLabel(String unit);
 
   /// No description provided for @workoutLoadHelper.
   ///
   /// In en, this message translates to:
-  /// **'Leave empty for bodyweight'**
+  /// **'Leave the load empty for a bodyweight set.'**
   String get workoutLoadHelper;
 
   /// No description provided for @workoutTotalRepsLabel.
@@ -1939,6 +1939,126 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Add to workout'**
   String get exerciseDetailAddAction;
+
+  /// No description provided for @workoutRoutinesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Routines'**
+  String get workoutRoutinesTitle;
+
+  /// No description provided for @workoutRoutinesTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Routines'**
+  String get workoutRoutinesTooltip;
+
+  /// No description provided for @workoutRoutinesEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No routines yet'**
+  String get workoutRoutinesEmptyTitle;
+
+  /// No description provided for @workoutRoutinesEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Build your A/B/C split and the app tells you which one is next.'**
+  String get workoutRoutinesEmptyMessage;
+
+  /// No description provided for @workoutRoutineNewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'New routine'**
+  String get workoutRoutineNewAction;
+
+  /// No description provided for @workoutRoutineNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Routine name'**
+  String get workoutRoutineNameLabel;
+
+  /// No description provided for @workoutRoutineNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout A — Chest and triceps'**
+  String get workoutRoutineNameHint;
+
+  /// No description provided for @workoutRoutineExercisesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises'**
+  String get workoutRoutineExercisesTitle;
+
+  /// No description provided for @workoutRoutineAddExerciseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add exercise'**
+  String get workoutRoutineAddExerciseAction;
+
+  /// No description provided for @workoutRoutineSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save routine'**
+  String get workoutRoutineSaveAction;
+
+  /// No description provided for @workoutRoutineDeleteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get workoutRoutineDeleteTooltip;
+
+  /// No description provided for @workoutRoutineRemoveExerciseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove from routine'**
+  String get workoutRoutineRemoveExerciseTooltip;
+
+  /// No description provided for @workoutRoutineIncompleteMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Give the routine a name and at least one exercise.'**
+  String get workoutRoutineIncompleteMessage;
+
+  /// No description provided for @workoutRoutineExerciseCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 exercise} other{{count} exercises}}'**
+  String workoutRoutineExerciseCount(int count);
+
+  /// No description provided for @workoutNextRoutineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next up'**
+  String get workoutNextRoutineLabel;
+
+  /// No description provided for @workoutStartRoutineAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start {name}'**
+  String workoutStartRoutineAction(String name);
+
+  /// No description provided for @workoutRoutineLastTrainedNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Not trained yet'**
+  String get workoutRoutineLastTrainedNever;
+
+  /// No description provided for @workoutFromRoutineLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'From {name}'**
+  String workoutFromRoutineLabel(String name);
+
+  /// No description provided for @workoutStartRoutineHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets are pre-filled with your last session — adjust what changed.'**
+  String get workoutStartRoutineHint;
+
+  /// No description provided for @reorderHandleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorderHandleLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -21,7 +21,7 @@ class SupabaseExerciseDataSource {
       if (muscleGroup != null) {
         request = request.contains('primary_muscles', [muscleGroup.wireValue]);
       }
-      final rows = await request.order('times_logged', ascending: false).order('id').limit(_searchLimit);
+      final rows = await request.order('times_logged', ascending: false).order('id', ascending: true).limit(_searchLimit);
       return Success(rows.map(Exercise.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to search exercises for "$query"', cause: error));

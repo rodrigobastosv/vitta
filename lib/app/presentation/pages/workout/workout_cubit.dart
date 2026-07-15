@@ -4,12 +4,15 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
@@ -24,6 +27,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._updateSetUseCase,
     required this._deleteSetUseCase,
     required this._deleteWorkoutUseCase,
+    required this._getRoutineCycleUseCase,
+    required this._startWorkoutFromRoutineUseCase,
     required this._getAppSettingsUseCase,
   }) : super(WorkoutState(date: _today(), workouts: const []));
 
@@ -34,6 +39,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final UpdateSetUseCase _updateSetUseCase;
   final DeleteSetUseCase _deleteSetUseCase;
   final DeleteWorkoutUseCase _deleteWorkoutUseCase;
+  final GetRoutineCycleUseCase _getRoutineCycleUseCase;
+  final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
 
   static DateTime _today() {
@@ -54,8 +61,34 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     emitPresentation(WorkoutHideLoading());
     workoutsResult.when(
       (error) => emitPresentation(WorkoutError(message: error.message, date: date)),
-      (value) => emit(WorkoutState(date: date, workouts: value)),
+      (value) => emit(state.copyWith(date: date, workouts: value)),
     );
+    await _loadCycle();
+  }
+
+  /// The cycle is loaded alongside the day but never blocks it: a failure here
+  /// leaves `state.cycle` empty, which just means the next-routine card doesn't
+  /// appear. Surfacing an error dialog over a day that loaded fine would be
+  /// worse than quietly hiding a suggestion.
+  Future<void> _loadCycle() async {
+    final cycleResult = await _getRoutineCycleUseCase();
+    cycleResult.when((_) {}, (value) => emit(state.copyWith(cycle: value)));
+  }
+
+  Future<void> startRoutine(Routine routine) async {
+    // Guarded here as well as in the page: a workout can only be started on
+    // the day it happens, and the write is what must not be possible - not
+    // just the button.
+    if (!state.isToday) {
+      return;
+    }
+    emitPresentation(WorkoutShowLoading());
+    final startedResult = await _startWorkoutFromRoutineUseCase(routine: routine, date: state.date);
+    emitPresentation(WorkoutHideLoading());
+    await startedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
+      Log.action('workout_started_from_routine', data: {'routine_id': routine.id});
+      return loadDate(state.date);
+    });
   }
 
   Future<void> addExercise(Exercise exercise) async {

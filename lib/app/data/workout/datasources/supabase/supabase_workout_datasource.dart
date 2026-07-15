@@ -13,6 +13,12 @@ import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 class SupabaseWorkoutDataSource {
   SupabaseWorkoutDataSource({required this._supabaseService});
 
+  /// How far back getLastSetsByExercise looks. Bounded so a user with years
+  /// of history doesn't drag their whole log over the wire to pre-fill one
+  /// routine; an exercise not trained within this many workouts simply starts
+  /// empty, which is the same as never having done it.
+  static const _lastSetsWorkoutLookback = 60;
+
   final SupabaseService _supabaseService;
 
   String get _userId => _supabaseService.currentUserId;
@@ -28,20 +34,69 @@ class SupabaseWorkoutDataSource {
           .eq('user_id', _userId)
           .gte('performed_date', _toDateString(from))
           .lte('performed_date', _toDateString(to))
-          .order('performed_date');
+          // Explicit: order() defaults to descending, and a range of days is
+          // read chronologically.
+          .order('performed_date', ascending: true);
       return Success(rows.map(Workout.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load workouts', cause: error));
     }
   }
 
-  Future<Result<VTError, Workout>> createWorkout({required DateTime performedDate, String? notes}) async {
+  Future<Result<VTError, Workout>> createWorkout({required DateTime performedDate, String? notes, String? routineId}) async {
     try {
-      final request = CreateWorkoutRequest(userId: _userId, performedDate: performedDate, notes: notes);
+      final request = CreateWorkoutRequest(userId: _userId, performedDate: performedDate, notes: notes, routineId: routineId);
       final row = await _supabaseService.from(.workouts).insert(request.toJson()).select(_workoutSelect).single();
       return Success(Workout.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to create workout', cause: error));
+    }
+  }
+
+  /// The sets performed the last time each of `exerciseIds` was trained, keyed
+  /// by exercise.
+  ///
+  /// Queried from the `workouts` side rather than `workout_exercises` because
+  /// PostgREST's `order` on an embedded resource sorts the *embedded* rows, not
+  /// the parents - ordering workout_exercises by `workouts(performed_date)`
+  /// would silently not sort anything. Walking workouts newest-first and taking
+  /// the first hit per exercise gives the real "last time" instead.
+  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({required List<String> exerciseIds}) async {
+    if (exerciseIds.isEmpty) {
+      return const Success({});
+    }
+    try {
+      final rows = await _supabaseService
+          .from(.workouts)
+          .select(
+            'performed_date, ${SupabaseTable.workoutExercises.wireName}!inner(exercise_id, ${SupabaseTable.workoutSets.wireName}(*))',
+          )
+          .eq('user_id', _userId)
+          .inFilter('${SupabaseTable.workoutExercises.wireName}.exercise_id', exerciseIds)
+          .order('performed_date', ascending: false)
+          .limit(_lastSetsWorkoutLookback);
+
+      final lastSets = <String, List<WorkoutSet>>{};
+      for (final row in rows) {
+        final workoutExercises = (row[SupabaseTable.workoutExercises.wireName] as List<dynamic>).cast<Map<String, dynamic>>();
+        for (final workoutExercise in workoutExercises) {
+          final exerciseId = workoutExercise['exercise_id'] as String;
+          if (lastSets.containsKey(exerciseId)) {
+            continue;
+          }
+          final sets = (workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const [])
+              .cast<Map<String, dynamic>>()
+              .map(WorkoutSet.fromMap)
+              .toList()
+            ..sort((a, b) => a.position.compareTo(b.position));
+          if (sets.isNotEmpty) {
+            lastSets[exerciseId] = sets;
+          }
+        }
+      }
+      return Success(lastSets);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load previous sets', cause: error));
     }
   }
 
@@ -93,6 +148,31 @@ class SupabaseWorkoutDataSource {
       return Success(WorkoutSet.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log set on workout exercise $workoutExerciseId', cause: error));
+    }
+  }
+
+  /// Inserts every set of every exercise in one round trip. Starting a routine
+  /// pre-fills ~6 exercises x ~4 sets; doing that through logSet would be two
+  /// dozen sequential inserts, and the positions are already known here.
+  Future<Result<VTError, void>> logSetsBulk({required Map<String, List<WorkoutSet>> setsByWorkoutExercise}) async {
+    final requests = [
+      for (final MapEntry(key: workoutExerciseId, value: sets) in setsByWorkoutExercise.entries)
+        for (final (index, set) in sets.indexed)
+          CreateWorkoutSetRequest(
+            workoutExerciseId: workoutExerciseId,
+            position: index,
+            reps: set.reps,
+            weightKg: set.weightKg,
+          ).toJson(),
+    ];
+    if (requests.isEmpty) {
+      return const Success(null);
+    }
+    try {
+      await _supabaseService.from(.workoutSets).insert(requests);
+      return const Success(null);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to pre-fill sets', cause: error));
     }
   }
 
