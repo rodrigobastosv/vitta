@@ -76,6 +76,12 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   }
 
   Future<void> startRoutine(Routine routine) async {
+    // Guarded here as well as in the page: a workout can only be started on
+    // the day it happens, and the write is what must not be possible - not
+    // just the button.
+    if (!state.isToday) {
+      return;
+    }
     emitPresentation(WorkoutShowLoading());
     final startedResult = await _startWorkoutFromRoutineUseCase(routine: routine, date: state.date);
     emitPresentation(WorkoutHideLoading());

@@ -69,13 +69,18 @@ class WorkoutPage extends StatelessWidget {
             ),
             const VTGap.m(),
             if (state.isEmpty) ...[
-              // The cycle's suggestion only makes sense on a day with nothing
-              // logged yet: once the workout exists, starting it again would
-              // duplicate every exercise.
-              if (state.cycle.next case final next?) ...[
-                VTAppearEffect(child: NextRoutineCard(routine: next, onStart: () => cubit.startRoutine(next))),
-                const VTGap.m(),
-              ],
+              // Starting a routine is offered only on today, and only on a day
+              // with nothing logged: you can't begin a session in the past, and
+              // once the workout exists, starting it again would duplicate every
+              // exercise. Past days stay editable - fixing a set you forgot to
+              // log is a different thing from starting the workout.
+              if (state.isToday)
+                if (state.cycle.next case final next?) ...[
+                  VTAppearEffect(
+                    child: NextRoutineCard(routine: next, onStart: () => cubit.startRoutine(next)),
+                  ),
+                  const VTGap.m(),
+                ],
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
               VTAppearEffect(

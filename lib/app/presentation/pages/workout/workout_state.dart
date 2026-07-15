@@ -22,6 +22,15 @@ class WorkoutState extends Equatable with WorkoutVolume {
 
   bool get isEmpty => workouts.every((workout) => workout.exercises.isEmpty);
 
+  /// Whether the day being shown is today. Starting a routine is only offered
+  /// here: you can't begin a session in the past, and the day selector already
+  /// refuses to go past today. Past days stay fully editable - fixing a set you
+  /// forgot to log is different from starting the workout.
+  bool get isToday {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
+
   @override
   List<WorkoutSet> get sets => [for (final workout in workouts) ...workout.sets];
 

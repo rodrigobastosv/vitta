@@ -100,11 +100,19 @@ class SupabaseRoutineDataSource {
   Future<Result<VTError, void>> reorderRoutines({required List<String> orderedRoutineIds}) async {
     try {
       for (final (position, routineId) in orderedRoutineIds.indexed) {
-        await _supabaseService
+        // `.select()` is what makes a write that changed nothing detectable: an
+        // UPDATE matching zero rows is a 204 success in PostgREST, so without
+        // it a filter that never matches (or an RLS policy that silently denies
+        // the write) reads as a clean save and the new order just evaporates.
+        final updated = await _supabaseService
             .from(.routines)
             .update({'position': position})
             .eq('id', routineId)
-            .eq('user_id', _userId);
+            .eq('user_id', _userId)
+            .select('id');
+        if (updated.isEmpty) {
+          return Failure(VTError(message: 'Routine $routineId was not updated (no row matched)'));
+        }
       }
       return const Success(null);
     } on Exception catch (error) {

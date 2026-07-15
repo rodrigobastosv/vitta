@@ -210,4 +210,55 @@ void main() {
 
     verify(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).called(1);
   });
+
+  test('refuses to start a routine on a past day - a workout happens on its own day', () async {
+    useMockLog();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    final startWorkoutFromRoutineUseCase = MockStartWorkoutFromRoutineUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+    await cubit.goToDate(DateTime(2020));
+
+    await cubit.startRoutine(RoutineFactory.build());
+
+    verifyNever(
+      () => startWorkoutFromRoutineUseCase(
+        routine: any(named: 'routine'),
+        date: any(named: 'date'),
+      ),
+    );
+  });
+
+  test('starts a routine on today', () async {
+    useMockLog();
+    final now = DateTime.now();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    final startWorkoutFromRoutineUseCase = MockStartWorkoutFromRoutineUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => startWorkoutFromRoutineUseCase(
+        routine: any(named: 'routine'),
+        date: any(named: 'date'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+    await cubit.goToDate(DateTime(now.year, now.month, now.day));
+
+    await cubit.startRoutine(RoutineFactory.build());
+
+    verify(
+      () => startWorkoutFromRoutineUseCase(
+        routine: any(named: 'routine'),
+        date: any(named: 'date'),
+      ),
+    ).called(1);
+  });
 }
