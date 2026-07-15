@@ -179,6 +179,173 @@ create table if not exists food_favorites (
 
 create index if not exists food_favorites_user_id_idx on food_favorites (user_id);
 
+-- `exercises` is a catalog shared across every user, exactly like `foods`:
+-- `user_id` only records who added a row, it doesn't scope visibility. The bulk
+-- of it is imported from the free-exercise-db public-domain dataset (see
+-- tool/import_exercise_catalog.dart) through the service_role key, which
+-- bypasses RLS - those rows have a null user_id, so the insert/update/delete
+-- policies below never match one and nobody can edit an imported exercise
+-- through the app. `slug` is the dataset's own id, deduplicated so re-running
+-- the import updates rows instead of duplicating them.
+--
+-- `names` and `instructions` are JSONB keyed by locale ({"en": ..., "pt": ...})
+-- rather than a name/name_pt column pair: the dataset ships English only and
+-- the import translates it, so a locale added later is an import re-run and an
+-- ARB file, never a migration. Same reasoning as foods.micronutrients.
+-- `instructions` holds an array of steps per locale.
+create table if not exists exercises (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth.users (id) on delete cascade,
+  slug text,
+  names jsonb not null default '{}',
+  instructions jsonb not null default '{}',
+  category text not null check (category in ('strength', 'cardio', 'stretching', 'plyometrics', 'powerlifting', 'olympic_weightlifting', 'strongman')),
+  equipment text check (equipment in ('barbell', 'dumbbell', 'kettlebells', 'cable', 'machine', 'bands', 'body_only', 'exercise_ball', 'medicine_ball', 'foam_roll', 'e_z_curl_bar', 'other')),
+  force text check (force in ('push', 'pull', 'static')),
+  level text not null check (level in ('beginner', 'intermediate', 'expert')),
+  mechanic text check (mechanic in ('compound', 'isolation')),
+  -- Muscle names as text arrays rather than a join table: they're a closed set
+  -- from a fixed enum on the app side (see lib/app/domain/workout/entities/
+  -- muscle_group.dart), never independently queried, and a GIN-indexed array
+  -- filters "exercises for chest" in one predicate with no join.
+  primary_muscles text[] not null default '{}',
+  secondary_muscles text[] not null default '{}',
+  -- Public URLs into the exercise-images bucket, in display order.
+  image_urls text[] not null default '{}',
+  -- How many times this exercise has been logged across every user, maintained
+  -- by the workout_exercises trigger below so catalog search ranks the popular
+  -- ones first. Denormalized onto exercises for the same reason foods
+  -- .times_logged is: workout RLS scopes each user to their own rows, so this
+  -- can't be aggregated client-side.
+  times_logged integer not null default 0 check (times_logged >= 0),
+  created_at timestamptz not null default now()
+);
+
+-- What catalog search actually matches on: every locale's name folded into one
+-- lowercase, accent-free string, so `ilike` finds "Tríceps Testa" whether the
+-- user types "triceps", "tríceps" or the English "Lying Triceps Extension" -
+-- searching names->>'pt' directly would need an `or` per locale built into the
+-- query string, and would miss unaccented typing entirely.
+--
+-- It reads every value of the blob rather than named locales, so adding a
+-- locale stays an import re-run with no migration - the whole point of keying
+-- names by locale. That needs the two immutable wrappers below: a generated
+-- column can only call immutable functions, and unaccent() is merely stable
+-- (it depends on a dictionary that could in principle be redefined), while
+-- jsonb_each_text is set-returning and can't be inlined into the expression.
+create extension if not exists unaccent;
+
+create or replace function immutable_unaccent(value text)
+returns text
+language sql
+immutable
+strict
+set search_path = public, extensions
+as $$
+  select unaccent('unaccent', value);
+$$;
+
+create or replace function exercise_search_text(names jsonb)
+returns text
+language sql
+immutable
+strict
+set search_path = public
+as $$
+  select immutable_unaccent(lower(coalesce(string_agg(value, ' '), ''))) from jsonb_each_text(names);
+$$;
+
+alter table exercises add column if not exists search_text text generated always as (exercise_search_text(names)) stored;
+
+create unique index if not exists exercises_slug_unique_idx on exercises (slug);
+create index if not exists exercises_user_id_idx on exercises (user_id);
+create index if not exists exercises_primary_muscles_idx on exercises using gin (primary_muscles);
+create index if not exists exercises_search_text_idx on exercises (search_text);
+
+-- A workout is one session on one day. `notes` is free text ("senti o ombro").
+-- A user can log more than one workout on a date (a two-a-day), so there's no
+-- unique constraint on (user_id, performed_date) - the app shows them all.
+create table if not exists workouts (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  performed_date date not null,
+  notes text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists workouts_user_id_performed_date_idx on workouts (user_id, performed_date);
+
+-- Which exercises a workout was made of, in order. `position` is what the user
+-- dragged them into, not insertion order.
+--
+-- The exercise is `on delete restrict`, unlike food_logs' cascade onto foods: a
+-- catalog exercise is either imported (nobody can delete it) or user-added, and
+-- silently erasing sessions from someone's history because the author of a
+-- custom exercise removed it would destroy real training data.
+create table if not exists workout_exercises (
+  id uuid primary key default gen_random_uuid(),
+  workout_id uuid not null references workouts (id) on delete cascade,
+  exercise_id uuid not null references exercises (id) on delete restrict,
+  position integer not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists workout_exercises_workout_id_idx on workout_exercises (workout_id);
+create index if not exists workout_exercises_exercise_id_idx on workout_exercises (exercise_id);
+
+-- One row per set actually performed: reps plus the load lifted.
+--
+-- weight_kg allows 0 rather than being null-for-bodyweight: a pull-up and a 0kg
+-- barbell row are both "no external load", and a single numeric keeps every
+-- volume sum (reps * weight_kg) total-able without a null branch. It's the
+-- reason issue #96 counts sets alongside tonnage - bodyweight work sums to 0kg
+-- of volume, and only the set count represents it.
+create table if not exists workout_sets (
+  id uuid primary key default gen_random_uuid(),
+  workout_exercise_id uuid not null references workout_exercises (id) on delete cascade,
+  position integer not null,
+  reps integer not null check (reps > 0),
+  weight_kg numeric not null default 0 check (weight_kg >= 0),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists workout_sets_workout_exercise_id_idx on workout_sets (workout_exercise_id);
+
+-- Keeps exercises.times_logged in sync, mirroring bump_food_times_logged.
+-- security definer for the same reason: the logging user doesn't own the
+-- (imported, null user_id) exercise row, so exercises' update policy would
+-- otherwise block the bump. Counts workout_exercises, not workout_sets - the
+-- signal is "how many sessions used this exercise", so adding a fourth set to
+-- an exercise you're already doing isn't a second vote for it.
+create or replace function bump_exercise_times_logged()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if tg_op = 'INSERT' then
+    update exercises set times_logged = times_logged + 1 where id = new.exercise_id;
+  elsif tg_op = 'DELETE' then
+    update exercises set times_logged = greatest(times_logged - 1, 0) where id = old.exercise_id;
+  end if;
+  return null;
+end;
+$$;
+
+drop trigger if exists workout_exercises_bump_times_logged on workout_exercises;
+create trigger workout_exercises_bump_times_logged
+  after insert or delete on workout_exercises
+  for each row execute function bump_exercise_times_logged();
+
+-- Reconcile from workout_exercises (the source of truth), idempotently, the
+-- same way foods.times_logged is re-seeded above.
+update exercises set times_logged = 0 where times_logged <> 0;
+update exercises e
+set times_logged = sub.cnt
+from (select exercise_id, count(*) as cnt from workout_exercises group by exercise_id) sub
+where e.id = sub.exercise_id;
+
 alter table foods enable row level security;
 alter table food_logs enable row level security;
 alter table water_logs enable row level security;
@@ -186,6 +353,10 @@ alter table sleep_logs enable row level security;
 alter table recipes enable row level security;
 alter table recipe_ingredients enable row level security;
 alter table food_favorites enable row level security;
+alter table exercises enable row level security;
+alter table workouts enable row level security;
+alter table workout_exercises enable row level security;
+alter table workout_sets enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -272,3 +443,80 @@ create policy "Users manage their own food favorites" on food_favorites
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- exercises is a shared catalog, on the same terms as foods: anyone
+-- authenticated reads every row, only a row's own author can change it.
+drop policy if exists "Anyone can read exercises" on exercises;
+create policy "Anyone can read exercises" on exercises
+  for select
+  using (true);
+
+drop policy if exists "Users insert their own exercises" on exercises;
+create policy "Users insert their own exercises" on exercises
+  for insert
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users update their own exercises" on exercises;
+create policy "Users update their own exercises" on exercises
+  for update
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users delete their own exercises" on exercises;
+create policy "Users delete their own exercises" on exercises
+  for delete
+  using (auth.uid() = user_id);
+
+-- Workouts are private. workout_exercises and workout_sets carry no user_id of
+-- their own - they inherit their workout's owner, so their policies walk up to
+-- it rather than duplicating the column, the same shape recipe_ingredients uses.
+drop policy if exists "Users manage their own workouts" on workouts;
+create policy "Users manage their own workouts" on workouts
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own workout exercises" on workout_exercises;
+create policy "Users manage their own workout exercises" on workout_exercises
+  for all
+  using (exists (select 1 from workouts where workouts.id = workout_exercises.workout_id and workouts.user_id = auth.uid()))
+  with check (exists (select 1 from workouts where workouts.id = workout_exercises.workout_id and workouts.user_id = auth.uid()));
+
+drop policy if exists "Users manage their own workout sets" on workout_sets;
+create policy "Users manage their own workout sets" on workout_sets
+  for all
+  using (
+    exists (
+      select 1
+      from workout_exercises
+      join workouts on workouts.id = workout_exercises.workout_id
+      where workout_exercises.id = workout_sets.workout_exercise_id and workouts.user_id = auth.uid()
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from workout_exercises
+      join workouts on workouts.id = workout_exercises.workout_id
+      where workout_exercises.id = workout_sets.workout_exercise_id and workouts.user_id = auth.uid()
+    )
+  );
+
+-- Storage bucket for exercise photos, on the same terms as food-images: public
+-- read (they're shown in the shared catalog to everyone), authenticated write.
+-- Its contents are mirrored from free-exercise-db by the import tool rather
+-- than uploaded from the app, so nothing writes here at runtime yet - the
+-- insert policy is what lets a user-added exercise carry a photo later.
+insert into storage.buckets (id, name, public)
+values ('exercise-images', 'exercise-images', true)
+on conflict (id) do nothing;
+
+drop policy if exists "Anyone can view exercise images" on storage.objects;
+create policy "Anyone can view exercise images" on storage.objects
+  for select
+  using (bucket_id = 'exercise-images');
+
+drop policy if exists "Authenticated users can upload exercise images" on storage.objects;
+create policy "Authenticated users can upload exercise images" on storage.objects
+  for insert
+  with check (bucket_id = 'exercise-images' and auth.uid() is not null);

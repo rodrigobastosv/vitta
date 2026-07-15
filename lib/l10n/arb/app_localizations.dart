@@ -1453,6 +1453,492 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Password must be at least 6 characters.'**
   String get authInvalidPasswordMessage;
+
+  /// No description provided for @muscleGroupAbdominals.
+  ///
+  /// In en, this message translates to:
+  /// **'Abs'**
+  String get muscleGroupAbdominals;
+
+  /// No description provided for @muscleGroupAbductors.
+  ///
+  /// In en, this message translates to:
+  /// **'Abductors'**
+  String get muscleGroupAbductors;
+
+  /// No description provided for @muscleGroupAdductors.
+  ///
+  /// In en, this message translates to:
+  /// **'Adductors'**
+  String get muscleGroupAdductors;
+
+  /// No description provided for @muscleGroupBiceps.
+  ///
+  /// In en, this message translates to:
+  /// **'Biceps'**
+  String get muscleGroupBiceps;
+
+  /// No description provided for @muscleGroupCalves.
+  ///
+  /// In en, this message translates to:
+  /// **'Calves'**
+  String get muscleGroupCalves;
+
+  /// No description provided for @muscleGroupChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get muscleGroupChest;
+
+  /// No description provided for @muscleGroupForearms.
+  ///
+  /// In en, this message translates to:
+  /// **'Forearms'**
+  String get muscleGroupForearms;
+
+  /// No description provided for @muscleGroupGlutes.
+  ///
+  /// In en, this message translates to:
+  /// **'Glutes'**
+  String get muscleGroupGlutes;
+
+  /// No description provided for @muscleGroupHamstrings.
+  ///
+  /// In en, this message translates to:
+  /// **'Hamstrings'**
+  String get muscleGroupHamstrings;
+
+  /// No description provided for @muscleGroupLats.
+  ///
+  /// In en, this message translates to:
+  /// **'Lats'**
+  String get muscleGroupLats;
+
+  /// No description provided for @muscleGroupLowerBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower back'**
+  String get muscleGroupLowerBack;
+
+  /// No description provided for @muscleGroupMiddleBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Middle back'**
+  String get muscleGroupMiddleBack;
+
+  /// No description provided for @muscleGroupNeck.
+  ///
+  /// In en, this message translates to:
+  /// **'Neck'**
+  String get muscleGroupNeck;
+
+  /// No description provided for @muscleGroupQuadriceps.
+  ///
+  /// In en, this message translates to:
+  /// **'Quads'**
+  String get muscleGroupQuadriceps;
+
+  /// No description provided for @muscleGroupShoulders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulders'**
+  String get muscleGroupShoulders;
+
+  /// No description provided for @muscleGroupTraps.
+  ///
+  /// In en, this message translates to:
+  /// **'Traps'**
+  String get muscleGroupTraps;
+
+  /// No description provided for @muscleGroupTriceps.
+  ///
+  /// In en, this message translates to:
+  /// **'Triceps'**
+  String get muscleGroupTriceps;
+
+  /// No description provided for @bodyRegionChest.
+  ///
+  /// In en, this message translates to:
+  /// **'Chest'**
+  String get bodyRegionChest;
+
+  /// No description provided for @bodyRegionBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get bodyRegionBack;
+
+  /// No description provided for @bodyRegionShoulders.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoulders'**
+  String get bodyRegionShoulders;
+
+  /// No description provided for @bodyRegionArms.
+  ///
+  /// In en, this message translates to:
+  /// **'Arms'**
+  String get bodyRegionArms;
+
+  /// No description provided for @bodyRegionCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Core'**
+  String get bodyRegionCore;
+
+  /// No description provided for @bodyRegionLegs.
+  ///
+  /// In en, this message translates to:
+  /// **'Legs'**
+  String get bodyRegionLegs;
+
+  /// No description provided for @exerciseCategoryStrength.
+  ///
+  /// In en, this message translates to:
+  /// **'Strength'**
+  String get exerciseCategoryStrength;
+
+  /// No description provided for @exerciseCategoryCardio.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardio'**
+  String get exerciseCategoryCardio;
+
+  /// No description provided for @exerciseCategoryStretching.
+  ///
+  /// In en, this message translates to:
+  /// **'Stretching'**
+  String get exerciseCategoryStretching;
+
+  /// No description provided for @exerciseCategoryPlyometrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Plyometrics'**
+  String get exerciseCategoryPlyometrics;
+
+  /// No description provided for @exerciseCategoryPowerlifting.
+  ///
+  /// In en, this message translates to:
+  /// **'Powerlifting'**
+  String get exerciseCategoryPowerlifting;
+
+  /// No description provided for @exerciseCategoryOlympicWeightlifting.
+  ///
+  /// In en, this message translates to:
+  /// **'Olympic weightlifting'**
+  String get exerciseCategoryOlympicWeightlifting;
+
+  /// No description provided for @exerciseCategoryStrongman.
+  ///
+  /// In en, this message translates to:
+  /// **'Strongman'**
+  String get exerciseCategoryStrongman;
+
+  /// No description provided for @exerciseLevelBeginner.
+  ///
+  /// In en, this message translates to:
+  /// **'Beginner'**
+  String get exerciseLevelBeginner;
+
+  /// No description provided for @exerciseLevelIntermediate.
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
+  String get exerciseLevelIntermediate;
+
+  /// No description provided for @exerciseLevelExpert.
+  ///
+  /// In en, this message translates to:
+  /// **'Expert'**
+  String get exerciseLevelExpert;
+
+  /// No description provided for @equipmentBarbell.
+  ///
+  /// In en, this message translates to:
+  /// **'Barbell'**
+  String get equipmentBarbell;
+
+  /// No description provided for @equipmentDumbbell.
+  ///
+  /// In en, this message translates to:
+  /// **'Dumbbell'**
+  String get equipmentDumbbell;
+
+  /// No description provided for @equipmentKettlebells.
+  ///
+  /// In en, this message translates to:
+  /// **'Kettlebell'**
+  String get equipmentKettlebells;
+
+  /// No description provided for @equipmentCable.
+  ///
+  /// In en, this message translates to:
+  /// **'Cable'**
+  String get equipmentCable;
+
+  /// No description provided for @equipmentMachine.
+  ///
+  /// In en, this message translates to:
+  /// **'Machine'**
+  String get equipmentMachine;
+
+  /// No description provided for @equipmentBands.
+  ///
+  /// In en, this message translates to:
+  /// **'Bands'**
+  String get equipmentBands;
+
+  /// No description provided for @equipmentBodyOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Bodyweight'**
+  String get equipmentBodyOnly;
+
+  /// No description provided for @equipmentExerciseBall.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercise ball'**
+  String get equipmentExerciseBall;
+
+  /// No description provided for @equipmentMedicineBall.
+  ///
+  /// In en, this message translates to:
+  /// **'Medicine ball'**
+  String get equipmentMedicineBall;
+
+  /// No description provided for @equipmentFoamRoll.
+  ///
+  /// In en, this message translates to:
+  /// **'Foam roller'**
+  String get equipmentFoamRoll;
+
+  /// No description provided for @equipmentEzCurlBar.
+  ///
+  /// In en, this message translates to:
+  /// **'EZ curl bar'**
+  String get equipmentEzCurlBar;
+
+  /// No description provided for @equipmentOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get equipmentOther;
+
+  /// No description provided for @workoutTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get workoutTodayTitle;
+
+  /// No description provided for @workoutPreviousDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get workoutPreviousDayTooltip;
+
+  /// No description provided for @workoutNextDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get workoutNextDayTooltip;
+
+  /// No description provided for @workoutAddExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Add exercise'**
+  String get workoutAddExercise;
+
+  /// No description provided for @workoutEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No workout logged'**
+  String get workoutEmptyTitle;
+
+  /// No description provided for @workoutEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add an exercise to start today\'s workout.'**
+  String get workoutEmptyMessage;
+
+  /// No description provided for @workoutVolumeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
+  String get workoutVolumeLabel;
+
+  /// No description provided for @workoutSetsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sets'**
+  String get workoutSetsLabel;
+
+  /// No description provided for @workoutRepsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reps'**
+  String get workoutRepsLabel;
+
+  /// No description provided for @workoutLoadLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Load'**
+  String get workoutLoadLabel;
+
+  /// No description provided for @workoutLoadHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave empty for bodyweight'**
+  String get workoutLoadHelper;
+
+  /// No description provided for @workoutTotalRepsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total reps'**
+  String get workoutTotalRepsLabel;
+
+  /// No description provided for @workoutHeaviestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heaviest'**
+  String get workoutHeaviestLabel;
+
+  /// No description provided for @workoutAddSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add set'**
+  String get workoutAddSet;
+
+  /// No description provided for @workoutEditSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit set'**
+  String get workoutEditSet;
+
+  /// No description provided for @workoutLogSetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save set'**
+  String get workoutLogSetAction;
+
+  /// No description provided for @workoutDeleteSetTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove set'**
+  String get workoutDeleteSetTooltip;
+
+  /// No description provided for @workoutDeleteExercise.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove exercise'**
+  String get workoutDeleteExercise;
+
+  /// No description provided for @workoutDeleteWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete workout'**
+  String get workoutDeleteWorkout;
+
+  /// No description provided for @workoutDeleteWorkoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This deletes every exercise and set logged on this day.'**
+  String get workoutDeleteWorkoutMessage;
+
+  /// No description provided for @workoutNoSetsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No sets yet.'**
+  String get workoutNoSetsMessage;
+
+  /// No description provided for @workoutBodyweightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Bodyweight'**
+  String get workoutBodyweightLabel;
+
+  /// No description provided for @workoutInvalidRepsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter how many reps you did.'**
+  String get workoutInvalidRepsMessage;
+
+  /// No description provided for @workoutInvalidLoadMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid load, or leave it empty for bodyweight.'**
+  String get workoutInvalidLoadMessage;
+
+  /// No description provided for @workoutSetSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{reps} reps'**
+  String workoutSetSummary(int reps);
+
+  /// No description provided for @workoutSetSummaryWeighted.
+  ///
+  /// In en, this message translates to:
+  /// **'{reps} reps · {weight}'**
+  String workoutSetSummaryWeighted(int reps, String weight);
+
+  /// No description provided for @exerciseSearchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Exercises'**
+  String get exerciseSearchTitle;
+
+  /// No description provided for @exerciseSearchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search exercises'**
+  String get exerciseSearchHint;
+
+  /// No description provided for @exerciseSearchEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises found'**
+  String get exerciseSearchEmptyTitle;
+
+  /// No description provided for @exerciseSearchEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another term or clear the muscle filter.'**
+  String get exerciseSearchEmptyMessage;
+
+  /// No description provided for @exerciseSearchAllFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get exerciseSearchAllFilter;
+
+  /// No description provided for @exerciseDetailInstructionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to do it'**
+  String get exerciseDetailInstructionsTitle;
+
+  /// No description provided for @exerciseDetailPrimaryMusclesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary muscles'**
+  String get exerciseDetailPrimaryMusclesTitle;
+
+  /// No description provided for @exerciseDetailSecondaryMusclesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Also works'**
+  String get exerciseDetailSecondaryMusclesTitle;
+
+  /// No description provided for @exerciseDetailNoInstructionsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This exercise has no instructions yet.'**
+  String get exerciseDetailNoInstructionsMessage;
+
+  /// No description provided for @exerciseDetailAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to workout'**
+  String get exerciseDetailAddAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

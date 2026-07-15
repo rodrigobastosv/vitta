@@ -772,4 +772,251 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get authInvalidPasswordMessage => 'A senha deve ter pelo menos 6 caracteres.';
+
+  @override
+  String get muscleGroupAbdominals => 'Abdômen';
+
+  @override
+  String get muscleGroupAbductors => 'Abdutores';
+
+  @override
+  String get muscleGroupAdductors => 'Adutores';
+
+  @override
+  String get muscleGroupBiceps => 'Bíceps';
+
+  @override
+  String get muscleGroupCalves => 'Panturrilhas';
+
+  @override
+  String get muscleGroupChest => 'Peito';
+
+  @override
+  String get muscleGroupForearms => 'Antebraços';
+
+  @override
+  String get muscleGroupGlutes => 'Glúteos';
+
+  @override
+  String get muscleGroupHamstrings => 'Posteriores de coxa';
+
+  @override
+  String get muscleGroupLats => 'Dorsais';
+
+  @override
+  String get muscleGroupLowerBack => 'Lombar';
+
+  @override
+  String get muscleGroupMiddleBack => 'Meio das costas';
+
+  @override
+  String get muscleGroupNeck => 'Pescoço';
+
+  @override
+  String get muscleGroupQuadriceps => 'Quadríceps';
+
+  @override
+  String get muscleGroupShoulders => 'Ombros';
+
+  @override
+  String get muscleGroupTraps => 'Trapézio';
+
+  @override
+  String get muscleGroupTriceps => 'Tríceps';
+
+  @override
+  String get bodyRegionChest => 'Peito';
+
+  @override
+  String get bodyRegionBack => 'Costas';
+
+  @override
+  String get bodyRegionShoulders => 'Ombros';
+
+  @override
+  String get bodyRegionArms => 'Braços';
+
+  @override
+  String get bodyRegionCore => 'Core';
+
+  @override
+  String get bodyRegionLegs => 'Pernas';
+
+  @override
+  String get exerciseCategoryStrength => 'Força';
+
+  @override
+  String get exerciseCategoryCardio => 'Cardio';
+
+  @override
+  String get exerciseCategoryStretching => 'Alongamento';
+
+  @override
+  String get exerciseCategoryPlyometrics => 'Pliometria';
+
+  @override
+  String get exerciseCategoryPowerlifting => 'Powerlifting';
+
+  @override
+  String get exerciseCategoryOlympicWeightlifting => 'Levantamento olímpico';
+
+  @override
+  String get exerciseCategoryStrongman => 'Strongman';
+
+  @override
+  String get exerciseLevelBeginner => 'Iniciante';
+
+  @override
+  String get exerciseLevelIntermediate => 'Intermediário';
+
+  @override
+  String get exerciseLevelExpert => 'Avançado';
+
+  @override
+  String get equipmentBarbell => 'Barra';
+
+  @override
+  String get equipmentDumbbell => 'Halteres';
+
+  @override
+  String get equipmentKettlebells => 'Kettlebell';
+
+  @override
+  String get equipmentCable => 'Cabo';
+
+  @override
+  String get equipmentMachine => 'Máquina';
+
+  @override
+  String get equipmentBands => 'Elásticos';
+
+  @override
+  String get equipmentBodyOnly => 'Peso corporal';
+
+  @override
+  String get equipmentExerciseBall => 'Bola suíça';
+
+  @override
+  String get equipmentMedicineBall => 'Medicine ball';
+
+  @override
+  String get equipmentFoamRoll => 'Rolo de espuma';
+
+  @override
+  String get equipmentEzCurlBar => 'Barra W';
+
+  @override
+  String get equipmentOther => 'Outro';
+
+  @override
+  String get workoutTodayTitle => 'Hoje';
+
+  @override
+  String get workoutPreviousDayTooltip => 'Dia anterior';
+
+  @override
+  String get workoutNextDayTooltip => 'Próximo dia';
+
+  @override
+  String get workoutAddExercise => 'Adicionar exercício';
+
+  @override
+  String get workoutEmptyTitle => 'Nenhum treino registrado';
+
+  @override
+  String get workoutEmptyMessage => 'Adicione um exercício para começar o treino de hoje.';
+
+  @override
+  String get workoutVolumeLabel => 'Volume';
+
+  @override
+  String get workoutSetsLabel => 'Séries';
+
+  @override
+  String get workoutRepsLabel => 'Repetições';
+
+  @override
+  String get workoutLoadLabel => 'Carga';
+
+  @override
+  String get workoutLoadHelper => 'Deixe vazio para peso corporal';
+
+  @override
+  String get workoutTotalRepsLabel => 'Total de repetições';
+
+  @override
+  String get workoutHeaviestLabel => 'Maior carga';
+
+  @override
+  String get workoutAddSet => 'Adicionar série';
+
+  @override
+  String get workoutEditSet => 'Editar série';
+
+  @override
+  String get workoutLogSetAction => 'Salvar série';
+
+  @override
+  String get workoutDeleteSetTooltip => 'Remover série';
+
+  @override
+  String get workoutDeleteExercise => 'Remover exercício';
+
+  @override
+  String get workoutDeleteWorkout => 'Excluir treino';
+
+  @override
+  String get workoutDeleteWorkoutMessage => 'Isso exclui todos os exercícios e séries registrados neste dia.';
+
+  @override
+  String get workoutNoSetsMessage => 'Nenhuma série ainda.';
+
+  @override
+  String get workoutBodyweightLabel => 'Peso corporal';
+
+  @override
+  String get workoutInvalidRepsMessage => 'Informe quantas repetições você fez.';
+
+  @override
+  String get workoutInvalidLoadMessage => 'Informe uma carga válida, ou deixe vazio para peso corporal.';
+
+  @override
+  String workoutSetSummary(int reps) {
+    return '$reps repetições';
+  }
+
+  @override
+  String workoutSetSummaryWeighted(int reps, String weight) {
+    return '$reps repetições · $weight';
+  }
+
+  @override
+  String get exerciseSearchTitle => 'Exercícios';
+
+  @override
+  String get exerciseSearchHint => 'Buscar exercícios';
+
+  @override
+  String get exerciseSearchEmptyTitle => 'Nenhum exercício encontrado';
+
+  @override
+  String get exerciseSearchEmptyMessage => 'Tente outro termo ou remova o filtro de músculo.';
+
+  @override
+  String get exerciseSearchAllFilter => 'Todos';
+
+  @override
+  String get exerciseDetailInstructionsTitle => 'Como fazer';
+
+  @override
+  String get exerciseDetailPrimaryMusclesTitle => 'Músculos principais';
+
+  @override
+  String get exerciseDetailSecondaryMusclesTitle => 'Também trabalha';
+
+  @override
+  String get exerciseDetailNoInstructionsMessage => 'Este exercício ainda não tem instruções.';
+
+  @override
+  String get exerciseDetailAddAction => 'Adicionar ao treino';
 }

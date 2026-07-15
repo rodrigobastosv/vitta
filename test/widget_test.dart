@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
+import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
+import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
 import 'package:vitta/main.dart';
 
 import 'fixtures/local_storage_fixture.dart';
@@ -10,9 +12,17 @@ import 'mocks/services_mocks.dart';
 
 void main() {
   setUpAll(() async {
+    registerFallbackValue(SupabaseTable.workouts);
     final supabaseService = MockSupabaseService();
     when(() => supabaseService.isAnonymous).thenReturn(true);
     when(() => supabaseService.currentUserEmail).thenReturn(null);
+    when(() => supabaseService.currentUserId).thenReturn('user-1');
+    // Every feature page now loads from Supabase on mount, so a page reached
+    // from a tile issues a query. Postgrest's fluent builder isn't practical to
+    // fake, so the query throws and the datasource turns it into the Failure it
+    // would return for any other network error - enough for a navigation test,
+    // which only cares that the page mounts and renders.
+    when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
     await G<OnboardingLocalDataSource>().markOnboardingSeen();
   });
@@ -33,6 +43,7 @@ void main() {
     await tester.tap(find.text('Workout'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Coming soon'), findsOneWidget);
+    expect(find.byType(WorkoutPage), findsOneWidget);
+    expect(find.text('No workout logged'), findsOneWidget);
   });
 }

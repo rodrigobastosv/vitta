@@ -29,6 +29,9 @@ import 'package:vitta/app/data/sleep/sleep_repository.dart';
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
+import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_datasource.dart';
+import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
+import 'package:vitta/app/data/workout/workout_repository.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -70,11 +73,20 @@ import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -84,6 +96,7 @@ import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water_history/water_history_cubit.dart';
+import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 
 final G = GetIt.instance;
 
@@ -125,6 +138,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
+  G.registerLazySingleton(() => SupabaseExerciseDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => SupabaseWorkoutDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => WorkoutRepository(supabaseExerciseDataSource: G(), supabaseWorkoutDataSource: G()));
   G.registerLazySingleton(() => SupabaseAuthDataSource(supabaseService: G()));
   G.registerLazySingleton(() => AuthRepository(supabaseAuthDataSource: G()));
 
@@ -160,6 +176,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
+  G.registerFactory(() => SearchExercisesUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetWorkoutsForDateUseCase(workoutRepository: G()));
+  G.registerFactory(() => AddExerciseToWorkoutUseCase(workoutRepository: G()));
+  G.registerFactory(() => RemoveWorkoutExerciseUseCase(workoutRepository: G()));
+  G.registerFactory(() => LogSetUseCase(workoutRepository: G()));
+  G.registerFactory(() => UpdateSetUseCase(workoutRepository: G()));
+  G.registerFactory(() => DeleteSetUseCase(workoutRepository: G()));
+  G.registerFactory(() => DeleteWorkoutUseCase(workoutRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
@@ -208,6 +232,19 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       recipe: recipe,
     ),
   );
+  G.registerFactory(
+    () => WorkoutCubit(
+      getWorkoutsForDateUseCase: G(),
+      addExerciseToWorkoutUseCase: G(),
+      removeWorkoutExerciseUseCase: G(),
+      logSetUseCase: G(),
+      updateSetUseCase: G(),
+      deleteSetUseCase: G(),
+      deleteWorkoutUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
+  G.registerFactory(() => ExerciseSearchCubit(searchExercisesUseCase: G()));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(
@@ -221,11 +258,13 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => WaterHistoryCubit(getWaterInRangeUseCase: G(), getWaterGoalUseCase: G()));
   G.registerFactory(() => SleepHistoryCubit(getSleepInRangeUseCase: G(), getSleepGoalUseCase: G()));
-  G.registerFactory(() => SleepCubit(
+  G.registerFactory(
+    () => SleepCubit(
       getRecentSleepLogsUseCase: G(),
       logSleepUseCase: G(),
       deleteSleepLogUseCase: G(),
       getSleepGoalUseCase: G(),
       saveSleepGoalUseCase: G(),
-    ));
+    ),
+  );
 }

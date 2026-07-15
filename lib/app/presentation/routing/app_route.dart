@@ -15,6 +15,8 @@ enum AppRoute {
   sleep('/sleep'),
   sleepHistory('/sleep/history'),
   workout('/workout'),
+  exerciseSearch('/workout/exercise-search'),
+  exerciseDetail('/workout/exercise-search/detail'),
   profile('/profile'),
   macroGoals('/profile/macro-goals'),
   settings('/settings'),

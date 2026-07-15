@@ -8,6 +8,8 @@ import 'package:vitta/app/presentation/routing/routes/custom_food_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_day_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
+import 'package:vitta/app/presentation/routing/routes/exercise_detail_route.dart';
+import 'package:vitta/app/presentation/routing/routes/exercise_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
 import 'package:vitta/app/presentation/routing/routes/ingredient_picker_route.dart';
@@ -42,6 +44,8 @@ abstract class AppRouter {
     SleepRoute(),
     SleepHistoryRoute(),
     WorkoutRoute(),
+    ExerciseSearchRoute(),
+    ExerciseDetailRoute(),
     ProfileRoute(),
     MacroGoalsRoute(),
     SettingsRoute(),
