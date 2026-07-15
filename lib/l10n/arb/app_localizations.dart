@@ -734,11 +734,125 @@ abstract class AppLocalizations {
   /// **'Avg'**
   String get dietWeekColumnLabel;
 
-  /// No description provided for @dietTrendRangeDays.
+  /// No description provided for @waterHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get waterHistoryTitle;
+
+  /// No description provided for @sleepHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get sleepHistoryTitle;
+
+  /// No description provided for @sleepDurationTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time asleep'**
+  String get sleepDurationTrendTitle;
+
+  /// No description provided for @sleepTrendAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours} h/night average'**
+  String sleepTrendAverageLabel(String hours);
+
+  /// No description provided for @sleepTrendEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged in this period yet.'**
+  String get sleepTrendEmptyMessage;
+
+  /// No description provided for @sleepHoursShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h'**
+  String sleepHoursShort(String hours);
+
+  /// No description provided for @sleepWeekAverageTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average: {hours} h over {days} logged nights'**
+  String sleepWeekAverageTooltip(String hours, int days);
+
+  /// No description provided for @sleepQualitySplitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality'**
+  String get sleepQualitySplitTitle;
+
+  /// No description provided for @sleepRatedNights.
+  ///
+  /// In en, this message translates to:
+  /// **'{nights} rated nights'**
+  String sleepRatedNights(int nights);
+
+  /// No description provided for @sleepQualityEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No nights rated in this period yet.'**
+  String get sleepQualityEmptyMessage;
+
+  /// No description provided for @sleepQualityStars.
+  ///
+  /// In en, this message translates to:
+  /// **'{rating} stars'**
+  String sleepQualityStars(int rating);
+
+  /// No description provided for @sleepGoalDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nightly sleep goal'**
+  String get sleepGoalDialogTitle;
+
+  /// No description provided for @sleepGoalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Hours per night'**
+  String get sleepGoalLabel;
+
+  /// No description provided for @sleepGoalInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a number of hours greater than zero.'**
+  String get sleepGoalInvalid;
+
+  /// No description provided for @waterTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get waterTrendTitle;
+
+  /// No description provided for @waterTrendAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{ml} ml/day average'**
+  String waterTrendAverageLabel(int ml);
+
+  /// No description provided for @waterTrendEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged in this period yet.'**
+  String get waterTrendEmptyMessage;
+
+  /// No description provided for @waterWeekAverageShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{ml}'**
+  String waterWeekAverageShort(int ml);
+
+  /// No description provided for @waterWeekAverageTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly average: {ml} ml over {days} logged days'**
+  String waterWeekAverageTooltip(int ml, int days);
+
+  /// No description provided for @trendRangeDays.
   ///
   /// In en, this message translates to:
   /// **'{days}d'**
-  String dietTrendRangeDays(int days);
+  String trendRangeDays(int days);
 
   /// No description provided for @dietCaloriesTrendTitle.
   ///

@@ -358,7 +358,80 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietWeekColumnLabel => 'Méd';
 
   @override
-  String dietTrendRangeDays(int days) {
+  String get waterHistoryTitle => 'Histórico';
+
+  @override
+  String get sleepHistoryTitle => 'Histórico';
+
+  @override
+  String get sleepDurationTrendTitle => 'Tempo dormido';
+
+  @override
+  String sleepTrendAverageLabel(String hours) {
+    return 'média de $hours h/noite';
+  }
+
+  @override
+  String get sleepTrendEmptyMessage => 'Nada registrado neste período ainda.';
+
+  @override
+  String sleepHoursShort(String hours) {
+    return '${hours}h';
+  }
+
+  @override
+  String sleepWeekAverageTooltip(String hours, int days) {
+    return 'Média semanal: $hours h em $days noites registradas';
+  }
+
+  @override
+  String get sleepQualitySplitTitle => 'Qualidade';
+
+  @override
+  String sleepRatedNights(int nights) {
+    return '$nights noites avaliadas';
+  }
+
+  @override
+  String get sleepQualityEmptyMessage => 'Nenhuma noite avaliada neste período ainda.';
+
+  @override
+  String sleepQualityStars(int rating) {
+    return '$rating estrelas';
+  }
+
+  @override
+  String get sleepGoalDialogTitle => 'Meta de sono por noite';
+
+  @override
+  String get sleepGoalLabel => 'Horas por noite';
+
+  @override
+  String get sleepGoalInvalid => 'Informe um número de horas maior que zero.';
+
+  @override
+  String get waterTrendTitle => 'Água';
+
+  @override
+  String waterTrendAverageLabel(int ml) {
+    return 'média de $ml ml/dia';
+  }
+
+  @override
+  String get waterTrendEmptyMessage => 'Nada registrado neste período ainda.';
+
+  @override
+  String waterWeekAverageShort(int ml) {
+    return '$ml';
+  }
+
+  @override
+  String waterWeekAverageTooltip(int ml, int days) {
+    return 'Média semanal: $ml ml em $days dias registrados';
+  }
+
+  @override
+  String trendRangeDays(int days) {
     return '${days}d';
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vitta/app/core/goals/goal_adherence.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
-import 'package:vitta/app/domain/diet/entities/goal_adherence.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';

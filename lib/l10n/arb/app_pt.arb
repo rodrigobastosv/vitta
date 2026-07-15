@@ -171,7 +171,26 @@
   "dietWeekAverageShort": "{calories}",
   "dietWeekAverageTooltip": "Média semanal: {calories} kcal em {days} dias registrados",
   "dietWeekColumnLabel": "Méd",
-  "dietTrendRangeDays": "{days}d",
+  "waterHistoryTitle": "Histórico",
+  "sleepHistoryTitle": "Histórico",
+  "sleepDurationTrendTitle": "Tempo dormido",
+  "sleepTrendAverageLabel": "média de {hours} h/noite",
+  "sleepTrendEmptyMessage": "Nada registrado neste período ainda.",
+  "sleepHoursShort": "{hours}h",
+  "sleepWeekAverageTooltip": "Média semanal: {hours} h em {days} noites registradas",
+  "sleepQualitySplitTitle": "Qualidade",
+  "sleepRatedNights": "{nights} noites avaliadas",
+  "sleepQualityEmptyMessage": "Nenhuma noite avaliada neste período ainda.",
+  "sleepQualityStars": "{rating} estrelas",
+  "sleepGoalDialogTitle": "Meta de sono por noite",
+  "sleepGoalLabel": "Horas por noite",
+  "sleepGoalInvalid": "Informe um número de horas maior que zero.",
+  "waterTrendTitle": "Água",
+  "waterTrendAverageLabel": "média de {ml} ml/dia",
+  "waterTrendEmptyMessage": "Nada registrado neste período ainda.",
+  "waterWeekAverageShort": "{ml}",
+  "waterWeekAverageTooltip": "Média semanal: {ml} ml em {days} dias registrados",
+  "trendRangeDays": "{days}d",
   "dietCaloriesTrendTitle": "Calorias",
   "dietMacrosTrendTitle": "Macros",
   "dietTrendAverageLabel": "{calories} kcal/dia em média",
@@ -195,7 +214,7 @@
       "days": { "type": "int" }
     }
   },
-  "@dietTrendRangeDays": {
+  "@trendRangeDays": {
     "placeholders": {
       "days": { "type": "int" }
     }

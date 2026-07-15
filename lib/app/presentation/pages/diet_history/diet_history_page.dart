@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/diet_day/diet_day_extra.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
@@ -17,7 +18,6 @@ import 'package:vitta/app/presentation/pages/diet_history/widgets/calories_trend
 import 'package:vitta/app/presentation/pages/diet_history/widgets/diet_history_calendar_card.dart';
 import 'package:vitta/app/presentation/pages/diet_history/widgets/macros_trend_card.dart';
 import 'package:vitta/app/presentation/pages/diet_history/widgets/meal_split_card.dart';
-import 'package:vitta/app/presentation/pages/diet_history/widgets/trend_range_selector.dart';
 
 class DietHistoryPage extends StatelessWidget {
   const DietHistoryPage({super.key});

@@ -23,7 +23,8 @@ import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
 import 'package:vitta/app/data/settings/settings_repository.dart';
-import 'package:vitta/app/data/sleep/datasources/supabase_sleep_datasource.dart';
+import 'package:vitta/app/data/sleep/datasources/local/sleep_local_datasource.dart';
+import 'package:vitta/app/data/sleep/datasources/supabase/supabase_sleep_datasource.dart';
 import 'package:vitta/app/data/sleep/sleep_repository.dart';
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
@@ -60,9 +61,14 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
+import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
+import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
@@ -75,7 +81,9 @@ import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
+import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
+import 'package:vitta/app/presentation/pages/water_history/water_history_cubit.dart';
 
 final G = GetIt.instance;
 
@@ -113,9 +121,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerLazySingleton(() => SupabaseWaterDataSource(supabaseService: G()));
-  G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G()));
+  G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G(), waterLocalDataSource: G()));
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
-  G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G()));
+  G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
+  G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
   G.registerLazySingleton(() => SupabaseAuthDataSource(supabaseService: G()));
   G.registerLazySingleton(() => AuthRepository(supabaseAuthDataSource: G()));
 
@@ -142,9 +151,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => ScanNutritionLabelUseCase(dietRepository: G()));
   G.registerFactory(() => LogWaterUseCase(waterRepository: G()));
   G.registerFactory(() => GetDailyWaterUseCase(waterRepository: G()));
+  G.registerFactory(() => GetWaterInRangeUseCase(waterRepository: G()));
+  G.registerFactory(() => GetWaterGoalUseCase(waterRepository: G()));
   G.registerFactory(() => DeleteWaterLogUseCase(waterRepository: G()));
   G.registerFactory(() => LogSleepUseCase(sleepRepository: G()));
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetSleepInRangeUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetSleepGoalUseCase(sleepRepository: G()));
+  G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
@@ -205,5 +219,13 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getAppSettingsUseCase: G(),
     ),
   );
-  G.registerFactory(() => SleepCubit(getRecentSleepLogsUseCase: G(), logSleepUseCase: G(), deleteSleepLogUseCase: G()));
+  G.registerFactory(() => WaterHistoryCubit(getWaterInRangeUseCase: G(), getWaterGoalUseCase: G()));
+  G.registerFactory(() => SleepHistoryCubit(getSleepInRangeUseCase: G(), getSleepGoalUseCase: G()));
+  G.registerFactory(() => SleepCubit(
+      getRecentSleepLogsUseCase: G(),
+      logSleepUseCase: G(),
+      deleteSleepLogUseCase: G(),
+      getSleepGoalUseCase: G(),
+      saveSleepGoalUseCase: G(),
+    ));
 }

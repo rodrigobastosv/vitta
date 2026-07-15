@@ -5,10 +5,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_state.dart';
-import 'package:vitta/app/presentation/pages/diet_history/trend_range.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';

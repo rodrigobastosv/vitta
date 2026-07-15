@@ -184,6 +184,20 @@ A copy is **plain `food_logs` inserts**, not a new kind of row: `SupabaseDietDat
 
 The calendar reuses `MonthNavigator` and `DietCalendarDayCell` from `pages/diet_history/widgets/` — the cell gained an optional `isSelected` (filled primary circle) and a **nullable** `onTap`, following `MealSectionCard`'s "pass no callback to disable" convention. Its existing "not tappable unless the day has a log" rule is exactly what a source picker wants, so days with nothing logged can't be chosen. The weekday header is the one piece not reused: history's carries a week-average column this page has no use for.
 
+## History pages (diet, water, sleep)
+
+All three features have the same history surface: a month calendar over a trends section, reached from a calendar icon in the feature's `AppBar` (`/diet/history`, `/water/history`, `/sleep/history`). Diet's came first (issue #55); water and sleep followed (issues #89, #90) and are what forced the shared pieces below out of `pages/diet_history/`.
+
+**They all reduce to one shape: a day's value against a goal.** Diet is `totalCalories` vs `calorieGoal`, water `totalMl` vs `water.dailyGoalMl`, sleep `totalHours` vs `sleep.durationGoalHours`. That's why `GoalAdherence` (`core/goals/`, moved out of `domain/diet/entities/` once it stopped being diet's) and `DailyGoalAverage` (which replaced `CalorieAverage`) serve all three unchanged. Add a fourth tracker and it should fall out the same way.
+
+**The calendar is a design-system component** (`design_system/components/calendar/`) and knows nothing about goals: `VTCalendarMonthGrid` takes a `dayColor(day)` callback where `null` means nothing was logged — which is what makes a cell plain and untappable — plus an optional `weekBadge` builder and an `isDayEnabled` veto. What counts as a good day is the feature's business, not the calendar's. `VTCalendarWeekBadge` renders `-` for a week with no data. `VTMonthNavigator` and `VTCalendarWeekdayHeader` moved there too, and `CopyMealsPage` uses the same grid (`isDayEnabled` is how the target day is barred from being its own source).
+
+**Averages count only days that have data** (`DailyGoalAverage.fromValues`) — an untracked day means "no data", not "zero", and averaging zeros in would slander every day the user forgot to log. This is why every caller filters to logged days before handing values over.
+
+`TrendRange` and `TrendRangeSelector` live in `presentation/general/`, shared by the three pages. The trend window is a rolling 7/30/90 days ending today and is **independent of the displayed month** — progression is the point, and paging month-by-month buries it — so each history cubit runs two separate range queries against the same use case.
+
+Per-feature specifics: water and sleep calendars are read-only (`isDayEnabled: (_) => false`) because there's no per-day page to open, unlike diet's `DietDayPage`. Sleep is the one feature whose goal didn't exist: `sleep.durationGoalHours` (default 8) is new, stored device-local like water's and edited from a dialog on `SleepPage`. `DailySleep` sums a date's logs rather than assuming one night, since nothing stops a nap being logged too. `SleepQualitySplit` counts **only rated nights** — `qualityRating` is optional, so an unrated night is missing data, not a bad night.
+
 ## Diet history page
 
 The diet page's `AppBar` calendar icon opens `DietHistoryPage` (`/diet/history`, issue #55) — a **read-only** analysis surface, deliberately separate from `DietDateSelector`'s `showDietCalendarSheet`, which is a date *picker* for choosing which day to edit. Two calendars, two jobs: one navigates, one explains.

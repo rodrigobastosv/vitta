@@ -11,7 +11,9 @@ import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
+import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
+import 'package:vitta/app/presentation/pages/water_history/water_history_cubit.dart';
 
 import '../mocks/datasources_mocks.dart';
 import '../mocks/services_mocks.dart';
@@ -151,13 +153,33 @@ abstract class CubitsFactories {
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
+  static WaterHistoryCubit buildWaterHistoryCubit({
+    MockGetWaterInRangeUseCase? getWaterInRangeUseCase,
+    MockGetWaterGoalUseCase? getWaterGoalUseCase,
+  }) => WaterHistoryCubit(
+    getWaterInRangeUseCase: getWaterInRangeUseCase ?? MockGetWaterInRangeUseCase(),
+    getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
+  );
+
+  static SleepHistoryCubit buildSleepHistoryCubit({
+    MockGetSleepInRangeUseCase? getSleepInRangeUseCase,
+    MockGetSleepGoalUseCase? getSleepGoalUseCase,
+  }) => SleepHistoryCubit(
+    getSleepInRangeUseCase: getSleepInRangeUseCase ?? MockGetSleepInRangeUseCase(),
+    getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
+  );
+
   static SleepCubit buildSleepCubit({
     MockGetRecentSleepLogsUseCase? getRecentSleepLogsUseCase,
     MockLogSleepUseCase? logSleepUseCase,
     MockDeleteSleepLogUseCase? deleteSleepLogUseCase,
+    MockGetSleepGoalUseCase? getSleepGoalUseCase,
+    MockSaveSleepGoalUseCase? saveSleepGoalUseCase,
   }) => SleepCubit(
     getRecentSleepLogsUseCase: getRecentSleepLogsUseCase ?? MockGetRecentSleepLogsUseCase(),
     logSleepUseCase: logSleepUseCase ?? MockLogSleepUseCase(),
     deleteSleepLogUseCase: deleteSleepLogUseCase ?? MockDeleteSleepLogUseCase(),
+    getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
+    saveSleepGoalUseCase: saveSleepGoalUseCase ?? MockSaveSleepGoalUseCase(),
   );
 }

@@ -171,7 +171,34 @@
   "dietWeekAverageShort": "{calories}",
   "dietWeekAverageTooltip": "Weekly average: {calories} kcal over {days} logged days",
   "dietWeekColumnLabel": "Avg",
-  "dietTrendRangeDays": "{days}d",
+  "waterHistoryTitle": "History",
+  "sleepHistoryTitle": "History",
+  "sleepDurationTrendTitle": "Time asleep",
+  "sleepTrendAverageLabel": "{hours} h/night average",
+  "sleepTrendEmptyMessage": "Nothing logged in this period yet.",
+  "sleepHoursShort": "{hours}h",
+  "sleepWeekAverageTooltip": "Weekly average: {hours} h over {days} logged nights",
+  "sleepQualitySplitTitle": "Quality",
+  "sleepRatedNights": "{nights} rated nights",
+  "sleepQualityEmptyMessage": "No nights rated in this period yet.",
+  "sleepQualityStars": "{rating} stars",
+  "sleepGoalDialogTitle": "Nightly sleep goal",
+  "sleepGoalLabel": "Hours per night",
+  "sleepGoalInvalid": "Enter a number of hours greater than zero.",
+  "@sleepTrendAverageLabel": { "placeholders": { "hours": { "type": "String" } } },
+  "@sleepHoursShort": { "placeholders": { "hours": { "type": "String" } } },
+  "@sleepWeekAverageTooltip": { "placeholders": { "hours": { "type": "String" }, "days": { "type": "int" } } },
+  "@sleepRatedNights": { "placeholders": { "nights": { "type": "int" } } },
+  "@sleepQualityStars": { "placeholders": { "rating": { "type": "int" } } },
+  "waterTrendTitle": "Water",
+  "waterTrendAverageLabel": "{ml} ml/day average",
+  "waterTrendEmptyMessage": "Nothing logged in this period yet.",
+  "waterWeekAverageShort": "{ml}",
+  "waterWeekAverageTooltip": "Weekly average: {ml} ml over {days} logged days",
+  "@waterTrendAverageLabel": { "placeholders": { "ml": { "type": "int" } } },
+  "@waterWeekAverageShort": { "placeholders": { "ml": { "type": "int" } } },
+  "@waterWeekAverageTooltip": { "placeholders": { "ml": { "type": "int" }, "days": { "type": "int" } } },
+  "trendRangeDays": "{days}d",
   "dietCaloriesTrendTitle": "Calories",
   "dietMacrosTrendTitle": "Macros",
   "dietTrendAverageLabel": "{calories} kcal/day average",
@@ -205,7 +232,7 @@
       "days": { "type": "int" }
     }
   },
-  "@dietTrendRangeDays": {
+  "@trendRangeDays": {
     "placeholders": {
       "days": { "type": "int" }
     }
