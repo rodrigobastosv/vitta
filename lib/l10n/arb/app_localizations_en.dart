@@ -1062,7 +1062,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String workoutRoutineExerciseCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercises', one: '1 exercise');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercises', one: '1 exercise', zero: 'No exercises');
     return '$_temp0';
   }
 
@@ -1102,7 +1102,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String workoutCompletedSummary(int sets) {
-    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets sets done', one: '1 set done');
+    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets sets done', one: '1 set done', zero: 'No sets');
     return '$_temp0';
   }
 
@@ -1111,4 +1111,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
+
+  @override
+  String get workoutCompleteNeedsSetTooltip => 'Log a set before finishing this exercise';
 }

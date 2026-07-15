@@ -488,7 +488,7 @@
   "workoutRoutineDeleteTooltip": "Remove",
   "workoutRoutineRemoveExerciseTooltip": "Remove from routine",
   "workoutRoutineIncompleteMessage": "Give the routine a name and at least one exercise.",
-  "workoutRoutineExerciseCount": "{count, plural, =1{1 exercise} other{{count} exercises}}",
+  "workoutRoutineExerciseCount": "{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}",
   "@workoutRoutineExerciseCount": { "placeholders": { "count": { "type": "int" } } },
   "workoutNextRoutineLabel": "Next up",
   "workoutStartRoutineAction": "Start {name}",
@@ -502,8 +502,9 @@
   "workoutRepeatSetTooltip": "Repeat the last set",
   "workoutCompleteExerciseAction": "Done",
   "workoutReopenExerciseAction": "Reopen",
-  "workoutCompletedSummary": "{sets, plural, =1{1 set done} other{{sets} sets done}}",
+  "workoutCompletedSummary": "{sets, plural, =0{No sets} =1{1 set done} other{{sets} sets done}}",
   "@workoutCompletedSummary": { "placeholders": { "sets": { "type": "int" } } },
   "workoutFinishedTitle": "Workout done",
-  "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session."
+  "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session.",
+  "workoutCompleteNeedsSetTooltip": "Log a set before finishing this exercise"
 }

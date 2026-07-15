@@ -42,6 +42,8 @@ class WorkoutExerciseCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final exercise = workoutExercise.exercise;
     final isCompleted = workoutExercise.isCompleted;
+    // You can't finish what you haven't done - see WorkoutCubit.setExerciseCompleted.
+    final canComplete = workoutExercise.sets.isNotEmpty;
     final accent = exercise.primaryMuscles.firstOrNull?.region.color ?? colorScheme.primary;
     return VTCard(
       child: Column(
@@ -98,8 +100,15 @@ class WorkoutExerciseCard extends StatelessWidget {
                     isCompleted ? Icons.check_circle : Icons.check_circle_outline,
                     color: isCompleted ? VTColors.success : null,
                   ),
-                  tooltip: isCompleted ? l10n.workoutReopenExerciseAction : l10n.workoutCompleteExerciseAction,
-                  onPressed: () => onToggleCompleted!(!isCompleted),
+                  // Disabled rather than hidden when there's nothing logged: the
+                  // affordance stays where the user expects it and the tooltip
+                  // says what's missing, instead of the button silently vanishing.
+                  tooltip: switch ((isCompleted, canComplete)) {
+                    (true, _) => l10n.workoutReopenExerciseAction,
+                    (false, true) => l10n.workoutCompleteExerciseAction,
+                    (false, false) => l10n.workoutCompleteNeedsSetTooltip,
+                  },
+                  onPressed: canComplete || isCompleted ? () => onToggleCompleted!(!isCompleted) : null,
                 ),
               if (onRemove != null && !isCompleted)
                 IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutDeleteExercise, onPressed: onRemove),

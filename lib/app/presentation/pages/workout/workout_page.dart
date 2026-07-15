@@ -102,7 +102,7 @@ class WorkoutPage extends StatelessWidget {
                       onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: workoutExercise.exercise)),
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
                       onToggleCompleted: (completed) =>
-                          cubit.setExerciseCompleted(workoutExerciseId: workoutExercise.id, completed: completed),
+                          cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
                       onRepeatSet: () => cubit.repeatLastSet(workoutExercise: workoutExercise),
                       onAddSet: () => showLogSetSheet(
                         context: context,

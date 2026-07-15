@@ -2021,7 +2021,7 @@ abstract class AppLocalizations {
   /// No description provided for @workoutRoutineExerciseCount.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 exercise} other{{count} exercises}}'**
+  /// **'{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}'**
   String workoutRoutineExerciseCount(int count);
 
   /// No description provided for @workoutNextRoutineLabel.
@@ -2087,7 +2087,7 @@ abstract class AppLocalizations {
   /// No description provided for @workoutCompletedSummary.
   ///
   /// In en, this message translates to:
-  /// **'{sets, plural, =1{1 set done} other{{sets} sets done}}'**
+  /// **'{sets, plural, =0{No sets} =1{1 set done} other{{sets} sets done}}'**
   String workoutCompletedSummary(int sets);
 
   /// No description provided for @workoutFinishedTitle.
@@ -2101,6 +2101,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Every exercise is checked off. Well done — see you next session.'**
   String get workoutFinishedMessage;
+
+  /// No description provided for @workoutCompleteNeedsSetTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a set before finishing this exercise'**
+  String get workoutCompleteNeedsSetTooltip;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

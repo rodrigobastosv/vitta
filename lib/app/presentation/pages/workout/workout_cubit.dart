@@ -152,9 +152,19 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     return logSet(workoutExerciseId: workoutExercise.id, reps: last.reps, weightKg: last.weightKg);
   }
 
-  Future<void> setExerciseCompleted({required String workoutExerciseId, required bool completed}) async {
+  /// Marks an exercise done, or reopens it.
+  ///
+  /// An exercise with no sets can't be finished: "done" means you did it, and
+  /// allowing it would let a workout of untouched exercises be marked complete
+  /// and congratulate the user for lifting nothing - a routine pre-fills the
+  /// exercises, so that is one tap away. Removing the exercise is the honest
+  /// way to clear it. Reopening is always allowed.
+  Future<void> setExerciseCompleted({required WorkoutExercise workoutExercise, required bool completed}) async {
+    if (completed && workoutExercise.sets.isEmpty) {
+      return;
+    }
     final completedResult = await _setWorkoutExerciseCompletedUseCase(
-      workoutExerciseId: workoutExerciseId,
+      workoutExerciseId: workoutExercise.id,
       completed: completed,
     );
     await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {

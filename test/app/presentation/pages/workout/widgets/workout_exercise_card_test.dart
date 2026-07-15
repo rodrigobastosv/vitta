@@ -50,10 +50,7 @@ void main() {
   testWidgets('a finished exercise collapses its working surface', (tester) async {
     await pumpCard(
       tester,
-      workoutExercise: WorkoutExerciseFactory.build(
-        sets: [WorkoutSetFactory.build()],
-        completedAt: DateTime(2026, 7, 20),
-      ),
+      workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 20)),
       onToggleCompleted: (_) {},
     );
 
@@ -65,7 +62,10 @@ void main() {
     await pumpCard(
       tester,
       workoutExercise: WorkoutExerciseFactory.build(
-        sets: [WorkoutSetFactory.build(id: 's1'), WorkoutSetFactory.build(id: 's2')],
+        sets: [
+          WorkoutSetFactory.build(id: 's1'),
+          WorkoutSetFactory.build(id: 's2'),
+        ],
         completedAt: DateTime(2026, 7, 20),
       ),
       onToggleCompleted: (_) {},

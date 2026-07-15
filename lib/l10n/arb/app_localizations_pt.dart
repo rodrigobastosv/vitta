@@ -1063,7 +1063,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutRoutineExerciseCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercícios', one: '1 exercício');
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exercícios',
+      one: '1 exercício',
+      zero: 'Nenhum exercício',
+    );
     return '$_temp0';
   }
 
@@ -1103,7 +1109,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutCompletedSummary(int sets) {
-    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets séries feitas', one: '1 série feita');
+    String _temp0 = intl.Intl.pluralLogic(
+      sets,
+      locale: localeName,
+      other: '$sets séries feitas',
+      one: '1 série feita',
+      zero: 'Nenhuma série',
+    );
     return '$_temp0';
   }
 
@@ -1112,4 +1124,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
+
+  @override
+  String get workoutCompleteNeedsSetTooltip => 'Registre uma série antes de concluir este exercício';
 }

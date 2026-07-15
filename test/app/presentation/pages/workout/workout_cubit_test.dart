@@ -327,7 +327,10 @@ void main() {
       getRoutineCycleUseCase: _emptyCycleUseCase(),
     );
 
-    await cubit.setExerciseCompleted(workoutExerciseId: 'we-1', completed: false);
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', completedAt: DateTime(2026, 7, 20)),
+      completed: false,
+    );
 
     verify(() => setCompleted(workoutExerciseId: 'we-1', completed: false)).called(1);
   });
@@ -349,8 +352,48 @@ void main() {
       getRoutineCycleUseCase: _emptyCycleUseCase(),
     );
 
-    await cubit.setExerciseCompleted(workoutExerciseId: 'we-1', completed: true);
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
+      completed: true,
+    );
 
     verify(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).called(1);
+  });
+
+  test('refuses to finish an exercise with no sets - you cannot complete what you did not do', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final cubit = CubitsFactories.buildWorkoutCubit(setWorkoutExerciseCompletedUseCase: setCompleted);
+
+    await cubit.setExerciseCompleted(workoutExercise: WorkoutExerciseFactory.build(), completed: true);
+
+    verifyNever(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    );
+  });
+
+  test('reopening is always allowed, even with no sets', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+
+    await cubit.setExerciseCompleted(workoutExercise: WorkoutExerciseFactory.build(id: 'we-1'), completed: false);
+
+    verify(() => setCompleted(workoutExerciseId: 'we-1', completed: false)).called(1);
   });
 }
