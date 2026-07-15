@@ -29,9 +29,14 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
+import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
+import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 
 class MockSearchFoodsUseCase extends Mock implements SearchFoodsUseCase {}
@@ -101,3 +106,13 @@ class MockAddRecentSearchUseCase extends Mock implements AddRecentSearchUseCase 
 class MockRemoveRecentSearchUseCase extends Mock implements RemoveRecentSearchUseCase {}
 
 class MockClearRecentSearchesUseCase extends Mock implements ClearRecentSearchesUseCase {}
+
+class MockGetSleepGoalUseCase extends Mock implements GetSleepGoalUseCase {}
+
+class MockSaveSleepGoalUseCase extends Mock implements SaveSleepGoalUseCase {}
+
+class MockGetSleepInRangeUseCase extends Mock implements GetSleepInRangeUseCase {}
+
+class MockGetWaterInRangeUseCase extends Mock implements GetWaterInRangeUseCase {}
+
+class MockGetWaterGoalUseCase extends Mock implements GetWaterGoalUseCase {}

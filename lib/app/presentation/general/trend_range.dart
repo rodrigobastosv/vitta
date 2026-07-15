@@ -9,5 +9,5 @@ enum TrendRange {
 
   final int days;
 
-  String getLabel(AppLocalizations l10n) => l10n.dietTrendRangeDays(days);
+  String getLabel(AppLocalizations l10n) => l10n.trendRangeDays(days);
 }

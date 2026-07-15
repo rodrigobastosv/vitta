@@ -1,7 +1,7 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
-import 'package:vitta/app/data/sleep/datasources/requests/create_sleep_log_request.dart';
+import 'package:vitta/app/data/sleep/datasources/supabase/requests/create_sleep_log_request.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
 
 class SupabaseSleepDataSource {
@@ -21,6 +21,21 @@ class SupabaseSleepDataSource {
       return Success(SleepLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to log sleep', cause: error));
+    }
+  }
+
+  Future<Result<VTError, List<SleepLog>>> getLogsInRange({required DateTime from, required DateTime to}) async {
+    try {
+      final rows = await _supabaseService
+          .from(.sleepLogs)
+          .select()
+          .eq('user_id', _supabaseService.currentUserId)
+          .gte('logged_date', from.toIso8601String().split('T').first)
+          .lte('logged_date', to.toIso8601String().split('T').first)
+          .order('logged_date');
+      return Success(rows.map(SleepLog.fromMap).toList());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load sleep logs', cause: error));
     }
   }
 

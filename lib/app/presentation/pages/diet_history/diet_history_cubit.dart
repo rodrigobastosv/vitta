@@ -2,9 +2,9 @@ import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
+import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_state.dart';
-import 'package:vitta/app/presentation/pages/diet_history/trend_range.dart';
 
 class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPresentationEvent> {
   DietHistoryCubit({required this._getMacrosInRangeUseCase, required this._getMacroGoalsUseCase})

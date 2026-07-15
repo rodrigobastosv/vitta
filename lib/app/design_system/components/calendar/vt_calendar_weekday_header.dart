@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/calendar/vt_calendar_week_badge.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
-import 'package:vitta/app/presentation/pages/diet_history/widgets/week_average_badge.dart';
 
-class DietCalendarWeekdayHeader extends StatelessWidget {
-  const DietCalendarWeekdayHeader({super.key});
+class VTCalendarWeekdayHeader extends StatelessWidget {
+  const VTCalendarWeekdayHeader({this.weekColumnLabel, super.key});
+
+  /// Heads the week-badge column. Omit it when the grid has no badges.
+  final String? weekColumnLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +23,11 @@ class DietCalendarWeekdayHeader extends StatelessWidget {
               ),
             ),
           ),
-        SizedBox(
-          width: WeekAverageBadge.width,
-          child: Center(child: Text(context.l10n.dietWeekColumnLabel, style: VTTextStyles.overline(context))),
-        ),
+        if (weekColumnLabel != null)
+          SizedBox(
+            width: VTCalendarWeekBadge.width,
+            child: Center(child: Text(weekColumnLabel!, style: VTTextStyles.overline(context))),
+          ),
       ],
     );
   }

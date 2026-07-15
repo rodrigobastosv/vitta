@@ -19,6 +19,21 @@ class SupabaseWaterDataSource {
     }
   }
 
+  Future<Result<VTError, List<WaterLog>>> getLogsInRange({required DateTime from, required DateTime to}) async {
+    try {
+      final rows = await _supabaseService
+          .from(.waterLogs)
+          .select()
+          .eq('user_id', _supabaseService.currentUserId)
+          .gte('logged_date', from.toIso8601String().split('T').first)
+          .lte('logged_date', to.toIso8601String().split('T').first)
+          .order('created_at');
+      return Success(rows.map(WaterLog.fromMap).toList());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load water logs', cause: error));
+    }
+  }
+
   Future<Result<VTError, List<WaterLog>>> getDailyLog({required DateTime date}) async {
     try {
       final rows = await _supabaseService

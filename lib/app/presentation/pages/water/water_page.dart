@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -37,6 +38,11 @@ class WaterPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.waterFeatureTitle),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.calendar_month_outlined),
+              tooltip: l10n.waterHistoryTitle,
+              onPressed: () => context.pushRoute(.waterHistory),
+            ),
             IconButton(
               icon: const Icon(Icons.flag_outlined),
               tooltip: l10n.waterGoalDialogTitle,

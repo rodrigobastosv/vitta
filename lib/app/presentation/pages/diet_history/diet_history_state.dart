@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
-import 'package:vitta/app/presentation/pages/diet_history/trend_range.dart';
+import 'package:vitta/app/presentation/general/trend_range.dart';
 
 class DietHistoryState extends Equatable {
   const DietHistoryState({

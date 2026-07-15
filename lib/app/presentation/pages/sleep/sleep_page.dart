@@ -3,12 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/edit_sleep_goal_dialog.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/log_sleep_sheet.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_log_tile.dart';
 
@@ -30,7 +32,26 @@ class SleepPage extends StatelessWidget {
     builder: (context, cubit, state) {
       final l10n = context.l10n;
       return Scaffold(
-        appBar: AppBar(title: Text(l10n.sleepFeatureTitle)),
+        appBar: AppBar(
+          title: Text(l10n.sleepFeatureTitle),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.calendar_month_outlined),
+              tooltip: l10n.sleepHistoryTitle,
+              onPressed: () => context.pushRoute(.sleepHistory),
+            ),
+            IconButton(
+              icon: const Icon(Icons.flag_outlined),
+              tooltip: l10n.sleepGoalDialogTitle,
+              onPressed: () async {
+                final goalHours = await showEditSleepGoalDialog(context: context, currentGoalHours: cubit.durationGoalHours);
+                if (goalHours != null) {
+                  await cubit.saveDurationGoalHours(goalHours);
+                }
+              },
+            ),
+          ],
+        ),
         body: RefreshIndicator(
           onRefresh: cubit.loadRecent,
           child: state.logs.isEmpty

@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:vitta/app/core/goals/goal_adherence.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
-import 'package:vitta/app/domain/diet/entities/goal_adherence.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/macro_totals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_section.dart';
