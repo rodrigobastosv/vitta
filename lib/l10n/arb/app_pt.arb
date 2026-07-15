@@ -23,6 +23,8 @@
   "workoutComingSoonMessage": "O acompanhamento de treino está a caminho.",
   "retry": "Tentar novamente",
   "ok": "OK",
+  "errorTitle": "Algo deu errado",
+  "warningTitle": "Falta pouco",
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {
     "placeholders": {
@@ -139,7 +141,8 @@
   "chooseFromGalleryAction": "Escolher da galeria",
   "dietContinueAction": "Continuar",
   "dietScanLabelAction": "Escanear tabela nutricional",
-  "dietNutritionScanNoData": "Não foi possível ler a tabela nutricional. Preencha os valores manualmente.",
+  "dietNutritionScanNoDataTitle": "Não deu para ler a tabela",
+  "dietNutritionScanNoData": "Preencha os valores manualmente, ou tente outra foto.",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {

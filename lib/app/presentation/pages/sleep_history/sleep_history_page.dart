@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -29,7 +29,7 @@ class SleepHistoryPage extends StatelessWidget {
           case SleepHistoryHideLoading():
             context.hideLoading();
           case SleepHistoryError(:final message):
-            context.showErrorDialog(message: message, onRetry: context.read<SleepHistoryCubit>().refresh);
+            context.showErrorToast(message: message, onRetry: context.read<SleepHistoryCubit>().refresh);
         }
       },
       builder: (context, cubit, state) => Scaffold(

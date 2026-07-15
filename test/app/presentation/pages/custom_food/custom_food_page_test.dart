@@ -110,11 +110,10 @@ void main() {
     await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
+    // A warning toast, not a blocking dialog: nothing to dismiss, and the form
+    // stays right where the user left it so they can fill in what's missing.
     expect(find.text('Fill in the name and all macros with valid numbers.'), findsOneWidget);
-
-    await tester.tap(find.text('OK'));
-    await tester.pumpAndSettle();
-
+    expect(find.text('Almost there'), findsOneWidget);
     expect(find.byType(CustomFoodPage), findsOneWidget);
   });
 

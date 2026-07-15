@@ -23,6 +23,8 @@
   "workoutComingSoonMessage": "Workout tracking is on its way.",
   "retry": "Retry",
   "ok": "OK",
+  "errorTitle": "Something went wrong",
+  "warningTitle": "Almost there",
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {
     "placeholders": {
@@ -139,7 +141,8 @@
   "chooseFromGalleryAction": "Choose from gallery",
   "dietContinueAction": "Continue",
   "dietScanLabelAction": "Scan nutrition label",
-  "dietNutritionScanNoData": "Couldn't read the nutrition label. Enter the values manually.",
+  "dietNutritionScanNoDataTitle": "Couldn't read the label",
+  "dietNutritionScanNoData": "Enter the values manually, or try another photo.",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {

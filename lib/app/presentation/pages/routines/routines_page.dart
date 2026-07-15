@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -24,7 +24,7 @@ class RoutinesPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         RoutinesShowLoading() => context.showLoading(),
         RoutinesHideLoading() => context.hideLoading(),
-        RoutinesError(:final message) => context.showErrorDialog(
+        RoutinesError(:final message) => context.showErrorToast(
           message: message,
           onRetry: context.read<RoutinesCubit>().loadRoutines,
         ),

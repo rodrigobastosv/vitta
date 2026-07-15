@@ -37,7 +37,7 @@ void main() {
   testWidgets('offers Repeat only once there is a set to repeat', (tester) async {
     await pumpCard(tester, workoutExercise: WorkoutExerciseFactory.build(), onRepeatSet: () {});
 
-    expect(find.text('Repeat'), findsNothing);
+    expect(find.text('Repeat set'), findsNothing);
 
     await pumpCard(
       tester,
@@ -45,7 +45,7 @@ void main() {
       onRepeatSet: () {},
     );
 
-    expect(find.text('Repeat'), findsOneWidget);
+    expect(find.text('Repeat set'), findsOneWidget);
   });
 
   testWidgets('a finished exercise collapses its working surface', (tester) async {

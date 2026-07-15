@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
@@ -38,9 +37,9 @@ class FoodSearchPage extends StatelessWidget {
           case FoodSearchHideLoading():
             context.hideLoading();
           case FoodLogged(:final foodName, :final mealType):
-            context.showToast(title: foodName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)), accentColor: mealType.color);
+            context.showToast(title: foodName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)));
           case FoodSearchError(:final message):
-            context.showErrorDialog(message: message);
+            context.showErrorToast(message: message);
         }
       },
       builder: (context, cubit, state) => Scaffold(

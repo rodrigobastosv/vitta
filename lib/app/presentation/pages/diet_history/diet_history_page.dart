@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -33,7 +33,7 @@ class DietHistoryPage extends StatelessWidget {
           case DietHistoryHideLoading():
             context.hideLoading();
           case DietHistoryError(:final message):
-            context.showErrorDialog(message: message, onRetry: context.read<DietHistoryCubit>().refresh);
+            context.showErrorToast(message: message, onRetry: context.read<DietHistoryCubit>().refresh);
         }
       },
       builder: (context, cubit, state) {
