@@ -483,7 +483,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String dietCopyMealFoodCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count alimentos', one: '1 alimento');
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count alimentos', one: '1 alimento', zero: 'Nenhum alimento');
     return '$_temp0';
   }
 
@@ -497,6 +497,7 @@ class AppLocalizationsPt extends AppLocalizations {
       locale: localeName,
       other: '$count refeições adicionadas ao seu dia',
       one: '1 refeição adicionada ao seu dia',
+      zero: 'Nenhuma refeição adicionada',
     );
     return '$_temp0';
   }
