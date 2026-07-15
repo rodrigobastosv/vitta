@@ -467,11 +467,19 @@
   "workoutRoutineDeleteTooltip": "Remover",
   "workoutRoutineRemoveExerciseTooltip": "Remover da rotina",
   "workoutRoutineIncompleteMessage": "Dê um nome à rotina e adicione pelo menos um exercício.",
-  "workoutRoutineExerciseCount": "{count, plural, =1{1 exercício} other{{count} exercícios}}",
+  "workoutRoutineExerciseCount": "{count, plural, =0{Nenhum exercício} =1{1 exercício} other{{count} exercícios}}",
   "workoutNextRoutineLabel": "Próximo",
   "workoutStartRoutineAction": "Iniciar {name}",
   "workoutRoutineLastTrainedNever": "Ainda não treinado",
   "workoutFromRoutineLabel": "De {name}",
   "workoutStartRoutineHint": "As séries vêm preenchidas com seu último treino — ajuste o que mudou.",
-  "reorderHandleLabel": "Reordenar"
+  "reorderHandleLabel": "Reordenar",
+  "workoutRepeatSetAction": "Repetir",
+  "workoutRepeatSetTooltip": "Repetir a última série",
+  "workoutCompleteExerciseAction": "Concluir",
+  "workoutReopenExerciseAction": "Reabrir",
+  "workoutCompletedSummary": "{sets, plural, =0{Nenhuma série} =1{1 série feita} other{{sets} séries feitas}}",
+  "workoutFinishedTitle": "Treino concluído",
+  "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino.",
+  "workoutCompleteNeedsSetTooltip": "Registre uma série antes de concluir este exercício"
 }

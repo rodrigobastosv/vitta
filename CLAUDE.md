@@ -269,6 +269,22 @@ UI: `WorkoutPage` (`/workout`) is a day view with a date selector, a volume/sets
 
 `VTRemoteImage` (design system) is `VTFoodImage` generalised — a network image with a caller-supplied placeholder icon — since the catalog needed the same behaviour with a different fallback. `VTFoodImage` is now a thin wrapper passing `Icons.restaurant_outlined`, so diet's call sites are untouched. Body regions get their own fixed `VTColors.bodyRegion*` accents (the `macro*` idea applied to muscle groups); don't reach for `warning`/`macroCarbs` for a region — they're the same hex, so two regions would collide.
 
+## Workout: repeating sets and finishing exercises
+
+Two things the logging screen learned from real use (issue #102).
+
+**An exercise with no sets can't be finished.** "Done" means you did it, and allowing it would let a workout of untouched exercises be marked complete and congratulate the user for lifting nothing — and since #94 pre-fills a routine's exercises, that's one tap away. The check button stays visible but disabled with a tooltip saying what's missing, rather than vanishing; removing the exercise is the honest way to clear it. Reopening is always allowed, whatever the set count. `WorkoutCubit.setExerciseCompleted` takes the `WorkoutExercise` rather than its id precisely so it can enforce this itself instead of trusting the UI.
+
+**Repeat** duplicates the exercise's last set in one tap — sets of an exercise are usually identical (4×10 at the same load), so the common case shouldn't cost a sheet and two numbers. It has **no use case of its own**: `WorkoutCubit.repeatLastSet` reads the values off state it already holds and calls the ordinary `LogSetUseCase`. The button only appears once there's a set to repeat, and the cubit guards the same rule rather than trusting the UI to.
+
+**`workout_exercises.completed_at`** (nullable) is what marks an exercise done; it collapses the card, and once every exercise of the day has one, `Workout.isComplete` shows the end-of-workout message. Three decisions worth keeping:
+
+- **Persisted, not screen state.** Closing the app must not lose your progress, and the end-of-workout message needs something durable to test — otherwise it appears and vanishes on no criterion.
+- **Never derived from "has ≥1 set".** Those are different facts: one set of a planned four isn't done, and — since #94 — a workout started from a routine is *born* with the previous session's sets already filled in, so deriving it would declare the workout finished before the user lifts anything. `Workout.isComplete` has a test pinning exactly that.
+- **Reversible, and the collapsed card still carries its summary.** Unmarking writes `null` back to the same column, so a mistaken tap costs one tap. The collapsed card keeps the exercise name and its set count, because "tidy the screen" must not mean "lose the information".
+
+`Workout.isComplete` is false for an empty workout: nothing was finished, so there's nothing to congratulate.
+
 ## Workout routines
 
 A routine is a named, ordered list of exercises ("Treino A — Peito e tríceps"); a user's routines form a **cycle**, and the app suggests which one is next (issue #94). `routines` + `routine_exercises` are private per user like `recipes`, with `routine_exercises` walking up to its parent's owner instead of duplicating `user_id`.
@@ -311,6 +327,8 @@ The user's cross-cutting preferences — locale override (`AppSettings.locale`, 
 `UnitSystem` has two independent conversion extensions in the same file: `WeightConversion` (grams/ounces — food quantity consumed, `LogFoodSheet`) and `VolumeConversion` (milliliters/fluid ounces — water intake, `WaterPage`/`AddWaterSheet`/`EditWaterGoalDialog`). Both convert to their metric base unit before it ever reaches the domain (`FoodLog.quantityGrams`, `WaterLog.amountMl`) — the base unit stays the source of truth end-to-end, same principle as storing locale/theme as their real types rather than display strings. `WeightConversion` deliberately does not touch a food's per-100g macros (`CustomFoodPage`, `dietNutritionPer100gTitle`, ...) — "per 100g" is a nutrition-label convention independent of the reader's preferred unit system, not a quantity to convert.
 
 ## Internationalization
+
+**Every `plural` message needs an explicit `=0` case.** Without one, `Intl.pluralLogic` falls through to the locale's CLDR rule — and Portuguese classifies zero as the **`one`** category (`_pt_rule`: `if (_i == 0 || _i == 1) return ONE`). So `{n, plural, =1{1 série feita} other{{n} séries feitas}}` renders **"1 série feita" for zero**: not a grammar wobble, a wrong number. It's invisible in English, where 0 maps to `other` and reads correctly — so it survives review and ships. `test/app/l10n/plural_zero_test.dart` pins this for both locales.
 
 Standard Flutter `gen-l10n` (not a custom solution). ARB files live in `lib/l10n/arb/` (`app_en.arb` is the template, plus `app_pt.arb`). Never hardcode user-facing strings — add a key to both ARB files and read it via `context.l10n` (`BuildContextLocalizationExt`, `core/localization/localization_extensions.dart`), not `AppLocalizations.of(context)` directly — the same file also has `context.materialLocalizations` for the rare case that needs Flutter's own localized strings (date/time formatting) instead of the app's. Run `flutter gen-l10n` (or `flutter pub get`, which triggers it) after editing an ARB file. Add more locales the same way dofus_buddy added `fr` — a new ARB file plus the corresponding `RadioListTile` in `SettingsPage`.
 

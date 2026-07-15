@@ -87,6 +87,7 @@ import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_c
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
@@ -197,6 +198,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => UpdateSetUseCase(workoutRepository: G()));
   G.registerFactory(() => DeleteSetUseCase(workoutRepository: G()));
   G.registerFactory(() => DeleteWorkoutUseCase(workoutRepository: G()));
+  G.registerFactory(() => SetWorkoutExerciseCompletedUseCase(workoutRepository: G()));
   G.registerFactory(() => GetRoutinesUseCase(workoutRepository: G()));
   G.registerFactory(() => GetRoutineCycleUseCase(workoutRepository: G()));
   G.registerFactory(() => SaveRoutineUseCase(workoutRepository: G()));
@@ -260,6 +262,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       updateSetUseCase: G(),
       deleteSetUseCase: G(),
       deleteWorkoutUseCase: G(),
+      setWorkoutExerciseCompletedUseCase: G(),
       getRoutineCycleUseCase: G(),
       startWorkoutFromRoutineUseCase: G(),
       getAppSettingsUseCase: G(),
@@ -267,9 +270,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => ExerciseSearchCubit(searchExercisesUseCase: G()));
   G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
-  G.registerFactoryParam<RoutineFormCubit, Routine?, void>(
-    (routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine),
-  );
+  G.registerFactoryParam<RoutineFormCubit, Routine?, void>((routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(

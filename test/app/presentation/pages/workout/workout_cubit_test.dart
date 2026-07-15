@@ -261,4 +261,139 @@ void main() {
       ),
     ).called(1);
   });
+
+  test('repeatLastSet logs another set identical to the last one', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => logSetUseCase(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        reps: any(named: 'reps'),
+        weightKg: any(named: 'weightKg'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutSetFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      logSetUseCase: logSetUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+
+    await cubit.repeatLastSet(
+      workoutExercise: WorkoutExerciseFactory.build(
+        id: 'we-1',
+        sets: [
+          WorkoutSetFactory.build(id: 's1', reps: 12, weightKg: 30),
+          WorkoutSetFactory.build(id: 's2', reps: 8, weightKg: 50),
+        ],
+      ),
+    );
+
+    // The *last* set, not the first: repeating follows what you just did.
+    verify(() => logSetUseCase(workoutExerciseId: 'we-1', reps: 8, weightKg: 50)).called(1);
+  });
+
+  test('repeatLastSet does nothing when there is no set to repeat', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    final cubit = CubitsFactories.buildWorkoutCubit(logSetUseCase: logSetUseCase);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build());
+
+    verifyNever(
+      () => logSetUseCase(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        reps: any(named: 'reps'),
+        weightKg: any(named: 'weightKg'),
+      ),
+    );
+  });
+
+  test('reopening an exercise clears completion rather than stamping a new time', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', completedAt: DateTime(2026, 7, 20)),
+      completed: false,
+    );
+
+    verify(() => setCompleted(workoutExerciseId: 'we-1', completed: false)).called(1);
+  });
+
+  test('marking an exercise done reloads the day so the finished state shows', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
+      completed: true,
+    );
+
+    verify(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).called(1);
+  });
+
+  test('refuses to finish an exercise with no sets - you cannot complete what you did not do', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final cubit = CubitsFactories.buildWorkoutCubit(setWorkoutExerciseCompletedUseCase: setCompleted);
+
+    await cubit.setExerciseCompleted(workoutExercise: WorkoutExerciseFactory.build(), completed: true);
+
+    verifyNever(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    );
+  });
+
+  test('reopening is always allowed, even with no sets', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+    );
+
+    await cubit.setExerciseCompleted(workoutExercise: WorkoutExerciseFactory.build(id: 'we-1'), completed: false);
+
+    verify(() => setCompleted(workoutExerciseId: 'we-1', completed: false)).called(1);
+  });
 }

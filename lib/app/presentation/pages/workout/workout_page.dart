@@ -15,6 +15,7 @@ import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart'
 import 'package:vitta/app/presentation/pages/workout/widgets/next_routine_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_date_selector.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/workout_finished_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_card.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
@@ -87,6 +88,10 @@ class WorkoutPage extends StatelessWidget {
                 child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
               ),
               const VTGap.m(),
+              if (state.isFinished) ...[
+                const VTAppearEffect(child: WorkoutFinishedCard()),
+                const VTGap.m(),
+              ],
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(
@@ -96,6 +101,9 @@ class WorkoutPage extends StatelessWidget {
                       unitSystem: cubit.unitSystem,
                       onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: workoutExercise.exercise)),
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
+                      onToggleCompleted: (completed) =>
+                          cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
+                      onRepeatSet: () => cubit.repeatLastSet(workoutExercise: workoutExercise),
                       onAddSet: () => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,

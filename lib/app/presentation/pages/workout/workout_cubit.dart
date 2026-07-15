@@ -5,6 +5,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
@@ -12,6 +13,7 @@ import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.da
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
@@ -27,6 +29,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._updateSetUseCase,
     required this._deleteSetUseCase,
     required this._deleteWorkoutUseCase,
+    required this._setWorkoutExerciseCompletedUseCase,
     required this._getRoutineCycleUseCase,
     required this._startWorkoutFromRoutineUseCase,
     required this._getAppSettingsUseCase,
@@ -39,6 +42,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final UpdateSetUseCase _updateSetUseCase;
   final DeleteSetUseCase _deleteSetUseCase;
   final DeleteWorkoutUseCase _deleteWorkoutUseCase;
+  final SetWorkoutExerciseCompletedUseCase _setWorkoutExerciseCompletedUseCase;
   final GetRoutineCycleUseCase _getRoutineCycleUseCase;
   final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
@@ -130,6 +134,43 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     Log.action('workout_set_updated', data: {'reps': reps, 'weight_kg': weightKg});
     await loadDate(state.date);
     return const Success(null);
+  }
+
+  /// Logs another set identical to the exercise's last one. Sets of an exercise
+  /// are usually the same, so the common case shouldn't cost a sheet and two
+  /// numbers - this is one tap.
+  ///
+  /// Needs no use case of its own: the values come from state the cubit already
+  /// holds, so it's an ordinary logSet.
+  Future<Result<VTError, void>> repeatLastSet({required WorkoutExercise workoutExercise}) async {
+    final last = workoutExercise.sets.lastOrNull;
+    if (last == null) {
+      // Nothing to repeat. The button is hidden in this case; this is the guard
+      // that keeps the rule true rather than trusting the UI.
+      return const Success(null);
+    }
+    return logSet(workoutExerciseId: workoutExercise.id, reps: last.reps, weightKg: last.weightKg);
+  }
+
+  /// Marks an exercise done, or reopens it.
+  ///
+  /// An exercise with no sets can't be finished: "done" means you did it, and
+  /// allowing it would let a workout of untouched exercises be marked complete
+  /// and congratulate the user for lifting nothing - a routine pre-fills the
+  /// exercises, so that is one tap away. Removing the exercise is the honest
+  /// way to clear it. Reopening is always allowed.
+  Future<void> setExerciseCompleted({required WorkoutExercise workoutExercise, required bool completed}) async {
+    if (completed && workoutExercise.sets.isEmpty) {
+      return;
+    }
+    final completedResult = await _setWorkoutExerciseCompletedUseCase(
+      workoutExerciseId: workoutExercise.id,
+      completed: completed,
+    );
+    await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
+      Log.action(completed ? 'workout_exercise_completed' : 'workout_exercise_reopened');
+      return loadDate(state.date);
+    });
   }
 
   Future<void> deleteSet({required String setId}) async {

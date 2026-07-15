@@ -50,6 +50,7 @@ import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_c
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 
@@ -158,3 +159,5 @@ class MockDeleteRoutineUseCase extends Mock implements DeleteRoutineUseCase {}
 class MockStartWorkoutFromRoutineUseCase extends Mock implements StartWorkoutFromRoutineUseCase {}
 
 class MockReorderRoutinesUseCase extends Mock implements ReorderRoutinesUseCase {}
+
+class MockSetWorkoutExerciseCompletedUseCase extends Mock implements SetWorkoutExerciseCompletedUseCase {}

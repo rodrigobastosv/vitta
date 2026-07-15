@@ -127,6 +127,26 @@ class SupabaseWorkoutDataSource {
     }
   }
 
+  /// Marks an exercise done, or un-marks it. `completed` false writes null
+  /// rather than a timestamp, so unmarking is a real undo - the same column
+  /// answers both, and a mistaken tap costs nothing.
+  Future<Result<VTError, WorkoutExercise>> setWorkoutExerciseCompleted({
+    required String workoutExerciseId,
+    required bool completed,
+  }) async {
+    try {
+      final row = await _supabaseService
+          .from(.workoutExercises)
+          .update({'completed_at': completed ? DateTime.now().toUtc().toIso8601String() : null})
+          .eq('id', workoutExerciseId)
+          .select('*, ${SupabaseTable.exercises.wireName}(*), ${SupabaseTable.workoutSets.wireName}(*)')
+          .single();
+      return Success(WorkoutExercise.fromMap(row));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to update workout exercise $workoutExerciseId', cause: error));
+    }
+  }
+
   Future<Result<VTError, void>> removeWorkoutExercise({required String workoutExerciseId}) async {
     try {
       await _supabaseService.from(.workoutExercises).delete().eq('id', workoutExerciseId);

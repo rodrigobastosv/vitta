@@ -2021,7 +2021,7 @@ abstract class AppLocalizations {
   /// No description provided for @workoutRoutineExerciseCount.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 exercise} other{{count} exercises}}'**
+  /// **'{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}'**
   String workoutRoutineExerciseCount(int count);
 
   /// No description provided for @workoutNextRoutineLabel.
@@ -2059,6 +2059,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Reorder'**
   String get reorderHandleLabel;
+
+  /// No description provided for @workoutRepeatSetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get workoutRepeatSetAction;
+
+  /// No description provided for @workoutRepeatSetTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat the last set'**
+  String get workoutRepeatSetTooltip;
+
+  /// No description provided for @workoutCompleteExerciseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get workoutCompleteExerciseAction;
+
+  /// No description provided for @workoutReopenExerciseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reopen'**
+  String get workoutReopenExerciseAction;
+
+  /// No description provided for @workoutCompletedSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{sets, plural, =0{No sets} =1{1 set done} other{{sets} sets done}}'**
+  String workoutCompletedSummary(int sets);
+
+  /// No description provided for @workoutFinishedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Workout done'**
+  String get workoutFinishedTitle;
+
+  /// No description provided for @workoutFinishedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Every exercise is checked off. Well done — see you next session.'**
+  String get workoutFinishedMessage;
+
+  /// No description provided for @workoutCompleteNeedsSetTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a set before finishing this exercise'**
+  String get workoutCompleteNeedsSetTooltip;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -334,6 +334,17 @@ create table if not exists workout_exercises (
   created_at timestamptz not null default now()
 );
 
+-- When the user marked this exercise done, which collapses its card and, once
+-- every exercise in the workout has one, is what says the workout is finished
+-- (see issue #102). Nullable: null means still in progress, and unmarking is
+-- setting it back to null - a mistaken tap must not cost the exercise.
+--
+-- Deliberately not derived from "has at least one set": those are different
+-- facts. One set of a planned four isn't done, and a workout started from a
+-- routine (issue #94) is born with the previous session's sets already filled
+-- in, so it would count as finished before the user lifts anything.
+alter table workout_exercises add column if not exists completed_at timestamptz;
+
 create index if not exists workout_exercises_workout_id_idx on workout_exercises (workout_id);
 create index if not exists workout_exercises_exercise_id_idx on workout_exercises (exercise_id);
 
