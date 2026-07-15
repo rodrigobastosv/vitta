@@ -164,12 +164,28 @@ create table if not exists recipe_ingredients (
 
 create index if not exists recipe_ingredients_recipe_id_idx on recipe_ingredients (recipe_id);
 
+-- Favourites are a plain join table rather than a flag on foods: foods is a
+-- shared catalog, so "is this a favourite" is per-user and cannot live on the
+-- row everyone reads. Recipes need nothing extra here - a recipe *is* a foods
+-- row (source: 'recipe'), so favouriting one is the same insert as any other
+-- food. Deleting the food (or the user) takes its favourites with it.
+create table if not exists food_favorites (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  food_id uuid not null references foods (id) on delete cascade,
+  created_at timestamptz not null default now(),
+  unique (user_id, food_id)
+);
+
+create index if not exists food_favorites_user_id_idx on food_favorites (user_id);
+
 alter table foods enable row level security;
 alter table food_logs enable row level security;
 alter table water_logs enable row level security;
 alter table sleep_logs enable row level security;
 alter table recipes enable row level security;
 alter table recipe_ingredients enable row level security;
+alter table food_favorites enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -248,3 +264,11 @@ create policy "Users manage their own recipe ingredients" on recipe_ingredients
   for all
   using (exists (select 1 from recipes where recipes.id = recipe_ingredients.recipe_id and recipes.user_id = auth.uid()))
   with check (exists (select 1 from recipes where recipes.id = recipe_ingredients.recipe_id and recipes.user_id = auth.uid()));
+
+-- Favourites are private, like recipes: the food they point at is shared, but
+-- who favourited it is not.
+drop policy if exists "Users manage their own food favorites" on food_favorites;
+create policy "Users manage their own food favorites" on food_favorites
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);

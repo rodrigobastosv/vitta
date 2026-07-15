@@ -5,6 +5,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
@@ -22,6 +23,7 @@ class DietRepository {
     required this._openFoodFactsDataSource,
     required this._supabaseDietDataSource,
     required this._dietGoalsLocalDataSource,
+    required this._supabaseFoodFavoritesDataSource,
     required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
   });
@@ -29,6 +31,7 @@ class DietRepository {
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
   final SupabaseDietDataSource _supabaseDietDataSource;
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
+  final SupabaseFoodFavoritesDataSource _supabaseFoodFavoritesDataSource;
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
 
@@ -83,6 +86,14 @@ class DietRepository {
       _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
+
+  Future<Result<VTError, List<Food>>> getFavoriteFoods() => _supabaseFoodFavoritesDataSource.getFavorites();
+
+  Future<Result<VTError, void>> addFavoriteFood({required String foodId}) =>
+      _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);
+
+  Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) =>
+      _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
 
   Future<Result<VTError, List<Recipe>>> getRecipes() => _supabaseRecipeDataSource.getRecipes();
 

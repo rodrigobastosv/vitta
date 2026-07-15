@@ -295,6 +295,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietFoodSearchTitle => 'Buscar alimentos';
 
   @override
+  String get dietFavoritesTitle => 'Favoritos';
+
+  @override
+  String get dietSearchTabLabel => 'Busca';
+
+  @override
+  String get dietFavoritesEmptyTitle => 'Nenhum favorito ainda';
+
+  @override
+  String get dietFavoritesEmptyMessage => 'Toque no coração de qualquer alimento para deixá-lo aqui, a um toque de distância.';
+
+  @override
+  String get dietFavoriteFoodTooltip => 'Adicionar aos favoritos';
+
+  @override
+  String get dietUnfavoriteFoodTooltip => 'Remover dos favoritos';
+
+  @override
   String get dietSearchFieldLabel => 'Buscar no Open Food Facts';
 
   @override

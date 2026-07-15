@@ -140,6 +140,24 @@ UI: a book icon in the diet `AppBar` opens `RecipesPage` (`/diet/recipes`, list 
 
 **`VTPage` gained an optional `cubitParam`** for this: `RecipeFormCubit` needs the recipe being edited at construction, and it's handed to `G<C>(param1: ...)` against a `registerFactoryParam` registration. Passing `param1: null` to a plain `registerFactory` is a no-op, so every other page is unaffected. Reach for this rather than a `create:` callback or seeding a cubit from a widget's `initState` — `VTPage` stays the one place that resolves a page's cubit.
 
+## Favorite foods
+
+A heart on `FoodSearchResultTile` favourites a food, and `FoodSearchPage` splits into **Search / Favorites tabs** (issue #78). `FoodSearchState.tab` holds the selection and `changeTab` sets it — cubit state, not a `TabController`, the same shape as `DietHistoryState.trendRange`. Both tabs stay alive across a switch: results and favourites are separate fields, so flipping tabs never re-queries.
+
+**Favouriting a `Food` is the whole feature — recipes came free.** A recipe *is* a `foods` row (`source: 'recipe'`, see Recipes above), so it favourites through the same insert and lands in the same list as any other food. No second mechanism, no `favorite_recipes` table.
+
+`food_favorites` is a join table (`user_id` + `food_id`, unique together) rather than a flag on `foods`, because `foods` is a shared catalog — "is this a favourite" is per-user and can't live on the row everyone reads. It's private like `recipes`: RLS scopes it to `auth.uid()`, and the `on delete cascade` on both FKs means deleting a food (or a user) takes its favourites with it.
+
+**The heart is optimistic**: `toggleFavorite` flips `favorites` before the request and `_revert`s to the previous list (plus an error dialog) if it fails. Favouriting is cheap and reversible, so making the user watch a spinner — two round-trips for an unsaved Open Food Facts result — buys nothing.
+
+**`FavoriteFoodUseCase` does save-then-favourite** and returns the persisted food: a result straight out of an Open Food Facts search has no `id` yet, and the id is what the favourite points at — the same save-then-act step `LogFoodUseCase` does before logging. That id-less window is why `FoodSearchState.isFavorite` matches an id-less food **by value** and everything else **by id** (`FoodSearchCubit._sameFood`), and why `_favorite` swaps the saved copy into both `results` and `favorites` once it lands. It also creates one real race: un-hearting *during* the save leaves `_unfavorite` with no id to delete by, so it no-ops and `_favorite` settles the server when its id arrives.
+
+`FoodSearchState.favorites` is the single source of truth for both the favourites tab and every result's heart; `loadFavorites()` only runs from `onInit`.
+
+The heart is **optional on the tile** (`onToggleFavorite` nullable, the "pass no callback to disable" convention `MealSectionCard` and `DietCalendarDayCell` already use): `IngredientPickerPage` reuses the same tile to build a recipe, where favouriting isn't the job.
+
+`VTSegmentedTabs` (design system) is the tab strip: a pill track with an indicator that slides between segments via `AnimatedAlign`, rather than Material's `SegmentedButton`, which snaps and brings its own chrome. It's generic over the value type, so `TrendRangeSelector` — still on `SegmentedButton` — could move onto it later.
+
 ## Copying meals
 
 The diet `AppBar`'s copy icon opens `CopyMealsPage` (`/diet/copy`, issue #61): pick a source day on a calendar, tick which of its meals to bring over, and they're appended to the day the diet page is currently showing. The target day rides in on `CopyMealsExtra` and reaches the cubit through `VTPage`'s `cubitParam` (a `registerFactoryParam`, same as `RecipeFormCubit`) — the page never picks the date itself, it copies into whatever day you were already looking at.

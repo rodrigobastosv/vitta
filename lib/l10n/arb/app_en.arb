@@ -147,6 +147,12 @@
     }
   },
   "dietFoodSearchTitle": "Search foods",
+  "dietFavoritesTitle": "Favorites",
+  "dietSearchTabLabel": "Search",
+  "dietFavoritesEmptyTitle": "No favorites yet",
+  "dietFavoritesEmptyMessage": "Tap the heart on any food to keep it here, one tap away.",
+  "dietFavoriteFoodTooltip": "Add to favorites",
+  "dietUnfavoriteFoodTooltip": "Remove from favorites",
   "dietSearchFieldLabel": "Search Open Food Facts",
   "dietSearchPrompt": "Search for a food to log it.",
   "dietSearchNoResults": "No results. Try another search or add it manually.",

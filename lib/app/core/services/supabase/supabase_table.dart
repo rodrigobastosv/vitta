@@ -4,7 +4,8 @@ enum SupabaseTable {
   waterLogs('water_logs'),
   sleepLogs('sleep_logs'),
   recipes('recipes'),
-  recipeIngredients('recipe_ingredients');
+  recipeIngredients('recipe_ingredients'),
+  foodFavorites('food_favorites');
 
   const SupabaseTable(this.wireName);
 
