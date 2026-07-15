@@ -2053,6 +2053,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Sets are pre-filled with your last session — adjust what changed.'**
   String get workoutStartRoutineHint;
+
+  /// No description provided for @reorderHandleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reorder'**
+  String get reorderHandleLabel;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

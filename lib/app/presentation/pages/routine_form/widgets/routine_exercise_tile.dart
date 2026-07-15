@@ -8,11 +8,16 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 
 class RoutineExerciseTile extends StatelessWidget {
-  const RoutineExerciseTile({required this.exercise, required this.position, this.onRemove, super.key});
+  const RoutineExerciseTile({required this.exercise, required this.position, this.onRemove, this.dragHandle, super.key});
 
   final Exercise exercise;
   final int position;
   final VoidCallback? onRemove;
+
+  /// The list's drag grip. Only a reorderable list can build it (it needs the
+  /// item's index), so it arrives from the outside rather than being a bare
+  /// icon here - an icon that looks draggable but isn't is worse than none.
+  final Widget? dragHandle;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +55,7 @@ class RoutineExerciseTile extends StatelessWidget {
               tooltip: l10n.workoutRoutineRemoveExerciseTooltip,
               onPressed: onRemove,
             ),
-          const Icon(Icons.drag_handle, size: 20),
+          ?dragHandle,
         ],
       ),
     );

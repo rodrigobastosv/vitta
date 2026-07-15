@@ -472,5 +472,6 @@
   "workoutStartRoutineAction": "Iniciar {name}",
   "workoutRoutineLastTrainedNever": "Ainda não treinado",
   "workoutFromRoutineLabel": "De {name}",
-  "workoutStartRoutineHint": "As séries vêm preenchidas com seu último treino — ajuste o que mudou."
+  "workoutStartRoutineHint": "As séries vêm preenchidas com seu último treino — ajuste o que mudou.",
+  "reorderHandleLabel": "Reordenar"
 }

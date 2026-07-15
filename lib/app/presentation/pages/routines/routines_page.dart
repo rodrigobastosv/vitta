@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -44,6 +45,10 @@ class RoutinesPage extends StatelessWidget {
             : ReorderableListView.builder(
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
                 itemCount: state.routines.length,
+                // The row is tap-to-edit, so the drag has to come from its own
+                // handle: the default (long-press anywhere on touch) both fights
+                // the tap and gives no hint the list moves at all.
+                buildDefaultDragHandles: false,
                 // The list order *is* the cycle order - dragging a routine here
                 // is how the user fixes an A/B/C they built out of sequence.
                 onReorderItem: (oldIndex, newIndex) => cubit.reorderRoutines(oldIndex: oldIndex, newIndex: newIndex),
@@ -56,6 +61,7 @@ class RoutinesPage extends StatelessWidget {
                       routine: routine,
                       onTap: () => _openForm(context, cubit, routineIndex: index),
                       onDelete: () => cubit.deleteRoutine(routineId: routine.id),
+                      dragHandle: ReorderableDragStartListener(index: index, child: const VTDragHandle()),
                     ),
                   );
                 },

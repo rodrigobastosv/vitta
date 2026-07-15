@@ -4,6 +4,7 @@ import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
+import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -59,6 +60,7 @@ class RoutineFormPage extends StatelessWidget {
               child: ReorderableListView.builder(
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, 0, VTSpacing.m, VTSpacing.m),
                 itemCount: state.draft.exercises.length,
+                buildDefaultDragHandles: false,
                 // onReorderItem, not the deprecated onReorder: it hands back a
                 // newIndex already adjusted for the removed item, so the cubit
                 // takes a final index rather than re-deriving one.
@@ -76,6 +78,7 @@ class RoutineFormPage extends StatelessWidget {
                     exercise: state.draft.exercises[index],
                     position: index + 1,
                     onRemove: () => cubit.removeExerciseAt(index),
+                    dragHandle: ReorderableDragStartListener(index: index, child: const VTDragHandle()),
                   ),
                 ),
               ),

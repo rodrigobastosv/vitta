@@ -8,11 +8,16 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 
 class RoutineTile extends StatelessWidget {
-  const RoutineTile({required this.routine, required this.onTap, this.onDelete, super.key});
+  const RoutineTile({required this.routine, required this.onTap, this.onDelete, this.dragHandle, super.key});
 
   final Routine routine;
   final VoidCallback onTap;
   final VoidCallback? onDelete;
+
+  /// The list's drag grip, which only a reorderable list can build (it needs
+  /// the item's index). Null wherever the routine isn't reorderable - the
+  /// same 'pass no callback to disable' convention MealSectionCard uses.
+  final Widget? dragHandle;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +48,7 @@ class RoutineTile extends StatelessWidget {
           ),
           if (onDelete != null)
             IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutRoutineDeleteTooltip, onPressed: onDelete),
+          ?dragHandle,
         ],
       ),
     );

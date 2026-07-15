@@ -277,9 +277,12 @@ A routine is a named, ordered list of exercises ("Treino A — Peito e tríceps"
 
 **The cycle order is editable, and that's load-bearing**: `position` decides what's suggested next, so `RoutinesPage` is a `ReorderableListView` and `reorderRoutines` rewrites positions (optimistically, reverting on failure — the same call favouriting makes). A `position` only assigned at creation would freeze a mis-built A/B/C forever.
 
-Two `ReorderableListView` rules this feature learned the hard way, both worth copying:
+Three `ReorderableListView` rules this feature learned the hard way — all three shipped broken first, so copy them:
 - **Key by the item's own id, never the index.** `ValueKey('$id-$index')` changes for every row the moment one is dragged, so the list loses track of its widgets and the drag doesn't stick.
 - **Use `onReorderItem`, not the deprecated `onReorder`.** It hands back a `newIndex` already adjusted for the removed item, so the cubit inserts at that index directly — re-deriving it (`newIndex > oldIndex ? newIndex - 1 : newIndex`) double-corrects and lands a downward drag one slot short.
+- **Always pass `buildDefaultDragHandles: false` and supply a real handle** — `ReorderableDragStartListener(index: index, child: const VTDragHandle())`. The default handles only render on **desktop**; on a touch platform the list is drag-on-long-press with no affordance whatsoever, so it looks immovable. It also matters that the grip is off the row: these rows are tap-to-edit `VTCard`s, and a long press there is ambiguous between "edit" and "drag" — the tap recognizer usually wins. An `Icons.drag_handle` that isn't wrapped in a listener is worse than no icon: it advertises a gesture that does nothing.
+
+Reorder is **verified by a widget test that performs the drag** (`routines_page_test.dart`), not by inspection — every one of the bugs above looked correct in the source. Two things that test had to get right: drag the handle in **small steps** (`moveBy(Offset(0, 10))` in a loop, pumping between), because the list tracks the pointer as it travels and one large `moveBy` skips the overlap it reorders on; and measure the tile with `tester.getSize` rather than guessing a pixel distance.
 
 A routine holds **distinct** exercises — `RoutineFormCubit.addExercise` no-ops on one already in the list. Repeating an exercise is what sets are for, and distinctness is what makes the id a usable reorder key.
 

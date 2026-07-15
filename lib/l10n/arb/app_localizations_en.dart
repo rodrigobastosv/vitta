@@ -1082,4 +1082,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutStartRoutineHint => 'Sets are pre-filled with your last session — adjust what changed.';
+
+  @override
+  String get reorderHandleLabel => 'Reorder';
 }
