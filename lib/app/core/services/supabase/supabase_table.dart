@@ -5,7 +5,11 @@ enum SupabaseTable {
   sleepLogs('sleep_logs'),
   recipes('recipes'),
   recipeIngredients('recipe_ingredients'),
-  foodFavorites('food_favorites');
+  foodFavorites('food_favorites'),
+  exercises('exercises'),
+  workouts('workouts'),
+  workoutExercises('workout_exercises'),
+  workoutSets('workout_sets');
 
   const SupabaseTable(this.wireName);
 

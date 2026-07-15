@@ -38,6 +38,14 @@ import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 
 class MockSearchFoodsUseCase extends Mock implements SearchFoodsUseCase {}
 
@@ -116,3 +124,19 @@ class MockGetSleepInRangeUseCase extends Mock implements GetSleepInRangeUseCase 
 class MockGetWaterInRangeUseCase extends Mock implements GetWaterInRangeUseCase {}
 
 class MockGetWaterGoalUseCase extends Mock implements GetWaterGoalUseCase {}
+
+class MockSearchExercisesUseCase extends Mock implements SearchExercisesUseCase {}
+
+class MockGetWorkoutsForDateUseCase extends Mock implements GetWorkoutsForDateUseCase {}
+
+class MockAddExerciseToWorkoutUseCase extends Mock implements AddExerciseToWorkoutUseCase {}
+
+class MockRemoveWorkoutExerciseUseCase extends Mock implements RemoveWorkoutExerciseUseCase {}
+
+class MockLogSetUseCase extends Mock implements LogSetUseCase {}
+
+class MockUpdateSetUseCase extends Mock implements UpdateSetUseCase {}
+
+class MockDeleteSetUseCase extends Mock implements DeleteSetUseCase {}
+
+class MockDeleteWorkoutUseCase extends Mock implements DeleteWorkoutUseCase {}

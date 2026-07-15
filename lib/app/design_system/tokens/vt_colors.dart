@@ -33,6 +33,13 @@ abstract class VTColors {
   static const Color macroFat = Color(0xFF4F8DF6);
   static const Color macroFiber = Color(0xFF2F8F7A);
 
+  static const Color bodyRegionChest = Color(0xFFE2622B);
+  static const Color bodyRegionBack = Color(0xFF4F8DF6);
+  static const Color bodyRegionShoulders = Color(0xFFE8A317);
+  static const Color bodyRegionArms = Color(0xFF2F8F7A);
+  static const Color bodyRegionCore = Color(0xFF8B5CF6);
+  static const Color bodyRegionLegs = Color(0xFF2E7D5B);
+
   static const Color success = Color(0xFF2F8F7A);
   static const Color warning = Color(0xFFE8A317);
   static const Color error = Color(0xFFBA1A1A);

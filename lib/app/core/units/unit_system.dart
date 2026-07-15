@@ -26,6 +26,25 @@ extension WeightConversion on UnitSystem {
   };
 }
 
+extension LoadConversion on UnitSystem {
+  static const _kilogramsPerPound = 0.45359237;
+
+  String get loadUnitLabel => switch (this) {
+    .metric => 'kg',
+    .imperial => 'lb',
+  };
+
+  double kilogramsToDisplayLoad(double kilograms) => switch (this) {
+    .metric => kilograms,
+    .imperial => kilograms / _kilogramsPerPound,
+  };
+
+  double displayLoadToKilograms(double value) => switch (this) {
+    .metric => value,
+    .imperial => value * _kilogramsPerPound,
+  };
+}
+
 extension VolumeConversion on UnitSystem {
   static const _mlPerFluidOunce = 29.5735;
 
