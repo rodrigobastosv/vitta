@@ -941,7 +941,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietCopyMealFoodCount.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 food} other{{count} foods}}'**
+  /// **'{count, plural, =0{No foods} =1{1 food} other{{count} foods}}'**
   String dietCopyMealFoodCount(int count);
 
   /// No description provided for @dietMealsCopiedToastTitle.
@@ -953,7 +953,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietMealsCopiedToastMessage.
   ///
   /// In en, this message translates to:
-  /// **'{count, plural, =1{1 meal added to your day} other{{count} meals added to your day}}'**
+  /// **'{count, plural, =0{No meals added} =1{1 meal added to your day} other{{count} meals added to your day}}'**
   String dietMealsCopiedToastMessage(int count);
 
   /// No description provided for @dietMealSplitTitle.

@@ -213,9 +213,9 @@
   "dietCopyMealsNoSourceMessage": "Tap a day with food logged to choose which meals to copy.",
   "dietCopyMealsSelectionTitle": "Meals to copy",
   "dietCopyMealsAction": "Copy meals",
-  "dietCopyMealFoodCount": "{count, plural, =1{1 food} other{{count} foods}}",
+  "dietCopyMealFoodCount": "{count, plural, =0{No foods} =1{1 food} other{{count} foods}}",
   "dietMealsCopiedToastTitle": "Meals copied",
-  "dietMealsCopiedToastMessage": "{count, plural, =1{1 meal added to your day} other{{count} meals added to your day}}",
+  "dietMealsCopiedToastMessage": "{count, plural, =0{No meals added} =1{1 meal added to your day} other{{count} meals added to your day}}",
   "@dietCopyMealFoodCount": {
     "placeholders": {
       "count": { "type": "int" }

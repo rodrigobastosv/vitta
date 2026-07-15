@@ -205,9 +205,9 @@
   "dietCopyMealsNoSourceMessage": "Toque em um dia com alimentos registrados para escolher quais refeições copiar.",
   "dietCopyMealsSelectionTitle": "Refeições a copiar",
   "dietCopyMealsAction": "Copiar refeições",
-  "dietCopyMealFoodCount": "{count, plural, =1{1 alimento} other{{count} alimentos}}",
+  "dietCopyMealFoodCount": "{count, plural, =0{Nenhum alimento} =1{1 alimento} other{{count} alimentos}}",
   "dietMealsCopiedToastTitle": "Refeições copiadas",
-  "dietMealsCopiedToastMessage": "{count, plural, =1{1 refeição adicionada ao seu dia} other{{count} refeições adicionadas ao seu dia}}",
+  "dietMealsCopiedToastMessage": "{count, plural, =0{Nenhuma refeição adicionada} =1{1 refeição adicionada ao seu dia} other{{count} refeições adicionadas ao seu dia}}",
   "@dietWeekAverageTooltip": {
     "placeholders": {
       "calories": { "type": "int" },
