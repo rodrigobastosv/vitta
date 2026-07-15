@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/entities/workout_volume.dart';
 
@@ -21,6 +22,10 @@ class WorkoutState extends Equatable with WorkoutVolume {
   Workout? get workout => workouts.firstOrNull;
 
   bool get isEmpty => workouts.every((workout) => workout.exercises.isEmpty);
+
+  List<WorkoutExercise> get exercises => [for (final workout in workouts) ...workout.exercises];
+
+  int get completedExercises => exercises.where((exercise) => exercise.isCompleted).length;
 
   /// Whether the day being shown is today. Starting a routine is only offered
   /// here: you can't begin a session in the past, and the day selector already
