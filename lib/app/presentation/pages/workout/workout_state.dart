@@ -26,6 +26,9 @@ class WorkoutState extends Equatable with WorkoutVolume {
   /// here: you can't begin a session in the past, and the day selector already
   /// refuses to go past today. Past days stay fully editable - fixing a set you
   /// forgot to log is different from starting the workout.
+  /// Every exercise of the day marked done. Drives the end-of-workout message.
+  bool get isFinished => workouts.isNotEmpty && workouts.every((workout) => workout.isComplete);
+
   bool get isToday {
     final now = DateTime.now();
     return date.year == now.year && date.month == now.month && date.day == now.day;

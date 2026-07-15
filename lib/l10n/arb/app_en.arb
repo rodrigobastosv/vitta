@@ -497,5 +497,13 @@
   "workoutFromRoutineLabel": "From {name}",
   "@workoutFromRoutineLabel": { "placeholders": { "name": { "type": "String" } } },
   "workoutStartRoutineHint": "Sets are pre-filled with your last session — adjust what changed.",
-  "reorderHandleLabel": "Reorder"
+  "reorderHandleLabel": "Reorder",
+  "workoutRepeatSetAction": "Repeat",
+  "workoutRepeatSetTooltip": "Repeat the last set",
+  "workoutCompleteExerciseAction": "Done",
+  "workoutReopenExerciseAction": "Reopen",
+  "workoutCompletedSummary": "{sets, plural, =1{1 set done} other{{sets} sets done}}",
+  "@workoutCompletedSummary": { "placeholders": { "sets": { "type": "int" } } },
+  "workoutFinishedTitle": "Workout done",
+  "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session."
 }

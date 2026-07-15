@@ -36,6 +36,11 @@ class Workout extends Equatable with WorkoutVolume {
   @override
   List<WorkoutSet> get sets => [for (final exercise in exercises) ...exercise.sets];
 
+  /// Every exercise marked done - what the end-of-workout message waits for.
+  /// An empty workout is never complete: nothing was finished, so there is
+  /// nothing to congratulate.
+  bool get isComplete => exercises.isNotEmpty && exercises.every((exercise) => exercise.isCompleted);
+
   Set<BodyRegion> get regions => {
     for (final exercise in exercises)
       for (final muscle in exercise.exercise.primaryMuscles) muscle.region,

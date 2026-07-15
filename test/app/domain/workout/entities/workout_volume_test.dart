@@ -46,4 +46,42 @@ void main() {
       expect(workout.totalSets, 2);
     });
   });
+
+  group('Workout.isComplete', () {
+    test('is true only once every exercise is marked done', () {
+      final workout = WorkoutFactory.build(
+        exercises: [
+          WorkoutExerciseFactory.build(id: 'we-1', completedAt: DateTime(2026, 7, 20)),
+          WorkoutExerciseFactory.build(id: 'we-2', completedAt: DateTime(2026, 7, 20)),
+        ],
+      );
+
+      expect(workout.isComplete, isTrue);
+    });
+
+    test('one unfinished exercise keeps the workout unfinished', () {
+      final workout = WorkoutFactory.build(
+        exercises: [
+          WorkoutExerciseFactory.build(id: 'we-1', completedAt: DateTime(2026, 7, 20)),
+          WorkoutExerciseFactory.build(id: 'we-2'),
+        ],
+      );
+
+      expect(workout.isComplete, isFalse);
+    });
+
+    test('an empty workout is never complete - nothing was finished', () {
+      expect(WorkoutFactory.build().isComplete, isFalse);
+    });
+
+    test('having sets does not mean done: a routine pre-fills sets before anything is lifted', () {
+      final workout = WorkoutFactory.build(
+        exercises: [
+          WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]),
+        ],
+      );
+
+      expect(workout.isComplete, isFalse);
+    });
+  });
 }

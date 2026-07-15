@@ -1087,4 +1087,28 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get reorderHandleLabel => 'Reorder';
+
+  @override
+  String get workoutRepeatSetAction => 'Repeat';
+
+  @override
+  String get workoutRepeatSetTooltip => 'Repeat the last set';
+
+  @override
+  String get workoutCompleteExerciseAction => 'Done';
+
+  @override
+  String get workoutReopenExerciseAction => 'Reopen';
+
+  @override
+  String workoutCompletedSummary(int sets) {
+    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets sets done', one: '1 set done');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutFinishedTitle => 'Workout done';
+
+  @override
+  String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
 }

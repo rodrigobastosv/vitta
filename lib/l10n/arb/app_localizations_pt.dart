@@ -1088,4 +1088,28 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get reorderHandleLabel => 'Reordenar';
+
+  @override
+  String get workoutRepeatSetAction => 'Repetir';
+
+  @override
+  String get workoutRepeatSetTooltip => 'Repetir a última série';
+
+  @override
+  String get workoutCompleteExerciseAction => 'Concluir';
+
+  @override
+  String get workoutReopenExerciseAction => 'Reabrir';
+
+  @override
+  String workoutCompletedSummary(int sets) {
+    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets séries feitas', one: '1 série feita');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutFinishedTitle => 'Treino concluído';
+
+  @override
+  String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
 }

@@ -473,5 +473,12 @@
   "workoutRoutineLastTrainedNever": "Ainda não treinado",
   "workoutFromRoutineLabel": "De {name}",
   "workoutStartRoutineHint": "As séries vêm preenchidas com seu último treino — ajuste o que mudou.",
-  "reorderHandleLabel": "Reordenar"
+  "reorderHandleLabel": "Reordenar",
+  "workoutRepeatSetAction": "Repetir",
+  "workoutRepeatSetTooltip": "Repetir a última série",
+  "workoutCompleteExerciseAction": "Concluir",
+  "workoutReopenExerciseAction": "Reabrir",
+  "workoutCompletedSummary": "{sets, plural, =1{1 série feita} other{{sets} séries feitas}}",
+  "workoutFinishedTitle": "Treino concluído",
+  "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino."
 }

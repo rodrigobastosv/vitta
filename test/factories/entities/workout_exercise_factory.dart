@@ -10,5 +10,6 @@ abstract class WorkoutExerciseFactory {
     Exercise? exercise,
     int position = 0,
     List<WorkoutSet> sets = const [],
-  }) => WorkoutExercise(id: id, exercise: exercise ?? ExerciseFactory.build(), position: position, sets: sets);
+    DateTime? completedAt,
+  }) => WorkoutExercise(id: id, exercise: exercise ?? ExerciseFactory.build(), position: position, sets: sets, completedAt: completedAt);
 }

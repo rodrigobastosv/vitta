@@ -43,6 +43,11 @@ class WorkoutRepository {
   Future<Result<VTError, WorkoutExercise>> addWorkoutExercise({required String workoutId, required String exerciseId}) =>
       _supabaseWorkoutDataSource.addWorkoutExercise(workoutId: workoutId, exerciseId: exerciseId);
 
+  Future<Result<VTError, WorkoutExercise>> setWorkoutExerciseCompleted({
+    required String workoutExerciseId,
+    required bool completed,
+  }) => _supabaseWorkoutDataSource.setWorkoutExerciseCompleted(workoutExerciseId: workoutExerciseId, completed: completed);
+
   Future<Result<VTError, void>> removeWorkoutExercise({required String workoutExerciseId}) =>
       _supabaseWorkoutDataSource.removeWorkoutExercise(workoutExerciseId: workoutExerciseId);
 
