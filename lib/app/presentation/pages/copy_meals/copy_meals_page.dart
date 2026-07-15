@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
@@ -33,7 +32,7 @@ class CopyMealsPage extends StatelessWidget {
           case CopyMealsHideLoading():
             context.hideLoading();
           case CopyMealsError(:final message):
-            context.showErrorDialog(message: message, onRetry: context.read<CopyMealsCubit>().refresh);
+            context.showErrorToast(message: message, onRetry: context.read<CopyMealsCubit>().refresh);
           case MealsCopied(:final mealCount):
             context.showToast(title: l10n.dietMealsCopiedToastTitle, message: l10n.dietMealsCopiedToastMessage(mealCount));
             Navigator.of(context).pop(true);

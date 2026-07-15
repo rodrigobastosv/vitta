@@ -230,6 +230,18 @@ abstract class AppLocalizations {
   /// **'OK'**
   String get ok;
 
+  /// No description provided for @errorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get errorTitle;
+
+  /// No description provided for @warningTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Almost there'**
+  String get warningTitle;
+
   /// No description provided for @progressLabel.
   ///
   /// In en, this message translates to:
@@ -602,10 +614,16 @@ abstract class AppLocalizations {
   /// **'Scan nutrition label'**
   String get dietScanLabelAction;
 
+  /// No description provided for @dietNutritionScanNoDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t read the label'**
+  String get dietNutritionScanNoDataTitle;
+
   /// No description provided for @dietNutritionScanNoData.
   ///
   /// In en, this message translates to:
-  /// **'Couldn\'t read the nutrition label. Enter the values manually.'**
+  /// **'Enter the values manually, or try another photo.'**
   String get dietNutritionScanNoData;
 
   /// No description provided for @dietCaloriesPer100g.

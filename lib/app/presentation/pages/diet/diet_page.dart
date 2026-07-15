@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -33,7 +33,7 @@ class DietPage extends StatelessWidget {
           case DietHideLoading():
             context.hideLoading();
           case DietError(:final message, :final date):
-            context.showErrorDialog(message: message, onRetry: () => context.read<DietCubit>().goToDate(date));
+            context.showErrorToast(message: message, onRetry: () => context.read<DietCubit>().goToDate(date));
         }
       },
       builder: (context, cubit, state) => Scaffold(

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
@@ -29,7 +29,7 @@ class ExerciseSearchPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         ExerciseSearchShowLoading() => context.showLoading(),
         ExerciseSearchHideLoading() => context.hideLoading(),
-        ExerciseSearchError(:final message) => context.showErrorDialog(message: message),
+        ExerciseSearchError(:final message) => context.showErrorToast(message: message),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.exerciseSearchTitle)),

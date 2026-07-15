@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -25,7 +25,7 @@ class AuthPage extends StatelessWidget {
           case AuthHideLoading():
             context.hideLoading();
           case AuthActionFailed(:final message):
-            context.showErrorDialog(message: message);
+            context.showErrorToast(message: message);
           case AuthSignedIn():
             Navigator.of(context).pop(true);
         }

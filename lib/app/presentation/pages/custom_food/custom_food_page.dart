@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
 import 'package:vitta/app/design_system/components/general/vt_photo_header.dart';
@@ -28,11 +28,11 @@ class CustomFoodPage extends StatelessWidget {
           case CustomFoodHideLoading():
             context.hideLoading();
           case CustomFoodIncomplete():
-            context.showErrorDialog(message: l10n.dietInvalidCustomFood);
+            context.showWarningToast(message: l10n.dietInvalidCustomFood);
           case CustomFoodScanFoundNothing():
-            context.showErrorDialog(message: l10n.dietNutritionScanNoData);
+            context.showWarningToast(message: l10n.dietNutritionScanNoData, title: l10n.dietNutritionScanNoDataTitle);
           case CustomFoodError(:final message):
-            context.showErrorDialog(message: message);
+            context.showErrorToast(message: message);
           case CustomFoodReady(:final food):
             Navigator.of(context).pop(food);
         }

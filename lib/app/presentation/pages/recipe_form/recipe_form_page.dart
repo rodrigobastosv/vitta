@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
 import 'package:vitta/app/design_system/components/general/vt_photo_header.dart';
@@ -32,9 +32,9 @@ class RecipeFormPage extends StatelessWidget {
           case RecipeFormHideLoading():
             context.hideLoading();
           case RecipeFormIncomplete():
-            context.showErrorDialog(message: l10n.dietRecipeIncomplete);
+            context.showWarningToast(message: l10n.dietRecipeIncomplete);
           case RecipeFormError(:final message):
-            context.showErrorDialog(message: message);
+            context.showErrorToast(message: message);
           case RecipeSaved():
             Navigator.of(context).pop(true);
         }

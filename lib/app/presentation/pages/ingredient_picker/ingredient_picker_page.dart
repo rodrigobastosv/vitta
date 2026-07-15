@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/error/error_dialog_extensions.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
@@ -32,7 +32,7 @@ class IngredientPickerPage extends StatelessWidget {
           case FoodSearchHideLoading():
             context.hideLoading();
           case FoodSearchError(:final message):
-            context.showErrorDialog(message: message);
+            context.showErrorToast(message: message);
           case FoodLogged():
             break;
         }

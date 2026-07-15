@@ -78,6 +78,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ok => 'OK';
 
   @override
+  String get errorTitle => 'Something went wrong';
+
+  @override
+  String get warningTitle => 'Almost there';
+
+  @override
   String progressLabel(String consumed, String goal, String unit) {
     return '$consumed / $goal $unit';
   }
@@ -284,7 +290,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietScanLabelAction => 'Scan nutrition label';
 
   @override
-  String get dietNutritionScanNoData => 'Couldn\'t read the nutrition label. Enter the values manually.';
+  String get dietNutritionScanNoDataTitle => 'Couldn\'t read the label';
+
+  @override
+  String get dietNutritionScanNoData => 'Enter the values manually, or try another photo.';
 
   @override
   String dietCaloriesPer100g(int calories) {
