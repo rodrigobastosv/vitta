@@ -27,7 +27,7 @@ class SupabaseWaterDataSource {
           .eq('user_id', _supabaseService.currentUserId)
           .gte('logged_date', from.toIso8601String().split('T').first)
           .lte('logged_date', to.toIso8601String().split('T').first)
-          .order('created_at');
+          .order('created_at', ascending: true);
       return Success(rows.map(WaterLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load water logs', cause: error));
@@ -41,7 +41,7 @@ class SupabaseWaterDataSource {
           .select()
           .eq('user_id', _supabaseService.currentUserId)
           .eq('logged_date', date.toIso8601String().split('T').first)
-          .order('created_at');
+          .order('created_at', ascending: true);
       return Success(rows.map(WaterLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load water logs for $date', cause: error));

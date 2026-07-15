@@ -61,7 +61,7 @@ class SupabaseDietDataSource {
           .ilike('name', '%$query%')
           .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
           .order('times_logged', ascending: false)
-          .order('name')
+          .order('name', ascending: true)
           .limit(20);
       return Success(rows.map(Food.fromMap).toList());
     } on Exception catch (error) {
@@ -116,7 +116,7 @@ class SupabaseDietDataSource {
           .select('*, ${SupabaseTable.foods.wireName}(*)')
           .eq('user_id', _userId)
           .eq('logged_date', date.toIso8601String().split('T').first)
-          .order('created_at');
+          .order('created_at', ascending: true);
       return Success(rows.map(FoodLogEntry.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load food logs for $date', cause: error));
@@ -160,7 +160,7 @@ class SupabaseDietDataSource {
           .eq('user_id', _userId)
           .gte('logged_date', from.toIso8601String().split('T').first)
           .lte('logged_date', to.toIso8601String().split('T').first)
-          .order('created_at');
+          .order('created_at', ascending: true);
       return Success(rows.map(FoodLogEntry.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load monthly food logs', cause: error));

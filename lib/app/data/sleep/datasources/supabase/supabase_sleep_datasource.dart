@@ -32,7 +32,7 @@ class SupabaseSleepDataSource {
           .eq('user_id', _supabaseService.currentUserId)
           .gte('logged_date', from.toIso8601String().split('T').first)
           .lte('logged_date', to.toIso8601String().split('T').first)
-          .order('logged_date');
+          .order('logged_date', ascending: true);
       return Success(rows.map(SleepLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load sleep logs', cause: error));

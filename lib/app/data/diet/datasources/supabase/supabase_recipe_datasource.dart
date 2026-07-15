@@ -20,7 +20,7 @@ class SupabaseRecipeDataSource {
 
   Future<Result<VTError, List<Recipe>>> getRecipes() async {
     try {
-      final rows = await _supabaseService.from(.recipes).select(_recipeSelect).eq('user_id', _userId).order('created_at');
+      final rows = await _supabaseService.from(.recipes).select(_recipeSelect).eq('user_id', _userId).order('created_at', ascending: false);
       return Success(rows.map(Recipe.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load recipes', cause: error));
