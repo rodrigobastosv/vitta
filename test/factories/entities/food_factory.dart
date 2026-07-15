@@ -16,6 +16,7 @@ abstract class FoodFactory {
     double fiberPer100g = 2.6,
     Map<Nutrient, double> micronutrientsPer100g = const {},
     String? imageUrl,
+    double? gramsPerUnit,
   }) => Food(
     id: id,
     name: name,
@@ -29,5 +30,6 @@ abstract class FoodFactory {
     fiberPer100g: fiberPer100g,
     micronutrientsPer100g: micronutrientsPer100g,
     imageUrl: imageUrl,
+    gramsPerUnit: gramsPerUnit,
   );
 }

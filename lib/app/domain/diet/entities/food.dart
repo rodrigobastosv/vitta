@@ -16,6 +16,7 @@ class Food extends Equatable {
     this.brand,
     this.barcode,
     this.imageUrl,
+    this.gramsPerUnit,
   });
 
   factory Food.fromMap(Map<String, dynamic> row) => Food(
@@ -31,6 +32,7 @@ class Food extends Equatable {
     fiberPer100g: (row['fiber_per_100g'] as num?)?.toDouble() ?? 0,
     micronutrientsPer100g: _micronutrientsFromMap(row['micronutrients']),
     imageUrl: row['image_url'] as String?,
+    gramsPerUnit: (row['grams_per_unit'] as num?)?.toDouble(),
   );
 
   static Map<Nutrient, double> _micronutrientsFromMap(dynamic raw) {
@@ -58,6 +60,13 @@ class Food extends Equatable {
   final Map<Nutrient, double> micronutrientsPer100g;
   final String? imageUrl;
 
+  /// What one whole item weighs, when this food is countable at all (an egg, a
+  /// slice, a can). Null for anything measured rather than counted - rice, milk
+  /// - which is what hides the unit mode on the log sheet.
+  final double? gramsPerUnit;
+
+  bool get isCountable => gramsPerUnit != null;
+
   @override
   List<Object?> get props => [
     id,
@@ -72,5 +81,6 @@ class Food extends Equatable {
     fiberPer100g,
     micronutrientsPer100g,
     imageUrl,
+    gramsPerUnit,
   ];
 }

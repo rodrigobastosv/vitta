@@ -15,5 +15,6 @@ class UpdateFoodRequest {
     'fiber_per_100g': food.fiberPer100g,
     'micronutrients': {for (final MapEntry(:key, :value) in food.micronutrientsPer100g.entries) key.wireKey: value},
     'image_url': food.imageUrl,
+    'grams_per_unit': food.gramsPerUnit,
   };
 }

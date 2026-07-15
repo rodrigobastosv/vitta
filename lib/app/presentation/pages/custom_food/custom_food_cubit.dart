@@ -27,6 +27,8 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
 
   void brandChanged(String brand) => emit(state.copyWith(brand: brand));
 
+  void gramsPerUnitChanged(String text) => emit(state.copyWith(gramsPerUnitText: text));
+
   void nutrientChanged({required CustomFoodNutrient nutrient, required String text}) {
     final value = double.tryParse(text.replaceAll(',', '.'));
     final nutrients = Map.of(state.nutrients);
@@ -101,5 +103,6 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     fatPer100g: state.nutrients[CustomFoodNutrient.fat]!,
     fiberPer100g: state.nutrients[CustomFoodNutrient.fiber]!,
     imageUrl: imageUrl,
+    gramsPerUnit: state.gramsPerUnit,
   );
 }

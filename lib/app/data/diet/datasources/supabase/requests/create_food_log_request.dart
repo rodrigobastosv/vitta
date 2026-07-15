@@ -7,6 +7,7 @@ class CreateFoodLogRequest {
     required this.loggedDate,
     required this.mealType,
     required this.quantityGrams,
+    this.quantityUnits,
   });
 
   final String userId;
@@ -14,6 +15,7 @@ class CreateFoodLogRequest {
   final DateTime loggedDate;
   final MealType mealType;
   final double quantityGrams;
+  final double? quantityUnits;
 
   Map<String, dynamic> toJson() => {
     'user_id': userId,
@@ -21,5 +23,6 @@ class CreateFoodLogRequest {
     'logged_date': loggedDate.toIso8601String().split('T').first,
     'meal_type': mealType.wireValue,
     'quantity_grams': quantityGrams,
+    'quantity_units': quantityUnits,
   };
 }

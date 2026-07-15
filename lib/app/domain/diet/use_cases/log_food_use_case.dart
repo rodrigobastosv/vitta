@@ -15,6 +15,7 @@ class LogFoodUseCase {
     required DateTime loggedDate,
     required MealType mealType,
     required double quantityGrams,
+    double? quantityUnits,
   }) async {
     final foodIdResult = switch (food.id) {
       final String id => Success<VTError, String>(id),
@@ -22,7 +23,13 @@ class LogFoodUseCase {
     };
     return foodIdResult.when(
       (error) => Future.value(Failure(error)),
-      (value) => _dietRepository.logFood(foodId: value, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams),
+      (value) => _dietRepository.logFood(
+        foodId: value,
+        loggedDate: loggedDate,
+        mealType: mealType,
+        quantityGrams: quantityGrams,
+        quantityUnits: quantityUnits,
+      ),
     );
   }
 

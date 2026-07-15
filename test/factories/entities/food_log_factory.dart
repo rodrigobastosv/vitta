@@ -8,5 +8,13 @@ abstract class FoodLogFactory {
     DateTime? loggedDate,
     MealType mealType = MealType.breakfast,
     double quantityGrams = 100,
-  }) => FoodLog(id: id, foodId: foodId, loggedDate: loggedDate ?? DateTime(2026, 7, 11), mealType: mealType, quantityGrams: quantityGrams);
+    double? quantityUnits,
+  }) => FoodLog(
+    id: id,
+    foodId: foodId,
+    loggedDate: loggedDate ?? DateTime(2026, 7, 11),
+    mealType: mealType,
+    quantityGrams: quantityGrams,
+    quantityUnits: quantityUnits,
+  );
 }

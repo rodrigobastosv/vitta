@@ -88,8 +88,14 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     required String logId,
     required MealType mealType,
     required double quantityGrams,
+    double? quantityUnits,
   }) async {
-    final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
+    final updatedResult = await _updateFoodLogUseCase(
+      logId: logId,
+      mealType: mealType,
+      quantityGrams: quantityGrams,
+      quantityUnits: quantityUnits,
+    );
     final error = updatedResult.when((error) => error, (_) => null);
     if (error == null) {
       Log.action('food_log_updated', data: {'meal': mealType.wireValue});

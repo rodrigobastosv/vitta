@@ -182,12 +182,14 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     required DateTime loggedDate,
     required MealType mealType,
     required double quantityGrams,
+    double? quantityUnits,
   }) async {
     final loggedResult = await _logFoodUseCase(
       food: food,
       loggedDate: DateTime(loggedDate.year, loggedDate.month, loggedDate.day),
       mealType: mealType,
       quantityGrams: quantityGrams,
+      quantityUnits: quantityUnits,
     );
     loggedResult.when((_) {}, (_) {
       Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});

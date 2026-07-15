@@ -32,6 +32,33 @@ void main() {
     verifyNever(() => dietRepository.saveFood(food: any(named: 'food')));
   });
 
+  test('carries the unit count through to the log', () async {
+    final dietRepository = MockDietRepository();
+    final useCase = UseCasesFactories.buildLogFoodUseCase(dietRepository: dietRepository);
+    final egg = FoodFactory.build(gramsPerUnit: 50);
+    final loggedDate = DateTime(2026, 7, 11);
+    final foodLog = FoodLogFactory.build(quantityUnits: 2);
+    when(
+      () => dietRepository.logFood(
+        foodId: 'food-1',
+        loggedDate: loggedDate,
+        mealType: MealType.breakfast,
+        quantityGrams: 100,
+        quantityUnits: 2,
+      ),
+    ).thenAnswer((_) async => Success(foodLog));
+
+    final loggedResult = await useCase(
+      food: egg,
+      loggedDate: loggedDate,
+      mealType: MealType.breakfast,
+      quantityGrams: 100,
+      quantityUnits: 2,
+    );
+
+    loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
+  });
+
   test('saves the food first when it has no id yet, then logs it', () async {
     final dietRepository = MockDietRepository();
     final useCase = UseCasesFactories.buildLogFoodUseCase(dietRepository: dietRepository);

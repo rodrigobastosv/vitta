@@ -74,6 +74,7 @@ class SupabaseDietDataSource {
     required DateTime loggedDate,
     required MealType mealType,
     required double quantityGrams,
+    double? quantityUnits,
   }) async {
     try {
       final request = CreateFoodLogRequest(
@@ -82,6 +83,7 @@ class SupabaseDietDataSource {
         loggedDate: loggedDate,
         mealType: mealType,
         quantityGrams: quantityGrams,
+        quantityUnits: quantityUnits,
       );
       final row = await _supabaseService.from(.foodLogs).insert(request.toJson()).select().single();
       return Success(FoodLog.fromMap(row));
@@ -100,6 +102,7 @@ class SupabaseDietDataSource {
             loggedDate: targetDate,
             mealType: entry.log.mealType,
             quantityGrams: entry.log.quantityGrams,
+            quantityUnits: entry.log.quantityUnits,
           ).toJson(),
       ];
       await _supabaseService.from(.foodLogs).insert(requests);
@@ -127,9 +130,10 @@ class SupabaseDietDataSource {
     required String logId,
     required MealType mealType,
     required double quantityGrams,
+    double? quantityUnits,
   }) async {
     try {
-      final request = UpdateFoodLogRequest(mealType: mealType, quantityGrams: quantityGrams);
+      final request = UpdateFoodLogRequest(mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
       final row = await _supabaseService
           .from(.foodLogs)
           .update(request.toJson())

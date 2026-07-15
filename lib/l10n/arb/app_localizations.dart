@@ -368,6 +368,48 @@ abstract class AppLocalizations {
   /// **'Quantity ({unit})'**
   String dietQuantityLabel(String unit);
 
+  /// No description provided for @dietUnitsUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'un'**
+  String get dietUnitsUnit;
+
+  /// No description provided for @dietLogSubtitleUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'{units} un - {calories} kcal'**
+  String dietLogSubtitleUnits(String units, int calories);
+
+  /// No description provided for @dietQuantityModeWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get dietQuantityModeWeight;
+
+  /// No description provided for @dietQuantityModeUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'Units'**
+  String get dietQuantityModeUnits;
+
+  /// No description provided for @dietQuantityUnitsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{units} un = {weight}'**
+  String dietQuantityUnitsHint(String units, String weight);
+
+  /// No description provided for @dietGramsPerUnitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of one unit (g)'**
+  String get dietGramsPerUnitLabel;
+
+  /// No description provided for @dietGramsPerUnitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Fill it in to log this food by unit, like \"2 eggs\".'**
+  String get dietGramsPerUnitHint;
+
   /// No description provided for @dietLogFoodAction.
   ///
   /// In en, this message translates to:
