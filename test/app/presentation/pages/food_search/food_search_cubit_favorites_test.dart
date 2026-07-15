@@ -23,20 +23,42 @@ void main() {
     return getFavoriteFoodsUseCase;
   }
 
+  // These tests are about favourites, but the cubit reads recent searches on
+  // init and records one after every hit, and both return non-nullable types a
+  // bare mock can't satisfy.
+  MockGetRecentSearchesUseCase stubbedRecents([List<String> recentSearches = const []]) {
+    final getRecentSearchesUseCase = MockGetRecentSearchesUseCase();
+    when(getRecentSearchesUseCase.call).thenReturn(recentSearches);
+    return getRecentSearchesUseCase;
+  }
+
+  MockAddRecentSearchUseCase stubbedAddRecent() {
+    final addRecentSearchUseCase = MockAddRecentSearchUseCase();
+    when(() => addRecentSearchUseCase(query: any(named: 'query'))).thenAnswer((_) async => const []);
+    return addRecentSearchUseCase;
+  }
+
   test('starts with no search and no favorites', () {
-    final cubit = CubitsFactories.buildFoodSearchCubit();
+    final cubit = CubitsFactories.buildFoodSearchCubit(getRecentSearchesUseCase: stubbedRecents());
 
     expect(cubit.state.results, isNull);
     expect(cubit.state.favorites, isEmpty);
   });
 
   blocTest<FoodSearchCubit, FoodSearchState>(
-    'onInit loads the favorites',
+    'onInit lands the recent searches immediately, then the favorites once they are fetched',
     build: () => CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(['banana']),
+      addRecentSearchUseCase: stubbedAddRecent(),
       getFavoriteFoodsUseCase: stubbedFavorites([FoodFactory.build(name: 'Iogurte')]),
     ),
     act: (cubit) => cubit.onInit(),
     expect: () => [
+      // Recent searches are a synchronous device-local read, so they don't wait
+      // on the favourites round-trip.
+      isA<FoodSearchState>()
+          .having((state) => state.recentSearches, 'recentSearches', ['banana'])
+          .having((state) => state.favorites, 'favorites', isEmpty),
       isA<FoodSearchState>()
           .having((state) => state.favorites.map((food) => food.name), 'favorites', ['Iogurte'])
           .having((state) => state.results, 'results', isNull),
@@ -47,6 +69,8 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       searchFoodsUseCase: searchFoodsUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([FoodFactory.build(id: 'old', name: 'Iogurte')]),
     );
@@ -67,6 +91,8 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       searchFoodsUseCase: searchFoodsUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([FoodFactory.build(name: 'Iogurte')]),
     );
@@ -87,6 +113,8 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => Success(food));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       favoriteFoodUseCase: favoriteFoodUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([FoodFactory.build(id: 'old', name: 'Iogurte')]),
     );
@@ -106,6 +134,8 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: offFood)).thenAnswer((_) async => Success(savedFood));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       searchFoodsUseCase: searchFoodsUseCase,
       favoriteFoodUseCase: favoriteFoodUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([]),
@@ -131,6 +161,8 @@ void main() {
     final unfavoriteFoodUseCase = MockUnfavoriteFoodUseCase();
     when(() => unfavoriteFoodUseCase(foodId: 'saved-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       favoriteFoodUseCase: favoriteFoodUseCase,
       unfavoriteFoodUseCase: unfavoriteFoodUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([]),
@@ -155,6 +187,8 @@ void main() {
     final unfavoriteFoodUseCase = MockUnfavoriteFoodUseCase();
     when(() => unfavoriteFoodUseCase(foodId: 'food-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       unfavoriteFoodUseCase: unfavoriteFoodUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([food]),
     );
@@ -173,6 +207,8 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentSearchesUseCase: stubbedRecents(),
+      addRecentSearchUseCase: stubbedAddRecent(),
       favoriteFoodUseCase: favoriteFoodUseCase,
       getFavoriteFoodsUseCase: stubbedFavorites([]),
     );

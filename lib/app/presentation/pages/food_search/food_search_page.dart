@@ -18,6 +18,7 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_list.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodSearchPage extends StatelessWidget {
@@ -100,13 +101,20 @@ class FoodSearchPage extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.m),
         child: VTSearchField(
           autofocus: true,
+          text: state.query,
           hintText: l10n.dietSearchFieldLabel,
           onSubmitted: (query) => cubit.search(query: query),
         ),
       ),
       Expanded(
         child: switch (state.results) {
-          null => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
+          null when state.recentSearches.isEmpty => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
+          null => RecentSearchesList(
+            queries: state.recentSearches,
+            onSelect: (query) => cubit.search(query: query),
+            onRemove: (query) => cubit.removeRecentSearch(query: query),
+            onClear: cubit.clearRecentSearches,
+          ),
           final results when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
           final results => _buildList(context: context, cubit: cubit, state: state, foods: results, heroPrefix: 'food-search'),
         },
