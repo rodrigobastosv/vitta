@@ -267,6 +267,28 @@ UI: `WorkoutPage` (`/workout`) is a day view with a date selector, a volume/sets
 
 `VTRemoteImage` (design system) is `VTFoodImage` generalised — a network image with a caller-supplied placeholder icon — since the catalog needed the same behaviour with a different fallback. `VTFoodImage` is now a thin wrapper passing `Icons.restaurant_outlined`, so diet's call sites are untouched. Body regions get their own fixed `VTColors.bodyRegion*` accents (the `macro*` idea applied to muscle groups); don't reach for `warning`/`macroCarbs` for a region — they're the same hex, so two regions would collide.
 
+## Workout routines
+
+A routine is a named, ordered list of exercises ("Treino A — Peito e tríceps"); a user's routines form a **cycle**, and the app suggests which one is next (issue #94). `routines` + `routine_exercises` are private per user like `recipes`, with `routine_exercises` walking up to its parent's owner instead of duplicating `user_id`.
+
+**The rotation is position-based, never calendar-based**, and lives on `RoutineCycle` (`domain/workout/entities/`) as a pure `next` getter over `routines` + `lastRoutineId` — no dates anywhere in it. The next routine is simply the one after the last routine-backed workout, wrapping at the end. Training Mon/Wed/Fri, twice in a day, or after a three-week layoff all advance it identically, and **missing a day never skips a routine** the way binding routines to weekdays would. Binding to weekdays was the alternative the issue raised and it's dropped for exactly that reason. With no usable history it suggests the first routine, which is also the fallback when the last-used routine has since been deleted.
+
+`workouts.routine_id` is **nullable and `on delete set null`**. Nullable because a one-off workout belongs to no routine and stays perfectly valid — the FAB path from #93 is untouched, and only routine-backed workouts participate in the cycle. `set null` rather than cascade because deleting a routine must not delete the training history performed under it; the workout survives and just stops naming where it came from, the same call recipes made by leaving their foods row behind.
+
+**The cycle order is editable, and that's load-bearing**: `position` decides what's suggested next, so `RoutinesPage` is a `ReorderableListView` and `reorderRoutines` rewrites positions (optimistically, reverting on failure — the same call favouriting makes). A `position` only assigned at creation would freeze a mis-built A/B/C forever.
+
+Two `ReorderableListView` rules this feature learned the hard way, both worth copying:
+- **Key by the item's own id, never the index.** `ValueKey('$id-$index')` changes for every row the moment one is dragged, so the list loses track of its widgets and the drag doesn't stick.
+- **Use `onReorderItem`, not the deprecated `onReorder`.** It hands back a `newIndex` already adjusted for the removed item, so the cubit inserts at that index directly — re-deriving it (`newIndex > oldIndex ? newIndex - 1 : newIndex`) double-corrects and lands a downward drag one slot short.
+
+A routine holds **distinct** exercises — `RoutineFormCubit.addExercise` no-ops on one already in the list. Repeating an exercise is what sets are for, and distinctness is what makes the id a usable reorder key.
+
+**Starting a routine pre-fills each exercise with the sets from the last time it was trained** (`StartWorkoutFromRoutineUseCase`), which is why it absorbed the core of issue #95. Those sets are **recorded, not suggested**: the user adjusts what changed and deletes what they didn't do. The trade is deliberate — the common case (same session, maybe one number up) becomes near-zero typing, at the cost of a workout abandoned right after starting leaving real-looking sets behind. An exercise never trained before starts empty.
+
+`getLastSetsByExercise` is queried **from the `workouts` side, not `workout_exercises`**, because PostgREST's `order` on an embedded resource sorts the *embedded* rows, not the parents — ordering `workout_exercises` by `workouts(performed_date)` silently sorts nothing. Walking workouts newest-first and taking the first hit per exercise is what actually gives "last time"; it's bounded by `_lastSetsWorkoutLookback` so a user with years of history doesn't drag their whole log over the wire.
+
+`WorkoutCubit.loadDate` loads the cycle alongside the day but **never lets it block**: a cycle failure leaves `state.cycle` empty, which just hides the suggestion card. An error dialog over a day that loaded fine would be worse than a missing suggestion. The consequence for tests: any test that loads a day must stub `GetRoutineCycleUseCase` (factories never stub — see Testing).
+
 ## App icon and splash screen
 
 The leaf mark (same shape as the `Icons.eco_outlined` avatar on `HomePage`) is the app's visual identity, sourced as three PNGs under `assets/icon/`: `app_icon.png` (full icon, leaf on `VTColors.greenContainerLight`, used for iOS and legacy Android), `app_icon_foreground.png` (transparent background, leaf scaled to fit Android's adaptive-icon safe zone), and `splash_logo.png` (transparent background, reused as the native splash logo). `flutter_launcher_icons` and `flutter_native_splash` (dev dependencies, configured in `pubspec.yaml`) generate the actual platform assets (`android/app/src/main/res/mipmap-*`, `ios/Runner/Assets.xcassets/*`, `android/**/drawable*` splash images) from those three source PNGs — never hand-edit a generated platform icon/splash file directly. After changing a source PNG or either package's config in `pubspec.yaml`, regenerate both with `dart run flutter_launcher_icons` and `dart run flutter_native_splash:create`, then re-run `flutter analyze`/`flutter test`.

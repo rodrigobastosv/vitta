@@ -275,6 +275,50 @@ create table if not exists workouts (
 
 create index if not exists workouts_user_id_performed_date_idx on workouts (user_id, performed_date);
 
+-- A routine is a named, ordered list of exercises ("Treino A - Peito e
+-- triceps"). A user's routines form a cycle: the app suggests the one after
+-- whichever routine the last routine-backed workout used (see issue #94).
+-- `position` is that cycle order, not insertion order.
+--
+-- Routines are private, like recipes - unlike the exercises catalog they read
+-- from. There is no shared/published routine concept.
+create table if not exists routines (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  name text not null,
+  position integer not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists routines_user_id_position_idx on routines (user_id, position);
+
+-- routine_exercises has no user_id: it inherits the owner of its parent routine,
+-- the same shape recipe_ingredients uses. `on delete restrict` on exercise_id
+-- matches workout_exercises - a routine referencing a deleted exercise would be
+-- a broken routine, so the delete is refused rather than silently emptying it.
+create table if not exists routine_exercises (
+  id uuid primary key default gen_random_uuid(),
+  routine_id uuid not null references routines (id) on delete cascade,
+  exercise_id uuid not null references exercises (id) on delete restrict,
+  position integer not null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists routine_exercises_routine_id_idx on routine_exercises (routine_id);
+
+-- Which routine a workout came from, if any. Nullable on purpose: a one-off
+-- workout belongs to no routine and is just as valid - the FAB path from issue
+-- #93 still works untouched, and only workouts with a routine_id participate in
+-- the cycle.
+--
+-- `on delete set null` rather than cascade: deleting a routine must not delete
+-- the training history performed under it. The workout survives and simply
+-- stops naming where it came from, the same call recipes made by leaving their
+-- foods row behind.
+alter table workouts add column if not exists routine_id uuid references routines (id) on delete set null;
+
+create index if not exists workouts_user_id_routine_id_idx on workouts (user_id, routine_id) where routine_id is not null;
+
 -- Which exercises a workout was made of, in order. `position` is what the user
 -- dragged them into, not insertion order.
 --
@@ -357,6 +401,8 @@ alter table exercises enable row level security;
 alter table workouts enable row level security;
 alter table workout_exercises enable row level security;
 alter table workout_sets enable row level security;
+alter table routines enable row level security;
+alter table routine_exercises enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -520,3 +566,17 @@ drop policy if exists "Authenticated users can upload exercise images" on storag
 create policy "Authenticated users can upload exercise images" on storage.objects
   for insert
   with check (bucket_id = 'exercise-images' and auth.uid() is not null);
+
+-- Routines are private, on the same terms as recipes. routine_exercises walks up
+-- to its parent routine's owner rather than duplicating user_id.
+drop policy if exists "Users manage their own routines" on routines;
+create policy "Users manage their own routines" on routines
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own routine exercises" on routine_exercises;
+create policy "Users manage their own routine exercises" on routine_exercises
+  for all
+  using (exists (select 1 from routines where routines.id = routine_exercises.routine_id and routines.user_id = auth.uid()))
+  with check (exists (select 1 from routines where routines.id = routine_exercises.routine_id and routines.user_id = auth.uid()));

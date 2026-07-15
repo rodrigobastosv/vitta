@@ -39,12 +39,18 @@ import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 
 class MockSearchFoodsUseCase extends Mock implements SearchFoodsUseCase {}
@@ -140,3 +146,15 @@ class MockUpdateSetUseCase extends Mock implements UpdateSetUseCase {}
 class MockDeleteSetUseCase extends Mock implements DeleteSetUseCase {}
 
 class MockDeleteWorkoutUseCase extends Mock implements DeleteWorkoutUseCase {}
+
+class MockGetRoutinesUseCase extends Mock implements GetRoutinesUseCase {}
+
+class MockGetRoutineCycleUseCase extends Mock implements GetRoutineCycleUseCase {}
+
+class MockSaveRoutineUseCase extends Mock implements SaveRoutineUseCase {}
+
+class MockDeleteRoutineUseCase extends Mock implements DeleteRoutineUseCase {}
+
+class MockStartWorkoutFromRoutineUseCase extends Mock implements StartWorkoutFromRoutineUseCase {}
+
+class MockReorderRoutinesUseCase extends Mock implements ReorderRoutinesUseCase {}

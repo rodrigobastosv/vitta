@@ -1019,4 +1019,68 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get exerciseDetailAddAction => 'Adicionar ao treino';
+
+  @override
+  String get workoutRoutinesTitle => 'Rotinas';
+
+  @override
+  String get workoutRoutinesTooltip => 'Rotinas';
+
+  @override
+  String get workoutRoutinesEmptyTitle => 'Nenhuma rotina ainda';
+
+  @override
+  String get workoutRoutinesEmptyMessage => 'Monte seu ABC e o app diz qual é o próximo treino.';
+
+  @override
+  String get workoutRoutineNewAction => 'Nova rotina';
+
+  @override
+  String get workoutRoutineNameLabel => 'Nome da rotina';
+
+  @override
+  String get workoutRoutineNameHint => 'Treino A — Peito e tríceps';
+
+  @override
+  String get workoutRoutineExercisesTitle => 'Exercícios';
+
+  @override
+  String get workoutRoutineAddExerciseAction => 'Adicionar exercício';
+
+  @override
+  String get workoutRoutineSaveAction => 'Salvar rotina';
+
+  @override
+  String get workoutRoutineDeleteTooltip => 'Remover';
+
+  @override
+  String get workoutRoutineRemoveExerciseTooltip => 'Remover da rotina';
+
+  @override
+  String get workoutRoutineIncompleteMessage => 'Dê um nome à rotina e adicione pelo menos um exercício.';
+
+  @override
+  String workoutRoutineExerciseCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercícios', one: '1 exercício');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutNextRoutineLabel => 'Próximo';
+
+  @override
+  String workoutStartRoutineAction(String name) {
+    return 'Iniciar $name';
+  }
+
+  @override
+  String get workoutRoutineLastTrainedNever => 'Ainda não treinado';
+
+  @override
+  String workoutFromRoutineLabel(String name) {
+    return 'De $name';
+  }
+
+  @override
+  String get workoutStartRoutineHint => 'As séries vêm preenchidas com seu último treino — ajuste o que mudou.';
 }

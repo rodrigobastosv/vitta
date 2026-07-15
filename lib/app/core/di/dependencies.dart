@@ -30,6 +30,7 @@ import 'package:vitta/app/data/water/datasources/local/water_local_datasource.da
 import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_datasource.dart';
+import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
 import 'package:vitta/app/data/workout/workout_repository.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
@@ -73,13 +74,20 @@ import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/delete_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
@@ -92,6 +100,8 @@ import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart'
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
+import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
+import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
@@ -140,7 +150,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
   G.registerLazySingleton(() => SupabaseExerciseDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseWorkoutDataSource(supabaseService: G()));
-  G.registerLazySingleton(() => WorkoutRepository(supabaseExerciseDataSource: G(), supabaseWorkoutDataSource: G()));
+  G.registerLazySingleton(() => SupabaseRoutineDataSource(supabaseService: G()));
+  G.registerLazySingleton(
+    () => WorkoutRepository(supabaseExerciseDataSource: G(), supabaseWorkoutDataSource: G(), supabaseRoutineDataSource: G()),
+  );
   G.registerLazySingleton(() => SupabaseAuthDataSource(supabaseService: G()));
   G.registerLazySingleton(() => AuthRepository(supabaseAuthDataSource: G()));
 
@@ -184,6 +197,12 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => UpdateSetUseCase(workoutRepository: G()));
   G.registerFactory(() => DeleteSetUseCase(workoutRepository: G()));
   G.registerFactory(() => DeleteWorkoutUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetRoutinesUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetRoutineCycleUseCase(workoutRepository: G()));
+  G.registerFactory(() => SaveRoutineUseCase(workoutRepository: G()));
+  G.registerFactory(() => DeleteRoutineUseCase(workoutRepository: G()));
+  G.registerFactory(() => ReorderRoutinesUseCase(workoutRepository: G()));
+  G.registerFactory(() => StartWorkoutFromRoutineUseCase(workoutRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
@@ -241,10 +260,16 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       updateSetUseCase: G(),
       deleteSetUseCase: G(),
       deleteWorkoutUseCase: G(),
+      getRoutineCycleUseCase: G(),
+      startWorkoutFromRoutineUseCase: G(),
       getAppSettingsUseCase: G(),
     ),
   );
   G.registerFactory(() => ExerciseSearchCubit(searchExercisesUseCase: G()));
+  G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
+  G.registerFactoryParam<RoutineFormCubit, Routine?, void>(
+    (routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine),
+  );
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
   G.registerFactory(

@@ -9,7 +9,9 @@ enum SupabaseTable {
   exercises('exercises'),
   workouts('workouts'),
   workoutExercises('workout_exercises'),
-  workoutSets('workout_sets');
+  workoutSets('workout_sets'),
+  routines('routines'),
+  routineExercises('routine_exercises');
 
   const SupabaseTable(this.wireName);
 
