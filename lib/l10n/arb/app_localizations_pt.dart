@@ -936,10 +936,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutRepsLabel => 'Repetições';
 
   @override
-  String get workoutLoadLabel => 'Carga';
+  String workoutLoadLabel(String unit) {
+    return 'Carga ($unit)';
+  }
 
   @override
-  String get workoutLoadHelper => 'Deixe vazio para peso corporal';
+  String get workoutLoadHelper => 'Deixe a carga vazia para uma série de peso corporal.';
 
   @override
   String get workoutTotalRepsLabel => 'Total de repetições';

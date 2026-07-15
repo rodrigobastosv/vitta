@@ -935,10 +935,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutRepsLabel => 'Reps';
 
   @override
-  String get workoutLoadLabel => 'Load';
+  String workoutLoadLabel(String unit) {
+    return 'Load ($unit)';
+  }
 
   @override
-  String get workoutLoadHelper => 'Leave empty for bodyweight';
+  String get workoutLoadHelper => 'Leave the load empty for a bodyweight set.';
 
   @override
   String get workoutTotalRepsLabel => 'Total reps';

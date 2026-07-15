@@ -1781,13 +1781,13 @@ abstract class AppLocalizations {
   /// No description provided for @workoutLoadLabel.
   ///
   /// In en, this message translates to:
-  /// **'Load'**
-  String get workoutLoadLabel;
+  /// **'Load ({unit})'**
+  String workoutLoadLabel(String unit);
 
   /// No description provided for @workoutLoadHelper.
   ///
   /// In en, this message translates to:
-  /// **'Leave empty for bodyweight'**
+  /// **'Leave the load empty for a bodyweight set.'**
   String get workoutLoadHelper;
 
   /// No description provided for @workoutTotalRepsLabel.

@@ -79,6 +79,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
                   controller: _repsController,
                   autofocus: true,
                   keyboardType: .number,
+                  textInputAction: .next,
                   decoration: InputDecoration(labelText: l10n.workoutRepsLabel),
                 ),
               ),
@@ -87,17 +88,23 @@ class _LogSetSheetState extends State<LogSetSheet> {
                 child: TextField(
                   controller: _loadController,
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.workoutLoadLabel,
-                    suffixText: widget.unitSystem.loadUnitLabel,
-                    helperText: l10n.workoutLoadHelper,
-                  ),
+                  textInputAction: .done,
+                  onSubmitted: (_) => _submit(),
+                  // The unit lives in the label, the way dietQuantityLabel and
+                  // waterCustomAmountLabel already do it. suffixText only renders
+                  // once the field is focused or filled, so it hid the unit at the
+                  // exact moment the user needs it - before typing anything.
+                  decoration: InputDecoration(labelText: l10n.workoutLoadLabel(widget.unitSystem.loadUnitLabel)),
                 ),
               ),
             ],
           ),
+          const VTGap.s(),
+          // Below the row rather than as the load field's helperText: a helper
+          // inside a half-width field truncates to "Deixe vazio para p…".
+          Text(l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
           if (_errorMessage case final message?) ...[
-            const VTGap.m(),
+            const VTGap.s(),
             Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error)),
           ],
           const VTGap.l(),
