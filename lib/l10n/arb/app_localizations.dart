@@ -1778,6 +1778,18 @@ abstract class AppLocalizations {
   /// **'Reps'**
   String get workoutRepsLabel;
 
+  /// No description provided for @workoutExercisesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'exercises'**
+  String get workoutExercisesLabel;
+
+  /// No description provided for @workoutExercisesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{All done} =1{1 to go} other{{count} to go}}'**
+  String workoutExercisesLeft(int count);
+
   /// No description provided for @workoutLoadLabel.
   ///
   /// In en, this message translates to:
@@ -1873,12 +1885,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{reps} reps'**
   String workoutSetSummary(int reps);
-
-  /// No description provided for @workoutSetSummaryWeighted.
-  ///
-  /// In en, this message translates to:
-  /// **'{reps} reps · {weight}'**
-  String workoutSetSummaryWeighted(int reps, String weight);
 
   /// No description provided for @exerciseSearchTitle.
   ///
@@ -2063,7 +2069,7 @@ abstract class AppLocalizations {
   /// No description provided for @workoutRepeatSetAction.
   ///
   /// In en, this message translates to:
-  /// **'Repeat'**
+  /// **'Repeat set'**
   String get workoutRepeatSetAction;
 
   /// No description provided for @workoutRepeatSetTooltip.

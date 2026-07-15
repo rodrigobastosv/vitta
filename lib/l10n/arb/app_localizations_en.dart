@@ -936,6 +936,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutRepsLabel => 'Reps';
 
   @override
+  String get workoutExercisesLabel => 'exercises';
+
+  @override
+  String workoutExercisesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count to go', one: '1 to go', zero: 'All done');
+    return '$_temp0';
+  }
+
+  @override
   String workoutLoadLabel(String unit) {
     return 'Load ($unit)';
   }
@@ -985,11 +994,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String workoutSetSummary(int reps) {
     return '$reps reps';
-  }
-
-  @override
-  String workoutSetSummaryWeighted(int reps, String weight) {
-    return '$reps reps · $weight';
   }
 
   @override
@@ -1090,7 +1094,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reorderHandleLabel => 'Reorder';
 
   @override
-  String get workoutRepeatSetAction => 'Repeat';
+  String get workoutRepeatSetAction => 'Repeat set';
 
   @override
   String get workoutRepeatSetTooltip => 'Repeat the last set';

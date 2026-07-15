@@ -4,6 +4,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_thumbnail.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -84,6 +85,26 @@ void main() {
 
     expect(find.byType(WorkoutSetRow), findsOneWidget);
     expect(find.text('Add set'), findsOneWidget);
+  });
+
+  testWidgets('a finished exercise is stamped done, and stays legible while saying it', (tester) async {
+    await pumpCard(
+      tester,
+      workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 20)),
+      onToggleCompleted: (_) {},
+    );
+
+    expect(tester.widget<WorkoutExerciseThumbnail>(find.byType(WorkoutExerciseThumbnail)).isCompleted, isTrue);
+    // The card marks itself done by receding, never by dimming its own text:
+    // an Opacity over the card would drag this summary under AA.
+    expect(tester.widget<Text>(find.text('1 set done')).style?.color, isNot(Colors.transparent));
+    expect(find.byType(Opacity), findsNothing);
+  });
+
+  testWidgets('an unfinished exercise carries no done stamp', (tester) async {
+    await pumpCard(tester, workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+
+    expect(tester.widget<WorkoutExerciseThumbnail>(find.byType(WorkoutExerciseThumbnail)).isCompleted, isFalse);
   });
 
   testWidgets('marking done is reversible - a finished card offers Reopen', (tester) async {

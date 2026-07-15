@@ -1,16 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 
 class WorkoutSetRow extends StatelessWidget {
-  const WorkoutSetRow({required this.set, required this.position, required this.unitSystem, this.onEdit, this.onDelete, super.key});
+  const WorkoutSetRow({
+    required this.set,
+    required this.position,
+    required this.unitSystem,
+    required this.color,
+    this.onEdit,
+    this.onDelete,
+    super.key,
+  });
 
   final WorkoutSet set;
   final int position;
   final UnitSystem unitSystem;
+  final Color color;
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
@@ -20,20 +32,29 @@ class WorkoutSetRow extends StatelessWidget {
     final colorScheme = context.colorScheme;
     return InkWell(
       onTap: onEdit,
+      borderRadius: VTRadius.borderRadiusS,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
+        padding: const EdgeInsets.symmetric(vertical: VTSpacing.xs),
         child: Row(
           children: [
-            SizedBox(width: 28, child: Text('$position', style: VTTextStyles.caption(context))),
-            const SizedBox(width: VTSpacing.s),
-            Expanded(
+            Container(
+              width: 28,
+              height: 28,
+              alignment: .center,
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.16), shape: .circle),
               child: Text(
-                set.isBodyweight ? l10n.workoutSetSummary(set.reps) : l10n.workoutSetSummaryWeighted(set.reps, _load()),
-                style: VTTextStyles.body(context),
+                '$position',
+                style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
               ),
             ),
-            if (set.isBodyweight)
-              Text(l10n.workoutBodyweightLabel, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+            const VTGap.m(),
+            Expanded(child: Text(l10n.workoutSetSummary(set.reps), style: VTTextStyles.body(context))),
+            // Bodyweight is a load like any other, so it reads as the same
+            // badge - the column stays one thing instead of going blank.
+            VTBadge(
+              label: set.isBodyweight ? l10n.workoutBodyweightLabel : _load(),
+              color: set.isBodyweight ? colorScheme.onSurfaceVariant : color,
+            ),
             if (onDelete != null)
               IconButton(icon: const Icon(Icons.close, size: 18), tooltip: l10n.workoutDeleteSetTooltip, onPressed: onDelete),
           ],

@@ -937,6 +937,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutRepsLabel => 'Repetições';
 
   @override
+  String get workoutExercisesLabel => 'exercícios';
+
+  @override
+  String workoutExercisesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Faltam $count', one: 'Falta 1', zero: 'Tudo feito');
+    return '$_temp0';
+  }
+
+  @override
   String workoutLoadLabel(String unit) {
     return 'Carga ($unit)';
   }
@@ -986,11 +995,6 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String workoutSetSummary(int reps) {
     return '$reps repetições';
-  }
-
-  @override
-  String workoutSetSummaryWeighted(int reps, String weight) {
-    return '$reps repetições · $weight';
   }
 
   @override
@@ -1097,7 +1101,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reorderHandleLabel => 'Reordenar';
 
   @override
-  String get workoutRepeatSetAction => 'Repetir';
+  String get workoutRepeatSetAction => 'Repetir série';
 
   @override
   String get workoutRepeatSetTooltip => 'Repetir a última série';

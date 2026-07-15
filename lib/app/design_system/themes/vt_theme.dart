@@ -27,7 +27,7 @@ abstract class VTTheme {
     surface: VTColors.surfaceLight,
     onSurface: VTColors.onSurfaceLight,
     surfaceContainerHighest: VTColors.surfaceContainerLight,
-    onSurfaceVariant: VTColors.onSurfaceLight,
+    onSurfaceVariant: VTColors.onSurfaceVariantLight,
     outline: VTColors.outlineLight,
   );
 
@@ -50,7 +50,7 @@ abstract class VTTheme {
     surface: VTColors.surfaceDark,
     onSurface: VTColors.onSurfaceDark,
     surfaceContainerHighest: VTColors.surfaceContainerDark,
-    onSurfaceVariant: VTColors.onSurfaceDark,
+    onSurfaceVariant: VTColors.onSurfaceVariantDark,
     outline: VTColors.outlineDark,
   );
 
