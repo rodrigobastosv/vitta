@@ -61,20 +61,30 @@ class SupabaseWorkoutDataSource {
   /// the parents - ordering workout_exercises by `workouts(performed_date)`
   /// would silently not sort anything. Walking workouts newest-first and taking
   /// the first hit per exercise gives the real "last time" instead.
-  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({required List<String> exerciseIds}) async {
+  ///
+  /// [before] excludes that day and everything after it, so the "last time"
+  /// hint shown on a day's own card (issue #95) means the *previous* session
+  /// rather than the sets already sitting on screen. Null (the routine-start
+  /// and standalone-add callers) keeps every session in scope.
+  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({
+    required List<String> exerciseIds,
+    DateTime? before,
+  }) async {
     if (exerciseIds.isEmpty) {
       return const Success({});
     }
     try {
-      final rows = await _supabaseService
+      var query = _supabaseService
           .from(.workouts)
           .select(
             'performed_date, ${SupabaseTable.workoutExercises.wireName}!inner(exercise_id, ${SupabaseTable.workoutSets.wireName}(*))',
           )
           .eq('user_id', _userId)
-          .inFilter('${SupabaseTable.workoutExercises.wireName}.exercise_id', exerciseIds)
-          .order('performed_date', ascending: false)
-          .limit(_lastSetsWorkoutLookback);
+          .inFilter('${SupabaseTable.workoutExercises.wireName}.exercise_id', exerciseIds);
+      if (before != null) {
+        query = query.lt('performed_date', _toDateString(before));
+      }
+      final rows = await query.order('performed_date', ascending: false).limit(_lastSetsWorkoutLookback);
 
       final lastSets = <String, List<WorkoutSet>>{};
       for (final row in rows) {

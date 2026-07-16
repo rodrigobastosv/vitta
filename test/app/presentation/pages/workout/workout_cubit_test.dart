@@ -29,6 +29,20 @@ MockGetRoutineCycleUseCase _emptyCycleUseCase() {
   return useCase;
 }
 
+/// loadDate also loads the "last time" hint's sets for any exercise on the day.
+/// Same reason as the cycle helper: factories never stub, so a day with
+/// exercises needs this to answer the call.
+MockGetLastSetsByExerciseUseCase _emptyLastSetsUseCase() {
+  final useCase = MockGetLastSetsByExerciseUseCase();
+  when(
+    () => useCase(
+      exerciseIds: any(named: 'exerciseIds'),
+      before: any(named: 'before'),
+    ),
+  ).thenAnswer((_) async => const Success({}));
+  return useCase;
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
@@ -52,6 +66,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
     act: (cubit) => cubit.loadDate(DateTime(2026, 7, 15)),
@@ -66,6 +81,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
     act: (cubit) => cubit.loadDate(DateTime(2026, 7, 15)),
@@ -80,6 +96,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
     act: (cubit) => cubit.loadDate(DateTime(2026, 7, 10)),
@@ -108,6 +125,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       addExerciseToWorkoutUseCase: addExerciseToWorkoutUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     await cubit.addExercise(ExerciseFactory.build(id: 'exercise-9'));
@@ -138,6 +156,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       logSetUseCase: logSetUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     final loggedResult = await cubit.logSet(workoutExerciseId: 'we-1', reps: 10, weightKg: 40);
@@ -167,6 +186,59 @@ void main() {
 
     // The day still loaded; there is simply nothing to suggest.
     expect(cubit.state.cycle.next, isNull);
+    expect(cubit.state.date, DateTime(2026, 7, 20));
+  });
+
+  test("loads each exercise's previous session for the last-time hint, scoped before the shown day", () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    final getLastSetsByExerciseUseCase = MockGetLastSetsByExerciseUseCase();
+    final lastSets = [WorkoutSetFactory.build(id: 'old-1', reps: 8, weightKg: 60)];
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]),
+          ],
+        ),
+      ]),
+    );
+    when(
+      () => getLastSetsByExerciseUseCase(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+    ).thenAnswer((_) async => Success({'exercise-1': lastSets}));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase,
+    );
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+
+    expect(cubit.state.lastSetsByExercise['exercise-1'], lastSets);
+    verify(() => getLastSetsByExerciseUseCase(exerciseIds: ['exercise-1'], before: DateTime(2026, 7, 20))).called(1);
+  });
+
+  test('a failed last-time lookup leaves the hint empty without breaking the day', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    final getLastSetsByExerciseUseCase = MockGetLastSetsByExerciseUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [WorkoutExerciseFactory.build()],
+        ),
+      ]),
+    );
+    when(
+      () => getLastSetsByExerciseUseCase(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase,
+    );
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+
+    expect(cubit.state.lastSetsByExercise, isEmpty);
     expect(cubit.state.date, DateTime(2026, 7, 20));
   });
 
@@ -220,6 +292,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
     await cubit.goToDate(DateTime(2020));
 
@@ -249,6 +322,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
     await cubit.goToDate(DateTime(now.year, now.month, now.day));
 
@@ -278,6 +352,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       logSetUseCase: logSetUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     await cubit.repeatLastSet(
@@ -325,6 +400,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     await cubit.setExerciseCompleted(
@@ -350,6 +426,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     await cubit.setExerciseCompleted(
@@ -390,6 +467,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     await cubit.setExerciseCompleted(workoutExercise: WorkoutExerciseFactory.build(id: 'we-1'), completed: false);

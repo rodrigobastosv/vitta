@@ -9,6 +9,7 @@ import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
@@ -32,6 +33,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._setWorkoutExerciseCompletedUseCase,
     required this._getRoutineCycleUseCase,
     required this._startWorkoutFromRoutineUseCase,
+    required this._getLastSetsByExerciseUseCase,
     required this._getAppSettingsUseCase,
   }) : super(WorkoutState(date: _today(), workouts: const []));
 
@@ -45,6 +47,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final SetWorkoutExerciseCompletedUseCase _setWorkoutExerciseCompletedUseCase;
   final GetRoutineCycleUseCase _getRoutineCycleUseCase;
   final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
+  final GetLastSetsByExerciseUseCase _getLastSetsByExerciseUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
 
   static DateTime _today() {
@@ -68,6 +71,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
       (value) => emit(state.copyWith(date: date, workouts: value)),
     );
     await _loadCycle();
+    await _loadLastSets(date);
   }
 
   /// The cycle is loaded alongside the day but never blocks it: a failure here
@@ -77,6 +81,19 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> _loadCycle() async {
     final cycleResult = await _getRoutineCycleUseCase();
     cycleResult.when((_) {}, (value) => emit(state.copyWith(cycle: value)));
+  }
+
+  /// The "last time" hint's data, loaded like the cycle: alongside the day,
+  /// never blocking it, a failure just leaving the map empty so the hint is
+  /// hidden. Scoped to sessions before the displayed day so it means the
+  /// *previous* session, not the sets already on screen.
+  Future<void> _loadLastSets(DateTime date) async {
+    final exerciseIds = [for (final exercise in state.exercises) exercise.exercise.id];
+    if (exerciseIds.isEmpty) {
+      return;
+    }
+    final lastSetsResult = await _getLastSetsByExerciseUseCase(exerciseIds: exerciseIds, before: date);
+    lastSetsResult.when((_) {}, (value) => emit(state.copyWith(lastSetsByExercise: value)));
   }
 
   Future<void> startRoutine(Routine routine) async {

@@ -1946,6 +1946,24 @@ abstract class AppLocalizations {
   /// **'{reps} reps'**
   String workoutSetSummary(int reps);
 
+  /// No description provided for @workoutLastTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last time: {summary}'**
+  String workoutLastTimeLabel(String summary);
+
+  /// No description provided for @workoutSetsSummaryUniform.
+  ///
+  /// In en, this message translates to:
+  /// **'{sets}×{reps}'**
+  String workoutSetsSummaryUniform(int sets, int reps);
+
+  /// No description provided for @workoutSetsSummaryMixed.
+  ///
+  /// In en, this message translates to:
+  /// **'{sets, plural, =0{no sets} =1{1 set} other{{sets} sets}}'**
+  String workoutSetsSummaryMixed(int sets);
+
   /// No description provided for @exerciseSearchTitle.
   ///
   /// In en, this message translates to:
