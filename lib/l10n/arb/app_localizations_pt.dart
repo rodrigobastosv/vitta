@@ -1272,4 +1272,41 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get workoutProgressionListEmptyMessage =>
       'Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.';
+
+  @override
+  String get workoutHistoryTitle => 'Histórico';
+
+  @override
+  String workoutHistoryWeekSessions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count treinos', one: '1 treino', zero: 'Nenhum treino');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutVolumeTrendTitle => 'Volume por sessão';
+
+  @override
+  String workoutVolumeAverageLabel(String value) {
+    return '$value méd.';
+  }
+
+  @override
+  String workoutHistoryVolumeSummary(int sessions, int sets) {
+    String _temp0 = intl.Intl.pluralLogic(
+      sessions,
+      locale: localeName,
+      other: '$sessions sessões',
+      one: '1 sessão',
+      zero: 'Nenhuma sessão',
+    );
+    String _temp1 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets séries', one: '1 série', zero: 'nenhuma série');
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
+  String get workoutMuscleSplitTitle => 'Volume por grupo muscular';
+
+  @override
+  String get workoutMuscleSplitEmptyMessage =>
+      'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
 }

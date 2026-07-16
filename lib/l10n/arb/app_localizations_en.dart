@@ -1259,4 +1259,34 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get workoutProgressionListEmptyMessage =>
       'Log a few workouts and the exercises you trained show up here to track their progression.';
+
+  @override
+  String get workoutHistoryTitle => 'History';
+
+  @override
+  String workoutHistoryWeekSessions(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count workouts', one: '1 workout', zero: 'No workouts');
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutVolumeTrendTitle => 'Volume per session';
+
+  @override
+  String workoutVolumeAverageLabel(String value) {
+    return '$value avg';
+  }
+
+  @override
+  String workoutHistoryVolumeSummary(int sessions, int sets) {
+    String _temp0 = intl.Intl.pluralLogic(sessions, locale: localeName, other: '$sessions sessions', one: '1 session', zero: 'No sessions');
+    String _temp1 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets sets', one: '1 set', zero: 'no sets');
+    return '$_temp0 · $_temp1';
+  }
+
+  @override
+  String get workoutMuscleSplitTitle => 'Volume by muscle group';
+
+  @override
+  String get workoutMuscleSplitEmptyMessage => 'No load lifted in this period. Weighted sets show their muscle-group split here.';
 }

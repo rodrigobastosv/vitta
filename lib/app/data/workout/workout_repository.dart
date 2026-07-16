@@ -3,6 +3,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
+import 'package:vitta/app/domain/workout/entities/daily_workout.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression_point.dart';
@@ -94,6 +95,20 @@ class WorkoutRepository {
       _supabaseWorkoutDataSource.logSetsBulk(setsByWorkoutExercise: setsByWorkoutExercise);
 
   Future<Result<VTError, List<Exercise>>> getLoggedExercises() => _supabaseWorkoutDataSource.getLoggedExercises();
+
+  Future<Result<VTError, Map<DateTime, DailyWorkout>>> getDailyWorkoutsInRange({required DateTime from, required DateTime to}) async {
+    final workoutsResult = await _supabaseWorkoutDataSource.getWorkoutsInRange(from: from, to: to);
+    return workoutsResult.when(Failure.new, (workouts) => Success(_groupByDate(workouts)));
+  }
+
+  Map<DateTime, DailyWorkout> _groupByDate(List<Workout> workouts) {
+    final workoutsByDate = <DateTime, List<Workout>>{};
+    for (final workout in workouts) {
+      final date = DateTime(workout.performedDate.year, workout.performedDate.month, workout.performedDate.day);
+      workoutsByDate.putIfAbsent(date, () => []).add(workout);
+    }
+    return {for (final MapEntry(:key, :value) in workoutsByDate.entries) key: DailyWorkout(date: key, workouts: value)};
+  }
 
   Future<Result<VTError, ExerciseProgression>> getExerciseProgression({required String exerciseId}) async {
     final sessionsResult = await _supabaseWorkoutDataSource.getSessionsForExercise(exerciseId: exerciseId);

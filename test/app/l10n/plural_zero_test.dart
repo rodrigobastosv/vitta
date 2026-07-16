@@ -11,6 +11,10 @@ void main() {
     'workoutRoutineExerciseCount': (l10n) => l10n.workoutRoutineExerciseCount(0),
     'dietCopyMealFoodCount': (l10n) => l10n.dietCopyMealFoodCount(0),
     'dietMealsCopiedToastMessage': (l10n) => l10n.dietMealsCopiedToastMessage(0),
+    'workoutProgressionSessionCount': (l10n) => l10n.workoutProgressionSessionCount(0),
+    'workoutHistoryWeekSessions': (l10n) => l10n.workoutHistoryWeekSessions(0),
+    'workoutHistoryVolumeSummaryZeroSessions': (l10n) => l10n.workoutHistoryVolumeSummary(0, 5),
+    'workoutHistoryVolumeSummaryZeroSets': (l10n) => l10n.workoutHistoryVolumeSummary(5, 0),
   };
 
   group('no plural claims "1" when the count is zero', () {

@@ -2347,6 +2347,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log a few workouts and the exercises you trained show up here to track their progression.'**
   String get workoutProgressionListEmptyMessage;
+
+  /// No description provided for @workoutHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get workoutHistoryTitle;
+
+  /// No description provided for @workoutHistoryWeekSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No workouts} =1{1 workout} other{{count} workouts}}'**
+  String workoutHistoryWeekSessions(int count);
+
+  /// No description provided for @workoutVolumeTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume per session'**
+  String get workoutVolumeTrendTitle;
+
+  /// No description provided for @workoutVolumeAverageLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} avg'**
+  String workoutVolumeAverageLabel(String value);
+
+  /// No description provided for @workoutHistoryVolumeSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{sessions, plural, =0{No sessions} =1{1 session} other{{sessions} sessions}} · {sets, plural, =0{no sets} =1{1 set} other{{sets} sets}}'**
+  String workoutHistoryVolumeSummary(int sessions, int sets);
+
+  /// No description provided for @workoutMuscleSplitTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume by muscle group'**
+  String get workoutMuscleSplitTitle;
+
+  /// No description provided for @workoutMuscleSplitEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No load lifted in this period. Weighted sets show their muscle-group split here.'**
+  String get workoutMuscleSplitEmptyMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -534,5 +534,15 @@
   "@workoutProgressionSessionCount": { "placeholders": { "count": { "type": "int" } } },
   "workoutProgressionListTitle": "Progressão",
   "workoutProgressionListEmptyTitle": "Nenhum exercício registrado ainda",
-  "workoutProgressionListEmptyMessage": "Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão."
+  "workoutProgressionListEmptyMessage": "Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.",
+  "workoutHistoryTitle": "Histórico",
+  "workoutHistoryWeekSessions": "{count, plural, =0{Nenhum treino} =1{1 treino} other{{count} treinos}}",
+  "@workoutHistoryWeekSessions": { "placeholders": { "count": { "type": "int" } } },
+  "workoutVolumeTrendTitle": "Volume por sessão",
+  "workoutVolumeAverageLabel": "{value} méd.",
+  "@workoutVolumeAverageLabel": { "placeholders": { "value": { "type": "String" } } },
+  "workoutHistoryVolumeSummary": "{sessions, plural, =0{Nenhuma sessão} =1{1 sessão} other{{sessions} sessões}} · {sets, plural, =0{nenhuma série} =1{1 série} other{{sets} séries}}",
+  "@workoutHistoryVolumeSummary": { "placeholders": { "sessions": { "type": "int" }, "sets": { "type": "int" } } },
+  "workoutMuscleSplitTitle": "Volume por grupo muscular",
+  "workoutMuscleSplitEmptyMessage": "Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular."
 }

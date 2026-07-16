@@ -44,6 +44,7 @@ import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_c
 import 'package:vitta/app/domain/workout/use_cases/delete_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_daily_workouts_in_range_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case.dart';
@@ -172,6 +173,8 @@ class MockGetLastSetsByExerciseUseCase extends Mock implements GetLastSetsByExer
 class MockGetExerciseProgressionUseCase extends Mock implements GetExerciseProgressionUseCase {}
 
 class MockGetLoggedExercisesUseCase extends Mock implements GetLoggedExercisesUseCase {}
+
+class MockGetDailyWorkoutsInRangeUseCase extends Mock implements GetDailyWorkoutsInRangeUseCase {}
 
 class MockReorderRoutinesUseCase extends Mock implements ReorderRoutinesUseCase {}
 
