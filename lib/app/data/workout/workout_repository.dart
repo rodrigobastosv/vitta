@@ -94,8 +94,8 @@ class WorkoutRepository {
     );
   }
 
-  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({required List<String> exerciseIds}) =>
-      _supabaseWorkoutDataSource.getLastSetsByExercise(exerciseIds: exerciseIds);
+  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({required List<String> exerciseIds, DateTime? before}) =>
+      _supabaseWorkoutDataSource.getLastSetsByExercise(exerciseIds: exerciseIds, before: before);
 
   Future<Result<VTError, void>> logSetsBulk({required Map<String, List<WorkoutSet>> setsByWorkoutExercise}) =>
       _supabaseWorkoutDataSource.logSetsBulk(setsByWorkoutExercise: setsByWorkoutExercise);

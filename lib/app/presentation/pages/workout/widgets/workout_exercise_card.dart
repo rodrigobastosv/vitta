@@ -9,6 +9,7 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
+import 'package:vitta/app/domain/workout/entities/workout_sets_summary.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_thumbnail.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 
@@ -16,6 +17,7 @@ class WorkoutExerciseCard extends StatelessWidget {
   const WorkoutExerciseCard({
     required this.workoutExercise,
     required this.unitSystem,
+    this.lastSets,
     this.onAddSet,
     this.onRepeatSet,
     this.onEditSet,
@@ -28,6 +30,12 @@ class WorkoutExerciseCard extends StatelessWidget {
 
   final WorkoutExercise workoutExercise;
   final UnitSystem unitSystem;
+
+  /// The previous session's sets for this exercise, for the "last time" hint
+  /// (issue #95). Null/empty when it was never trained before - the hint is
+  /// then hidden. A reference to what was done last time, independent of the
+  /// (editable) sets showing now.
+  final List<WorkoutSet>? lastSets;
   final VoidCallback? onAddSet;
   final VoidCallback? onRepeatSet;
   final void Function(WorkoutSet set)? onEditSet;
@@ -134,6 +142,19 @@ class WorkoutExerciseCard extends StatelessWidget {
                       const VTGap.s(),
                       const Divider(height: 1),
                       const VTGap.s(),
+                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n) case final summary?) ...[
+                        Row(
+                          children: [
+                            Icon(Icons.history, size: 14, color: colorScheme.onSurfaceVariant),
+                            const VTGap.xs(),
+                            Text(
+                              l10n.workoutLastTimeLabel(summary),
+                              style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                            ),
+                          ],
+                        ),
+                        const VTGap.s(),
+                      ],
                       if (workoutExercise.sets.isEmpty)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),

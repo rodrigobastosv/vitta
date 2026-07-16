@@ -79,6 +79,7 @@ import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_c
 import 'package:vitta/app/domain/workout/use_cases/delete_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
@@ -205,6 +206,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => DeleteRoutineUseCase(workoutRepository: G()));
   G.registerFactory(() => ReorderRoutinesUseCase(workoutRepository: G()));
   G.registerFactory(() => StartWorkoutFromRoutineUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetLastSetsByExerciseUseCase(workoutRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
@@ -265,6 +267,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       setWorkoutExerciseCompletedUseCase: G(),
       getRoutineCycleUseCase: G(),
       startWorkoutFromRoutineUseCase: G(),
+      getLastSetsByExerciseUseCase: G(),
       getAppSettingsUseCase: G(),
     ),
   );

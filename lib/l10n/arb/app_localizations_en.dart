@@ -1031,6 +1031,22 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String workoutLastTimeLabel(String summary) {
+    return 'Last time: $summary';
+  }
+
+  @override
+  String workoutSetsSummaryUniform(int sets, int reps) {
+    return '$sets×$reps';
+  }
+
+  @override
+  String workoutSetsSummaryMixed(int sets) {
+    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets sets', one: '1 set', zero: 'no sets');
+    return '$_temp0';
+  }
+
+  @override
   String get exerciseSearchTitle => 'Exercises';
 
   @override

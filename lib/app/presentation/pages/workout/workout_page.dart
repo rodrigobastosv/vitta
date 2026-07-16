@@ -99,6 +99,7 @@ class WorkoutPage extends StatelessWidget {
                     child: WorkoutExerciseCard(
                       workoutExercise: workoutExercise,
                       unitSystem: cubit.unitSystem,
+                      lastSets: state.lastSetsByExercise[workoutExercise.exercise.id],
                       onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: workoutExercise.exercise)),
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
                       onToggleCompleted: (completed) =>
