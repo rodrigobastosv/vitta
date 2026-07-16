@@ -22,8 +22,7 @@ class FoodSearchState extends Equatable {
   final FoodSearchTab tab;
 
   Set<String> get favoriteFoodIds => {
-    for (final food in favorites)
-      if (food.id != null) food.id!,
+    for (final food in favorites) ?food.id,
   };
 
   bool isFavorite(Food food) => food.id == null ? favorites.contains(food) : favoriteFoodIds.contains(food.id);

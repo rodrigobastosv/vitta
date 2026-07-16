@@ -21,7 +21,7 @@ class VTEmptyState extends StatelessWidget {
           children: [
             Icon(icon, size: 56, color: colorScheme.onSurfaceVariant),
             const VTGap.m(),
-            if (title != null) ...[Text(title!, style: VTTextStyles.title(context), textAlign: .center), const VTGap.s()],
+            if (title case final title?) ...[Text(title, style: VTTextStyles.title(context), textAlign: .center), const VTGap.s()],
             Text(
               message,
               style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant),

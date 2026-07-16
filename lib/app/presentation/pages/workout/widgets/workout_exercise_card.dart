@@ -47,6 +47,8 @@ class WorkoutExerciseCard extends StatelessWidget {
     final exercise = workoutExercise.exercise;
     final isCompleted = workoutExercise.isCompleted;
     final canComplete = workoutExercise.sets.isNotEmpty;
+    final onEditSet = this.onEditSet;
+    final onDeleteSet = this.onDeleteSet;
     final accent = exercise.primaryMuscles.firstOrNull?.region.color ?? colorScheme.primary;
     return VTCard(
       color: isCompleted ? Color.alphaBlend(VTColors.success.withValues(alpha: 0.10), colorScheme.surface) : null,
@@ -89,7 +91,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                   ),
                 ),
               ),
-              if (onToggleCompleted != null)
+              if (onToggleCompleted case final onToggleCompleted?)
                 IconButton(
                   icon: Icon(isCompleted ? Icons.check_circle : Icons.check_circle_outline, color: isCompleted ? VTColors.success : null),
                   tooltip: switch ((isCompleted, canComplete)) {
@@ -97,7 +99,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                     (false, true) => l10n.workoutCompleteExerciseAction,
                     (false, false) => l10n.workoutCompleteNeedsSetTooltip,
                   },
-                  onPressed: canComplete || isCompleted ? () => onToggleCompleted!(!isCompleted) : null,
+                  onPressed: canComplete || isCompleted ? () => onToggleCompleted(!isCompleted) : null,
                 ),
               if (onRemove != null && !isCompleted)
                 IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutDeleteExercise, onPressed: onRemove),
@@ -141,8 +143,8 @@ class WorkoutExerciseCard extends StatelessWidget {
                             position: index + 1,
                             unitSystem: unitSystem,
                             color: accent,
-                            onEdit: onEditSet == null ? null : () => onEditSet!(set),
-                            onDelete: onDeleteSet == null ? null : () => onDeleteSet!(set),
+                            onEdit: onEditSet == null ? null : () => onEditSet(set),
+                            onDelete: onDeleteSet == null ? null : () => onDeleteSet(set),
                           ),
                       const VTGap.s(),
                       Row(

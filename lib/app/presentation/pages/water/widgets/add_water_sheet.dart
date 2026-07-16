@@ -87,9 +87,9 @@ class _AddWaterSheetState extends State<_AddWaterSheet> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(labelText: l10n.waterCustomAmountLabel(widget.unitSystem.volumeUnitLabel)),
           ),
-          if (_errorMessage != null) ...[
+          if (_errorMessage case final errorMessage?) ...[
             const VTGap.s(),
-            Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.waterLogAction, onPressed: _addCustomAmount),

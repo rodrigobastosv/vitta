@@ -54,10 +54,10 @@ class FoodDetailsDialog extends StatelessWidget {
                     ),
                     const VTGap.m(),
                     Text(food.name, style: VTTextStyles.title(context), textAlign: .center),
-                    if (food.brand != null) ...[
+                    if (food.brand case final brand?) ...[
                       const VTGap.xs(),
                       Text(
-                        food.brand!,
+                        brand,
                         style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
                         textAlign: .center,
                       ),

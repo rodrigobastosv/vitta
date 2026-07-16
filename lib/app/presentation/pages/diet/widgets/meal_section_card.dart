@@ -37,6 +37,8 @@ class _MealSectionCardState extends State<MealSectionCard> {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
     final section = widget.section;
+    final onEditEntry = widget.onEditEntry;
+    final onDeleteEntry = widget.onDeleteEntry;
     return VTCard(
       onTap: () => setState(() => _isExpanded = !_isExpanded),
       child: Column(
@@ -74,8 +76,8 @@ class _MealSectionCardState extends State<MealSectionCard> {
             for (final entry in section.entries) ...[
               FoodLogTile(
                 entry: entry,
-                onEdit: widget.onEditEntry == null ? null : () => widget.onEditEntry!(entry),
-                onDelete: widget.onDeleteEntry == null ? null : () => widget.onDeleteEntry!(entry),
+                onEdit: onEditEntry == null ? null : () => onEditEntry(entry),
+                onDelete: onDeleteEntry == null ? null : () => onDeleteEntry(entry),
               ),
               const VTGap.s(),
             ],

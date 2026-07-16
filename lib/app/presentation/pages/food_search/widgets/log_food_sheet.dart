@@ -139,9 +139,9 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
                 ),
             ],
           ),
-          if (_errorMessage != null) ...[
+          if (_errorMessage case final errorMessage?) ...[
             const VTGap.s(),
-            Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietLogFoodAction, isLoading: _isSaving, onPressed: _submit),

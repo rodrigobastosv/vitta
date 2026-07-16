@@ -22,7 +22,7 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final title = switch (user) {
-      final user? when (user.displayName?.isNotEmpty ?? false) => user.displayName!,
+      AuthenticatedUser(displayName: final displayName?) when displayName.isNotEmpty => displayName,
       final user? => user.email,
       null => l10n.profileGuestTitle,
     };

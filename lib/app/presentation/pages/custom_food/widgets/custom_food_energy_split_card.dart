@@ -55,7 +55,7 @@ class CustomFoodEnergySplitCard extends StatelessWidget {
   Map<CustomFoodNutrient, double> _shares() {
     final energyByNutrient = {
       for (final entry in _caloriesPerGram.entries)
-        if ((nutrients[entry.key] ?? 0) > 0) entry.key: nutrients[entry.key]! * entry.value,
+        if (nutrients[entry.key] case final grams? when grams > 0) entry.key: grams * entry.value,
     };
     final totalEnergy = energyByNutrient.values.fold<double>(0, (total, energy) => total + energy);
     return {for (final entry in energyByNutrient.entries) entry.key: entry.value / totalEnergy};

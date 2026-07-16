@@ -44,9 +44,9 @@ class FoodSearchResultTile extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(food.name, style: VTTextStyles.bodyStrong(context), maxLines: 2, overflow: .ellipsis),
-                if (food.brand != null)
+                if (food.brand case final brand?)
                   Text(
-                    food.brand!,
+                    brand,
                     style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
                     maxLines: 1,
                     overflow: .ellipsis,
