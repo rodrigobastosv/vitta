@@ -35,7 +35,7 @@ class RoutineFormPage extends StatelessWidget {
         RoutineFormError(:final message) => context.showErrorToast(message: message),
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(state.isEditing ? state.routine!.name : l10n.workoutRoutineNewAction)),
+        appBar: AppBar(title: Text(switch (state.routine) { final routine? => routine.name, null => l10n.workoutRoutineNewAction })),
         body: Column(
           children: [
             Padding(

@@ -28,17 +28,13 @@ class AddExerciseToWorkoutUseCase {
     final targetWorkoutId = targetWorkoutIdResult.when((_) => '', (value) => value);
 
     final addedResult = await _workoutRepository.addWorkoutExercise(workoutId: targetWorkoutId, exerciseId: exerciseId);
-    final addedError = addedResult.when((error) => error, (_) => null);
-    if (addedError != null) {
-      return Failure(addedError);
-    }
-    final added = addedResult.when((_) => null, (value) => value)!;
-
-    if (lastSets == null || lastSets.isEmpty) {
-      return Success(added);
-    }
-    final filledResult = await _workoutRepository.logSetsBulk(setsByWorkoutExercise: {added.id: lastSets});
-    return filledResult.when(Failure.new, (_) => Success(added));
+    return addedResult.when((error) => Future.value(Failure(error)), (added) async {
+      if (lastSets == null || lastSets.isEmpty) {
+        return Success(added);
+      }
+      final filledResult = await _workoutRepository.logSetsBulk(setsByWorkoutExercise: {added.id: lastSets});
+      return filledResult.when(Failure.new, (_) => Success(added));
+    });
   }
 
   Future<Result<VTError, String>> _createWorkout(DateTime date) async {

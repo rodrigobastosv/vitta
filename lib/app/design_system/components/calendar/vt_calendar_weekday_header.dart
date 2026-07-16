@@ -22,10 +22,10 @@ class VTCalendarWeekdayHeader extends StatelessWidget {
               ),
             ),
           ),
-        if (weekColumnLabel != null)
+        if (weekColumnLabel case final weekColumnLabel?)
           SizedBox(
             width: VTCalendarWeekBadge.width,
-            child: Center(child: Text(weekColumnLabel!, style: VTTextStyles.overline(context))),
+            child: Center(child: Text(weekColumnLabel, style: VTTextStyles.overline(context))),
           ),
       ],
     );

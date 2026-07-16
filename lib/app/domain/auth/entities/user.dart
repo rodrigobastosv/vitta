@@ -20,7 +20,8 @@ class AuthenticatedUser extends User {
   final String? avatarUrl;
 
   String? get initial {
-    final source = (displayName?.trim().isNotEmpty ?? false) ? displayName!.trim() : email;
+    final trimmedName = displayName?.trim();
+    final source = (trimmedName != null && trimmedName.isNotEmpty) ? trimmedName : email;
     return source.isEmpty ? null : source[0].toUpperCase();
   }
 

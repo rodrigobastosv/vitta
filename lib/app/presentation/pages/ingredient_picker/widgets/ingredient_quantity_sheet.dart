@@ -85,7 +85,7 @@ class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: InputDecoration(labelText: l10n.dietQuantityLabel(widget.unitSystem.weightUnitLabel)),
           ),
-          if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: context.colorScheme.error))],
+          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: context.colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietRecipeAddIngredientAction, onPressed: _submit),
         ],

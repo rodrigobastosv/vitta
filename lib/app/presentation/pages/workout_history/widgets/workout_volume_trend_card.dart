@@ -21,7 +21,7 @@ class WorkoutVolumeTrendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
-    final trainedDays = [for (final day in days) if (workoutsByDate[day]?.hasData ?? false) workoutsByDate[day]!];
+    final trainedDays = [for (final day in days) if (workoutsByDate[day] case final workout? when workout.hasData) workout];
     final sessionCount = trainedDays.length;
     final totalVolumeKg = trainedDays.fold<double>(0, (sum, workout) => sum + workout.volumeKg);
     final totalSets = trainedDays.fold<int>(0, (sum, workout) => sum + workout.totalSets);
@@ -45,9 +45,9 @@ class WorkoutVolumeTrendCard extends StatelessWidget {
             VTBarChart(
               bars: [
                 for (final day in days)
-                  if (workoutsByDate[day]?.hasData ?? false)
+                  if (workoutsByDate[day] case final workout? when workout.hasData)
                     VTBarChartBar(
-                      segments: [VTBarChartSegment(value: unitSystem.kilogramsToDisplayLoad(workoutsByDate[day]!.volumeKg), color: colorScheme.primary)],
+                      segments: [VTBarChartSegment(value: unitSystem.kilogramsToDisplayLoad(workout.volumeKg), color: colorScheme.primary)],
                     )
                   else
                     const VTBarChartBar.empty(),

@@ -55,7 +55,7 @@ class VTCalendarMonthGrid extends StatelessWidget {
                               onTap: (isDayEnabled?.call(day) ?? true) ? () => onDaySelected(day) : null,
                             ),
                     ),
-                  if (weekBadge != null) Center(child: weekBadge!(week.whereType<DateTime>().toList())),
+                  if (weekBadge case final weekBadge?) Center(child: weekBadge(week.whereType<DateTime>().toList())),
                 ],
               ),
             ),
