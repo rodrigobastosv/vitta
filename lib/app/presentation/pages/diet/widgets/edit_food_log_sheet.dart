@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
@@ -10,6 +11,8 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
 
 Future<void> showEditFoodLogSheet({required BuildContext context, required FoodLogEntry entry}) => showModalBottomSheet<void>(
   context: context,
@@ -28,12 +31,23 @@ class _EditFoodLogSheet extends StatefulWidget {
 
 class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   late final UnitSystem _unitSystem = context.read<DietCubit>().unitSystem;
-  late final TextEditingController _quantityController = TextEditingController(
-    text: _formatNumber(_unitSystem.gramsToDisplayWeight(widget.entry.log.quantityGrams)),
-  );
+
+  /// A log counted in units reopens counting them - but only while its food is
+  /// still countable. A food that lost its unit weight since would otherwise
+  /// strand the sheet in a mode whose switch [FoodQuantityInput] no longer
+  /// renders.
+  late FoodQuantityMode _quantityMode = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable
+      ? FoodQuantityMode.units
+      : FoodQuantityMode.weight;
+  late final TextEditingController _quantityController = TextEditingController(text: _initialQuantityText);
   late MealType _mealType = widget.entry.log.mealType;
   bool _isSaving = false;
   String? _errorMessage;
+
+  String get _initialQuantityText => switch (_quantityMode) {
+    .weight => QuantityFormat.format(_unitSystem.gramsToDisplayWeight(widget.entry.log.quantityGrams)),
+    .units => QuantityFormat.format(widget.entry.log.quantityUnits!),
+  };
 
   @override
   void dispose() {
@@ -41,15 +55,29 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
     super.dispose();
   }
 
-  String _formatNumber(double value) {
-    final rounded = double.parse(value.toStringAsFixed(1));
-    return rounded == rounded.roundToDouble() ? rounded.toInt().toString() : rounded.toString();
+  void _quantityModeChanged(FoodQuantityMode mode) {
+    if (mode == _quantityMode) {
+      return;
+    }
+    final entered = double.tryParse(_quantityController.text.replaceAll(',', '.'));
+    final converted = entered == null
+        ? null
+        : _quantityMode.valueIn(mode, value: entered, food: widget.entry.food, unitSystem: _unitSystem);
+    setState(() {
+      _quantityMode = mode;
+      if (converted != null) {
+        _quantityController.text = QuantityFormat.format(converted);
+      }
+    });
   }
 
   Future<void> _submit() async {
     final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     final l10n = context.l10n;
-    if (quantityDisplayValue == null || quantityDisplayValue <= 0) {
+    final quantityGrams = quantityDisplayValue == null
+        ? null
+        : _quantityMode.gramsFor(value: quantityDisplayValue, food: widget.entry.food, unitSystem: _unitSystem);
+    if (quantityDisplayValue == null || quantityDisplayValue <= 0 || quantityGrams == null) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -62,7 +90,8 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
     final updatedResult = await context.read<DietCubit>().updateLog(
       logId: widget.entry.log.id,
       mealType: _mealType,
-      quantityGrams: _unitSystem.displayWeightToGrams(quantityDisplayValue),
+      quantityGrams: quantityGrams,
+      quantityUnits: _quantityMode.unitsFor(quantityDisplayValue),
     );
 
     if (!mounted) {
@@ -99,11 +128,13 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
             ],
           ),
           const VTGap.m(),
-          TextField(
+          FoodQuantityInput(
+            food: widget.entry.food,
             controller: _quantityController,
+            mode: _quantityMode,
+            onModeChanged: _quantityModeChanged,
+            unitSystem: _unitSystem,
             autofocus: true,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: l10n.dietQuantityLabel(_unitSystem.weightUnitLabel)),
           ),
           const VTGap.m(),
           Wrap(

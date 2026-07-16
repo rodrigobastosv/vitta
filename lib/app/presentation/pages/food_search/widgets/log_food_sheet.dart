@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -8,6 +9,8 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
 Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
@@ -33,8 +36,11 @@ class _LogFoodSheet extends StatefulWidget {
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
-  late final TextEditingController _quantityController = TextEditingController(text: _formatNumber(_unitSystem.gramsToDisplayWeight(100)));
+  late final TextEditingController _quantityController = TextEditingController(
+    text: QuantityFormat.format(_unitSystem.gramsToDisplayWeight(100)),
+  );
   late MealType _mealType = widget.initialMealType;
+  FoodQuantityMode _quantityMode = .weight;
   bool _isSaving = false;
   String? _errorMessage;
 
@@ -44,15 +50,29 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
     super.dispose();
   }
 
-  String _formatNumber(double value) {
-    final rounded = double.parse(value.toStringAsFixed(1));
-    return rounded == rounded.roundToDouble() ? rounded.toInt().toString() : rounded.toString();
+  void _quantityModeChanged(FoodQuantityMode mode) {
+    if (mode == _quantityMode) {
+      return;
+    }
+    final entered = double.tryParse(_quantityController.text.replaceAll(',', '.'));
+    final converted = entered == null
+        ? null
+        : _quantityMode.valueIn(mode, value: entered, food: widget.food, unitSystem: _unitSystem);
+    setState(() {
+      _quantityMode = mode;
+      if (converted != null) {
+        _quantityController.text = QuantityFormat.format(converted);
+      }
+    });
   }
 
   Future<void> _submit() async {
     final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     final l10n = context.l10n;
-    if (quantityDisplayValue == null || quantityDisplayValue <= 0) {
+    final quantityGrams = quantityDisplayValue == null
+        ? null
+        : _quantityMode.gramsFor(value: quantityDisplayValue, food: widget.food, unitSystem: _unitSystem);
+    if (quantityDisplayValue == null || quantityDisplayValue <= 0 || quantityGrams == null) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -66,7 +86,8 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       food: widget.food,
       loggedDate: widget.loggedDate,
       mealType: _mealType,
-      quantityGrams: _unitSystem.displayWeightToGrams(quantityDisplayValue),
+      quantityGrams: quantityGrams,
+      quantityUnits: _quantityMode.unitsFor(quantityDisplayValue),
     );
 
     if (!mounted) {
@@ -97,10 +118,12 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
         children: [
           Text(widget.food.name, style: VTTextStyles.title(context)),
           const VTGap.m(),
-          TextField(
+          FoodQuantityInput(
+            food: widget.food,
             controller: _quantityController,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: l10n.dietQuantityLabel(_unitSystem.weightUnitLabel)),
+            mode: _quantityMode,
+            onModeChanged: _quantityModeChanged,
+            unitSystem: _unitSystem,
           ),
           const VTGap.m(),
           Wrap(

@@ -37,6 +37,18 @@ create table if not exists foods (
   -- first (see issue #56). Denormalized onto foods because food_logs' RLS scopes
   -- each user to their own rows, so this count can't be aggregated client-side.
   times_logged integer not null default 0 check (times_logged >= 0),
+  -- What one whole item of this food weighs, so it can be logged as "2 eggs"
+  -- rather than "100 g" (see issue #114). A property of the food, not of any
+  -- quantity, which is why it lives here and not on food_logs. Null means the
+  -- food is not countable - rice and milk are measured, not counted - and the
+  -- log sheet then offers no unit mode at all.
+  grams_per_unit numeric check (grams_per_unit > 0),
+  -- When tool/populate_food_unit_weights.dart last asked the converter API
+  -- about this row. Null means never asked; non-null alongside a null
+  -- grams_per_unit means "asked, and it is not countable". Without this the
+  -- null above would conflate "unchecked" with "not countable" and every
+  -- re-run would re-ask an LLM about every bulk food forever.
+  grams_per_unit_checked_at timestamptz,
   created_at timestamptz not null default now()
 );
 
@@ -45,6 +57,8 @@ alter table foods add column if not exists fiber_per_100g numeric not null defau
 alter table foods add column if not exists micronutrients jsonb not null default '{}';
 alter table foods add column if not exists image_url text;
 alter table foods add column if not exists times_logged integer not null default 0 check (times_logged >= 0);
+alter table foods add column if not exists grams_per_unit numeric check (grams_per_unit > 0);
+alter table foods add column if not exists grams_per_unit_checked_at timestamptz;
 alter table foods alter column user_id drop not null;
 
 -- 'recipe' was added for issue #63: a recipe is stored as an ordinary foods row
@@ -73,8 +87,18 @@ create table if not exists food_logs (
   logged_date date not null,
   meal_type text not null check (meal_type in ('breakfast', 'lunch', 'dinner', 'snack')),
   quantity_grams numeric not null check (quantity_grams > 0),
+  -- How many whole items were logged, when the user entered a count rather than
+  -- a weight (see foods.grams_per_unit). Null means logged by weight.
+  -- quantity_grams above stays not null and is always the source of truth for
+  -- every calorie and macro: this column only records how the number was typed,
+  -- so that the day view can say "2 un" back. It is deliberately never used to
+  -- recompute grams - a later re-run of the converter that revises a food's
+  -- grams_per_unit must not retroactively move yesterday's calories.
+  quantity_units numeric check (quantity_units > 0),
   created_at timestamptz not null default now()
 );
+
+alter table food_logs add column if not exists quantity_units numeric check (quantity_units > 0);
 
 create index if not exists food_logs_user_id_logged_date_idx on food_logs (user_id, logged_date);
 

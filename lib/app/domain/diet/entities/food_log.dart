@@ -2,7 +2,14 @@ import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class FoodLog extends Equatable {
-  const FoodLog({required this.id, required this.foodId, required this.loggedDate, required this.mealType, required this.quantityGrams});
+  const FoodLog({
+    required this.id,
+    required this.foodId,
+    required this.loggedDate,
+    required this.mealType,
+    required this.quantityGrams,
+    this.quantityUnits,
+  });
 
   factory FoodLog.fromMap(Map<String, dynamic> row) => FoodLog(
     id: row['id'] as String,
@@ -10,6 +17,7 @@ class FoodLog extends Equatable {
     loggedDate: DateTime.parse(row['logged_date'] as String),
     mealType: MealType.fromWireValue(row['meal_type'] as String),
     quantityGrams: (row['quantity_grams'] as num).toDouble(),
+    quantityUnits: (row['quantity_units'] as num?)?.toDouble(),
   );
 
   final String id;
@@ -18,6 +26,13 @@ class FoodLog extends Equatable {
   final MealType mealType;
   final double quantityGrams;
 
+  /// How many whole items were logged, when the user counted rather than
+  /// weighed. Null means logged by weight. [quantityGrams] stays the source of
+  /// truth for every macro either way - this only records how it was typed.
+  final double? quantityUnits;
+
+  bool get isLoggedInUnits => quantityUnits != null;
+
   @override
-  List<Object?> get props => [id, foodId, loggedDate, mealType, quantityGrams];
+  List<Object?> get props => [id, foodId, loggedDate, mealType, quantityGrams, quantityUnits];
 }

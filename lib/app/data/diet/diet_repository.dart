@@ -75,7 +75,14 @@ class DietRepository {
     required DateTime loggedDate,
     required MealType mealType,
     required double quantityGrams,
-  }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams);
+    double? quantityUnits,
+  }) => _supabaseDietDataSource.logFood(
+    foodId: foodId,
+    loggedDate: loggedDate,
+    mealType: mealType,
+    quantityGrams: quantityGrams,
+    quantityUnits: quantityUnits,
+  );
 
   Future<Result<VTError, void>> copyFoodLogs({required List<FoodLogEntry> entries, required DateTime targetDate}) =>
       _supabaseDietDataSource.copyFoodLogs(entries: entries, targetDate: targetDate);
@@ -85,8 +92,17 @@ class DietRepository {
     return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));
   }
 
-  Future<Result<VTError, FoodLog>> updateFoodLog({required String logId, required MealType mealType, required double quantityGrams}) =>
-      _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams);
+  Future<Result<VTError, FoodLog>> updateFoodLog({
+    required String logId,
+    required MealType mealType,
+    required double quantityGrams,
+    double? quantityUnits,
+  }) => _supabaseDietDataSource.updateFoodLog(
+    logId: logId,
+    mealType: mealType,
+    quantityGrams: quantityGrams,
+    quantityUnits: quantityUnits,
+  );
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 

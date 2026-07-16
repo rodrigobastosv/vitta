@@ -84,6 +84,25 @@
       "unit": {"type": "String"}
     }
   },
+  "dietUnitsUnit": "un",
+  "dietLogSubtitleUnits": "{units} un - {calories} kcal",
+  "@dietLogSubtitleUnits": {
+    "placeholders": {
+      "units": {"type": "String"},
+      "calories": {"type": "int"}
+    }
+  },
+  "dietQuantityModeWeight": "Weight",
+  "dietQuantityModeUnits": "Units",
+  "dietQuantityUnitsHint": "{units} un = {weight}",
+  "@dietQuantityUnitsHint": {
+    "placeholders": {
+      "units": {"type": "String"},
+      "weight": {"type": "String"}
+    }
+  },
+  "dietGramsPerUnitLabel": "Weight of one unit (g)",
+  "dietGramsPerUnitHint": "Optional. Fill it in to log this food by unit, like \"2 eggs\".",
   "dietLogFoodAction": "Add to day",
   "dietFoodLoggedToast": "Added to {meal}",
   "@dietFoodLoggedToast": {

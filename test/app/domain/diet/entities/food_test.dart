@@ -104,4 +104,39 @@ void main() {
 
     expect(food.micronutrientsPer100g, isEmpty);
   });
+
+  test('fromMap parses the weight of one unit for a countable food', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Ovo',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 155,
+      'protein_per_100g': 13,
+      'carbs_per_100g': 1.1,
+      'fat_per_100g': 11,
+      'grams_per_unit': 50,
+    });
+
+    expect(food.gramsPerUnit, 50);
+    expect(food.isCountable, isTrue);
+  });
+
+  test('fromMap leaves a food nobody has asked the converter about uncountable', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Arroz',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 130,
+      'protein_per_100g': 2.7,
+      'carbs_per_100g': 28,
+      'fat_per_100g': 0.3,
+    });
+
+    expect(food.gramsPerUnit, isNull);
+    expect(food.isCountable, isFalse);
+  });
 }

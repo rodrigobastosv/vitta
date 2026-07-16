@@ -161,6 +161,31 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get dietUnitsUnit => 'un';
+
+  @override
+  String dietLogSubtitleUnits(String units, int calories) {
+    return '$units un - $calories kcal';
+  }
+
+  @override
+  String get dietQuantityModeWeight => 'Peso';
+
+  @override
+  String get dietQuantityModeUnits => 'Unidades';
+
+  @override
+  String dietQuantityUnitsHint(String units, String weight) {
+    return '$units un = $weight';
+  }
+
+  @override
+  String get dietGramsPerUnitLabel => 'Peso de uma unidade (g)';
+
+  @override
+  String get dietGramsPerUnitHint => 'Opcional. Preencha para registrar este alimento por unidade, como \"2 ovos\".';
+
+  @override
   String get dietLogFoodAction => 'Adicionar ao dia';
 
   @override

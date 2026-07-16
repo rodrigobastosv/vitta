@@ -25,6 +25,7 @@ class CustomFoodForm extends StatefulWidget {
 class _CustomFoodFormState extends State<CustomFoodForm> {
   final _nameController = TextEditingController();
   final _brandController = TextEditingController();
+  final _gramsPerUnitController = TextEditingController();
   final _nutrientControllers = {for (final nutrient in CustomFoodNutrient.values) nutrient: TextEditingController()};
 
   @override
@@ -39,6 +40,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
   void dispose() {
     _nameController.dispose();
     _brandController.dispose();
+    _gramsPerUnitController.dispose();
     for (final controller in _nutrientControllers.values) {
       controller.dispose();
     }
@@ -95,6 +97,16 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
               textInputAction: .next,
               textCapitalization: .words,
               decoration: InputDecoration(labelText: l10n.dietBrandLabel, hintText: l10n.dietBrandHint),
+            ),
+          ),
+          const VTGap.s(),
+          VTAppearEffect(
+            delay: const Duration(milliseconds: 85),
+            child: TextField(
+              controller: _gramsPerUnitController,
+              onChanged: cubit.gramsPerUnitChanged,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(labelText: l10n.dietGramsPerUnitLabel, helperText: l10n.dietGramsPerUnitHint, helperMaxLines: 2),
             ),
           ),
           const VTGap.m(),

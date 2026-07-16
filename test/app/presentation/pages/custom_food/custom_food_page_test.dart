@@ -93,6 +93,8 @@ void main() {
     );
     await openCustomFoodPage(tester);
 
+    await tester.ensureVisible(find.text('Scan nutrition label'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Scan nutrition label'));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Choose from gallery'));
