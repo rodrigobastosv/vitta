@@ -9,5 +9,6 @@ class RecipeFormRoute extends VTRoute {
   AppRoute get route => .recipeForm;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => RecipeFormPage(recipe: (state.extra as RecipeFormExtra?)?.recipe);
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => RecipeFormPage(recipe: (state.extra as RecipeFormExtra?)?.recipe);
 }

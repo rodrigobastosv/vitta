@@ -32,9 +32,6 @@ class WorkoutExercise extends Equatable with WorkoutVolume {
   @override
   final List<WorkoutSet> sets;
 
-  /// When the user marked this done. Null while it's still in progress -
-  /// never derived from having sets, which is a different fact (see the
-  /// column comment in schema.sql).
   final DateTime? completedAt;
 
   bool get isCompleted => completedAt != null;

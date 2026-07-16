@@ -15,8 +15,6 @@ class FoodLogTile extends StatelessWidget {
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
 
-  /// A log the user counted reads back as the count they typed; everything else
-  /// reads as grams, exactly as before.
   String _subtitle(AppLocalizations l10n) => switch (entry.log.quantityUnits) {
     final units? => l10n.dietLogSubtitleUnits(QuantityFormat.format(units), entry.calories.round()),
     null => l10n.dietLogSubtitle(entry.log.quantityGrams.round(), entry.calories.round()),
@@ -42,8 +40,7 @@ class FoodLogTile extends StatelessWidget {
               ],
             ),
           ),
-          if (onDelete != null)
-            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
+          if (onDelete != null) IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.dietDeleteLogTooltip, onPressed: onDelete),
         ],
       ),
     );

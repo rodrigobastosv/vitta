@@ -6,7 +6,6 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 class VTCalendarWeekdayHeader extends StatelessWidget {
   const VTCalendarWeekdayHeader({this.weekColumnLabel, super.key});
 
-  /// Heads the week-badge column. Omit it when the grid has no badges.
   final String? weekColumnLabel;
 
   @override

@@ -8,10 +8,6 @@ class VTCard extends StatelessWidget {
   final Widget child;
   final VoidCallback? onTap;
 
-  /// Null keeps the theme's card colour, which is what almost every card
-  /// wants. Pass one only to mark a card's own state - and blend it into
-  /// `surfaceContainerHighest` rather than passing a translucent colour,
-  /// which would composite over the scaffold and read lighter than a card.
   final Color? color;
   final EdgeInsetsGeometry padding;
 

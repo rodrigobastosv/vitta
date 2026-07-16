@@ -37,10 +37,6 @@ class _MacroGoalsForm extends StatefulWidget {
 }
 
 class _MacroGoalsFormState extends State<_MacroGoalsForm> {
-  // The whole draft is one MacroGoals: a macro slider replaces one field, the
-  // calorie slider rescales the three energy macros at once (see
-  // withScaledCalories), and the calorie target is always derived from it - so
-  // calories can never drift out of sync with the macros (issue #116).
   late MacroGoals _goals = widget.initialGoals;
 
   static const double _maxProtein = 300;
@@ -63,10 +59,7 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
     return ListView(
       padding: const EdgeInsets.all(VTSpacing.m),
       children: [
-        CalorieTargetCard(
-          goals: _goals,
-          onCaloriesChanged: (calories) => setState(() => _goals = _goals.withScaledCalories(calories)),
-        ),
+        CalorieTargetCard(goals: _goals, onCaloriesChanged: (calories) => setState(() => _goals = _goals.withScaledCalories(calories))),
         const VTGap.l(),
         VTLabeledSlider(
           label: l10n.dietProteinLabel,

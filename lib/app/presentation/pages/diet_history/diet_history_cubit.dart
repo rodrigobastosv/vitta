@@ -59,7 +59,10 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
 
   Future<void> _loadTrend(TrendRange trendRange) async {
     final to = _dateOnly(DateTime.now());
-    final macrosResult = await _getMacrosInRangeUseCase(from: to.subtract(Duration(days: trendRange.days - 1)), to: to);
+    final macrosResult = await _getMacrosInRangeUseCase(
+      from: to.subtract(Duration(days: trendRange.days - 1)),
+      to: to,
+    );
     macrosResult.when(
       (error) => emitPresentation(DietHistoryError(message: error.message)),
       (macrosByDate) => emit(state.copyWith(macrosInTrendRange: macrosByDate)),

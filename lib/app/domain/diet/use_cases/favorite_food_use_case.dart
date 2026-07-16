@@ -8,10 +8,6 @@ class FavoriteFoodUseCase {
 
   final DietRepository _dietRepository;
 
-  /// Returns the persisted food, which is what the caller favourited: a food
-  /// straight out of an Open Food Facts search has no `id` yet, so it is saved
-  /// into the shared catalog first, the same save-then-act step [LogFoodUseCase]
-  /// does before logging.
   Future<Result<VTError, Food>> call({required Food food}) async {
     final savedFoodResult = food.id == null ? await _dietRepository.saveFood(food: food) : Success<VTError, Food>(food);
     final savedFood = savedFoodResult.when((_) => null, (value) => value);

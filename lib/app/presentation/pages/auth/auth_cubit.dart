@@ -38,10 +38,6 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
 
   void refreshUser() => emit(state.copyWith(user: _getUserUseCase()));
 
-  /// Seeds the draft avatar from an existing user, for the edit-profile form. A
-  /// stored photo isn't pulled back down as bytes - it stays the persisted
-  /// `avatarUrl` and is only replaced if the user picks a new one - so only an
-  /// emoji seeds the draft here.
   void seedAvatarFrom(User user) {
     if (user case AuthenticatedUser(:final avatarId?)) {
       emit(state.withPresetAvatar(avatarId));
@@ -108,11 +104,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
       return;
     }
     final avatar = avatarResult.when((_) => const _ResolvedAvatar(), (value) => value);
-    final statusResult = await _updateProfileUseCase(
-      displayName: _trimToNull(displayName),
-      avatarId: avatar.id,
-      avatarUrl: avatar.url,
-    );
+    final statusResult = await _updateProfileUseCase(displayName: _trimToNull(displayName), avatarId: avatar.id, avatarUrl: avatar.url);
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (value) {
       Log.action('profile_updated');
@@ -121,10 +113,6 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     });
   }
 
-  /// Turns the draft avatar into the pair the save methods need: a photo draft
-  /// is uploaded and becomes a URL (preset id null), a preset draft passes
-  /// through (URL null), and no draft is both null. The mutual exclusivity is
-  /// enforced here so neither save path has to think about it.
   Future<Result<VTError, _ResolvedAvatar>> _resolveDraftAvatar() async {
     final bytes = state.draftAvatarBytes;
     if (bytes != null) {

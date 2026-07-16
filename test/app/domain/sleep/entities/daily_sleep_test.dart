@@ -20,7 +20,12 @@ void main() {
   });
 
   test('a nap on the same date adds to the night rather than replacing it', () {
-    final day = DailySleep(entries: [buildLog(hours: 7), buildLog(hours: 1, id: 'nap')]);
+    final day = DailySleep(
+      entries: [
+        buildLog(hours: 7),
+        buildLog(hours: 1, id: 'nap'),
+      ],
+    );
 
     expect(day.totalHours, 8);
   });
@@ -28,12 +33,7 @@ void main() {
   test('half hours survive the conversion', () {
     final night = DailySleep(
       entries: [
-        SleepLog(
-          id: 'a',
-          loggedDate: DateTime(2026, 7, 10),
-          bedTime: DateTime(2026, 7, 10, 23),
-          wakeTime: DateTime(2026, 7, 11, 6, 30),
-        ),
+        SleepLog(id: 'a', loggedDate: DateTime(2026, 7, 10), bedTime: DateTime(2026, 7, 10, 23), wakeTime: DateTime(2026, 7, 11, 6, 30)),
       ],
     );
 
@@ -47,7 +47,13 @@ void main() {
   });
 
   test('quality averages only the nights that were rated', () {
-    final day = DailySleep(entries: [buildLog(hours: 4, qualityRating: 5), buildLog(hours: 4, id: 'b'), buildLog(hours: 1, id: 'c', qualityRating: 3)]);
+    final day = DailySleep(
+      entries: [
+        buildLog(hours: 4, qualityRating: 5),
+        buildLog(hours: 4, id: 'b'),
+        buildLog(hours: 1, id: 'c', qualityRating: 3),
+      ],
+    );
 
     expect(day.averageQuality, 4);
   });

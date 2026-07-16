@@ -45,8 +45,6 @@ class Food extends Equatable {
     };
   }
 
-  /// Null until the food has been persisted (e.g. a fresh Open Food Facts search
-  /// result or a custom food the user hasn't saved yet).
   final String? id;
   final String name;
   final String? brand;
@@ -60,9 +58,6 @@ class Food extends Equatable {
   final Map<Nutrient, double> micronutrientsPer100g;
   final String? imageUrl;
 
-  /// What one whole item weighs, when this food is countable at all (an egg, a
-  /// slice, a can). Null for anything measured rather than counted - rice, milk
-  /// - which is what hides the unit mode on the log sheet.
   final double? gramsPerUnit;
 
   bool get isCountable => gramsPerUnit != null;

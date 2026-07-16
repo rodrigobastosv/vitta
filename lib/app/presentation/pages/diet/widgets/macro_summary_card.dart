@@ -17,9 +17,6 @@ class MacroSummaryCard extends StatefulWidget {
   final DailyMacros dailyMacros;
   final MacroGoals macroGoals;
 
-  /// Opens the goals editor. Null on the read-only history day view, where the
-  /// same card is reused but goals aren't editable (the "pass no callback to
-  /// disable" convention).
   final VoidCallback? onEditGoals;
 
   @override

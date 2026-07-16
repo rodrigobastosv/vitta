@@ -25,7 +25,9 @@ void main() {
   testWidgets('shows the day it is describing and its macro summary', (tester) async {
     await pumpDietDayPage(
       tester,
-      dailyMacros: DailyMacros(entries: [FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Oatmeal'))]),
+      dailyMacros: DailyMacros(
+        entries: [FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Oatmeal'))],
+      ),
     );
 
     expect(find.text('Saturday, July 11, 2026'), findsOneWidget);
@@ -37,8 +39,14 @@ void main() {
       tester,
       dailyMacros: DailyMacros(
         entries: [
-          FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Oatmeal'), log: FoodLogFactory.build()),
-          FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Salad'), log: FoodLogFactory.build(mealType: .lunch)),
+          FoodLogEntryFactory.build(
+            food: FoodFactory.build(name: 'Oatmeal'),
+            log: FoodLogFactory.build(),
+          ),
+          FoodLogEntryFactory.build(
+            food: FoodFactory.build(name: 'Salad'),
+            log: FoodLogFactory.build(mealType: .lunch),
+          ),
         ],
       ),
     );

@@ -34,8 +34,7 @@ class CaloriesTrendCard extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(l10n.dietCaloriesTrendTitle, style: VTTextStyles.bodyStrong(context))),
-              if (average.hasData)
-                VTBadge(label: l10n.dietTrendAverageLabel(average.average.round()), color: colorScheme.primary),
+              if (average.hasData) VTBadge(label: l10n.dietTrendAverageLabel(average.average.round()), color: colorScheme.primary),
             ],
           ),
           const VTGap.xs(),

@@ -76,7 +76,11 @@ void main() {
     final logSleepUseCase = MockLogSleepUseCase();
     final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
     when(
-      () => logSleepUseCase(bedTime: any(named: 'bedTime'), wakeTime: any(named: 'wakeTime'), qualityRating: 4),
+      () => logSleepUseCase(
+        bedTime: any(named: 'bedTime'),
+        wakeTime: any(named: 'wakeTime'),
+        qualityRating: 4,
+      ),
     ).thenAnswer((_) async => Success(SleepLogFactory.build()));
     when(() => getRecentSleepLogsUseCase(days: 7)).thenAnswer((_) async => const Success([]));
     final cubit = CubitsFactories.buildSleepCubit(logSleepUseCase: logSleepUseCase, getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
@@ -84,7 +88,10 @@ void main() {
     await cubit.logSleep(bedTime: DateTime(2026, 7, 10, 22, 30), wakeTime: DateTime(2026, 7, 11, 6, 45), qualityRating: 4);
 
     final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
-    expect(captured, ['sleep_logged', {'quality': 4}]);
+    expect(captured, [
+      'sleep_logged',
+      {'quality': 4},
+    ]);
   });
 
   blocTest<SleepCubit, SleepState>(

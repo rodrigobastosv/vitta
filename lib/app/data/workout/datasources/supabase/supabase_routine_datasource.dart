@@ -14,29 +14,17 @@ class SupabaseRoutineDataSource {
 
   String get _userId => _supabaseService.currentUserId;
 
-  String get _routineSelect =>
-      '*, ${SupabaseTable.routineExercises.wireName}(*, ${SupabaseTable.exercises.wireName}(*))';
+  String get _routineSelect => '*, ${SupabaseTable.routineExercises.wireName}(*, ${SupabaseTable.exercises.wireName}(*))';
 
   Future<Result<VTError, List<Routine>>> getRoutines() async {
     try {
-      final rows = await _supabaseService
-          .from(.routines)
-          .select(_routineSelect)
-          .eq('user_id', _userId)
-          // ascending is explicit because postgrest-dart's order() defaults to
-          // DESCENDING - `.order('position')` alone returns the cycle backwards,
-          // which reads as "my reorder didn't save" even though it did.
-          .order('position', ascending: true);
+      final rows = await _supabaseService.from(.routines).select(_routineSelect).eq('user_id', _userId).order('position', ascending: true);
       return Success(rows.map(Routine.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load routines', cause: error));
     }
   }
 
-  /// The routine of the most recent workout that came from one, which is what
-  /// `RoutineCycle` advances from. Null when the user has never trained from a
-  /// routine - a workout with no `routine_id` doesn't participate in the cycle,
-  /// so it's filtered out here rather than being treated as "no routine".
   Future<Result<VTError, String?>> getLastUsedRoutineId() async {
     try {
       final row = await _supabaseService
@@ -72,11 +60,7 @@ class SupabaseRoutineDataSource {
     required List<String> exerciseIds,
   }) async {
     try {
-      await _supabaseService
-          .from(.routines)
-          .update(UpdateRoutineRequest(name: name).toJson())
-          .eq('id', routineId)
-          .eq('user_id', _userId);
+      await _supabaseService.from(.routines).update(UpdateRoutineRequest(name: name).toJson()).eq('id', routineId).eq('user_id', _userId);
       await _replaceExercises(routineId: routineId, exerciseIds: exerciseIds);
       return _reload(routineId);
     } on Exception catch (error) {
@@ -93,20 +77,9 @@ class SupabaseRoutineDataSource {
     }
   }
 
-  /// Rewrites the cycle order. `position` is the whole point of a routine's
-  /// order - it decides what RoutineCycle suggests next - so it has to be
-  /// editable, not just assigned once at creation.
-  ///
-  /// Sequential updates rather than one upsert: an upsert would have to resend
-  /// every not-null column (name, user_id) just to move an integer, and a user
-  /// has a handful of routines, not thousands.
   Future<Result<VTError, void>> reorderRoutines({required List<String> orderedRoutineIds}) async {
     try {
       for (final (position, routineId) in orderedRoutineIds.indexed) {
-        // `.select()` is what makes a write that changed nothing detectable: an
-        // UPDATE matching zero rows is a 204 success in PostgREST, so without
-        // it a filter that never matches (or an RLS policy that silently denies
-        // the write) reads as a clean save and the new order just evaporates.
         final updated = await _supabaseService
             .from(.routines)
             .update({'position': position})
@@ -123,9 +96,6 @@ class SupabaseRoutineDataSource {
     }
   }
 
-  /// Delete-then-insert rather than diffing: a routine is a short ordered list,
-  /// and reconciling positions in place would be more code than rewriting them.
-  /// The same call `SaveRecipeUseCase` makes for ingredients.
   Future<void> _replaceExercises({required String routineId, required List<String> exerciseIds}) async {
     await _supabaseService.from(.routineExercises).delete().eq('routine_id', routineId);
     if (exerciseIds.isEmpty) {

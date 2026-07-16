@@ -56,7 +56,9 @@ class DietHistoryPage extends StatelessWidget {
               const VTGap.l(),
               Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
               const VTGap.m(),
-              Center(child: TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange)),
+              Center(
+                child: TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+              ),
               const VTGap.m(),
               VTAppearEffect(
                 key: ValueKey('calories-${state.trendRange}'),
@@ -84,8 +86,6 @@ class DietHistoryPage extends StatelessWidget {
   List<DateTime> _trendDays(DietHistoryState state) {
     final now = DateTime.now();
     final to = DateTime(now.year, now.month, now.day);
-    return [
-      for (var offset = state.trendRange.days - 1; offset >= 0; offset--) to.subtract(Duration(days: offset)),
-    ];
+    return [for (var offset = state.trendRange.days - 1; offset >= 0; offset--) to.subtract(Duration(days: offset))];
   }
 }

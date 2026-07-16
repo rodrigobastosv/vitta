@@ -10,10 +10,6 @@ import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 
-/// The tappable avatar preview + its edit menu, shared by the sign-up and
-/// edit-profile forms. Reads the draft off [AuthState] and drives [AuthCubit],
-/// so the choice previews live and the mutual-exclusivity/upload logic stays in
-/// the cubit rather than the widget.
 class AvatarPicker extends StatelessWidget {
   const AvatarPicker({required this.state, super.key});
 
@@ -51,8 +47,6 @@ class AvatarPicker extends StatelessWidget {
               alignment: .bottomRight,
               children: [
                 VTProfileAvatar(
-                  // The draft wins while composing; the persisted avatar is the
-                  // fallback, so the edit form opens showing what's saved.
                   avatarUrl: state.hasDraftPhoto || state.draftAvatarId != null ? null : _persistedUrl,
                   avatarId: state.draftAvatarId ?? (state.hasDraftPhoto ? null : _persistedAvatarId),
                   previewBytes: state.draftAvatarBytes,

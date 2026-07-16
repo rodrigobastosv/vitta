@@ -53,7 +53,10 @@ void main() {
     build: () {
       final imagePickerService = MockImagePickerService();
       when(
-        () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .gallery,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/r.png', bytes: Uint8List.fromList([1, 2]), fileExtension: 'png'));
       return CubitsFactories.buildRecipeFormCubit(imagePickerService: imagePickerService);
     },
@@ -70,13 +73,19 @@ void main() {
     final uploadFoodImageUseCase = MockUploadFoodImageUseCase();
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+      () => imagePickerService.pickImage(
+        source: .gallery,
+        maxWidth: any(named: 'maxWidth'),
+      ),
     ).thenAnswer((_) async => PickedImage(path: '/tmp/r.png', bytes: Uint8List.fromList([1, 2]), fileExtension: 'png'));
     when(
       () => uploadFoodImageUseCase(bytes: Uint8List.fromList([1, 2]), fileExtension: 'png'),
     ).thenAnswer((_) async => const Success('https://example.com/r.png'));
     when(
-      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
     ).thenAnswer((_) async => Success(RecipeFactory.build()));
     final cubit = CubitsFactories.buildRecipeFormCubit(
       imagePickerService: imagePickerService,
@@ -90,39 +99,62 @@ void main() {
     await cubit.pickPhoto(source: .gallery);
     await cubit.submit();
 
-    final capturedDraft = verify(
-      () => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: any(named: 'recipe')),
-    ).captured.single as RecipeDraft;
+    final capturedDraft =
+        verify(
+              () => saveRecipeUseCase(
+                draft: captureAny(named: 'draft'),
+                recipe: any(named: 'recipe'),
+              ),
+            ).captured.single
+            as RecipeDraft;
     expect(capturedDraft.imageUrl, 'https://example.com/r.png');
   });
 
   test('saving without touching the photo keeps the url the recipe already had', () async {
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
     ).thenAnswer((_) async => Success(RecipeFactory.build()));
-    final recipe = RecipeFactory.build(food: FoodFactory.build(name: 'Lasagna', imageUrl: 'https://example.com/old.jpg'));
+    final recipe = RecipeFactory.build(
+      food: FoodFactory.build(name: 'Lasagna', imageUrl: 'https://example.com/old.jpg'),
+    );
     final cubit = CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase, recipe: recipe);
 
     await cubit.submit();
 
-    final capturedDraft = verify(
-      () => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: any(named: 'recipe')),
-    ).captured.single as RecipeDraft;
+    final capturedDraft =
+        verify(
+              () => saveRecipeUseCase(
+                draft: captureAny(named: 'draft'),
+                recipe: any(named: 'recipe'),
+              ),
+            ).captured.single
+            as RecipeDraft;
     expect(capturedDraft.imageUrl, 'https://example.com/old.jpg');
   });
 
   test('an editing save hands the recipe back so the use case updates instead of creating', () async {
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
     ).thenAnswer((_) async => Success(RecipeFactory.build()));
     final recipe = RecipeFactory.build();
     final cubit = CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase, recipe: recipe);
 
     await cubit.submit();
 
-    verify(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: recipe)).called(1);
+    verify(
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: recipe,
+      ),
+    ).called(1);
   });
 
   test('a failed photo upload reports the error and never reaches the save', () async {
@@ -130,7 +162,10 @@ void main() {
     final uploadFoodImageUseCase = MockUploadFoodImageUseCase();
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+      () => imagePickerService.pickImage(
+        source: .gallery,
+        maxWidth: any(named: 'maxWidth'),
+      ),
     ).thenAnswer((_) async => PickedImage(path: '/tmp/r.png', bytes: Uint8List.fromList([1, 2]), fileExtension: 'png'));
     when(
       () => uploadFoodImageUseCase(bytes: Uint8List.fromList([1, 2]), fileExtension: 'png'),
@@ -147,7 +182,12 @@ void main() {
 
     await cubit.submit();
 
-    verifyNever(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')));
+    verifyNever(
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
+    );
   });
 
   blocTest<RecipeFormCubit, RecipeFormState>(
@@ -190,7 +230,12 @@ void main() {
     'emits RecipeSaved once the recipe is saved',
     build: () {
       final saveRecipeUseCase = MockSaveRecipeUseCase();
-      when(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe'))).thenAnswer((_) async => Success(RecipeFactory.build()));
+      when(
+        () => saveRecipeUseCase(
+          draft: any(named: 'draft'),
+          recipe: any(named: 'recipe'),
+        ),
+      ).thenAnswer((_) async => Success(RecipeFactory.build()));
       return CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase);
     },
     act: (cubit) {
@@ -206,7 +251,12 @@ void main() {
     'emits RecipeFormError when saving fails',
     build: () {
       final saveRecipeUseCase = MockSaveRecipeUseCase();
-      when(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      when(
+        () => saveRecipeUseCase(
+          draft: any(named: 'draft'),
+          recipe: any(named: 'recipe'),
+        ),
+      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase);
     },
     act: (cubit) {
@@ -225,7 +275,12 @@ void main() {
   test('logs a recipe_created action with how many ingredients went in', () async {
     final loggingService = useMockLog();
     final saveRecipeUseCase = MockSaveRecipeUseCase();
-    when(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe'))).thenAnswer((_) async => Success(RecipeFactory.build()));
+    when(
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
+    ).thenAnswer((_) async => Success(RecipeFactory.build()));
     final cubit = CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase);
     cubit
       ..nameChanged('Lasagna')
@@ -235,6 +290,9 @@ void main() {
     await cubit.submit();
 
     final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
-    expect(captured, ['recipe_created', {'ingredients': 2}]);
+    expect(captured, [
+      'recipe_created',
+      {'ingredients': 2},
+    ]);
   });
 }

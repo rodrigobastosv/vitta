@@ -60,7 +60,10 @@ void main() {
     build: () {
       final imagePickerService = MockImagePickerService();
       when(
-        () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .gallery,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/food.png', bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'png'));
       return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService);
     },
@@ -76,7 +79,12 @@ void main() {
     'pickPhoto keeps the state untouched when the user cancels the picker',
     build: () {
       final imagePickerService = MockImagePickerService();
-      when(() => imagePickerService.pickImage(source: .camera, maxWidth: any(named: 'maxWidth'))).thenAnswer((_) async => null);
+      when(
+        () => imagePickerService.pickImage(
+          source: .camera,
+          maxWidth: any(named: 'maxWidth'),
+        ),
+      ).thenAnswer((_) async => null);
       return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService);
     },
     act: (cubit) => cubit.pickPhoto(source: .camera),
@@ -89,7 +97,10 @@ void main() {
       final imagePickerService = MockImagePickerService();
       final scanNutritionLabelUseCase = MockScanNutritionLabelUseCase();
       when(
-        () => imagePickerService.pickImage(source: .camera, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .camera,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(
         () => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg'),
@@ -105,11 +116,11 @@ void main() {
     },
     skip: 1,
     expect: () => [
-      isA<CustomFoodState>().having(
-        (state) => state.nutrients,
-        'nutrients',
-        {CustomFoodNutrient.fiber: 2.0, CustomFoodNutrient.calories: 200.0, CustomFoodNutrient.protein: 10.0},
-      ),
+      isA<CustomFoodState>().having((state) => state.nutrients, 'nutrients', {
+        CustomFoodNutrient.fiber: 2.0,
+        CustomFoodNutrient.calories: 200.0,
+        CustomFoodNutrient.protein: 10.0,
+      }),
     ],
   );
 
@@ -119,11 +130,12 @@ void main() {
       final imagePickerService = MockImagePickerService();
       final scanNutritionLabelUseCase = MockScanNutritionLabelUseCase();
       when(
-        () => imagePickerService.pickImage(source: .camera, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .camera,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
-      when(
-        () => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg'),
-      ).thenAnswer((_) async => const Success(ScannedNutritionFacts()));
+      when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Success(ScannedNutritionFacts()));
       return CubitsFactories.buildCustomFoodCubit(
         imagePickerService: imagePickerService,
         scanNutritionLabelUseCase: scanNutritionLabelUseCase,
@@ -139,7 +151,10 @@ void main() {
       final imagePickerService = MockImagePickerService();
       final scanNutritionLabelUseCase = MockScanNutritionLabelUseCase();
       when(
-        () => imagePickerService.pickImage(source: .camera, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .camera,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildCustomFoodCubit(
@@ -200,15 +215,15 @@ void main() {
       final imagePickerService = MockImagePickerService();
       final uploadFoodImageUseCase = MockUploadFoodImageUseCase();
       when(
-        () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .gallery,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/food.png', bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'png'));
       when(
         () => uploadFoodImageUseCase(bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'png'),
       ).thenAnswer((_) async => const Success('https://example.com/food.png'));
-      return CubitsFactories.buildCustomFoodCubit(
-        imagePickerService: imagePickerService,
-        uploadFoodImageUseCase: uploadFoodImageUseCase,
-      );
+      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, uploadFoodImageUseCase: uploadFoodImageUseCase);
     },
     act: (cubit) async {
       fillEveryNutrient(cubit);
@@ -228,15 +243,15 @@ void main() {
       final imagePickerService = MockImagePickerService();
       final uploadFoodImageUseCase = MockUploadFoodImageUseCase();
       when(
-        () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+        () => imagePickerService.pickImage(
+          source: .gallery,
+          maxWidth: any(named: 'maxWidth'),
+        ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/food.png', bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'png'));
       when(
         () => uploadFoodImageUseCase(bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'png'),
       ).thenAnswer((_) async => const Failure(VTError(message: 'upload failed')));
-      return CubitsFactories.buildCustomFoodCubit(
-        imagePickerService: imagePickerService,
-        uploadFoodImageUseCase: uploadFoodImageUseCase,
-      );
+      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, uploadFoodImageUseCase: uploadFoodImageUseCase);
     },
     act: (cubit) async {
       fillEveryNutrient(cubit);

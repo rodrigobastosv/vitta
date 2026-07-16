@@ -95,8 +95,6 @@ void main() {
     );
 
     expect(tester.widget<WorkoutExerciseThumbnail>(find.byType(WorkoutExerciseThumbnail)).isCompleted, isTrue);
-    // The card marks itself done by receding, never by dimming its own text:
-    // an Opacity over the card would drag this summary under AA.
     expect(tester.widget<Text>(find.text('1 set done')).style?.color, isNot(Colors.transparent));
     expect(find.byType(Opacity), findsNothing);
   });

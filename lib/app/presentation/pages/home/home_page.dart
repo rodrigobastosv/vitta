@@ -23,9 +23,6 @@ class HomePage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
           actions: [
-            // A plain IconButton constrains its child to the 24px icon box, so
-            // the avatar reads as a tiny dot; a tappable avatar renders at its
-            // real size instead.
             Padding(
               padding: const EdgeInsets.only(right: VTSpacing.s),
               child: Tooltip(

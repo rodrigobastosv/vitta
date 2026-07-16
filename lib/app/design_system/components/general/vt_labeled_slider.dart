@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
-/// A slider tinted with an accent, with a leading colour dot, a label and the
-/// current value read out as a badge. Used for the macro and calorie goals
-/// (issue #116); the accent-per-value follows the design system's macro colours.
 class VTLabeledSlider extends StatelessWidget {
   const VTLabeledSlider({
     required this.label,
@@ -31,9 +28,15 @@ class VTLabeledSlider extends StatelessWidget {
     children: [
       Row(
         children: [
-          Container(width: 10, height: 10, decoration: BoxDecoration(color: color, shape: .circle)),
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: color, shape: .circle),
+          ),
           const SizedBox(width: 8),
-          Expanded(child: Text(label, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis)),
+          Expanded(
+            child: Text(label, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
+          ),
           const SizedBox(width: 8),
           VTBadge(label: valueLabel, color: color),
         ],

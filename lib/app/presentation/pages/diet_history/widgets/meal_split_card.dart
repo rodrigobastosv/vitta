@@ -18,9 +18,7 @@ class MealSplitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final split = MealCalorieSplit.fromLoggedDays([
-      for (final day in days) ?macrosByDate[day],
-    ]);
+    final split = MealCalorieSplit.fromLoggedDays([for (final day in days) ?macrosByDate[day]]);
     return VTCard(
       child: Column(
         crossAxisAlignment: .start,

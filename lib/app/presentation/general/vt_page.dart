@@ -10,10 +10,6 @@ class VTPage<C extends PresentationCubit<S, P>, S, P> extends StatelessWidget {
   final Widget Function(BuildContext context, C cubit, S state) builder;
   final void Function(BuildContext context, P event)? onPresentation;
 
-  /// Handed to `G<C>(param1: ...)` for a cubit registered with
-  /// `registerFactoryParam`, so a page whose cubit needs a runtime argument
-  /// (the recipe being edited, say) still resolves it here rather than taking a
-  /// `create:` callback.
   final Object? cubitParam;
 
   @override

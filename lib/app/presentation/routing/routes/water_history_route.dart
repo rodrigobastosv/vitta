@@ -8,5 +8,6 @@ class WaterHistoryRoute extends VTRoute {
   AppRoute get route => .waterHistory;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const WaterHistoryPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const WaterHistoryPage();
 }

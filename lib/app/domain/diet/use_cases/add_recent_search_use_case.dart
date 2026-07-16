@@ -5,7 +5,5 @@ class AddRecentSearchUseCase {
 
   final DietRepository _dietRepository;
 
-  /// Returns the updated list, so the caller doesn't have to re-read it to
-  /// learn where the query landed after de-duplication and capping.
   Future<List<String>> call({required String query}) => _dietRepository.addRecentSearch(query: query);
 }

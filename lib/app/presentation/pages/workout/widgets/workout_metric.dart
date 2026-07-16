@@ -10,9 +10,6 @@ class WorkoutMetric extends StatelessWidget {
   final String label;
   final String value;
 
-  /// The accent this metric is tinted with. Null keeps it neutral, which is
-  /// what the secondary metrics use so the headline figure stays the only
-  /// coloured one of the column.
   final Color? color;
 
   @override

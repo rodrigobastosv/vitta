@@ -9,9 +9,6 @@ class ExerciseSearchCubit extends PresentationCubit<ExerciseSearchState, Exercis
 
   final SearchExercisesUseCase _searchExercisesUseCase;
 
-  /// The catalog is browsable with no query at all - an empty search ranked by
-  /// popularity is a reasonable "what can I do?" list, unlike food search where
-  /// an empty query has nothing to show.
   @override
   void onInit() => search('');
 

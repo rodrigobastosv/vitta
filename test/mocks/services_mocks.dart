@@ -8,7 +8,6 @@ class MockSupabaseService extends Mock implements SupabaseService {}
 
 class MockImagePickerService extends Mock implements ImagePickerService {}
 
-
 class MockLoggingService extends Mock implements LoggingService {}
 
 class MockLogDestination extends Mock implements LogDestination {}

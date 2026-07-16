@@ -74,19 +74,11 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     await _loadLastSets(date);
   }
 
-  /// The cycle is loaded alongside the day but never blocks it: a failure here
-  /// leaves `state.cycle` empty, which just means the next-routine card doesn't
-  /// appear. Surfacing an error dialog over a day that loaded fine would be
-  /// worse than quietly hiding a suggestion.
   Future<void> _loadCycle() async {
     final cycleResult = await _getRoutineCycleUseCase();
     cycleResult.when((_) {}, (value) => emit(state.copyWith(cycle: value)));
   }
 
-  /// The "last time" hint's data, loaded like the cycle: alongside the day,
-  /// never blocking it, a failure just leaving the map empty so the hint is
-  /// hidden. Scoped to sessions before the displayed day so it means the
-  /// *previous* session, not the sets already on screen.
   Future<void> _loadLastSets(DateTime date) async {
     final exerciseIds = [for (final exercise in state.exercises) exercise.exercise.id];
     if (exerciseIds.isEmpty) {
@@ -97,9 +89,6 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   }
 
   Future<void> startRoutine(Routine routine) async {
-    // Guarded here as well as in the page: a workout can only be started on
-    // the day it happens, and the write is what must not be possible - not
-    // just the button.
     if (!state.isToday) {
       return;
     }
@@ -128,9 +117,6 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     });
   }
 
-  /// Returns its `Result` rather than emitting an error, so the sheet that
-  /// captures reps/load can show the failure inline and pop on success - the
-  /// same split `DietCubit.updateLog` uses.
   Future<Result<VTError, void>> logSet({required String workoutExerciseId, required int reps, required double weightKg}) async {
     final loggedResult = await _logSetUseCase(workoutExerciseId: workoutExerciseId, reps: reps, weightKg: weightKg);
     final error = loggedResult.when((error) => error, (_) => null);
@@ -153,37 +139,19 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     return const Success(null);
   }
 
-  /// Logs another set identical to the exercise's last one. Sets of an exercise
-  /// are usually the same, so the common case shouldn't cost a sheet and two
-  /// numbers - this is one tap.
-  ///
-  /// Needs no use case of its own: the values come from state the cubit already
-  /// holds, so it's an ordinary logSet.
   Future<Result<VTError, void>> repeatLastSet({required WorkoutExercise workoutExercise}) async {
     final last = workoutExercise.sets.lastOrNull;
     if (last == null) {
-      // Nothing to repeat. The button is hidden in this case; this is the guard
-      // that keeps the rule true rather than trusting the UI.
       return const Success(null);
     }
     return logSet(workoutExerciseId: workoutExercise.id, reps: last.reps, weightKg: last.weightKg);
   }
 
-  /// Marks an exercise done, or reopens it.
-  ///
-  /// An exercise with no sets can't be finished: "done" means you did it, and
-  /// allowing it would let a workout of untouched exercises be marked complete
-  /// and congratulate the user for lifting nothing - a routine pre-fills the
-  /// exercises, so that is one tap away. Removing the exercise is the honest
-  /// way to clear it. Reopening is always allowed.
   Future<void> setExerciseCompleted({required WorkoutExercise workoutExercise, required bool completed}) async {
     if (completed && workoutExercise.sets.isEmpty) {
       return;
     }
-    final completedResult = await _setWorkoutExerciseCompletedUseCase(
-      workoutExerciseId: workoutExercise.id,
-      completed: completed,
-    );
+    final completedResult = await _setWorkoutExerciseCompletedUseCase(workoutExerciseId: workoutExercise.id, completed: completed);
     await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
       Log.action(completed ? 'workout_exercise_completed' : 'workout_exercise_reopened');
       return loadDate(state.date);

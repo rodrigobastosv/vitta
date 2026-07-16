@@ -23,9 +23,6 @@ void main() {
     return getFavoriteFoodsUseCase;
   }
 
-  // These tests are about favourites, but the cubit reads recent searches on
-  // init and records one after every hit, and both return non-nullable types a
-  // bare mock can't satisfy.
   MockGetRecentSearchesUseCase stubbedRecents([List<String> recentSearches = const []]) {
     final getRecentSearchesUseCase = MockGetRecentSearchesUseCase();
     when(getRecentSearchesUseCase.call).thenReturn(recentSearches);
@@ -54,8 +51,6 @@ void main() {
     ),
     act: (cubit) => cubit.onInit(),
     expect: () => [
-      // Recent searches are a synchronous device-local read, so they don't wait
-      // on the favourites round-trip.
       isA<FoodSearchState>()
           .having((state) => state.recentSearches, 'recentSearches', ['banana'])
           .having((state) => state.favorites, 'favorites', isEmpty),
@@ -172,7 +167,6 @@ void main() {
     final pendingFavorite = cubit.toggleFavorite(food: offFood);
     expect(cubit.state.isFavorite(offFood), isTrue);
 
-    // Second tap lands before the save returns, so there is no id to delete by.
     await cubit.toggleFavorite(food: offFood);
     expect(cubit.state.favorites, isEmpty);
 

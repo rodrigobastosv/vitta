@@ -81,7 +81,9 @@ class _SignUpFormState extends State<SignUpForm> {
           const VTGap.l(),
           VTPrimaryButton(label: l10n.authSignUpAction, onPressed: _submit),
           const VTGap.s(),
-          Center(child: TextButton(onPressed: widget.onGoToSignIn, child: Text(l10n.authHasAccountAction))),
+          Center(
+            child: TextButton(onPressed: widget.onGoToSignIn, child: Text(l10n.authHasAccountAction)),
+          ),
         ],
       ),
     );

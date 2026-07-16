@@ -38,11 +38,7 @@ class SignUpPage extends StatelessWidget {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(VTSpacing.m),
           child: switch (state.user) {
-            AnonymousUser() => SignUpForm(
-              state: state,
-              onSubmit: cubit.signUp,
-              onGoToSignIn: () => _goToSignIn(context),
-            ),
+            AnonymousUser() => SignUpForm(state: state, onSubmit: cubit.signUp, onGoToSignIn: () => _goToSignIn(context)),
             AuthenticatedUser(:final email) => SignedInView(email: email, onSignOut: cubit.signOut),
           },
         ),
@@ -50,9 +46,6 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  /// Forwards a success back to whoever opened the auth flow: logging in from
-  /// here pops this page with `true` too, so the original caller (profile or
-  /// onboarding) still learns the user is now authenticated.
   Future<void> _goToSignIn(BuildContext context) async {
     final signedIn = await context.pushRoute<bool>(.signIn) ?? false;
     if (signedIn && context.mounted) {

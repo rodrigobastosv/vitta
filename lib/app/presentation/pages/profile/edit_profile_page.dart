@@ -61,9 +61,6 @@ class _EditProfileFormState extends State<_EditProfileForm> {
   @override
   void initState() {
     super.initState();
-    // Seed the draft avatar from the current user once, so the picker opens
-    // showing what's saved. Done here rather than in the page build so it fires
-    // exactly once, not on every rebuild.
     final user = widget.state.user;
     _nameController = TextEditingController(text: user.displayNameOrEmpty);
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -31,9 +31,7 @@ class RecipeDraft extends Equatable with MacroTotals {
     carbsPer100g: per100g(totalCarbs),
     fatPer100g: per100g(totalFat),
     fiberPer100g: per100g(totalFiber),
-    micronutrientsPer100g: {
-      for (final MapEntry(:key, :value) in micronutrientTotals.entries) key: per100g(value),
-    },
+    micronutrientsPer100g: {for (final MapEntry(:key, :value) in micronutrientTotals.entries) key: per100g(value)},
     imageUrl: imageUrl,
   );
 

@@ -16,8 +16,6 @@ import '../../../../factories/entities/routine_factory.dart';
 import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
-/// Drives the page's body directly rather than through VTPage, which would
-/// resolve the cubit from GetIt. The list under test is the same widget.
 Future<void> pumpRoutinesPage(WidgetTester tester, {required RoutinesCubit cubit}) => tester.pumpWidget(
   MaterialApp(
     theme: VTTheme.light,
@@ -64,9 +62,7 @@ void main() {
     final getRoutinesUseCase = MockGetRoutinesUseCase();
     final reorderRoutinesUseCase = MockReorderRoutinesUseCase();
     when(getRoutinesUseCase.call).thenAnswer((_) async => Success(RoutineFactory.buildCycle()));
-    when(
-      () => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds')),
-    ).thenAnswer((_) async => const Success(null));
+    when(() => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds'))).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildRoutinesCubit(
       getRoutinesUseCase: getRoutinesUseCase,
       reorderRoutinesUseCase: reorderRoutinesUseCase,
@@ -76,13 +72,9 @@ void main() {
     await pumpRoutinesPage(tester, cubit: cubit);
     await tester.pumpAndSettle();
 
-    // Drag the first routine's handle down by exactly one tile, so the
-    // assertion is about moving one position rather than about a pixel count.
     final tileHeight = tester.getSize(find.byType(RoutineTile).first).height;
     final gesture = await tester.startGesture(tester.getCenter(find.byType(VTDragHandle).first));
     await tester.pump(kLongPressTimeout);
-    // Moved in steps, not one jump: the list tracks the pointer's position as
-    // it travels, and a single large moveBy skips the overlap it reorders on.
     for (var moved = 0.0; moved < tileHeight + 1; moved += 10) {
       await gesture.moveBy(const Offset(0, 10));
       await tester.pump();

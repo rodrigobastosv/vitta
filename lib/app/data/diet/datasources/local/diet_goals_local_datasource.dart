@@ -6,8 +6,6 @@ class DietGoalsLocalDataSource {
 
   final LocalStorageService _localStorageService;
 
-  // No calorie key: the calorie goal is derived from the macros (see
-  // MacroGoals.calorieGoal, issue #116), so there's nothing separate to store.
   static const _proteinGoalGramsKey = 'diet.proteinGoalGrams';
   static const _carbsGoalGramsKey = 'diet.carbsGoalGrams';
   static const _fatGoalGramsKey = 'diet.fatGoalGrams';

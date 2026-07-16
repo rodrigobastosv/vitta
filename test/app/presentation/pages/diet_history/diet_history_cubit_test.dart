@@ -33,7 +33,10 @@ void main() {
     final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(
-      () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMacrosInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => const Success({}));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final cubit = CubitsFactories.buildDietHistoryCubit(
@@ -45,16 +48,17 @@ void main() {
 
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
-    verify(
-      () => getMacrosInRangeUseCase(from: DateTime(now.year, now.month), to: DateTime(now.year, now.month + 1, 0)),
-    ).called(1);
+    verify(() => getMacrosInRangeUseCase(from: DateTime(now.year, now.month), to: DateTime(now.year, now.month + 1, 0))).called(1);
     verify(() => getMacrosInRangeUseCase(from: today.subtract(const Duration(days: 29)), to: today)).called(1);
   });
 
   test('changing the trend range re-queries only the trend, using the new window', () async {
     final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     when(
-      () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMacrosInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => const Success({}));
     final cubit = CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
 
@@ -71,8 +75,15 @@ void main() {
     'going to the previous month emits the new month immediately, then its macros',
     build: () {
       final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
-      when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
-        (_) async => Success({DateTime(2026, 6, 10): DailyMacros(entries: [FoodLogEntryFactory.build()])}),
+      when(
+        () => getMacrosInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer(
+        (_) async => Success({
+          DateTime(2026, 6, 10): DailyMacros(entries: [FoodLogEntryFactory.build()]),
+        }),
       );
       return CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
     },
@@ -86,7 +97,10 @@ void main() {
   test('the next month is only reachable after going back', () async {
     final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     when(
-      () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMacrosInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => const Success({}));
     final cubit = CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
 
@@ -102,7 +116,10 @@ void main() {
     build: () {
       final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
       when(
-        () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+        () => getMacrosInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
       ).thenAnswer((_) async => const Success({}));
       return CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
     },
@@ -115,7 +132,10 @@ void main() {
     build: () {
       final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
       when(
-        () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+        () => getMacrosInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase);
     },

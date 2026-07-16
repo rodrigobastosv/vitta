@@ -46,8 +46,6 @@ void main() {
 
     test('advances by cycle position, never by date - the whole point of the rule', () {
       final routines = RoutineFactory.buildCycle();
-      // Same last routine, regardless of whether it was trained today or a
-      // month ago: the cycle carries no date at all.
       final cycle = RoutineCycle(routines: routines, lastRoutineId: 'routine-b');
 
       expect(cycle.next?.id, 'routine-c');

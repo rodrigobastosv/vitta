@@ -17,11 +17,6 @@ void main() {
     when(() => supabaseService.isAnonymous).thenReturn(true);
     when(() => supabaseService.currentUserEmail).thenReturn(null);
     when(() => supabaseService.currentUserId).thenReturn('user-1');
-    // Every feature page now loads from Supabase on mount, so a page reached
-    // from a tile issues a query. Postgrest's fluent builder isn't practical to
-    // fake, so the query throws and the datasource turns it into the Failure it
-    // would return for any other network error - enough for a navigation test,
-    // which only cares that the page mounts and renders.
     when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
     await G<OnboardingLocalDataSource>().markOnboardingSeen();

@@ -12,9 +12,6 @@ enum GoalAdherence {
     .off => VTColors.error,
   };
 
-  /// The band around a goal that counts as "on target" (green). Public because
-  /// the calorie goal shows this as its min/max range (issue #116), so the
-  /// range on the goals page means exactly what "met" means everywhere else.
   static const metLowerBound = 0.9;
   static const metUpperBound = 1.1;
   static const _closeLowerBound = 0.75;

@@ -72,7 +72,6 @@ void main() {
     },
     act: (cubit) async {
       await cubit.loadRoutines();
-      // Drag C to the front: the cycle becomes C -> A -> B.
       await cubit.reorderRoutines(oldIndex: 2, newIndex: 0);
     },
     skip: 1,

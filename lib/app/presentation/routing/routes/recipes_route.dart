@@ -8,5 +8,6 @@ class RecipesRoute extends VTRoute {
   AppRoute get route => .recipes;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const RecipesPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const RecipesPage();
 }

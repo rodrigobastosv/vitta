@@ -11,20 +11,12 @@ class FoodSearchState extends Equatable {
     this.tab = FoodSearchTab.search,
   });
 
-  /// `null` means no search has been performed yet (idle); an empty list means
-  /// a search ran and found nothing.
   final List<Food>? results;
 
-  /// The user's favourite foods, newest first. Backs the favourites tab and is
-  /// the source of truth for whether any food's heart is filled.
   final List<Food> favorites;
 
-  /// Past queries that returned something, most recent first. Device-local.
   final List<String> recentSearches;
 
-  /// The query the search field should show. Only set when a search actually
-  /// runs, so replaying a recent search fills the box without the field being
-  /// driven on every keystroke.
   final String query;
 
   final FoodSearchTab tab;
@@ -34,24 +26,16 @@ class FoodSearchState extends Equatable {
       if (food.id != null) food.id!,
   };
 
-  /// A food straight out of Open Food Facts has no id until favouriting saves
-  /// it, and an optimistic toggle shows it as a favourite before that id
-  /// exists — so an id-less food is matched by value instead.
   bool isFavorite(Food food) => food.id == null ? favorites.contains(food) : favoriteFoodIds.contains(food.id);
 
-  FoodSearchState copyWith({
-    List<Food>? results,
-    List<Food>? favorites,
-    List<String>? recentSearches,
-    String? query,
-    FoodSearchTab? tab,
-  }) => FoodSearchState(
-    results: results ?? this.results,
-    favorites: favorites ?? this.favorites,
-    recentSearches: recentSearches ?? this.recentSearches,
-    query: query ?? this.query,
-    tab: tab ?? this.tab,
-  );
+  FoodSearchState copyWith({List<Food>? results, List<Food>? favorites, List<String>? recentSearches, String? query, FoodSearchTab? tab}) =>
+      FoodSearchState(
+        results: results ?? this.results,
+        favorites: favorites ?? this.favorites,
+        recentSearches: recentSearches ?? this.recentSearches,
+        query: query ?? this.query,
+        tab: tab ?? this.tab,
+      );
 
   @override
   List<Object?> get props => [results, favorites, recentSearches, query, tab];

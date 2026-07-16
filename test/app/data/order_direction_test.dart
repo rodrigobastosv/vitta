@@ -2,23 +2,6 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 
-/// postgrest-dart's `order()` is **descending by default**:
-///
-/// ```dart
-/// PostgrestTransformBuilder<T> order(String column, {bool ascending = false, ...})
-/// ```
-///
-/// That is the opposite of SQL's default and of what the call site reads like,
-/// so `.order('position')` silently returns a list backwards. The symptom is
-/// never "sorted wrong" — it's a feature that looks broken for an unrelated
-/// reason: routine reordering read as "my drag didn't save" while the database
-/// held the correct order the whole time (issue #100).
-///
-/// Nothing else can catch this. The datasources are tested against a mocked
-/// SupabaseService, so PostgREST's real ordering is never exercised — the bug
-/// only exists against a live database. So the rule is enforced here instead,
-/// against the source: every `.order(...)` must say its direction out loud,
-/// even when ascending is what you want.
 void main() {
   test('every .order(...) states its direction explicitly', () {
     final offenders = <String>[];
@@ -53,12 +36,6 @@ class _OrderCall {
   final String arguments;
 }
 
-/// Blanks out comments and string literals, keeping every newline so reported
-/// line numbers still line up with the real file.
-///
-/// Needed because the rule is documented in prose right next to the code it
-/// governs — a comment explaining that `.order('position')` reads backwards
-/// would otherwise be reported as an offender itself.
 String _withoutComments(String source) {
   final buffer = StringBuffer();
   var index = 0;
@@ -82,8 +59,6 @@ String _withoutComments(String source) {
     }
     final character = source[index];
     if (character == "'" || character == '"') {
-      // Keep the quotes so `.order('x')` still parses as a call, but blank the
-      // contents so a URL or a message can't look like one.
       buffer.write(character);
       index++;
       while (index < source.length && source[index] != character) {
@@ -107,9 +82,6 @@ String _withoutComments(String source) {
   return buffer.toString();
 }
 
-/// Finds `.order(` calls and returns their argument text, matching parentheses
-/// so a call wrapped across lines is read whole rather than truncated at the
-/// first newline.
 Iterable<_OrderCall> _orderCalls(String source) sync* {
   const marker = '.order(';
   var index = source.indexOf(marker);

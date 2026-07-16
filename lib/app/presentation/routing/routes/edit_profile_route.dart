@@ -8,5 +8,6 @@ class EditProfileRoute extends VTRoute {
   AppRoute get route => .editProfile;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const EditProfilePage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const EditProfilePage();
 }

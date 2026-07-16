@@ -12,9 +12,7 @@ class TrendRangeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return SegmentedButton<TrendRange>(
-      segments: [
-        for (final range in TrendRange.values) ButtonSegment(value: range, label: Text(range.getLabel(l10n))),
-      ],
+      segments: [for (final range in TrendRange.values) ButtonSegment(value: range, label: Text(range.getLabel(l10n)))],
       selected: {selected},
       showSelectedIcon: false,
       onSelectionChanged: (selection) => onSelected(selection.single),

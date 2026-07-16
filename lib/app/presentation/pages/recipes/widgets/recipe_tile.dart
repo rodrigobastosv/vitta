@@ -46,12 +46,7 @@ class RecipeTile extends StatelessWidget {
           ),
           const VTGap.s(),
           Text(
-            l10n.dietMealMacros(
-              recipe.totalProtein.round(),
-              recipe.totalCarbs.round(),
-              recipe.totalFat.round(),
-              recipe.totalFiber.round(),
-            ),
+            l10n.dietMealMacros(recipe.totalProtein.round(), recipe.totalCarbs.round(), recipe.totalFat.round(), recipe.totalFiber.round()),
             style: VTTextStyles.caption(context),
           ),
         ],

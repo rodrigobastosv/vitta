@@ -49,8 +49,6 @@ class WorkoutSetRow extends StatelessWidget {
             ),
             const VTGap.m(),
             Expanded(child: Text(l10n.workoutSetSummary(set.reps), style: VTTextStyles.body(context))),
-            // Bodyweight is a load like any other, so it reads as the same
-            // badge - the column stays one thing instead of going blank.
             VTBadge(
               label: set.isBodyweight ? l10n.workoutBodyweightLabel : _load(),
               color: set.isBodyweight ? colorScheme.onSurfaceVariant : color,

@@ -4,14 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
 
 class VTBarChart extends StatelessWidget {
-  const VTBarChart({
-    required this.bars,
-    this.referenceValue,
-    this.referenceColor,
-    this.emptySlotColor,
-    this.height = 140,
-    super.key,
-  });
+  const VTBarChart({required this.bars, this.referenceValue, this.referenceColor, this.emptySlotColor, this.height = 140, super.key});
 
   final List<VTBarChartBar> bars;
   final double? referenceValue;
@@ -95,11 +88,7 @@ class _BarChartPainter extends CustomPainter {
   }
 
   void _paintEmptySlot(Canvas canvas, {required double left, required double width, required Size size, required Radius radius}) {
-    final track = RRect.fromRectAndCorners(
-      Rect.fromLTWH(left, size.height - 3, width, 3),
-      topLeft: radius,
-      topRight: radius,
-    );
+    final track = RRect.fromRectAndCorners(Rect.fromLTWH(left, size.height - 3, width, 3), topLeft: radius, topRight: radius);
     canvas.drawRRect(track, Paint()..color = emptySlotColor);
   }
 

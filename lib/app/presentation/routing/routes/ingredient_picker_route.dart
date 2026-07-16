@@ -9,5 +9,6 @@ class IngredientPickerRoute extends VTRoute {
   AppRoute get route => .ingredientPicker;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => IngredientPickerPage(unitSystem: state.extra! as UnitSystem);
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => IngredientPickerPage(unitSystem: state.extra! as UnitSystem);
 }

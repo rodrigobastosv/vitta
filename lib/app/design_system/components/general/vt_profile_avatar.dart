@@ -6,15 +6,6 @@ import 'package:vitta/app/design_system/components/general/vt_avatar_catalog.dar
 import 'package:vitta/app/design_system/components/general/vt_remote_image.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
-/// A circular profile avatar resolving, in order: an uploaded photo, a chosen
-/// preset avatar (see [VTAvatarCatalog]), a name/email initial, then a fallback
-/// person icon (issue #117). The precedence lives here so every place that
-/// shows the avatar - the home app-bar, the profile header, the sign-up/edit
-/// preview - agrees.
-///
-/// [previewBytes] is the one exception: while a photo is being picked it hasn't
-/// been uploaded yet, so there's no URL, and the raw bytes are shown instead.
-/// It wins over everything, since it's the choice the user is actively making.
 class VTProfileAvatar extends StatelessWidget {
   const VTProfileAvatar({
     this.avatarUrl,
@@ -43,7 +34,9 @@ class VTProfileAvatar extends StatelessWidget {
 
     final bytes = previewBytes;
     if (bytes != null) {
-      return ClipOval(child: Image.memory(bytes, width: size, height: size, fit: BoxFit.cover));
+      return ClipOval(
+        child: Image.memory(bytes, width: size, height: size, fit: BoxFit.cover),
+      );
     }
     if (avatarUrl != null) {
       return VTRemoteImage(

@@ -27,7 +27,12 @@ void main() {
 
   MockGetWaterInRangeUseCase stubbedRange(Map<DateTime, DailyWater> waterByDate) {
     final getWaterInRangeUseCase = MockGetWaterInRangeUseCase();
-    when(() => getWaterInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(waterByDate));
+    when(
+      () => getWaterInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => Success(waterByDate));
     return getWaterInRangeUseCase;
   }
 
@@ -95,7 +100,10 @@ void main() {
     build: () {
       final getWaterInRangeUseCase = MockGetWaterInRangeUseCase();
       when(
-        () => getWaterInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+        () => getWaterInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildWaterHistoryCubit(getWaterInRangeUseCase: getWaterInRangeUseCase, getWaterGoalUseCase: stubbedGoal());
     },

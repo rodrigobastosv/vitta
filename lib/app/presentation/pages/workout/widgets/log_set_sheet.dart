@@ -23,10 +23,6 @@ Future<void> showLogSetSheet({
   ),
 );
 
-/// Captures the two fields a set is made of. Doubles as the create and the edit
-/// form: `set` non-null seeds the fields and switches the title, which is worth
-/// it here (unlike `LogFoodSheet` vs `EditFoodLogSheet`, which hang off
-/// different cubits) because both paths call the same `WorkoutCubit`.
 class LogSetSheet extends StatefulWidget {
   const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, super.key});
 
@@ -90,18 +86,12 @@ class _LogSetSheetState extends State<LogSetSheet> {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   textInputAction: .done,
                   onSubmitted: (_) => _submit(),
-                  // The unit lives in the label, the way dietQuantityLabel and
-                  // waterCustomAmountLabel already do it. suffixText only renders
-                  // once the field is focused or filled, so it hid the unit at the
-                  // exact moment the user needs it - before typing anything.
                   decoration: InputDecoration(labelText: l10n.workoutLoadLabel(widget.unitSystem.loadUnitLabel)),
                 ),
               ),
             ],
           ),
           const VTGap.s(),
-          // Below the row rather than as the load field's helperText: a helper
-          // inside a half-width field truncates to "Deixe vazio para p…".
           Text(l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
           if (_errorMessage case final message?) ...[
             const VTGap.s(),
@@ -120,8 +110,6 @@ class _LogSetSheetState extends State<LogSetSheet> {
       setState(() => _errorMessage = context.l10n.workoutInvalidRepsMessage);
       return;
     }
-    // An empty load is a bodyweight set, not a validation failure - the column
-    // stores 0 and `WorkoutSet.isBodyweight` reads it back.
     final rawLoad = _loadController.text.trim().replaceAll(',', '.');
     final displayLoad = rawLoad.isEmpty ? 0.0 : double.tryParse(rawLoad);
     if (displayLoad == null || displayLoad < 0) {

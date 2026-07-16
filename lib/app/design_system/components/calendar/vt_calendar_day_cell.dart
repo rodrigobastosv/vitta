@@ -18,14 +18,10 @@ class VTCalendarDayCell extends StatelessWidget {
   final bool isToday;
   final bool isFuture;
 
-  /// How the day scored — `null` means nothing was logged, which is what makes
-  /// the cell plain and untappable. The component never derives this itself:
-  /// what counts as "good" is the feature's business, not the calendar's.
   final Color? valueColor;
 
   final bool isSelected;
 
-  /// Passing none disables the cell even when it has data.
   final VoidCallback? onTap;
 
   bool get _hasValue => valueColor != null;

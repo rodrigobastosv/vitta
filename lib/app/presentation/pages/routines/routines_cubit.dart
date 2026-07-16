@@ -7,11 +7,8 @@ import 'package:vitta/app/presentation/pages/routines/routines_presentation_even
 import 'package:vitta/app/presentation/pages/routines/routines_state.dart';
 
 class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentationEvent> {
-  RoutinesCubit({
-    required this._getRoutinesUseCase,
-    required this._deleteRoutineUseCase,
-    required this._reorderRoutinesUseCase,
-  }) : super(const RoutinesState(routines: []));
+  RoutinesCubit({required this._getRoutinesUseCase, required this._deleteRoutineUseCase, required this._reorderRoutinesUseCase})
+    : super(const RoutinesState(routines: []));
 
   final GetRoutinesUseCase _getRoutinesUseCase;
   final DeleteRoutineUseCase _deleteRoutineUseCase;
@@ -38,25 +35,22 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
     });
   }
 
-  /// Moves a routine in the cycle. The list is reordered locally first so the
-  /// drag lands immediately, then persisted; a failure reverts to the server's
-  /// order via a reload. Optimistic for the same reason favouriting is: the
-  /// move is cheap and the user just watched it happen.
   Future<void> reorderRoutines({required int oldIndex, required int newIndex}) async {
     final previous = state.routines;
     final reordered = [...state.routines];
     reordered.insert(newIndex, reordered.removeAt(oldIndex));
     emit(state.copyWith(routines: reordered));
 
-    final reorderedResult = await _reorderRoutinesUseCase(
-      orderedRoutineIds: [for (final routine in reordered) routine.id],
+    final reorderedResult = await _reorderRoutinesUseCase(orderedRoutineIds: [for (final routine in reordered) routine.id]);
+    await reorderedResult.when(
+      (error) {
+        emit(state.copyWith(routines: previous));
+        return Future.sync(() => emitPresentation(RoutinesError(message: error.message)));
+      },
+      (_) {
+        Log.action('workout_routines_reordered');
+        return Future<void>.value();
+      },
     );
-    await reorderedResult.when((error) {
-      emit(state.copyWith(routines: previous));
-      return Future.sync(() => emitPresentation(RoutinesError(message: error.message)));
-    }, (_) {
-      Log.action('workout_routines_reordered');
-      return Future<void>.value();
-    });
   }
 }

@@ -9,7 +9,6 @@ void main() {
   final l10n = AppLocalizationsEn();
 
   test('groups identical sets into the n×reps · load form', () {
-    // The factory defaults to 10 reps at 40 kg, so these four are identical.
     final sets = [
       WorkoutSetFactory.build(id: 's1'),
       WorkoutSetFactory.build(id: 's2', position: 1),
@@ -21,10 +20,7 @@ void main() {
   });
 
   test('falls back to a set count and top load when the sets differ', () {
-    final sets = [
-      WorkoutSetFactory.build(id: 's1'),
-      WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 45),
-    ];
+    final sets = [WorkoutSetFactory.build(id: 's1'), WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 45)];
 
     expect(WorkoutSetsSummary.format(sets: sets, unitSystem: UnitSystem.metric, l10n: l10n), '2 sets · 45 kg');
   });

@@ -14,9 +14,6 @@ class RoutineExerciseTile extends StatelessWidget {
   final int position;
   final VoidCallback? onRemove;
 
-  /// The list's drag grip. Only a reorderable list can build it (it needs the
-  /// item's index), so it arrives from the outside rather than being a bare
-  /// icon here - an icon that looks draggable but isn't is worse than none.
   final Widget? dragHandle;
 
   @override
@@ -26,10 +23,7 @@ class RoutineExerciseTile extends StatelessWidget {
     return VTCard(
       child: Row(
         children: [
-          SizedBox(
-            width: 20,
-            child: Text('$position', style: VTTextStyles.caption(context)),
-          ),
+          SizedBox(width: 20, child: Text('$position', style: VTTextStyles.caption(context))),
           const SizedBox(width: VTSpacing.s),
           VTRemoteImage(imageUrl: exercise.imageUrl, placeholderIcon: Icons.fitness_center_outlined, size: 44),
           const SizedBox(width: VTSpacing.m),
@@ -50,11 +44,7 @@ class RoutineExerciseTile extends StatelessWidget {
             ),
           ),
           if (onRemove != null)
-            IconButton(
-              icon: const Icon(Icons.close, size: 18),
-              tooltip: l10n.workoutRoutineRemoveExerciseTooltip,
-              onPressed: onRemove,
-            ),
+            IconButton(icon: const Icon(Icons.close, size: 18), tooltip: l10n.workoutRoutineRemoveExerciseTooltip, onPressed: onRemove),
           ?dragHandle,
         ],
       ),

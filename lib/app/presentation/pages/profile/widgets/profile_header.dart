@@ -11,11 +11,9 @@ import 'package:vitta/app/domain/auth/entities/user.dart';
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({required this.onAction, this.user, this.onEdit, super.key});
 
-  /// The signed-in user, or null for a guest.
   final AuthenticatedUser? user;
   final VoidCallback onAction;
 
-  /// Opens the edit-profile flow. Null for a guest, who has no profile to edit.
   final VoidCallback? onEdit;
 
   bool get _isSignedIn => user != null;
@@ -67,10 +65,7 @@ class ProfileHeader extends StatelessWidget {
           ),
           if (!_isSignedIn) ...[
             const VTGap.m(),
-            Text(
-              l10n.authAnonymousMessage,
-              style: VTTextStyles.caption(context).copyWith(color: VTColors.onGreen.withValues(alpha: 0.85)),
-            ),
+            Text(l10n.authAnonymousMessage, style: VTTextStyles.caption(context).copyWith(color: VTColors.onGreen.withValues(alpha: 0.85))),
           ],
           const VTGap.l(),
           SizedBox(

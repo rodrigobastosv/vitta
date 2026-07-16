@@ -24,8 +24,6 @@ class WorkoutSummaryCard extends StatelessWidget {
     final regions = {for (final workout in state.workouts) ...workout.regions}.toList();
     final completed = state.completedExercises;
     final total = state.exercises.length;
-    // Tonnage has no goal to ring against, but the session does: mid-workout
-    // the figure that has a target at all is how much of today is left.
     final accent = state.isFinished ? VTColors.success : colorScheme.primary;
     return VTCard(
       child: Column(

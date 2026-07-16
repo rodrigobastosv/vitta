@@ -44,10 +44,7 @@ Future<void> pumpEditSheet(WidgetTester tester, {required DietCubit cubit, requi
   await tester.pumpAndSettle();
 }
 
-DietCubit buildCubit({
-  required MockUpdateFoodLogUseCase updateFoodLogUseCase,
-  UnitSystem unitSystem = UnitSystem.metric,
-}) {
+DietCubit buildCubit({required MockUpdateFoodLogUseCase updateFoodLogUseCase, UnitSystem unitSystem = UnitSystem.metric}) {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
@@ -73,7 +70,11 @@ void main() {
       food: FoodFactory.build(name: 'Oatmeal'),
       log: FoodLogFactory.build(mealType: .dinner, quantityGrams: 250),
     );
-    await pumpEditSheet(tester, cubit: buildCubit(updateFoodLogUseCase: MockUpdateFoodLogUseCase()), entry: entry);
+    await pumpEditSheet(
+      tester,
+      cubit: buildCubit(updateFoodLogUseCase: MockUpdateFoodLogUseCase()),
+      entry: entry,
+    );
 
     expect(find.text('Oatmeal'), findsOneWidget);
     expect(find.widgetWithText(TextField, '250'), findsOneWidget);
@@ -117,7 +118,11 @@ void main() {
     expect(find.text('Enter a quantity greater than zero.'), findsOneWidget);
     expect(find.text('Save'), findsOneWidget);
     verifyNever(
-      () => updateFoodLogUseCase(logId: any(named: 'logId'), mealType: any(named: 'mealType'), quantityGrams: any(named: 'quantityGrams')),
+      () => updateFoodLogUseCase(
+        logId: any(named: 'logId'),
+        mealType: any(named: 'mealType'),
+        quantityGrams: any(named: 'quantityGrams'),
+      ),
     );
   });
 

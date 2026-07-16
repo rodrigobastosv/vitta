@@ -61,17 +61,8 @@ class RoutineFormPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, 0, VTSpacing.m, VTSpacing.m),
                 itemCount: state.draft.exercises.length,
                 buildDefaultDragHandles: false,
-                // onReorderItem, not the deprecated onReorder: it hands back a
-                // newIndex already adjusted for the removed item, so the cubit
-                // takes a final index rather than re-deriving one.
                 onReorderItem: (oldIndex, newIndex) => cubit.reorderExercise(oldIndex: oldIndex, newIndex: newIndex),
                 itemBuilder: (context, index) => Padding(
-                  // Keyed by exercise id alone, never the index: a
-                  // ReorderableListView needs a key that stays with the item
-                  // across a move, and an index-based key changes for every
-                  // row the moment one is dragged, so nothing sticks. Safe
-                  // because a routine holds distinct exercises (see
-                  // RoutineFormCubit.addExercise).
                   key: ValueKey(state.draft.exercises[index].id),
                   padding: const EdgeInsets.only(bottom: VTSpacing.s),
                   child: RoutineExerciseTile(

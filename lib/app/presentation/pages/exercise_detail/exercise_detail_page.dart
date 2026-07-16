@@ -10,9 +10,6 @@ import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/widgets/exercise_instruction_step.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/widgets/exercise_muscle_section.dart';
 
-/// Read-only illustration of one catalog exercise. It has no cubit: whoever
-/// pushed it already holds the `Exercise`, so re-fetching it would be ceremony
-/// - the same reasoning that leaves `DietDayPage` cubit-less.
 class ExerciseDetailPage extends StatelessWidget {
   const ExerciseDetailPage({required this.exercise, super.key});
 

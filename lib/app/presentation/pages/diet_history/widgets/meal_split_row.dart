@@ -20,10 +20,7 @@ class MealSplitRow extends StatelessWidget {
         Icon(mealType.icon, size: 18, color: mealType.color),
         const VTGap.s(),
         Expanded(child: Text(mealType.getLabel(l10n), style: VTTextStyles.caption(context))),
-        Text(
-          l10n.dietMealSplitAverage(dailyAverage.round()),
-          style: VTTextStyles.caption(context),
-        ),
+        Text(l10n.dietMealSplitAverage(dailyAverage.round()), style: VTTextStyles.caption(context)),
         const VTGap.s(),
         VTBadge(label: l10n.dietMacroPercent((share * 100).round()), color: mealType.color),
       ],

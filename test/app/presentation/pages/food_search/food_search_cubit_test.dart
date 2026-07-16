@@ -16,8 +16,6 @@ import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
-  // A search that finds something now records the query, and the use case
-  // returns a non-nullable list a bare mock can't satisfy.
   MockAddRecentSearchUseCase stubbedAddRecent() {
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     when(() => addRecentSearchUseCase(query: any(named: 'query'))).thenAnswer((_) async => const []);

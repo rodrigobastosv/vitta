@@ -8,5 +8,6 @@ class CustomFoodRoute extends VTRoute {
   AppRoute get route => .customFood;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const CustomFoodPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const CustomFoodPage();
 }

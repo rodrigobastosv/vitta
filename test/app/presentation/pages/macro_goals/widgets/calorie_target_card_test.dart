@@ -7,8 +7,6 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 import '../../../../../factories/entities/macro_goals_factory.dart';
 
 Future<void> pumpCard(WidgetTester tester, {Locale locale = const Locale('en')}) {
-  // The narrowest phone the app targets - where the header row (title + big
-  // kcal value) would overflow first.
   tester.view.physicalSize = const Size(320, 900);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -18,7 +16,9 @@ Future<void> pumpCard(WidgetTester tester, {Locale locale = const Locale('en')})
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: CalorieTargetCard(goals: MacroGoalsFactory.build(), onCaloriesChanged: (_) {})),
+      home: Scaffold(
+        body: CalorieTargetCard(goals: MacroGoalsFactory.build(), onCaloriesChanged: (_) {}),
+      ),
     ),
   );
 }
@@ -27,7 +27,6 @@ void main() {
   testWidgets('renders the derived target without overflowing at 320px', (tester) async {
     await pumpCard(tester);
 
-    // 150*4 + 250*4 + 65*9 = 2185.
     expect(find.text('2185 kcal'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
@@ -48,7 +47,9 @@ void main() {
         theme: VTTheme.light,
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(body: CalorieTargetCard(goals: MacroGoalsFactory.build(), onCaloriesChanged: (calories) => reported = calories)),
+        home: Scaffold(
+          body: CalorieTargetCard(goals: MacroGoalsFactory.build(), onCaloriesChanged: (calories) => reported = calories),
+        ),
       ),
     );
 

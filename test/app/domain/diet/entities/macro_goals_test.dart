@@ -5,7 +5,6 @@ import '../../../../factories/entities/macro_goals_factory.dart';
 
 void main() {
   test('calorieGoal is the energy of the macros (4/4/9, fiber excluded)', () {
-    // Defaults: 150g protein, 250g carbs, 65g fat -> 600 + 1000 + 585.
     final goals = MacroGoalsFactory.build();
 
     expect(goals.calorieGoal, 2185);
@@ -15,7 +14,7 @@ void main() {
     final before = MacroGoalsFactory.build();
     final after = MacroGoalsFactory.build(fatGoalGrams: 75);
 
-    expect(after.calorieGoal - before.calorieGoal, 90); // 10g fat * 9
+    expect(after.calorieGoal - before.calorieGoal, 90);
   });
 
   test('fiber carries no energy, so it never changes the calorie goal', () {

@@ -15,8 +15,6 @@ void main() {
     return getRecentSearchesUseCase;
   }
 
-  // onInit loads favourites too, and that use case returns a non-nullable
-  // Result a bare mock can't satisfy.
   MockGetFavoriteFoodsUseCase stubbedFavorites() {
     final getFavoriteFoodsUseCase = MockGetFavoriteFoodsUseCase();
     when(getFavoriteFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));

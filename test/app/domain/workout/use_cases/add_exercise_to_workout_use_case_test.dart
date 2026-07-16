@@ -17,10 +17,16 @@ void main() {
     final workoutRepository = MockWorkoutRepository();
     final lastSets = [WorkoutSetFactory.build(id: 'old-1', reps: 8, weightKg: 60)];
     when(
-      () => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => workoutRepository.getLastSetsByExercise(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => Success({'exercise-1': lastSets}));
     when(
-      () => workoutRepository.addWorkoutExercise(workoutId: any(named: 'workoutId'), exerciseId: any(named: 'exerciseId')),
+      () => workoutRepository.addWorkoutExercise(
+        workoutId: any(named: 'workoutId'),
+        exerciseId: any(named: 'exerciseId'),
+      ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-9')));
     when(
       () => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')),
@@ -41,10 +47,16 @@ void main() {
   test('adds no sets when the exercise was never trained before', () async {
     final workoutRepository = MockWorkoutRepository();
     when(
-      () => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => workoutRepository.getLastSetsByExercise(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => const Success({}));
     when(
-      () => workoutRepository.addWorkoutExercise(workoutId: any(named: 'workoutId'), exerciseId: any(named: 'exerciseId')),
+      () => workoutRepository.addWorkoutExercise(
+        workoutId: any(named: 'workoutId'),
+        exerciseId: any(named: 'exerciseId'),
+      ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-9')));
 
     await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(
@@ -59,7 +71,10 @@ void main() {
   test("creates the day's workout when there is none yet, then attaches the exercise", () async {
     final workoutRepository = MockWorkoutRepository();
     when(
-      () => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => workoutRepository.getLastSetsByExercise(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => const Success({}));
     when(
       () => workoutRepository.createWorkout(
@@ -69,7 +84,10 @@ void main() {
       ),
     ).thenAnswer((_) async => Success(WorkoutFactory.build(id: 'workout-new')));
     when(
-      () => workoutRepository.addWorkoutExercise(workoutId: any(named: 'workoutId'), exerciseId: any(named: 'exerciseId')),
+      () => workoutRepository.addWorkoutExercise(
+        workoutId: any(named: 'workoutId'),
+        exerciseId: any(named: 'exerciseId'),
+      ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-9')));
 
     await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(date: DateTime(2026, 7, 20), exerciseId: 'exercise-1');
@@ -81,7 +99,10 @@ void main() {
   test('does not create a workout when the previous-sets lookup fails', () async {
     final workoutRepository = MockWorkoutRepository();
     when(
-      () => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => workoutRepository.getLastSetsByExercise(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
 
     final addedResult = await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(
@@ -97,6 +118,11 @@ void main() {
         routineId: any(named: 'routineId'),
       ),
     );
-    verifyNever(() => workoutRepository.addWorkoutExercise(workoutId: any(named: 'workoutId'), exerciseId: any(named: 'exerciseId')));
+    verifyNever(
+      () => workoutRepository.addWorkoutExercise(
+        workoutId: any(named: 'workoutId'),
+        exerciseId: any(named: 'exerciseId'),
+      ),
+    );
   });
 }

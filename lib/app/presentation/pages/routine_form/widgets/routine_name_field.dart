@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 
-/// Owns the name controller, seeding it from the draft once. The cubit is the
-/// source of truth for the value; this only exists because a TextField needs a
-/// controller - the same split CustomFoodForm uses.
 class RoutineNameField extends StatefulWidget {
   const RoutineNameField({required this.initialName, required this.onChanged, super.key});
 

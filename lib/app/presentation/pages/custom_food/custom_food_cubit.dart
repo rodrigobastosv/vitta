@@ -10,11 +10,8 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_presentatio
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart';
 
 class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPresentationEvent> {
-  CustomFoodCubit({
-    required this._uploadFoodImageUseCase,
-    required this._scanNutritionLabelUseCase,
-    required this._imagePickerService,
-  }) : super(const CustomFoodState());
+  CustomFoodCubit({required this._uploadFoodImageUseCase, required this._scanNutritionLabelUseCase, required this._imagePickerService})
+    : super(const CustomFoodState());
 
   final UploadFoodImageUseCase _uploadFoodImageUseCase;
   final ScanNutritionLabelUseCase _scanNutritionLabelUseCase;

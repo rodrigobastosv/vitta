@@ -142,7 +142,8 @@ void main() {
         avatarUrl: any(named: 'avatarUrl'),
       ),
     ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)..setAvatarPreset('man-light');
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)
+      ..setAvatarPreset('man-light');
 
     await cubit.signUp(email: 'a@b.com', password: 'secret1', displayName: 'Rod');
 
@@ -154,11 +155,17 @@ void main() {
     when(getUserUseCase.call).thenReturn(const AnonymousUser());
     final imagePickerService = MockImagePickerService();
     when(
-      () => imagePickerService.pickImage(source: any(named: 'source'), maxWidth: any(named: 'maxWidth')),
+      () => imagePickerService.pickImage(
+        source: any(named: 'source'),
+        maxWidth: any(named: 'maxWidth'),
+      ),
     ).thenAnswer((_) async => PickedImage(path: 'p.jpg', bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'jpg'));
     final uploadAvatarUseCase = MockUploadAvatarUseCase();
     when(
-      () => uploadAvatarUseCase(bytes: any(named: 'bytes'), fileExtension: any(named: 'fileExtension')),
+      () => uploadAvatarUseCase(
+        bytes: any(named: 'bytes'),
+        fileExtension: any(named: 'fileExtension'),
+      ),
     ).thenAnswer((_) async => const Success('https://cdn/a.jpg'));
     final signUpUseCase = MockSignUpUseCase();
     when(
@@ -188,7 +195,10 @@ void main() {
     when(getUserUseCase.call).thenReturn(const AnonymousUser());
     final imagePickerService = MockImagePickerService();
     when(
-      () => imagePickerService.pickImage(source: any(named: 'source'), maxWidth: any(named: 'maxWidth')),
+      () => imagePickerService.pickImage(
+        source: any(named: 'source'),
+        maxWidth: any(named: 'maxWidth'),
+      ),
     ).thenAnswer((_) async => PickedImage(path: 'p.jpg', bytes: Uint8List.fromList([9]), fileExtension: 'jpg'));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, imagePickerService: imagePickerService);
 

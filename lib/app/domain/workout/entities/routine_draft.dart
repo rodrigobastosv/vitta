@@ -2,9 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 
-/// What the routine form edits: a name and an ordered list of exercises, with
-/// no id until it's persisted. `RoutineDraft`/`Routine` is the same split
-/// `RecipeDraft`/`Recipe` uses.
 class RoutineDraft extends Equatable {
   const RoutineDraft({this.name = '', this.exercises = const []});
 

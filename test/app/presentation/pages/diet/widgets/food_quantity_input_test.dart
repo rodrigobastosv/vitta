@@ -39,7 +39,11 @@ Future<void> pumpInput(
 
 void main() {
   testWidgets('offers no unit mode for a food nobody counts', (tester) async {
-    await pumpInput(tester, food: FoodFactory.build(name: 'Arroz'), controller: TextEditingController(text: '100'));
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Arroz'),
+      controller: TextEditingController(text: '100'),
+    );
 
     expect(find.text('Units'), findsNothing);
     expect(find.text('Weight'), findsNothing);
@@ -47,7 +51,11 @@ void main() {
   });
 
   testWidgets('offers the unit mode once the food has a unit weight', (tester) async {
-    await pumpInput(tester, food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50), controller: TextEditingController(text: '100'));
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
+      controller: TextEditingController(text: '100'),
+    );
 
     expect(find.text('Units'), findsOneWidget);
     expect(find.text('Weight'), findsOneWidget);

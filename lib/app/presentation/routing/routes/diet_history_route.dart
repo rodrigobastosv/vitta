@@ -8,5 +8,6 @@ class DietHistoryRoute extends VTRoute {
   AppRoute get route => .dietHistory;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const DietHistoryPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const DietHistoryPage();
 }

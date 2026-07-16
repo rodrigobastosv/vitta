@@ -33,8 +33,6 @@ void main() {
   testWidgets('names the load unit in the label, so it is readable before typing', (tester) async {
     await pumpLogSetSheet(tester);
 
-    // suffixText would only render once the field is focused or filled, which
-    // hid the unit exactly when it is needed.
     expect(find.text('Load (kg)'), findsOneWidget);
   });
 
@@ -48,8 +46,6 @@ void main() {
     await pumpLogSetSheet(tester);
 
     final hint = tester.widget<Text>(find.text('Leave the load empty for a bodyweight set.'));
-    // A Text with no maxLines and no ellipsis cannot be the truncated
-    // "Leave the load empty for a…" the field's helperText produced.
     expect(hint.maxLines, isNull);
     expect(hint.overflow, isNull);
   });
@@ -87,7 +83,6 @@ void main() {
     await tester.tap(find.text('Save set'));
     await tester.pump();
 
-    // 100 lb reaches the domain as kilograms, the stored base unit.
     expect(submittedWeight, closeTo(45.36, 0.01));
   });
 

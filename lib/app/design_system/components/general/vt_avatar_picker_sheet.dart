@@ -8,9 +8,6 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 Future<String?> showAvatarPickerSheet({required BuildContext context}) =>
     showModalBottomSheet<String>(context: context, isScrollControlled: true, builder: (sheetContext) => const VTAvatarPickerSheet());
 
-/// A grid of preset avatars to choose from (issue #117). Taps pop the chosen
-/// option's id. The grid scrolls inside a capped height, so a large catalog
-/// doesn't overflow the sheet.
 class VTAvatarPickerSheet extends StatelessWidget {
   const VTAvatarPickerSheet({super.key});
 

@@ -35,7 +35,6 @@ class WaterHistoryCalendarCard extends StatelessWidget {
           VTCalendarMonthGrid(
             month: state.month,
             dayColor: _dayColor,
-            // Read-only: there is no per-day water page to open.
             isDayEnabled: (_) => false,
             onDaySelected: (_) {},
             weekBadge: (daysInWeek) => _weekBadge(context, daysInWeek),

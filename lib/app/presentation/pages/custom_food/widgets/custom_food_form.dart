@@ -74,9 +74,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
       child: Column(
         crossAxisAlignment: .start,
         children: [
-          VTAppearEffect(
-            child: Text(l10n.dietCustomFoodSubtitle, style: VTTextStyles.caption(context)),
-          ),
+          VTAppearEffect(child: Text(l10n.dietCustomFoodSubtitle, style: VTTextStyles.caption(context))),
           const VTGap.m(),
           VTAppearEffect(
             delay: const Duration(milliseconds: 50),

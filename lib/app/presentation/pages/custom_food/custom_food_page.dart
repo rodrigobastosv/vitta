@@ -48,10 +48,7 @@ class CustomFoodPage extends StatelessWidget {
               backgroundColor: context.colorScheme.surface,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
-                background: VTPhotoHeader(
-                  imageBytes: state.imageBytes,
-                  onTap: () => _pickPhoto(context, cubit),
-                ),
+                background: VTPhotoHeader(imageBytes: state.imageBytes, onTap: () => _pickPhoto(context, cubit)),
               ),
             ),
             SliverToBoxAdapter(child: CustomFoodForm(state: state)),

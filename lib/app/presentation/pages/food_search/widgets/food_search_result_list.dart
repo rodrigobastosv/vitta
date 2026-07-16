@@ -17,8 +17,6 @@ class FoodSearchResultList extends StatelessWidget {
 
   final List<Food> foods;
 
-  /// Keeps the Hero tags of the favourites list and the results list from
-  /// colliding when both have rendered in the same session.
   final String heroPrefix;
   final bool Function(Food food) isFavorite;
   final void Function(Food food, Object heroTag) onTapFood;

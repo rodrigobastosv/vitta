@@ -14,10 +14,7 @@ class VTLegendDot extends StatelessWidget {
     mainAxisSize: .min,
     children: [
       if (isDashed)
-        SizedBox(
-          width: 12,
-          child: Divider(color: color.withValues(alpha: 0.5), thickness: 1.5),
-        )
+        SizedBox(width: 12, child: Divider(color: color.withValues(alpha: 0.5), thickness: 1.5))
       else
         Container(
           width: 10,

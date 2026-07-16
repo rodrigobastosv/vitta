@@ -8,5 +8,6 @@ class SignInRoute extends VTRoute {
   AppRoute get route => .signIn;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const SignInPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const SignInPage();
 }

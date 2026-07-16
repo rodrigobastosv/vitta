@@ -20,18 +20,12 @@ import '../../../../factories/entities/workout_set_factory.dart';
 import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
-/// loadDate loads the routine cycle too, so any test that loads a day has to
-/// answer that call. Factories never stub (see CLAUDE.md), hence this helper
-/// rather than a stubbed default.
 MockGetRoutineCycleUseCase _emptyCycleUseCase() {
   final useCase = MockGetRoutineCycleUseCase();
   when(useCase.call).thenAnswer((_) async => const Success(RoutineCycle(routines: [])));
   return useCase;
 }
 
-/// loadDate also loads the "last time" hint's sets for any exercise on the day.
-/// Same reason as the cycle helper: factories never stub, so a day with
-/// exercises needs this to answer the call.
 MockGetLastSetsByExerciseUseCase _emptyLastSetsUseCase() {
   final useCase = MockGetLastSetsByExerciseUseCase();
   when(
@@ -130,8 +124,6 @@ void main() {
 
     await cubit.addExercise(ExerciseFactory.build(id: 'exercise-9'));
 
-    // workoutId stays null on an empty day, which is what tells the use case to
-    // create the workout before attaching the exercise.
     verify(
       () => addExerciseToWorkoutUseCase(
         date: any(named: 'date'),
@@ -184,7 +176,6 @@ void main() {
 
     await cubit.loadDate(DateTime(2026, 7, 20));
 
-    // The day still loaded; there is simply nothing to suggest.
     expect(cubit.state.cycle.next, isNull);
     expect(cubit.state.date, DateTime(2026, 7, 20));
   });
@@ -203,7 +194,10 @@ void main() {
       ]),
     );
     when(
-      () => getLastSetsByExerciseUseCase(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => getLastSetsByExerciseUseCase(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => Success({'exercise-1': lastSets}));
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
@@ -222,13 +216,14 @@ void main() {
     final getLastSetsByExerciseUseCase = MockGetLastSetsByExerciseUseCase();
     when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
       (_) async => Success([
-        WorkoutFactory.build(
-          exercises: [WorkoutExerciseFactory.build()],
-        ),
+        WorkoutFactory.build(exercises: [WorkoutExerciseFactory.build()]),
       ]),
     );
     when(
-      () => getLastSetsByExerciseUseCase(exerciseIds: any(named: 'exerciseIds'), before: any(named: 'before')),
+      () => getLastSetsByExerciseUseCase(
+        exerciseIds: any(named: 'exerciseIds'),
+        before: any(named: 'before'),
+      ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
@@ -365,7 +360,6 @@ void main() {
       ),
     );
 
-    // The *last* set, not the first: repeating follows what you just did.
     verify(() => logSetUseCase(workoutExerciseId: 'we-1', reps: 8, weightKg: 50)).called(1);
   });
 

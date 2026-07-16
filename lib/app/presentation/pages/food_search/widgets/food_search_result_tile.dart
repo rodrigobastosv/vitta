@@ -24,8 +24,6 @@ class FoodSearchResultTile extends StatelessWidget {
   final VoidCallback onAdd;
   final bool isFavorite;
 
-  /// Passing none hides the heart entirely — the ingredient picker reuses this
-  /// tile to build a recipe, where favouriting isn't the job.
   final VoidCallback? onToggleFavorite;
 
   @override
@@ -36,7 +34,10 @@ class FoodSearchResultTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          Hero(tag: heroTag, child: VTFoodImage(imageUrl: food.imageUrl)),
+          Hero(
+            tag: heroTag,
+            child: VTFoodImage(imageUrl: food.imageUrl),
+          ),
           const VTGap.m(),
           Expanded(
             child: Column(

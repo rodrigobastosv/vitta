@@ -19,15 +19,8 @@ class CustomFoodState extends Equatable {
   final Uint8List? imageBytes;
   final String imageExtension;
 
-  /// Held as raw text like [name] and [brand], rather than as a parsed
-  /// `double?`: emptying the field has to be expressible, and `copyWith` can
-  /// never distinguish a null meaning "cleared" from one meaning "unchanged".
-  /// It is the same problem [nutrients] uses a map to sidestep.
   final String gramsPerUnitText;
 
-  /// Null whenever the field is empty or holds something that isn't a usable
-  /// weight, which is exactly the food not being countable. Anything <= 0 is
-  /// filtered here rather than at the database's check constraint.
   double? get gramsPerUnit {
     final parsed = double.tryParse(gramsPerUnitText.replaceAll(',', '.'));
     return parsed == null || parsed <= 0 ? null : parsed;

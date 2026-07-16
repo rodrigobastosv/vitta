@@ -45,11 +45,6 @@ class _VTAppearEffectState extends State<VTAppearEffect> {
     offset: _isVisible ? Offset.zero : widget.offset,
     duration: widget.duration,
     curve: Curves.easeOutCubic,
-    child: AnimatedOpacity(
-      opacity: _isVisible ? 1 : 0,
-      duration: widget.duration,
-      curve: Curves.easeOutCubic,
-      child: widget.child,
-    ),
+    child: AnimatedOpacity(opacity: _isVisible ? 1 : 0, duration: widget.duration, curve: Curves.easeOutCubic, child: widget.child),
   );
 }

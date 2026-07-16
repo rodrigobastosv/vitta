@@ -35,16 +35,19 @@ DailyMacros buildDayOf(double calories, {MealType mealType = MealType.breakfast}
 Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyMacros> macrosByDate = const {}}) async {
   final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
-  when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(macrosByDate));
+  when(
+    () => getMacrosInRangeUseCase(
+      from: any(named: 'from'),
+      to: any(named: 'to'),
+    ),
+  ).thenAnswer((_) async => Success(macrosByDate));
   when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
   if (G.isRegistered<DietHistoryCubit>()) {
     G.unregister<DietHistoryCubit>();
   }
   G.registerFactory<DietHistoryCubit>(
-    () => CubitsFactories.buildDietHistoryCubit(
-      getMacrosInRangeUseCase: getMacrosInRangeUseCase,
-      getMacroGoalsUseCase: getMacroGoalsUseCase,
-    ),
+    () =>
+        CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
   );
 
   await tester.pumpWidget(

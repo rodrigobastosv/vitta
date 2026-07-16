@@ -134,13 +134,7 @@ class SupabaseDietDataSource {
   }) async {
     try {
       final request = UpdateFoodLogRequest(mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
-      final row = await _supabaseService
-          .from(.foodLogs)
-          .update(request.toJson())
-          .eq('id', logId)
-          .eq('user_id', _userId)
-          .select()
-          .single();
+      final row = await _supabaseService.from(.foodLogs).update(request.toJson()).eq('id', logId).eq('user_id', _userId).select().single();
       return Success(FoodLog.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to update food log $logId', cause: error));
