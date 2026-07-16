@@ -13,7 +13,7 @@ void main() {
 
   test('saveGoals persists and getGoals reads it back', () async {
     final dataSource = DietGoalsLocalDataSource(localStorageService: await buildTestLocalStorageService());
-    const goals = MacroGoals(calorieGoal: 2500, proteinGoalGrams: 180, carbsGoalGrams: 300, fatGoalGrams: 80, fiberGoalGrams: 35);
+    const goals = MacroGoals(proteinGoalGrams: 180, carbsGoalGrams: 300, fatGoalGrams: 80, fiberGoalGrams: 35);
 
     await dataSource.saveGoals(goals);
 

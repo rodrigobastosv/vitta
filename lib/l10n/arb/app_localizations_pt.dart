@@ -755,22 +755,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get macroGoalsTitle => 'Metas de macros';
 
   @override
-  String get macroGoalsCalorieLabel => 'Meta de calorias (kcal)';
+  String get macroGoalsEditTooltip => 'Editar metas';
 
   @override
-  String get macroGoalsProteinLabel => 'Meta de proteína (g)';
+  String get macroGoalsCalorieTargetTitle => 'Meta de calorias';
 
   @override
-  String get macroGoalsCarbsLabel => 'Meta de carboidratos (g)';
+  String get macroGoalsCalorieTargetHint => 'Calculada a partir dos seus macros';
 
   @override
-  String get macroGoalsFatLabel => 'Meta de gordura (g)';
+  String get macroGoalsCalorieMinLabel => 'Mín';
 
   @override
-  String get macroGoalsFiberLabel => 'Meta de fibra (g)';
+  String get macroGoalsCalorieMaxLabel => 'Máx';
 
   @override
-  String get macroGoalsInvalid => 'Preencha todas as metas com números válidos maiores que zero.';
+  String macroGoalsKcal(int value) {
+    return '$value kcal';
+  }
 
   @override
   String get authAnonymousMessage =>

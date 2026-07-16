@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_presentation_event.dart';
+import 'package:vitta/app/presentation/pages/macro_goals/widgets/calorie_target_card.dart';
 
 class MacroGoalsPage extends StatelessWidget {
   const MacroGoalsPage({super.key});
@@ -34,52 +37,25 @@ class _MacroGoalsForm extends StatefulWidget {
 }
 
 class _MacroGoalsFormState extends State<_MacroGoalsForm> {
-  late final _calorieController = TextEditingController(text: widget.initialGoals.calorieGoal.round().toString());
-  late final _proteinController = TextEditingController(text: widget.initialGoals.proteinGoalGrams.round().toString());
-  late final _carbsController = TextEditingController(text: widget.initialGoals.carbsGoalGrams.round().toString());
-  late final _fatController = TextEditingController(text: widget.initialGoals.fatGoalGrams.round().toString());
-  late final _fiberController = TextEditingController(text: widget.initialGoals.fiberGoalGrams.round().toString());
-  String? _errorMessage;
+  // The whole draft is one MacroGoals: a macro slider replaces one field, the
+  // calorie slider rescales the three energy macros at once (see
+  // withScaledCalories), and the calorie target is always derived from it - so
+  // calories can never drift out of sync with the macros (issue #116).
+  late MacroGoals _goals = widget.initialGoals;
 
-  @override
-  void dispose() {
-    _calorieController.dispose();
-    _proteinController.dispose();
-    _carbsController.dispose();
-    _fatController.dispose();
-    _fiberController.dispose();
-    super.dispose();
-  }
-
-  double? _parse(String text) => double.tryParse(text.replaceAll(',', '.'));
+  static const double _maxProtein = 300;
+  static const double _maxCarbs = 600;
+  static const double _maxFat = 200;
+  static const double _maxFiber = 100;
 
   Future<void> _submit() async {
-    final l10n = context.l10n;
-    final calorieGoal = _parse(_calorieController.text);
-    final proteinGoalGrams = _parse(_proteinController.text);
-    final carbsGoalGrams = _parse(_carbsController.text);
-    final fatGoalGrams = _parse(_fatController.text);
-    final fiberGoalGrams = _parse(_fiberController.text);
-
-    final goals = [calorieGoal, proteinGoalGrams, carbsGoalGrams, fatGoalGrams, fiberGoalGrams];
-    if (goals.any((goal) => goal == null || goal <= 0)) {
-      setState(() => _errorMessage = l10n.macroGoalsInvalid);
-      return;
-    }
-
-    await widget.onSave(
-      MacroGoals(
-        calorieGoal: calorieGoal!,
-        proteinGoalGrams: proteinGoalGrams!,
-        carbsGoalGrams: carbsGoalGrams!,
-        fatGoalGrams: fatGoalGrams!,
-        fiberGoalGrams: fiberGoalGrams!,
-      ),
-    );
+    await widget.onSave(_goals);
     if (mounted) {
       Navigator.of(context).pop();
     }
   }
+
+  String _grams(double value) => '${value.round()} ${context.l10n.dietGramsUnit}';
 
   @override
   Widget build(BuildContext context) {
@@ -87,36 +63,50 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
     return ListView(
       padding: const EdgeInsets.all(VTSpacing.m),
       children: [
-        TextField(
-          controller: _calorieController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.macroGoalsCalorieLabel),
+        CalorieTargetCard(
+          goals: _goals,
+          onCaloriesChanged: (calories) => setState(() => _goals = _goals.withScaledCalories(calories)),
         ),
-        const VTGap.s(),
-        TextField(
-          controller: _proteinController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.macroGoalsProteinLabel),
+        const VTGap.l(),
+        VTLabeledSlider(
+          label: l10n.dietProteinLabel,
+          valueLabel: _grams(_goals.proteinGoalGrams),
+          value: _goals.proteinGoalGrams,
+          min: 0,
+          max: _maxProtein,
+          color: VTColors.macroProtein,
+          onChanged: (grams) => setState(() => _goals = _goals.copyWith(proteinGoalGrams: grams)),
         ),
-        const VTGap.s(),
-        TextField(
-          controller: _carbsController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.macroGoalsCarbsLabel),
+        const VTGap.m(),
+        VTLabeledSlider(
+          label: l10n.dietCarbsLabel,
+          valueLabel: _grams(_goals.carbsGoalGrams),
+          value: _goals.carbsGoalGrams,
+          min: 0,
+          max: _maxCarbs,
+          color: VTColors.macroCarbs,
+          onChanged: (grams) => setState(() => _goals = _goals.copyWith(carbsGoalGrams: grams)),
         ),
-        const VTGap.s(),
-        TextField(
-          controller: _fatController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.macroGoalsFatLabel),
+        const VTGap.m(),
+        VTLabeledSlider(
+          label: l10n.dietFatLabel,
+          valueLabel: _grams(_goals.fatGoalGrams),
+          value: _goals.fatGoalGrams,
+          min: 0,
+          max: _maxFat,
+          color: VTColors.macroFat,
+          onChanged: (grams) => setState(() => _goals = _goals.copyWith(fatGoalGrams: grams)),
         ),
-        const VTGap.s(),
-        TextField(
-          controller: _fiberController,
-          keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          decoration: InputDecoration(labelText: l10n.macroGoalsFiberLabel),
+        const VTGap.m(),
+        VTLabeledSlider(
+          label: l10n.dietFiberLabel,
+          valueLabel: _grams(_goals.fiberGoalGrams),
+          value: _goals.fiberGoalGrams,
+          min: 0,
+          max: _maxFiber,
+          color: VTColors.macroFiber,
+          onChanged: (grams) => setState(() => _goals = _goals.copyWith(fiberGoalGrams: grams)),
         ),
-        if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error))],
         const VTGap.l(),
         VTPrimaryButton(label: l10n.saveAction, onPressed: _submit),
       ],

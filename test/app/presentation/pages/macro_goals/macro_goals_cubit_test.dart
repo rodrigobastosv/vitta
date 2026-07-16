@@ -15,7 +15,7 @@ void main() {
 
   test('loads the persisted goals on construction', () {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
-    final persistedGoals = MacroGoalsFactory.build(calorieGoal: 2500);
+    final persistedGoals = MacroGoalsFactory.build(proteinGoalGrams: 180);
     when(getMacroGoalsUseCase.call).thenReturn(persistedGoals);
 
     final cubit = CubitsFactories.buildMacroGoalsCubit(getMacroGoalsUseCase: getMacroGoalsUseCase);
@@ -32,8 +32,8 @@ void main() {
       when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
       return CubitsFactories.buildMacroGoalsCubit(getMacroGoalsUseCase: getMacroGoalsUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase);
     },
-    act: (cubit) => cubit.saveGoals(MacroGoalsFactory.build(calorieGoal: 2500)),
-    expect: () => [MacroGoalsFactory.build(calorieGoal: 2500)],
+    act: (cubit) => cubit.saveGoals(MacroGoalsFactory.build(proteinGoalGrams: 180)),
+    expect: () => [MacroGoalsFactory.build(proteinGoalGrams: 180)],
   );
 
   test('persists the new goals when saveGoals is called', () async {
@@ -41,7 +41,7 @@ void main() {
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final saveMacroGoalsUseCase = MockSaveMacroGoalsUseCase();
     when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
-    final newGoals = MacroGoalsFactory.build(calorieGoal: 2500);
+    final newGoals = MacroGoalsFactory.build(proteinGoalGrams: 180);
 
     await CubitsFactories.buildMacroGoalsCubit(
       getMacroGoalsUseCase: getMacroGoalsUseCase,

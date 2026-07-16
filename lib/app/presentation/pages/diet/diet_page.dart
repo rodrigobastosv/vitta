@@ -75,7 +75,18 @@ class DietPage extends StatelessWidget {
                 onPickDate: cubit.goToDate,
               ),
               const VTGap.m(),
-              MacroSummaryCard(dailyMacros: state.dailyMacros, macroGoals: state.macroGoals),
+              MacroSummaryCard(
+                dailyMacros: state.dailyMacros,
+                macroGoals: state.macroGoals,
+                onEditGoals: () async {
+                  await context.pushRoute(.macroGoals);
+                  // Goals drive the ring and adherence colours, so re-read them
+                  // when the editor closes.
+                  if (context.mounted) {
+                    await cubit.refresh();
+                  }
+                },
+              ),
               const VTGap.l(),
               if (state.dailyMacros.entries.isEmpty)
                 VTEmptyState(

@@ -6,14 +6,14 @@ class DietGoalsLocalDataSource {
 
   final LocalStorageService _localStorageService;
 
-  static const _calorieGoalKey = 'diet.calorieGoal';
+  // No calorie key: the calorie goal is derived from the macros (see
+  // MacroGoals.calorieGoal, issue #116), so there's nothing separate to store.
   static const _proteinGoalGramsKey = 'diet.proteinGoalGrams';
   static const _carbsGoalGramsKey = 'diet.carbsGoalGrams';
   static const _fatGoalGramsKey = 'diet.fatGoalGrams';
   static const _fiberGoalGramsKey = 'diet.fiberGoalGrams';
 
   MacroGoals getGoals() => MacroGoals(
-    calorieGoal: _localStorageService.get<double>(_calorieGoalKey) ?? MacroGoals.defaultGoals.calorieGoal,
     proteinGoalGrams: _localStorageService.get<double>(_proteinGoalGramsKey) ?? MacroGoals.defaultGoals.proteinGoalGrams,
     carbsGoalGrams: _localStorageService.get<double>(_carbsGoalGramsKey) ?? MacroGoals.defaultGoals.carbsGoalGrams,
     fatGoalGrams: _localStorageService.get<double>(_fatGoalGramsKey) ?? MacroGoals.defaultGoals.fatGoalGrams,
@@ -21,7 +21,6 @@ class DietGoalsLocalDataSource {
   );
 
   Future<void> saveGoals(MacroGoals goals) async {
-    await _localStorageService.put(_calorieGoalKey, goals.calorieGoal);
     await _localStorageService.put(_proteinGoalGramsKey, goals.proteinGoalGrams);
     await _localStorageService.put(_carbsGoalGramsKey, goals.carbsGoalGrams);
     await _localStorageService.put(_fatGoalGramsKey, goals.fatGoalGrams);
