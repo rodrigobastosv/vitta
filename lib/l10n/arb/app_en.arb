@@ -391,12 +391,17 @@
   "profileMacroGoalsSubtitle": "Your daily calorie and macro targets",
   "profileSettingsSubtitle": "Language, theme and units",
   "macroGoalsTitle": "Macro goals",
-  "macroGoalsCalorieLabel": "Calorie goal (kcal)",
-  "macroGoalsProteinLabel": "Protein goal (g)",
-  "macroGoalsCarbsLabel": "Carbs goal (g)",
-  "macroGoalsFatLabel": "Fat goal (g)",
-  "macroGoalsFiberLabel": "Fiber goal (g)",
-  "macroGoalsInvalid": "Fill in all goals with valid numbers greater than zero.",
+  "macroGoalsEditTooltip": "Edit goals",
+  "macroGoalsCalorieTargetTitle": "Calorie target",
+  "macroGoalsCalorieTargetHint": "Calculated from your macros",
+  "macroGoalsCalorieMinLabel": "Min",
+  "macroGoalsCalorieMaxLabel": "Max",
+  "macroGoalsKcal": "{value} kcal",
+  "@macroGoalsKcal": {
+    "placeholders": {
+      "value": {"type": "int"}
+    }
+  },
   "authAnonymousMessage": "Your data stays on this device only. Create an account to keep it safe and access it from any device.",
   "authSignedInAsLabel": "Signed in as {email}",
   "@authSignedInAsLabel": {

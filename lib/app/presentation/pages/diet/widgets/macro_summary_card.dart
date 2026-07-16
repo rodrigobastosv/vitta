@@ -12,10 +12,15 @@ import 'package:vitta/app/presentation/pages/diet/widgets/macro_progress_row.dar
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
 
 class MacroSummaryCard extends StatefulWidget {
-  const MacroSummaryCard({required this.dailyMacros, required this.macroGoals, super.key});
+  const MacroSummaryCard({required this.dailyMacros, required this.macroGoals, this.onEditGoals, super.key});
 
   final DailyMacros dailyMacros;
   final MacroGoals macroGoals;
+
+  /// Opens the goals editor. Null on the read-only history day view, where the
+  /// same card is reused but goals aren't editable (the "pass no callback to
+  /// disable" convention).
+  final VoidCallback? onEditGoals;
 
   @override
   State<MacroSummaryCard> createState() => _MacroSummaryCardState();
@@ -65,6 +70,19 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
               Expanded(
                 child: Column(
                   children: [
+                    if (widget.onEditGoals != null)
+                      Align(
+                        alignment: .centerRight,
+                        child: IconButton(
+                          visualDensity: .compact,
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                          icon: const Icon(Icons.tune, size: 20),
+                          tooltip: l10n.macroGoalsEditTooltip,
+                          onPressed: widget.onEditGoals,
+                        ),
+                      ),
+                    const VTGap.s(),
                     MacroProgressRow(
                       label: l10n.dietProteinLabel,
                       consumed: dailyMacros.totalProtein,

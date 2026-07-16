@@ -12,13 +12,16 @@ enum GoalAdherence {
     .off => VTColors.error,
   };
 
-  static const _metLowerBound = 0.9;
-  static const _metUpperBound = 1.1;
+  /// The band around a goal that counts as "on target" (green). Public because
+  /// the calorie goal shows this as its min/max range (issue #116), so the
+  /// range on the goals page means exactly what "met" means everywhere else.
+  static const metLowerBound = 0.9;
+  static const metUpperBound = 1.1;
   static const _closeLowerBound = 0.75;
   static const _closeUpperBound = 1.25;
 
   static GoalAdherence forRatio(double consumedToGoalRatio) {
-    if (consumedToGoalRatio >= _metLowerBound && consumedToGoalRatio <= _metUpperBound) {
+    if (consumedToGoalRatio >= metLowerBound && consumedToGoalRatio <= metUpperBound) {
       return .met;
     }
     if (consumedToGoalRatio >= _closeLowerBound && consumedToGoalRatio <= _closeUpperBound) {

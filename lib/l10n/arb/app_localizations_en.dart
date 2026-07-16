@@ -754,22 +754,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get macroGoalsTitle => 'Macro goals';
 
   @override
-  String get macroGoalsCalorieLabel => 'Calorie goal (kcal)';
+  String get macroGoalsEditTooltip => 'Edit goals';
 
   @override
-  String get macroGoalsProteinLabel => 'Protein goal (g)';
+  String get macroGoalsCalorieTargetTitle => 'Calorie target';
 
   @override
-  String get macroGoalsCarbsLabel => 'Carbs goal (g)';
+  String get macroGoalsCalorieTargetHint => 'Calculated from your macros';
 
   @override
-  String get macroGoalsFatLabel => 'Fat goal (g)';
+  String get macroGoalsCalorieMinLabel => 'Min';
 
   @override
-  String get macroGoalsFiberLabel => 'Fiber goal (g)';
+  String get macroGoalsCalorieMaxLabel => 'Max';
 
   @override
-  String get macroGoalsInvalid => 'Fill in all goals with valid numbers greater than zero.';
+  String macroGoalsKcal(int value) {
+    return '$value kcal';
+  }
 
   @override
   String get authAnonymousMessage =>

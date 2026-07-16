@@ -1412,41 +1412,41 @@ abstract class AppLocalizations {
   /// **'Macro goals'**
   String get macroGoalsTitle;
 
-  /// No description provided for @macroGoalsCalorieLabel.
+  /// No description provided for @macroGoalsEditTooltip.
   ///
   /// In en, this message translates to:
-  /// **'Calorie goal (kcal)'**
-  String get macroGoalsCalorieLabel;
+  /// **'Edit goals'**
+  String get macroGoalsEditTooltip;
 
-  /// No description provided for @macroGoalsProteinLabel.
+  /// No description provided for @macroGoalsCalorieTargetTitle.
   ///
   /// In en, this message translates to:
-  /// **'Protein goal (g)'**
-  String get macroGoalsProteinLabel;
+  /// **'Calorie target'**
+  String get macroGoalsCalorieTargetTitle;
 
-  /// No description provided for @macroGoalsCarbsLabel.
+  /// No description provided for @macroGoalsCalorieTargetHint.
   ///
   /// In en, this message translates to:
-  /// **'Carbs goal (g)'**
-  String get macroGoalsCarbsLabel;
+  /// **'Calculated from your macros'**
+  String get macroGoalsCalorieTargetHint;
 
-  /// No description provided for @macroGoalsFatLabel.
+  /// No description provided for @macroGoalsCalorieMinLabel.
   ///
   /// In en, this message translates to:
-  /// **'Fat goal (g)'**
-  String get macroGoalsFatLabel;
+  /// **'Min'**
+  String get macroGoalsCalorieMinLabel;
 
-  /// No description provided for @macroGoalsFiberLabel.
+  /// No description provided for @macroGoalsCalorieMaxLabel.
   ///
   /// In en, this message translates to:
-  /// **'Fiber goal (g)'**
-  String get macroGoalsFiberLabel;
+  /// **'Max'**
+  String get macroGoalsCalorieMaxLabel;
 
-  /// No description provided for @macroGoalsInvalid.
+  /// No description provided for @macroGoalsKcal.
   ///
   /// In en, this message translates to:
-  /// **'Fill in all goals with valid numbers greater than zero.'**
-  String get macroGoalsInvalid;
+  /// **'{value} kcal'**
+  String macroGoalsKcal(int value);
 
   /// No description provided for @authAnonymousMessage.
   ///
