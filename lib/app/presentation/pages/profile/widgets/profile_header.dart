@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_profile_avatar.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/auth/entities/user.dart';
 
 class ProfileHeader extends StatelessWidget {
-  const ProfileHeader({required this.onAction, this.email, super.key});
+  const ProfileHeader({required this.onAction, this.user, this.onEdit, super.key});
 
-  final String? email;
+  /// The signed-in user, or null for a guest.
+  final AuthenticatedUser? user;
   final VoidCallback onAction;
 
-  bool get _isSignedIn => email != null;
+  /// Opens the edit-profile flow. Null for a guest, who has no profile to edit.
+  final VoidCallback? onEdit;
+
+  bool get _isSignedIn => user != null;
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final title = _isSignedIn ? email! : l10n.profileGuestTitle;
-    final initial = (email?.isNotEmpty ?? false) ? email![0].toUpperCase() : null;
+    final title = switch (user) {
+      final user? when (user.displayName?.isNotEmpty ?? false) => user.displayName!,
+      final user? => user.email,
+      null => l10n.profileGuestTitle,
+    };
     return Container(
       padding: const EdgeInsets.all(VTSpacing.l),
       decoration: BoxDecoration(
@@ -31,12 +40,13 @@ class ProfileHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
-                radius: 30,
+              VTProfileAvatar(
+                avatarUrl: user?.avatarUrl,
+                avatarId: user?.avatarId,
+                initial: user?.initial,
+                size: 60,
                 backgroundColor: VTColors.onGreen,
-                child: initial != null
-                    ? Text(initial, style: VTTextStyles.headline(context).copyWith(color: VTColors.green))
-                    : const Icon(Icons.person_outline, color: VTColors.green, size: 30),
+                foregroundColor: VTColors.green,
               ),
               const VTGap.m(),
               Expanded(
@@ -47,6 +57,12 @@ class ProfileHeader extends StatelessWidget {
                   overflow: .ellipsis,
                 ),
               ),
+              if (onEdit != null)
+                IconButton(
+                  icon: const Icon(Icons.edit_outlined, color: VTColors.onGreen),
+                  tooltip: l10n.profileEditAction,
+                  onPressed: onEdit,
+                ),
             ],
           ),
           if (!_isSignedIn) ...[

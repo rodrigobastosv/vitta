@@ -809,6 +809,48 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authInvalidPasswordMessage => 'A senha deve ter pelo menos 6 caracteres.';
 
   @override
+  String get authDisplayNameLabel => 'Nome de exibição';
+
+  @override
+  String get authAvatarLabel => 'Avatar';
+
+  @override
+  String get authHasAccountAction => 'Já tem uma conta? Entrar';
+
+  @override
+  String get authNoAccountAction => 'Ainda não tem conta? Criar';
+
+  @override
+  String get authPickAvatarAction => 'Escolher um avatar';
+
+  @override
+  String get authRemoveAvatarAction => 'Remover';
+
+  @override
+  String get signInTitle => 'Entrar';
+
+  @override
+  String get signUpTitle => 'Criar conta';
+
+  @override
+  String get profileAvatarPickerTitle => 'Escolha um avatar';
+
+  @override
+  String get profileEditAction => 'Editar perfil';
+
+  @override
+  String get editProfileTitle => 'Editar perfil';
+
+  @override
+  String get editProfileSaveAction => 'Salvar';
+
+  @override
+  String get profileUpdatedToast => 'Perfil atualizado';
+
+  @override
+  String get profileUpdatedToastMessage => 'Suas alterações foram salvas.';
+
+  @override
   String get muscleGroupAbdominals => 'Abdômen';
 
   @override

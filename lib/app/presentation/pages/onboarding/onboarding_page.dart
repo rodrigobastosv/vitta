@@ -53,7 +53,7 @@ class OnboardingPage extends StatelessWidget {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
-                      final linked = await context.pushRoute<bool>(.auth) ?? false;
+                      final linked = await context.pushRoute<bool>(.signUp) ?? false;
                       if (linked && context.mounted) {
                         await cubit.completeOnboarding();
                         if (context.mounted) {

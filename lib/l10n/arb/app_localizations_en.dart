@@ -808,6 +808,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authInvalidPasswordMessage => 'Password must be at least 6 characters.';
 
   @override
+  String get authDisplayNameLabel => 'Display name';
+
+  @override
+  String get authAvatarLabel => 'Avatar';
+
+  @override
+  String get authHasAccountAction => 'Already have an account? Log in';
+
+  @override
+  String get authNoAccountAction => 'No account yet? Sign up';
+
+  @override
+  String get authPickAvatarAction => 'Choose an avatar';
+
+  @override
+  String get authRemoveAvatarAction => 'Remove';
+
+  @override
+  String get signInTitle => 'Log in';
+
+  @override
+  String get signUpTitle => 'Create account';
+
+  @override
+  String get profileAvatarPickerTitle => 'Choose an avatar';
+
+  @override
+  String get profileEditAction => 'Edit profile';
+
+  @override
+  String get editProfileTitle => 'Edit profile';
+
+  @override
+  String get editProfileSaveAction => 'Save';
+
+  @override
+  String get profileUpdatedToast => 'Profile updated';
+
+  @override
+  String get profileUpdatedToastMessage => 'Your changes were saved.';
+
+  @override
   String get muscleGroupAbdominals => 'Abs';
 
   @override

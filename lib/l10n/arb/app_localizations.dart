@@ -1514,6 +1514,90 @@ abstract class AppLocalizations {
   /// **'Password must be at least 6 characters.'**
   String get authInvalidPasswordMessage;
 
+  /// No description provided for @authDisplayNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Display name'**
+  String get authDisplayNameLabel;
+
+  /// No description provided for @authAvatarLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Avatar'**
+  String get authAvatarLabel;
+
+  /// No description provided for @authHasAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account? Log in'**
+  String get authHasAccountAction;
+
+  /// No description provided for @authNoAccountAction.
+  ///
+  /// In en, this message translates to:
+  /// **'No account yet? Sign up'**
+  String get authNoAccountAction;
+
+  /// No description provided for @authPickAvatarAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an avatar'**
+  String get authPickAvatarAction;
+
+  /// No description provided for @authRemoveAvatarAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get authRemoveAvatarAction;
+
+  /// No description provided for @signInTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log in'**
+  String get signInTitle;
+
+  /// No description provided for @signUpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Create account'**
+  String get signUpTitle;
+
+  /// No description provided for @profileAvatarPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose an avatar'**
+  String get profileAvatarPickerTitle;
+
+  /// No description provided for @profileEditAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get profileEditAction;
+
+  /// No description provided for @editProfileTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit profile'**
+  String get editProfileTitle;
+
+  /// No description provided for @editProfileSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get editProfileSaveAction;
+
+  /// No description provided for @profileUpdatedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated'**
+  String get profileUpdatedToast;
+
+  /// No description provided for @profileUpdatedToastMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your changes were saved.'**
+  String get profileUpdatedToastMessage;
+
   /// No description provided for @muscleGroupAbdominals.
   ///
   /// In en, this message translates to:

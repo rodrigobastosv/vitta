@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
+import 'package:vitta/app/core/services/image_picker/picked_image.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
@@ -11,9 +15,15 @@ import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../fixtures/logging_fixture.dart';
+import '../../../../mocks/services_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
+  setUpAll(() {
+    registerFallbackValue(ImagePickerSource.gallery);
+    registerFallbackValue(Uint8List(0));
+  });
+
   test('logs a sign_in user action when signIn succeeds', () async {
     final loggingService = useMockLog();
     final getUserUseCase = MockGetUserUseCase();
@@ -22,10 +32,9 @@ void main() {
     when(
       () => signInUseCase(email: 'a@b.com', password: 'secret1'),
     ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase)
-      ..setSignUpMode(isSignUp: false);
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
 
-    await cubit.submit(email: 'a@b.com', password: 'secret1');
+    await cubit.signIn(email: 'a@b.com', password: 'secret1');
 
     verify(() => loggingService.logAction('sign_in')).called(1);
   });
@@ -42,14 +51,14 @@ void main() {
 
     verify(() => loggingService.logAction('sign_out')).called(1);
   });
-  test('loads the current auth status on construction, defaulting to sign-up mode', () {
+
+  test('loads the current auth status on construction', () {
     final getUserUseCase = MockGetUserUseCase();
     when(getUserUseCase.call).thenReturn(const AnonymousUser());
 
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase);
 
     expect(cubit.state, const AuthState(user: AnonymousUser()));
-    expect(cubit.state.isSignUpMode, isTrue);
   });
 
   blocTest<AuthCubit, AuthState>(
@@ -66,17 +75,6 @@ void main() {
   );
 
   blocTest<AuthCubit, AuthState>(
-    'setSignUpMode toggles the mode without touching the status',
-    build: () {
-      final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AnonymousUser());
-      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase);
-    },
-    act: (cubit) => cubit.setSignUpMode(isSignUp: false),
-    expect: () => [const AuthState(user: AnonymousUser(), isSignUpMode: false)],
-  );
-
-  blocTest<AuthCubit, AuthState>(
     'emits the new status when signUp succeeds',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
@@ -87,7 +85,7 @@ void main() {
       ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
-    act: (cubit) => cubit.submit(email: 'a@b.com', password: 'secret1'),
+    act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
     expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'))],
   );
 
@@ -102,7 +100,7 @@ void main() {
       ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
-    act: (cubit) => cubit.submit(email: 'a@b.com', password: 'secret1'),
+    act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
     expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthSignedIn>()],
   );
 
@@ -113,7 +111,7 @@ void main() {
     when(() => signUpUseCase(email: 'a@b.com', password: 'secret1')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
 
-    await cubit.submit(email: 'a@b.com', password: 'secret1');
+    await cubit.signUp(email: 'a@b.com', password: 'secret1');
 
     expect(cubit.state, const AuthState(user: AnonymousUser()));
   });
@@ -127,8 +125,121 @@ void main() {
       when(() => signUpUseCase(email: 'a@b.com', password: 'secret1')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
-    act: (cubit) => cubit.submit(email: 'a@b.com', password: 'secret1'),
+    act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
     expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthActionFailed>()],
+  );
+
+  test('signUp passes a chosen preset avatar through and no photo url', () async {
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AnonymousUser());
+    final signUpUseCase = MockSignUpUseCase();
+    when(
+      () => signUpUseCase(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+        displayName: any(named: 'displayName'),
+        avatarId: any(named: 'avatarId'),
+        avatarUrl: any(named: 'avatarUrl'),
+      ),
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)..setAvatarPreset('leaf');
+
+    await cubit.signUp(email: 'a@b.com', password: 'secret1', displayName: 'Rod');
+
+    verify(() => signUpUseCase(email: 'a@b.com', password: 'secret1', displayName: 'Rod', avatarId: 'leaf')).called(1);
+  });
+
+  test('signUp uploads a picked photo and passes its url with no preset', () async {
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AnonymousUser());
+    final imagePickerService = MockImagePickerService();
+    when(
+      () => imagePickerService.pickImage(source: any(named: 'source'), maxWidth: any(named: 'maxWidth')),
+    ).thenAnswer((_) async => PickedImage(path: 'p.jpg', bytes: Uint8List.fromList([1, 2, 3]), fileExtension: 'jpg'));
+    final uploadAvatarUseCase = MockUploadAvatarUseCase();
+    when(
+      () => uploadAvatarUseCase(bytes: any(named: 'bytes'), fileExtension: any(named: 'fileExtension')),
+    ).thenAnswer((_) async => const Success('https://cdn/a.jpg'));
+    final signUpUseCase = MockSignUpUseCase();
+    when(
+      () => signUpUseCase(
+        email: any(named: 'email'),
+        password: any(named: 'password'),
+        displayName: any(named: 'displayName'),
+        avatarId: any(named: 'avatarId'),
+        avatarUrl: any(named: 'avatarUrl'),
+      ),
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    final cubit = CubitsFactories.buildAuthCubit(
+      getUserUseCase: getUserUseCase,
+      imagePickerService: imagePickerService,
+      uploadAvatarUseCase: uploadAvatarUseCase,
+      signUpUseCase: signUpUseCase,
+    );
+
+    await cubit.pickAvatarPhoto(ImagePickerSource.gallery);
+    await cubit.signUp(email: 'a@b.com', password: 'secret1');
+
+    verify(() => signUpUseCase(email: 'a@b.com', password: 'secret1', avatarUrl: 'https://cdn/a.jpg')).called(1);
+  });
+
+  test('picking a photo clears a previously chosen preset, and vice versa', () async {
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AnonymousUser());
+    final imagePickerService = MockImagePickerService();
+    when(
+      () => imagePickerService.pickImage(source: any(named: 'source'), maxWidth: any(named: 'maxWidth')),
+    ).thenAnswer((_) async => PickedImage(path: 'p.jpg', bytes: Uint8List.fromList([9]), fileExtension: 'jpg'));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, imagePickerService: imagePickerService);
+
+    cubit.setAvatarPreset('leaf');
+    await cubit.pickAvatarPhoto(ImagePickerSource.gallery);
+    expect(cubit.state.draftAvatarId, isNull);
+    expect(cubit.state.draftAvatarBytes, isNotNull);
+
+    cubit.setAvatarPreset('flame');
+    expect(cubit.state.draftAvatarBytes, isNull);
+    expect(cubit.state.draftAvatarId, 'flame');
+  });
+
+  test('updateProfile emits the new user and logs profile_updated', () async {
+    final loggingService = useMockLog();
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    final updateProfileUseCase = MockUpdateProfileUseCase();
+    when(
+      () => updateProfileUseCase(
+        displayName: any(named: 'displayName'),
+        avatarId: any(named: 'avatarId'),
+        avatarUrl: any(named: 'avatarUrl'),
+      ),
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'leaf')));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase)
+      ..setAvatarPreset('leaf');
+
+    await cubit.updateProfile(displayName: 'Rod');
+
+    expect(cubit.state.user, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'leaf'));
+    verify(() => loggingService.logAction('profile_updated')).called(1);
+  });
+
+  blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
+    'updateProfile signals AuthProfileUpdated on success',
+    build: () {
+      final getUserUseCase = MockGetUserUseCase();
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      final updateProfileUseCase = MockUpdateProfileUseCase();
+      when(
+        () => updateProfileUseCase(
+          displayName: any(named: 'displayName'),
+          avatarId: any(named: 'avatarId'),
+          avatarUrl: any(named: 'avatarUrl'),
+        ),
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase);
+    },
+    act: (cubit) => cubit.updateProfile(displayName: 'Rod'),
+    expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthProfileUpdated>()],
   );
 
   blocTest<AuthCubit, AuthState>(
@@ -140,10 +251,10 @@ void main() {
       when(
         () => signInUseCase(email: 'a@b.com', password: 'secret1'),
       ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
-      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase)..setSignUpMode(isSignUp: false);
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
     },
-    act: (cubit) => cubit.submit(email: 'a@b.com', password: 'secret1'),
-    expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'), isSignUpMode: false)],
+    act: (cubit) => cubit.signIn(email: 'a@b.com', password: 'secret1'),
+    expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'))],
   );
 
   blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
@@ -155,9 +266,9 @@ void main() {
       when(
         () => signInUseCase(email: 'a@b.com', password: 'secret1'),
       ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
-      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase)..setSignUpMode(isSignUp: false);
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
     },
-    act: (cubit) => cubit.submit(email: 'a@b.com', password: 'secret1'),
+    act: (cubit) => cubit.signIn(email: 'a@b.com', password: 'secret1'),
     expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthSignedIn>()],
   );
 

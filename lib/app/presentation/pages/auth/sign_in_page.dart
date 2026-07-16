@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
@@ -8,11 +9,11 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
-import 'package:vitta/app/presentation/pages/auth/widgets/auth_form.dart';
+import 'package:vitta/app/presentation/pages/auth/widgets/sign_in_form.dart';
 import 'package:vitta/app/presentation/pages/auth/widgets/signed_in_view.dart';
 
-class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +29,33 @@ class AuthPage extends StatelessWidget {
             context.showErrorToast(message: message);
           case AuthSignedIn():
             Navigator.of(context).pop(true);
+          case AuthProfileUpdated():
+            break;
         }
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.settingsAuthLabel)),
+        appBar: AppBar(title: Text(l10n.signInTitle)),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(VTSpacing.m),
           child: switch (state.user) {
-            AnonymousUser() => AuthForm(isSignUp: state.isSignUpMode, onModeChanged: cubit.setSignUpMode, onSubmit: cubit.submit),
+            AnonymousUser() => SignInForm(
+              onSubmit: cubit.signIn,
+              onGoToSignUp: () => _goToSignUp(context),
+            ),
             AuthenticatedUser(:final email) => SignedInView(email: email, onSignOut: cubit.signOut),
           },
         ),
       ),
     );
+  }
+
+  /// Forwards a success back to whoever opened the auth flow: signing up from
+  /// here pops this page with `true` too, so the original caller (profile or
+  /// onboarding) still learns the user is now authenticated.
+  Future<void> _goToSignUp(BuildContext context) async {
+    final signedIn = await context.pushRoute<bool>(.signUp) ?? false;
+    if (signedIn && context.mounted) {
+      Navigator.of(context).pop(true);
+    }
   }
 }

@@ -602,6 +602,25 @@ create policy "Authenticated users can upload exercise images" on storage.object
   for insert
   with check (bucket_id = 'exercise-images' and auth.uid() is not null);
 
+-- Storage bucket for profile avatar photos (issue #117), on the same terms as
+-- food-images: public read (the URL is what gets stored on the auth user's
+-- metadata and rendered wherever the avatar shows), authenticated write. The
+-- rest of the profile (display name, a picked emoji) lives on the auth user's
+-- metadata directly, not here - only an uploaded photo needs storage.
+insert into storage.buckets (id, name, public)
+values ('avatars', 'avatars', true)
+on conflict (id) do nothing;
+
+drop policy if exists "Anyone can view avatars" on storage.objects;
+create policy "Anyone can view avatars" on storage.objects
+  for select
+  using (bucket_id = 'avatars');
+
+drop policy if exists "Authenticated users can upload avatars" on storage.objects;
+create policy "Authenticated users can upload avatars" on storage.objects
+  for insert
+  with check (bucket_id = 'avatars' and auth.uid() is not null);
+
 -- Routines are private, on the same terms as recipes. routine_exercises walks up
 -- to its parent routine's owner rather than duplicating user_id.
 drop policy if exists "Users manage their own routines" on routines;

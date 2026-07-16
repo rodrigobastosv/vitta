@@ -29,6 +29,8 @@ class ProfilePage extends StatelessWidget {
             context.hideLoading();
           case AuthSignedIn():
             break;
+          case AuthProfileUpdated():
+            break;
           case AuthActionFailed(:final message):
             context.showErrorToast(message: message);
         }
@@ -41,11 +43,18 @@ class ProfilePage extends StatelessWidget {
             switch (state.user) {
               AnonymousUser() => ProfileHeader(
                 onAction: () async {
-                  await context.pushRoute(.auth);
+                  await context.pushRoute(.signUp);
                   cubit.refreshUser();
                 },
               ),
-              AuthenticatedUser(:final email) => ProfileHeader(email: email, onAction: cubit.signOut),
+              final AuthenticatedUser user => ProfileHeader(
+                user: user,
+                onAction: cubit.signOut,
+                onEdit: () async {
+                  await context.pushRoute(.editProfile);
+                  cubit.refreshUser();
+                },
+              ),
             },
             const VTGap.l(),
             ProfileMenuTile(

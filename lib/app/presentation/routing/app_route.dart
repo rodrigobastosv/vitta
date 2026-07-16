@@ -20,9 +20,11 @@ enum AppRoute {
   exerciseSearch('/workout/exercise-search'),
   exerciseDetail('/workout/exercise-search/detail'),
   profile('/profile'),
+  editProfile('/profile/edit'),
   macroGoals('/profile/macro-goals'),
   settings('/settings'),
-  auth('/auth');
+  signIn('/auth/sign-in'),
+  signUp('/auth/sign-up');
 
   const AppRoute(this.path);
 
