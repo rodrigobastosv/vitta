@@ -2275,6 +2275,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Log a set before finishing this exercise'**
   String get workoutCompleteNeedsSetTooltip;
+
+  /// No description provided for @workoutProgressionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progression'**
+  String get workoutProgressionTitle;
+
+  /// No description provided for @workoutProgressionEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No history yet'**
+  String get workoutProgressionEmptyTitle;
+
+  /// No description provided for @workoutProgressionEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log this exercise in a few workouts and its load progression shows up here.'**
+  String get workoutProgressionEmptyMessage;
+
+  /// No description provided for @workoutProgressionRecordsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal records'**
+  String get workoutProgressionRecordsTitle;
+
+  /// No description provided for @workoutProgressionBestE1rmLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Best est. 1RM'**
+  String get workoutProgressionBestE1rmLabel;
+
+  /// No description provided for @workoutProgressionHeaviestLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heaviest load'**
+  String get workoutProgressionHeaviestLabel;
+
+  /// No description provided for @workoutProgressionE1rmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated 1RM'**
+  String get workoutProgressionE1rmTitle;
+
+  /// No description provided for @workoutProgressionHeaviestTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Heaviest load'**
+  String get workoutProgressionHeaviestTitle;
+
+  /// No description provided for @workoutProgressionSessionCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No sessions} =1{Last session} other{Last {count} sessions}}'**
+  String workoutProgressionSessionCount(int count);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

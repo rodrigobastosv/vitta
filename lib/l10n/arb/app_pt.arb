@@ -521,5 +521,15 @@
   "workoutCompletedSummary": "{sets, plural, =0{Nenhuma série} =1{1 série feita} other{{sets} séries feitas}}",
   "workoutFinishedTitle": "Treino concluído",
   "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino.",
-  "workoutCompleteNeedsSetTooltip": "Registre uma série antes de concluir este exercício"
+  "workoutCompleteNeedsSetTooltip": "Registre uma série antes de concluir este exercício",
+  "workoutProgressionTitle": "Progressão",
+  "workoutProgressionEmptyTitle": "Ainda sem histórico",
+  "workoutProgressionEmptyMessage": "Registre este exercício em alguns treinos e a progressão de carga aparece aqui.",
+  "workoutProgressionRecordsTitle": "Recordes pessoais",
+  "workoutProgressionBestE1rmLabel": "Melhor 1RM est.",
+  "workoutProgressionHeaviestLabel": "Maior carga",
+  "workoutProgressionE1rmTitle": "1RM estimado",
+  "workoutProgressionHeaviestTitle": "Maior carga",
+  "workoutProgressionSessionCount": "{count, plural, =0{Nenhuma sessão} =1{Última sessão} other{Últimas {count} sessões}}",
+  "@workoutProgressionSessionCount": { "placeholders": { "count": { "type": "int" } } }
 }

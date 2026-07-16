@@ -17,6 +17,8 @@ class WorkoutSet extends Equatable {
 
   double get volumeKg => reps * weightKg;
 
+  double get estimatedOneRepMax => weightKg * (1 + reps / 30);
+
   bool get isBodyweight => weightKg == 0;
 
   @override
