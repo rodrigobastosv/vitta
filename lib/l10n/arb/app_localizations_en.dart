@@ -1249,4 +1249,14 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutProgressionListTitle => 'Progress';
+
+  @override
+  String get workoutProgressionListEmptyTitle => 'No exercises logged yet';
+
+  @override
+  String get workoutProgressionListEmptyMessage =>
+      'Log a few workouts and the exercises you trained show up here to track their progression.';
 }

@@ -41,6 +41,11 @@ class WorkoutPage extends StatelessWidget {
           title: Text(l10n.workoutFeatureTitle),
           actions: [
             IconButton(
+              icon: const Icon(Icons.query_stats),
+              tooltip: l10n.workoutProgressionListTitle,
+              onPressed: () => context.pushRoute(.exerciseProgressionList),
+            ),
+            IconButton(
               icon: const Icon(Icons.repeat),
               tooltip: l10n.workoutRoutinesTooltip,
               onPressed: () async {

@@ -1262,4 +1262,14 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get workoutProgressionListTitle => 'Progressão';
+
+  @override
+  String get workoutProgressionListEmptyTitle => 'Nenhum exercício registrado ainda';
+
+  @override
+  String get workoutProgressionListEmptyMessage =>
+      'Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.';
 }

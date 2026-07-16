@@ -2329,6 +2329,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, =0{No sessions} =1{Last session} other{Last {count} sessions}}'**
   String workoutProgressionSessionCount(int count);
+
+  /// No description provided for @workoutProgressionListTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress'**
+  String get workoutProgressionListTitle;
+
+  /// No description provided for @workoutProgressionListEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No exercises logged yet'**
+  String get workoutProgressionListEmptyTitle;
+
+  /// No description provided for @workoutProgressionListEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few workouts and the exercises you trained show up here to track their progression.'**
+  String get workoutProgressionListEmptyMessage;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

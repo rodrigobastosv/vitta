@@ -93,6 +93,8 @@ class WorkoutRepository {
   Future<Result<VTError, void>> logSetsBulk({required Map<String, List<WorkoutSet>> setsByWorkoutExercise}) =>
       _supabaseWorkoutDataSource.logSetsBulk(setsByWorkoutExercise: setsByWorkoutExercise);
 
+  Future<Result<VTError, List<Exercise>>> getLoggedExercises() => _supabaseWorkoutDataSource.getLoggedExercises();
+
   Future<Result<VTError, ExerciseProgression>> getExerciseProgression({required String exerciseId}) async {
     final sessionsResult = await _supabaseWorkoutDataSource.getSessionsForExercise(exerciseId: exerciseId);
     return sessionsResult.when(Failure.new, (sessions) => Success(_toProgression(sessions)));

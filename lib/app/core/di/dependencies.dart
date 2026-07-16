@@ -84,6 +84,7 @@ import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
@@ -101,6 +102,7 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart'
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
@@ -213,6 +215,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => StartWorkoutFromRoutineUseCase(workoutRepository: G()));
   G.registerFactory(() => GetLastSetsByExerciseUseCase(workoutRepository: G()));
   G.registerFactory(() => GetExerciseProgressionUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetLoggedExercisesUseCase(workoutRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
@@ -283,6 +286,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactoryParam<ExerciseProgressionCubit, Exercise, void>(
     (exercise, _) => ExerciseProgressionCubit(getExerciseProgressionUseCase: G(), getAppSettingsUseCase: G(), exercise: exercise),
   );
+  G.registerFactory(() => ExerciseProgressionListCubit(getLoggedExercisesUseCase: G()));
   G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
   G.registerFactoryParam<RoutineFormCubit, Routine?, void>((routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
