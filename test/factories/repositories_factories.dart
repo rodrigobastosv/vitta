@@ -1,5 +1,6 @@
 import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
+import 'package:vitta/app/data/workout/workout_repository.dart';
 
 import '../mocks/datasources_mocks.dart';
 
@@ -28,5 +29,15 @@ abstract class RepositoriesFactories {
   }) => WaterRepository(
     supabaseWaterDataSource: supabaseWaterDataSource ?? MockSupabaseWaterDataSource(),
     waterLocalDataSource: waterLocalDataSource ?? MockWaterLocalDataSource(),
+  );
+
+  static WorkoutRepository buildWorkoutRepository({
+    MockSupabaseExerciseDataSource? supabaseExerciseDataSource,
+    MockSupabaseWorkoutDataSource? supabaseWorkoutDataSource,
+    MockSupabaseRoutineDataSource? supabaseRoutineDataSource,
+  }) => WorkoutRepository(
+    supabaseExerciseDataSource: supabaseExerciseDataSource ?? MockSupabaseExerciseDataSource(),
+    supabaseWorkoutDataSource: supabaseWorkoutDataSource ?? MockSupabaseWorkoutDataSource(),
+    supabaseRoutineDataSource: supabaseRoutineDataSource ?? MockSupabaseRoutineDataSource(),
   );
 }

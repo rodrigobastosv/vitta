@@ -4,6 +4,8 @@ import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_da
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_progression.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_progression_point.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
@@ -90,4 +92,22 @@ class WorkoutRepository {
 
   Future<Result<VTError, void>> logSetsBulk({required Map<String, List<WorkoutSet>> setsByWorkoutExercise}) =>
       _supabaseWorkoutDataSource.logSetsBulk(setsByWorkoutExercise: setsByWorkoutExercise);
+
+  Future<Result<VTError, List<Exercise>>> getLoggedExercises() => _supabaseWorkoutDataSource.getLoggedExercises();
+
+  Future<Result<VTError, ExerciseProgression>> getExerciseProgression({required String exerciseId}) async {
+    final sessionsResult = await _supabaseWorkoutDataSource.getSessionsForExercise(exerciseId: exerciseId);
+    return sessionsResult.when(Failure.new, (sessions) => Success(_toProgression(sessions)));
+  }
+
+  ExerciseProgression _toProgression(List<(DateTime, List<WorkoutSet>)> sessions) {
+    final setsByDate = <DateTime, List<WorkoutSet>>{};
+    for (final (performedDate, sets) in sessions) {
+      final date = DateTime(performedDate.year, performedDate.month, performedDate.day);
+      setsByDate.putIfAbsent(date, () => []).addAll(sets);
+    }
+    final points = [for (final MapEntry(:key, :value) in setsByDate.entries) ExerciseProgressionPoint(date: key, sets: value)]
+      ..sort((a, b) => a.date.compareTo(b.date));
+    return ExerciseProgression(points: points);
+  }
 }

@@ -1213,4 +1213,50 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutCompleteNeedsSetTooltip => 'Log a set before finishing this exercise';
+
+  @override
+  String get workoutProgressionTitle => 'Progression';
+
+  @override
+  String get workoutProgressionEmptyTitle => 'No history yet';
+
+  @override
+  String get workoutProgressionEmptyMessage => 'Log this exercise in a few workouts and its load progression shows up here.';
+
+  @override
+  String get workoutProgressionRecordsTitle => 'Personal records';
+
+  @override
+  String get workoutProgressionBestE1rmLabel => 'Best est. 1RM';
+
+  @override
+  String get workoutProgressionHeaviestLabel => 'Heaviest load';
+
+  @override
+  String get workoutProgressionE1rmTitle => 'Estimated 1RM';
+
+  @override
+  String get workoutProgressionHeaviestTitle => 'Heaviest load';
+
+  @override
+  String workoutProgressionSessionCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Last $count sessions',
+      one: 'Last session',
+      zero: 'No sessions',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutProgressionListTitle => 'Progress';
+
+  @override
+  String get workoutProgressionListEmptyTitle => 'No exercises logged yet';
+
+  @override
+  String get workoutProgressionListEmptyMessage =>
+      'Log a few workouts and the exercises you trained show up here to track their progression.';
 }

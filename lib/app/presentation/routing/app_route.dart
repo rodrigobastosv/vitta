@@ -19,6 +19,8 @@ enum AppRoute {
   routineForm('/workout/routines/new'),
   exerciseSearch('/workout/exercise-search'),
   exerciseDetail('/workout/exercise-search/detail'),
+  exerciseProgressionList('/workout/progression'),
+  exerciseProgression('/workout/exercise-progression'),
   profile('/profile'),
   editProfile('/profile/edit'),
   macroGoals('/profile/macro-goals'),

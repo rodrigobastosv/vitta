@@ -6,6 +6,7 @@ import 'package:vitta/app/data/workout/datasources/supabase/requests/create_work
 import 'package:vitta/app/data/workout/datasources/supabase/requests/create_workout_request.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/requests/create_workout_set_request.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/requests/update_workout_set_request.dart';
+import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
@@ -14,6 +15,10 @@ class SupabaseWorkoutDataSource {
   SupabaseWorkoutDataSource({required this._supabaseService});
 
   static const _lastSetsWorkoutLookback = 60;
+
+  static const _progressionWorkoutLookback = 60;
+
+  static const _loggedExercisesWorkoutLookback = 500;
 
   final SupabaseService _supabaseService;
 
@@ -87,6 +92,67 @@ class SupabaseWorkoutDataSource {
       return Success(lastSets);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load previous sets', cause: error));
+    }
+  }
+
+  Future<Result<VTError, List<(DateTime, List<WorkoutSet>)>>> getSessionsForExercise({required String exerciseId}) async {
+    try {
+      final rows = await _supabaseService
+          .from(.workouts)
+          .select('performed_date, ${SupabaseTable.workoutExercises.wireName}!inner(exercise_id, ${SupabaseTable.workoutSets.wireName}(*))')
+          .eq('user_id', _userId)
+          .eq('${SupabaseTable.workoutExercises.wireName}.exercise_id', exerciseId)
+          .order('performed_date', ascending: false)
+          .limit(_progressionWorkoutLookback);
+
+      final sessions = <(DateTime, List<WorkoutSet>)>[];
+      for (final row in rows) {
+        final performedDate = DateTime.parse(row['performed_date'] as String);
+        final workoutExercises = (row[SupabaseTable.workoutExercises.wireName] as List<dynamic>).cast<Map<String, dynamic>>();
+        final sets = [
+          for (final workoutExercise in workoutExercises)
+            ...(workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const [])
+                .cast<Map<String, dynamic>>()
+                .map(WorkoutSet.fromMap),
+        ]..sort((a, b) => a.position.compareTo(b.position));
+        if (sets.isNotEmpty) {
+          sessions.add((performedDate, sets));
+        }
+      }
+      return Success(sessions);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load progression for exercise $exerciseId', cause: error));
+    }
+  }
+
+  Future<Result<VTError, List<Exercise>>> getLoggedExercises() async {
+    try {
+      final rows = await _supabaseService
+          .from(.workouts)
+          .select('${SupabaseTable.workoutExercises.wireName}(position, ${SupabaseTable.exercises.wireName}(*))')
+          .eq('user_id', _userId)
+          .order('performed_date', ascending: false)
+          .limit(_loggedExercisesWorkoutLookback);
+
+      final exercises = <Exercise>[];
+      final seenExerciseIds = <String>{};
+      for (final row in rows) {
+        final workoutExercises = (row[SupabaseTable.workoutExercises.wireName] as List<dynamic>).cast<Map<String, dynamic>>()
+          ..sort((a, b) => (a['position'] as num).compareTo(b['position'] as num));
+        for (final workoutExercise in workoutExercises) {
+          final exerciseRow = workoutExercise[SupabaseTable.exercises.wireName] as Map<String, dynamic>?;
+          if (exerciseRow == null) {
+            continue;
+          }
+          final exercise = Exercise.fromMap(exerciseRow);
+          if (seenExerciseIds.add(exercise.id)) {
+            exercises.add(exercise);
+          }
+        }
+      }
+      return Success(exercises);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load logged exercises', cause: error));
     }
   }
 
