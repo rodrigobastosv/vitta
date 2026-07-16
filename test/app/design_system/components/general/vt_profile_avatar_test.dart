@@ -8,10 +8,10 @@ Future<void> pump(WidgetTester tester, VTProfileAvatar avatar) =>
     tester.pumpWidget(MaterialApp(theme: VTTheme.light, home: Scaffold(body: Center(child: avatar))));
 
 void main() {
-  testWidgets('a chosen preset renders its catalog icon', (tester) async {
-    await pump(tester, const VTProfileAvatar(avatarId: 'leaf', initial: 'R'));
+  testWidgets('a chosen preset renders its catalog face', (tester) async {
+    await pump(tester, const VTProfileAvatar(avatarId: 'man-light', initial: 'R'));
 
-    expect(find.byIcon(VTAvatarCatalog.byId('leaf')!.icon), findsOneWidget);
+    expect(find.text(VTAvatarCatalog.byId('man-light')!.emoji), findsOneWidget);
     expect(find.text('R'), findsNothing);
   });
 

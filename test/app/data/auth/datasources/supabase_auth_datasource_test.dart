@@ -10,10 +10,10 @@ void main() {
     final supabaseService = MockSupabaseService();
     when(() => supabaseService.isAnonymous).thenReturn(false);
     when(() => supabaseService.currentUserEmail).thenReturn('a@b.com');
-    when(() => supabaseService.currentUserMetadata).thenReturn({'display_name': 'Rod', 'avatar_id': 'leaf', 'avatar_url': null});
+    when(() => supabaseService.currentUserMetadata).thenReturn({'display_name': 'Rod', 'avatar_id': 'man-light', 'avatar_url': null});
     final dataSource = SupabaseAuthDataSource(supabaseService: supabaseService);
 
-    expect(dataSource.status, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'leaf'));
+    expect(dataSource.status, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
   });
 
   test('status leaves the profile fields null when there is no metadata', () {

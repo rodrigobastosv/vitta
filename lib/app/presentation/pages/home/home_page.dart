@@ -23,26 +23,39 @@ class HomePage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
           actions: [
-            IconButton(
-              icon: VTProfileAvatar(
-                avatarUrl: switch (state.user) {
-                  AuthenticatedUser(:final avatarUrl) => avatarUrl,
-                  _ => null,
-                },
-                avatarId: switch (state.user) {
-                  AuthenticatedUser(:final avatarId) => avatarId,
-                  _ => null,
-                },
-                initial: switch (state.user) {
-                  final AuthenticatedUser user => user.initial,
-                  _ => null,
-                },
+            // A plain IconButton constrains its child to the 24px icon box, so
+            // the avatar reads as a tiny dot; a tappable avatar renders at its
+            // real size instead.
+            Padding(
+              padding: const EdgeInsets.only(right: VTSpacing.s),
+              child: Tooltip(
+                message: l10n.profileTitle,
+                child: InkWell(
+                  customBorder: const CircleBorder(),
+                  onTap: () async {
+                    await context.pushRoute(.profile);
+                    cubit.refreshUser();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(VTSpacing.xs),
+                    child: VTProfileAvatar(
+                      size: 40,
+                      avatarUrl: switch (state.user) {
+                        AuthenticatedUser(:final avatarUrl) => avatarUrl,
+                        _ => null,
+                      },
+                      avatarId: switch (state.user) {
+                        AuthenticatedUser(:final avatarId) => avatarId,
+                        _ => null,
+                      },
+                      initial: switch (state.user) {
+                        final AuthenticatedUser user => user.initial,
+                        _ => null,
+                      },
+                    ),
+                  ),
+                ),
               ),
-              tooltip: l10n.profileTitle,
-              onPressed: () async {
-                await context.pushRoute(.profile);
-                cubit.refreshUser();
-              },
             ),
           ],
         ),

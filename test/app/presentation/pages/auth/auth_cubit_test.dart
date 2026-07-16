@@ -142,11 +142,11 @@ void main() {
         avatarUrl: any(named: 'avatarUrl'),
       ),
     ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)..setAvatarPreset('leaf');
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)..setAvatarPreset('man-light');
 
     await cubit.signUp(email: 'a@b.com', password: 'secret1', displayName: 'Rod');
 
-    verify(() => signUpUseCase(email: 'a@b.com', password: 'secret1', displayName: 'Rod', avatarId: 'leaf')).called(1);
+    verify(() => signUpUseCase(email: 'a@b.com', password: 'secret1', displayName: 'Rod', avatarId: 'man-light')).called(1);
   });
 
   test('signUp uploads a picked photo and passes its url with no preset', () async {
@@ -192,14 +192,14 @@ void main() {
     ).thenAnswer((_) async => PickedImage(path: 'p.jpg', bytes: Uint8List.fromList([9]), fileExtension: 'jpg'));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, imagePickerService: imagePickerService);
 
-    cubit.setAvatarPreset('leaf');
+    cubit.setAvatarPreset('man-light');
     await cubit.pickAvatarPhoto(ImagePickerSource.gallery);
     expect(cubit.state.draftAvatarId, isNull);
     expect(cubit.state.draftAvatarBytes, isNotNull);
 
-    cubit.setAvatarPreset('flame');
+    cubit.setAvatarPreset('woman-light');
     expect(cubit.state.draftAvatarBytes, isNull);
-    expect(cubit.state.draftAvatarId, 'flame');
+    expect(cubit.state.draftAvatarId, 'woman-light');
   });
 
   test('updateProfile emits the new user and logs profile_updated', () async {
@@ -213,13 +213,13 @@ void main() {
         avatarId: any(named: 'avatarId'),
         avatarUrl: any(named: 'avatarUrl'),
       ),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'leaf')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase)
-      ..setAvatarPreset('leaf');
+      ..setAvatarPreset('man-light');
 
     await cubit.updateProfile(displayName: 'Rod');
 
-    expect(cubit.state.user, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'leaf'));
+    expect(cubit.state.user, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
     verify(() => loggingService.logAction('profile_updated')).called(1);
   });
 

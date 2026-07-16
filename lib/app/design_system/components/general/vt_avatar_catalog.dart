@@ -1,44 +1,65 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 
-/// One choosable preset avatar (issue #117): a glyph on a two-colour gradient,
-/// identified by a stable [id] that's what gets stored on the profile. Owned
-/// and rendered by us rather than shipped as image assets or a dependency -
-/// the same "own the small component" call the charts and emoji-free approach
-/// make - so a new option is one entry here, no asset pipeline.
+/// One choosable preset avatar (issue #117): a face on a soft two-colour
+/// gradient, identified by a stable [id] that's what gets stored on the
+/// profile. The faces are the person emoji with skin-tone, gender and hair
+/// modifiers, so the gallery spans a diverse set (man/woman, light/dark, blond,
+/// red, curly, bearded, older) without shipping image assets or a dependency -
+/// the same "own the small component" call the charts make. A new option is one
+/// entry here.
 class VTAvatarOption {
-  const VTAvatarOption({required this.id, required this.icon, required this.colors});
+  const VTAvatarOption({required this.id, required this.emoji, required this.colors});
 
   final String id;
-  final IconData icon;
+  final String emoji;
   final List<Color> colors;
 }
 
 abstract class VTAvatarCatalog {
-  static const Color _ink = VTColors.onGreen;
+  // Soft pastel pairs so a face reads clearly on top, cycled across the faces.
+  static const List<Color> _mint = [VTColors.greenContainerLight, VTColors.greenLight];
+  static const List<Color> _peach = [VTColors.coralContainerLight, VTColors.coralLight];
+  static const List<Color> _butter = [VTColors.warningContainerLight, VTColors.warning];
+  static const List<Color> _rose = [VTColors.errorContainerLight, VTColors.coral];
 
   /// The gallery, in display order. Ids are stable strings, never the list
   /// index - reordering or inserting must not change what an existing profile
   /// resolves to.
   static const List<VTAvatarOption> options = [
-    VTAvatarOption(id: 'leaf', icon: Icons.eco, colors: [VTColors.green, VTColors.greenLight]),
-    VTAvatarOption(id: 'flame', icon: Icons.local_fire_department, colors: [VTColors.coral, VTColors.coralLight]),
-    VTAvatarOption(id: 'bolt', icon: Icons.bolt, colors: [VTColors.macroCarbs, VTColors.coralLight]),
-    VTAvatarOption(id: 'wave', icon: Icons.waves, colors: [VTColors.macroFat, VTColors.greenLight]),
-    VTAvatarOption(id: 'spa', icon: Icons.spa, colors: [VTColors.macroFiber, VTColors.greenLight]),
-    VTAvatarOption(id: 'star', icon: Icons.star, colors: [VTColors.warning, VTColors.macroCarbs]),
-    VTAvatarOption(id: 'heart', icon: Icons.favorite, colors: [VTColors.error, VTColors.coral]),
-    VTAvatarOption(id: 'rocket', icon: Icons.rocket_launch, colors: [VTColors.bodyRegionCore, VTColors.macroFat]),
-    VTAvatarOption(id: 'paw', icon: Icons.pets, colors: [VTColors.coral, VTColors.macroCarbs]),
-    VTAvatarOption(id: 'bird', icon: Icons.flutter_dash, colors: [VTColors.macroFat, VTColors.macroFiber]),
-    VTAvatarOption(id: 'ball', icon: Icons.sports_soccer, colors: [VTColors.green, VTColors.macroFat]),
-    VTAvatarOption(id: 'bike', icon: Icons.pedal_bike, colors: [VTColors.macroFiber, VTColors.macroFat]),
-    VTAvatarOption(id: 'yoga', icon: Icons.self_improvement, colors: [VTColors.bodyRegionCore, VTColors.coralLight]),
-    VTAvatarOption(id: 'music', icon: Icons.music_note, colors: [VTColors.coral, VTColors.bodyRegionCore]),
-    VTAvatarOption(id: 'brush', icon: Icons.brush, colors: [VTColors.macroCarbs, VTColors.macroFiber]),
-    VTAvatarOption(id: 'sun', icon: Icons.wb_sunny, colors: [VTColors.warning, VTColors.coral]),
-    VTAvatarOption(id: 'snow', icon: Icons.ac_unit, colors: [VTColors.macroFat, VTColors.greenLight]),
-    VTAvatarOption(id: 'game', icon: Icons.sports_esports, colors: [VTColors.bodyRegionCore, VTColors.green]),
+    VTAvatarOption(id: 'man-light', emoji: '👨🏻', colors: _mint),
+    VTAvatarOption(id: 'woman-light', emoji: '👩🏻', colors: _peach),
+    VTAvatarOption(id: 'man-blond', emoji: '👱🏼‍♂️', colors: _butter),
+    VTAvatarOption(id: 'woman-blond', emoji: '👱🏻‍♀️', colors: _rose),
+    VTAvatarOption(id: 'woman-blond-medium', emoji: '👱🏽‍♀️', colors: _mint),
+    VTAvatarOption(id: 'man-medium', emoji: '👨🏽', colors: _peach),
+    VTAvatarOption(id: 'woman-medium', emoji: '👩🏽', colors: _butter),
+    VTAvatarOption(id: 'man-medium-dark', emoji: '👨🏾', colors: _rose),
+    VTAvatarOption(id: 'woman-medium-dark', emoji: '👩🏾', colors: _mint),
+    VTAvatarOption(id: 'man-red', emoji: '👨🏼‍🦰', colors: _peach),
+    VTAvatarOption(id: 'woman-red', emoji: '👩🏼‍🦰', colors: _butter),
+    VTAvatarOption(id: 'man-red-dark', emoji: '👨🏿‍🦰', colors: _rose),
+    VTAvatarOption(id: 'woman-red-dark', emoji: '👩🏿‍🦰', colors: _mint),
+    VTAvatarOption(id: 'man-dark', emoji: '👨🏿', colors: _peach),
+    VTAvatarOption(id: 'woman-dark', emoji: '👩🏿', colors: _butter),
+    VTAvatarOption(id: 'man-curly', emoji: '👨🏾‍🦱', colors: _rose),
+    VTAvatarOption(id: 'woman-curly', emoji: '👩🏾‍🦱', colors: _mint),
+    VTAvatarOption(id: 'man-curly-light', emoji: '👨🏻‍🦱', colors: _peach),
+    VTAvatarOption(id: 'woman-curly-dark', emoji: '👩🏿‍🦱', colors: _butter),
+    VTAvatarOption(id: 'man-white-hair', emoji: '👨🏻‍🦳', colors: _rose),
+    VTAvatarOption(id: 'woman-white-hair', emoji: '👩🏽‍🦳', colors: _mint),
+    VTAvatarOption(id: 'man-bald', emoji: '👨🏼‍🦲', colors: _peach),
+    VTAvatarOption(id: 'man-bald-dark', emoji: '👨🏿‍🦲', colors: _butter),
+    VTAvatarOption(id: 'man-beard', emoji: '🧔🏻', colors: _rose),
+    VTAvatarOption(id: 'man-beard-medium', emoji: '🧔🏽', colors: _mint),
+    VTAvatarOption(id: 'man-beard-dark', emoji: '🧔🏿', colors: _peach),
+    VTAvatarOption(id: 'person-light', emoji: '🧑🏻', colors: _butter),
+    VTAvatarOption(id: 'person-medium', emoji: '🧑🏽', colors: _rose),
+    VTAvatarOption(id: 'person-dark', emoji: '🧑🏿', colors: _mint),
+    VTAvatarOption(id: 'older-man', emoji: '👴🏼', colors: _peach),
+    VTAvatarOption(id: 'older-man-dark', emoji: '👴🏿', colors: _butter),
+    VTAvatarOption(id: 'older-woman', emoji: '👵🏽', colors: _rose),
+    VTAvatarOption(id: 'older-woman-light', emoji: '👵🏻', colors: _mint),
   ];
 
   static VTAvatarOption? byId(String? id) {
@@ -58,10 +79,11 @@ abstract class VTAvatarCatalog {
   static Widget buildAvatar(VTAvatarOption option, {required double size}) => Container(
     width: size,
     height: size,
+    alignment: Alignment.center,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
       gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: option.colors),
     ),
-    child: Icon(option.icon, size: size * 0.5, color: _ink),
+    child: Text(option.emoji, style: TextStyle(fontSize: size * 0.56)),
   );
 }
