@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
@@ -9,17 +11,74 @@ class SupabaseAuthDataSource {
 
   final SupabaseService _supabaseService;
 
-  User get status =>
-      _supabaseService.isAnonymous ? const AnonymousUser() : AuthenticatedUser(email: _supabaseService.currentUserEmail ?? '');
+  static const _displayNameKey = 'display_name';
+  static const _avatarIdKey = 'avatar_id';
+  static const _avatarUrlKey = 'avatar_url';
 
-  Future<Result<VTError, User>> signUp({required String email, required String password}) async {
+  User get status {
+    if (_supabaseService.isAnonymous) {
+      return const AnonymousUser();
+    }
+    final metadata = _supabaseService.currentUserMetadata;
+    return AuthenticatedUser(
+      email: _supabaseService.currentUserEmail ?? '',
+      displayName: metadata?[_displayNameKey] as String?,
+      avatarId: metadata?[_avatarIdKey] as String?,
+      avatarUrl: metadata?[_avatarUrlKey] as String?,
+    );
+  }
+
+  Future<Result<VTError, User>> signUp({
+    required String email,
+    required String password,
+    String? displayName,
+    String? avatarId,
+    String? avatarUrl,
+  }) async {
     try {
-      await _supabaseService.auth.updateUser(UserAttributes(email: email, password: password));
+      await _supabaseService.auth.updateUser(
+        UserAttributes(
+          email: email,
+          password: password,
+          data: _profileData(displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl),
+        ),
+      );
       return Success(status);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to create account', cause: error));
     }
   }
+
+  Future<Result<VTError, User>> updateProfile({String? displayName, String? avatarId, String? avatarUrl}) async {
+    try {
+      await _supabaseService.auth.updateUser(
+        UserAttributes(data: _profileData(displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl)),
+      );
+      return Success(status);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to update profile', cause: error));
+    }
+  }
+
+  Future<Result<VTError, String>> uploadAvatar({required Uint8List bytes, required String fileExtension}) async {
+    try {
+      final path = '${_supabaseService.currentUserId}/${DateTime.now().microsecondsSinceEpoch}.$fileExtension';
+      final storage = _supabaseService.storage(.avatars);
+      await storage.uploadBinary(path, bytes);
+      return Success(storage.getPublicUrl(path));
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to upload avatar', cause: error));
+    }
+  }
+
+  /// The avatar is a preset id or a photo, never both: whichever is set here
+  /// writes its key and writes an explicit null to the other, so switching
+  /// between them clears the previous one rather than leaving a stale value.
+  Map<String, dynamic> _profileData({required String? displayName, required String? avatarId, required String? avatarUrl}) => {
+    _displayNameKey: displayName,
+    _avatarIdKey: avatarId,
+    _avatarUrlKey: avatarUrl,
+  };
 
   Future<Result<VTError, User>> signIn({required String email, required String password}) async {
     try {

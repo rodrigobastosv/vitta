@@ -37,6 +37,8 @@ import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
@@ -213,6 +215,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
+  G.registerFactory(() => UpdateProfileUseCase(authRepository: G()));
+  G.registerFactory(() => UploadAvatarUseCase(authRepository: G()));
 
   G.registerFactory(
     () => DietCubit(
@@ -275,7 +279,17 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
   G.registerFactoryParam<RoutineFormCubit, Routine?, void>((routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine));
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
-  G.registerFactory(() => AuthCubit(getUserUseCase: G(), signUpUseCase: G(), signInUseCase: G(), signOutUseCase: G()));
+  G.registerFactory(
+    () => AuthCubit(
+      getUserUseCase: G(),
+      signUpUseCase: G(),
+      signInUseCase: G(),
+      signOutUseCase: G(),
+      updateProfileUseCase: G(),
+      uploadAvatarUseCase: G(),
+      imagePickerService: G(),
+    ),
+  );
   G.registerFactory(
     () => WaterCubit(
       getDailyWaterUseCase: G(),

@@ -2,12 +2,12 @@ import 'package:go_router/go_router.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/app/presentation/routing/logging_navigator_observer.dart';
-import 'package:vitta/app/presentation/routing/routes/auth_route.dart';
 import 'package:vitta/app/presentation/routing/routes/copy_meals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/custom_food_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_day_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
+import 'package:vitta/app/presentation/routing/routes/edit_profile_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_detail_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
@@ -21,6 +21,8 @@ import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routine_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routines_route.dart';
 import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
+import 'package:vitta/app/presentation/routing/routes/sign_in_route.dart';
+import 'package:vitta/app/presentation/routing/routes/sign_up_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_route.dart';
 import 'package:vitta/app/presentation/routing/routes/water_history_route.dart';
@@ -51,9 +53,11 @@ abstract class AppRouter {
     ExerciseSearchRoute(),
     ExerciseDetailRoute(),
     ProfileRoute(),
+    EditProfileRoute(),
     MacroGoalsRoute(),
     SettingsRoute(),
-    AuthRoute(),
+    SignInRoute(),
+    SignUpRoute(),
   ];
 
   static final GoRouter router = GoRouter(

@@ -36,11 +36,17 @@ abstract class CubitsFactories {
     MockSignUpUseCase? signUpUseCase,
     MockSignInUseCase? signInUseCase,
     MockSignOutUseCase? signOutUseCase,
+    MockUpdateProfileUseCase? updateProfileUseCase,
+    MockUploadAvatarUseCase? uploadAvatarUseCase,
+    MockImagePickerService? imagePickerService,
   }) => AuthCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
     signUpUseCase: signUpUseCase ?? MockSignUpUseCase(),
     signInUseCase: signInUseCase ?? MockSignInUseCase(),
     signOutUseCase: signOutUseCase ?? MockSignOutUseCase(),
+    updateProfileUseCase: updateProfileUseCase ?? MockUpdateProfileUseCase(),
+    uploadAvatarUseCase: uploadAvatarUseCase ?? MockUploadAvatarUseCase(),
+    imagePickerService: imagePickerService ?? MockImagePickerService(),
   );
 
   static DietCubit buildDietCubit({

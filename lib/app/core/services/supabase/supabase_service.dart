@@ -18,6 +18,8 @@ class SupabaseService {
 
   String? get currentUserEmail => _client.auth.currentUser?.email;
 
+  Map<String, dynamic>? get currentUserMetadata => _client.auth.currentUser?.userMetadata;
+
   SupabaseQueryBuilder from(SupabaseTable table) => _client.from(table.wireName);
 
   StorageFileApi storage(SupabaseBucket bucket) => _client.storage.from(bucket.wireName);

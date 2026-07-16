@@ -2,24 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
-typedef AuthModeChanged = void Function({required bool isSignUp});
-typedef AuthSubmitAction = Future<void> Function({required String email, required String password});
+typedef SignInSubmit = Future<void> Function({required String email, required String password});
 
-class AuthForm extends StatefulWidget {
-  const AuthForm({required this.isSignUp, required this.onModeChanged, required this.onSubmit, super.key});
+class SignInForm extends StatefulWidget {
+  const SignInForm({required this.onSubmit, required this.onGoToSignUp, super.key});
 
-  final bool isSignUp;
-  final AuthModeChanged onModeChanged;
-  final AuthSubmitAction onSubmit;
+  final SignInSubmit onSubmit;
+  final VoidCallback onGoToSignUp;
 
   @override
-  State<AuthForm> createState() => _AuthFormState();
+  State<SignInForm> createState() => _SignInFormState();
 }
 
-class _AuthFormState extends State<AuthForm> {
+class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -41,24 +38,13 @@ class _AuthFormState extends State<AuthForm> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final isSignUp = widget.isSignUp;
     return Form(
       key: _formKey,
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
         children: [
-          Text(l10n.authAnonymousMessage),
-          const VTGap.m(),
-          Text(isSignUp ? l10n.authCreateAction : l10n.authLoginAction, style: VTTextStyles.title(context)),
-          const VTGap.m(),
-          Wrap(
-            spacing: VTSpacing.s,
-            children: [
-              ChoiceChip(label: Text(l10n.authSignUpAction), selected: isSignUp, onSelected: (_) => widget.onModeChanged(isSignUp: true)),
-              ChoiceChip(label: Text(l10n.authSignInAction), selected: !isSignUp, onSelected: (_) => widget.onModeChanged(isSignUp: false)),
-            ],
-          ),
+          Text(l10n.signInTitle, style: VTTextStyles.title(context)),
           const VTGap.l(),
           TextFormField(
             controller: _emailController,
@@ -74,7 +60,9 @@ class _AuthFormState extends State<AuthForm> {
             validator: (value) => value != null && value.length >= 6 ? null : l10n.authInvalidPasswordMessage,
           ),
           const VTGap.l(),
-          VTPrimaryButton(label: isSignUp ? l10n.authSignUpAction : l10n.authSignInAction, onPressed: _submit),
+          VTPrimaryButton(label: l10n.authSignInAction, onPressed: _submit),
+          const VTGap.s(),
+          Center(child: TextButton(onPressed: widget.onGoToSignUp, child: Text(l10n.authNoAccountAction))),
         ],
       ),
     );

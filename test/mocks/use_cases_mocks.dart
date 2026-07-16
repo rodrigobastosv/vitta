@@ -3,6 +3,8 @@ import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
@@ -108,6 +110,10 @@ class MockSignUpUseCase extends Mock implements SignUpUseCase {}
 class MockSignInUseCase extends Mock implements SignInUseCase {}
 
 class MockSignOutUseCase extends Mock implements SignOutUseCase {}
+
+class MockUpdateProfileUseCase extends Mock implements UpdateProfileUseCase {}
+
+class MockUploadAvatarUseCase extends Mock implements UploadAvatarUseCase {}
 
 class MockGetFavoriteFoodsUseCase extends Mock implements GetFavoriteFoodsUseCase {}
 
