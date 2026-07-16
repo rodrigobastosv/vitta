@@ -9,5 +9,6 @@ class CopyMealsRoute extends VTRoute {
   AppRoute get route => .dietCopy;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => CopyMealsPage(targetDate: (state.extra! as CopyMealsExtra).targetDate);
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => CopyMealsPage(targetDate: (state.extra! as CopyMealsExtra).targetDate);
 }

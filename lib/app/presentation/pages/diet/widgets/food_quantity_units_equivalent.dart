@@ -7,8 +7,6 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
 
-/// Reads "2 un = 100 g" under the quantity field. Listens to the controller
-/// directly, so the sheet that owns it doesn't rebuild on every keystroke.
 class FoodQuantityUnitsEquivalent extends StatelessWidget {
   const FoodQuantityUnitsEquivalent({required this.food, required this.controller, required this.unitSystem, super.key});
 

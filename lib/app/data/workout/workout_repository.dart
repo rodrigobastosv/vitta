@@ -43,10 +43,8 @@ class WorkoutRepository {
   Future<Result<VTError, WorkoutExercise>> addWorkoutExercise({required String workoutId, required String exerciseId}) =>
       _supabaseWorkoutDataSource.addWorkoutExercise(workoutId: workoutId, exerciseId: exerciseId);
 
-  Future<Result<VTError, WorkoutExercise>> setWorkoutExerciseCompleted({
-    required String workoutExerciseId,
-    required bool completed,
-  }) => _supabaseWorkoutDataSource.setWorkoutExerciseCompleted(workoutExerciseId: workoutExerciseId, completed: completed);
+  Future<Result<VTError, WorkoutExercise>> setWorkoutExerciseCompleted({required String workoutExerciseId, required bool completed}) =>
+      _supabaseWorkoutDataSource.setWorkoutExerciseCompleted(workoutExerciseId: workoutExerciseId, completed: completed);
 
   Future<Result<VTError, void>> removeWorkoutExercise({required String workoutExerciseId}) =>
       _supabaseWorkoutDataSource.removeWorkoutExercise(workoutExerciseId: workoutExerciseId);
@@ -64,11 +62,8 @@ class WorkoutRepository {
   Future<Result<VTError, Routine>> createRoutine({required String name, required List<String> exerciseIds}) =>
       _supabaseRoutineDataSource.createRoutine(name: name, exerciseIds: exerciseIds);
 
-  Future<Result<VTError, Routine>> updateRoutine({
-    required String routineId,
-    required String name,
-    required List<String> exerciseIds,
-  }) => _supabaseRoutineDataSource.updateRoutine(routineId: routineId, name: name, exerciseIds: exerciseIds);
+  Future<Result<VTError, Routine>> updateRoutine({required String routineId, required String name, required List<String> exerciseIds}) =>
+      _supabaseRoutineDataSource.updateRoutine(routineId: routineId, name: name, exerciseIds: exerciseIds);
 
   Future<Result<VTError, void>> deleteRoutine({required String routineId}) =>
       _supabaseRoutineDataSource.deleteRoutine(routineId: routineId);
@@ -76,9 +71,6 @@ class WorkoutRepository {
   Future<Result<VTError, void>> reorderRoutines({required List<String> orderedRoutineIds}) =>
       _supabaseRoutineDataSource.reorderRoutines(orderedRoutineIds: orderedRoutineIds);
 
-  /// Assembles the cycle from its two halves - the routines and which one was
-  /// used last - so nothing above has to know the rotation needs both. The
-  /// rule itself lives on RoutineCycle, not here.
   Future<Result<VTError, RoutineCycle>> getRoutineCycle() async {
     final routinesResult = await getRoutines();
     final routinesError = routinesResult.when((error) => error, (_) => null);
@@ -88,9 +80,8 @@ class WorkoutRepository {
     final lastRoutineIdResult = await _supabaseRoutineDataSource.getLastUsedRoutineId();
     return lastRoutineIdResult.when(
       Failure.new,
-      (lastRoutineId) => Success(
-        RoutineCycle(routines: routinesResult.when((_) => const [], (value) => value), lastRoutineId: lastRoutineId),
-      ),
+      (lastRoutineId) =>
+          Success(RoutineCycle(routines: routinesResult.when((_) => const [], (value) => value), lastRoutineId: lastRoutineId)),
     );
   }
 

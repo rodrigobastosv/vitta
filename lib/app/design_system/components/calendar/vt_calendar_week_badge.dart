@@ -4,8 +4,6 @@ import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
-/// The figure at the end of a calendar week row. A dash when the week has no
-/// data at all, which is the honest answer for a week nothing was logged.
 class VTCalendarWeekBadge extends StatelessWidget {
   const VTCalendarWeekBadge({this.label, this.color, this.tooltip, super.key});
 
@@ -35,6 +33,9 @@ class VTCalendarWeekBadge extends StatelessWidget {
         style: VTTextStyles.overline(context).copyWith(color: badgeColor, fontWeight: .w700),
       ),
     );
-    return SizedBox(width: width, child: tooltipMessage == null ? badge : Tooltip(message: tooltipMessage, child: badge));
+    return SizedBox(
+      width: width,
+      child: tooltipMessage == null ? badge : Tooltip(message: tooltipMessage, child: badge),
+    );
   }
 }

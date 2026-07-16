@@ -19,7 +19,6 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
 
   bool get isViewingCurrentMonth => state.month == _monthOf(DateTime.now());
 
-  /// The rolling window the trend covers, oldest first.
   List<DateTime> get trendDays {
     final to = _dateOnly(DateTime.now());
     return [for (var offset = state.trendRange.days - 1; offset >= 0; offset--) to.subtract(Duration(days: offset))];
@@ -65,7 +64,10 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
 
   Future<void> _loadTrend(TrendRange trendRange) async {
     final to = _dateOnly(DateTime.now());
-    final sleepResult = await _getSleepInRangeUseCase(from: to.subtract(Duration(days: trendRange.days - 1)), to: to);
+    final sleepResult = await _getSleepInRangeUseCase(
+      from: to.subtract(Duration(days: trendRange.days - 1)),
+      to: to,
+    );
     sleepResult.when(
       (error) => emitPresentation(SleepHistoryError(message: error.message)),
       (sleepByDate) => emit(state.copyWith(sleepInTrendRange: sleepByDate)),

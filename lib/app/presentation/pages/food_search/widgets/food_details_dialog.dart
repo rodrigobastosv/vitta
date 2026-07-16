@@ -46,7 +46,12 @@ class FoodDetailsDialog extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: .stretch,
                   children: [
-                    Align(child: Hero(tag: heroTag, child: VTFoodImage(imageUrl: food.imageUrl, size: 112))),
+                    Align(
+                      child: Hero(
+                        tag: heroTag,
+                        child: VTFoodImage(imageUrl: food.imageUrl, size: 112),
+                      ),
+                    ),
                     const VTGap.m(),
                     Text(food.name, style: VTTextStyles.title(context), textAlign: .center),
                     if (food.brand != null) ...[

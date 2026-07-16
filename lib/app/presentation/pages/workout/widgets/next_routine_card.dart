@@ -7,8 +7,6 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 
-/// Shown on an empty day when the user has routines: the cycle's answer to
-/// "what am I training today?", plus the one tap that starts it.
 class NextRoutineCard extends StatelessWidget {
   const NextRoutineCard({required this.routine, required this.onStart, super.key});
 

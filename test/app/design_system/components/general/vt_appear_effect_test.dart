@@ -19,7 +19,9 @@ void main() {
 
   testWidgets('stays hidden until its delay elapses', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(home: VTAppearEffect(delay: Duration(milliseconds: 200), child: Text('hi'))),
+      const MaterialApp(
+        home: VTAppearEffect(delay: Duration(milliseconds: 200), child: Text('hi')),
+      ),
     );
 
     await tester.pump(const Duration(milliseconds: 100));

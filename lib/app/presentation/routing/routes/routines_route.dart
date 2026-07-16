@@ -8,5 +8,6 @@ class RoutinesRoute extends VTRoute {
   AppRoute get route => .routines;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const RoutinesPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const RoutinesPage();
 }

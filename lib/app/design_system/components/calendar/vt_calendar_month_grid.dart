@@ -3,9 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/calendar/vt_calendar_day_cell.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 
-/// A month laid out as week rows rather than a GridView, so each week can end
-/// in a summary badge. What a day is worth and what the badge says are both the
-/// caller's business: this only knows dates.
 class VTCalendarMonthGrid extends StatelessWidget {
   const VTCalendarMonthGrid({
     required this.month,
@@ -21,13 +18,11 @@ class VTCalendarMonthGrid extends StatelessWidget {
 
   final DateTime month;
 
-  /// `null` for a day with nothing logged.
   final Color? Function(DateTime day) dayColor;
 
   final ValueChanged<DateTime> onDaySelected;
   final DateTime? selectedDay;
 
-  /// Vetoes a day the caller doesn't want picked even though it has data.
   final bool Function(DateTime day)? isDayEnabled;
 
   final Widget Function(List<DateTime> daysInWeek)? weekBadge;
@@ -80,8 +75,6 @@ class VTCalendarMonthGrid extends StatelessWidget {
     while (slots.length % DateTime.daysPerWeek != 0) {
       slots.add(null);
     }
-    return [
-      for (var start = 0; start < slots.length; start += DateTime.daysPerWeek) slots.sublist(start, start + DateTime.daysPerWeek),
-    ];
+    return [for (var start = 0; start < slots.length; start += DateTime.daysPerWeek) slots.sublist(start, start + DateTime.daysPerWeek)];
   }
 }

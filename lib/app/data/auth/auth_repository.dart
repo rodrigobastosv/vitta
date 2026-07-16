@@ -18,13 +18,8 @@ class AuthRepository {
     String? displayName,
     String? avatarId,
     String? avatarUrl,
-  }) => _supabaseAuthDataSource.signUp(
-    email: email,
-    password: password,
-    displayName: displayName,
-    avatarId: avatarId,
-    avatarUrl: avatarUrl,
-  );
+  }) =>
+      _supabaseAuthDataSource.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
 
   Future<Result<VTError, User>> updateProfile({String? displayName, String? avatarId, String? avatarUrl}) =>
       _supabaseAuthDataSource.updateProfile(displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);

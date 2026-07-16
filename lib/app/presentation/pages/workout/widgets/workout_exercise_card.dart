@@ -31,10 +31,6 @@ class WorkoutExerciseCard extends StatelessWidget {
   final WorkoutExercise workoutExercise;
   final UnitSystem unitSystem;
 
-  /// The previous session's sets for this exercise, for the "last time" hint
-  /// (issue #95). Null/empty when it was never trained before - the hint is
-  /// then hidden. A reference to what was done last time, independent of the
-  /// (editable) sets showing now.
   final List<WorkoutSet>? lastSets;
   final VoidCallback? onAddSet;
   final VoidCallback? onRepeatSet;
@@ -50,18 +46,9 @@ class WorkoutExerciseCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final exercise = workoutExercise.exercise;
     final isCompleted = workoutExercise.isCompleted;
-    // You can't finish what you haven't done - see WorkoutCubit.setExerciseCompleted.
     final canComplete = workoutExercise.sets.isNotEmpty;
     final accent = exercise.primaryMuscles.firstOrNull?.region.color ?? colorScheme.primary;
     return VTCard(
-      // Done reads as an achievement, not as a disabled row: the card recedes
-      // toward the scaffold with a success tint while its text stays at full
-      // contrast. Blending against `surface` rather than the card colour is
-      // what makes one expression right in both themes - it washes lighter on
-      // light, darker on dark, receding either way. An `Opacity` over the
-      // whole card would instead bury `workoutCompletedSummary` (2.7:1, under
-      // AA), and that summary is the one thing a collapsed card exists to
-      // keep saying.
       color: isCompleted ? Color.alphaBlend(VTColors.success.withValues(alpha: 0.10), colorScheme.surface) : null,
       child: Column(
         crossAxisAlignment: .start,
@@ -90,18 +77,13 @@ class WorkoutExerciseCard extends StatelessWidget {
                       ),
                       const VTGap.xs(),
                       Text(
-                        // Collapsed, the card still has to say what was done -
-                        // otherwise "tidy the screen" just means "lose the
-                        // information". The set count is the summary.
                         isCompleted
                             ? l10n.workoutCompletedSummary(workoutExercise.totalSets)
                             : [
                                 if (exercise.equipment case final equipment?) equipment.getLabel(l10n),
                                 for (final muscle in exercise.primaryMuscles.take(2)) muscle.getLabel(l10n),
                               ].join(' · '),
-                        style: VTTextStyles.caption(context).copyWith(
-                          color: isCompleted ? colorScheme.onSurfaceVariant : accent,
-                        ),
+                        style: VTTextStyles.caption(context).copyWith(color: isCompleted ? colorScheme.onSurfaceVariant : accent),
                       ),
                     ],
                   ),
@@ -109,13 +91,7 @@ class WorkoutExerciseCard extends StatelessWidget {
               ),
               if (onToggleCompleted != null)
                 IconButton(
-                  icon: Icon(
-                    isCompleted ? Icons.check_circle : Icons.check_circle_outline,
-                    color: isCompleted ? VTColors.success : null,
-                  ),
-                  // Disabled rather than hidden when there's nothing logged: the
-                  // affordance stays where the user expects it and the tooltip
-                  // says what's missing, instead of the button silently vanishing.
+                  icon: Icon(isCompleted ? Icons.check_circle : Icons.check_circle_outline, color: isCompleted ? VTColors.success : null),
                   tooltip: switch ((isCompleted, canComplete)) {
                     (true, _) => l10n.workoutReopenExerciseAction,
                     (false, true) => l10n.workoutCompleteExerciseAction,
@@ -127,9 +103,6 @@ class WorkoutExerciseCard extends StatelessWidget {
                 IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutDeleteExercise, onPressed: onRemove),
             ],
           ),
-          // Everything below is the working surface, and a finished exercise
-          // doesn't need one. Reopening brings it all back - marking done is
-          // reversible, so a mistaken tap costs one tap.
           AnimatedSize(
             duration: const Duration(milliseconds: 250),
             curve: Curves.easeOutCubic,
@@ -142,7 +115,8 @@ class WorkoutExerciseCard extends StatelessWidget {
                       const VTGap.s(),
                       const Divider(height: 1),
                       const VTGap.s(),
-                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n) case final summary?) ...[
+                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n)
+                          case final summary?) ...[
                         Row(
                           children: [
                             Icon(Icons.history, size: 14, color: colorScheme.onSurfaceVariant),
@@ -179,8 +153,6 @@ class WorkoutExerciseCard extends StatelessWidget {
                               label: Text(l10n.workoutAddSet),
                               onPressed: onAddSet,
                             ),
-                          // Only once there's a set to repeat: the first set of
-                          // an exercise has no previous one to copy.
                           if (onRepeatSet != null && workoutExercise.sets.isNotEmpty) ...[
                             const VTGap.s(),
                             TextButton.icon(

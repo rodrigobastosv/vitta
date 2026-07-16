@@ -54,16 +54,16 @@ Future<void> pumpRecipeForm(
               ),
             ),
           ),
-          GoRoute(path: '/new', builder: (context, state) => RecipeFormPage(recipe: recipe)),
+          GoRoute(
+            path: '/new',
+            builder: (context, state) => RecipeFormPage(recipe: recipe),
+          ),
           GoRoute(
             path: '/ingredient',
             name: 'ingredientPicker',
             builder: (context, state) => Scaffold(
               body: Center(
-                child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(pickedIngredient),
-                  child: const Text('pick'),
-                ),
+                child: ElevatedButton(onPressed: () => Navigator.of(context).pop(pickedIngredient), child: const Text('pick')),
               ),
             ),
           ),
@@ -137,13 +137,21 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Give the recipe a name and at least one ingredient.'), findsOneWidget);
-    verifyNever(() => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')));
+    verifyNever(
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
+    );
   });
 
   testWidgets('saving a complete recipe sends the whole draft and pops back', (tester) async {
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
     ).thenAnswer((_) async => Success(RecipeFactory.build()));
     await pumpRecipeForm(
       tester,
@@ -157,7 +165,13 @@ void main() {
     await tester.pumpAndSettle();
 
     final capturedDraft =
-        verify(() => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: any(named: 'recipe'))).captured.single as RecipeDraft;
+        verify(
+              () => saveRecipeUseCase(
+                draft: captureAny(named: 'draft'),
+                recipe: any(named: 'recipe'),
+              ),
+            ).captured.single
+            as RecipeDraft;
     expect(capturedDraft.name, 'Porridge');
     expect(capturedDraft.ingredients.single.food.name, 'Oatmeal');
     expect(capturedDraft.totalGrams, 200);
@@ -170,9 +184,7 @@ void main() {
       saveRecipeUseCase: MockSaveRecipeUseCase(),
       recipe: RecipeFactory.build(
         food: FoodFactory.build(name: 'Lasagna'),
-        ingredients: [
-          RecipeIngredient(food: FoodFactory.build(name: 'Pasta'), quantityGrams: 250),
-        ],
+        ingredients: [RecipeIngredient(food: FoodFactory.build(name: 'Pasta'), quantityGrams: 250)],
       ),
     );
 
@@ -185,7 +197,10 @@ void main() {
   testWidgets('editing sends the recipe back so it updates rather than duplicates', (tester) async {
     final saveRecipeUseCase = MockSaveRecipeUseCase();
     when(
-      () => saveRecipeUseCase(draft: any(named: 'draft'), recipe: any(named: 'recipe')),
+      () => saveRecipeUseCase(
+        draft: any(named: 'draft'),
+        recipe: any(named: 'recipe'),
+      ),
     ).thenAnswer((_) async => Success(RecipeFactory.build()));
     final recipe = RecipeFactory.build(food: FoodFactory.build(name: 'Lasagna'));
     await pumpRecipeForm(tester, saveRecipeUseCase: saveRecipeUseCase, recipe: recipe);
@@ -195,7 +210,13 @@ void main() {
     await tester.pumpAndSettle();
 
     final capturedDraft =
-        verify(() => saveRecipeUseCase(draft: captureAny(named: 'draft'), recipe: recipe)).captured.single as RecipeDraft;
+        verify(
+              () => saveRecipeUseCase(
+                draft: captureAny(named: 'draft'),
+                recipe: recipe,
+              ),
+            ).captured.single
+            as RecipeDraft;
     expect(capturedDraft.name, 'Lasagna v2');
   });
 

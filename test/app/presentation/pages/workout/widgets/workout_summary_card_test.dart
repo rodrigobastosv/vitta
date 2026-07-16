@@ -11,9 +11,6 @@ import '../../../../../factories/entities/workout_factory.dart';
 import '../../../../../factories/entities/workout_set_factory.dart';
 
 Future<void> pumpSummary(WidgetTester tester, {required WorkoutState state, Locale locale = const Locale('en')}) {
-  // The narrowest phone the app targets: the ring's centred text and the
-  // metric column split one row between them, so this is where either one
-  // overflows first.
   tester.view.physicalSize = const Size(320, 800);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -23,7 +20,9 @@ Future<void> pumpSummary(WidgetTester tester, {required WorkoutState state, Loca
       locale: locale,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: Scaffold(body: WorkoutSummaryCard(state: state, unitSystem: UnitSystem.metric)),
+      home: Scaffold(
+        body: WorkoutSummaryCard(state: state, unitSystem: UnitSystem.metric),
+      ),
     ),
   );
 }

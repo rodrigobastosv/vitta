@@ -45,8 +45,6 @@ class WorkoutPage extends StatelessWidget {
               tooltip: l10n.workoutRoutinesTooltip,
               onPressed: () async {
                 await context.pushRoute(.routines);
-                // Routines may have been added, reordered or deleted, which
-                // changes what the cycle suggests next.
                 if (context.mounted) {
                   await cubit.loadDate(cubit.state.date);
                 }
@@ -70,11 +68,6 @@ class WorkoutPage extends StatelessWidget {
             ),
             const VTGap.m(),
             if (state.isEmpty) ...[
-              // Starting a routine is offered only on today, and only on a day
-              // with nothing logged: you can't begin a session in the past, and
-              // once the workout exists, starting it again would duplicate every
-              // exercise. Past days stay editable - fixing a set you forgot to
-              // log is a different thing from starting the workout.
               if (state.isToday)
                 if (state.cycle.next case final next?) ...[
                   VTAppearEffect(
@@ -88,10 +81,7 @@ class WorkoutPage extends StatelessWidget {
                 child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
               ),
               const VTGap.m(),
-              if (state.isFinished) ...[
-                const VTAppearEffect(child: WorkoutFinishedCard()),
-                const VTGap.m(),
-              ],
+              if (state.isFinished) ...[const VTAppearEffect(child: WorkoutFinishedCard()), const VTGap.m()],
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(
@@ -102,8 +92,7 @@ class WorkoutPage extends StatelessWidget {
                       lastSets: state.lastSetsByExercise[workoutExercise.exercise.id],
                       onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: workoutExercise.exercise)),
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
-                      onToggleCompleted: (completed) =>
-                          cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
+                      onToggleCompleted: (completed) => cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
                       onRepeatSet: () => cubit.repeatLastSet(workoutExercise: workoutExercise),
                       onAddSet: () => showLogSetSheet(
                         context: context,

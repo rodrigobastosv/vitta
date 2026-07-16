@@ -43,11 +43,7 @@ class SleepHistoryPage extends StatelessWidget {
             const VTGap.m(),
             TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
             const VTGap.m(),
-            SleepDurationTrendCard(
-              days: cubit.trendDays,
-              sleepByDate: state.sleepInTrendRange,
-              durationGoalHours: state.durationGoalHours,
-            ),
+            SleepDurationTrendCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange, durationGoalHours: state.durationGoalHours),
             const VTGap.m(),
             SleepQualitySplitCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange),
           ],

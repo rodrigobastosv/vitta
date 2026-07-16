@@ -48,17 +48,9 @@ class CopyMealsPage extends StatelessWidget {
             CopyMealsCalendarCard(cubit: cubit, state: state),
             const VTGap.m(),
             if (state.sourceMeals.isEmpty)
-              VTEmptyState(
-                icon: Icons.event_outlined,
-                title: l10n.dietCopyMealsNoSourceTitle,
-                message: l10n.dietCopyMealsNoSourceMessage,
-              )
+              VTEmptyState(icon: Icons.event_outlined, title: l10n.dietCopyMealsNoSourceTitle, message: l10n.dietCopyMealsNoSourceMessage)
             else
-              CopyMealsSelectionCard(
-                meals: state.sourceMeals,
-                selectedMealTypes: state.selectedMealTypes,
-                onToggleMeal: cubit.toggleMeal,
-              ),
+              CopyMealsSelectionCard(meals: state.sourceMeals, selectedMealTypes: state.selectedMealTypes, onToggleMeal: cubit.toggleMeal),
           ],
         ),
         bottomNavigationBar: SafeArea(

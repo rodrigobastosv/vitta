@@ -3,7 +3,13 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTMonthNavigator extends StatelessWidget {
-  const VTMonthNavigator({required this.month, required this.canGoToNextMonth, required this.onPreviousMonth, required this.onNextMonth, super.key});
+  const VTMonthNavigator({
+    required this.month,
+    required this.canGoToNextMonth,
+    required this.onPreviousMonth,
+    required this.onNextMonth,
+    super.key,
+  });
 
   final DateTime month;
   final bool canGoToNextMonth;

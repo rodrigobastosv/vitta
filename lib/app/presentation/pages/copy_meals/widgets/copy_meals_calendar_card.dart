@@ -24,15 +24,12 @@ class CopyMealsCalendarCard extends StatelessWidget {
           onNextMonth: cubit.goToNextMonth,
         ),
         const VTGap.s(),
-        // No week averages here: this calendar is a source picker, not an
-        // analysis surface.
         const VTCalendarWeekdayHeader(),
         const VTGap.s(),
         VTCalendarMonthGrid(
           month: state.month,
           dayColor: _dayColor,
           selectedDay: state.sourceDate,
-          // A day can't be copied onto itself.
           isDayEnabled: (day) => day != state.targetDate,
           onDaySelected: cubit.selectSourceDate,
         ),

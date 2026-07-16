@@ -7,9 +7,7 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 
 Future<void> pumpChart(WidgetTester tester, VTBarChart chart) => tester.pumpWidget(
   MaterialApp(
-    home: Scaffold(
-      body: SizedBox(width: 300, child: chart),
-    ),
+    home: Scaffold(body: SizedBox(width: 300, child: chart)),
   ),
 );
 

@@ -78,11 +78,14 @@ void main() {
     final imagePickerService = MockImagePickerService();
     final scanNutritionLabelUseCase = MockScanNutritionLabelUseCase();
     when(
-      () => imagePickerService.pickImage(source: .gallery, maxWidth: any(named: 'maxWidth')),
+      () => imagePickerService.pickImage(
+        source: .gallery,
+        maxWidth: any(named: 'maxWidth'),
+      ),
     ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
-    when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer(
-      (_) async => const Success(ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10.5)),
-    );
+    when(
+      () => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg'),
+    ).thenAnswer((_) async => const Success(ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10.5)));
     await tester.pumpWidget(
       buildTestApp(
         cubit: CubitsFactories.buildCustomFoodCubit(
@@ -112,8 +115,6 @@ void main() {
     await tester.tap(find.text('Continue'));
     await tester.pumpAndSettle();
 
-    // A warning toast, not a blocking dialog: nothing to dismiss, and the form
-    // stays right where the user left it so they can fill in what's missing.
     expect(find.text('Fill in the name and all macros with valid numbers.'), findsOneWidget);
     expect(find.text('Almost there'), findsOneWidget);
     expect(find.byType(CustomFoodPage), findsOneWidget);
@@ -121,9 +122,7 @@ void main() {
 
   testWidgets('continuing with a complete form pops the built custom food back', (tester) async {
     Food? poppedFood;
-    await tester.pumpWidget(
-      buildTestApp(cubit: CubitsFactories.buildCustomFoodCubit(), onPopped: (food) => poppedFood = food),
-    );
+    await tester.pumpWidget(buildTestApp(cubit: CubitsFactories.buildCustomFoodCubit(), onPopped: (food) => poppedFood = food));
     await openCustomFoodPage(tester);
 
     await tester.enterText(find.widgetWithText(TextField, 'Name'), 'Greek yogurt');

@@ -47,8 +47,6 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
-  /// An id-less food (an Open Food Facts result not yet saved) can only be
-  /// matched by value; everything persisted is matched by id.
   static bool _sameFood(Food a, Food b) => a.id == null || b.id == null ? a == b : a.id == b.id;
 
   @override
@@ -84,8 +82,6 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     }
     emit(state.copyWith(results: foods, query: query));
     if (foods.isEmpty) {
-      // A typo or a dead end is exactly what the recent list should spare the
-      // user from replaying, so only a search that found something is kept.
       return;
     }
     emit(state.copyWith(recentSearches: await _addRecentSearchUseCase(query: query)));
@@ -96,9 +92,6 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
 
   Future<void> clearRecentSearches() async => emit(state.copyWith(recentSearches: await _clearRecentSearchesUseCase()));
 
-  /// The heart flips before the request is made and is put back if it fails —
-  /// favouriting is cheap and reversible, so making the user wait on a
-  /// round-trip (two, for an unsaved Open Food Facts result) buys nothing.
   Future<void> toggleFavorite({required Food food}) {
     final previousFavorites = state.favorites;
     final wasFavorite = state.isFavorite(food);
@@ -123,17 +116,10 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
       return;
     }
     Log.action('food_favorited', data: {'food': savedFood.name});
-    // Matched against the food the caller passed, not the saved copy: the
-    // optimistic entry is still the id-less original at this point.
     if (!state.favorites.any((favorite) => _sameFood(favorite, food))) {
-      // Un-hearted while the save was still in flight: _unfavorite had no id to
-      // work with, so settling the server is this call's job.
       await _unfavoriteFoodUseCase(foodId: savedFood.id!);
       return;
     }
-    // Favouriting an Open Food Facts result saves it, and the id that comes
-    // back is what fills the heart from here on — so both lists take the saved
-    // copy in place of the id-less original.
     emit(
       state.copyWith(
         results: _replaceInResults(food, savedFood),
@@ -148,8 +134,6 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
   Future<void> _unfavorite(Food food, List<Food> previousFavorites) async {
     final foodId = food.id;
     if (foodId == null) {
-      // Still being saved by an in-flight favourite; that call settles the
-      // server once it has an id (see _favorite).
       return;
     }
     final unfavoritedResult = await _unfavoriteFoodUseCase(foodId: foodId);

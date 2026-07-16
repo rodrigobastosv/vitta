@@ -13,19 +13,12 @@ class VTSegmentedTab<T> {
   final IconData? icon;
 }
 
-/// Tabs marked by an underline that slides between them, rather than a filled
-/// track: a track would repeat the shape and tone of the cards underneath it,
-/// so the navigation would read as one more card competing with the content.
-/// Colour and weight carry the selection instead, which also keeps the primary
-/// green meaning "primary action".
 class VTSegmentedTabs<T> extends StatelessWidget {
   const VTSegmentedTabs({required this.tabs, required this.selected, required this.onSelected, super.key});
 
   static const Duration _duration = Duration(milliseconds: 240);
   static const double _indicatorHeight = 3;
 
-  /// How much of a single tab's width the underline spans — short enough to
-  /// read as an accent under the label rather than a filled segment.
   static const double _indicatorTabFraction = 0.5;
 
   final List<VTSegmentedTab<T>> tabs;
@@ -34,9 +27,6 @@ class VTSegmentedTabs<T> extends StatelessWidget {
 
   double get _indicatorWidthFactor => _indicatorTabFraction / tabs.length;
 
-  /// [Alignment] spreads a child across the *leftover* space, so centring the
-  /// underline under tab `i` means solving for the x that lands it there:
-  /// its centre must sit at `(i + 0.5) / n` of the full width.
   double get _indicatorAlignmentX {
     final selectedIndex = tabs.indexWhere((tab) => tab.value == selected);
     if (selectedIndex < 0 || tabs.length < 2) {
@@ -101,10 +91,7 @@ class _Segment<T> extends StatelessWidget {
           child: Row(
             mainAxisAlignment: .center,
             children: [
-              if (tab.icon != null) ...[
-                Icon(tab.icon, size: 18, color: color),
-                const VTGap.s(),
-              ],
+              if (tab.icon != null) ...[Icon(tab.icon, size: 18, color: color), const VTGap.s()],
               Text(tab.label),
             ],
           ),

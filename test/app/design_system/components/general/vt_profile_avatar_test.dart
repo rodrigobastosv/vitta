@@ -4,8 +4,12 @@ import 'package:vitta/app/design_system/components/general/vt_avatar_catalog.dar
 import 'package:vitta/app/design_system/components/general/vt_profile_avatar.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 
-Future<void> pump(WidgetTester tester, VTProfileAvatar avatar) =>
-    tester.pumpWidget(MaterialApp(theme: VTTheme.light, home: Scaffold(body: Center(child: avatar))));
+Future<void> pump(WidgetTester tester, VTProfileAvatar avatar) => tester.pumpWidget(
+  MaterialApp(
+    theme: VTTheme.light,
+    home: Scaffold(body: Center(child: avatar)),
+  ),
+);
 
 void main() {
   testWidgets('a chosen preset renders its catalog face', (tester) async {

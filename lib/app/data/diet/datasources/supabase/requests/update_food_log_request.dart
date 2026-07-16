@@ -7,9 +7,5 @@ class UpdateFoodLogRequest {
   final double quantityGrams;
   final double? quantityUnits;
 
-  Map<String, dynamic> toJson() => {
-    'meal_type': mealType.wireValue,
-    'quantity_grams': quantityGrams,
-    'quantity_units': quantityUnits,
-  };
+  Map<String, dynamic> toJson() => {'meal_type': mealType.wireValue, 'quantity_grams': quantityGrams, 'quantity_units': quantityUnits};
 }

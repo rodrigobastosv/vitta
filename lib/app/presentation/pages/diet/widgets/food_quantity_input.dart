@@ -7,10 +7,6 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_units_equivalent.dart';
 
-/// The quantity field shared by the log and edit sheets, plus the weight/units
-/// switch above it. The switch appears only for a countable food
-/// ([Food.isCountable]); for anything measured rather than counted this stays
-/// exactly the plain weight field it has always been.
 class FoodQuantityInput extends StatelessWidget {
   const FoodQuantityInput({
     required this.food,

@@ -129,7 +129,10 @@ void main() {
     updatedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => getDailyMacrosUseCase(date: DateTime(2026, 7, 10))).called(2);
     final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
-    expect(captured, ['food_log_updated', {'meal': 'dinner'}]);
+    expect(captured, [
+      'food_log_updated',
+      {'meal': 'dinner'},
+    ]);
   });
 
   final getDailyMacrosUseCaseUpdateSpy = MockGetDailyMacrosUseCase();

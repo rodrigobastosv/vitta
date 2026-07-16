@@ -52,7 +52,9 @@ class SupabaseAuthDataSource {
   Future<Result<VTError, User>> updateProfile({String? displayName, String? avatarId, String? avatarUrl}) async {
     try {
       await _supabaseService.auth.updateUser(
-        UserAttributes(data: _profileData(displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl)),
+        UserAttributes(
+          data: _profileData(displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl),
+        ),
       );
       return Success(status);
     } on Exception catch (error) {
@@ -71,9 +73,6 @@ class SupabaseAuthDataSource {
     }
   }
 
-  /// The avatar is a preset id or a photo, never both: whichever is set here
-  /// writes its key and writes an explicit null to the other, so switching
-  /// between them clears the previous one rather than leaving a stale value.
   Map<String, dynamic> _profileData({required String? displayName, required String? avatarId, required String? avatarUrl}) => {
     _displayNameKey: displayName,
     _avatarIdKey: avatarId,

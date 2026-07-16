@@ -6,9 +6,6 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
-/// Shown once every exercise of the day is marked done. It's the payoff for
-/// checking things off, so it only appears when the workout is genuinely
-/// finished - a day with nothing logged has finished nothing.
 class WorkoutFinishedCard extends StatelessWidget {
   const WorkoutFinishedCard({super.key});
 

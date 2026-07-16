@@ -24,10 +24,7 @@ class RoutinesPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         RoutinesShowLoading() => context.showLoading(),
         RoutinesHideLoading() => context.hideLoading(),
-        RoutinesError(:final message) => context.showErrorToast(
-          message: message,
-          onRetry: context.read<RoutinesCubit>().loadRoutines,
-        ),
+        RoutinesError(:final message) => context.showErrorToast(message: message, onRetry: context.read<RoutinesCubit>().loadRoutines),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutRoutinesTitle)),
@@ -37,20 +34,11 @@ class RoutinesPage extends StatelessWidget {
           label: Text(l10n.workoutRoutineNewAction),
         ),
         body: state.routines.isEmpty
-            ? VTEmptyState(
-                icon: Icons.repeat,
-                title: l10n.workoutRoutinesEmptyTitle,
-                message: l10n.workoutRoutinesEmptyMessage,
-              )
+            ? VTEmptyState(icon: Icons.repeat, title: l10n.workoutRoutinesEmptyTitle, message: l10n.workoutRoutinesEmptyMessage)
             : ReorderableListView.builder(
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
                 itemCount: state.routines.length,
-                // The row is tap-to-edit, so the drag has to come from its own
-                // handle: the default (long-press anywhere on touch) both fights
-                // the tap and gives no hint the list moves at all.
                 buildDefaultDragHandles: false,
-                // The list order *is* the cycle order - dragging a routine here
-                // is how the user fixes an A/B/C they built out of sequence.
                 onReorderItem: (oldIndex, newIndex) => cubit.reorderRoutines(oldIndex: oldIndex, newIndex: newIndex),
                 itemBuilder: (context, index) {
                   final routine = state.routines[index];

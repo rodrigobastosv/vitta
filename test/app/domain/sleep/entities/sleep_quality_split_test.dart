@@ -18,7 +18,9 @@ DailySleep buildDay(List<int?> ratings) => DailySleep(
 
 void main() {
   test('no rated nights means no data, so the card can say so instead of drawing an empty bar', () {
-    final split = SleepQualitySplit.fromDays([buildDay([null, null])]);
+    final split = SleepQualitySplit.fromDays([
+      buildDay([null, null]),
+    ]);
 
     expect(split.hasData, isFalse);
     expect(split.ratedNightCount, 0);

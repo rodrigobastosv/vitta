@@ -17,7 +17,10 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dar
 Future<void> showEditFoodLogSheet({required BuildContext context, required FoodLogEntry entry}) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(value: context.read<DietCubit>(), child: _EditFoodLogSheet(entry: entry)),
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<DietCubit>(),
+    child: _EditFoodLogSheet(entry: entry),
+  ),
 );
 
 class _EditFoodLogSheet extends StatefulWidget {
@@ -32,10 +35,6 @@ class _EditFoodLogSheet extends StatefulWidget {
 class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   late final UnitSystem _unitSystem = context.read<DietCubit>().unitSystem;
 
-  /// A log counted in units reopens counting them - but only while its food is
-  /// still countable. A food that lost its unit weight since would otherwise
-  /// strand the sheet in a mode whose switch [FoodQuantityInput] no longer
-  /// renders.
   late FoodQuantityMode _quantityMode = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable
       ? FoodQuantityMode.units
       : FoodQuantityMode.weight;
@@ -148,10 +147,7 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
                 ),
             ],
           ),
-          if (_errorMessage != null) ...[
-            const VTGap.s(),
-            Text(_errorMessage!, style: TextStyle(color: context.colorScheme.error)),
-          ],
+          if (_errorMessage != null) ...[const VTGap.s(), Text(_errorMessage!, style: TextStyle(color: context.colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.saveAction, isLoading: _isSaving, onPressed: _submit),
         ],

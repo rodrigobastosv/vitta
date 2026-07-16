@@ -16,9 +16,6 @@ import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_sta
 import 'package:vitta/app/presentation/pages/exercise_search/widgets/exercise_search_result_tile.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/widgets/muscle_group_filter.dart';
 
-/// Picks an exercise out of the shared catalog and pops it back, the same shape
-/// `IngredientPickerPage` uses - it never touches a workout itself, so the
-/// caller decides what the picked exercise is for.
 class ExerciseSearchPage extends StatelessWidget {
   const ExerciseSearchPage({super.key});
 

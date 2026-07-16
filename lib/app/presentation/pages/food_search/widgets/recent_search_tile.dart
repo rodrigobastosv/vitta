@@ -24,7 +24,9 @@ class RecentSearchTile extends StatelessWidget {
           children: [
             Icon(Icons.history, size: 20, color: colorScheme.onSurfaceVariant),
             const VTGap.m(),
-            Expanded(child: Text(query, style: VTTextStyles.body(context), maxLines: 1, overflow: .ellipsis)),
+            Expanded(
+              child: Text(query, style: VTTextStyles.body(context), maxLines: 1, overflow: .ellipsis),
+            ),
             IconButton(
               onPressed: onRemove,
               icon: const Icon(Icons.close, size: 18),

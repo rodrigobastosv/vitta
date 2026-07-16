@@ -14,9 +14,6 @@ class RoutineTile extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onDelete;
 
-  /// The list's drag grip, which only a reorderable list can build (it needs
-  /// the item's index). Null wherever the routine isn't reorderable - the
-  /// same 'pass no callback to disable' convention MealSectionCard uses.
   final Widget? dragHandle;
 
   @override
@@ -38,9 +35,7 @@ class RoutineTile extends StatelessWidget {
                   Wrap(
                     spacing: VTSpacing.s,
                     runSpacing: VTSpacing.xs,
-                    children: [
-                      for (final region in routine.regions) VTBadge(label: region.getLabel(l10n), color: region.color),
-                    ],
+                    children: [for (final region in routine.regions) VTBadge(label: region.getLabel(l10n), color: region.color)],
                   ),
                 ],
               ],

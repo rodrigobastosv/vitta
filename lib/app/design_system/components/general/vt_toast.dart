@@ -18,18 +18,10 @@ class VTToast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    // The whole card carries the severity, not just an avatar on it. It used to
-    // be `colorScheme.surface`, which is also `scaffoldBackgroundColor` - the
-    // toast was the exact colour of the page behind it and only its shadow
-    // separated the two.
     final container = severity.container(colorScheme);
     final ink = severity.onContainer(colorScheme);
     return Material(
       color: container,
-      // A black shadow - Material's default - halos a coloured card in grey and
-      // reads as a dirty border. The card's own colour is what separates it from
-      // the page (dE 15.8 in light); the shadow only has to add depth, so it
-      // does it in the card's hue instead of over it.
       elevation: 3,
       shadowColor: severity.accent,
       shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusL),
@@ -40,9 +32,6 @@ class VTToast extends StatelessWidget {
             Container(
               width: 44,
               height: 44,
-              // The accent, not the ink at a low alpha: the ink is near-black,
-              // so diluting it over the card yields grey rather than a deeper
-              // tone of the card's own hue.
               decoration: BoxDecoration(color: severity.accent.withValues(alpha: 0.22), shape: .circle),
               child: Icon(severity.icon, color: ink, size: 24),
             ),
@@ -72,8 +61,6 @@ class VTToast extends StatelessWidget {
               const VTGap.s(),
               TextButton(
                 onPressed: onAction,
-                // The theme's primary green on a red card would read as a
-                // different component sitting inside this one.
                 style: TextButton.styleFrom(foregroundColor: ink),
                 child: Text(actionLabel ?? context.l10n.retry),
               ),

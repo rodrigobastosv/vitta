@@ -10,10 +10,6 @@ enum NutrientUnit {
   double fromGrams(double grams) => grams * perGram;
 }
 
-/// Micronutrients are stored, like macros, as an amount per 100g in grams (the
-/// base unit end-to-end); [unit] only governs how that amount is displayed.
-/// [offKey] is the Open Food Facts `nutriments` key its per-100g value is read
-/// from — its `_100g` fields are normalized to grams, matching our base unit.
 enum Nutrient {
   vitaminA('vitamin_a', 'vitamin-a_100g', NutrientUnit.microgram),
   vitaminC('vitamin_c', 'vitamin-c_100g', NutrientUnit.milligram),

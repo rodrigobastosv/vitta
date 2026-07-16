@@ -67,10 +67,7 @@ void main() {
     final draft = RecipeDraft(
       name: 'Salad',
       ingredients: [
-        RecipeIngredientFactory.build(
-          food: FoodFactory.build(micronutrientsPer100g: const {Nutrient.iron: 0.01}),
-          quantityGrams: 200,
-        ),
+        RecipeIngredientFactory.build(food: FoodFactory.build(micronutrientsPer100g: const {Nutrient.iron: 0.01}), quantityGrams: 200),
       ],
     );
 

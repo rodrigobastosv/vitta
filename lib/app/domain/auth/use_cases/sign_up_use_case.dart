@@ -14,11 +14,5 @@ class SignUpUseCase {
     String? displayName,
     String? avatarId,
     String? avatarUrl,
-  }) => _authRepository.signUp(
-    email: email,
-    password: password,
-    displayName: displayName,
-    avatarId: avatarId,
-    avatarUrl: avatarUrl,
-  );
+  }) => _authRepository.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
 }

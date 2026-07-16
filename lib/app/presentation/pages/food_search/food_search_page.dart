@@ -65,9 +65,7 @@ class FoodSearchPage extends StatelessWidget {
               child: VTSegmentedTabs<FoodSearchTab>(
                 selected: state.tab,
                 onSelected: cubit.changeTab,
-                tabs: [
-                  for (final tab in FoodSearchTab.values) VTSegmentedTab(value: tab, label: tab.getLabel(l10n), icon: tab.icon),
-                ],
+                tabs: [for (final tab in FoodSearchTab.values) VTSegmentedTab(value: tab, label: tab.getLabel(l10n), icon: tab.icon)],
               ),
             ),
             Expanded(

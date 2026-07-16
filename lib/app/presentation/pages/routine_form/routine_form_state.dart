@@ -7,8 +7,6 @@ class RoutineFormState extends Equatable {
 
   final RoutineDraft draft;
 
-  /// The routine being edited, or null when creating. Kept on state so the page
-  /// can title itself without a second flag.
   final Routine? routine;
 
   bool get isEditing => routine != null;

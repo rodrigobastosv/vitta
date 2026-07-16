@@ -80,8 +80,6 @@ class DietPage extends StatelessWidget {
                 macroGoals: state.macroGoals,
                 onEditGoals: () async {
                   await context.pushRoute(.macroGoals);
-                  // Goals drive the ring and adherence colours, so re-read them
-                  // when the editor closes.
                   if (context.mounted) {
                     await cubit.refresh();
                   }

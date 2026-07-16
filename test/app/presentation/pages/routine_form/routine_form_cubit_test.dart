@@ -28,8 +28,6 @@ void main() {
         ..addExercise(ExerciseFactory.build(id: 'a'))
         ..addExercise(ExerciseFactory.build(id: 'b'))
         ..addExercise(ExerciseFactory.build(id: 'c'))
-        // Dragging the first item to the end: onReorderItem reports the index
-        // after removal, so 2 means "last", not "second".
         ..reorderExercise(oldIndex: 0, newIndex: 2);
     },
     skip: 3,

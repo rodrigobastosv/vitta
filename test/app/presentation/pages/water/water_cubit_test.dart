@@ -86,7 +86,9 @@ void main() {
     final logWaterUseCase = MockLogWaterUseCase();
     final getDailyWaterUseCase = MockGetDailyWaterUseCase();
     final waterLocalDataSource = MockWaterLocalDataSource();
-    when(() => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250)).thenAnswer((_) async => Success(WaterLogFactory.build()));
+    when(
+      () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
+    ).thenAnswer((_) async => Success(WaterLogFactory.build()));
     when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
     when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
     final cubit = CubitsFactories.buildWaterCubit(
@@ -98,7 +100,10 @@ void main() {
     await cubit.addWater(amountMl: 250);
 
     final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
-    expect(captured, ['water_logged', {'amount_ml': 250.0}]);
+    expect(captured, [
+      'water_logged',
+      {'amount_ml': 250.0},
+    ]);
   });
 
   blocTest<WaterCubit, WaterState>(

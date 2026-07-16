@@ -6,9 +6,6 @@ class VTSearchField extends StatefulWidget {
   final String hintText;
   final ValueChanged<String> onSubmitted;
 
-  /// The query the field should show. Only a *change* to this value is pushed
-  /// into the field, so a caller that replays a past search fills the box while
-  /// ordinary typing is never clobbered mid-word.
   final String? text;
 
   final bool autofocus;

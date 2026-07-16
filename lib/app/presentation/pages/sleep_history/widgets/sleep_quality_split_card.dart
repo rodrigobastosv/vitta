@@ -45,7 +45,9 @@ class SleepQualitySplitCard extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 4),
                   child: Row(
                     children: [
-                      Expanded(child: VTLegendDot(label: l10n.sleepQualityStars(rating), color: sleepQualityColor(rating))),
+                      Expanded(
+                        child: VTLegendDot(label: l10n.sleepQualityStars(rating), color: sleepQualityColor(rating)),
+                      ),
                       Text(l10n.dietMacroPercent((split.shareAt(rating) * 100).round()), style: VTTextStyles.caption(context)),
                     ],
                   ),

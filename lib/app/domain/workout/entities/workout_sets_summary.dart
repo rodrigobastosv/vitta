@@ -2,13 +2,6 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
-/// Renders a list of sets as the compact "4×10 · 40 kg" line the "last time"
-/// hint shows (issue #95).
-///
-/// Sets of an exercise are usually identical (see #102's repeat-set), so the
-/// common case groups them - `{n}×{reps} · {load}`, the issue's own example.
-/// When they aren't, it falls back to `{n} sets · {top load}` rather than
-/// picking one set's reps and quietly lying about the rest.
 abstract class WorkoutSetsSummary {
   static String? format({required List<WorkoutSet> sets, required UnitSystem unitSystem, required AppLocalizations l10n}) {
     if (sets.isEmpty) {

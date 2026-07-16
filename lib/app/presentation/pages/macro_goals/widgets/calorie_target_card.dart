@@ -10,10 +10,6 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 
-/// The calorie hero of the macro-goals page (issue #116): the target derived
-/// from the macros, its "on target" min/max band, the protein/carbs/fat energy
-/// split, and a slider that scales the macros to hit a new calorie total. The
-/// target is never edited directly - it's always the energy of the macros.
 class CalorieTargetCard extends StatelessWidget {
   const CalorieTargetCard({required this.goals, required this.onCaloriesChanged, super.key});
 
@@ -58,9 +54,6 @@ class CalorieTargetCard extends StatelessWidget {
             ],
           ),
           const VTGap.s(),
-          // A bare themed slider, not a VTLabeledSlider: the header above is
-          // already the value readout, so a labelled row would show the number
-          // twice.
           SliderTheme(
             data: SliderTheme.of(context).copyWith(
               activeTrackColor: VTColors.green,

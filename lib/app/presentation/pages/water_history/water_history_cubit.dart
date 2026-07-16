@@ -19,7 +19,6 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
 
   bool get isViewingCurrentMonth => state.month == _monthOf(DateTime.now());
 
-  /// The rolling window the trend covers, oldest first.
   List<DateTime> get trendDays {
     final to = _dateOnly(DateTime.now());
     return [for (var offset = state.trendRange.days - 1; offset >= 0; offset--) to.subtract(Duration(days: offset))];
@@ -65,7 +64,10 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
 
   Future<void> _loadTrend(TrendRange trendRange) async {
     final to = _dateOnly(DateTime.now());
-    final waterResult = await _getWaterInRangeUseCase(from: to.subtract(Duration(days: trendRange.days - 1)), to: to);
+    final waterResult = await _getWaterInRangeUseCase(
+      from: to.subtract(Duration(days: trendRange.days - 1)),
+      to: to,
+    );
     waterResult.when(
       (error) => emitPresentation(WaterHistoryError(message: error.message)),
       (waterByDate) => emit(state.copyWith(waterInTrendRange: waterByDate)),

@@ -27,10 +27,17 @@ class CustomFoodNutrientField extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
           child: Center(
             widthFactor: 1,
-            child: Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: .circle)),
+            child: Container(
+              width: 12,
+              height: 12,
+              decoration: BoxDecoration(color: color, shape: .circle),
+            ),
           ),
         ),
-        focusedBorder: OutlineInputBorder(borderRadius: VTRadius.borderRadiusM, borderSide: BorderSide(color: color, width: 2)),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: VTRadius.borderRadiusM,
+          borderSide: BorderSide(color: color, width: 2),
+        ),
       ),
     );
   }

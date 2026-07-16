@@ -8,5 +8,6 @@ class SleepHistoryRoute extends VTRoute {
   AppRoute get route => .sleepHistory;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const SleepHistoryPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const SleepHistoryPage();
 }

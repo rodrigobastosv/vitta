@@ -27,7 +27,12 @@ void main() {
 
   MockGetSleepInRangeUseCase stubbedRange(Map<DateTime, DailySleep> sleepByDate) {
     final getSleepInRangeUseCase = MockGetSleepInRangeUseCase();
-    when(() => getSleepInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(sleepByDate));
+    when(
+      () => getSleepInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => Success(sleepByDate));
     return getSleepInRangeUseCase;
   }
 
@@ -62,12 +67,7 @@ void main() {
       getSleepInRangeUseCase: stubbedRange({
         DateTime(2026, 6, 10): DailySleep(
           entries: [
-            SleepLog(
-              id: 'a',
-              loggedDate: DateTime(2026, 6, 10),
-              bedTime: DateTime(2026, 6, 10, 23),
-              wakeTime: DateTime(2026, 6, 11, 7),
-            ),
+            SleepLog(id: 'a', loggedDate: DateTime(2026, 6, 10), bedTime: DateTime(2026, 6, 10, 23), wakeTime: DateTime(2026, 6, 11, 7)),
           ],
         ),
       }),
@@ -85,7 +85,10 @@ void main() {
     build: () {
       final getSleepInRangeUseCase = MockGetSleepInRangeUseCase();
       when(
-        () => getSleepInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+        () => getSleepInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildSleepHistoryCubit(getSleepInRangeUseCase: getSleepInRangeUseCase, getSleepGoalUseCase: stubbedGoal());
     },

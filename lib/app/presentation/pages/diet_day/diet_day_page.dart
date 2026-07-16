@@ -24,7 +24,9 @@ class DietDayPage extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(VTSpacing.m),
         children: [
-          VTAppearEffect(child: MacroSummaryCard(dailyMacros: dailyMacros, macroGoals: macroGoals)),
+          VTAppearEffect(
+            child: MacroSummaryCard(dailyMacros: dailyMacros, macroGoals: macroGoals),
+          ),
           const VTGap.l(),
           if (dailyMacros.entries.isEmpty)
             VTEmptyState(icon: Icons.restaurant_outlined, message: l10n.dietDayDetailsEmptyMessage)

@@ -3,20 +3,9 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 import 'package:vitta/l10n/arb/app_localizations_en.dart';
 import 'package:vitta/l10n/arb/app_localizations_pt.dart';
 
-/// Portuguese classifies zero as the `one` plural category (`_pt_rule`:
-/// `if (_i == 0 || _i == 1) return ONE`). So a message declaring only `=1` and
-/// `other` renders "1 série feita" for zero — the count is simply wrong, and
-/// only in pt: English maps 0 to `other` and reads fine, which is how such a
-/// message survives review and ships.
-///
-/// Every plural in the app therefore needs an explicit `=0` case. These tests
-/// exist so that rule can't quietly rot.
 void main() {
   final locales = <String, AppLocalizations>{'en': AppLocalizationsEn(), 'pt': AppLocalizationsPt()};
 
-  /// Every plural message in the app, rendered at zero. Add a row whenever a
-  /// plural is added: the subject of this test is the rule, not these four
-  /// particular strings.
   final pluralsAtZero = <String, String Function(AppLocalizations)>{
     'workoutCompletedSummary': (l10n) => l10n.workoutCompletedSummary(0),
     'workoutRoutineExerciseCount': (l10n) => l10n.workoutRoutineExerciseCount(0),
@@ -28,11 +17,7 @@ void main() {
     for (final MapEntry(key: name, value: atZero) in pluralsAtZero.entries) {
       test(name, () {
         for (final MapEntry(key: locale, value: l10n) in locales.entries) {
-          expect(
-            atZero(l10n),
-            isNot(contains('1')),
-            reason: '$name said "1" for zero in $locale - it is missing an explicit =0 case',
-          );
+          expect(atZero(l10n), isNot(contains('1')), reason: '$name said "1" for zero in $locale - it is missing an explicit =0 case');
         }
       });
     }

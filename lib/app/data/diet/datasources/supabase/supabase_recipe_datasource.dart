@@ -37,11 +37,7 @@ class SupabaseRecipeDataSource {
       final recipeId = recipeRow['id'] as String;
       await _supabaseService.from(.recipeIngredients).insert([
         for (final ingredient in ingredients)
-          CreateRecipeIngredientRequest(
-            recipeId: recipeId,
-            foodId: ingredient.food.id!,
-            quantityGrams: ingredient.quantityGrams,
-          ).toJson(),
+          CreateRecipeIngredientRequest(recipeId: recipeId, foodId: ingredient.food.id!, quantityGrams: ingredient.quantityGrams).toJson(),
       ]);
       final createdRow = await _supabaseService.from(.recipes).select(_recipeSelect).eq('id', recipeId).single();
       return Success(Recipe.fromMap(createdRow));
@@ -55,11 +51,7 @@ class SupabaseRecipeDataSource {
       await _supabaseService.from(.recipeIngredients).delete().eq('recipe_id', recipeId);
       await _supabaseService.from(.recipeIngredients).insert([
         for (final ingredient in ingredients)
-          CreateRecipeIngredientRequest(
-            recipeId: recipeId,
-            foodId: ingredient.food.id!,
-            quantityGrams: ingredient.quantityGrams,
-          ).toJson(),
+          CreateRecipeIngredientRequest(recipeId: recipeId, foodId: ingredient.food.id!, quantityGrams: ingredient.quantityGrams).toJson(),
       ]);
       final updatedRow = await _supabaseService.from(.recipes).select(_recipeSelect).eq('id', recipeId).single();
       return Success(Recipe.fromMap(updatedRow));

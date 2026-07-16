@@ -26,9 +26,6 @@ class FoodLog extends Equatable {
   final MealType mealType;
   final double quantityGrams;
 
-  /// How many whole items were logged, when the user counted rather than
-  /// weighed. Null means logged by weight. [quantityGrams] stays the source of
-  /// truth for every macro either way - this only records how it was typed.
   final double? quantityUnits;
 
   bool get isLoggedInUnits => quantityUnits != null;

@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 
-/// One choosable preset avatar (issue #117): a face on a soft two-colour
-/// gradient, identified by a stable [id] that's what gets stored on the
-/// profile. The faces are the person emoji with skin-tone, gender and hair
-/// modifiers, so the gallery spans a diverse set (man/woman, light/dark, blond,
-/// red, curly, bearded, older) without shipping image assets or a dependency -
-/// the same "own the small component" call the charts make. A new option is one
-/// entry here.
 class VTAvatarOption {
   const VTAvatarOption({required this.id, required this.emoji, required this.colors});
 
@@ -17,15 +10,11 @@ class VTAvatarOption {
 }
 
 abstract class VTAvatarCatalog {
-  // Soft pastel pairs so a face reads clearly on top, cycled across the faces.
   static const List<Color> _mint = [VTColors.greenContainerLight, VTColors.greenLight];
   static const List<Color> _peach = [VTColors.coralContainerLight, VTColors.coralLight];
   static const List<Color> _butter = [VTColors.warningContainerLight, VTColors.warning];
   static const List<Color> _rose = [VTColors.errorContainerLight, VTColors.coral];
 
-  /// The gallery, in display order. Ids are stable strings, never the list
-  /// index - reordering or inserting must not change what an existing profile
-  /// resolves to.
   static const List<VTAvatarOption> options = [
     VTAvatarOption(id: 'man-light', emoji: '👨🏻', colors: _mint),
     VTAvatarOption(id: 'woman-light', emoji: '👩🏻', colors: _peach),
@@ -74,8 +63,6 @@ abstract class VTAvatarCatalog {
     return null;
   }
 
-  /// Renders an option as a circular gradient avatar. Shared by the picker grid
-  /// and [VTProfileAvatar] so an option looks the same everywhere.
   static Widget buildAvatar(VTAvatarOption option, {required double size}) => Container(
     width: size,
     height: size,

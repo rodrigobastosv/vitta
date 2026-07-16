@@ -30,7 +30,12 @@ void main() {
 
   MockGetMacrosInRangeUseCase buildMacrosInRangeUseCase(Map<DateTime, DailyMacros> macrosByDate) {
     final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
-    when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(macrosByDate));
+    when(
+      () => getMacrosInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => Success(macrosByDate));
     return getMacrosInRangeUseCase;
   }
 
@@ -96,7 +101,10 @@ void main() {
   test('copy sends only the selected meals entries to the target date', () async {
     final copyFoodLogsUseCase = MockCopyFoodLogsUseCase();
     when(
-      () => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate')),
+      () => copyFoodLogsUseCase(
+        entries: any(named: 'entries'),
+        targetDate: any(named: 'targetDate'),
+      ),
     ).thenAnswer((_) async => const Success(null));
     final lunchEntry = buildEntry(MealType.lunch);
     final cubit = CubitsFactories.buildCopyMealsCubit(
@@ -156,7 +164,10 @@ void main() {
     build: () {
       final copyFoodLogsUseCase = MockCopyFoodLogsUseCase();
       when(
-        () => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate')),
+        () => copyFoodLogsUseCase(
+          entries: any(named: 'entries'),
+          targetDate: any(named: 'targetDate'),
+        ),
       ).thenAnswer((_) async => const Success(null));
       return CubitsFactories.buildCopyMealsCubit(
         getMacrosInRangeUseCase: buildMacrosInRangeUseCase({
@@ -186,7 +197,10 @@ void main() {
     build: () {
       final copyFoodLogsUseCase = MockCopyFoodLogsUseCase();
       when(
-        () => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate')),
+        () => copyFoodLogsUseCase(
+          entries: any(named: 'entries'),
+          targetDate: any(named: 'targetDate'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildCopyMealsCubit(
         getMacrosInRangeUseCase: buildMacrosInRangeUseCase({

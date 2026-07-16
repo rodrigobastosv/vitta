@@ -13,15 +13,19 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.da
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
-Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (sheetContext) => BlocProvider.value(
-        value: context.read<FoodSearchCubit>(),
-        child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
-      ),
-    );
+Future<void> showLogFoodSheet({
+  required BuildContext context,
+  required Food food,
+  required DateTime loggedDate,
+  MealType? initialMealType,
+}) => showModalBottomSheet<void>(
+  context: context,
+  isScrollControlled: true,
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<FoodSearchCubit>(),
+    child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
+  ),
+);
 
 class _LogFoodSheet extends StatefulWidget {
   const _LogFoodSheet({required this.food, required this.loggedDate, required this.initialMealType});
@@ -55,9 +59,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       return;
     }
     final entered = double.tryParse(_quantityController.text.replaceAll(',', '.'));
-    final converted = entered == null
-        ? null
-        : _quantityMode.valueIn(mode, value: entered, food: widget.food, unitSystem: _unitSystem);
+    final converted = entered == null ? null : _quantityMode.valueIn(mode, value: entered, food: widget.food, unitSystem: _unitSystem);
     setState(() {
       _quantityMode = mode;
       if (converted != null) {

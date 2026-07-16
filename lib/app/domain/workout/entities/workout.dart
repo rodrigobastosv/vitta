@@ -29,16 +29,11 @@ class Workout extends Equatable with WorkoutVolume {
   final List<WorkoutExercise> exercises;
   final String? notes;
 
-  /// Null for a one-off workout. Only routine-backed workouts advance the
-  /// cycle - see RoutineCycle.
   final String? routineId;
 
   @override
   List<WorkoutSet> get sets => [for (final exercise in exercises) ...exercise.sets];
 
-  /// Every exercise marked done - what the end-of-workout message waits for.
-  /// An empty workout is never complete: nothing was finished, so there is
-  /// nothing to congratulate.
   bool get isComplete => exercises.isNotEmpty && exercises.every((exercise) => exercise.isCompleted);
 
   Set<BodyRegion> get regions => {

@@ -1,10 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/sleep/entities/daily_sleep.dart';
 
-/// How many nights landed on each 1-5 rating across a window.
-///
-/// Only rated nights are counted: the rating is optional, so an unrated night
-/// is missing data, not a bad night.
 class SleepQualitySplit extends Equatable {
   const SleepQualitySplit({required this.nightsByRating});
 

@@ -14,11 +14,8 @@ class WaterHistoryState extends Equatable {
   final DateTime month;
   final double dailyGoalMl;
 
-  /// The displayed month, for the calendar.
   final Map<DateTime, DailyWater> waterInMonth;
 
-  /// A rolling window ending today, for the trend. Independent of [month]:
-  /// progression is the point, and paging month-by-month buries it.
   final Map<DateTime, DailyWater> waterInTrendRange;
 
   final TrendRange trendRange;

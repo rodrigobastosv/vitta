@@ -10,8 +10,6 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 class VTPhotoHeader extends StatelessWidget {
   const VTPhotoHeader({required this.imageBytes, required this.onTap, this.imageUrl, super.key});
 
-  /// A freshly picked photo, which wins over [imageUrl] — that's the already
-  /// uploaded one an edited record starts with.
   final Uint8List? imageBytes;
   final String? imageUrl;
   final VoidCallback onTap;
@@ -27,11 +25,7 @@ class VTPhotoHeader extends StatelessWidget {
         children: [
           DecoratedBox(
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: .topLeft,
-                end: .bottomLeft,
-                colors: [colorScheme.primaryContainer, colorScheme.surface],
-              ),
+              gradient: LinearGradient(begin: .topLeft, end: .bottomLeft, colors: [colorScheme.primaryContainer, colorScheme.surface]),
             ),
           ),
           AnimatedSwitcher(
@@ -39,12 +33,7 @@ class VTPhotoHeader extends StatelessWidget {
             switchInCurve: Curves.easeOutCubic,
             child: photo ?? _placeholder(context),
           ),
-          if (photo != null)
-            Positioned(
-              right: VTSpacing.m,
-              bottom: VTSpacing.m,
-              child: _changePhotoChip(context),
-            ),
+          if (photo != null) Positioned(right: VTSpacing.m, bottom: VTSpacing.m, child: _changePhotoChip(context)),
         ],
       ),
     );

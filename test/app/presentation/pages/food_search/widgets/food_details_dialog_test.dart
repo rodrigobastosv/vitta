@@ -12,7 +12,10 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: FoodDetailsDialog(food: FoodFactory.build(micronutrientsPer100g: micronutrients), heroTag: 'tag'),
+        body: FoodDetailsDialog(
+          food: FoodFactory.build(micronutrientsPer100g: micronutrients),
+          heroTag: 'tag',
+        ),
       ),
     ),
   );

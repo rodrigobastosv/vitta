@@ -7,9 +7,6 @@ class ExerciseSearchState extends Equatable {
 
   final String query;
 
-  /// Null means no search has run yet (the idle prompt); a non-null empty list
-  /// means a search ran and matched nothing - two different states sharing one
-  /// field, the same shape `FoodSearchState.results` uses.
   final List<Exercise>? results;
   final MuscleGroup? muscleGroup;
 

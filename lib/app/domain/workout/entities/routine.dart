@@ -16,8 +16,7 @@ class Routine extends Equatable {
     if (raw is! List<dynamic>) {
       return const [];
     }
-    final rows = raw.cast<Map<String, dynamic>>().toList()
-      ..sort((a, b) => (a['position'] as num).compareTo(b['position'] as num));
+    final rows = raw.cast<Map<String, dynamic>>().toList()..sort((a, b) => (a['position'] as num).compareTo(b['position'] as num));
     return [for (final row in rows) Exercise.fromMap(row['exercises'] as Map<String, dynamic>)];
   }
 

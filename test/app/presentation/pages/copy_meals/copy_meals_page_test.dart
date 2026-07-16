@@ -52,9 +52,6 @@ Widget buildTestApp({required CopyMealsCubit cubit, void Function({bool? hasCopi
   );
 }
 
-// The page stacks a month calendar over the meal list; the default 800px test
-// viewport cuts the list off, and a ListView never builds what it can't show —
-// which would make every `findsNothing` below pass for the wrong reason.
 Future<void> pumpCopyMealsPage(WidgetTester tester, Widget app) async {
   tester.view.physicalSize = const Size(1200, 4200);
   tester.view.devicePixelRatio = 3;
@@ -73,7 +70,10 @@ void main() {
   CopyMealsCubit buildCubit({MockCopyFoodLogsUseCase? copyFoodLogsUseCase, Map<DateTime, DailyMacros>? macrosByDate}) {
     final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
     when(
-      () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+      () => getMacrosInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
     ).thenAnswer((_) async => Success(macrosByDate ?? const {}));
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
@@ -89,7 +89,9 @@ void main() {
     sourceDate: DailyMacros(
       entries: [
         FoodLogEntryFactory.build(log: FoodLogFactory.build()),
-        FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'log-2', mealType: MealType.lunch)),
+        FoodLogEntryFactory.build(
+          log: FoodLogFactory.build(id: 'log-2', mealType: MealType.lunch),
+        ),
       ],
     ),
   };
@@ -146,7 +148,10 @@ void main() {
   testWidgets('unticking a meal leaves the other one copyable', (tester) async {
     final copyFoodLogsUseCase = MockCopyFoodLogsUseCase();
     when(
-      () => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate')),
+      () => copyFoodLogsUseCase(
+        entries: any(named: 'entries'),
+        targetDate: any(named: 'targetDate'),
+      ),
     ).thenAnswer((_) async => const Success(null));
     await pumpCopyMealsPage(
       tester,
@@ -162,16 +167,24 @@ void main() {
     await tester.tap(find.byType(VTPrimaryButton));
     await tester.pumpAndSettle();
 
-    final entries = verify(
-      () => copyFoodLogsUseCase(entries: captureAny(named: 'entries'), targetDate: targetDate),
-    ).captured.single as List<FoodLogEntry>;
+    final entries =
+        verify(
+              () => copyFoodLogsUseCase(
+                entries: captureAny(named: 'entries'),
+                targetDate: targetDate,
+              ),
+            ).captured.single
+            as List<FoodLogEntry>;
     expect(entries.map((entry) => entry.log.mealType), [MealType.lunch]);
   });
 
   testWidgets('a successful copy toasts and pops back so the diet page can refresh', (tester) async {
     final copyFoodLogsUseCase = MockCopyFoodLogsUseCase();
     when(
-      () => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate')),
+      () => copyFoodLogsUseCase(
+        entries: any(named: 'entries'),
+        targetDate: any(named: 'targetDate'),
+      ),
     ).thenAnswer((_) async => const Success(null));
     bool? poppedWith;
     await pumpCopyMealsPage(

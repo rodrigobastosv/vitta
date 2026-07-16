@@ -38,9 +38,6 @@ class DietRepository {
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
 
-  // Below this many catalog hits, the shared catalog is too thin to stand on its
-  // own (e.g. a Portuguese term the OFF import barely covers), so Open Food Facts
-  // is queried too and merged in. At or above it, the catalog answers alone.
   static const _sparseCatalogThreshold = 5;
 
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
@@ -97,19 +94,13 @@ class DietRepository {
     required MealType mealType,
     required double quantityGrams,
     double? quantityUnits,
-  }) => _supabaseDietDataSource.updateFoodLog(
-    logId: logId,
-    mealType: mealType,
-    quantityGrams: quantityGrams,
-    quantityUnits: quantityUnits,
-  );
+  }) => _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 
   Future<Result<VTError, List<Food>>> getFavoriteFoods() => _supabaseFoodFavoritesDataSource.getFavorites();
 
-  Future<Result<VTError, void>> addFavoriteFood({required String foodId}) =>
-      _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);
+  Future<Result<VTError, void>> addFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);
 
   Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) =>
       _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
@@ -124,15 +115,10 @@ class DietRepository {
 
   Future<Result<VTError, void>> deleteRecipe({required String recipeId}) => _supabaseRecipeDataSource.deleteRecipe(recipeId: recipeId);
 
-  // Recent searches live on the device only (issue #86): they are a typing
-  // shortcut, not user data worth a table and a round-trip.
   static const _maxRecentSearches = 8;
 
   List<String> getRecentSearches() => _recentSearchesLocalDataSource.getRecentSearches();
 
-  /// Most recent first, no duplicates, capped. Matching is case-insensitive so
-  /// "Banana" doesn't sit next to "banana", but the newly typed spelling is the
-  /// one kept.
   Future<List<String>> addRecentSearch({required String query}) {
     final trimmedQuery = query.trim();
     final updatedSearches = [
