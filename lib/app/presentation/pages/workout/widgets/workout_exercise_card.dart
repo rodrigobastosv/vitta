@@ -11,6 +11,7 @@ import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/entities/workout_sets_summary.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_thumbnail.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_actions.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 
 class WorkoutExerciseCard extends StatelessWidget {
@@ -137,33 +138,35 @@ class WorkoutExerciseCard extends StatelessWidget {
                           child: Text(l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context)),
                         )
                       else
-                        for (final (index, set) in workoutExercise.sets.indexed)
-                          WorkoutSetRow(
-                            set: set,
-                            position: index + 1,
-                            unitSystem: unitSystem,
-                            color: accent,
-                            onEdit: onEditSet == null ? null : () => onEditSet(set),
-                            onDelete: onDeleteSet == null ? null : () => onDeleteSet(set),
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: colorScheme.onSurface.withValues(alpha: 0.035),
+                            borderRadius: VTRadius.borderRadiusM,
                           ),
-                      const VTGap.s(),
-                      Row(
-                        children: [
-                          if (onAddSet != null)
-                            FilledButton.tonalIcon(
-                              icon: const Icon(Icons.add, size: 18),
-                              label: Text(l10n.workoutAddSet),
-                              onPressed: onAddSet,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
+                            child: Column(
+                              children: [
+                                for (final (index, set) in workoutExercise.sets.indexed) ...[
+                                  if (index > 0) Divider(height: 1, thickness: 1, color: colorScheme.outline.withValues(alpha: 0.4)),
+                                  WorkoutSetRow(
+                                    set: set,
+                                    position: index + 1,
+                                    unitSystem: unitSystem,
+                                    color: accent,
+                                    onEdit: onEditSet == null ? null : () => onEditSet(set),
+                                    onDelete: onDeleteSet == null ? null : () => onDeleteSet(set),
+                                  ),
+                                ],
+                              ],
                             ),
-                          if (onRepeatSet != null && workoutExercise.sets.isNotEmpty) ...[
-                            const VTGap.s(),
-                            TextButton.icon(
-                              icon: const Icon(Icons.repeat, size: 18),
-                              label: Text(l10n.workoutRepeatSetAction),
-                              onPressed: onRepeatSet,
-                            ),
-                          ],
-                        ],
+                          ),
+                        ),
+                      const VTGap.m(),
+                      WorkoutSetActions(
+                        accent: accent,
+                        onAddSet: onAddSet,
+                        onRepeatSet: onRepeatSet != null && workoutExercise.sets.isNotEmpty ? onRepeatSet : null,
                       ),
                     ],
                   ),

@@ -27,6 +27,8 @@ abstract class VTColors {
   static const Color onSurfaceVariantDark = Color(0xFF9FB0A6);
   static const Color surfaceContainerLight = Color(0xFFF0EEE4);
   static const Color surfaceContainerDark = Color(0xFF1E2620);
+  static const Color cardLight = Color(0xFFFFFFFF);
+  static const Color cardDark = Color(0xFF1D2620);
   static const Color outlineLight = Color(0xFFD6D2C4);
   static const Color outlineDark = Color(0xFF3A423C);
 

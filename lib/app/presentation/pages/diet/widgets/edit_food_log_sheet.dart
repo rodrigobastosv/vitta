@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
@@ -12,7 +11,7 @@ import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 
 Future<void> showEditFoodLogSheet({required BuildContext context, required FoodLogEntry entry}) => showModalBottomSheet<void>(
   context: context,
@@ -35,48 +34,21 @@ class _EditFoodLogSheet extends StatefulWidget {
 class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   late final UnitSystem _unitSystem = context.read<DietCubit>().unitSystem;
 
-  late FoodQuantityMode _quantityMode = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable
-      ? FoodQuantityMode.units
-      : FoodQuantityMode.weight;
-  late final TextEditingController _quantityController = TextEditingController(text: _initialQuantityText);
+  late final double? _initialUnits = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable
+      ? widget.entry.log.quantityUnits
+      : null;
+  late FoodQuantitySelection _selection = FoodQuantitySelection(
+    quantityGrams: widget.entry.log.quantityGrams,
+    quantityUnits: _initialUnits,
+  );
   late MealType _mealType = widget.entry.log.mealType;
   bool _isSaving = false;
   String? _errorMessage;
 
-  String get _initialQuantityText => switch (_quantityMode) {
-    .weight => QuantityFormat.format(_unitSystem.gramsToDisplayWeight(widget.entry.log.quantityGrams)),
-    .units => QuantityFormat.format(widget.entry.log.quantityUnits!),
-  };
-
-  @override
-  void dispose() {
-    _quantityController.dispose();
-    super.dispose();
-  }
-
-  void _quantityModeChanged(FoodQuantityMode mode) {
-    if (mode == _quantityMode) {
-      return;
-    }
-    final entered = double.tryParse(_quantityController.text.replaceAll(',', '.'));
-    final converted = entered == null
-        ? null
-        : _quantityMode.valueIn(mode, value: entered, food: widget.entry.food, unitSystem: _unitSystem);
-    setState(() {
-      _quantityMode = mode;
-      if (converted != null) {
-        _quantityController.text = QuantityFormat.format(converted);
-      }
-    });
-  }
-
   Future<void> _submit() async {
-    final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     final l10n = context.l10n;
-    final quantityGrams = quantityDisplayValue == null
-        ? null
-        : _quantityMode.gramsFor(value: quantityDisplayValue, food: widget.entry.food, unitSystem: _unitSystem);
-    if (quantityDisplayValue == null || quantityDisplayValue <= 0 || quantityGrams == null) {
+    final selection = _selection;
+    if (!selection.isValid) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -89,8 +61,8 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
     final updatedResult = await context.read<DietCubit>().updateLog(
       logId: widget.entry.log.id,
       mealType: _mealType,
-      quantityGrams: quantityGrams,
-      quantityUnits: _quantityMode.unitsFor(quantityDisplayValue),
+      quantityGrams: selection.quantityGrams!,
+      quantityUnits: selection.quantityUnits,
     );
 
     if (!mounted) {
@@ -129,11 +101,11 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
           const VTGap.m(),
           FoodQuantityInput(
             food: widget.entry.food,
-            controller: _quantityController,
-            mode: _quantityMode,
-            onModeChanged: _quantityModeChanged,
             unitSystem: _unitSystem,
+            initialGrams: widget.entry.log.quantityGrams,
+            initialUnits: _initialUnits,
             autofocus: true,
+            onChanged: (selection) => _selection = selection,
           ),
           const VTGap.m(),
           Wrap(

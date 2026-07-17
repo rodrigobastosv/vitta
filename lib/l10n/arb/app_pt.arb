@@ -92,15 +92,6 @@
       "calories": {"type": "int"}
     }
   },
-  "dietQuantityModeWeight": "Peso",
-  "dietQuantityModeUnits": "Unidades",
-  "dietQuantityUnitsHint": "{units} un = {weight}",
-  "@dietQuantityUnitsHint": {
-    "placeholders": {
-      "units": {"type": "String"},
-      "weight": {"type": "String"}
-    }
-  },
   "dietGramsPerUnitLabel": "Peso de uma unidade (g)",
   "dietGramsPerUnitHint": "Opcional. Preencha para registrar este alimento por unidade, como \"2 ovos\".",
   "dietLogFoodAction": "Adicionar ao dia",

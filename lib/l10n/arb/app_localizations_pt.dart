@@ -169,17 +169,6 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
-  String get dietQuantityModeWeight => 'Peso';
-
-  @override
-  String get dietQuantityModeUnits => 'Unidades';
-
-  @override
-  String dietQuantityUnitsHint(String units, String weight) {
-    return '$units un = $weight';
-  }
-
-  @override
   String get dietGramsPerUnitLabel => 'Peso de uma unidade (g)';
 
   @override

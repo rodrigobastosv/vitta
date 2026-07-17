@@ -13,20 +13,6 @@ enum FoodQuantityMode {
     },
   };
 
-  double? valueIn(FoodQuantityMode target, {required double value, required Food food, required UnitSystem unitSystem}) {
-    final grams = gramsFor(value: value, food: food, unitSystem: unitSystem);
-    if (grams == null) {
-      return null;
-    }
-    return switch (target) {
-      .weight => unitSystem.gramsToDisplayWeight(grams),
-      .units => switch (food.gramsPerUnit) {
-        final gramsPerUnit? => grams / gramsPerUnit,
-        null => null,
-      },
-    };
-  }
-
   double? unitsFor(double value) => switch (this) {
     .weight => null,
     .units => value,

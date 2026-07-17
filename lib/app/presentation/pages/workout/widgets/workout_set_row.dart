@@ -34,27 +34,39 @@ class WorkoutSetRow extends StatelessWidget {
       onTap: onEdit,
       borderRadius: VTRadius.borderRadiusS,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: VTSpacing.xs),
+        padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
         child: Row(
           children: [
             Container(
-              width: 28,
-              height: 28,
+              width: 26,
+              height: 26,
               alignment: .center,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.16), shape: .circle),
+              decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: VTRadius.borderRadiusS),
               child: Text(
                 '$position',
                 style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
               ),
             ),
             const VTGap.m(),
-            Expanded(child: Text(l10n.workoutSetSummary(set.reps), style: VTTextStyles.body(context))),
+            Expanded(child: Text(l10n.workoutSetSummary(set.reps), style: VTTextStyles.bodyStrong(context))),
             VTBadge(
               label: set.isBodyweight ? l10n.workoutBodyweightLabel : _load(),
               color: set.isBodyweight ? colorScheme.onSurfaceVariant : color,
             ),
-            if (onDelete != null)
-              IconButton(icon: const Icon(Icons.close, size: 18), tooltip: l10n.workoutDeleteSetTooltip, onPressed: onDelete),
+            if (onDelete != null) ...[
+              const VTGap.xs(),
+              InkResponse(
+                onTap: onDelete,
+                radius: 20,
+                child: Tooltip(
+                  message: l10n.workoutDeleteSetTooltip,
+                  child: Padding(
+                    padding: const EdgeInsets.all(VTSpacing.xs),
+                    child: Icon(Icons.close_rounded, size: 18, color: colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
