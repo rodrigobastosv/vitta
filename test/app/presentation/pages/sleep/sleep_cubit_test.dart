@@ -94,20 +94,18 @@ void main() {
     ]);
   });
 
+  final deleteReloadSpy = MockGetRecentSleepLogsUseCase();
   blocTest<SleepCubit, SleepState>(
-    'reloads recent logs after successfully deleting a log',
+    'optimistically removes a log without reloading',
     build: () {
       final deleteSleepLogUseCase = MockDeleteSleepLogUseCase();
-      final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
       when(() => deleteSleepLogUseCase(logId: 'log-1')).thenAnswer((_) async => const Success(null));
-      when(() => getRecentSleepLogsUseCase(days: 7)).thenAnswer((_) async => const Success([]));
-      return CubitsFactories.buildSleepCubit(
-        deleteSleepLogUseCase: deleteSleepLogUseCase,
-        getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
-      );
+      return CubitsFactories.buildSleepCubit(deleteSleepLogUseCase: deleteSleepLogUseCase, getRecentSleepLogsUseCase: deleteReloadSpy);
     },
+    seed: () => SleepState(logs: [SleepLogFactory.build(id: 'log-1')]),
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [isA<SleepState>()],
+    expect: () => [isA<SleepState>().having((state) => state.logs, 'logs', isEmpty)],
+    verify: (_) => verifyNever(() => deleteReloadSpy(days: any(named: 'days'))),
   );
 
   final getRecentSleepLogsUseCaseSpy = MockGetRecentSleepLogsUseCase();

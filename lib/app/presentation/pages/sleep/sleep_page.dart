@@ -5,6 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/edit_sleep_goal_dialog.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/log_sleep_sheet.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_log_tile.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_summary_card.dart';
 
 class SleepPage extends StatelessWidget {
   const SleepPage({super.key});
@@ -40,40 +42,40 @@ class SleepPage extends StatelessWidget {
               tooltip: l10n.sleepHistoryTitle,
               onPressed: () => context.pushRoute(.sleepHistory),
             ),
-            IconButton(
-              icon: const Icon(Icons.flag_outlined),
-              tooltip: l10n.sleepGoalDialogTitle,
-              onPressed: () async {
-                final goalHours = await showEditSleepGoalDialog(context: context, currentGoalHours: cubit.durationGoalHours);
-                if (goalHours != null) {
-                  await cubit.saveDurationGoalHours(goalHours);
-                }
-              },
-            ),
           ],
         ),
         body: RefreshIndicator(
           onRefresh: cubit.loadRecent,
-          child: state.logs.isEmpty
-              ? ListView(
-                  children: [VTEmptyState(icon: Icons.bedtime_outlined, title: l10n.sleepEmptyTitle, message: l10n.sleepEmptyMessage)],
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.all(VTSpacing.m),
-                  itemCount: state.logs.length,
-                  separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
-                  itemBuilder: (context, index) {
-                    final log = state.logs[index];
-                    return SleepLogTile(
-                      log: log,
-                      onDelete: () => cubit.deleteLog(logId: log.id),
-                    );
+          child: ListView(
+            padding: const EdgeInsets.all(VTSpacing.m),
+            children: [
+              if (state.logs.isEmpty)
+                VTEmptyState(icon: Icons.bedtime_outlined, title: l10n.sleepEmptyTitle, message: l10n.sleepEmptyMessage)
+              else ...[
+                SleepSummaryCard(
+                  logs: state.logs,
+                  goalHours: cubit.durationGoalHours,
+                  onEditGoal: () async {
+                    final goalHours = await showEditSleepGoalDialog(context: context, currentGoalHours: cubit.durationGoalHours);
+                    if (goalHours != null) {
+                      await cubit.saveDurationGoalHours(goalHours);
+                      await cubit.loadRecent();
+                    }
                   },
                 ),
+                const VTGap.l(),
+                for (final log in state.logs) ...[
+                  SleepLogTile(log: log, onDelete: () => cubit.deleteLog(logId: log.id)),
+                  const VTGap.s(),
+                ],
+              ],
+            ],
+          ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: FloatingActionButton.extended(
           onPressed: () => showLogSleepSheet(context: context),
-          child: const Icon(Icons.add),
+          icon: const Icon(Icons.add),
+          label: Text(l10n.sleepLogAction),
         ),
       );
     },

@@ -400,6 +400,35 @@
       "minutes": {"type": "int"}
     }
   },
+  "sleepHoursOnly": "{hours}h",
+  "@sleepHoursOnly": {
+    "placeholders": {
+      "hours": {"type": "int"}
+    }
+  },
+  "sleepMinutesOnly": "{minutes}m",
+  "@sleepMinutesOnly": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "sleepLastNightLabel": "Last night",
+  "sleepGoalReached": "Goal met!",
+  "sleepShort": "{duration} short",
+  "@sleepShort": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "sleepOfGoal": "of {duration}",
+  "@sleepOfGoal": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "sleepGoalMetric": "Goal",
+  "sleepAverageMetric": "Average",
+  "sleepNightsMetric": "Nights",
   "onboardingWelcomeTitle": "Welcome to Vitta",
   "onboardingWelcomeMessage": "Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.",
   "onboardingAccountBenefitMessage": "Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.",

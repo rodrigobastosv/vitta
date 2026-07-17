@@ -45,6 +45,7 @@ abstract class VTColors {
   static const Color bodyRegionLegs = Color(0xFF2E7D5B);
 
   static const Color water = Color(0xFF2AA5D6);
+  static const Color sleep = Color(0xFF5C6BC0);
 
   static const Color success = Color(0xFF2F8F7A);
   static const Color warning = Color(0xFFE8A317);
