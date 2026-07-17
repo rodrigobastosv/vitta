@@ -48,10 +48,15 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   }
 
   Future<void> deleteLog({required String logId}) async {
+    final previous = state.logs;
+    emit(state.copyWith(logs: [for (final log in previous) if (log.id != logId) log]));
     final deletedResult = await _deleteSleepLogUseCase(logId: logId);
-    await deletedResult.when((error) => Future.sync(() => emitPresentation(SleepError(message: error.message))), (_) {
-      Log.action('sleep_log_deleted');
-      return loadRecent();
-    });
+    deletedResult.when(
+      (error) {
+        emit(state.copyWith(logs: previous));
+        emitPresentation(SleepError(message: error.message));
+      },
+      (_) => Log.action('sleep_log_deleted'),
+    );
   }
 }

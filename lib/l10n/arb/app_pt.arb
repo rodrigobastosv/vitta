@@ -382,6 +382,35 @@
       "minutes": {"type": "int"}
     }
   },
+  "sleepHoursOnly": "{hours}h",
+  "@sleepHoursOnly": {
+    "placeholders": {
+      "hours": {"type": "int"}
+    }
+  },
+  "sleepMinutesOnly": "{minutes}m",
+  "@sleepMinutesOnly": {
+    "placeholders": {
+      "minutes": {"type": "int"}
+    }
+  },
+  "sleepLastNightLabel": "Última noite",
+  "sleepGoalReached": "Meta atingida!",
+  "sleepShort": "faltam {duration}",
+  "@sleepShort": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "sleepOfGoal": "de {duration}",
+  "@sleepOfGoal": {
+    "placeholders": {
+      "duration": {"type": "String"}
+    }
+  },
+  "sleepGoalMetric": "Meta",
+  "sleepAverageMetric": "Média",
+  "sleepNightsMetric": "Noites",
   "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
   "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",

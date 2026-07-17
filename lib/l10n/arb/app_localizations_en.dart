@@ -767,6 +767,41 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String sleepHoursOnly(int hours) {
+    return '${hours}h';
+  }
+
+  @override
+  String sleepMinutesOnly(int minutes) {
+    return '${minutes}m';
+  }
+
+  @override
+  String get sleepLastNightLabel => 'Last night';
+
+  @override
+  String get sleepGoalReached => 'Goal met!';
+
+  @override
+  String sleepShort(String duration) {
+    return '$duration short';
+  }
+
+  @override
+  String sleepOfGoal(String duration) {
+    return 'of $duration';
+  }
+
+  @override
+  String get sleepGoalMetric => 'Goal';
+
+  @override
+  String get sleepAverageMetric => 'Average';
+
+  @override
+  String get sleepNightsMetric => 'Nights';
+
+  @override
   String get onboardingWelcomeTitle => 'Welcome to Vitta';
 
   @override

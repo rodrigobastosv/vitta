@@ -1430,6 +1430,60 @@ abstract class AppLocalizations {
   /// **'{hours}h {minutes}m'**
   String sleepDurationLabel(int hours, int minutes);
 
+  /// No description provided for @sleepHoursOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h'**
+  String sleepHoursOnly(int hours);
+
+  /// No description provided for @sleepMinutesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m'**
+  String sleepMinutesOnly(int minutes);
+
+  /// No description provided for @sleepLastNightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last night'**
+  String get sleepLastNightLabel;
+
+  /// No description provided for @sleepGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal met!'**
+  String get sleepGoalReached;
+
+  /// No description provided for @sleepShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{duration} short'**
+  String sleepShort(String duration);
+
+  /// No description provided for @sleepOfGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'of {duration}'**
+  String sleepOfGoal(String duration);
+
+  /// No description provided for @sleepGoalMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get sleepGoalMetric;
+
+  /// No description provided for @sleepAverageMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get sleepAverageMetric;
+
+  /// No description provided for @sleepNightsMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Nights'**
+  String get sleepNightsMetric;
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
