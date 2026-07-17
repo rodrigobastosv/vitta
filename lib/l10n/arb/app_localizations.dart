@@ -380,24 +380,6 @@ abstract class AppLocalizations {
   /// **'{units} un - {calories} kcal'**
   String dietLogSubtitleUnits(String units, int calories);
 
-  /// No description provided for @dietQuantityModeWeight.
-  ///
-  /// In en, this message translates to:
-  /// **'Weight'**
-  String get dietQuantityModeWeight;
-
-  /// No description provided for @dietQuantityModeUnits.
-  ///
-  /// In en, this message translates to:
-  /// **'Units'**
-  String get dietQuantityModeUnits;
-
-  /// No description provided for @dietQuantityUnitsHint.
-  ///
-  /// In en, this message translates to:
-  /// **'{units} un = {weight}'**
-  String dietQuantityUnitsHint(String units, String weight);
-
   /// No description provided for @dietGramsPerUnitLabel.
   ///
   /// In en, this message translates to:

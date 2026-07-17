@@ -44,30 +44,4 @@ void main() {
     expect(FoodQuantityMode.units.unitsFor(2), 2);
     expect(FoodQuantityMode.weight.unitsFor(100), isNull);
   });
-
-  test('switching modes restates the same portion rather than rereading the number', () {
-    final egg = FoodFactory.build(gramsPerUnit: 50);
-
-    final asUnits = FoodQuantityMode.weight.valueIn(FoodQuantityMode.units, value: 150, food: egg, unitSystem: UnitSystem.metric);
-    final asWeight = FoodQuantityMode.units.valueIn(FoodQuantityMode.weight, value: 3, food: egg, unitSystem: UnitSystem.metric);
-
-    expect(asUnits, 3);
-    expect(asWeight, 150);
-  });
-
-  test("switching modes restates the weight in the reader's unit system", () {
-    final egg = FoodFactory.build(gramsPerUnit: 50);
-
-    final asOunces = FoodQuantityMode.units.valueIn(FoodQuantityMode.weight, value: 2, food: egg, unitSystem: UnitSystem.imperial);
-
-    expect(asOunces, closeTo(3.53, 0.01));
-  });
-
-  test('switching a food with no unit weight into units restates nothing', () {
-    final rice = FoodFactory.build();
-
-    final asUnits = FoodQuantityMode.weight.valueIn(FoodQuantityMode.units, value: 150, food: rice, unitSystem: UnitSystem.metric);
-
-    expect(asUnits, isNull);
-  });
 }

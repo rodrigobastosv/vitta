@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -10,7 +9,7 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
 Future<void> showLogFoodSheet({
@@ -40,41 +39,15 @@ class _LogFoodSheet extends StatefulWidget {
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
-  late final TextEditingController _quantityController = TextEditingController(
-    text: QuantityFormat.format(_unitSystem.gramsToDisplayWeight(100)),
-  );
+  FoodQuantitySelection _selection = const FoodQuantitySelection(quantityGrams: 100);
   late MealType _mealType = widget.initialMealType;
-  FoodQuantityMode _quantityMode = .weight;
   bool _isSaving = false;
   String? _errorMessage;
 
-  @override
-  void dispose() {
-    _quantityController.dispose();
-    super.dispose();
-  }
-
-  void _quantityModeChanged(FoodQuantityMode mode) {
-    if (mode == _quantityMode) {
-      return;
-    }
-    final entered = double.tryParse(_quantityController.text.replaceAll(',', '.'));
-    final converted = entered == null ? null : _quantityMode.valueIn(mode, value: entered, food: widget.food, unitSystem: _unitSystem);
-    setState(() {
-      _quantityMode = mode;
-      if (converted != null) {
-        _quantityController.text = QuantityFormat.format(converted);
-      }
-    });
-  }
-
   Future<void> _submit() async {
-    final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
     final l10n = context.l10n;
-    final quantityGrams = quantityDisplayValue == null
-        ? null
-        : _quantityMode.gramsFor(value: quantityDisplayValue, food: widget.food, unitSystem: _unitSystem);
-    if (quantityDisplayValue == null || quantityDisplayValue <= 0 || quantityGrams == null) {
+    final selection = _selection;
+    if (!selection.isValid) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -88,8 +61,8 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       food: widget.food,
       loggedDate: widget.loggedDate,
       mealType: _mealType,
-      quantityGrams: quantityGrams,
-      quantityUnits: _quantityMode.unitsFor(quantityDisplayValue),
+      quantityGrams: selection.quantityGrams!,
+      quantityUnits: selection.quantityUnits,
     );
 
     if (!mounted) {
@@ -122,10 +95,9 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
           const VTGap.m(),
           FoodQuantityInput(
             food: widget.food,
-            controller: _quantityController,
-            mode: _quantityMode,
-            onModeChanged: _quantityModeChanged,
             unitSystem: _unitSystem,
+            initialGrams: 100,
+            onChanged: (selection) => _selection = selection,
           ),
           const VTGap.m(),
           Wrap(
