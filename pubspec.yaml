@@ -42,10 +42,12 @@ dev_dependencies:
   flutter_native_splash: ^2.4.8
 
 dependency_overrides:
-  # health pulls device_info_plus transitively; 12.4.0 calls
-  # [NSProcessInfo isiOSAppOnVision] gated on @available(iOS 26.1), which fails to
-  # archive on any earlier iOS SDK. Cap below it (allows safe patches) until fixed.
-  device_info_plus: "<12.4.0"
+  # Both are transitive-only (via health / sentry) — pinned here to dodge broken
+  # versions rather than listed as things we depend on directly.
+  # device_info_plus 12.4.0 calls [NSProcessInfo isiOSAppOnVision] (iOS 26.1 SDK
+  # only), which fails to archive on earlier Xcode. Hold at health's floor..<12.4.0
+  # (an unbounded "<12.4.0" lets pub drop to 0.0.1).
+  device_info_plus: ">=12.1.0 <12.4.0"
 
 flutter:
   uses-material-design: true
