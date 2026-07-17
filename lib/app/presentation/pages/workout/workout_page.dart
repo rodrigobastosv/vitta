@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
@@ -31,6 +33,7 @@ class WorkoutPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         WorkoutShowLoading() => context.showLoading(),
         WorkoutHideLoading() => context.hideLoading(),
+        WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
         WorkoutError(:final message, :final date) => context.showErrorToast(
           message: message,
           onRetry: () => context.read<WorkoutCubit>().goToDate(date),
@@ -131,6 +134,20 @@ class WorkoutPage extends StatelessWidget {
   static DateTime _today() {
     final now = DateTime.now();
     return DateTime(now.year, now.month, now.day);
+  }
+
+  Future<void> _showIntro(BuildContext context, WorkoutCubit cubit) async {
+    final wantsRoutine = await context.pushRoute<bool>(.workoutIntro) ?? false;
+    if (!context.mounted) {
+      return;
+    }
+    await cubit.markIntroSeen();
+    if (wantsRoutine && context.mounted) {
+      await context.pushRoute(.routines);
+      if (context.mounted) {
+        await cubit.loadDate(cubit.state.date);
+      }
+    }
   }
 
   Future<void> _addExercise(BuildContext context, WorkoutCubit cubit) async {

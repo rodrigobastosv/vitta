@@ -468,4 +468,52 @@ void main() {
 
     verify(() => setCompleted(workoutExerciseId: 'we-1', completed: false)).called(1);
   });
+
+  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
+    'onInit asks to show the intro when it has not been seen yet',
+    build: () {
+      useMockLog();
+      final hasSeenIntro = MockHasSeenWorkoutIntroUseCase();
+      when(hasSeenIntro.call).thenReturn(false);
+      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+      return CubitsFactories.buildWorkoutCubit(
+        hasSeenWorkoutIntroUseCase: hasSeenIntro,
+        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+        getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+      );
+    },
+    act: (cubit) => cubit.onInit(),
+    expectPresentation: () => [isA<WorkoutShowIntro>(), isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+  );
+
+  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
+    'onInit does not show the intro once it has been seen',
+    build: () {
+      useMockLog();
+      final hasSeenIntro = MockHasSeenWorkoutIntroUseCase();
+      when(hasSeenIntro.call).thenReturn(true);
+      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+      return CubitsFactories.buildWorkoutCubit(
+        hasSeenWorkoutIntroUseCase: hasSeenIntro,
+        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+        getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+      );
+    },
+    act: (cubit) => cubit.onInit(),
+    expectPresentation: () => [isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+  );
+
+  test('markIntroSeen records that the intro was seen', () async {
+    final markIntroSeen = MockMarkWorkoutIntroSeenUseCase();
+    when(markIntroSeen.call).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildWorkoutCubit(markWorkoutIntroSeenUseCase: markIntroSeen);
+
+    await cubit.markIntroSeen();
+
+    verify(markIntroSeen.call).called(1);
+  });
 }

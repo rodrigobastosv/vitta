@@ -1,5 +1,6 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/data/workout/datasources/local/workout_local_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
@@ -19,11 +20,17 @@ class WorkoutRepository {
     required this._supabaseExerciseDataSource,
     required this._supabaseWorkoutDataSource,
     required this._supabaseRoutineDataSource,
+    required this._workoutLocalDataSource,
   });
 
   final SupabaseExerciseDataSource _supabaseExerciseDataSource;
   final SupabaseWorkoutDataSource _supabaseWorkoutDataSource;
   final SupabaseRoutineDataSource _supabaseRoutineDataSource;
+  final WorkoutLocalDataSource _workoutLocalDataSource;
+
+  bool hasSeenIntro() => _workoutLocalDataSource.hasSeenIntro();
+
+  Future<void> markIntroSeen() => _workoutLocalDataSource.markIntroSeen();
 
   Future<Result<VTError, List<Exercise>>> searchExercises({required String query, MuscleGroup? muscleGroup}) =>
       _supabaseExerciseDataSource.searchCatalog(query: query, muscleGroup: muscleGroup);

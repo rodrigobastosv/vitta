@@ -12,7 +12,9 @@ import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart'
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/has_seen_workout_intro_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/mark_workout_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
@@ -35,6 +37,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._startWorkoutFromRoutineUseCase,
     required this._getLastSetsByExerciseUseCase,
     required this._getAppSettingsUseCase,
+    required this._hasSeenWorkoutIntroUseCase,
+    required this._markWorkoutIntroSeenUseCase,
   }) : super(WorkoutState(date: _today(), workouts: const []));
 
   final GetWorkoutsForDateUseCase _getWorkoutsForDateUseCase;
@@ -49,6 +53,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
   final GetLastSetsByExerciseUseCase _getLastSetsByExerciseUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
+  final HasSeenWorkoutIntroUseCase _hasSeenWorkoutIntroUseCase;
+  final MarkWorkoutIntroSeenUseCase _markWorkoutIntroSeenUseCase;
 
   static DateTime _today() {
     final now = DateTime.now();
@@ -58,7 +64,14 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
   @override
-  void onInit() => loadDate(state.date);
+  void onInit() {
+    if (!_hasSeenWorkoutIntroUseCase()) {
+      emitPresentation(WorkoutShowIntro());
+    }
+    loadDate(state.date);
+  }
+
+  Future<void> markIntroSeen() => _markWorkoutIntroSeenUseCase();
 
   Future<void> goToDate(DateTime date) => loadDate(date);
 
