@@ -4,6 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
+import 'package:vitta/app/data/workout/datasources/local/workout_local_datasource.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
 import 'package:vitta/main.dart';
 
@@ -20,6 +21,7 @@ void main() {
     when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
     await G<OnboardingLocalDataSource>().markOnboardingSeen();
+    await G<WorkoutLocalDataSource>().markIntroSeen();
   });
 
   testWidgets('renders the home page with its feature tiles and a profile action', (tester) async {

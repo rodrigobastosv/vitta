@@ -35,9 +35,11 @@ abstract class RepositoriesFactories {
     MockSupabaseExerciseDataSource? supabaseExerciseDataSource,
     MockSupabaseWorkoutDataSource? supabaseWorkoutDataSource,
     MockSupabaseRoutineDataSource? supabaseRoutineDataSource,
+    MockWorkoutLocalDataSource? workoutLocalDataSource,
   }) => WorkoutRepository(
     supabaseExerciseDataSource: supabaseExerciseDataSource ?? MockSupabaseExerciseDataSource(),
     supabaseWorkoutDataSource: supabaseWorkoutDataSource ?? MockSupabaseWorkoutDataSource(),
     supabaseRoutineDataSource: supabaseRoutineDataSource ?? MockSupabaseRoutineDataSource(),
+    workoutLocalDataSource: workoutLocalDataSource ?? MockWorkoutLocalDataSource(),
   );
 }

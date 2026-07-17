@@ -51,7 +51,9 @@ import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/has_seen_workout_intro_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/mark_workout_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
@@ -179,3 +181,7 @@ class MockGetDailyWorkoutsInRangeUseCase extends Mock implements GetDailyWorkout
 class MockReorderRoutinesUseCase extends Mock implements ReorderRoutinesUseCase {}
 
 class MockSetWorkoutExerciseCompletedUseCase extends Mock implements SetWorkoutExerciseCompletedUseCase {}
+
+class MockHasSeenWorkoutIntroUseCase extends Mock implements HasSeenWorkoutIntroUseCase {}
+
+class MockMarkWorkoutIntroSeenUseCase extends Mock implements MarkWorkoutIntroSeenUseCase {}

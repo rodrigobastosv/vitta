@@ -1886,6 +1886,66 @@ abstract class AppLocalizations {
   /// **'Add an exercise to start today\'s workout.'**
   String get workoutEmptyMessage;
 
+  /// No description provided for @workoutIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Workout'**
+  String get workoutIntroTitle;
+
+  /// No description provided for @workoutIntroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your training, watch your numbers climb, and let the app plan what\'s next.'**
+  String get workoutIntroSubtitle;
+
+  /// No description provided for @workoutIntroLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log every set'**
+  String get workoutIntroLogTitle;
+
+  /// No description provided for @workoutIntroLogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add exercises and record reps and load — sets are pre-filled from last time so you just adjust.'**
+  String get workoutIntroLogMessage;
+
+  /// No description provided for @workoutIntroProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See your progress'**
+  String get workoutIntroProgressTitle;
+
+  /// No description provided for @workoutIntroProgressMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume, history and per-exercise progression build up automatically as you train.'**
+  String get workoutIntroProgressMessage;
+
+  /// No description provided for @workoutIntroRoutineTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What is a routine?'**
+  String get workoutIntroRoutineTitle;
+
+  /// No description provided for @workoutIntroRoutineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'A routine is a named, ordered list of exercises — like \"Push — chest & triceps\". Your routines form a cycle, and the app suggests which one to train next, so you never wonder what\'s on today.'**
+  String get workoutIntroRoutineMessage;
+
+  /// No description provided for @workoutIntroCreateRoutineAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create my first routine'**
+  String get workoutIntroCreateRoutineAction;
+
+  /// No description provided for @workoutIntroSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get workoutIntroSkipAction;
+
   /// No description provided for @workoutVolumeLabel.
   ///
   /// In en, this message translates to:

@@ -994,6 +994,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutEmptyMessage => 'Add an exercise to start today\'s workout.';
 
   @override
+  String get workoutIntroTitle => 'Welcome to Workout';
+
+  @override
+  String get workoutIntroSubtitle => 'Log your training, watch your numbers climb, and let the app plan what\'s next.';
+
+  @override
+  String get workoutIntroLogTitle => 'Log every set';
+
+  @override
+  String get workoutIntroLogMessage => 'Add exercises and record reps and load — sets are pre-filled from last time so you just adjust.';
+
+  @override
+  String get workoutIntroProgressTitle => 'See your progress';
+
+  @override
+  String get workoutIntroProgressMessage => 'Volume, history and per-exercise progression build up automatically as you train.';
+
+  @override
+  String get workoutIntroRoutineTitle => 'What is a routine?';
+
+  @override
+  String get workoutIntroRoutineMessage =>
+      'A routine is a named, ordered list of exercises — like \"Push — chest & triceps\". Your routines form a cycle, and the app suggests which one to train next, so you never wonder what\'s on today.';
+
+  @override
+  String get workoutIntroCreateRoutineAction => 'Create my first routine';
+
+  @override
+  String get workoutIntroSkipAction => 'Skip for now';
+
+  @override
   String get workoutVolumeLabel => 'Volume';
 
   @override

@@ -207,6 +207,8 @@ abstract class CubitsFactories {
     MockStartWorkoutFromRoutineUseCase? startWorkoutFromRoutineUseCase,
     MockGetLastSetsByExerciseUseCase? getLastSetsByExerciseUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockHasSeenWorkoutIntroUseCase? hasSeenWorkoutIntroUseCase,
+    MockMarkWorkoutIntroSeenUseCase? markWorkoutIntroSeenUseCase,
   }) => WorkoutCubit(
     getWorkoutsForDateUseCase: getWorkoutsForDateUseCase ?? MockGetWorkoutsForDateUseCase(),
     addExerciseToWorkoutUseCase: addExerciseToWorkoutUseCase ?? MockAddExerciseToWorkoutUseCase(),
@@ -220,6 +222,8 @@ abstract class CubitsFactories {
     startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase ?? MockStartWorkoutFromRoutineUseCase(),
     getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase ?? MockGetLastSetsByExerciseUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    hasSeenWorkoutIntroUseCase: hasSeenWorkoutIntroUseCase ?? MockHasSeenWorkoutIntroUseCase(),
+    markWorkoutIntroSeenUseCase: markWorkoutIntroSeenUseCase ?? MockMarkWorkoutIntroSeenUseCase(),
   );
 
   static ExerciseSearchCubit buildExerciseSearchCubit({MockSearchExercisesUseCase? searchExercisesUseCase}) =>
