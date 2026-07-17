@@ -10,6 +10,8 @@ import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/mark_diet_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
@@ -24,6 +26,8 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     required this._getMacroGoalsUseCase,
     required this._getMacrosInRangeUseCase,
     required this._getAppSettingsUseCase,
+    required this._hasSeenDietIntroUseCase,
+    required this._markDietIntroSeenUseCase,
   }) : super(
          DietState(
            date: _dateOnly(DateTime.now()),
@@ -38,6 +42,8 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   final GetMacroGoalsUseCase _getMacroGoalsUseCase;
   final GetMacrosInRangeUseCase _getMacrosInRangeUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
+  final HasSeenDietIntroUseCase _hasSeenDietIntroUseCase;
+  final MarkDietIntroSeenUseCase _markDietIntroSeenUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -48,7 +54,14 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   bool get isViewingToday => state.date == _today;
 
   @override
-  void onInit() => loadToday();
+  void onInit() {
+    if (!_hasSeenDietIntroUseCase()) {
+      emitPresentation(DietShowIntro());
+    }
+    loadToday();
+  }
+
+  Future<void> markIntroSeen() => _markDietIntroSeenUseCase();
 
   Future<void> loadToday() => _loadDate(_today);
 

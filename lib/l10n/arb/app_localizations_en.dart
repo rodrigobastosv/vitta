@@ -112,6 +112,45 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietAddFood => 'Add food';
 
   @override
+  String get dietIntroTitle => 'Welcome to Diet';
+
+  @override
+  String get dietIntroSubtitle => 'Log what you eat, and see your calories and macros come together day by day.';
+
+  @override
+  String get dietIntroLogTitle => 'Log your food';
+
+  @override
+  String get dietIntroLogMessage =>
+      'Search a shared catalog, scan a nutrition label, or add a custom food — then log it by weight or by the unit.';
+
+  @override
+  String get dietIntroRecipeTitle => 'Build recipes';
+
+  @override
+  String get dietIntroRecipeMessage =>
+      'Save meals you eat often as a recipe, then log the whole thing in one tap instead of adding each ingredient.';
+
+  @override
+  String get dietIntroTrackTitle => 'Track your progress';
+
+  @override
+  String get dietIntroTrackMessage => 'Every log rolls up into your daily calories and macros, a calendar, and trends over time.';
+
+  @override
+  String get dietIntroGoalsTitle => 'Set a goal that fits you';
+
+  @override
+  String get dietIntroGoalsMessage =>
+      'Your calorie and macro targets drive everything here. Aiming to lose weight? Set a target below what you burn to create a deficit — you can fine-tune it any time.';
+
+  @override
+  String get dietIntroSetGoalsAction => 'Set my goals';
+
+  @override
+  String get dietIntroSkipAction => 'Skip for now';
+
+  @override
   String get dietProteinLabel => 'Protein';
 
   @override

@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
@@ -28,6 +29,7 @@ class DietRepository {
     required this._supabaseFoodFavoritesDataSource,
     required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
+    required this._dietIntroLocalDataSource,
   });
 
   final OpenFoodFactsDataSource _openFoodFactsDataSource;
@@ -37,6 +39,11 @@ class DietRepository {
   final SupabaseFoodFavoritesDataSource _supabaseFoodFavoritesDataSource;
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
+  final DietIntroLocalDataSource _dietIntroLocalDataSource;
+
+  bool hasSeenIntro() => _dietIntroLocalDataSource.hasSeenIntro();
+
+  Future<void> markIntroSeen() => _dietIntroLocalDataSource.markIntroSeen();
 
   static const _sparseCatalogThreshold = 5;
 

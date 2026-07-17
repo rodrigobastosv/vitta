@@ -112,6 +112,46 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietAddFood => 'Adicionar alimento';
 
   @override
+  String get dietIntroTitle => 'Bem-vindo à Dieta';
+
+  @override
+  String get dietIntroSubtitle => 'Registre o que você come e veja suas calorias e macros se formarem dia após dia.';
+
+  @override
+  String get dietIntroLogTitle => 'Registre seus alimentos';
+
+  @override
+  String get dietIntroLogMessage =>
+      'Busque em um catálogo compartilhado, escaneie um rótulo nutricional ou crie um alimento personalizado — e registre por peso ou por unidade.';
+
+  @override
+  String get dietIntroRecipeTitle => 'Monte receitas';
+
+  @override
+  String get dietIntroRecipeMessage =>
+      'Salve as refeições que você come com frequência como receita e registre tudo de uma vez, em vez de adicionar cada ingrediente.';
+
+  @override
+  String get dietIntroTrackTitle => 'Acompanhe sua evolução';
+
+  @override
+  String get dietIntroTrackMessage =>
+      'Cada registro entra nas suas calorias e macros do dia, em um calendário e em tendências ao longo do tempo.';
+
+  @override
+  String get dietIntroGoalsTitle => 'Defina uma meta que combina com você';
+
+  @override
+  String get dietIntroGoalsMessage =>
+      'Suas metas de calorias e macros guiam tudo por aqui. Quer perder peso? Defina uma meta abaixo do que você gasta para criar um déficit — dá para ajustar quando quiser.';
+
+  @override
+  String get dietIntroSetGoalsAction => 'Definir minhas metas';
+
+  @override
+  String get dietIntroSkipAction => 'Pular por agora';
+
+  @override
   String get dietProteinLabel => 'Proteína';
 
   @override

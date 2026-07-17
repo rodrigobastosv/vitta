@@ -13,6 +13,7 @@ abstract class RepositoriesFactories {
     MockSupabaseNutritionScanDataSource? supabaseNutritionScanDataSource,
     MockSupabaseFoodFavoritesDataSource? supabaseFoodFavoritesDataSource,
     MockSupabaseRecipeDataSource? supabaseRecipeDataSource,
+    MockDietIntroLocalDataSource? dietIntroLocalDataSource,
   }) => DietRepository(
     openFoodFactsDataSource: openFoodFactsDataSource ?? MockOpenFoodFactsDataSource(),
     supabaseDietDataSource: supabaseDietDataSource ?? MockSupabaseDietDataSource(),
@@ -21,6 +22,7 @@ abstract class RepositoriesFactories {
     supabaseFoodFavoritesDataSource: supabaseFoodFavoritesDataSource ?? MockSupabaseFoodFavoritesDataSource(),
     supabaseNutritionScanDataSource: supabaseNutritionScanDataSource ?? MockSupabaseNutritionScanDataSource(),
     supabaseRecipeDataSource: supabaseRecipeDataSource ?? MockSupabaseRecipeDataSource(),
+    dietIntroLocalDataSource: dietIntroLocalDataSource ?? MockDietIntroLocalDataSource(),
   );
 
   static WaterRepository buildWaterRepository({

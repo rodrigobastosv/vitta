@@ -1,0 +1,13 @@
+import 'package:vitta/app/core/services/storage/local_storage_service.dart';
+
+class DietIntroLocalDataSource {
+  DietIntroLocalDataSource({required this._localStorageService});
+
+  final LocalStorageService _localStorageService;
+
+  static const _introSeenKey = 'diet.introSeen';
+
+  bool hasSeenIntro() => _localStorageService.get<bool>(_introSeenKey) ?? false;
+
+  Future<void> markIntroSeen() => _localStorageService.put(_introSeenKey, true);
+}

@@ -287,4 +287,52 @@ void main() {
 
     expect(cubit.state.loggedMacrosInMonth, isEmpty);
   });
+
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
+    'onInit asks to show the intro when it has not been seen yet',
+    build: () {
+      final hasSeenDietIntroUseCase = MockHasSeenDietIntroUseCase();
+      when(hasSeenDietIntroUseCase.call).thenReturn(false);
+      final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(
+        hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
+    },
+    act: (cubit) => cubit.onInit(),
+    expectPresentation: () => [isA<DietShowIntro>(), isA<DietShowLoading>(), isA<DietHideLoading>()],
+  );
+
+  blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
+    'onInit does not show the intro once it has been seen',
+    build: () {
+      final hasSeenDietIntroUseCase = MockHasSeenDietIntroUseCase();
+      when(hasSeenDietIntroUseCase.call).thenReturn(true);
+      final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+      when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+      final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+      when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      return CubitsFactories.buildDietCubit(
+        hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
+    },
+    act: (cubit) => cubit.onInit(),
+    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
+  );
+
+  test('markIntroSeen records that the intro was seen', () async {
+    final markDietIntroSeenUseCase = MockMarkDietIntroSeenUseCase();
+    when(markDietIntroSeenUseCase.call).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildDietCubit(markDietIntroSeenUseCase: markDietIntroSeenUseCase);
+
+    await cubit.markIntroSeen();
+
+    verify(markDietIntroSeenUseCase.call).called(1);
+  });
 }

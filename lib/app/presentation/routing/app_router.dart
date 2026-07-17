@@ -6,6 +6,7 @@ import 'package:vitta/app/presentation/routing/routes/copy_meals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/custom_food_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_day_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_history_route.dart';
+import 'package:vitta/app/presentation/routing/routes/diet_intro_route.dart';
 import 'package:vitta/app/presentation/routing/routes/diet_route.dart';
 import 'package:vitta/app/presentation/routing/routes/edit_profile_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_detail_route.dart';
@@ -39,6 +40,7 @@ abstract class AppRouter {
     OnboardingRoute(),
     HomeRoute(hasSeenOnboardingUseCase: G()),
     DietRoute(),
+    DietIntroRoute(),
     CopyMealsRoute(),
     DietHistoryRoute(),
     DietDayRoute(),
