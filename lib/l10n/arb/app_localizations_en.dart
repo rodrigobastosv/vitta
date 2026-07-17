@@ -688,6 +688,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waterQuickAddTitle => 'Add water';
 
   @override
+  String get waterQuickAddLabel => 'Quick add';
+
+  @override
+  String waterOfGoal(String goal, String unit) {
+    return 'of $goal $unit';
+  }
+
+  @override
+  String waterLeft(String amount, String unit) {
+    return '$amount $unit left';
+  }
+
+  @override
+  String get waterGoalReached => 'Goal reached!';
+
+  @override
+  String get waterGoalMetric => 'Goal';
+
+  @override
+  String get waterLogsMetric => 'Logs';
+
+  @override
   String waterCustomAmountLabel(String unit) {
     return 'Custom amount ($unit)';
   }

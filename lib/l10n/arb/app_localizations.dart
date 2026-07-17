@@ -1292,6 +1292,42 @@ abstract class AppLocalizations {
   /// **'Add water'**
   String get waterQuickAddTitle;
 
+  /// No description provided for @waterQuickAddLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick add'**
+  String get waterQuickAddLabel;
+
+  /// No description provided for @waterOfGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'of {goal} {unit}'**
+  String waterOfGoal(String goal, String unit);
+
+  /// No description provided for @waterLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} {unit} left'**
+  String waterLeft(String amount, String unit);
+
+  /// No description provided for @waterGoalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached!'**
+  String get waterGoalReached;
+
+  /// No description provided for @waterGoalMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal'**
+  String get waterGoalMetric;
+
+  /// No description provided for @waterLogsMetric.
+  ///
+  /// In en, this message translates to:
+  /// **'Logs'**
+  String get waterLogsMetric;
+
   /// No description provided for @waterCustomAmountLabel.
   ///
   /// In en, this message translates to:

@@ -331,6 +331,24 @@
   "waterEmptyTitle": "Nada registrado ainda",
   "waterEmptyMessage": "Toque no botão + para registrar o primeiro copo d'água.",
   "waterQuickAddTitle": "Adicionar água",
+  "waterQuickAddLabel": "Adição rápida",
+  "waterOfGoal": "de {goal} {unit}",
+  "@waterOfGoal": {
+    "placeholders": {
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLeft": "faltam {amount} {unit}",
+  "@waterLeft": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterGoalReached": "Meta atingida!",
+  "waterGoalMetric": "Meta",
+  "waterLogsMetric": "Registros",
   "waterCustomAmountLabel": "Quantidade personalizada ({unit})",
   "@waterCustomAmountLabel": {
     "placeholders": {

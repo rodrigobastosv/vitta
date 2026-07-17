@@ -3,6 +3,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
+import 'package:vitta/app/domain/water/entities/water_log.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
@@ -31,6 +32,8 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   final WaterLocalDataSource _waterLocalDataSource;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
 
+  int _optimisticSeq = 0;
+
   static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
   DateTime get _today => _dateOnly(DateTime.now());
@@ -52,20 +55,39 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   }
 
   Future<void> addWater({required double amountMl}) async {
+    final optimistic = WaterLog(id: 'optimistic-${_optimisticSeq++}', loggedDate: _today, amountMl: amountMl);
+    emit(state.copyWith(dailyWater: DailyWater(entries: [...state.dailyWater.entries, optimistic])));
     final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
-    await loggedResult.when((error) => Future.sync(() => emitPresentation(WaterError(message: error.message))), (_) {
-      Log.action('water_logged', data: {'amount_ml': amountMl});
-      return loadToday();
-    });
+    loggedResult.when(
+      (error) {
+        emit(state.copyWith(dailyWater: DailyWater(entries: _without(optimistic.id))));
+        emitPresentation(WaterError(message: error.message));
+      },
+      (saved) {
+        Log.action('water_logged', data: {'amount_ml': amountMl});
+        emit(
+          state.copyWith(
+            dailyWater: DailyWater(entries: [for (final entry in state.dailyWater.entries) if (entry.id == optimistic.id) saved else entry]),
+          ),
+        );
+      },
+    );
   }
 
   Future<void> deleteLog({required String logId}) async {
+    final previous = state.dailyWater;
+    emit(state.copyWith(dailyWater: DailyWater(entries: _without(logId))));
     final deletedResult = await _deleteWaterLogUseCase(logId: logId);
-    await deletedResult.when((error) => Future.sync(() => emitPresentation(WaterError(message: error.message))), (_) {
-      Log.action('water_log_deleted');
-      return loadToday();
-    });
+    deletedResult.when(
+      (error) {
+        emit(state.copyWith(dailyWater: previous));
+        emitPresentation(WaterError(message: error.message));
+      },
+      (_) => Log.action('water_log_deleted'),
+    );
   }
+
+  List<WaterLog> _without(String logId) => [for (final entry in state.dailyWater.entries) if (entry.id != logId) entry];
 
   Future<void> changeDailyGoal({required double goalMl}) async {
     await _waterLocalDataSource.saveDailyGoalMl(goalMl);
