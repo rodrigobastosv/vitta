@@ -60,25 +60,38 @@ void main() {
     expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>(), isA<WaterError>()],
   );
 
+  final addReloadSpy = MockGetDailyWaterUseCase();
   blocTest<WaterCubit, WaterState>(
-    'reloads today after successfully adding water',
+    'optimistically shows the added water, then swaps in the saved log without reloading',
     build: () {
       final logWaterUseCase = MockLogWaterUseCase();
-      final getDailyWaterUseCase = MockGetDailyWaterUseCase();
-      final waterLocalDataSource = MockWaterLocalDataSource();
       when(
         () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
       ).thenAnswer((_) async => Success(WaterLogFactory.build()));
-      when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
-      when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
-      return CubitsFactories.buildWaterCubit(
-        getDailyWaterUseCase: getDailyWaterUseCase,
-        logWaterUseCase: logWaterUseCase,
-        waterLocalDataSource: waterLocalDataSource,
-      );
+      return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: addReloadSpy, logWaterUseCase: logWaterUseCase);
     },
     act: (cubit) => cubit.addWater(amountMl: 250),
-    expect: () => [isA<WaterState>()],
+    expect: () => [
+      isA<WaterState>().having((state) => state.dailyWater.entries.single.id, 'optimistic id', startsWith('optimistic-')),
+      isA<WaterState>().having((state) => state.dailyWater.entries.single.id, 'saved id', 'water-log-1'),
+    ],
+    verify: (_) => verifyNever(() => addReloadSpy(date: any(named: 'date'))),
+  );
+
+  blocTest<WaterCubit, WaterState>(
+    'reverts the optimistic add when logging fails',
+    build: () {
+      final logWaterUseCase = MockLogWaterUseCase();
+      when(
+        () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
+      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildWaterCubit(logWaterUseCase: logWaterUseCase);
+    },
+    act: (cubit) => cubit.addWater(amountMl: 250),
+    expect: () => [
+      isA<WaterState>().having((state) => state.dailyWater.entries, 'optimistic entry', hasLength(1)),
+      isA<WaterState>().having((state) => state.dailyWater.entries, 'reverted', isEmpty),
+    ],
   );
 
   test('logs a water_logged user action after adding water', () async {
@@ -106,23 +119,22 @@ void main() {
     ]);
   });
 
+  final deleteReloadSpy = MockGetDailyWaterUseCase();
   blocTest<WaterCubit, WaterState>(
-    'reloads today after successfully deleting a log',
+    'optimistically removes a log without reloading',
     build: () {
       final deleteWaterLogUseCase = MockDeleteWaterLogUseCase();
-      final getDailyWaterUseCase = MockGetDailyWaterUseCase();
-      final waterLocalDataSource = MockWaterLocalDataSource();
       when(() => deleteWaterLogUseCase(logId: 'log-1')).thenAnswer((_) async => const Success(null));
-      when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
-      when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
-      return CubitsFactories.buildWaterCubit(
-        getDailyWaterUseCase: getDailyWaterUseCase,
-        deleteWaterLogUseCase: deleteWaterLogUseCase,
-        waterLocalDataSource: waterLocalDataSource,
-      );
+      return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: deleteReloadSpy, deleteWaterLogUseCase: deleteWaterLogUseCase);
     },
+    seed: () => WaterState(
+      date: DateTime(2026, 7, 11),
+      dailyWater: DailyWater(entries: [WaterLogFactory.build(id: 'log-1')]),
+      dailyGoalMl: 2000,
+    ),
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
-    expect: () => [isA<WaterState>()],
+    expect: () => [isA<WaterState>().having((state) => state.dailyWater.entries, 'entries', isEmpty)],
+    verify: (_) => verifyNever(() => deleteReloadSpy(date: any(named: 'date'))),
   );
 
   final getDailyWaterUseCaseSpy = MockGetDailyWaterUseCase();

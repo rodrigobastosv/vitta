@@ -349,6 +349,24 @@
   "waterEmptyTitle": "Nothing logged yet",
   "waterEmptyMessage": "Tap the + button to log the first glass of water.",
   "waterQuickAddTitle": "Add water",
+  "waterQuickAddLabel": "Quick add",
+  "waterOfGoal": "of {goal} {unit}",
+  "@waterOfGoal": {
+    "placeholders": {
+      "goal": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterLeft": "{amount} {unit} left",
+  "@waterLeft": {
+    "placeholders": {
+      "amount": {"type": "String"},
+      "unit": {"type": "String"}
+    }
+  },
+  "waterGoalReached": "Goal reached!",
+  "waterGoalMetric": "Goal",
+  "waterLogsMetric": "Logs",
   "waterCustomAmountLabel": "Custom amount ({unit})",
   "@waterCustomAmountLabel": {
     "placeholders": {
