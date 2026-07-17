@@ -429,6 +429,17 @@
   "sleepGoalMetric": "Goal",
   "sleepAverageMetric": "Average",
   "sleepNightsMetric": "Nights",
+  "sleepSyncedTitle": "Sleep synced",
+  "sleepSyncTooltip": "Sync from health app",
+  "sleepSyncDebugTooltip": "Insert sample sleep (debug)",
+  "sleepImportedMessage": "{count, plural, =0{No new sleep to import} =1{1 night imported} other{{count} nights imported}}",
+  "@sleepImportedMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "sleepHealthUnavailableMessage": "Sleep data isn't available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.",
+  "sleepHealthPermissionDeniedMessage": "Sleep permission was denied. Grant it to import your nights.",
   "onboardingWelcomeTitle": "Welcome to Vitta",
   "onboardingWelcomeMessage": "Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.",
   "onboardingAccountBenefitMessage": "Create a free account to keep your data safe and access it from any device. Without one, your data stays on this device only.",

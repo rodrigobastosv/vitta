@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/health/health_sleep_session.dart';
+import 'package:vitta/app/domain/sleep/entities/sleep_import.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
@@ -11,12 +13,14 @@ import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/sleep_log_factory.dart';
 import '../../../../fixtures/logging_fixture.dart';
+import '../../../../mocks/services_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
     registerFallbackValue(<String, Object?>{});
+    registerFallbackValue(<SleepImport>[]);
   });
 
   blocTest<SleepCubit, SleepState>(
@@ -122,5 +126,56 @@ void main() {
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
     expectPresentation: () => [isA<SleepError>()],
     verify: (_) => verifyNever(() => getRecentSleepLogsUseCaseSpy(days: any(named: 'days'))),
+  );
+
+  test('importFromHealth imports the read sessions and reloads the list', () async {
+    useMockLog();
+    final healthService = MockHealthService();
+    when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(healthService.requestSleepAuthorization).thenAnswer((_) async => true);
+    when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
+      (_) async => [
+        HealthSleepSession(start: DateTime(2026, 7, 10, 23), end: DateTime(2026, 7, 11, 6, 30), externalId: 'ext-1'),
+      ],
+    );
+    final importSleepFromHealthUseCase = MockImportSleepFromHealthUseCase();
+    when(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).thenAnswer((_) async => const Success(1));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([SleepLogFactory.build()]));
+    final cubit = CubitsFactories.buildSleepCubit(
+      healthService: healthService,
+      importSleepFromHealthUseCase: importSleepFromHealthUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+    );
+
+    await cubit.importFromHealth();
+
+    final captured = verify(() => importSleepFromHealthUseCase(imports: captureAny(named: 'imports'))).captured.single as List<SleepImport>;
+    expect(captured.single.externalId, 'ext-1');
+    verify(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).called(1);
+    expect(cubit.state.logs, isNotEmpty);
+  });
+
+  blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
+    'importFromHealth reports when the health platform is unavailable',
+    build: () {
+      final healthService = MockHealthService();
+      when(healthService.isAvailable).thenAnswer((_) async => false);
+      return CubitsFactories.buildSleepCubit(healthService: healthService);
+    },
+    act: (cubit) => cubit.importFromHealth(),
+    expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHealthUnavailable>(), isA<SleepHideLoading>()],
+  );
+
+  blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
+    'importFromHealth reports when sleep permission is denied',
+    build: () {
+      final healthService = MockHealthService();
+      when(healthService.isAvailable).thenAnswer((_) async => true);
+      when(healthService.requestSleepAuthorization).thenAnswer((_) async => false);
+      return CubitsFactories.buildSleepCubit(healthService: healthService);
+    },
+    act: (cubit) => cubit.importFromHealth(),
+    expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHealthPermissionDenied>(), isA<SleepHideLoading>()],
   );
 }

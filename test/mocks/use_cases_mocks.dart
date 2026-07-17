@@ -35,6 +35,7 @@ import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart'
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
@@ -107,6 +108,8 @@ class MockLogSleepUseCase extends Mock implements LogSleepUseCase {}
 class MockGetRecentSleepLogsUseCase extends Mock implements GetRecentSleepLogsUseCase {}
 
 class MockDeleteSleepLogUseCase extends Mock implements DeleteSleepLogUseCase {}
+
+class MockImportSleepFromHealthUseCase extends Mock implements ImportSleepFromHealthUseCase {}
 
 class MockCompleteOnboardingUseCase extends Mock implements CompleteOnboardingUseCase {}
 

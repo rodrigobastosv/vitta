@@ -9,3 +9,13 @@ class SleepError implements SleepPresentationEvent {
 
   final String message;
 }
+
+class SleepImported implements SleepPresentationEvent {
+  const SleepImported({required this.count});
+
+  final int count;
+}
+
+class SleepHealthUnavailable implements SleepPresentationEvent {}
+
+class SleepHealthPermissionDenied implements SleepPresentationEvent {}
