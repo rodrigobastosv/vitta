@@ -17,7 +17,9 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/mark_diet_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
@@ -85,6 +87,10 @@ class MockDeleteRecipeUseCase extends Mock implements DeleteRecipeUseCase {}
 class MockGetMacroGoalsUseCase extends Mock implements GetMacroGoalsUseCase {}
 
 class MockGetMacrosInRangeUseCase extends Mock implements GetMacrosInRangeUseCase {}
+
+class MockHasSeenDietIntroUseCase extends Mock implements HasSeenDietIntroUseCase {}
+
+class MockMarkDietIntroSeenUseCase extends Mock implements MarkDietIntroSeenUseCase {}
 
 class MockCopyFoodLogsUseCase extends Mock implements CopyFoodLogsUseCase {}
 

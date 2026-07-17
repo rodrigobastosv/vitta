@@ -56,6 +56,8 @@ abstract class CubitsFactories {
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
     MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockHasSeenDietIntroUseCase? hasSeenDietIntroUseCase,
+    MockMarkDietIntroSeenUseCase? markDietIntroSeenUseCase,
   }) => DietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
     deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
@@ -63,6 +65,8 @@ abstract class CubitsFactories {
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
     getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    hasSeenDietIntroUseCase: hasSeenDietIntroUseCase ?? MockHasSeenDietIntroUseCase(),
+    markDietIntroSeenUseCase: markDietIntroSeenUseCase ?? MockMarkDietIntroSeenUseCase(),
   );
 
   static DietHistoryCubit buildDietHistoryCubit({

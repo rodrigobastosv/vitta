@@ -13,6 +13,7 @@ import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
@@ -53,7 +54,9 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/mark_diet_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
@@ -143,6 +146,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
   G.registerLazySingleton(() => DietGoalsLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => RecentSearchesLocalDataSource(localStorageService: G()));
+  G.registerLazySingleton(() => DietIntroLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SupabaseNutritionScanDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseRecipeDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseFoodFavoritesDataSource(supabaseService: G()));
@@ -155,6 +159,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       supabaseFoodFavoritesDataSource: G(),
       supabaseNutritionScanDataSource: G(),
       supabaseRecipeDataSource: G(),
+      dietIntroLocalDataSource: G(),
     ),
   );
   G.registerLazySingleton(() => SupabaseWaterDataSource(supabaseService: G()));
@@ -188,6 +193,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => SaveMacroGoalsUseCase(dietRepository: G()));
   G.registerFactory(() => GetMacrosInRangeUseCase(dietRepository: G()));
+  G.registerFactory(() => HasSeenDietIntroUseCase(dietRepository: G()));
+  G.registerFactory(() => MarkDietIntroSeenUseCase(dietRepository: G()));
   G.registerFactory(() => GetFavoriteFoodsUseCase(dietRepository: G()));
   G.registerFactory(() => GetRecentSearchesUseCase(dietRepository: G()));
   G.registerFactory(() => AddRecentSearchUseCase(dietRepository: G()));
@@ -247,6 +254,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getMacroGoalsUseCase: G(),
       getMacrosInRangeUseCase: G(),
       getAppSettingsUseCase: G(),
+      hasSeenDietIntroUseCase: G(),
+      markDietIntroSeenUseCase: G(),
     ),
   );
   G.registerFactory(() => DietHistoryCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G()));

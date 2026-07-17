@@ -2,6 +2,7 @@ enum AppRoute {
   onboarding('/onboarding'),
   home('/'),
   diet('/diet'),
+  dietIntro('/diet/intro'),
   dietCopy('/diet/copy'),
   dietHistory('/diet/history'),
   dietDay('/diet/history/day'),

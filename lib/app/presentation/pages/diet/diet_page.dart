@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
@@ -32,6 +34,8 @@ class DietPage extends StatelessWidget {
             context.showLoading();
           case DietHideLoading():
             context.hideLoading();
+          case DietShowIntro():
+            unawaited(_showIntro(context, context.read<DietCubit>()));
           case DietError(:final message, :final date):
             context.showErrorToast(message: message, onRetry: () => context.read<DietCubit>().goToDate(date));
         }
@@ -125,5 +129,19 @@ class DietPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _showIntro(BuildContext context, DietCubit cubit) async {
+    final wantsGoals = await context.pushRoute<bool>(.dietIntro) ?? false;
+    if (!context.mounted) {
+      return;
+    }
+    await cubit.markIntroSeen();
+    if (wantsGoals && context.mounted) {
+      await context.pushRoute(.macroGoals);
+      if (context.mounted) {
+        await cubit.refresh();
+      }
+    }
   }
 }

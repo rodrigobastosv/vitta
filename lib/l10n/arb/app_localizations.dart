@@ -278,6 +278,78 @@ abstract class AppLocalizations {
   /// **'Add food'**
   String get dietAddFood;
 
+  /// No description provided for @dietIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Diet'**
+  String get dietIntroTitle;
+
+  /// No description provided for @dietIntroSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log what you eat, and see your calories and macros come together day by day.'**
+  String get dietIntroSubtitle;
+
+  /// No description provided for @dietIntroLogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your food'**
+  String get dietIntroLogTitle;
+
+  /// No description provided for @dietIntroLogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Search a shared catalog, scan a nutrition label, or add a custom food — then log it by weight or by the unit.'**
+  String get dietIntroLogMessage;
+
+  /// No description provided for @dietIntroRecipeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Build recipes'**
+  String get dietIntroRecipeTitle;
+
+  /// No description provided for @dietIntroRecipeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Save meals you eat often as a recipe, then log the whole thing in one tap instead of adding each ingredient.'**
+  String get dietIntroRecipeMessage;
+
+  /// No description provided for @dietIntroTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your progress'**
+  String get dietIntroTrackTitle;
+
+  /// No description provided for @dietIntroTrackMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Every log rolls up into your daily calories and macros, a calendar, and trends over time.'**
+  String get dietIntroTrackMessage;
+
+  /// No description provided for @dietIntroGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a goal that fits you'**
+  String get dietIntroGoalsTitle;
+
+  /// No description provided for @dietIntroGoalsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your calorie and macro targets drive everything here. Aiming to lose weight? Set a target below what you burn to create a deficit — you can fine-tune it any time.'**
+  String get dietIntroGoalsMessage;
+
+  /// No description provided for @dietIntroSetGoalsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Set my goals'**
+  String get dietIntroSetGoalsAction;
+
+  /// No description provided for @dietIntroSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get dietIntroSkipAction;
+
   /// No description provided for @dietProteinLabel.
   ///
   /// In en, this message translates to:
