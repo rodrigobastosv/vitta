@@ -41,6 +41,12 @@ dev_dependencies:
   flutter_launcher_icons: ^0.14.4
   flutter_native_splash: ^2.4.8
 
+dependency_overrides:
+  # health pulls device_info_plus transitively; 12.4.0 calls
+  # [NSProcessInfo isiOSAppOnVision] gated on @available(iOS 26.1), which fails to
+  # archive on any earlier iOS SDK. Cap below it (allows safe patches) until fixed.
+  device_info_plus: "<12.4.0"
+
 flutter:
   uses-material-design: true
   generate: true

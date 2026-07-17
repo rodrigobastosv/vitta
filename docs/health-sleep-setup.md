@@ -50,15 +50,26 @@ Publishing to the Play Store with Health Connect requires:
 
 ## 4. iOS (Apple Health)
 
-The app code is cross-platform — `HealthService` reads from HealthKit on iOS the same way it
-reads Health Connect on Android. The Dart side and `Info.plist` usage strings
-(`NSHealthShareUsageDescription` / `NSHealthUpdateUsageDescription`) are already in the repo. To
-activate it you must enable the **HealthKit capability** in Xcode (Runner target → Signing &
-Capabilities → + Capability → HealthKit), which writes `Runner.entitlements` and wires
-`CODE_SIGN_ENTITLEMENTS`, and add the HealthKit capability to the `match` provisioning profile
-(see [`docs/testflight-setup.md`](testflight-setup.md)).
+The app code is cross-platform — `HealthService` reads from HealthKit on iOS the same way it reads
+Health Connect on Android. Already wired in the repo:
+
+- `ios/Runner/Runner.entitlements` with `com.apple.developer.healthkit`, referenced from all three
+  Runner build configs via `CODE_SIGN_ENTITLEMENTS`.
+- `NSHealthShareUsageDescription` / `NSHealthUpdateUsageDescription` in `ios/Runner/Info.plist`.
+
+**To ship an iOS/TestFlight build you must enable HealthKit on the signing side** (one-time,
+owner-only — the entitlement in the app must match the provisioning profile):
+
+1. Enable **HealthKit** on the App ID `com.rodrigobastosv.vitta` in the Apple Developer portal
+   (Certificates, IDs & Profiles → Identifiers → the app → HealthKit).
+2. Regenerate the App Store provisioning profile so it includes HealthKit, and push it to the
+   `match` repo: `bundle exec fastlane match appstore --force` (needs write access — CI runs
+   `match` read-only). See [`docs/testflight-setup.md`](testflight-setup.md).
+3. Local `flutter run` uses automatic signing, so Xcode adds the capability to your dev profile on
+   its own once the entitlement is present.
+
+Internal TestFlight testing (your own team) does not need Beta App Review; external testers do.
 
 Note: a Samsung/Wear OS watch cannot pair with an iPhone, so its data never reaches Apple Health —
-the HealthKit path only surfaces data from Apple Watch (or other apps that write sleep to Apple
-Health). Until the capability is enabled, iOS calls fail gracefully and the app shows a
-"couldn't connect" message.
+the HealthKit path surfaces data from an Apple Watch (or other apps that write sleep to Apple
+Health).

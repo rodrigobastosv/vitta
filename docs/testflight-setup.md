@@ -128,3 +128,10 @@ SENTRY_DSN
   distribution certificate.
 - **Rerunning a tag** re-uploads with a *new* build number, which is fine — build numbers are
   what App Store Connect dedupes on, not the version.
+- **HealthKit capability** (sleep import, issue #105). The app ships the
+  `com.apple.developer.healthkit` entitlement (`ios/Runner/Runner.entitlements`). Because the
+  entitlement must match the provisioning profile, before the first build that includes it you
+  must (a) enable **HealthKit** on the App ID in the Apple Developer portal, and (b) regenerate
+  the App Store profile into the `match` repo with write access:
+  `bundle exec fastlane match appstore --force`. CI runs `match` `readonly: true`, so it will fail
+  until the regenerated profile is committed. See [`docs/health-sleep-setup.md`](health-sleep-setup.md).
