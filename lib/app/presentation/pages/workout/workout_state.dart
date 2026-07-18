@@ -11,6 +11,7 @@ class WorkoutState extends Equatable with WorkoutVolume {
     required this.workouts,
     this.cycle = const RoutineCycle(routines: []),
     this.lastSetsByExercise = const {},
+    this.latestBodyWeightKg,
   });
 
   final DateTime date;
@@ -19,6 +20,10 @@ class WorkoutState extends Equatable with WorkoutVolume {
   final RoutineCycle cycle;
 
   final Map<String, List<WorkoutSet>> lastSetsByExercise;
+
+  // The user's most recent body weight (issue #101), used to pre-fill the load for
+  // bodyweight exercises. Null when nothing has been logged.
+  final double? latestBodyWeightKg;
 
   Workout? get workout => workouts.firstOrNull;
 
@@ -43,13 +48,15 @@ class WorkoutState extends Equatable with WorkoutVolume {
     List<Workout>? workouts,
     RoutineCycle? cycle,
     Map<String, List<WorkoutSet>>? lastSetsByExercise,
+    double? latestBodyWeightKg,
   }) => WorkoutState(
     date: date ?? this.date,
     workouts: workouts ?? this.workouts,
     cycle: cycle ?? this.cycle,
     lastSetsByExercise: lastSetsByExercise ?? this.lastSetsByExercise,
+    latestBodyWeightKg: latestBodyWeightKg ?? this.latestBodyWeightKg,
   );
 
   @override
-  List<Object?> get props => [date, workouts, cycle, lastSetsByExercise];
+  List<Object?> get props => [date, workouts, cycle, lastSetsByExercise, latestBodyWeightKg];
 }

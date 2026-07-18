@@ -14,21 +14,26 @@ Future<void> showLogSetSheet({
   required UnitSystem unitSystem,
   required Future<Result<VTError, void>> Function({required int reps, required double weightKg}) onSubmit,
   WorkoutSet? set,
+  double? defaultLoadKg,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   builder: (context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set),
+    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set, defaultLoadKg: defaultLoadKg),
   ),
 );
 
 class LogSetSheet extends StatefulWidget {
-  const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, super.key});
+  const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, this.defaultLoadKg, super.key});
 
   final UnitSystem unitSystem;
   final Future<Result<VTError, void>> Function({required int reps, required double weightKg}) onSubmit;
   final WorkoutSet? set;
+
+  // Pre-fills the load for a *new* set - the user's latest body weight on a
+  // bodyweight exercise (issue #101). Ignored when editing an existing set.
+  final double? defaultLoadKg;
 
   @override
   State<LogSetSheet> createState() => _LogSetSheetState();
@@ -39,12 +44,15 @@ class _LogSetSheetState extends State<LogSetSheet> {
   late final TextEditingController _loadController = TextEditingController(text: _initialLoad());
   String? _errorMessage;
 
+  bool get _isPrefilled => widget.set == null && (widget.defaultLoadKg ?? 0) > 0;
+
   String _initialLoad() {
     final set = widget.set;
-    if (set == null || set.weightKg == 0) {
+    final loadKg = set != null ? set.weightKg : (widget.defaultLoadKg ?? 0);
+    if (loadKg == 0) {
       return '';
     }
-    final value = widget.unitSystem.kilogramsToDisplayLoad(set.weightKg);
+    final value = widget.unitSystem.kilogramsToDisplayLoad(loadKg);
     final rounded = value.round();
     return (value - rounded).abs() < 0.05 ? '$rounded' : value.toStringAsFixed(1);
   }
@@ -92,7 +100,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
             ],
           ),
           const VTGap.s(),
-          Text(l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
+          Text(_isPrefilled ? l10n.workoutBodyweightPrefillNote : l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
           if (_errorMessage case final message?) ...[
             const VTGap.s(),
             Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error)),

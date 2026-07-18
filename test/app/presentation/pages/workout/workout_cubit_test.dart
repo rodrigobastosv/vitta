@@ -12,6 +12,7 @@ import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../factories/entities/body_weight_log_factory.dart';
 import '../../../../factories/entities/exercise_factory.dart';
 import '../../../../factories/entities/routine_factory.dart';
 import '../../../../factories/entities/workout_exercise_factory.dart';
@@ -34,6 +35,12 @@ MockGetLastSetsByExerciseUseCase _emptyLastSetsUseCase() {
       before: any(named: 'before'),
     ),
   ).thenAnswer((_) async => const Success({}));
+  return useCase;
+}
+
+MockGetLatestBodyWeightUseCase _noBodyWeightUseCase() {
+  final useCase = MockGetLatestBodyWeightUseCase();
+  when(useCase.call).thenAnswer((_) async => const Success(null));
   return useCase;
 }
 
@@ -60,6 +67,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
         getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
@@ -75,6 +83,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
         getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
@@ -90,6 +99,7 @@ void main() {
       return CubitsFactories.buildWorkoutCubit(
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
         getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
@@ -119,6 +129,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       addExerciseToWorkoutUseCase: addExerciseToWorkoutUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
@@ -148,12 +159,47 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       logSetUseCase: logSetUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
     final loggedResult = await cubit.logSet(workoutExerciseId: 'we-1', reps: 10, weightKg: 40);
 
     expect(loggedResult, isA<Failure<VTError, void>>());
+  });
+
+  test('loadDate stores the latest body weight for the bodyweight prefill', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => Success(BodyWeightLogFactory.build(weightKg: 82)));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+
+    await cubit.loadDate(DateTime(2026, 7, 15));
+
+    expect(cubit.state.latestBodyWeightKg, 82);
+  });
+
+  test('a failed latest-body-weight load leaves the prefill unset without breaking the day', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+
+    await cubit.loadDate(DateTime(2026, 7, 15));
+
+    expect(cubit.state.latestBodyWeightKg, isNull);
   });
 
   test('unitSystem reads settings directly rather than through AppCubit', () {
@@ -172,6 +218,7 @@ void main() {
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRoutineCycleUseCase: getRoutineCycleUseCase,
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
     );
 
     await cubit.loadDate(DateTime(2026, 7, 20));
@@ -202,6 +249,7 @@ void main() {
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase,
     );
 
@@ -228,6 +276,7 @@ void main() {
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase,
     );
 
@@ -247,6 +296,7 @@ void main() {
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRoutineCycleUseCase: getRoutineCycleUseCase,
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
     );
 
     await cubit.loadDate(DateTime(2026, 7, 20));
@@ -271,6 +321,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
       getRoutineCycleUseCase: getRoutineCycleUseCase,
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
     );
 
     await cubit.startRoutine(RoutineFactory.build());
@@ -287,6 +338,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
     await cubit.goToDate(DateTime(2020));
@@ -317,6 +369,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
     await cubit.goToDate(DateTime(now.year, now.month, now.day));
@@ -347,6 +400,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       logSetUseCase: logSetUseCase,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
@@ -394,6 +448,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
@@ -420,6 +475,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
@@ -461,6 +517,7 @@ void main() {
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       setWorkoutExerciseCompletedUseCase: setCompleted,
       getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
@@ -481,6 +538,7 @@ void main() {
         hasSeenWorkoutIntroUseCase: hasSeenIntro,
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
         getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },
@@ -500,6 +558,7 @@ void main() {
         hasSeenWorkoutIntroUseCase: hasSeenIntro,
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
         getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
       );
     },

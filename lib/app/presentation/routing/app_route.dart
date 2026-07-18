@@ -13,6 +13,8 @@ enum AppRoute {
   customFood('/diet/food-search/custom-food'),
   water('/water'),
   waterHistory('/water/history'),
+  bodyWeight('/body-weight'),
+  bodyWeightHistory('/body-weight/history'),
   sleep('/sleep'),
   sleepHistory('/sleep/history'),
   workout('/workout'),

@@ -686,6 +686,62 @@ class AppLocalizationsPt extends AppLocalizations {
   String get waterEmptyMessage => 'Toque no botão + para registrar o primeiro copo d\'água.';
 
   @override
+  String get bodyWeightFeatureTitle => 'Peso corporal';
+
+  @override
+  String get bodyWeightFeatureSubtitle => 'Acompanhe seu peso ao longo do tempo';
+
+  @override
+  String get bodyWeightHistoryTitle => 'Histórico de peso';
+
+  @override
+  String get bodyWeightCurrentTitle => 'Peso atual';
+
+  @override
+  String get bodyWeightEmptyTitle => 'Nenhum peso registrado';
+
+  @override
+  String get bodyWeightEmptyMessage => 'Registre seu peso para começar a acompanhar sua evolução.';
+
+  @override
+  String get bodyWeightLogAction => 'Registrar peso';
+
+  @override
+  String get bodyWeightDateLabel => 'Data';
+
+  @override
+  String bodyWeightValue(String value, String unit) {
+    return '$value $unit';
+  }
+
+  @override
+  String get bodyWeightRecentTitle => 'Registros recentes';
+
+  @override
+  String get bodyWeightTrendTitle => 'Tendência';
+
+  @override
+  String get bodyWeightStatMin => 'Mín';
+
+  @override
+  String get bodyWeightStatMax => 'Máx';
+
+  @override
+  String get bodyWeightStatAverage => 'Média';
+
+  @override
+  String get bodyWeightStatChange => 'Variação';
+
+  @override
+  String get bodyWeightHistoryEmptyTitle => 'Sem registros neste período';
+
+  @override
+  String get bodyWeightHistoryEmptyMessage => 'Registre seu peso para ver sua tendência.';
+
+  @override
+  String get workoutBodyweightPrefillNote => 'Preenchido com seu peso atual';
+
+  @override
   String get waterQuickAddTitle => 'Adicionar água';
 
   @override

@@ -2,6 +2,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
@@ -36,6 +37,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._getRoutineCycleUseCase,
     required this._startWorkoutFromRoutineUseCase,
     required this._getLastSetsByExerciseUseCase,
+    required this._getLatestBodyWeightUseCase,
     required this._getAppSettingsUseCase,
     required this._hasSeenWorkoutIntroUseCase,
     required this._markWorkoutIntroSeenUseCase,
@@ -52,6 +54,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final GetRoutineCycleUseCase _getRoutineCycleUseCase;
   final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
   final GetLastSetsByExerciseUseCase _getLastSetsByExerciseUseCase;
+  final GetLatestBodyWeightUseCase _getLatestBodyWeightUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
   final HasSeenWorkoutIntroUseCase _hasSeenWorkoutIntroUseCase;
   final MarkWorkoutIntroSeenUseCase _markWorkoutIntroSeenUseCase;
@@ -85,11 +88,23 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     );
     await _loadCycle();
     await _loadLastSets(date);
+    await _loadLatestBodyWeight();
   }
 
   Future<void> _loadCycle() async {
     final cycleResult = await _getRoutineCycleUseCase();
     cycleResult.when((_) {}, (value) => emit(state.copyWith(cycle: value)));
+  }
+
+  // Non-blocking, like the cycle and last sets above: a failure just leaves the
+  // bodyweight prefill unset rather than interrupting a day that loaded fine.
+  Future<void> _loadLatestBodyWeight() async {
+    final latestResult = await _getLatestBodyWeightUseCase();
+    latestResult.when((_) {}, (value) {
+      if (value != null) {
+        emit(state.copyWith(latestBodyWeightKg: value.weightKg));
+      }
+    });
   }
 
   Future<void> _loadLastSets(DateTime date) async {

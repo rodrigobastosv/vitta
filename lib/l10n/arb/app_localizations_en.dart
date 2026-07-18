@@ -685,6 +685,62 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waterEmptyMessage => 'Tap the + button to log the first glass of water.';
 
   @override
+  String get bodyWeightFeatureTitle => 'Body weight';
+
+  @override
+  String get bodyWeightFeatureSubtitle => 'Track your weight over time';
+
+  @override
+  String get bodyWeightHistoryTitle => 'Weight history';
+
+  @override
+  String get bodyWeightCurrentTitle => 'Current weight';
+
+  @override
+  String get bodyWeightEmptyTitle => 'No weight logged yet';
+
+  @override
+  String get bodyWeightEmptyMessage => 'Log your weight to start tracking your progress.';
+
+  @override
+  String get bodyWeightLogAction => 'Log weight';
+
+  @override
+  String get bodyWeightDateLabel => 'Date';
+
+  @override
+  String bodyWeightValue(String value, String unit) {
+    return '$value $unit';
+  }
+
+  @override
+  String get bodyWeightRecentTitle => 'Recent entries';
+
+  @override
+  String get bodyWeightTrendTitle => 'Trend';
+
+  @override
+  String get bodyWeightStatMin => 'Min';
+
+  @override
+  String get bodyWeightStatMax => 'Max';
+
+  @override
+  String get bodyWeightStatAverage => 'Average';
+
+  @override
+  String get bodyWeightStatChange => 'Change';
+
+  @override
+  String get bodyWeightHistoryEmptyTitle => 'No weight in this range';
+
+  @override
+  String get bodyWeightHistoryEmptyMessage => 'Log your weight to see your trend.';
+
+  @override
+  String get workoutBodyweightPrefillNote => 'Prefilled with your latest body weight';
+
+  @override
   String get waterQuickAddTitle => 'Add water';
 
   @override

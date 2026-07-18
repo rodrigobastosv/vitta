@@ -1286,6 +1286,114 @@ abstract class AppLocalizations {
   /// **'Tap the + button to log the first glass of water.'**
   String get waterEmptyMessage;
 
+  /// No description provided for @bodyWeightFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Body weight'**
+  String get bodyWeightFeatureTitle;
+
+  /// No description provided for @bodyWeightFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your weight over time'**
+  String get bodyWeightFeatureSubtitle;
+
+  /// No description provided for @bodyWeightHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight history'**
+  String get bodyWeightHistoryTitle;
+
+  /// No description provided for @bodyWeightCurrentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Current weight'**
+  String get bodyWeightCurrentTitle;
+
+  /// No description provided for @bodyWeightEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No weight logged yet'**
+  String get bodyWeightEmptyTitle;
+
+  /// No description provided for @bodyWeightEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your weight to start tracking your progress.'**
+  String get bodyWeightEmptyMessage;
+
+  /// No description provided for @bodyWeightLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log weight'**
+  String get bodyWeightLogAction;
+
+  /// No description provided for @bodyWeightDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get bodyWeightDateLabel;
+
+  /// No description provided for @bodyWeightValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} {unit}'**
+  String bodyWeightValue(String value, String unit);
+
+  /// No description provided for @bodyWeightRecentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent entries'**
+  String get bodyWeightRecentTitle;
+
+  /// No description provided for @bodyWeightTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trend'**
+  String get bodyWeightTrendTitle;
+
+  /// No description provided for @bodyWeightStatMin.
+  ///
+  /// In en, this message translates to:
+  /// **'Min'**
+  String get bodyWeightStatMin;
+
+  /// No description provided for @bodyWeightStatMax.
+  ///
+  /// In en, this message translates to:
+  /// **'Max'**
+  String get bodyWeightStatMax;
+
+  /// No description provided for @bodyWeightStatAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'Average'**
+  String get bodyWeightStatAverage;
+
+  /// No description provided for @bodyWeightStatChange.
+  ///
+  /// In en, this message translates to:
+  /// **'Change'**
+  String get bodyWeightStatChange;
+
+  /// No description provided for @bodyWeightHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No weight in this range'**
+  String get bodyWeightHistoryEmptyTitle;
+
+  /// No description provided for @bodyWeightHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your weight to see your trend.'**
+  String get bodyWeightHistoryEmptyMessage;
+
+  /// No description provided for @workoutBodyweightPrefillNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefilled with your latest body weight'**
+  String get workoutBodyweightPrefillNote;
+
   /// No description provided for @waterQuickAddTitle.
   ///
   /// In en, this message translates to:
