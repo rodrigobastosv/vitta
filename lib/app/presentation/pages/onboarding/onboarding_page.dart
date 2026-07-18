@@ -9,6 +9,7 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
+import 'package:vitta/app/presentation/routing/app_route.dart';
 
 class OnboardingPage extends StatelessWidget {
   const OnboardingPage({super.key});
@@ -52,19 +53,18 @@ class OnboardingPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      final linked = await context.pushRoute<bool>(.signUp) ?? false;
-                      if (linked && context.mounted) {
-                        await cubit.completeOnboarding();
-                        if (context.mounted) {
-                          context.goRoute(.home);
-                        }
-                      }
-                    },
+                    onPressed: () => _authenticateThenFinish(context, cubit, .signUp),
                     child: Text(l10n.onboardingCreateAccountAction),
                   ),
                 ),
                 const VTGap.s(),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton(
+                    onPressed: () => _authenticateThenFinish(context, cubit, .signIn),
+                    child: Text(l10n.authHasAccountAction),
+                  ),
+                ),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(
@@ -81,6 +81,19 @@ class OnboardingPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Create-account and sign-in differ only by which auth route opens: both return
+  // true once the user is authenticated, and both then close onboarding and land
+  // on home. The mounted checks bracket the two awaits, as elsewhere.
+  Future<void> _authenticateThenFinish(BuildContext context, OnboardingCubit cubit, AppRoute route) async {
+    final authenticated = await context.pushRoute<bool>(route) ?? false;
+    if (authenticated && context.mounted) {
+      await cubit.completeOnboarding();
+      if (context.mounted) {
+        context.goRoute(.home);
+      }
+    }
   }
 }
 

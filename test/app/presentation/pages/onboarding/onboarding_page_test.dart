@@ -43,6 +43,22 @@ void main() {
     await tester.pumpAndSettle();
   });
 
+  testWidgets('tapping the sign-in CTA opens the log in page without completing onboarding', (tester) async {
+    await tester.pumpWidget(const VittaApp());
+    await tester.pumpAndSettle();
+
+    await tester.ensureVisible(find.text('Already have an account? Log in'));
+    await tester.tap(find.text('Already have an account? Log in'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Log in'), findsWidgets);
+    expect(find.byType(GridView), findsNothing);
+    expect(G<OnboardingRepository>().hasSeenOnboarding(), isFalse);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+  });
+
   testWidgets('continuing without an account reaches home and persists the flag', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
