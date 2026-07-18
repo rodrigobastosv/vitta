@@ -175,9 +175,14 @@ create index if not exists sleep_logs_user_id_logged_date_idx on sleep_logs (use
 
 -- Idempotent imports: a given health record maps to at most one row per user, so
 -- re-syncing the same nights upserts (on user_id, external_id) rather than duplicating.
+-- A plain (non-partial) unique index, not one qualified with `where external_id is
+-- not null`: Postgres already treats every NULL as distinct, so manual rows (null
+-- external_id) never collide, and a partial index can't be inferred by the upsert's
+-- bare `on conflict (user_id, external_id)` (PostgREST can't emit the predicate),
+-- which fails with 42P10 — the same reasoning as foods_barcode_unique_idx above.
+drop index if exists sleep_logs_user_id_external_id_key;
 create unique index if not exists sleep_logs_user_id_external_id_key
-  on sleep_logs (user_id, external_id)
-  where external_id is not null;
+  on sleep_logs (user_id, external_id);
 
 -- A recipe is a set of foods eaten together. It owns no macros of its own: the
 -- foods row it points at (source = 'recipe') carries the rolled-up per-100g
