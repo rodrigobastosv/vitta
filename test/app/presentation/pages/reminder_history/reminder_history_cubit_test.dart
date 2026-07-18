@@ -30,6 +30,31 @@ void main() {
   );
 
   blocTest<ReminderHistoryCubit, ReminderHistoryState>(
+    'selectDay exposes that day reminders and goToNextMonth clears the selection',
+    build: () {
+      final getRange = MockGetRemindersInRangeUseCase();
+      when(() => getRange(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => const Success({}));
+      return CubitsFactories.buildReminderHistoryCubit(getRemindersInRangeUseCase: getRange);
+    },
+    seed: () => ReminderHistoryState(
+      month: DateTime(2026, 7),
+      remindersInMonth: {
+        today: [ReminderFactory.build()],
+      },
+    ),
+    act: (cubit) async {
+      cubit.selectDay(today);
+      await cubit.goToNextMonth();
+    },
+    expect: () => [
+      isA<ReminderHistoryState>().having((state) => state.selectedReminders.length, 'selected reminders', 1),
+      isA<ReminderHistoryState>()
+          .having((state) => state.selectedDay, 'cleared on month change', isNull)
+          .having((state) => state.month, 'reloaded month', DateTime(2026, 8)),
+    ],
+  );
+
+  blocTest<ReminderHistoryCubit, ReminderHistoryState>(
     'goToNextMonth advances the month and reloads',
     build: () {
       final getRange = MockGetRemindersInRangeUseCase();

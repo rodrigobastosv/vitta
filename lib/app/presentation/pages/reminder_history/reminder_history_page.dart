@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_state.dart';
+import 'package:vitta/app/presentation/pages/reminder_history/widgets/reminder_day_section.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/widgets/reminder_history_calendar_card.dart';
 
 class ReminderHistoryPage extends StatelessWidget {
@@ -32,7 +34,16 @@ class ReminderHistoryPage extends StatelessWidget {
         appBar: AppBar(title: Text(l10n.reminderHistoryTitle)),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(VTSpacing.m),
-          child: ReminderHistoryCalendarCard(cubit: cubit, state: state),
+          child: Column(
+            crossAxisAlignment: .start,
+            children: [
+              ReminderHistoryCalendarCard(cubit: cubit, state: state),
+              if (state.selectedDay case final selectedDay?) ...[
+                const VTGap.l(),
+                ReminderDaySection(date: selectedDay, reminders: state.selectedReminders),
+              ],
+            ],
+          ),
         ),
       ),
     );

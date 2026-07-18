@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/calendar/vt_calendar_month_grid.dart';
 import 'package:vitta/app/design_system/components/calendar/vt_calendar_weekday_header.dart';
 import 'package:vitta/app/design_system/components/calendar/vt_month_navigator.dart';
@@ -8,7 +7,6 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
-import 'package:vitta/app/presentation/pages/reminder_day/reminder_day_extra.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_state.dart';
 
@@ -35,9 +33,10 @@ class ReminderHistoryCalendarCard extends StatelessWidget {
           const VTGap.s(),
           VTCalendarMonthGrid(
             month: state.month,
+            selectedDay: state.selectedDay,
             dayColor: (day) => _dayColor(state.remindersInMonth[day], colorScheme),
             isDayEnabled: (day) => state.remindersInMonth[day]?.isNotEmpty ?? false,
-            onDaySelected: (day) => _openDay(context, day),
+            onDaySelected: cubit.selectDay,
           ),
         ],
       ),
@@ -49,9 +48,5 @@ class ReminderHistoryCalendarCard extends StatelessWidget {
       return null;
     }
     return reminders.every((reminder) => reminder.isCompleted) ? VTColors.success : colorScheme.primary;
-  }
-
-  void _openDay(BuildContext context, DateTime day) {
-    context.pushRoute(.reminderDay, extra: ReminderDayExtra(date: day, reminders: state.remindersInMonth[day] ?? const []));
   }
 }

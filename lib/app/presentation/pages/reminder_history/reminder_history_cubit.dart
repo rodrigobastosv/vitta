@@ -13,13 +13,17 @@ class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, Remin
   @override
   void onInit() => loadMonth(state.month);
 
+  void selectDay(DateTime day) => emit(state.copyWith(selectedDay: day));
+
   Future<void> goToPreviousMonth() => _changeMonth(-1);
 
   Future<void> goToNextMonth() => _changeMonth(1);
 
   Future<void> _changeMonth(int monthDelta) {
+    // A fresh state (not copyWith) so the previous month's selected day clears -
+    // copyWith can't null a field back out.
     final month = DateTime(state.month.year, state.month.month + monthDelta);
-    emit(state.copyWith(month: month));
+    emit(ReminderHistoryState(month: month));
     return loadMonth(month);
   }
 

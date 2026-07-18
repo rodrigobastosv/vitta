@@ -30,7 +30,10 @@ class VTCalendarDayCell extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
     return InkWell(
-      onTap: isFuture || !_hasValue ? null : onTap,
+      // Gate on whether the day has data, not on isFuture: reminders live in the
+      // future, and for the diet/water/sleep calendars a future day has no value
+      // anyway, so it stays untappable there.
+      onTap: _hasValue ? onTap : null,
       borderRadius: VTRadius.borderRadiusM,
       child: Column(
         mainAxisAlignment: .center,
@@ -47,11 +50,11 @@ class VTCalendarDayCell extends StatelessWidget {
             child: Text(
               '${day.day}',
               style: VTTextStyles.caption(context).copyWith(
+                // A day with reminders keeps its accent even in the future; only
+                // empty future days (the history calendars) dim.
                 color: isSelected
                     ? colorScheme.onPrimary
-                    : isFuture
-                    ? colorScheme.onSurface.withValues(alpha: 0.3)
-                    : valueColor ?? colorScheme.onSurface,
+                    : valueColor ?? (isFuture ? colorScheme.onSurface.withValues(alpha: 0.3) : colorScheme.onSurface),
                 fontWeight: _hasValue ? .w700 : .w400,
               ),
             ),
