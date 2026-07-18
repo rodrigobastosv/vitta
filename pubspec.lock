@@ -129,6 +129,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.2"
+  cached_network_image_ce:
+    dependency: "direct main"
+    description:
+      name: cached_network_image_ce
+      sha256: "9c61372fecd5f6ac6aaa66fa6808b4c303b8574875e853a0916116bf2fae6840"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.9.0"
+  cached_network_image_platform_interface_ce:
+    dependency: transitive
+    description:
+      name: cached_network_image_platform_interface_ce
+      sha256: "95343645becaeac01dd6eeb9f3a85448b6076d211010ff1973e8bbfd840b571d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.2.0"
+  cached_network_image_web_ce:
+    dependency: transitive
+    description:
+      name: cached_network_image_web_ce
+      sha256: "6bcd8608d4ace7c35625f09d971ce68c7a6581a4631b0fb6ceb2909b2c2e17a8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   carp_serializable:
     dependency: transitive
     description:
@@ -773,6 +797,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.4.1"
+  octo_image:
+    dependency: transitive
+    description:
+      name: octo_image
+      sha256: "34faa6639a78c7e3cbe79be6f9f96535867e879748ade7d17c9b1ae7536293bd"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   package_config:
     dependency: transitive
     description:

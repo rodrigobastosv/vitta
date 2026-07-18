@@ -29,6 +29,7 @@ dependencies:
   sentry_flutter: ^9.24.0
   image_picker: ^1.2.3
   health: ^13.0.0
+  cached_network_image_ce: ^4.9.0
 
 dev_dependencies:
   flutter_test:

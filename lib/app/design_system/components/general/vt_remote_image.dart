@@ -1,3 +1,4 @@
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_remote_image_placeholder.dart';
@@ -39,11 +40,11 @@ class VTRemoteImage extends StatelessWidget {
         height: resolvedHeight,
         child: url == null
             ? placeholder
-            : Image.network(
-                url,
+            : CachedNetworkImage(
+                imageUrl: url,
                 fit: BoxFit.cover,
+                placeholder: (context, url) => placeholder,
                 errorBuilder: (context, error, stackTrace) => placeholder,
-                loadingBuilder: (context, child, loadingProgress) => loadingProgress == null ? child : placeholder,
               ),
       ),
     );
