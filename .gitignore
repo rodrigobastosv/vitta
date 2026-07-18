@@ -44,6 +44,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Firebase App Distribution service account credentials, written from a secret on CI.
+firebase-service-account.json
+
 # Environment secrets (Supabase URL/anon key) - copy .env.example to .env locally
 .env
 

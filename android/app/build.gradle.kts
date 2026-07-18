@@ -30,10 +30,26 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        // Point the debug config at a keystore committed to the repo (debug.keystore,
+        // with the well-known public `android` password - nothing secret). Distributing
+        // via Firebase App Distribution needs the signature to be stable across builds,
+        // and CI runners otherwise auto-generate a fresh debug keystore per run, whose
+        // changing signature makes Android reject in-place updates. A committed keystore
+        // gives every build - local and CI - the same signature, with no secrets to wire
+        // up. Not a Play Store upload key: set one up if a Play pipeline is ever added.
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // Signed with the committed debug keystore (see signingConfigs above) so
+            // `flutter run --release` and the Firebase build share one stable signature.
             signingConfig = signingConfigs.getByName("debug")
         }
     }

@@ -1,0 +1,99 @@
+name: Firebase (Android)
+
+# Same release ritual as TestFlight: `git tag v1.2.3 && git push origin v1.2.3`
+# builds the Android APK and ships it to Firebase App Distribution. The tag is the
+# source of truth for the version, exactly as the TestFlight lane treats it.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  distribute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # v1.2.3 -> 1.2.3, rejecting anything that isn't a version tag before we
+      # spend a build on it - the same rule ios/fastlane's version_from_tag applies.
+      - name: Resolve version from tag
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          if [[ ! "$tag" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::Tag '$tag' is not a vX.Y.Z version tag."
+            exit 1
+          fi
+          echo "BUILD_NAME=${BASH_REMATCH[1]}" >> "$GITHUB_ENV"
+
+      # .env is a bundled asset (see pubspec) and gitignored, so a build without
+      # this step ships an app that talks to nothing. A missing secret reads as an
+      # empty string rather than failing, and Env would only blow up once a tester
+      # launches the build - so check here, where it costs nothing. Mirrors the
+      # TestFlight workflow's identical step.
+      - name: Write .env from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY SENTRY_DSN; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty; the build would ship unable to reach its backend."
+              exit 1
+            fi
+          done
+          cat > .env <<EOF
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY
+          SENTRY_DSN=$SENTRY_DSN
+          EOF
+
+      - run: flutter pub get
+
+      # The release build is signed with the committed debug.keystore (see
+      # android/app/build.gradle.kts) so every build shares one stable signature and
+      # Firebase can update a tester's install in place - no signing secrets needed.
+      # build-number is versionCode: github.run_number is monotonic across runs, so
+      # each distributed build outranks the last and Android accepts it as an update.
+      - name: Build release APK
+        run: flutter build apk --release --build-name="$BUILD_NAME" --build-number="${{ github.run_number }}"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: npm install -g firebase-tools
+
+      # The Firebase CLI authenticates with the service account via
+      # GOOGLE_APPLICATION_CREDENTIALS pointing at a JSON key file. Written from a
+      # secret rather than checked in - it grants App Distribution upload rights.
+      - name: Distribute to Firebase App Distribution
+        env:
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          set -euo pipefail
+          for name in FIREBASE_ANDROID_APP_ID FIREBASE_SERVICE_ACCOUNT; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty; cannot distribute to Firebase."
+              exit 1
+            fi
+          done
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > firebase-service-account.json
+          export GOOGLE_APPLICATION_CREDENTIALS="$PWD/firebase-service-account.json"
+          firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk \
+            --app "$FIREBASE_ANDROID_APP_ID" \
+            --groups testers \
+            --release-notes "Vitta $BUILD_NAME (build ${{ github.run_number }})"
