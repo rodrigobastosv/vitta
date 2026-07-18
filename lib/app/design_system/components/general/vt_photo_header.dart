@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image_ce/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -48,8 +49,8 @@ class VTPhotoHeader extends StatelessWidget {
     if (url == null) {
       return null;
     }
-    return Image.network(
-      url,
+    return CachedNetworkImage(
+      imageUrl: url,
       key: ValueKey(url),
       fit: BoxFit.cover,
       width: double.infinity,
