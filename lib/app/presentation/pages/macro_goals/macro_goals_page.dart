@@ -5,11 +5,13 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/domain/diet/entities/diet_modality.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/widgets/calorie_target_card.dart';
+import 'package:vitta/app/presentation/pages/macro_goals/widgets/diet_modality_selector.dart';
 
 class MacroGoalsPage extends StatelessWidget {
   const MacroGoalsPage({super.key});
@@ -59,6 +61,11 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
     return ListView(
       padding: const EdgeInsets.all(VTSpacing.m),
       children: [
+        DietModalitySelector(
+          selected: DietModality.matching(_goals),
+          onSelected: (modality) => setState(() => _goals = modality.applyTo(_goals)),
+        ),
+        const VTGap.l(),
         CalorieTargetCard(goals: _goals, onCaloriesChanged: (calories) => setState(() => _goals = _goals.withScaledCalories(calories))),
         const VTGap.l(),
         VTLabeledSlider(

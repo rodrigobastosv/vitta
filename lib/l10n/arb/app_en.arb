@@ -463,6 +463,14 @@
       "value": {"type": "int"}
     }
   },
+  "macroGoalsModalityTitle": "Diet modality",
+  "macroGoalsModalityHint": "Pick a preset, then fine-tune below",
+  "macroGoalsModalityCustom": "Custom",
+  "dietModalityBalanced": "Balanced",
+  "dietModalityHighProtein": "High protein",
+  "dietModalityLowFat": "Low fat",
+  "dietModalityLowCarb": "Low carb",
+  "dietModalityKeto": "Keto",
   "authAnonymousMessage": "Your data stays on this device only. Create an account to keep it safe and access it from any device.",
   "authSignedInAsLabel": "Signed in as {email}",
   "@authSignedInAsLabel": {

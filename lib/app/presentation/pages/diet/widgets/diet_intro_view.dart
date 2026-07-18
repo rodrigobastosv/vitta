@@ -25,13 +25,17 @@ class DietIntroView extends StatelessWidget {
             child: Column(
               crossAxisAlignment: .start,
               children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundColor: colorScheme.primaryContainer,
-                  child: Icon(Icons.restaurant, size: 32, color: colorScheme.onPrimaryContainer),
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 32,
+                      backgroundColor: colorScheme.primaryContainer,
+                      child: Icon(Icons.restaurant, size: 32, color: colorScheme.onPrimaryContainer),
+                    ),
+                    const VTGap.l(),
+                    Text(l10n.dietIntroTitle, style: VTTextStyles.headline(context)),
+                  ],
                 ),
-                const VTGap.l(),
-                Text(l10n.dietIntroTitle, style: VTTextStyles.display(context)),
                 const VTGap.s(),
                 Text(l10n.dietIntroSubtitle, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
                 const VTGap.xl(),
@@ -53,10 +57,7 @@ class DietIntroView extends StatelessWidget {
                         ],
                       ),
                       const VTGap.s(),
-                      Text(
-                        l10n.dietIntroGoalsMessage,
-                        style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
+                      Text(l10n.dietIntroGoalsMessage, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
                     ],
                   ),
                 ),
@@ -69,7 +70,6 @@ class DietIntroView extends StatelessWidget {
                     label: Text(l10n.dietIntroSetGoalsAction),
                   ),
                 ),
-                const VTGap.s(),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(onPressed: onSkip, child: Text(l10n.dietIntroSkipAction)),

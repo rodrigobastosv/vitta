@@ -887,6 +887,30 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get macroGoalsModalityTitle => 'Diet modality';
+
+  @override
+  String get macroGoalsModalityHint => 'Pick a preset, then fine-tune below';
+
+  @override
+  String get macroGoalsModalityCustom => 'Custom';
+
+  @override
+  String get dietModalityBalanced => 'Balanced';
+
+  @override
+  String get dietModalityHighProtein => 'High protein';
+
+  @override
+  String get dietModalityLowFat => 'Low fat';
+
+  @override
+  String get dietModalityLowCarb => 'Low carb';
+
+  @override
+  String get dietModalityKeto => 'Keto';
+
+  @override
   String get authAnonymousMessage =>
       'Your data stays on this device only. Create an account to keep it safe and access it from any device.';
 
