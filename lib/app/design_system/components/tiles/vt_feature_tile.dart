@@ -23,16 +23,18 @@ class VTFeatureTile extends StatelessWidget {
         onTap: onTap,
         borderRadius: VTRadius.borderRadiusL,
         child: Padding(
-          padding: const EdgeInsets.all(VTSpacing.m),
+          padding: const EdgeInsets.all(VTSpacing.l),
           child: Column(
             crossAxisAlignment: .start,
             children: [
               Container(
-                padding: const EdgeInsets.all(VTSpacing.s),
-                decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: VTRadius.borderRadiusM),
-                child: Icon(icon, color: colorScheme.onPrimaryContainer),
+                width: 56,
+                height: 56,
+                alignment: .center,
+                decoration: BoxDecoration(color: colorScheme.primaryContainer, shape: .circle),
+                child: Icon(icon, color: colorScheme.onPrimaryContainer, size: 26),
               ),
-              const VTGap.m(),
+              const VTGap.l(),
               Text(title, style: VTTextStyles.title(context)),
               const VTGap.xs(),
               Text(

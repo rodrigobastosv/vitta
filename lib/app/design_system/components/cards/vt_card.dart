@@ -22,11 +22,13 @@ class VTCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: VTRadius.borderRadiusL,
-        border: Border.all(color: colorScheme.outline.withValues(alpha: isDark ? 0.4 : 0.6)),
+        border: isDark ? Border.all(color: colorScheme.outline.withValues(alpha: 0.4)) : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: isDark ? 0.22 : 0.05),
-            blurRadius: 18,
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.22)
+                : const Color(0xFF2D4632).withValues(alpha: 0.09),
+            blurRadius: 22,
             offset: const Offset(0, 8),
           ),
         ],

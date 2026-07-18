@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 abstract class VTRadius {
   static const double s = 8;
   static const double m = 12;
-  static const double l = 20;
+  static const double l = 22;
   static const double full = 999;
 
   static const BorderRadius borderRadiusS = BorderRadius.all(Radius.circular(s));

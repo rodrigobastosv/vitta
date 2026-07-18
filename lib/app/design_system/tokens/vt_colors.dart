@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
 abstract class VTColors {
-  static const Color green = Color(0xFF2E7D5B);
+  static const Color green = Color(0xFF2F7D52);
   static const Color greenLight = Color(0xFF6FBF97);
   static const Color onGreen = Color(0xFFFFFFFF);
   static const Color onGreenDark = Color(0xFF0D3322);
-  static const Color greenContainerLight = Color(0xFFC9EAD9);
+  static const Color greenContainerLight = Color(0xFFCFE6D0);
   static const Color greenContainerDark = Color(0xFF1F5C3F);
-  static const Color onGreenContainerLight = Color(0xFF0D3322);
+  static const Color onGreenContainerLight = Color(0xFF215B3B);
   static const Color onGreenContainerDark = Color(0xFFD9F2E4);
 
   static const Color coral = Color(0xFFE2622B);
@@ -19,17 +19,17 @@ abstract class VTColors {
   static const Color onCoralContainerLight = Color(0xFF5C2A0F);
   static const Color onCoralContainerDark = Color(0xFFFBDCC7);
 
-  static const Color surfaceLight = Color(0xFFFBFAF5);
+  static const Color surfaceLight = Color(0xFFF6F5EC);
   static const Color surfaceDark = Color(0xFF141B17);
-  static const Color onSurfaceLight = Color(0xFF1E2620);
+  static const Color onSurfaceLight = Color(0xFF201E1D);
   static const Color onSurfaceDark = Color(0xFFE7EFE9);
   static const Color onSurfaceVariantLight = Color(0xFF5F6B64);
   static const Color onSurfaceVariantDark = Color(0xFF9FB0A6);
-  static const Color surfaceContainerLight = Color(0xFFF0EEE4);
+  static const Color surfaceContainerLight = Color(0xFFF0EFE1);
   static const Color surfaceContainerDark = Color(0xFF1E2620);
   static const Color cardLight = Color(0xFFFFFFFF);
   static const Color cardDark = Color(0xFF1D2620);
-  static const Color outlineLight = Color(0xFFD6D2C4);
+  static const Color outlineLight = Color(0xFFE1DED0);
   static const Color outlineDark = Color(0xFF3A423C);
 
   static const Color macroProtein = Color(0xFFE2622B);
