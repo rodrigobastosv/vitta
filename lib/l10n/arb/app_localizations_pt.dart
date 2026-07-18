@@ -889,6 +889,30 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get macroGoalsModalityTitle => 'Modalidade da dieta';
+
+  @override
+  String get macroGoalsModalityHint => 'Escolha um preset e ajuste abaixo';
+
+  @override
+  String get macroGoalsModalityCustom => 'Personalizada';
+
+  @override
+  String get dietModalityBalanced => 'Balanceada';
+
+  @override
+  String get dietModalityHighProtein => 'Rica em proteína';
+
+  @override
+  String get dietModalityLowFat => 'Baixa gordura';
+
+  @override
+  String get dietModalityLowCarb => 'Baixa em carboidratos';
+
+  @override
+  String get dietModalityKeto => 'Cetogênica';
+
+  @override
   String get authAnonymousMessage =>
       'Seus dados ficam só neste dispositivo. Crie uma conta para mantê-los seguros e acessá-los em qualquer aparelho.';
 

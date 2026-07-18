@@ -1628,6 +1628,54 @@ abstract class AppLocalizations {
   /// **'{value} kcal'**
   String macroGoalsKcal(int value);
 
+  /// No description provided for @macroGoalsModalityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Diet modality'**
+  String get macroGoalsModalityTitle;
+
+  /// No description provided for @macroGoalsModalityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a preset, then fine-tune below'**
+  String get macroGoalsModalityHint;
+
+  /// No description provided for @macroGoalsModalityCustom.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom'**
+  String get macroGoalsModalityCustom;
+
+  /// No description provided for @dietModalityBalanced.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced'**
+  String get dietModalityBalanced;
+
+  /// No description provided for @dietModalityHighProtein.
+  ///
+  /// In en, this message translates to:
+  /// **'High protein'**
+  String get dietModalityHighProtein;
+
+  /// No description provided for @dietModalityLowFat.
+  ///
+  /// In en, this message translates to:
+  /// **'Low fat'**
+  String get dietModalityLowFat;
+
+  /// No description provided for @dietModalityLowCarb.
+  ///
+  /// In en, this message translates to:
+  /// **'Low carb'**
+  String get dietModalityLowCarb;
+
+  /// No description provided for @dietModalityKeto.
+  ///
+  /// In en, this message translates to:
+  /// **'Keto'**
+  String get dietModalityKeto;
+
   /// No description provided for @authAnonymousMessage.
   ///
   /// In en, this message translates to:

@@ -9,6 +9,23 @@ class MacroGoals extends Equatable {
     required this.fiberGoalGrams,
   });
 
+  // Grams that put `calories` behind the given protein/carbs/fat energy split
+  // (fractions of total calories, e.g. 0.30/0.40/0.30). The kcal-per-gram
+  // conversion stays here so a diet modality never has to know it. Fiber isn't an
+  // energy macro, so it's carried through untouched rather than derived from the split.
+  factory MacroGoals.fromEnergySplit({
+    required double calories,
+    required double proteinRatio,
+    required double carbsRatio,
+    required double fatRatio,
+    required double fiberGoalGrams,
+  }) => MacroGoals(
+    proteinGoalGrams: calories * proteinRatio / _caloriesPerGramProtein,
+    carbsGoalGrams: calories * carbsRatio / _caloriesPerGramCarbs,
+    fatGoalGrams: calories * fatRatio / _caloriesPerGramFat,
+    fiberGoalGrams: fiberGoalGrams,
+  );
+
   static const defaultGoals = MacroGoals(proteinGoalGrams: 150, carbsGoalGrams: 250, fatGoalGrams: 65, fiberGoalGrams: 30);
 
   static const _caloriesPerGramProtein = 4.0;
@@ -25,6 +42,13 @@ class MacroGoals extends Equatable {
 
   double get calorieMin => calorieGoal * GoalAdherence.metLowerBound;
   double get calorieMax => calorieGoal * GoalAdherence.metUpperBound;
+
+  // Each energy macro's share of the calorie goal, so a diet modality can be
+  // matched back from the grams (0 when there's no energy to divide). These are
+  // the inverse of fromEnergySplit and the reason a modality needs no stored field.
+  double get proteinCalorieRatio => calorieGoal > 0 ? proteinGoalGrams * _caloriesPerGramProtein / calorieGoal : 0;
+  double get carbsCalorieRatio => calorieGoal > 0 ? carbsGoalGrams * _caloriesPerGramCarbs / calorieGoal : 0;
+  double get fatCalorieRatio => calorieGoal > 0 ? fatGoalGrams * _caloriesPerGramFat / calorieGoal : 0;
 
   MacroGoals copyWith({double? proteinGoalGrams, double? carbsGoalGrams, double? fatGoalGrams, double? fiberGoalGrams}) => MacroGoals(
     proteinGoalGrams: proteinGoalGrams ?? this.proteinGoalGrams,
