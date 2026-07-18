@@ -426,6 +426,24 @@ create table if not exists workout_sets (
 
 create index if not exists workout_sets_workout_exercise_id_idx on workout_sets (workout_exercise_id);
 
+-- Personal to-do list (issue #118). Private per user like water_logs. due_date is
+-- the day the reminder belongs to; remind_at is an optional local-notification time;
+-- recurrence (null | daily | weekly | monthly) is carried on each occurrence so
+-- completing a recurring reminder can spawn the next one (client-side, no server cron).
+create table if not exists reminders (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  title text not null check (char_length(title) > 0),
+  notes text,
+  due_date date not null,
+  remind_at timestamptz,
+  recurrence text check (recurrence in ('daily', 'weekly', 'monthly')),
+  completed_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists reminders_user_id_due_date_idx on reminders (user_id, due_date);
+
 -- Keeps exercises.times_logged in sync, mirroring bump_food_times_logged.
 -- security definer for the same reason: the logging user doesn't own the
 -- (imported, null user_id) exercise row, so exercises' update policy would
@@ -475,6 +493,7 @@ alter table workout_exercises enable row level security;
 alter table workout_sets enable row level security;
 alter table routines enable row level security;
 alter table routine_exercises enable row level security;
+alter table reminders enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -677,3 +696,9 @@ create policy "Users manage their own routine exercises" on routine_exercises
   for all
   using (exists (select 1 from routines where routines.id = routine_exercises.routine_id and routines.user_id = auth.uid()))
   with check (exists (select 1 from routines where routines.id = routine_exercises.routine_id and routines.user_id = auth.uid()));
+
+drop policy if exists "Users manage their own reminders" on reminders;
+create policy "Users manage their own reminders" on reminders
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);

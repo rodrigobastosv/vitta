@@ -119,6 +119,12 @@ class HomePage extends StatelessWidget {
                     subtitle: l10n.bodyWeightFeatureSubtitle,
                     onTap: () => context.pushRoute(.bodyWeight),
                   ),
+                  VTFeatureTile(
+                    icon: Icons.checklist_rounded,
+                    title: l10n.reminderFeatureTitle,
+                    subtitle: l10n.reminderFeatureSubtitle,
+                    onTap: () => context.pushRoute(.reminders),
+                  ),
                 ],
               ),
             ],

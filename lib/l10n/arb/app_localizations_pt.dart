@@ -24,6 +24,90 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeGreetingEvening => 'Boa noite';
 
   @override
+  String get reminderFeatureTitle => 'Lembretes';
+
+  @override
+  String get reminderFeatureSubtitle => 'Organize suas tarefas e lembretes';
+
+  @override
+  String get reminderTitle => 'Lembretes';
+
+  @override
+  String get reminderAddAction => 'Adicionar lembrete';
+
+  @override
+  String get reminderHistoryTitle => 'Histórico';
+
+  @override
+  String get reminderFilterAll => 'Todos';
+
+  @override
+  String get reminderFilterCompleted => 'Concluídos';
+
+  @override
+  String get reminderFilterActive => 'Ativos';
+
+  @override
+  String get reminderEmptyTitle => 'Nenhum lembrete';
+
+  @override
+  String get reminderEmptyMessage => 'Toque em + para adicionar um lembrete para este dia.';
+
+  @override
+  String get reminderNewTitle => 'Novo lembrete';
+
+  @override
+  String get reminderEditTitle => 'Editar lembrete';
+
+  @override
+  String get reminderTitleLabel => 'Título';
+
+  @override
+  String get reminderTitleHint => 'Pagar a conta de luz, ...';
+
+  @override
+  String get reminderNotesLabel => 'Notas (opcional)';
+
+  @override
+  String get reminderDueDateLabel => 'Data';
+
+  @override
+  String get reminderRemindLabel => 'Lembrar-me';
+
+  @override
+  String get reminderRepeatLabel => 'Repetir';
+
+  @override
+  String get reminderRepeatNever => 'Nunca';
+
+  @override
+  String get reminderRepeatDaily => 'Diariamente';
+
+  @override
+  String get reminderRepeatWeekly => 'Semanalmente';
+
+  @override
+  String get reminderRepeatMonthly => 'Mensalmente';
+
+  @override
+  String get reminderDeleteTooltip => 'Remover';
+
+  @override
+  String get reminderPreviousDayTooltip => 'Dia anterior';
+
+  @override
+  String get reminderNextDayTooltip => 'Próximo dia';
+
+  @override
+  String get reminderToday => 'Hoje';
+
+  @override
+  String get reminderTomorrow => 'Amanhã';
+
+  @override
+  String get reminderYesterday => 'Ontem';
+
+  @override
   String get dietFeatureTitle => 'Dieta';
 
   @override

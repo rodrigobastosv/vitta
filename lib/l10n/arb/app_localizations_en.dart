@@ -24,6 +24,90 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeGreetingEvening => 'Good evening';
 
   @override
+  String get reminderFeatureTitle => 'Reminders';
+
+  @override
+  String get reminderFeatureSubtitle => 'Keep track of things to do';
+
+  @override
+  String get reminderTitle => 'Reminders';
+
+  @override
+  String get reminderAddAction => 'Add reminder';
+
+  @override
+  String get reminderHistoryTitle => 'History';
+
+  @override
+  String get reminderFilterAll => 'All';
+
+  @override
+  String get reminderFilterCompleted => 'Completed';
+
+  @override
+  String get reminderFilterActive => 'Active';
+
+  @override
+  String get reminderEmptyTitle => 'No reminders';
+
+  @override
+  String get reminderEmptyMessage => 'Tap + to add a reminder for this day.';
+
+  @override
+  String get reminderNewTitle => 'New reminder';
+
+  @override
+  String get reminderEditTitle => 'Edit reminder';
+
+  @override
+  String get reminderTitleLabel => 'Title';
+
+  @override
+  String get reminderTitleHint => 'Pay the electricity bill, ...';
+
+  @override
+  String get reminderNotesLabel => 'Notes (optional)';
+
+  @override
+  String get reminderDueDateLabel => 'Date';
+
+  @override
+  String get reminderRemindLabel => 'Remind me';
+
+  @override
+  String get reminderRepeatLabel => 'Repeat';
+
+  @override
+  String get reminderRepeatNever => 'Never';
+
+  @override
+  String get reminderRepeatDaily => 'Daily';
+
+  @override
+  String get reminderRepeatWeekly => 'Weekly';
+
+  @override
+  String get reminderRepeatMonthly => 'Monthly';
+
+  @override
+  String get reminderDeleteTooltip => 'Delete';
+
+  @override
+  String get reminderPreviousDayTooltip => 'Previous day';
+
+  @override
+  String get reminderNextDayTooltip => 'Next day';
+
+  @override
+  String get reminderToday => 'Today';
+
+  @override
+  String get reminderTomorrow => 'Tomorrow';
+
+  @override
+  String get reminderYesterday => 'Yesterday';
+
+  @override
   String get dietFeatureTitle => 'Diet';
 
   @override

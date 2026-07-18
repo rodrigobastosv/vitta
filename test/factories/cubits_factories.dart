@@ -14,6 +14,8 @@ import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart'
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
+import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
+import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
@@ -275,4 +277,23 @@ abstract class CubitsFactories {
 
   static RoutineFormCubit buildRoutineFormCubit({MockSaveRoutineUseCase? saveRoutineUseCase, Routine? routine}) =>
       RoutineFormCubit(saveRoutineUseCase: saveRoutineUseCase ?? MockSaveRoutineUseCase(), routine: routine);
+
+  static ReminderCubit buildReminderCubit({
+    MockGetRemindersForDateUseCase? getRemindersForDateUseCase,
+    MockCreateReminderUseCase? createReminderUseCase,
+    MockUpdateReminderUseCase? updateReminderUseCase,
+    MockCompleteReminderUseCase? completeReminderUseCase,
+    MockDeleteReminderUseCase? deleteReminderUseCase,
+    MockNotificationService? notificationService,
+  }) => ReminderCubit(
+    getRemindersForDateUseCase: getRemindersForDateUseCase ?? MockGetRemindersForDateUseCase(),
+    createReminderUseCase: createReminderUseCase ?? MockCreateReminderUseCase(),
+    updateReminderUseCase: updateReminderUseCase ?? MockUpdateReminderUseCase(),
+    completeReminderUseCase: completeReminderUseCase ?? MockCompleteReminderUseCase(),
+    deleteReminderUseCase: deleteReminderUseCase ?? MockDeleteReminderUseCase(),
+    notificationService: notificationService ?? MockNotificationService(),
+  );
+
+  static ReminderHistoryCubit buildReminderHistoryCubit({MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase}) =>
+      ReminderHistoryCubit(getRemindersInRangeUseCase: getRemindersInRangeUseCase ?? MockGetRemindersInRangeUseCase());
 }

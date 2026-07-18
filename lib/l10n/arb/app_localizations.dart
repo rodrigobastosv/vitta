@@ -122,6 +122,174 @@ abstract class AppLocalizations {
   /// **'Good evening'**
   String get homeGreetingEvening;
 
+  /// No description provided for @reminderFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get reminderFeatureTitle;
+
+  /// No description provided for @reminderFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep track of things to do'**
+  String get reminderFeatureSubtitle;
+
+  /// No description provided for @reminderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get reminderTitle;
+
+  /// No description provided for @reminderAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add reminder'**
+  String get reminderAddAction;
+
+  /// No description provided for @reminderHistoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get reminderHistoryTitle;
+
+  /// No description provided for @reminderFilterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get reminderFilterAll;
+
+  /// No description provided for @reminderFilterCompleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed'**
+  String get reminderFilterCompleted;
+
+  /// No description provided for @reminderFilterActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get reminderFilterActive;
+
+  /// No description provided for @reminderEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminders'**
+  String get reminderEmptyTitle;
+
+  /// No description provided for @reminderEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add a reminder for this day.'**
+  String get reminderEmptyMessage;
+
+  /// No description provided for @reminderNewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New reminder'**
+  String get reminderNewTitle;
+
+  /// No description provided for @reminderEditTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit reminder'**
+  String get reminderEditTitle;
+
+  /// No description provided for @reminderTitleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Title'**
+  String get reminderTitleLabel;
+
+  /// No description provided for @reminderTitleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay the electricity bill, ...'**
+  String get reminderTitleHint;
+
+  /// No description provided for @reminderNotesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Notes (optional)'**
+  String get reminderNotesLabel;
+
+  /// No description provided for @reminderDueDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get reminderDueDateLabel;
+
+  /// No description provided for @reminderRemindLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Remind me'**
+  String get reminderRemindLabel;
+
+  /// No description provided for @reminderRepeatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Repeat'**
+  String get reminderRepeatLabel;
+
+  /// No description provided for @reminderRepeatNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Never'**
+  String get reminderRepeatNever;
+
+  /// No description provided for @reminderRepeatDaily.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily'**
+  String get reminderRepeatDaily;
+
+  /// No description provided for @reminderRepeatWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly'**
+  String get reminderRepeatWeekly;
+
+  /// No description provided for @reminderRepeatMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get reminderRepeatMonthly;
+
+  /// No description provided for @reminderDeleteTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get reminderDeleteTooltip;
+
+  /// No description provided for @reminderPreviousDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous day'**
+  String get reminderPreviousDayTooltip;
+
+  /// No description provided for @reminderNextDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Next day'**
+  String get reminderNextDayTooltip;
+
+  /// No description provided for @reminderToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get reminderToday;
+
+  /// No description provided for @reminderTomorrow.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get reminderTomorrow;
+
+  /// No description provided for @reminderYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday'**
+  String get reminderYesterday;
+
   /// No description provided for @dietFeatureTitle.
   ///
   /// In en, this message translates to:

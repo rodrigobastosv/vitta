@@ -35,6 +35,12 @@ import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/get_reminders_for_date_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/get_reminders_in_range_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/update_reminder_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
@@ -212,3 +218,15 @@ class MockSetWorkoutExerciseCompletedUseCase extends Mock implements SetWorkoutE
 class MockHasSeenWorkoutIntroUseCase extends Mock implements HasSeenWorkoutIntroUseCase {}
 
 class MockMarkWorkoutIntroSeenUseCase extends Mock implements MarkWorkoutIntroSeenUseCase {}
+
+class MockGetRemindersForDateUseCase extends Mock implements GetRemindersForDateUseCase {}
+
+class MockGetRemindersInRangeUseCase extends Mock implements GetRemindersInRangeUseCase {}
+
+class MockCreateReminderUseCase extends Mock implements CreateReminderUseCase {}
+
+class MockUpdateReminderUseCase extends Mock implements UpdateReminderUseCase {}
+
+class MockCompleteReminderUseCase extends Mock implements CompleteReminderUseCase {}
+
+class MockDeleteReminderUseCase extends Mock implements DeleteReminderUseCase {}

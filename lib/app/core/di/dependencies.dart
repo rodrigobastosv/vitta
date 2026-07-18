@@ -7,6 +7,7 @@ import 'package:vitta/app/core/services/logging/console_log_destination.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/logging/logging_service.dart';
 import 'package:vitta/app/core/services/logging/sentry_log_destination.dart';
+import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
@@ -25,6 +26,8 @@ import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasou
 import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/data/reminder/datasources/supabase/supabase_reminder_datasource.dart';
+import 'package:vitta/app/data/reminder/reminder_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
 import 'package:vitta/app/data/settings/settings_repository.dart';
 import 'package:vitta/app/data/sleep/datasources/local/sleep_local_datasource.dart';
@@ -76,6 +79,12 @@ import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/get_reminders_for_date_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/get_reminders_in_range_use_case.dart';
+import 'package:vitta/app/domain/reminder/use_cases/update_reminder_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
@@ -128,6 +137,8 @@ import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart'
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
+import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
+import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
@@ -153,6 +164,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => supabaseService);
   G.registerLazySingleton(ImagePickerService.new);
   G.registerLazySingleton(HealthService.new);
+  G.registerLazySingleton(NotificationService.new);
   Log.service = LoggingService(destinations: const [ConsoleLogDestination(), SentryLogDestination()]);
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
@@ -182,6 +194,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
+  G.registerLazySingleton(() => SupabaseReminderDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => ReminderRepository(supabaseReminderDataSource: G()));
   G.registerLazySingleton(() => SupabaseExerciseDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseWorkoutDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseRoutineDataSource(supabaseService: G()));
@@ -237,6 +251,12 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => ImportSleepFromHealthUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetRemindersForDateUseCase(reminderRepository: G()));
+  G.registerFactory(() => GetRemindersInRangeUseCase(reminderRepository: G()));
+  G.registerFactory(() => CreateReminderUseCase(reminderRepository: G()));
+  G.registerFactory(() => UpdateReminderUseCase(reminderRepository: G()));
+  G.registerFactory(() => CompleteReminderUseCase(reminderRepository: G()));
+  G.registerFactory(() => DeleteReminderUseCase(reminderRepository: G()));
   G.registerFactory(() => SearchExercisesUseCase(workoutRepository: G()));
   G.registerFactory(() => GetWorkoutsForDateUseCase(workoutRepository: G()));
   G.registerFactory(() => AddExerciseToWorkoutUseCase(workoutRepository: G()));
@@ -361,6 +381,17 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactory(() => WaterHistoryCubit(getWaterInRangeUseCase: G(), getWaterGoalUseCase: G()));
+  G.registerFactory(
+    () => ReminderCubit(
+      getRemindersForDateUseCase: G(),
+      createReminderUseCase: G(),
+      updateReminderUseCase: G(),
+      completeReminderUseCase: G(),
+      deleteReminderUseCase: G(),
+      notificationService: G(),
+    ),
+  );
+  G.registerFactory(() => ReminderHistoryCubit(getRemindersInRangeUseCase: G()));
   G.registerFactory(
     () => BodyWeightCubit(
       getRecentBodyWeightLogsUseCase: G(),

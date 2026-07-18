@@ -17,6 +17,8 @@ enum AppRoute {
   bodyWeightHistory('/body-weight/history'),
   sleep('/sleep'),
   sleepHistory('/sleep/history'),
+  reminders('/reminders'),
+  reminderHistory('/reminders/history'),
   workout('/workout'),
   workoutIntro('/workout/intro'),
   workoutHistory('/workout/history'),

@@ -23,6 +23,8 @@ import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
 import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipe_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';
+import 'package:vitta/app/presentation/routing/routes/reminder_history_route.dart';
+import 'package:vitta/app/presentation/routing/routes/reminder_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routine_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routines_route.dart';
 import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
@@ -57,6 +59,8 @@ abstract class AppRouter {
     BodyWeightHistoryRoute(),
     SleepRoute(),
     SleepHistoryRoute(),
+    ReminderRoute(),
+    ReminderHistoryRoute(),
     WorkoutRoute(),
     WorkoutIntroRoute(),
     WorkoutHistoryRoute(),
