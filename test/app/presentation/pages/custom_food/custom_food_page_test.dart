@@ -112,7 +112,7 @@ void main() {
     await openCustomFoodPage(tester);
 
     await tester.enterText(find.widgetWithText(TextField, 'Name'), 'Greek yogurt');
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     expect(find.text('Fill in the name and all macros with valid numbers.'), findsOneWidget);
@@ -131,7 +131,7 @@ void main() {
       await tester.enterText(find.widgetWithText(TextField, label), value);
     }
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
     expect(poppedFood?.name, 'Greek yogurt');

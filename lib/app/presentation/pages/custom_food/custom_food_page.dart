@@ -56,7 +56,7 @@ class CustomFoodPage extends StatelessWidget {
         ),
         bottomNavigationBar: SafeArea(
           minimum: const EdgeInsets.all(VTSpacing.m),
-          child: VTPrimaryButton(label: l10n.dietContinueAction, onPressed: cubit.submit),
+          child: VTPrimaryButton(label: l10n.saveAction, onPressed: cubit.submit),
         ),
       ),
     );

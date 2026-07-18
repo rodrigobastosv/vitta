@@ -161,7 +161,6 @@
   "nutrientZinc": "Zinc",
   "takePhotoAction": "Take photo",
   "chooseFromGalleryAction": "Choose from gallery",
-  "dietContinueAction": "Continue",
   "dietScanLabelAction": "Scan nutrition label",
   "dietNutritionScanNoDataTitle": "Couldn't read the label",
   "dietNutritionScanNoData": "Enter the values manually, or try another photo.",
