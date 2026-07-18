@@ -38,25 +38,31 @@ class CustomFoodPage extends StatelessWidget {
         }
       },
       builder: (context, cubit, state) => Scaffold(
-        body: CustomScrollView(
-          physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          slivers: [
-            SliverAppBar(
-              expandedHeight: _headerHeight,
-              pinned: true,
-              stretch: true,
-              backgroundColor: context.colorScheme.surface,
-              flexibleSpace: FlexibleSpaceBar(
-                stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
-                background: VTPhotoHeader(imageBytes: state.imageBytes, onTap: () => _pickPhoto(context, cubit)),
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              SliverAppBar(
+                expandedHeight: _headerHeight,
+                pinned: true,
+                stretch: true,
+                backgroundColor: context.colorScheme.surface,
+                flexibleSpace: FlexibleSpaceBar(
+                  stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
+                  background: VTPhotoHeader(imageBytes: state.imageBytes, onTap: () => _pickPhoto(context, cubit)),
+                ),
               ),
-            ),
-            SliverToBoxAdapter(child: CustomFoodForm(state: state)),
-          ],
+              SliverToBoxAdapter(child: CustomFoodForm(state: state)),
+            ],
+          ),
         ),
-        bottomNavigationBar: SafeArea(
-          minimum: const EdgeInsets.all(VTSpacing.m),
-          child: VTPrimaryButton(label: l10n.saveAction, onPressed: cubit.submit),
+        bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
+          child: SafeArea(
+            minimum: const EdgeInsets.all(VTSpacing.m),
+            child: VTPrimaryButton(label: l10n.saveAction, onPressed: cubit.submit),
+          ),
         ),
       ),
     );
