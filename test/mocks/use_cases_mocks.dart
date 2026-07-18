@@ -5,6 +5,11 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_body_weight_in_range_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_recent_body_weight_logs_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
@@ -180,6 +185,16 @@ class MockDeleteRoutineUseCase extends Mock implements DeleteRoutineUseCase {}
 class MockStartWorkoutFromRoutineUseCase extends Mock implements StartWorkoutFromRoutineUseCase {}
 
 class MockGetLastSetsByExerciseUseCase extends Mock implements GetLastSetsByExerciseUseCase {}
+
+class MockLogBodyWeightUseCase extends Mock implements LogBodyWeightUseCase {}
+
+class MockGetRecentBodyWeightLogsUseCase extends Mock implements GetRecentBodyWeightLogsUseCase {}
+
+class MockGetBodyWeightInRangeUseCase extends Mock implements GetBodyWeightInRangeUseCase {}
+
+class MockDeleteBodyWeightLogUseCase extends Mock implements DeleteBodyWeightLogUseCase {}
+
+class MockGetLatestBodyWeightUseCase extends Mock implements GetLatestBodyWeightUseCase {}
 
 class MockGetExerciseProgressionUseCase extends Mock implements GetExerciseProgressionUseCase {}
 

@@ -103,6 +103,12 @@ class HomePage extends StatelessWidget {
                     subtitle: l10n.sleepFeatureSubtitle,
                     onTap: () => context.pushRoute(.sleep),
                   ),
+                  VTFeatureTile(
+                    icon: Icons.monitor_weight_outlined,
+                    title: l10n.bodyWeightFeatureTitle,
+                    subtitle: l10n.bodyWeightFeatureSubtitle,
+                    onTap: () => context.pushRoute(.bodyWeight),
+                  ),
                 ],
               ),
             ],

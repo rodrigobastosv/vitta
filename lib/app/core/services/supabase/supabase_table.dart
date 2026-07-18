@@ -2,6 +2,7 @@ enum SupabaseTable {
   foods('foods'),
   foodLogs('food_logs'),
   waterLogs('water_logs'),
+  bodyWeightLogs('body_weight_logs'),
   sleepLogs('sleep_logs'),
   recipes('recipes'),
   recipeIngredients('recipe_ingredients'),

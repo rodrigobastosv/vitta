@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/domain/workout/entities/equipment.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/exercise_detail_extra.dart';
@@ -110,6 +111,7 @@ class WorkoutPage extends StatelessWidget {
                       onAddSet: () => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,
+                        defaultLoadKg: workoutExercise.exercise.equipment == Equipment.bodyOnly ? state.latestBodyWeightKg : null,
                         onSubmit: ({required reps, required weightKg}) =>
                             cubit.logSet(workoutExerciseId: workoutExercise.id, reps: reps, weightKg: weightKg),
                       ),

@@ -2,6 +2,8 @@ import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
+import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
+import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -184,6 +186,26 @@ abstract class CubitsFactories {
     getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
   );
 
+  static BodyWeightCubit buildBodyWeightCubit({
+    MockGetRecentBodyWeightLogsUseCase? getRecentBodyWeightLogsUseCase,
+    MockLogBodyWeightUseCase? logBodyWeightUseCase,
+    MockDeleteBodyWeightLogUseCase? deleteBodyWeightLogUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => BodyWeightCubit(
+    getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase ?? MockGetRecentBodyWeightLogsUseCase(),
+    logBodyWeightUseCase: logBodyWeightUseCase ?? MockLogBodyWeightUseCase(),
+    deleteBodyWeightLogUseCase: deleteBodyWeightLogUseCase ?? MockDeleteBodyWeightLogUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static BodyWeightHistoryCubit buildBodyWeightHistoryCubit({
+    MockGetBodyWeightInRangeUseCase? getBodyWeightInRangeUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => BodyWeightHistoryCubit(
+    getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase ?? MockGetBodyWeightInRangeUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
   static SleepCubit buildSleepCubit({
     MockGetRecentSleepLogsUseCase? getRecentSleepLogsUseCase,
     MockLogSleepUseCase? logSleepUseCase,
@@ -214,6 +236,7 @@ abstract class CubitsFactories {
     MockGetRoutineCycleUseCase? getRoutineCycleUseCase,
     MockStartWorkoutFromRoutineUseCase? startWorkoutFromRoutineUseCase,
     MockGetLastSetsByExerciseUseCase? getLastSetsByExerciseUseCase,
+    MockGetLatestBodyWeightUseCase? getLatestBodyWeightUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
     MockHasSeenWorkoutIntroUseCase? hasSeenWorkoutIntroUseCase,
     MockMarkWorkoutIntroSeenUseCase? markWorkoutIntroSeenUseCase,
@@ -229,6 +252,7 @@ abstract class CubitsFactories {
     getRoutineCycleUseCase: getRoutineCycleUseCase ?? MockGetRoutineCycleUseCase(),
     startWorkoutFromRoutineUseCase: startWorkoutFromRoutineUseCase ?? MockStartWorkoutFromRoutineUseCase(),
     getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase ?? MockGetLastSetsByExerciseUseCase(),
+    getLatestBodyWeightUseCase: getLatestBodyWeightUseCase ?? MockGetLatestBodyWeightUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
     hasSeenWorkoutIntroUseCase: hasSeenWorkoutIntroUseCase ?? MockHasSeenWorkoutIntroUseCase(),
     markWorkoutIntroSeenUseCase: markWorkoutIntroSeenUseCase ?? MockMarkWorkoutIntroSeenUseCase(),

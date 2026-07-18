@@ -12,6 +12,8 @@ import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
+import 'package:vitta/app/data/body_weight/body_weight_repository.dart';
+import 'package:vitta/app/data/body_weight/datasources/supabase/supabase_body_weight_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasource.dart';
@@ -42,6 +44,11 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_body_weight_in_range_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/get_recent_body_weight_logs_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
@@ -106,6 +113,8 @@ import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_complete
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
+import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
+import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -167,6 +176,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerLazySingleton(() => SupabaseWaterDataSource(supabaseService: G()));
   G.registerLazySingleton(() => WaterRepository(supabaseWaterDataSource: G(), waterLocalDataSource: G()));
+  G.registerLazySingleton(() => SupabaseBodyWeightDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => BodyWeightRepository(supabaseBodyWeightDataSource: G()));
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
@@ -213,6 +224,11 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetWaterInRangeUseCase(waterRepository: G()));
   G.registerFactory(() => GetWaterGoalUseCase(waterRepository: G()));
   G.registerFactory(() => DeleteWaterLogUseCase(waterRepository: G()));
+  G.registerFactory(() => LogBodyWeightUseCase(bodyWeightRepository: G()));
+  G.registerFactory(() => GetRecentBodyWeightLogsUseCase(bodyWeightRepository: G()));
+  G.registerFactory(() => GetBodyWeightInRangeUseCase(bodyWeightRepository: G()));
+  G.registerFactory(() => DeleteBodyWeightLogUseCase(bodyWeightRepository: G()));
+  G.registerFactory(() => GetLatestBodyWeightUseCase(bodyWeightRepository: G()));
   G.registerFactory(() => LogSleepUseCase(sleepRepository: G()));
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
   G.registerFactory(() => GetSleepInRangeUseCase(sleepRepository: G()));
@@ -306,6 +322,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getRoutineCycleUseCase: G(),
       startWorkoutFromRoutineUseCase: G(),
       getLastSetsByExerciseUseCase: G(),
+      getLatestBodyWeightUseCase: G(),
       getAppSettingsUseCase: G(),
       hasSeenWorkoutIntroUseCase: G(),
       markWorkoutIntroSeenUseCase: G(),
@@ -341,6 +358,15 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactory(() => WaterHistoryCubit(getWaterInRangeUseCase: G(), getWaterGoalUseCase: G()));
+  G.registerFactory(
+    () => BodyWeightCubit(
+      getRecentBodyWeightLogsUseCase: G(),
+      logBodyWeightUseCase: G(),
+      deleteBodyWeightLogUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
+  G.registerFactory(() => BodyWeightHistoryCubit(getBodyWeightInRangeUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => SleepHistoryCubit(getSleepInRangeUseCase: G(), getSleepGoalUseCase: G()));
   G.registerFactory(
     () => SleepCubit(

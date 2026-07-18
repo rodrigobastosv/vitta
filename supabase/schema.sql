@@ -150,6 +150,21 @@ create table if not exists water_logs (
 
 create index if not exists water_logs_user_id_logged_date_idx on water_logs (user_id, logged_date);
 
+-- Body weight over time (issue #101). One row per measurement, kept in kilograms
+-- the same way water is milliliters and workout load is kilograms - the display
+-- unit (kg/lb) is a presentation concern. No unique constraint on the date: a user
+-- may weigh more than once in a day, and "current weight" is simply the most recent
+-- row by logged_date then created_at.
+create table if not exists body_weight_logs (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  logged_date date not null,
+  weight_kg numeric not null check (weight_kg > 0),
+  created_at timestamptz not null default now()
+);
+
+create index if not exists body_weight_logs_user_id_logged_date_idx on body_weight_logs (user_id, logged_date);
+
 create table if not exists sleep_logs (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -449,6 +464,7 @@ where e.id = sub.exercise_id;
 alter table foods enable row level security;
 alter table food_logs enable row level security;
 alter table water_logs enable row level security;
+alter table body_weight_logs enable row level security;
 alter table sleep_logs enable row level security;
 alter table recipes enable row level security;
 alter table recipe_ingredients enable row level security;
@@ -494,6 +510,12 @@ create policy "Users manage their own food logs" on food_logs
 
 drop policy if exists "Users manage their own water logs" on water_logs;
 create policy "Users manage their own water logs" on water_logs
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own body weight logs" on body_weight_logs;
+create policy "Users manage their own body weight logs" on body_weight_logs
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
