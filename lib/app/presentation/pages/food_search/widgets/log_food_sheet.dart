@@ -39,7 +39,12 @@ class _LogFoodSheet extends StatefulWidget {
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
-  FoodQuantitySelection _selection = const FoodQuantitySelection(quantityGrams: 100);
+  late final double? _initialUnits = widget.food.isCountable ? 1 : null;
+  late final double _initialGrams = widget.food.gramsPerUnit ?? 100;
+  late FoodQuantitySelection _selection = FoodQuantitySelection(
+    quantityGrams: _initialGrams,
+    quantityUnits: _initialUnits,
+  );
   late MealType _mealType = widget.initialMealType;
   bool _isSaving = false;
   String? _errorMessage;
@@ -96,7 +101,8 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
           FoodQuantityInput(
             food: widget.food,
             unitSystem: _unitSystem,
-            initialGrams: 100,
+            initialGrams: _initialGrams,
+            initialUnits: _initialUnits,
             onChanged: (selection) => _selection = selection,
           ),
           const VTGap.m(),

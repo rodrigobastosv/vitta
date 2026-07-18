@@ -116,9 +116,9 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
     }
     return Row(
       children: [
-        Expanded(child: _weightField(context, autofocus: widget.autofocus)),
-        const VTGap.m(),
         VTStepper(controller: _unitsController, suffixLabel: l10n.dietUnitsUnit),
+        const VTGap.m(),
+        Expanded(child: _weightField(context, autofocus: widget.autofocus)),
       ],
     );
   }
