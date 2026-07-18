@@ -4,6 +4,7 @@ import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
+import 'package:vitta/app/domain/auth/use_cases/delete_account_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -22,6 +23,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     required this._signOutUseCase,
     required this._updateProfileUseCase,
     required this._uploadAvatarUseCase,
+    required this._deleteAccountUseCase,
     required this._imagePickerService,
   }) : _getUserUseCase = getUserUseCase,
        super(AuthState(user: getUserUseCase()));
@@ -32,6 +34,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
   final SignOutUseCase _signOutUseCase;
   final UpdateProfileUseCase _updateProfileUseCase;
   final UploadAvatarUseCase _uploadAvatarUseCase;
+  final DeleteAccountUseCase _deleteAccountUseCase;
   final ImagePickerService _imagePickerService;
 
   static const double _avatarMaxWidth = 512;
@@ -134,6 +137,17 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
       Log.action('sign_out');
       emit(state.copyWith(user: user));
+    });
+  }
+
+  Future<void> deleteAccount() async {
+    emitPresentation(AuthShowLoading());
+    final statusResult = await _deleteAccountUseCase();
+    emitPresentation(AuthHideLoading());
+    statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
+      Log.action('account_deleted');
+      emit(state.copyWith(user: user));
+      emitPresentation(AuthAccountDeleted());
     });
   }
 }

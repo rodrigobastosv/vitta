@@ -32,6 +32,8 @@ class EditProfilePage extends StatelessWidget {
             Navigator.of(context).pop();
           case AuthSignedIn():
             break;
+          case AuthAccountDeleted():
+            break;
         }
       },
       builder: (context, cubit, state) => Scaffold(

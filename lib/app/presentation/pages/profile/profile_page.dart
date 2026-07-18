@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
+import 'package:vitta/app/presentation/pages/profile/widgets/delete_account_dialog.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_header.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_menu_tile.dart';
 
@@ -31,6 +32,8 @@ class ProfilePage extends StatelessWidget {
             break;
           case AuthProfileUpdated():
             break;
+          case AuthAccountDeleted():
+            context.showToast(title: l10n.profileAccountDeleted, message: l10n.profileAccountDeletedMessage);
           case AuthActionFailed(:final message):
             context.showErrorToast(message: message);
         }
@@ -72,9 +75,26 @@ class ProfilePage extends StatelessWidget {
               subtitle: l10n.profileSettingsSubtitle,
               onTap: () => context.pushRoute(.settings),
             ),
+            if (state.user is AuthenticatedUser) ...[
+              const VTGap.m(),
+              ProfileMenuTile(
+                icon: Icons.delete_forever_outlined,
+                accent: context.colorScheme.error,
+                title: l10n.profileDeleteAccountTitle,
+                subtitle: l10n.profileDeleteAccountSubtitle,
+                onTap: () => _confirmDeleteAccount(context, cubit),
+              ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context, AuthCubit cubit) async {
+    final confirmed = await showDeleteAccountConfirmation(context: context);
+    if (confirmed) {
+      await cubit.deleteAccount();
+    }
   }
 }

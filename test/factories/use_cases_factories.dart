@@ -1,3 +1,4 @@
+import 'package:vitta/app/domain/auth/use_cases/delete_account_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -101,4 +102,7 @@ abstract class UseCasesFactories {
 
   static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository}) =>
       SignOutUseCase(authRepository: authRepository ?? MockAuthRepository());
+
+  static DeleteAccountUseCase buildDeleteAccountUseCase({MockAuthRepository? authRepository}) =>
+      DeleteAccountUseCase(authRepository: authRepository ?? MockAuthRepository());
 }

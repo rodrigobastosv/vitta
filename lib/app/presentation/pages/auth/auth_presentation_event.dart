@@ -8,6 +8,8 @@ class AuthSignedIn implements AuthPresentationEvent {}
 
 class AuthProfileUpdated implements AuthPresentationEvent {}
 
+class AuthAccountDeleted implements AuthPresentationEvent {}
+
 class AuthActionFailed implements AuthPresentationEvent {
   const AuthActionFailed({required this.message});
 

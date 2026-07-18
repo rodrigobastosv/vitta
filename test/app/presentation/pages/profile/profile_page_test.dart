@@ -37,6 +37,12 @@ void main() {
     expect(find.text('Settings'), findsOneWidget);
   });
 
+  testWidgets('does not offer delete account to an anonymous user', (tester) async {
+    await pumpProfile(tester, user: const AnonymousUser());
+
+    expect(find.text('Delete account'), findsNothing);
+  });
+
   testWidgets('shows the email and a log out action when signed in', (tester) async {
     await pumpProfile(tester, user: const AuthenticatedUser(email: 'anna@example.com'));
 
@@ -44,5 +50,18 @@ void main() {
     expect(find.text('A'), findsOneWidget);
     expect(find.text('Log out'), findsOneWidget);
     expect(find.text('Sign in or create account'), findsNothing);
+  });
+
+  testWidgets('offers delete account to a signed-in user and confirms irreversibility', (tester) async {
+    await pumpProfile(tester, user: const AuthenticatedUser(email: 'anna@example.com'));
+
+    expect(find.text('Delete account'), findsOneWidget);
+
+    await tester.tap(find.text('Delete account'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Delete account?'), findsOneWidget);
+    expect(find.textContaining("can't be undone"), findsOneWidget);
+    expect(find.text('Cancel'), findsOneWidget);
   });
 }

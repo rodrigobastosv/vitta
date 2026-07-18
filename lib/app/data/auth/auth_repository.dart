@@ -33,4 +33,6 @@ class AuthRepository {
   Future<Result<VTError, void>> signOut() => _supabaseAuthDataSource.signOut();
 
   Future<Result<VTError, User>> signInAnonymously() => _supabaseAuthDataSource.signInAnonymously();
+
+  Future<Result<VTError, void>> deleteAccount() => _supabaseAuthDataSource.deleteAccount();
 }

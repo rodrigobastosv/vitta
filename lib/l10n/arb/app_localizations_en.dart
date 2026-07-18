@@ -917,6 +917,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsSubtitle => 'Language, theme and units';
 
   @override
+  String get profileDeleteAccountTitle => 'Delete account';
+
+  @override
+  String get profileDeleteAccountSubtitle => 'Permanently erase your account and data';
+
+  @override
+  String get deleteAccountDialogTitle => 'Delete account?';
+
+  @override
+  String get deleteAccountDialogMessage =>
+      'This permanently deletes your account and all of your data — meals, workouts, weight, water, sleep and everything else. This can\'t be undone.';
+
+  @override
+  String get deleteAccountConfirmAction => 'Delete account';
+
+  @override
+  String get profileAccountDeleted => 'Account deleted';
+
+  @override
+  String get profileAccountDeletedMessage => 'Your account and all of your data were permanently deleted.';
+
+  @override
   String get macroGoalsTitle => 'Macro goals';
 
   @override

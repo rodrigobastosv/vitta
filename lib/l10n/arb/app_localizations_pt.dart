@@ -919,6 +919,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileSettingsSubtitle => 'Idioma, tema e unidades';
 
   @override
+  String get profileDeleteAccountTitle => 'Excluir conta';
+
+  @override
+  String get profileDeleteAccountSubtitle => 'Apagar permanentemente sua conta e seus dados';
+
+  @override
+  String get deleteAccountDialogTitle => 'Excluir conta?';
+
+  @override
+  String get deleteAccountDialogMessage =>
+      'Isso exclui permanentemente sua conta e todos os seus dados — refeições, treinos, peso, água, sono e tudo mais. Não é possível desfazer.';
+
+  @override
+  String get deleteAccountConfirmAction => 'Excluir conta';
+
+  @override
+  String get profileAccountDeleted => 'Conta excluída';
+
+  @override
+  String get profileAccountDeletedMessage => 'Sua conta e todos os seus dados foram excluídos permanentemente.';
+
+  @override
   String get macroGoalsTitle => 'Metas de macros';
 
   @override

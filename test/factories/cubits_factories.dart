@@ -40,6 +40,7 @@ abstract class CubitsFactories {
     MockSignOutUseCase? signOutUseCase,
     MockUpdateProfileUseCase? updateProfileUseCase,
     MockUploadAvatarUseCase? uploadAvatarUseCase,
+    MockDeleteAccountUseCase? deleteAccountUseCase,
     MockImagePickerService? imagePickerService,
   }) => AuthCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
@@ -48,6 +49,7 @@ abstract class CubitsFactories {
     signOutUseCase: signOutUseCase ?? MockSignOutUseCase(),
     updateProfileUseCase: updateProfileUseCase ?? MockUpdateProfileUseCase(),
     uploadAvatarUseCase: uploadAvatarUseCase ?? MockUploadAvatarUseCase(),
+    deleteAccountUseCase: deleteAccountUseCase ?? MockDeleteAccountUseCase(),
     imagePickerService: imagePickerService ?? MockImagePickerService(),
   );
 

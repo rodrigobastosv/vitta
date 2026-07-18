@@ -307,4 +307,56 @@ void main() {
     act: (cubit) => cubit.signOut(),
     expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>()],
   );
+
+  test('logs an account_deleted user action when deleteAccount succeeds', () async {
+    final loggingService = useMockLog();
+    final getUserUseCase = MockGetUserUseCase();
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    final deleteAccountUseCase = MockDeleteAccountUseCase();
+    when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
+
+    await cubit.deleteAccount();
+
+    verify(() => loggingService.logAction('account_deleted')).called(1);
+  });
+
+  blocTest<AuthCubit, AuthState>(
+    'emits a fresh anonymous status when deleteAccount succeeds',
+    build: () {
+      final getUserUseCase = MockGetUserUseCase();
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      final deleteAccountUseCase = MockDeleteAccountUseCase();
+      when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
+    },
+    act: (cubit) => cubit.deleteAccount(),
+    expect: () => [const AuthState(user: AnonymousUser())],
+  );
+
+  blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
+    'shows loading then signals AuthAccountDeleted when deleteAccount succeeds',
+    build: () {
+      final getUserUseCase = MockGetUserUseCase();
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      final deleteAccountUseCase = MockDeleteAccountUseCase();
+      when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
+    },
+    act: (cubit) => cubit.deleteAccount(),
+    expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthAccountDeleted>()],
+  );
+
+  blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
+    'emits AuthActionFailed and no deletion signal when deleteAccount fails',
+    build: () {
+      final getUserUseCase = MockGetUserUseCase();
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      final deleteAccountUseCase = MockDeleteAccountUseCase();
+      when(deleteAccountUseCase.call).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
+    },
+    act: (cubit) => cubit.deleteAccount(),
+    expectPresentation: () => [isA<AuthShowLoading>(), isA<AuthHideLoading>(), isA<AuthActionFailed>()],
+  );
 }
