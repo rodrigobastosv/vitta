@@ -5,20 +5,31 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_profile_avatar.dart';
 import 'package:vitta/app/design_system/components/tiles/vt_feature_tile.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
-import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
+import 'package:vitta/app/presentation/pages/home/widgets/home_header.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  String _greeting(AppLocalizations l10n) {
+    final hour = DateTime.now().hour;
+    if (hour < 5 || hour >= 18) {
+      return l10n.homeGreetingEvening;
+    }
+    if (hour < 12) {
+      return l10n.homeGreetingMorning;
+    }
+    return l10n.homeGreetingAfternoon;
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = context.colorScheme;
     return VTPage<AuthCubit, AuthState, AuthPresentationEvent>(
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
@@ -61,23 +72,22 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: .start,
             children: [
-              CircleAvatar(
-                radius: 44,
-                backgroundColor: colorScheme.primaryContainer,
-                child: Icon(Icons.eco_outlined, size: 42, color: colorScheme.onPrimaryContainer),
+              HomeHeader(
+                user: state.user,
+                greeting: _greeting(l10n),
+                appTitle: l10n.appTitle,
+                tagline: l10n.homeTagline,
               ),
-              const VTGap.m(),
-              Text(l10n.appTitle, style: VTTextStyles.display(context).copyWith(fontSize: 54, letterSpacing: -2)),
-              const VTGap.xs(),
-              Text(l10n.homeTagline, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
               const VTGap.xl(),
-              GridView.count(
+              GridView(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                mainAxisSpacing: VTSpacing.m,
-                crossAxisSpacing: VTSpacing.m,
-                childAspectRatio: 0.82,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: VTSpacing.m,
+                  crossAxisSpacing: VTSpacing.m,
+                  mainAxisExtent: 180,
+                ),
                 children: [
                   VTFeatureTile(
                     icon: Icons.restaurant_outlined,
