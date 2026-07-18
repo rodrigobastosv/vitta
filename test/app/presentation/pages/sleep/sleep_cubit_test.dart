@@ -156,6 +156,80 @@ void main() {
     expect(cubit.state.logs, isNotEmpty);
   });
 
+  test('onInit auto-syncs new nights from Health without prompting for permission', () async {
+    useMockLog();
+    final healthService = MockHealthService();
+    when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
+      (_) async => [
+        HealthSleepSession(start: DateTime(2026, 7, 10, 23), end: DateTime(2026, 7, 11, 6, 30), externalId: 'ext-1'),
+      ],
+    );
+    final importSleepFromHealthUseCase = MockImportSleepFromHealthUseCase();
+    when(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).thenAnswer((_) async => const Success(1));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([SleepLogFactory.build()]));
+    final cubit = CubitsFactories.buildSleepCubit(
+      healthService: healthService,
+      importSleepFromHealthUseCase: importSleepFromHealthUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+    );
+    final events = <SleepPresentationEvent>[];
+    final subscription = cubit.presentation.listen(events.add);
+
+    cubit.onInit();
+    await pumpEventQueue();
+    await subscription.cancel();
+
+    verify(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).called(1);
+    verifyNever(healthService.requestSleepAuthorization);
+    expect(events.whereType<SleepImported>(), isNotEmpty);
+    expect(cubit.state.logs, isNotEmpty);
+  });
+
+  test('onInit auto-sync stays silent when Health has no new nights', () async {
+    useMockLog();
+    final healthService = MockHealthService();
+    when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => []);
+    final importSleepFromHealthUseCase = MockImportSleepFromHealthUseCase();
+    when(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).thenAnswer((_) async => const Success(0));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildSleepCubit(
+      healthService: healthService,
+      importSleepFromHealthUseCase: importSleepFromHealthUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+    );
+    final events = <SleepPresentationEvent>[];
+    final subscription = cubit.presentation.listen(events.add);
+
+    cubit.onInit();
+    await pumpEventQueue();
+    await subscription.cancel();
+
+    expect(events.whereType<SleepImported>(), isEmpty);
+    expect(events.whereType<SleepError>(), isEmpty);
+  });
+
+  test('onInit auto-sync swallows a Health read failure without an error toast', () async {
+    final healthService = MockHealthService();
+    when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenThrow(Exception('healthkit blew up'));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([SleepLogFactory.build()]));
+    final cubit = CubitsFactories.buildSleepCubit(healthService: healthService, getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
+    final events = <SleepPresentationEvent>[];
+    final subscription = cubit.presentation.listen(events.add);
+
+    cubit.onInit();
+    await pumpEventQueue();
+    await subscription.cancel();
+
+    expect(events.whereType<SleepError>(), isEmpty);
+    expect(cubit.state.logs, isNotEmpty);
+  });
+
   blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
     'importFromHealth reports when the health platform is unavailable',
     build: () {

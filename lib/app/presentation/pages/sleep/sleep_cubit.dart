@@ -1,3 +1,5 @@
+import 'package:vitta/app/core/error/result.dart';
+import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/health/health_service.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_import.dart';
@@ -38,7 +40,12 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   static const _importWindowDays = 30;
 
   @override
-  void onInit() => loadRecent();
+  void onInit() => _loadThenSync();
+
+  Future<void> _loadThenSync() async {
+    await loadRecent();
+    await _autoSyncFromHealth();
+  }
 
   Future<void> loadRecent() async {
     emitPresentation(SleepShowLoading());
@@ -79,10 +86,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
         emitPresentation(SleepHealthPermissionDenied());
         return;
       }
-      final to = DateTime.now();
-      final sessions = await _healthService.readSleepSessions(from: to.subtract(const Duration(days: _importWindowDays)), to: to);
-      final imports = [for (final session in sessions) SleepImport(start: session.start, end: session.end, externalId: session.externalId)];
-      final importedResult = await _importSleepFromHealthUseCase(imports: imports);
+      final importedResult = await _readAndImportFromHealth();
       await importedResult.when((error) => Future.sync(() => emitPresentation(SleepError(message: error.message))), (count) {
         Log.action('sleep_imported_from_health', data: {'count': count});
         emitPresentation(SleepImported(count: count));
@@ -93,6 +97,39 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     } finally {
       emitPresentation(SleepHideLoading());
     }
+  }
+
+  // Best-effort sync run whenever the page opens, so recorded nights show up
+  // without tapping the button. Deliberately silent: no loading overlay, no
+  // permission prompt (an unauthorized read just comes back empty on iOS and
+  // throws-then-swallowed on Android), and no error toast — the manual button
+  // stays the path that grants permission and surfaces failures. Only a sync
+  // that actually pulled in new nights announces itself.
+  Future<void> _autoSyncFromHealth() async {
+    try {
+      if (!await _healthService.isAvailable()) {
+        return;
+      }
+      final importedResult = await _readAndImportFromHealth();
+      await importedResult.when((_) => Future<void>.value(), (count) async {
+        if (count == 0) {
+          return;
+        }
+        Log.action('sleep_imported_from_health', data: {'count': count, 'auto': true});
+        emitPresentation(SleepImported(count: count));
+        await loadRecent();
+      });
+    } on Exception {
+      // An unavailable or unauthorized health platform must never interrupt the
+      // page it opened onto — the manual sync button is where failures surface.
+    }
+  }
+
+  Future<Result<VTError, int>> _readAndImportFromHealth() async {
+    final to = DateTime.now();
+    final sessions = await _healthService.readSleepSessions(from: to.subtract(const Duration(days: _importWindowDays)), to: to);
+    final imports = [for (final session in sessions) SleepImport(start: session.start, end: session.end, externalId: session.externalId)];
+    return _importSleepFromHealthUseCase(imports: imports);
   }
 
   Future<void> seedSampleSleepForDebug() async {
