@@ -38,6 +38,7 @@ import 'package:vitta/app/data/workout/datasources/supabase/supabase_exercise_da
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
 import 'package:vitta/app/data/workout/workout_repository.dart';
+import 'package:vitta/app/domain/auth/use_cases/delete_account_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -265,6 +266,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SignOutUseCase(authRepository: G()));
   G.registerFactory(() => UpdateProfileUseCase(authRepository: G()));
   G.registerFactory(() => UploadAvatarUseCase(authRepository: G()));
+  G.registerFactory(() => DeleteAccountUseCase(authRepository: G()));
 
   G.registerFactory(
     () => DietCubit(
@@ -345,6 +347,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       signOutUseCase: G(),
       updateProfileUseCase: G(),
       uploadAvatarUseCase: G(),
+      deleteAccountUseCase: G(),
       imagePickerService: G(),
     ),
   );

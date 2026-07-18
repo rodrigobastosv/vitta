@@ -31,6 +31,8 @@ class SignUpPage extends StatelessWidget {
             Navigator.of(context).pop(true);
           case AuthProfileUpdated():
             break;
+          case AuthAccountDeleted():
+            break;
         }
       },
       builder: (context, cubit, state) => Scaffold(

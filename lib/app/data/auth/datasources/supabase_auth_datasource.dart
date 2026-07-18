@@ -105,4 +105,13 @@ class SupabaseAuthDataSource {
       return Failure(VTError(message: 'Failed to sign in anonymously', cause: error));
     }
   }
+
+  Future<Result<VTError, void>> deleteAccount() async {
+    try {
+      await _supabaseService.invoke(.deleteAccount, body: const {});
+      return const Success(null);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to delete account', cause: error));
+    }
+  }
 }

@@ -1688,6 +1688,48 @@ abstract class AppLocalizations {
   /// **'Language, theme and units'**
   String get profileSettingsSubtitle;
 
+  /// No description provided for @profileDeleteAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get profileDeleteAccountTitle;
+
+  /// No description provided for @profileDeleteAccountSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Permanently erase your account and data'**
+  String get profileDeleteAccountSubtitle;
+
+  /// No description provided for @deleteAccountDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account?'**
+  String get deleteAccountDialogTitle;
+
+  /// No description provided for @deleteAccountDialogMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This permanently deletes your account and all of your data — meals, workouts, weight, water, sleep and everything else. This can\'t be undone.'**
+  String get deleteAccountDialogMessage;
+
+  /// No description provided for @deleteAccountConfirmAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountConfirmAction;
+
+  /// No description provided for @profileAccountDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Account deleted'**
+  String get profileAccountDeleted;
+
+  /// No description provided for @profileAccountDeletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account and all of your data were permanently deleted.'**
+  String get profileAccountDeletedMessage;
+
   /// No description provided for @macroGoalsTitle.
   ///
   /// In en, this message translates to:

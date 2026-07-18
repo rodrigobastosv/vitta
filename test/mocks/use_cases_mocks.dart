@@ -1,4 +1,5 @@
 import 'package:mocktail/mocktail.dart';
+import 'package:vitta/app/domain/auth/use_cases/delete_account_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_in_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
@@ -133,6 +134,8 @@ class MockSignOutUseCase extends Mock implements SignOutUseCase {}
 class MockUpdateProfileUseCase extends Mock implements UpdateProfileUseCase {}
 
 class MockUploadAvatarUseCase extends Mock implements UploadAvatarUseCase {}
+
+class MockDeleteAccountUseCase extends Mock implements DeleteAccountUseCase {}
 
 class MockGetFavoriteFoodsUseCase extends Mock implements GetFavoriteFoodsUseCase {}
 
