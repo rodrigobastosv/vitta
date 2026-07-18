@@ -15,6 +15,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeTagline => 'Seu companheiro de dieta e treino.';
 
   @override
+  String get homeGreetingMorning => 'Bom dia';
+
+  @override
+  String get homeGreetingAfternoon => 'Boa tarde';
+
+  @override
+  String get homeGreetingEvening => 'Boa noite';
+
+  @override
   String get dietFeatureTitle => 'Dieta';
 
   @override
