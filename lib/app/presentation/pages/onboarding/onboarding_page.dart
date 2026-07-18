@@ -65,7 +65,6 @@ class OnboardingPage extends StatelessWidget {
                     child: Text(l10n.authHasAccountAction),
                   ),
                 ),
-                const VTGap.s(),
                 SizedBox(
                   width: double.infinity,
                   child: TextButton(
