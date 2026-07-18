@@ -411,6 +411,17 @@
   "sleepGoalMetric": "Meta",
   "sleepAverageMetric": "Média",
   "sleepNightsMetric": "Noites",
+  "sleepSyncedTitle": "Sono sincronizado",
+  "sleepSyncTooltip": "Sincronizar do app de saúde",
+  "sleepSyncDebugTooltip": "Inserir sono de exemplo (debug)",
+  "sleepImportedMessage": "{count, plural, =0{Nada novo para importar} =1{1 noite importada} other{{count} noites importadas}}",
+  "@sleepImportedMessage": {
+    "placeholders": {
+      "count": {"type": "int"}
+    }
+  },
+  "sleepHealthUnavailableMessage": "Os dados de sono não estão disponíveis neste dispositivo. Configure o Health Connect (Android) ou a Apple Saúde (iOS) primeiro.",
+  "sleepHealthPermissionDeniedMessage": "A permissão de sono foi negada. Conceda-a para importar suas noites.",
   "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
   "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",

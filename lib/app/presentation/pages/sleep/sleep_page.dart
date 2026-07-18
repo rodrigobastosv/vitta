@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
@@ -22,6 +23,7 @@ class SleepPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => VTPage<SleepCubit, SleepState, SleepPresentationEvent>(
     onPresentation: (context, event) {
+      final l10n = context.l10n;
       switch (event) {
         case SleepShowLoading():
           context.showLoading();
@@ -29,6 +31,12 @@ class SleepPage extends StatelessWidget {
           context.hideLoading();
         case SleepError(:final message):
           context.showErrorToast(message: message, onRetry: context.read<SleepCubit>().loadRecent);
+        case SleepImported(:final count):
+          context.showToast(title: l10n.sleepSyncedTitle, message: l10n.sleepImportedMessage(count));
+        case SleepHealthUnavailable():
+          context.showWarningToast(message: l10n.sleepHealthUnavailableMessage);
+        case SleepHealthPermissionDenied():
+          context.showWarningToast(message: l10n.sleepHealthPermissionDeniedMessage);
       }
     },
     builder: (context, cubit, state) {
@@ -37,6 +45,17 @@ class SleepPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.sleepFeatureTitle),
           actions: [
+            if (kDebugMode)
+              IconButton(
+                icon: const Icon(Icons.bug_report_outlined),
+                tooltip: l10n.sleepSyncDebugTooltip,
+                onPressed: cubit.seedSampleSleepForDebug,
+              ),
+            IconButton(
+              icon: const Icon(Icons.sync),
+              tooltip: l10n.sleepSyncTooltip,
+              onPressed: cubit.importFromHealth,
+            ),
             IconButton(
               icon: const Icon(Icons.calendar_month_outlined),
               tooltip: l10n.sleepHistoryTitle,

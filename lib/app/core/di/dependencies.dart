@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
+import 'package:vitta/app/core/services/health/health_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/logging/console_log_destination.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
@@ -73,6 +74,7 @@ import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart'
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
@@ -140,6 +142,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
 
   G.registerLazySingleton(() => supabaseService);
   G.registerLazySingleton(ImagePickerService.new);
+  G.registerLazySingleton(HealthService.new);
   Log.service = LoggingService(destinations: const [ConsoleLogDestination(), SentryLogDestination()]);
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
@@ -216,6 +219,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
+  G.registerFactory(() => ImportSleepFromHealthUseCase(sleepRepository: G()));
   G.registerFactory(() => SearchExercisesUseCase(workoutRepository: G()));
   G.registerFactory(() => GetWorkoutsForDateUseCase(workoutRepository: G()));
   G.registerFactory(() => AddExerciseToWorkoutUseCase(workoutRepository: G()));
@@ -345,6 +349,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       deleteSleepLogUseCase: G(),
       getSleepGoalUseCase: G(),
       saveSleepGoalUseCase: G(),
+      importSleepFromHealthUseCase: G(),
+      healthService: G(),
     ),
   );
 }

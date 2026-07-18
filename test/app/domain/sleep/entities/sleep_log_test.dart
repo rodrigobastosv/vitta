@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
+import 'package:vitta/app/domain/sleep/entities/sleep_log_source.dart';
 
 import '../../../../factories/entities/sleep_log_factory.dart';
 
@@ -24,6 +25,22 @@ void main() {
     expect(sleepLog.bedTime, DateTime.parse('2026-07-10T22:30:00.000Z').toLocal());
     expect(sleepLog.wakeTime, DateTime.parse('2026-07-11T06:45:00.000Z').toLocal());
     expect(sleepLog.qualityRating, 4);
+    expect(sleepLog.source, SleepLogSource.manual);
+  });
+
+  test('fromMap reads the source and defaults to manual when absent', () {
+    SleepLog rowWith(String? source) => SleepLog.fromMap({
+      'id': 'sleep-1',
+      'logged_date': '2026-07-11',
+      'bed_time': '2026-07-10T22:30:00.000Z',
+      'wake_time': '2026-07-11T06:45:00.000Z',
+      'quality_rating': null,
+      'source': source,
+    });
+
+    expect(rowWith('health').source, SleepLogSource.health);
+    expect(rowWith('manual').source, SleepLogSource.manual);
+    expect(rowWith(null).source, SleepLogSource.manual);
   });
 
   test('fromMap handles a null quality rating', () {

@@ -190,12 +190,16 @@ abstract class CubitsFactories {
     MockDeleteSleepLogUseCase? deleteSleepLogUseCase,
     MockGetSleepGoalUseCase? getSleepGoalUseCase,
     MockSaveSleepGoalUseCase? saveSleepGoalUseCase,
+    MockImportSleepFromHealthUseCase? importSleepFromHealthUseCase,
+    MockHealthService? healthService,
   }) => SleepCubit(
     getRecentSleepLogsUseCase: getRecentSleepLogsUseCase ?? MockGetRecentSleepLogsUseCase(),
     logSleepUseCase: logSleepUseCase ?? MockLogSleepUseCase(),
     deleteSleepLogUseCase: deleteSleepLogUseCase ?? MockDeleteSleepLogUseCase(),
     getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
     saveSleepGoalUseCase: saveSleepGoalUseCase ?? MockSaveSleepGoalUseCase(),
+    importSleepFromHealthUseCase: importSleepFromHealthUseCase ?? MockImportSleepFromHealthUseCase(),
+    healthService: healthService ?? MockHealthService(),
   );
 
   static WorkoutCubit buildWorkoutCubit({

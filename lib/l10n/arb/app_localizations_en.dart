@@ -802,6 +802,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepNightsMetric => 'Nights';
 
   @override
+  String get sleepSyncedTitle => 'Sleep synced';
+
+  @override
+  String get sleepSyncTooltip => 'Sync from health app';
+
+  @override
+  String get sleepSyncDebugTooltip => 'Insert sample sleep (debug)';
+
+  @override
+  String sleepImportedMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count nights imported',
+      one: '1 night imported',
+      zero: 'No new sleep to import',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sleepHealthUnavailableMessage =>
+      'Sleep data isn\'t available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.';
+
+  @override
+  String get sleepHealthPermissionDeniedMessage => 'Sleep permission was denied. Grant it to import your nights.';
+
+  @override
   String get onboardingWelcomeTitle => 'Welcome to Vitta';
 
   @override

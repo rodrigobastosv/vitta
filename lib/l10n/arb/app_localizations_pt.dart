@@ -803,6 +803,34 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sleepNightsMetric => 'Noites';
 
   @override
+  String get sleepSyncedTitle => 'Sono sincronizado';
+
+  @override
+  String get sleepSyncTooltip => 'Sincronizar do app de saúde';
+
+  @override
+  String get sleepSyncDebugTooltip => 'Inserir sono de exemplo (debug)';
+
+  @override
+  String sleepImportedMessage(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count noites importadas',
+      one: '1 noite importada',
+      zero: 'Nada novo para importar',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get sleepHealthUnavailableMessage =>
+      'Os dados de sono não estão disponíveis neste dispositivo. Configure o Health Connect (Android) ou a Apple Saúde (iOS) primeiro.';
+
+  @override
+  String get sleepHealthPermissionDeniedMessage => 'A permissão de sono foi negada. Conceda-a para importar suas noites.';
+
+  @override
   String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
 
   @override

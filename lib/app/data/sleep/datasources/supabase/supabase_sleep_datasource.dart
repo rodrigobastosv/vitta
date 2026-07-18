@@ -2,7 +2,9 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/data/sleep/datasources/supabase/requests/create_sleep_log_request.dart';
+import 'package:vitta/app/domain/sleep/entities/sleep_import.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
+import 'package:vitta/app/domain/sleep/entities/sleep_log_source.dart';
 
 class SupabaseSleepDataSource {
   SupabaseSleepDataSource({required this._supabaseService});
@@ -52,6 +54,34 @@ class SupabaseSleepDataSource {
       return Success(rows.map(SleepLog.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load recent sleep logs', cause: error));
+    }
+  }
+
+  Future<Result<VTError, int>> importSleepLogs({required List<SleepImport> imports}) async {
+    if (imports.isEmpty) {
+      return const Success(0);
+    }
+    try {
+      final userId = _supabaseService.currentUserId;
+      final rows = [
+        for (final import in imports)
+          CreateSleepLogRequest(
+            userId: userId,
+            bedTime: import.start,
+            wakeTime: import.end,
+            source: SleepLogSource.health,
+            externalId: import.externalId,
+          ).toJson(),
+      ];
+      // ignoreDuplicates so a re-sync skips nights already imported (deduped on the
+      // user_id + external_id unique index); .select() then returns only the new rows.
+      final inserted = await _supabaseService
+          .from(.sleepLogs)
+          .upsert(rows, onConflict: 'user_id,external_id', ignoreDuplicates: true)
+          .select();
+      return Success(inserted.length);
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to import sleep logs', cause: error));
     }
   }
 

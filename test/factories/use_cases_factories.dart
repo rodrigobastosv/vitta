@@ -18,6 +18,7 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/settings/use_cases/save_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
@@ -79,6 +80,9 @@ abstract class UseCasesFactories {
 
   static DeleteSleepLogUseCase buildDeleteSleepLogUseCase({MockSleepRepository? sleepRepository}) =>
       DeleteSleepLogUseCase(sleepRepository: sleepRepository ?? MockSleepRepository());
+
+  static ImportSleepFromHealthUseCase buildImportSleepFromHealthUseCase({MockSleepRepository? sleepRepository}) =>
+      ImportSleepFromHealthUseCase(sleepRepository: sleepRepository ?? MockSleepRepository());
 
   static CompleteOnboardingUseCase buildCompleteOnboardingUseCase({MockOnboardingRepository? onboardingRepository}) =>
       CompleteOnboardingUseCase(onboardingRepository: onboardingRepository ?? MockOnboardingRepository());

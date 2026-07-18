@@ -157,11 +157,32 @@ create table if not exists sleep_logs (
   bed_time timestamptz not null,
   wake_time timestamptz not null,
   quality_rating smallint check (quality_rating between 1 and 5),
+  -- 'manual' is a night typed in the app; 'health' was imported from the device
+  -- health platform (Health Connect / HealthKit). external_id is the health
+  -- record's own id, so a re-sync upserts the same night instead of duplicating
+  -- it (see the unique index below). Nulls are allowed for manual rows.
+  source text not null default 'manual' check (source in ('manual', 'health')),
+  external_id text,
   created_at timestamptz not null default now(),
   constraint sleep_logs_wake_after_bed check (wake_time > bed_time)
 );
 
+-- Bring existing databases up to date (the create table above only runs on a fresh db).
+alter table sleep_logs add column if not exists source text not null default 'manual' check (source in ('manual', 'health'));
+alter table sleep_logs add column if not exists external_id text;
+
 create index if not exists sleep_logs_user_id_logged_date_idx on sleep_logs (user_id, logged_date);
+
+-- Idempotent imports: a given health record maps to at most one row per user, so
+-- re-syncing the same nights upserts (on user_id, external_id) rather than duplicating.
+-- A plain (non-partial) unique index, not one qualified with `where external_id is
+-- not null`: Postgres already treats every NULL as distinct, so manual rows (null
+-- external_id) never collide, and a partial index can't be inferred by the upsert's
+-- bare `on conflict (user_id, external_id)` (PostgREST can't emit the predicate),
+-- which fails with 42P10 — the same reasoning as foods_barcode_unique_idx above.
+drop index if exists sleep_logs_user_id_external_id_key;
+create unique index if not exists sleep_logs_user_id_external_id_key
+  on sleep_logs (user_id, external_id);
 
 -- A recipe is a set of foods eaten together. It owns no macros of its own: the
 -- foods row it points at (source = 'recipe') carries the rolled-up per-100g

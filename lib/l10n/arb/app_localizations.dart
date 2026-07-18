@@ -1484,6 +1484,42 @@ abstract class AppLocalizations {
   /// **'Nights'**
   String get sleepNightsMetric;
 
+  /// No description provided for @sleepSyncedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep synced'**
+  String get sleepSyncedTitle;
+
+  /// No description provided for @sleepSyncTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync from health app'**
+  String get sleepSyncTooltip;
+
+  /// No description provided for @sleepSyncDebugTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert sample sleep (debug)'**
+  String get sleepSyncDebugTooltip;
+
+  /// No description provided for @sleepImportedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No new sleep to import} =1{1 night imported} other{{count} nights imported}}'**
+  String sleepImportedMessage(int count);
+
+  /// No description provided for @sleepHealthUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep data isn\'t available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.'**
+  String get sleepHealthUnavailableMessage;
+
+  /// No description provided for @sleepHealthPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep permission was denied. Grant it to import your nights.'**
+  String get sleepHealthPermissionDeniedMessage;
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:
