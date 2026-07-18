@@ -12,3 +12,8 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
+# ...except the debug keystore, which is committed on purpose so Firebase App
+# Distribution builds share one stable signature (public `android` password,
+# nothing secret). See android/app/build.gradle.kts and
+# docs/firebase-distribution-setup.md.
+!/app/debug.keystore
