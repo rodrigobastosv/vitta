@@ -337,9 +337,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get chooseFromGalleryAction => 'Choose from gallery';
 
   @override
-  String get dietContinueAction => 'Continue';
-
-  @override
   String get dietScanLabelAction => 'Scan nutrition label';
 
   @override

@@ -338,9 +338,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get chooseFromGalleryAction => 'Escolher da galeria';
 
   @override
-  String get dietContinueAction => 'Continuar';
-
-  @override
   String get dietScanLabelAction => 'Escanear tabela nutricional';
 
   @override

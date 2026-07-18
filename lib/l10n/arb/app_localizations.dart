@@ -698,12 +698,6 @@ abstract class AppLocalizations {
   /// **'Choose from gallery'**
   String get chooseFromGalleryAction;
 
-  /// No description provided for @dietContinueAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue'**
-  String get dietContinueAction;
-
   /// No description provided for @dietScanLabelAction.
   ///
   /// In en, this message translates to:

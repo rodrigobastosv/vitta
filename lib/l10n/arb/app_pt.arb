@@ -161,7 +161,6 @@
   "nutrientZinc": "Zinco",
   "takePhotoAction": "Tirar foto",
   "chooseFromGalleryAction": "Escolher da galeria",
-  "dietContinueAction": "Continuar",
   "dietScanLabelAction": "Escanear tabela nutricional",
   "dietNutritionScanNoDataTitle": "Não deu para ler a tabela",
   "dietNutritionScanNoData": "Preencha os valores manualmente, ou tente outra foto.",
