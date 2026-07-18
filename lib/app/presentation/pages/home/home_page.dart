@@ -62,12 +62,12 @@ class HomePage extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               CircleAvatar(
-                radius: 32,
+                radius: 44,
                 backgroundColor: colorScheme.primaryContainer,
-                child: Icon(Icons.eco_outlined, size: 32, color: colorScheme.onPrimaryContainer),
+                child: Icon(Icons.eco_outlined, size: 42, color: colorScheme.onPrimaryContainer),
               ),
               const VTGap.m(),
-              Text(l10n.appTitle, style: VTTextStyles.display(context)),
+              Text(l10n.appTitle, style: VTTextStyles.display(context).copyWith(fontSize: 54, letterSpacing: -2)),
               const VTGap.xs(),
               Text(l10n.homeTagline, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
               const VTGap.xl(),
@@ -77,7 +77,7 @@ class HomePage extends StatelessWidget {
                 crossAxisCount: 2,
                 mainAxisSpacing: VTSpacing.m,
                 crossAxisSpacing: VTSpacing.m,
-                childAspectRatio: 1.1,
+                childAspectRatio: 0.82,
                 children: [
                   VTFeatureTile(
                     icon: Icons.restaurant_outlined,

@@ -55,13 +55,13 @@ abstract class VTTheme {
   );
 
   static ThemeData _buildTheme(ColorScheme colorScheme) {
-    final textTheme = GoogleFonts.interTextTheme().copyWith(
-      displayLarge: GoogleFonts.poppins(fontWeight: .w700),
-      displayMedium: GoogleFonts.poppins(fontWeight: .w700),
-      headlineLarge: GoogleFonts.poppins(fontWeight: .w700),
-      headlineMedium: GoogleFonts.poppins(fontWeight: .w700),
-      titleLarge: GoogleFonts.poppins(fontWeight: .w600),
-      titleMedium: GoogleFonts.poppins(fontWeight: .w600),
+    final textTheme = GoogleFonts.archivoTextTheme().copyWith(
+      displayLarge: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -1),
+      displayMedium: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -0.5),
+      headlineLarge: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -0.5),
+      headlineMedium: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -0.5),
+      titleLarge: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -0.2),
+      titleMedium: GoogleFonts.archivo(fontWeight: .w800, letterSpacing: -0.2),
     );
 
     return ThemeData(
@@ -74,12 +74,17 @@ abstract class VTTheme {
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.poppins(fontSize: 22, fontWeight: .w700, color: colorScheme.onSurface),
+        titleTextStyle: GoogleFonts.archivo(
+          fontSize: 22,
+          fontWeight: .w800,
+          letterSpacing: -0.5,
+          color: colorScheme.onSurface,
+        ),
       ),
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerHighest,
         elevation: 0,
-        shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusM),
+        shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusL),
         margin: EdgeInsets.zero,
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -97,18 +102,19 @@ abstract class VTTheme {
         style: ElevatedButton.styleFrom(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusM),
-          textStyle: GoogleFonts.inter(fontSize: 16, fontWeight: .w700),
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusFull),
+          textStyle: GoogleFonts.archivo(fontSize: 15, fontWeight: .w800, letterSpacing: -0.2),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: colorScheme.primary,
           side: BorderSide(color: colorScheme.outline),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-          shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusM),
-          textStyle: GoogleFonts.inter(fontSize: 16, fontWeight: .w700),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          shape: const RoundedRectangleBorder(borderRadius: VTRadius.borderRadiusFull),
+          textStyle: GoogleFonts.archivo(fontSize: 15, fontWeight: .w800, letterSpacing: -0.2),
         ),
       ),
     );
