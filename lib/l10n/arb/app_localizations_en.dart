@@ -439,6 +439,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietNutritionScanNoData => 'Enter the values manually, or try another photo.';
 
   @override
+  String get mealScanTitle => 'Scan a meal';
+
+  @override
+  String get mealScanIntroTitle => 'Snap your meal';
+
+  @override
+  String get mealScanIntroMessage => 'Take a photo of your plate and we identify the items and estimate their macros for you.';
+
+  @override
+  String get mealScanTakePhotoAction => 'Take a photo';
+
+  @override
+  String get mealScanRetakeAction => 'Try another photo';
+
+  @override
+  String get mealScanNoDataTitle => 'No food detected';
+
+  @override
+  String get mealScanNoData => 'We couldn\'t spot any food in that photo. Try another one with a clearer view of the plate.';
+
+  @override
+  String get mealScanItemsTitle => 'Detected items';
+
+  @override
+  String get mealScanItemsSubtitle => 'Adjust the amounts, untick anything you don\'t want, then add it to your day.';
+
+  @override
+  String get mealScanMealTypeTitle => 'Add to meal';
+
+  @override
+  String get mealScanLogAction => 'Add to diary';
+
+  @override
+  String get mealScanIncomplete => 'Pick at least one item with a valid amount.';
+
+  @override
+  String get mealScanLoggedTitle => 'Meal added';
+
+  @override
+  String get mealScanLoggedMessage => 'The detected items were logged to your day.';
+
+  @override
   String dietCaloriesPer100g(int calories) {
     return '$calories kcal / 100g';
   }

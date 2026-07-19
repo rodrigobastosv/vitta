@@ -902,6 +902,90 @@ abstract class AppLocalizations {
   /// **'Enter the values manually, or try another photo.'**
   String get dietNutritionScanNoData;
 
+  /// No description provided for @mealScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan a meal'**
+  String get mealScanTitle;
+
+  /// No description provided for @mealScanIntroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Snap your meal'**
+  String get mealScanIntroTitle;
+
+  /// No description provided for @mealScanIntroMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo of your plate and we identify the items and estimate their macros for you.'**
+  String get mealScanIntroMessage;
+
+  /// No description provided for @mealScanTakePhotoAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get mealScanTakePhotoAction;
+
+  /// No description provided for @mealScanRetakeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Try another photo'**
+  String get mealScanRetakeAction;
+
+  /// No description provided for @mealScanNoDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No food detected'**
+  String get mealScanNoDataTitle;
+
+  /// No description provided for @mealScanNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t spot any food in that photo. Try another one with a clearer view of the plate.'**
+  String get mealScanNoData;
+
+  /// No description provided for @mealScanItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Detected items'**
+  String get mealScanItemsTitle;
+
+  /// No description provided for @mealScanItemsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust the amounts, untick anything you don\'t want, then add it to your day.'**
+  String get mealScanItemsSubtitle;
+
+  /// No description provided for @mealScanMealTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to meal'**
+  String get mealScanMealTypeTitle;
+
+  /// No description provided for @mealScanLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to diary'**
+  String get mealScanLogAction;
+
+  /// No description provided for @mealScanIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one item with a valid amount.'**
+  String get mealScanIncomplete;
+
+  /// No description provided for @mealScanLoggedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal added'**
+  String get mealScanLoggedTitle;
+
+  /// No description provided for @mealScanLoggedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The detected items were logged to your day.'**
+  String get mealScanLoggedMessage;
+
   /// No description provided for @dietCaloriesPer100g.
   ///
   /// In en, this message translates to:

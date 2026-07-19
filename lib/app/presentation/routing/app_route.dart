@@ -4,6 +4,7 @@ enum AppRoute {
   diet('/diet'),
   dietIntro('/diet/intro'),
   dietCopy('/diet/copy'),
+  mealScan('/diet/meal-scan'),
   dietHistory('/diet/history'),
   dietDay('/diet/history/day'),
   recipes('/diet/recipes'),

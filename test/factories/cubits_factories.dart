@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dar
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
+import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
@@ -135,6 +136,18 @@ abstract class CubitsFactories {
     uploadFoodImageUseCase: uploadFoodImageUseCase ?? MockUploadFoodImageUseCase(),
     scanNutritionLabelUseCase: scanNutritionLabelUseCase ?? MockScanNutritionLabelUseCase(),
     imagePickerService: imagePickerService ?? MockImagePickerService(),
+  );
+
+  static MealScanCubit buildMealScanCubit({
+    MockScanMealUseCase? scanMealUseCase,
+    MockLogScannedMealUseCase? logScannedMealUseCase,
+    MockImagePickerService? imagePickerService,
+    DateTime? loggedDate,
+  }) => MealScanCubit(
+    scanMealUseCase: scanMealUseCase ?? MockScanMealUseCase(),
+    logScannedMealUseCase: logScannedMealUseCase ?? MockLogScannedMealUseCase(),
+    imagePickerService: imagePickerService ?? MockImagePickerService(),
+    loggedDate: loggedDate ?? DateTime(2026, 7, 19),
   );
 
   static RecipesCubit buildRecipesCubit({MockGetRecipesUseCase? getRecipesUseCase, MockDeleteRecipeUseCase? deleteRecipeUseCase}) =>

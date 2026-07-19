@@ -8,6 +8,7 @@ import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasourc
 import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
@@ -18,6 +19,7 @@ import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
+import 'package:vitta/app/domain/diet/entities/scanned_meal.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 
 class DietRepository {
@@ -27,6 +29,7 @@ class DietRepository {
     required this._dietGoalsLocalDataSource,
     required this._recentSearchesLocalDataSource,
     required this._supabaseFoodFavoritesDataSource,
+    required this._supabaseMealScanDataSource,
     required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
     required this._dietIntroLocalDataSource,
@@ -37,6 +40,7 @@ class DietRepository {
   final DietGoalsLocalDataSource _dietGoalsLocalDataSource;
   final RecentSearchesLocalDataSource _recentSearchesLocalDataSource;
   final SupabaseFoodFavoritesDataSource _supabaseFoodFavoritesDataSource;
+  final SupabaseMealScanDataSource _supabaseMealScanDataSource;
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
   final DietIntroLocalDataSource _dietIntroLocalDataSource;
@@ -171,4 +175,7 @@ class DietRepository {
 
   Future<Result<VTError, ScannedNutritionFacts>> scanNutritionLabel({required String imagePath}) =>
       _supabaseNutritionScanDataSource.scanLabel(imagePath: imagePath);
+
+  Future<Result<VTError, ScannedMeal>> scanMeal({required String imagePath}) =>
+      _supabaseMealScanDataSource.scanMeal(imagePath: imagePath);
 }
