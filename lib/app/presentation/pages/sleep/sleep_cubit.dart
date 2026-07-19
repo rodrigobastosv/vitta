@@ -100,14 +100,18 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   }
 
   // Best-effort sync run whenever the page opens, so recorded nights show up
-  // without tapping the button. Deliberately silent: no loading overlay, no
-  // permission prompt (an unauthorized read just comes back empty on iOS and
-  // throws-then-swallowed on Android), and no error toast — the manual button
-  // stays the path that grants permission and surfaces failures. Only a sync
-  // that actually pulled in new nights announces itself.
+  // without tapping the button. Requests health authorization here — not only
+  // when the sync button is tapped (issue #150) — so the OS permission prompt
+  // appears the first time the sleep page is opened. Still deliberately quiet
+  // otherwise: no loading overlay, and no error toast on an unavailable platform
+  // or a denied prompt — the manual button stays the path that surfaces
+  // failures. Only a sync that actually pulled in new nights announces itself.
   Future<void> _autoSyncFromHealth() async {
     try {
       if (!await _healthService.isAvailable()) {
+        return;
+      }
+      if (!await _healthService.requestSleepAuthorization()) {
         return;
       }
       final importedResult = await _readAndImportFromHealth();

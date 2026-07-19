@@ -156,10 +156,11 @@ void main() {
     expect(cubit.state.logs, isNotEmpty);
   });
 
-  test('onInit auto-syncs new nights from Health without prompting for permission', () async {
+  test('onInit requests permission on open then imports new nights from Health', () async {
     useMockLog();
     final healthService = MockHealthService();
     when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(healthService.requestSleepAuthorization).thenAnswer((_) async => true);
     when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
       (_) async => [
         HealthSleepSession(start: DateTime(2026, 7, 10, 23), end: DateTime(2026, 7, 11, 6, 30), externalId: 'ext-1'),
@@ -181,16 +182,45 @@ void main() {
     await pumpEventQueue();
     await subscription.cancel();
 
+    verify(healthService.requestSleepAuthorization).called(1);
     verify(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).called(1);
-    verifyNever(healthService.requestSleepAuthorization);
     expect(events.whereType<SleepImported>(), isNotEmpty);
     expect(cubit.state.logs, isNotEmpty);
+  });
+
+  test('onInit stays silent and imports nothing when permission is denied on open', () async {
+    useMockLog();
+    final healthService = MockHealthService();
+    when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(healthService.requestSleepAuthorization).thenAnswer((_) async => false);
+    final importSleepFromHealthUseCase = MockImportSleepFromHealthUseCase();
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildSleepCubit(
+      healthService: healthService,
+      importSleepFromHealthUseCase: importSleepFromHealthUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+    );
+    final events = <SleepPresentationEvent>[];
+    final subscription = cubit.presentation.listen(events.add);
+
+    cubit.onInit();
+    await pumpEventQueue();
+    await subscription.cancel();
+
+    verify(healthService.requestSleepAuthorization).called(1);
+    verifyNever(() => importSleepFromHealthUseCase(imports: any(named: 'imports')));
+    verifyNever(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to')));
+    expect(events.whereType<SleepImported>(), isEmpty);
+    expect(events.whereType<SleepError>(), isEmpty);
+    expect(events.whereType<SleepHealthPermissionDenied>(), isEmpty);
   });
 
   test('onInit auto-sync stays silent when Health has no new nights', () async {
     useMockLog();
     final healthService = MockHealthService();
     when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(healthService.requestSleepAuthorization).thenAnswer((_) async => true);
     when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => []);
     final importSleepFromHealthUseCase = MockImportSleepFromHealthUseCase();
     when(() => importSleepFromHealthUseCase(imports: any(named: 'imports'))).thenAnswer((_) async => const Success(0));
@@ -215,6 +245,7 @@ void main() {
   test('onInit auto-sync swallows a Health read failure without an error toast', () async {
     final healthService = MockHealthService();
     when(healthService.isAvailable).thenAnswer((_) async => true);
+    when(healthService.requestSleepAuthorization).thenAnswer((_) async => true);
     when(() => healthService.readSleepSessions(from: any(named: 'from'), to: any(named: 'to'))).thenThrow(Exception('healthkit blew up'));
     final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
     when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([SleepLogFactory.build()]));
