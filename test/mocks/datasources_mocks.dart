@@ -5,6 +5,7 @@ import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasourc
 import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
@@ -31,6 +32,8 @@ class MockDietGoalsLocalDataSource extends Mock implements DietGoalsLocalDataSou
 class MockDietIntroLocalDataSource extends Mock implements DietIntroLocalDataSource {}
 
 class MockSupabaseNutritionScanDataSource extends Mock implements SupabaseNutritionScanDataSource {}
+
+class MockSupabaseMealScanDataSource extends Mock implements SupabaseMealScanDataSource {}
 
 class MockSupabaseFoodFavoritesDataSource extends Mock implements SupabaseFoodFavoritesDataSource {}
 

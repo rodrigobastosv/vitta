@@ -20,6 +20,7 @@ import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.da
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
+import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_extra.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
@@ -56,6 +57,19 @@ class DietPage extends StatelessWidget {
                 final hasCopied = await context.pushRoute<bool>(.dietCopy, extra: CopyMealsExtra(targetDate: state.date));
                 if (hasCopied ?? false) {
                   await cubit.refresh();
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.photo_camera_outlined),
+              tooltip: l10n.mealScanTitle,
+              onPressed: () async {
+                final hasLogged = await context.pushRoute<bool>(.mealScan, extra: MealScanExtra(loggedDate: state.date));
+                if (hasLogged ?? false) {
+                  await cubit.refresh();
+                  if (context.mounted) {
+                    context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
+                  }
                 }
               },
             ),

@@ -440,6 +440,48 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietNutritionScanNoData => 'Preencha os valores manualmente, ou tente outra foto.';
 
   @override
+  String get mealScanTitle => 'Escanear refeição';
+
+  @override
+  String get mealScanIntroTitle => 'Fotografe sua refeição';
+
+  @override
+  String get mealScanIntroMessage => 'Tire uma foto do seu prato e identificamos os itens e estimamos os macros para você.';
+
+  @override
+  String get mealScanTakePhotoAction => 'Tirar uma foto';
+
+  @override
+  String get mealScanRetakeAction => 'Tentar outra foto';
+
+  @override
+  String get mealScanNoDataTitle => 'Nenhum alimento detectado';
+
+  @override
+  String get mealScanNoData => 'Não encontramos nenhum alimento nessa foto. Tente outra com o prato mais visível.';
+
+  @override
+  String get mealScanItemsTitle => 'Itens detectados';
+
+  @override
+  String get mealScanItemsSubtitle => 'Ajuste as quantidades, desmarque o que não quiser e adicione ao seu dia.';
+
+  @override
+  String get mealScanMealTypeTitle => 'Adicionar à refeição';
+
+  @override
+  String get mealScanLogAction => 'Adicionar ao diário';
+
+  @override
+  String get mealScanIncomplete => 'Escolha pelo menos um item com uma quantidade válida.';
+
+  @override
+  String get mealScanLoggedTitle => 'Refeição adicionada';
+
+  @override
+  String get mealScanLoggedMessage => 'Os itens detectados foram registrados no seu dia.';
+
+  @override
   String dietCaloriesPer100g(int calories) {
     return '$calories kcal / 100g';
   }
