@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Vitta</title>
+<style>
+  :root {
+    --bg: #f6f5ec;
+    --surface: #ffffff;
+    --text: #201e1d;
+    --muted: #5f6b64;
+    --accent: #2f7d52;
+    --border: #e1ded0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141b17;
+      --surface: #1d2620;
+      --text: #e7efe9;
+      --muted: #9fb0a6;
+      --accent: #6fbf97;
+      --border: #3a423c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 2rem 1.25rem 5rem;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+  }
+  main { max-width: 45rem; margin: 0 auto; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 .4rem; letter-spacing: -.02em; }
+  h2 {
+    font-size: 1.15rem; margin: 2.4rem 0 .6rem; letter-spacing: -.01em;
+    padding-top: 1.4rem; border-top: 1px solid var(--border);
+  }
+  h2:first-of-type { border-top: 0; padding-top: 0; }
+  .updated { color: var(--muted); font-size: .9rem; margin: 0 0 2rem; }
+  .summary {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 1.1rem 1.25rem; margin: 0 0 2.5rem;
+  }
+  .summary p { margin: 0 0 .6rem; }
+  .summary p:last-child { margin-bottom: 0; }
+  .summary strong { color: var(--accent); }
+  ul { padding-left: 1.25rem; }
+  li { margin: .35rem 0; }
+  a { color: var(--accent); }
+  code {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 5px; padding: .1em .4em; font-size: .88em;
+  }
+  footer {
+    margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--border);
+    color: var(--muted); font-size: .9rem;
+  }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Vitta — Privacy Policy</h1>
+<p class="updated">Last updated: 20 July 2026</p>
+
+<div class="summary">
+  <p><strong>The short version.</strong> Vitta stores the things you track — food, water, sleep, weight, workouts, reminders — so they are there when you come back. Your data is yours, scoped to your account, and readable by nobody else.</p>
+  <p>There is <strong>no advertising, no tracking, no analytics SDK</strong>, and nothing is ever sold or shared with data brokers. Apple Health data is used for one purpose only: filling in your own sleep history.</p>
+  <p>Two things are genuinely public, and they are the ones worth reading below: <strong>photos you upload</strong> and <strong>custom foods you add</strong>.</p>
+</div>
+
+<h2>1. Who is responsible</h2>
+<p>Vitta is an independent app developed by Rodrigo Bastos Vasconcelos. For the purposes of the LGPD (Brazil) and the GDPR (EU), that individual is the data controller. Contact details are at the bottom of this page.</p>
+
+<h2>2. You can use Vitta without giving us anything</h2>
+<p>On first launch Vitta creates an <strong>anonymous account</strong> automatically. It has no name, no email address, and no link to your identity — it exists only so your entries can be saved and retrieved. You can track food, water, sleep, weight, workouts and reminders indefinitely without ever telling us who you are.</p>
+<p>Creating a real account is optional. If you do, we store the email address you sign up with, and — if you choose to set them — a display name and a profile picture.</p>
+
+<h2>3. What we store</h2>
+<p>Whatever you enter in the app: food and meal logs, water intake, sleep entries, body weight measurements, workouts and routines, reminders, recipes, favourites, and your nutrition goals. Each row is tied to your account and protected by database rules so that no other user can read it.</p>
+<p>This is held on <a href="https://supabase.com/privacy" target="_blank" rel="noopener">Supabase</a>, our hosting provider, which processes it on our behalf and does not use it for its own purposes.</p>
+
+<h2>4. Apple Health</h2>
+<p>If you grant permission, Vitta <strong>reads sleep data only</strong>, and only to import nights into your own sleep history inside the app. It writes nothing back to Health.</p>
+<p>Health data is <strong>never used for advertising or marketing, never shared with third parties, never sold, and never used for any purpose other than showing you your own sleep</strong>. You can revoke the permission at any time in the iOS Settings app or the Health app, and Vitta will keep working without it.</p>
+
+<h2>5. Photos, and the shared food catalog</h2>
+<p>Two things here are public. We would rather state them plainly than bury them.</p>
+<ul>
+  <li><strong>Uploaded images are publicly accessible by their URL.</strong> Photos you attach to a custom food, and any profile picture you upload, are stored in a public bucket. The address is long and unguessable and is not listed anywhere, but anyone who has the link can open it. Do not upload anything you would not want seen.</li>
+  <li><strong>A custom food you create becomes part of a catalog shared with all users.</strong> Its name, brand, nutrition values and photo become visible in other people's search results, so the catalog improves for everyone. Your account is not shown alongside it, but the entry itself is not private.</li>
+</ul>
+<p>Your <strong>logs, recipes and favourites are not shared</strong> — only the catalog entry itself is. If you would rather keep something to yourself, do not add it as a custom food.</p>
+
+<h2>6. AI photo scanning</h2>
+<p>The meal photo scan and the nutrition label scan send the photo you take to <a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Anthropic</a> for analysis, through our own server, so that the food and its nutrition values can be read back automatically. The image is processed to produce that result and is not used to train models under Anthropic's API terms.</p>
+<p>These features are optional and only ever run when you explicitly take or choose a photo for them.</p>
+
+<h2>7. Food search</h2>
+<p>Searching for a food sends the text you typed to <a href="https://world.openfoodfacts.org/" target="_blank" rel="noopener">Open Food Facts</a>, a public food database, when our own catalog has too few matches. Only the search term is sent — nothing that identifies you or your account.</p>
+
+<h2>8. Crash reporting</h2>
+<p>Vitta uses <a href="https://sentry.io/privacy/" target="_blank" rel="noopener">Sentry</a> to report crashes and errors, so that faults can be found and fixed. A report contains the technical details of the failure — device model, operating system version, and a trace of the screens you visited and actions you took just before it — but is not configured to attach personal information, and does not include the contents of your logs.</p>
+
+<h2>9. Kept only on your device</h2>
+<p>Your app preferences — theme, language, unit system, daily goals, recent searches — are stored locally on your device and never uploaded. Reminder notifications are scheduled by your device itself; no reminder text is sent to any server to deliver them.</p>
+
+<h2>10. Subscriptions</h2>
+<p>Vitta offers an optional paid subscription for its AI photo scanning features. Purchases are handled entirely by Apple, and <strong>we never see or receive your payment details</strong>. Apple and <a href="https://www.revenuecat.com/privacy" target="_blank" rel="noopener">RevenueCat</a>, which verifies purchases on our behalf, tell us only whether your subscription is currently valid and when it expires. That status is stored against your account so the paid features can be unlocked.</p>
+
+<h2>11. What we do not do</h2>
+<ul>
+  <li>No advertising, and no advertising identifiers.</li>
+  <li>No cross-app or cross-site tracking, and no App Tracking Transparency prompt because there is nothing to track.</li>
+  <li>No analytics or attribution SDKs.</li>
+  <li>We do not sell your data, and we do not share it with data brokers.</li>
+  <li>We do not use your health or fitness data for marketing.</li>
+</ul>
+
+<h2>12. Deleting your data</h2>
+<p>You can delete your account from inside the app, at <strong>Profile → Delete account</strong>. This is immediate and permanent: it removes your account and every entry attached to it — food, water, sleep, weight, workouts, routines, reminders, recipes and favourites — with no recovery.</p>
+<p>One honest exception: <strong>custom foods you contributed to the shared catalog, and their photos, remain</strong>. Other people's saved logs point at those entries and would break without them. They carry no name, email or identifier linking them to you once your account is gone.</p>
+
+<h2>13. Your rights</h2>
+<p>Under the LGPD and the GDPR you may request access to the personal data we hold about you, correction of anything inaccurate, deletion of it, or a copy in a portable format. Most of this is immediate inside the app — everything you have entered is visible in it, editable, and deletable — and account deletion is available without contacting anyone. For anything else, write to the address below and we will respond within 30 days.</p>
+
+<h2>14. Children</h2>
+<p>Vitta is not directed at children under 13, and we do not knowingly collect data from them. If you believe a child has provided us with personal data, contact us and we will delete it.</p>
+
+<h2>15. Changes to this policy</h2>
+<p>If this policy changes materially, the date at the top will be updated and the new version published here before the change takes effect.</p>
+
+<h2>16. Contact</h2>
+<p>Questions about this policy, or about your data: <a href="mailto:rodrigobastosv@gmail.com">rodrigobastosv@gmail.com</a>.</p>
+
+<footer>
+  Vitta — diet, workout and lifestyle tracking.
+</footer>
+
+</main>
+</body>
+</html>
