@@ -528,6 +528,20 @@
   "premiumPrivacyAction": "Política de Privacidade",
   "premiumAutoRenewalDisclosure": "A cobrança é feita na sua conta do Apple ID ao confirmar a compra. A assinatura é renovada automaticamente, a menos que seja cancelada com pelo menos 24 horas de antecedência do fim do período atual. Você pode gerenciar ou cancelar quando quiser nos ajustes da sua conta da App Store.",
   "premiumLinkFailed": "Não foi possível abrir o link.",
+  "premiumSubscribeAction": "Assinar por {price}",
+  "@premiumSubscribeAction": {
+    "placeholders": {
+      "price": {"type": "String"}
+    }
+  },
+  "premiumRestoreAction": "Restaurar compras",
+  "premiumUnavailable": "As assinaturas não estão disponíveis agora. Tente mais tarde.",
+  "premiumPurchaseFailed": "Não foi possível concluir a compra.",
+  "premiumRestoredTitle": "Bem-vindo de volta",
+  "premiumRestoredMessage": "Sua assinatura está ativa novamente.",
+  "premiumNothingToRestore": "Nenhuma assinatura anterior foi encontrada para este Apple ID.",
+  "premiumPurchasedTitle": "Tudo pronto",
+  "premiumPurchasedMessage": "Os escaneamentos com IA estão liberados.",
   "premiumRequiredTitle": "Premium necessário",
   "premiumRequiredMessage": "Sua assinatura não está ativa, então o escaneamento não foi feito.",
   "profilePremiumTitle": "Premium",

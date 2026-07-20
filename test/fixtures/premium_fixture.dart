@@ -6,6 +6,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
 
+import '../mocks/services_mocks.dart';
 import '../mocks/use_cases_mocks.dart';
 
 // PremiumCubit is provided once at the root in main.dart, so any widget test
@@ -19,7 +20,9 @@ PremiumCubit buildTestPremiumCubit({bool isPremium = false}) {
       Success(isPremium ? const PremiumStatus(status: .active, productId: 'vitta_premium_monthly') : const PremiumStatus.free()),
     ),
   );
-  return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase);
+  final purchaseService = MockPurchaseService();
+  when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
+  return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
 }
 
 Widget withTestPremium(Widget child, {bool isPremium = false}) =>

@@ -40,7 +40,7 @@ void main() {
   Finder greetingFinder() => find.byWidgetPredicate((widget) => widget is Text && _greetings.contains(widget.data));
 
   testWidgets('greets a signed-in user by name instead of the app title', (tester) async {
-    await pumpHome(tester, user: const AuthenticatedUser(email: 'rodrigo@example.com', displayName: 'Rodrigo'));
+    await pumpHome(tester, user: const AuthenticatedUser(id: 'user-1', email: 'rodrigo@example.com', displayName: 'Rodrigo'));
 
     expect(greetingFinder(), findsOneWidget);
     expect(find.text('Rodrigo'), findsOneWidget);
@@ -58,7 +58,7 @@ void main() {
     testWidgets('does not overflow at ${size.width.toInt()}x${size.height.toInt()} for a signed-in user', (tester) async {
       await pumpHome(
         tester,
-        user: const AuthenticatedUser(email: 'rodrigo@example.com', displayName: 'Rodrigo'),
+        user: const AuthenticatedUser(id: 'user-1', email: 'rodrigo@example.com', displayName: 'Rodrigo'),
         size: size,
       );
       expect(tester.takeException(), isNull);

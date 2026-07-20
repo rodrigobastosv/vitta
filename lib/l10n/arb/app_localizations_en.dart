@@ -1123,6 +1123,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumLinkFailed => 'Couldn\'t open that link.';
 
   @override
+  String premiumSubscribeAction(String price) {
+    return 'Subscribe for $price';
+  }
+
+  @override
+  String get premiumRestoreAction => 'Restore purchases';
+
+  @override
+  String get premiumUnavailable => 'Subscriptions aren\'t available right now. Try again later.';
+
+  @override
+  String get premiumPurchaseFailed => 'The purchase couldn\'t be completed.';
+
+  @override
+  String get premiumRestoredTitle => 'Welcome back';
+
+  @override
+  String get premiumRestoredMessage => 'Your subscription is active again.';
+
+  @override
+  String get premiumNothingToRestore => 'No previous subscription was found for this Apple ID.';
+
+  @override
+  String get premiumPurchasedTitle => 'You\'re all set';
+
+  @override
+  String get premiumPurchasedMessage => 'The AI scans are unlocked.';
+
+  @override
   String get premiumRequiredTitle => 'Premium required';
 
   @override

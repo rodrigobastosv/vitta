@@ -76,7 +76,13 @@ class PaywallPage extends StatelessWidget {
                     if (premiumState.isPremium)
                       PaywallActiveCard(expiresAt: premiumState.status.expiresAt)
                     else
-                      PaywallPurchaseSection(isSignedIn: authState.user is AuthenticatedUser, onSignUp: () => _signUp(context, authCubit)),
+                      PaywallPurchaseSection(
+                        isSignedIn: authState.user is AuthenticatedUser,
+                        offer: premiumState.offer,
+                        onSignUp: () => _signUp(context, authCubit),
+                        onSubscribe: () => _subscribe(context, authState.user),
+                        onRestore: () => _restore(context, authState.user),
+                      ),
                     const VTGap.l(),
                     const PaywallLegalFooter(),
                   ],
@@ -88,6 +94,58 @@ class PaywallPage extends StatelessWidget {
       );
     },
   );
+
+  Future<void> _subscribe(BuildContext context, User user) async {
+    if (user is! AuthenticatedUser) {
+      return;
+    }
+    final premiumCubit = context.read<PremiumCubit>();
+    final l10n = context.l10n;
+    context.showLoading();
+    try {
+      final hasPurchased = await premiumCubit.purchase(userId: user.id);
+      if (!context.mounted) {
+        return;
+      }
+      context.hideLoading();
+      // Cancelling is a deliberate action, not a failure: it reports false and
+      // says nothing at all.
+      if (hasPurchased) {
+        context.showToast(title: l10n.premiumPurchasedTitle, message: l10n.premiumPurchasedMessage);
+      }
+    } on Exception {
+      if (context.mounted) {
+        context.hideLoading();
+        context.showErrorToast(message: l10n.premiumPurchaseFailed);
+      }
+    }
+  }
+
+  Future<void> _restore(BuildContext context, User user) async {
+    if (user is! AuthenticatedUser) {
+      return;
+    }
+    final premiumCubit = context.read<PremiumCubit>();
+    final l10n = context.l10n;
+    context.showLoading();
+    try {
+      final hasRestored = await premiumCubit.restore(userId: user.id);
+      if (!context.mounted) {
+        return;
+      }
+      context.hideLoading();
+      if (hasRestored) {
+        context.showToast(title: l10n.premiumRestoredTitle, message: l10n.premiumRestoredMessage);
+      } else {
+        context.showWarningToast(message: l10n.premiumNothingToRestore);
+      }
+    } on Exception {
+      if (context.mounted) {
+        context.hideLoading();
+        context.showErrorToast(message: l10n.premiumPurchaseFailed);
+      }
+    }
+  }
 
   Future<void> _signUp(BuildContext context, AuthCubit authCubit) async {
     final premiumCubit = context.read<PremiumCubit>();

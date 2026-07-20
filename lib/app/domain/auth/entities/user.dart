@@ -10,7 +10,11 @@ sealed class User extends Equatable {
 }
 
 class AuthenticatedUser extends User {
-  const AuthenticatedUser({required this.email, this.displayName, this.avatarId, this.avatarUrl});
+  const AuthenticatedUser({required this.id, required this.email, this.displayName, this.avatarId, this.avatarUrl});
+
+  /// The Supabase auth.uid(). RevenueCat is identified with it so
+  /// revenuecat-webhook can resolve a store event back to a subscriptions row.
+  final String id;
 
   final String email;
 
@@ -26,7 +30,7 @@ class AuthenticatedUser extends User {
   }
 
   @override
-  List<Object?> get props => [email, displayName, avatarId, avatarUrl];
+  List<Object?> get props => [id, email, displayName, avatarId, avatarUrl];
 }
 
 class AnonymousUser extends User {

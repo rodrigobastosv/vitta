@@ -167,24 +167,21 @@ answer plus a webhook. It is free under $2.5k/month revenue.
 
 ## The follow-up
 
-Everything above is deliberately shaped so the purchase flow plugs in by writing to one table (issue #155).
+The server half and the client half are both **built** (#155). What remains is Apple-side and testing:
 
-The server half is **done**: [`docs/revenuecat-webhook-setup.md`](revenuecat-webhook-setup.md) has the
-`revenuecat-webhook` Edge Function that maps RevenueCat's events onto the four statuses and upserts
-`subscriptions`. It can be deployed and exercised with `curl` before any store product exists, which is why
-it was built first.
+- The `revenuecat-webhook` Edge Function maps store events onto `subscriptions` —
+  [`docs/revenuecat-webhook-setup.md`](revenuecat-webhook-setup.md).
+- `PurchaseService` (`lib/app/core/services/purchases/`) is the adapter over `purchases_flutter`, and
+  `PremiumCubit` drives it. The paywall renders the store's own price, buys, and restores.
 
-What is left, and is blocked on store setup rather than on code:
+Still to do:
 
-- Create the subscription products in App Store Connect (with the Paid Apps agreement signed — nothing is
-  returned by the store until it is) and Play Console, and point a RevenueCat project at both.
-- Add `purchases_flutter` behind a `core/services/purchases/` adapter, the `NotificationService` boundary —
-  nothing above `core/services/` should import the SDK.
-- Identify the RevenueCat user with the Supabase `auth.uid()` via `logIn`, so the webhook can resolve the
-  event back to a row. Until that call happens, purchases carry RevenueCat's anonymous id and the webhook
-  deliberately ignores them.
-- Replace `PaywallPurchaseSection`'s disabled "coming soon" button with a real purchase + **restore**
-  flow (restore is required by App Store review), and call `PremiumCubit.refresh()` after either succeeds.
+- Paid Applications agreement cleared (Banking status **Clear**) — until then the SDK returns an empty
+  offering and the paywall shows "unavailable" rather than a price. That is expected, not a bug.
+- `REVENUECAT_API_KEY` added as a GitHub secret, so release builds carry it. It is **optional** by design:
+  a build without it still launches and works, it just has no purchasable offer, because nothing else in
+  the app depends on purchases.
+- Sandbox verification: buy, cancel, refund, restore — see #155's Phase 4.
 
-Nothing in the domain, the data layer, the gate, or the two scan Edge Functions changes when that lands —
-which is the point of granting premium by hand today.
+Nothing in the domain, the data layer, the gate, or the two scan Edge Functions changed when this landed —
+which was the point of granting premium by hand first.

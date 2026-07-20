@@ -82,6 +82,15 @@ Then check the row, and confirm the app unlocks the scans. Three follow-ups wort
 2. Send a `CANCELLATION` with `"cancel_reason": "CUSTOMER_SUPPORT"` and a *newer* `event_timestamp_ms` — status must become `expired`, and the scans must lock **even though `expires_at` is still in the future**. This is the refund case.
 3. Re-send the original `INITIAL_PURCHASE` (older timestamp) — it must be **dropped**, leaving the status `expired`. This is the out-of-order guard.
 
+## When a delivery fails
+
+**`{"code":"UNAUTHORIZED_NO_AUTH_HEADER","message":"Missing authorization header"}`, with `x-served-by: supabase-edge-runtime` and an `sb-error-code` header** — this is Supabase's gateway, not the function; the handler never ran. Two independent causes, and they look identical from RevenueCat's side:
+
+- **`verify_jwt` is still enabled.** Fix this first (step 2). RevenueCat holds no Supabase session, so the gateway rejects every delivery before the handler is reached. With it on, the shared secret is rejected too — it is not a JWT — so setting the header alone will not help.
+- **RevenueCat is not sending the header.** `NO_AUTH_HEADER` means it was absent rather than wrong, so the Authorization field in RevenueCat's webhook config is empty (step 3).
+
+A `401 {"error":"unauthorized"}` **without** an `sb-error-code` header is the opposite situation and is good news: the gateway let the request through and our own `secretMatches` rejected it, so `verify_jwt` is off and only the secret is wrong.
+
 ## The function
 
 ```ts

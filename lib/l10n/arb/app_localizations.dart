@@ -2090,6 +2090,60 @@ abstract class AppLocalizations {
   /// **'Couldn\'t open that link.'**
   String get premiumLinkFailed;
 
+  /// No description provided for @premiumSubscribeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscribe for {price}'**
+  String premiumSubscribeAction(String price);
+
+  /// No description provided for @premiumRestoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchases'**
+  String get premiumRestoreAction;
+
+  /// No description provided for @premiumUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions aren\'t available right now. Try again later.'**
+  String get premiumUnavailable;
+
+  /// No description provided for @premiumPurchaseFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The purchase couldn\'t be completed.'**
+  String get premiumPurchaseFailed;
+
+  /// No description provided for @premiumRestoredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get premiumRestoredTitle;
+
+  /// No description provided for @premiumRestoredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your subscription is active again.'**
+  String get premiumRestoredMessage;
+
+  /// No description provided for @premiumNothingToRestore.
+  ///
+  /// In en, this message translates to:
+  /// **'No previous subscription was found for this Apple ID.'**
+  String get premiumNothingToRestore;
+
+  /// No description provided for @premiumPurchasedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all set'**
+  String get premiumPurchasedTitle;
+
+  /// No description provided for @premiumPurchasedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The AI scans are unlocked.'**
+  String get premiumPurchasedMessage;
+
   /// No description provided for @premiumRequiredTitle.
   ///
   /// In en, this message translates to:

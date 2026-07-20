@@ -14,6 +14,12 @@ PODS:
     - Flutter
   - package_info_plus (0.4.5):
     - Flutter
+  - purchases_flutter (10.4.2):
+    - Flutter
+    - PurchasesHybridCommon (= 18.22.1)
+  - PurchasesHybridCommon (18.22.1):
+    - RevenueCat (= 5.81.0)
+  - RevenueCat (5.81.0)
   - Sentry/HybridSDK (8.58.3)
   - sentry_flutter (9.24.0):
     - Flutter
@@ -34,12 +40,15 @@ DEPENDENCIES:
   - health (from `.symlinks/plugins/health/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
+  - purchases_flutter (from `.symlinks/plugins/purchases_flutter/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
 SPEC REPOS:
   trunk:
+    - PurchasesHybridCommon
+    - RevenueCat
     - Sentry
 
 EXTERNAL SOURCES:
@@ -59,6 +68,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker_ios/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
+  purchases_flutter:
+    :path: ".symlinks/plugins/purchases_flutter/ios"
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   shared_preferences_foundation:
@@ -75,6 +86,9 @@ SPEC CHECKSUMS:
   health: c1dfe8bc28ccd5998a32bdd0963943bfe9ac8320
   image_picker_ios: 4f2f91b01abdb52842a8e277617df877e40f905b
   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
+  purchases_flutter: dc0631634f73d8824943cc6ba596c399d43beb79
+  PurchasesHybridCommon: 5759975e7b63c093772fd92d8a9e5edbc6a809a8
+  RevenueCat: c692d9b9d123ce98acea28796abcd81f63e9f34a
   Sentry: 108fdbb76299c4189af12246bf0308c09c278922
   sentry_flutter: b9c59bc3a9fe2272f74961586afc08bd7300c2c3
   shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
