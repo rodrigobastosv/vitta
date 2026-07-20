@@ -1,6 +1,6 @@
 # Vitta
 
-Lifestyle companion app: diet and workout tracking. Flutter, SDK ^3.10.7.
+Health companion app: food, workouts, water, sleep, body weight and reminders. Flutter, SDK ^3.10.7.
 
 ## Backend
 

@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Vitta';
 
   @override
-  String get homeTagline => 'Your companion for diet and training.';
+  String get homeTagline => 'Your companion for a healthier day.';
 
   @override
   String get homeGreetingMorning => 'Good morning';
@@ -1021,7 +1021,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingWelcomeTitle => 'Welcome to Vitta';
 
   @override
-  String get onboardingWelcomeMessage => 'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.';
+  String get onboardingWelcomeMessage =>
+      'Food, workouts, water, sleep, weight and reminders — all in one place, so staying consistent gets easier day after day.';
 
   @override
   String get onboardingAccountBenefitMessage =>
