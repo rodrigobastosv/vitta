@@ -464,10 +464,21 @@ create table if not exists subscriptions (
   user_id uuid primary key references auth.users (id) on delete cascade,
   product_id text not null,
   status text not null check (status in ('active', 'expired', 'cancelled', 'in_grace_period')),
-  store text check (store in ('app_store', 'play_store', 'manual')),
+  store text check (store in ('app_store', 'play_store', 'rc_billing', 'manual')),
   expires_at timestamptz,
+  -- The store event this row was last written from (issue #155). Webhooks are
+  -- retried and can arrive out of order, and applying a stale RENEWAL after a
+  -- CANCELLATION would silently re-entitle someone: revenuecat-webhook drops any
+  -- event not newer than this. Null for a row granted by hand.
+  last_event_at timestamptz,
   updated_at timestamptz not null default now()
 );
+
+-- Bring existing databases up to date (the create table above only runs on a fresh db).
+alter table subscriptions add column if not exists last_event_at timestamptz;
+alter table subscriptions drop constraint if exists subscriptions_store_check;
+alter table subscriptions add constraint subscriptions_store_check
+  check (store in ('app_store', 'play_store', 'rc_billing', 'manual'));
 
 -- Keeps exercises.times_logged in sync, mirroring bump_food_times_logged.
 -- security definer for the same reason: the logging user doesn't own the

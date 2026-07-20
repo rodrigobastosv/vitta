@@ -167,15 +167,24 @@ answer plus a webhook. It is free under $2.5k/month revenue.
 
 ## The follow-up
 
-Everything above is deliberately shaped so the purchase flow plugs in by writing to one table:
+Everything above is deliberately shaped so the purchase flow plugs in by writing to one table (issue #155).
 
+The server half is **done**: [`docs/revenuecat-webhook-setup.md`](revenuecat-webhook-setup.md) has the
+`revenuecat-webhook` Edge Function that maps RevenueCat's events onto the four statuses and upserts
+`subscriptions`. It can be deployed and exercised with `curl` before any store product exists, which is why
+it was built first.
+
+What is left, and is blocked on store setup rather than on code:
+
+- Create the subscription products in App Store Connect (with the Paid Apps agreement signed — nothing is
+  returned by the store until it is) and Play Console, and point a RevenueCat project at both.
 - Add `purchases_flutter` behind a `core/services/purchases/` adapter, the `NotificationService` boundary —
   nothing above `core/services/` should import the SDK.
-- Create the products in App Store Connect and Play Console, and point RevenueCat at both.
-- Add a `revenuecat-webhook` Edge Function that upserts `subscriptions` with the service-role key. This is
-  the only new server piece, and it is the only thing that ever writes the table.
-- Replace `PaywallPurchaseSection`'s disabled "coming soon" button with a real purchase + restore flow, and
-  call `PremiumCubit.refresh()` after a successful purchase.
+- Identify the RevenueCat user with the Supabase `auth.uid()` via `logIn`, so the webhook can resolve the
+  event back to a row. Until that call happens, purchases carry RevenueCat's anonymous id and the webhook
+  deliberately ignores them.
+- Replace `PaywallPurchaseSection`'s disabled "coming soon" button with a real purchase + **restore**
+  flow (restore is required by App Store review), and call `PremiumCubit.refresh()` after either succeeds.
 
-Nothing in the domain, the data layer, the gate, or the two Edge Functions changes when that lands — which
-is the point of granting premium by hand today.
+Nothing in the domain, the data layer, the gate, or the two scan Edge Functions changes when that lands —
+which is the point of granting premium by hand today.
