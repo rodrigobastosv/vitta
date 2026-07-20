@@ -2093,7 +2093,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumSubscribeAction.
   ///
   /// In en, this message translates to:
-  /// **'Subscribe for {price}'**
+  /// **'Subscribe for {price}/month'**
   String premiumSubscribeAction(String price);
 
   /// No description provided for @premiumRestoreAction.

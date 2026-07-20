@@ -301,10 +301,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));
-  G.registerFactory(() => SignOutUseCase(authRepository: G()));
+  G.registerFactory(() => SignOutUseCase(authRepository: G(), purchaseService: G()));
   G.registerFactory(() => UpdateProfileUseCase(authRepository: G()));
   G.registerFactory(() => UploadAvatarUseCase(authRepository: G()));
-  G.registerFactory(() => DeleteAccountUseCase(authRepository: G()));
+  G.registerFactory(() => DeleteAccountUseCase(authRepository: G(), purchaseService: G()));
 
   G.registerFactory(
     () => DietCubit(

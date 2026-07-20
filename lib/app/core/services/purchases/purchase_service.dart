@@ -44,11 +44,20 @@ class PurchaseService {
     await Purchases.logIn(userId);
   }
 
+  // Never throws, because signing out of the app must not depend on the store
+  // being reachable — and the most common case here is not an error at all:
+  // logIn only runs at purchase time, so a user who never subscribed still has
+  // RevenueCat's anonymous identity, which logOut reports as
+  // logOutWithAnonymousUserError. There is already no identity to shed.
   Future<void> logOut() async {
     if (!_isConfigured) {
       return;
     }
-    await Purchases.logOut();
+    try {
+      await Purchases.logOut();
+    } on PlatformException {
+      return;
+    }
   }
 
   Future<List<PremiumOffer>> fetchOffers() async {
@@ -81,7 +90,7 @@ class PurchaseService {
       await Purchases.purchase(PurchaseParams.package(package));
       return .purchased;
     } on PlatformException catch (error) {
-      if (PurchasesErrorHelper.getErrorCode(error) == PurchasesErrorCode.purchaseCancelledError) {
+      if (PurchasesErrorHelper.getErrorCode(error) == .purchaseCancelledError) {
         return .cancelled;
       }
       rethrow;
