@@ -1,7 +1,7 @@
 {
   "@@locale": "pt",
   "appTitle": "Vitta",
-  "homeTagline": "Seu companheiro de dieta e treino.",
+  "homeTagline": "Seu companheiro para um dia mais saudável.",
   "homeGreetingMorning": "Bom dia",
   "homeGreetingAfternoon": "Boa tarde",
   "homeGreetingEvening": "Boa noite",
@@ -491,7 +491,7 @@
   "sleepHealthUnavailableMessage": "Os dados de sono não estão disponíveis neste dispositivo. Configure o Health Connect (Android) ou a Apple Saúde (iOS) primeiro.",
   "sleepHealthPermissionDeniedMessage": "A permissão de sono foi negada. Conceda-a para importar suas noites.",
   "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
-  "onboardingWelcomeMessage": "Acompanhe sua dieta, água, sono e treinos em um só lugar, e mantenha a consistência dia após dia.",
+  "onboardingWelcomeMessage": "Comida, treinos, água, sono, peso e lembretes — tudo em um só lugar, para manter a consistência dia após dia.",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",
   "onboardingCreateAccountAction": "Criar conta",
   "onboardingContinueWithoutAccountAction": "Continuar sem conta",

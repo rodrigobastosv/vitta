@@ -101,7 +101,7 @@ abstract class AppLocalizations {
   /// No description provided for @homeTagline.
   ///
   /// In en, this message translates to:
-  /// **'Your companion for diet and training.'**
+  /// **'Your companion for a healthier day.'**
   String get homeTagline;
 
   /// No description provided for @homeGreetingMorning.
@@ -1901,7 +1901,7 @@ abstract class AppLocalizations {
   /// No description provided for @onboardingWelcomeMessage.
   ///
   /// In en, this message translates to:
-  /// **'Track your diet, water, sleep, and workouts in one place, and stay consistent day after day.'**
+  /// **'Food, workouts, water, sleep, weight and reminders — all in one place, so staying consistent gets easier day after day.'**
   String get onboardingWelcomeMessage;
 
   /// No description provided for @onboardingAccountBenefitMessage.
