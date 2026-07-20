@@ -31,7 +31,7 @@ void main() {
     final signInUseCase = MockSignInUseCase();
     when(
       () => signInUseCase(email: 'a@b.com', password: 'secret1'),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
 
     await cubit.signIn(email: 'a@b.com', password: 'secret1');
@@ -42,7 +42,7 @@ void main() {
   test('logs a sign_out user action when signOut succeeds', () async {
     final loggingService = useMockLog();
     final getUserUseCase = MockGetUserUseCase();
-    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
     final signOutUseCase = MockSignOutUseCase();
     when(signOutUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signOutUseCase: signOutUseCase);
@@ -67,11 +67,11 @@ void main() {
       final getUserUseCase = MockGetUserUseCase();
       when(getUserUseCase.call).thenReturn(const AnonymousUser());
       final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase);
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       return cubit;
     },
     act: (cubit) => cubit.refreshUser(),
-    expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'))],
+    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
   );
 
   blocTest<AuthCubit, AuthState>(
@@ -82,11 +82,11 @@ void main() {
       final signUpUseCase = MockSignUpUseCase();
       when(
         () => signUpUseCase(email: 'a@b.com', password: 'secret1'),
-      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
     act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
-    expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'))],
+    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
   );
 
   blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
@@ -97,7 +97,7 @@ void main() {
       final signUpUseCase = MockSignUpUseCase();
       when(
         () => signUpUseCase(email: 'a@b.com', password: 'secret1'),
-      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
     act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
@@ -141,7 +141,7 @@ void main() {
         avatarId: any(named: 'avatarId'),
         avatarUrl: any(named: 'avatarUrl'),
       ),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)
       ..setAvatarPreset('man-light');
 
@@ -176,7 +176,7 @@ void main() {
         avatarId: any(named: 'avatarId'),
         avatarUrl: any(named: 'avatarUrl'),
       ),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
     final cubit = CubitsFactories.buildAuthCubit(
       getUserUseCase: getUserUseCase,
       imagePickerService: imagePickerService,
@@ -215,7 +215,7 @@ void main() {
   test('updateProfile emits the new user and logs profile_updated', () async {
     final loggingService = useMockLog();
     final getUserUseCase = MockGetUserUseCase();
-    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
     final updateProfileUseCase = MockUpdateProfileUseCase();
     when(
       () => updateProfileUseCase(
@@ -223,13 +223,13 @@ void main() {
         avatarId: any(named: 'avatarId'),
         avatarUrl: any(named: 'avatarUrl'),
       ),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase)
       ..setAvatarPreset('man-light');
 
     await cubit.updateProfile(displayName: 'Rod');
 
-    expect(cubit.state.user, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
+    expect(cubit.state.user, const AuthenticatedUser(id: 'user-1', email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
     verify(() => loggingService.logAction('profile_updated')).called(1);
   });
 
@@ -237,7 +237,7 @@ void main() {
     'updateProfile signals AuthProfileUpdated on success',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final updateProfileUseCase = MockUpdateProfileUseCase();
       when(
         () => updateProfileUseCase(
@@ -245,7 +245,7 @@ void main() {
           avatarId: any(named: 'avatarId'),
           avatarUrl: any(named: 'avatarUrl'),
         ),
-      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase);
     },
     act: (cubit) => cubit.updateProfile(displayName: 'Rod'),
@@ -260,11 +260,11 @@ void main() {
       final signInUseCase = MockSignInUseCase();
       when(
         () => signInUseCase(email: 'a@b.com', password: 'secret1'),
-      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
     },
     act: (cubit) => cubit.signIn(email: 'a@b.com', password: 'secret1'),
-    expect: () => [const AuthState(user: AuthenticatedUser(email: 'a@b.com'))],
+    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
   );
 
   blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
@@ -275,7 +275,7 @@ void main() {
       final signInUseCase = MockSignInUseCase();
       when(
         () => signInUseCase(email: 'a@b.com', password: 'secret1'),
-      ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+      ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
     },
     act: (cubit) => cubit.signIn(email: 'a@b.com', password: 'secret1'),
@@ -286,7 +286,7 @@ void main() {
     'emits a fresh anonymous status when signOut succeeds',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final signOutUseCase = MockSignOutUseCase();
       when(signOutUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signOutUseCase: signOutUseCase);
@@ -299,7 +299,7 @@ void main() {
     'does not signal sign-in when signOut succeeds',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final signOutUseCase = MockSignOutUseCase();
       when(signOutUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signOutUseCase: signOutUseCase);
@@ -311,7 +311,7 @@ void main() {
   test('logs an account_deleted user action when deleteAccount succeeds', () async {
     final loggingService = useMockLog();
     final getUserUseCase = MockGetUserUseCase();
-    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+    when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
     final deleteAccountUseCase = MockDeleteAccountUseCase();
     when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
@@ -325,7 +325,7 @@ void main() {
     'emits a fresh anonymous status when deleteAccount succeeds',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final deleteAccountUseCase = MockDeleteAccountUseCase();
       when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
@@ -338,7 +338,7 @@ void main() {
     'shows loading then signals AuthAccountDeleted when deleteAccount succeeds',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final deleteAccountUseCase = MockDeleteAccountUseCase();
       when(deleteAccountUseCase.call).thenAnswer((_) async => const Success(AnonymousUser()));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);
@@ -351,7 +351,7 @@ void main() {
     'emits AuthActionFailed and no deletion signal when deleteAccount fails',
     build: () {
       final getUserUseCase = MockGetUserUseCase();
-      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(email: 'a@b.com'));
+      when(getUserUseCase.call).thenReturn(const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
       final deleteAccountUseCase = MockDeleteAccountUseCase();
       when(deleteAccountUseCase.call).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, deleteAccountUseCase: deleteAccountUseCase);

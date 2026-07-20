@@ -7,6 +7,7 @@ import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
 import 'package:vitta/app/presentation/pages/premium/premium_state.dart';
 
+import '../../mocks/services_mocks.dart';
 import '../../mocks/use_cases_mocks.dart';
 
 void main() {
@@ -17,7 +18,9 @@ void main() {
       when(getPremiumStatusUseCase.call).thenAnswer(
         (_) => Future.value(const Success(PremiumStatus(status: .active, productId: 'vitta_premium_monthly'))),
       );
-      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase);
+      final purchaseService = MockPurchaseService();
+      when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
+      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
     },
     expect: () => [
       const PremiumState(status: PremiumStatus(status: .active, productId: 'vitta_premium_monthly')),
@@ -34,7 +37,9 @@ void main() {
       when(getPremiumStatusUseCase.call).thenAnswer(
         (_) => Future.value(const Failure(VTError(message: 'offline'))),
       );
-      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase);
+      final purchaseService = MockPurchaseService();
+      when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
+      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
     },
     // Cubit.emit only de-duplicates after its first emission, so the free state
     // is delivered once even though it equals the initial one.
@@ -52,7 +57,9 @@ void main() {
         isSubscribed = true;
         return Future.value(Success(status));
       });
-      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase);
+      final purchaseService = MockPurchaseService();
+      when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
+      return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
     },
     act: (cubit) => cubit.refresh(),
     expect: () => [const PremiumState.free(), const PremiumState(status: PremiumStatus(status: .active))],

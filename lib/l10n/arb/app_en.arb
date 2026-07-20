@@ -546,6 +546,20 @@
   "premiumPrivacyAction": "Privacy Policy",
   "premiumAutoRenewalDisclosure": "Payment is charged to your Apple ID account at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it any time in your App Store account settings.",
   "premiumLinkFailed": "Couldn't open that link.",
+  "premiumSubscribeAction": "Subscribe for {price}",
+  "@premiumSubscribeAction": {
+    "placeholders": {
+      "price": {"type": "String"}
+    }
+  },
+  "premiumRestoreAction": "Restore purchases",
+  "premiumUnavailable": "Subscriptions aren't available right now. Try again later.",
+  "premiumPurchaseFailed": "The purchase couldn't be completed.",
+  "premiumRestoredTitle": "Welcome back",
+  "premiumRestoredMessage": "Your subscription is active again.",
+  "premiumNothingToRestore": "No previous subscription was found for this Apple ID.",
+  "premiumPurchasedTitle": "You're all set",
+  "premiumPurchasedMessage": "The AI scans are unlocked.",
   "premiumRequiredTitle": "Premium required",
   "premiumRequiredMessage": "Your subscription is not active, so this scan was not run.",
   "profilePremiumTitle": "Premium",

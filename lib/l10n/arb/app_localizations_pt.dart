@@ -1125,6 +1125,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumLinkFailed => 'Não foi possível abrir o link.';
 
   @override
+  String premiumSubscribeAction(String price) {
+    return 'Assinar por $price';
+  }
+
+  @override
+  String get premiumRestoreAction => 'Restaurar compras';
+
+  @override
+  String get premiumUnavailable => 'As assinaturas não estão disponíveis agora. Tente mais tarde.';
+
+  @override
+  String get premiumPurchaseFailed => 'Não foi possível concluir a compra.';
+
+  @override
+  String get premiumRestoredTitle => 'Bem-vindo de volta';
+
+  @override
+  String get premiumRestoredMessage => 'Sua assinatura está ativa novamente.';
+
+  @override
+  String get premiumNothingToRestore => 'Nenhuma assinatura anterior foi encontrada para este Apple ID.';
+
+  @override
+  String get premiumPurchasedTitle => 'Tudo pronto';
+
+  @override
+  String get premiumPurchasedMessage => 'Os escaneamentos com IA estão liberados.';
+
+  @override
   String get premiumRequiredTitle => 'Premium necessário';
 
   @override

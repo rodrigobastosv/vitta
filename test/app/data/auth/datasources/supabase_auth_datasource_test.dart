@@ -11,21 +11,23 @@ void main() {
   test('status maps the auth user metadata into the profile fields', () {
     final supabaseService = MockSupabaseService();
     when(() => supabaseService.isAnonymous).thenReturn(false);
+    when(() => supabaseService.currentUserId).thenReturn('user-1');
     when(() => supabaseService.currentUserEmail).thenReturn('a@b.com');
     when(() => supabaseService.currentUserMetadata).thenReturn({'display_name': 'Rod', 'avatar_id': 'man-light', 'avatar_url': null});
     final dataSource = SupabaseAuthDataSource(supabaseService: supabaseService);
 
-    expect(dataSource.status, const AuthenticatedUser(email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
+    expect(dataSource.status, const AuthenticatedUser(id: 'user-1', email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light'));
   });
 
   test('status leaves the profile fields null when there is no metadata', () {
     final supabaseService = MockSupabaseService();
     when(() => supabaseService.isAnonymous).thenReturn(false);
+    when(() => supabaseService.currentUserId).thenReturn('user-1');
     when(() => supabaseService.currentUserEmail).thenReturn('a@b.com');
     when(() => supabaseService.currentUserMetadata).thenReturn(null);
     final dataSource = SupabaseAuthDataSource(supabaseService: supabaseService);
 
-    expect(dataSource.status, const AuthenticatedUser(email: 'a@b.com'));
+    expect(dataSource.status, const AuthenticatedUser(id: 'user-1', email: 'a@b.com'));
   });
 
   test('status is an anonymous user when the session is anonymous', () {

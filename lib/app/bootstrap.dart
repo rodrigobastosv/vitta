@@ -6,6 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/env/env.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
+import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 
 Future<void> bootstrap({required AppRunner appRunner}) async {
@@ -23,6 +24,7 @@ Future<void> bootstrap({required AppRunner appRunner}) async {
       final appBox = await Hive.openBox<dynamic>('app');
       setupDependencies(appBox: appBox, supabaseService: supabaseService);
       await G<NotificationService>().init();
+      await G<PurchaseService>().init();
       await appRunner();
     },
   );

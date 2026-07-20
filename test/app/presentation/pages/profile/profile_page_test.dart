@@ -47,7 +47,7 @@ void main() {
   });
 
   testWidgets('shows the email and a log out action when signed in', (tester) async {
-    await pumpProfile(tester, user: const AuthenticatedUser(email: 'anna@example.com'));
+    await pumpProfile(tester, user: const AuthenticatedUser(id: 'user-1', email: 'anna@example.com'));
 
     expect(find.text('anna@example.com'), findsOneWidget);
     expect(find.text('A'), findsOneWidget);
@@ -56,7 +56,7 @@ void main() {
   });
 
   testWidgets('offers delete account to a signed-in user and confirms irreversibility', (tester) async {
-    await pumpProfile(tester, user: const AuthenticatedUser(email: 'anna@example.com'));
+    await pumpProfile(tester, user: const AuthenticatedUser(id: 'user-1', email: 'anna@example.com'));
 
     expect(find.text('Delete account'), findsOneWidget);
 

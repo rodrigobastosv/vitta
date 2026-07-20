@@ -11,14 +11,14 @@ void main() {
     final authRepository = MockAuthRepository();
     when(
       () => authRepository.signUp(email: 'a@b.com', password: 'secret1'),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(email: 'a@b.com')));
+    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
     final useCase = UseCasesFactories.buildSignUpUseCase(authRepository: authRepository);
 
     final statusResult = await useCase(email: 'a@b.com', password: 'secret1');
 
     statusResult.when(
       (error) => fail('expected Success, got Failure($error)'),
-      (value) => expect(value, const AuthenticatedUser(email: 'a@b.com')),
+      (value) => expect(value, const AuthenticatedUser(id: 'user-1', email: 'a@b.com')),
     );
   });
 }

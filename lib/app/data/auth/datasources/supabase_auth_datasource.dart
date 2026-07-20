@@ -21,6 +21,7 @@ class SupabaseAuthDataSource {
     }
     final metadata = _supabaseService.currentUserMetadata;
     return AuthenticatedUser(
+      id: _supabaseService.currentUserId,
       email: _supabaseService.currentUserEmail ?? '',
       displayName: metadata?[_displayNameKey] as String?,
       avatarId: metadata?[_avatarIdKey] as String?,
