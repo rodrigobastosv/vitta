@@ -8,6 +8,7 @@ import 'package:vitta/app/presentation/pages/profile/profile_page.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
@@ -19,10 +20,12 @@ void main() {
     addTearDown(() => G.unregister<AuthCubit>());
 
     await tester.pumpWidget(
-      const MaterialApp(
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: ProfilePage(),
+      withTestPremium(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: ProfilePage(),
+        ),
       ),
     );
   }

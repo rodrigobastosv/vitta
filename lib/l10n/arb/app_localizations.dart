@@ -1958,6 +1958,144 @@ abstract class AppLocalizations {
   /// **'Language, theme and units'**
   String get profileSettingsSubtitle;
 
+  /// No description provided for @premiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitta Premium'**
+  String get premiumTitle;
+
+  /// No description provided for @premiumTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered tracking, without the typing'**
+  String get premiumTagline;
+
+  /// No description provided for @premiumIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Photo scanning uses AI to read your food for you. It costs real money to run, so it lives behind Premium — everything else in Vitta stays free.'**
+  String get premiumIntro;
+
+  /// No description provided for @premiumFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you unlock'**
+  String get premiumFeaturesTitle;
+
+  /// No description provided for @premiumFeatureMealScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal photo scan'**
+  String get premiumFeatureMealScanTitle;
+
+  /// No description provided for @premiumFeatureMealScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph a plate and log every item at once'**
+  String get premiumFeatureMealScanSubtitle;
+
+  /// No description provided for @premiumFeatureNutritionLabelScanTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition label scan'**
+  String get premiumFeatureNutritionLabelScanTitle;
+
+  /// No description provided for @premiumFeatureNutritionLabelScanSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Point at a label and fill the macros in for you'**
+  String get premiumFeatureNutritionLabelScanSubtitle;
+
+  /// No description provided for @premiumFreeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Free forever'**
+  String get premiumFreeTitle;
+
+  /// No description provided for @premiumFreeMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.'**
+  String get premiumFreeMessage;
+
+  /// No description provided for @premiumComingSoonAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions coming soon'**
+  String get premiumComingSoonAction;
+
+  /// No description provided for @premiumComingSoonHint.
+  ///
+  /// In en, this message translates to:
+  /// **'In-app purchases are not open yet. This screen is where they will live.'**
+  String get premiumComingSoonHint;
+
+  /// No description provided for @premiumSignUpPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'A subscription is tied to your account, so you need one first.'**
+  String get premiumSignUpPrompt;
+
+  /// No description provided for @premiumSignUpAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create an account'**
+  String get premiumSignUpAction;
+
+  /// No description provided for @premiumActiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium active'**
+  String get premiumActiveTitle;
+
+  /// No description provided for @premiumActiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have full access to the AI scans. Thank you for supporting Vitta.'**
+  String get premiumActiveMessage;
+
+  /// No description provided for @premiumRenewsOn.
+  ///
+  /// In en, this message translates to:
+  /// **'Renews on {date}'**
+  String premiumRenewsOn(String date);
+
+  /// No description provided for @premiumLockedBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premiumLockedBadge;
+
+  /// No description provided for @premiumRequiredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium required'**
+  String get premiumRequiredTitle;
+
+  /// No description provided for @premiumRequiredMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your subscription is not active, so this scan was not run.'**
+  String get premiumRequiredMessage;
+
+  /// No description provided for @profilePremiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get profilePremiumTitle;
+
+  /// No description provided for @profilePremiumSubtitleActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscription active'**
+  String get profilePremiumSubtitleActive;
+
+  /// No description provided for @profilePremiumSubtitleFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock the AI photo scans'**
+  String get profilePremiumSubtitleFree;
+
   /// No description provided for @profileDeleteAccountTitle.
   ///
   /// In en, this message translates to:

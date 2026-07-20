@@ -16,6 +16,10 @@ class CustomFoodReady implements CustomFoodPresentationEvent {
   final Food food;
 }
 
+// The Edge Function refused the scan (see PremiumRequiredError): the local lock
+// was stale, so the page opens the paywall instead of showing a failure.
+class CustomFoodPremiumRequired implements CustomFoodPresentationEvent {}
+
 class CustomFoodError implements CustomFoodPresentationEvent {
   const CustomFoodError({required this.message});
 

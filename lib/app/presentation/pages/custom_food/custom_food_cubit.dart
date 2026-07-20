@@ -1,3 +1,5 @@
+import 'package:vitta/app/core/error/premium_required_error.dart';
+import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
@@ -53,8 +55,12 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     emitPresentation(CustomFoodShowLoading());
     final scannedFactsResult = await _scanNutritionLabelUseCase(imagePath: pickedImage.path);
     emitPresentation(CustomFoodHideLoading());
-    scannedFactsResult.when((error) => emitPresentation(CustomFoodError(message: error.message)), _applyScannedFacts);
+    scannedFactsResult.when(_onScanFailed, _applyScannedFacts);
   }
+
+  void _onScanFailed(VTError error) => emitPresentation(
+    error is PremiumRequiredError ? CustomFoodPremiumRequired() : CustomFoodError(message: error.message),
+  );
 
   void _applyScannedFacts(ScannedNutritionFacts facts) {
     if (!facts.hasAnyValue) {

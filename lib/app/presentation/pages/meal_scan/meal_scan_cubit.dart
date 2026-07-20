@@ -1,3 +1,5 @@
+import 'package:vitta/app/core/error/premium_required_error.dart';
+import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
@@ -34,8 +36,12 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
     emitPresentation(MealScanShowLoading());
     final scannedMealResult = await _scanMealUseCase(imagePath: pickedImage.path);
     emitPresentation(MealScanHideLoading());
-    scannedMealResult.when((error) => emitPresentation(MealScanError(message: error.message)), _applyScannedMeal);
+    scannedMealResult.when(_onScanFailed, _applyScannedMeal);
   }
+
+  void _onScanFailed(VTError error) => emitPresentation(
+    error is PremiumRequiredError ? MealScanPremiumRequired() : MealScanError(message: error.message),
+  );
 
   void _applyScannedMeal(ScannedMeal meal) {
     if (!meal.hasItems) {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -11,6 +13,7 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
+import 'package:vitta/app/presentation/pages/premium/premium_state.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/delete_account_dialog.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_header.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_menu_tile.dart';
@@ -60,6 +63,16 @@ class ProfilePage extends StatelessWidget {
               ),
             },
             const VTGap.l(),
+            BlocBuilder<PremiumCubit, PremiumState>(
+              builder: (context, premiumState) => ProfileMenuTile(
+                icon: Icons.workspace_premium_outlined,
+                accent: VTColors.premium,
+                title: l10n.profilePremiumTitle,
+                subtitle: premiumState.isPremium ? l10n.profilePremiumSubtitleActive : l10n.profilePremiumSubtitleFree,
+                onTap: () => context.pushRoute(.premium),
+              ),
+            ),
+            const VTGap.m(),
             ProfileMenuTile(
               icon: Icons.flag_outlined,
               accent: VTColors.macroProtein,

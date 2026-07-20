@@ -5,6 +5,7 @@ import 'package:vitta/app/bootstrap.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
+import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_loading_overlay_indicator.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
@@ -19,8 +20,11 @@ class VittaApp extends StatelessWidget {
   const VittaApp({super.key});
 
   @override
-  Widget build(BuildContext context) => BlocProvider<AppCubit>.value(
-    value: G<AppCubit>(),
+  Widget build(BuildContext context) => MultiBlocProvider(
+    providers: [
+      BlocProvider<AppCubit>.value(value: G<AppCubit>()),
+      BlocProvider<PremiumCubit>.value(value: G<PremiumCubit>()),
+    ],
     child: BlocBuilder<AppCubit, AppSettings>(
       builder: (context, state) => MaterialApp.router(
         debugShowCheckedModeBanner: false,

@@ -15,32 +15,36 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_page.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/services_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
-Widget buildTestApp({required CustomFoodCubit cubit, void Function(Food? food)? onPopped}) {
+Widget buildTestApp({required CustomFoodCubit cubit, void Function(Food? food)? onPopped, bool isPremium = true}) {
   if (G.isRegistered<CustomFoodCubit>()) {
     G.unregister<CustomFoodCubit>();
   }
   G.registerFactory<CustomFoodCubit>(() => cubit);
-  return MaterialApp(
-    theme: VTTheme.light,
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: Builder(
-      builder: (context) => Scaffold(
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              final food = await Navigator.of(context).push<Food>(MaterialPageRoute(builder: (_) => const CustomFoodPage()));
-              onPopped?.call(food);
-            },
-            child: const Text('open'),
+  return withTestPremium(
+    isPremium: isPremium,
+    MaterialApp(
+      theme: VTTheme.light,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: Builder(
+        builder: (context) => Scaffold(
+          body: Center(
+            child: ElevatedButton(
+              onPressed: () async {
+                final food = await Navigator.of(context).push<Food>(MaterialPageRoute(builder: (_) => const CustomFoodPage()));
+                onPopped?.call(food);
+              },
+              child: const Text('open'),
+            ),
           ),
         ),
       ),
+      builder: (context, child) => LoaderOverlay(child: child!),
     ),
-    builder: (context, child) => LoaderOverlay(child: child!),
   );
 }
 
@@ -88,10 +92,7 @@ void main() {
     ).thenAnswer((_) async => const Success(ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10.5)));
     await tester.pumpWidget(
       buildTestApp(
-        cubit: CubitsFactories.buildCustomFoodCubit(
-          imagePickerService: imagePickerService,
-          scanNutritionLabelUseCase: scanNutritionLabelUseCase,
-        ),
+        cubit: CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase),
       ),
     );
     await openCustomFoodPage(tester);

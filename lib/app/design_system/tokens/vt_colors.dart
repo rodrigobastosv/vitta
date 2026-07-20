@@ -47,6 +47,11 @@ abstract class VTColors {
   static const Color water = Color(0xFF2AA5D6);
   static const Color sleep = Color(0xFF5C6BC0);
 
+  // Its own token rather than reusing macroCarbs/warning: a premium lock sits
+  // next to macro figures on the diet page, and sharing a hex would read as a
+  // fourth macro - the same collision bodyRegion* has to avoid.
+  static const Color premium = Color(0xFFB8860B);
+
   static const Color success = Color(0xFF2F8F7A);
   static const Color warning = Color(0xFFE8A317);
   static const Color warningContainerLight = Color(0xFFFBECC7);
