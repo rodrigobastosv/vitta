@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
@@ -11,6 +14,7 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart'
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_form.dart';
+import 'package:vitta/app/presentation/pages/premium/paywall_extra.dart';
 
 class CustomFoodPage extends StatelessWidget {
   const CustomFoodPage({super.key});
@@ -31,6 +35,9 @@ class CustomFoodPage extends StatelessWidget {
             context.showWarningToast(message: l10n.dietInvalidCustomFood);
           case CustomFoodScanFoundNothing():
             context.showWarningToast(message: l10n.dietNutritionScanNoData, title: l10n.dietNutritionScanNoDataTitle);
+          case CustomFoodPremiumRequired():
+            context.showWarningToast(message: l10n.premiumRequiredMessage, title: l10n.premiumRequiredTitle);
+            unawaited(context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .nutritionLabelScan)));
           case CustomFoodError(:final message):
             context.showErrorToast(message: message);
           case CustomFoodReady(:final food):

@@ -1052,6 +1052,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsSubtitle => 'Language, theme and units';
 
   @override
+  String get premiumTitle => 'Vitta Premium';
+
+  @override
+  String get premiumTagline => 'AI-powered tracking, without the typing';
+
+  @override
+  String get premiumIntro =>
+      'Photo scanning uses AI to read your food for you. It costs real money to run, so it lives behind Premium — everything else in Vitta stays free.';
+
+  @override
+  String get premiumFeaturesTitle => 'What you unlock';
+
+  @override
+  String get premiumFeatureMealScanTitle => 'Meal photo scan';
+
+  @override
+  String get premiumFeatureMealScanSubtitle => 'Photograph a plate and log every item at once';
+
+  @override
+  String get premiumFeatureNutritionLabelScanTitle => 'Nutrition label scan';
+
+  @override
+  String get premiumFeatureNutritionLabelScanSubtitle => 'Point at a label and fill the macros in for you';
+
+  @override
+  String get premiumFreeTitle => 'Free forever';
+
+  @override
+  String get premiumFreeMessage =>
+      'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.';
+
+  @override
+  String get premiumComingSoonAction => 'Subscriptions coming soon';
+
+  @override
+  String get premiumComingSoonHint => 'In-app purchases are not open yet. This screen is where they will live.';
+
+  @override
+  String get premiumSignUpPrompt => 'A subscription is tied to your account, so you need one first.';
+
+  @override
+  String get premiumSignUpAction => 'Create an account';
+
+  @override
+  String get premiumActiveTitle => 'Premium active';
+
+  @override
+  String get premiumActiveMessage => 'You have full access to the AI scans. Thank you for supporting Vitta.';
+
+  @override
+  String premiumRenewsOn(String date) {
+    return 'Renews on $date';
+  }
+
+  @override
+  String get premiumLockedBadge => 'Premium';
+
+  @override
+  String get premiumRequiredTitle => 'Premium required';
+
+  @override
+  String get premiumRequiredMessage => 'Your subscription is not active, so this scan was not run.';
+
+  @override
+  String get profilePremiumTitle => 'Premium';
+
+  @override
+  String get profilePremiumSubtitleActive => 'Subscription active';
+
+  @override
+  String get profilePremiumSubtitleFree => 'Unlock the AI photo scans';
+
+  @override
   String get profileDeleteAccountTitle => 'Delete account';
 
   @override

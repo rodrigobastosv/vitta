@@ -13,7 +13,8 @@ enum SupabaseTable {
   workoutSets('workout_sets'),
   routines('routines'),
   routineExercises('routine_exercises'),
-  reminders('reminders');
+  reminders('reminders'),
+  subscriptions('subscriptions');
 
   const SupabaseTable(this.wireName);
 

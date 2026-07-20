@@ -11,6 +11,7 @@ import 'package:vitta/app/core/services/notifications/notification_service.dart'
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
+import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
 import 'package:vitta/app/data/body_weight/body_weight_repository.dart';
@@ -27,6 +28,8 @@ import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasou
 import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/data/premium/datasources/supabase_premium_datasource.dart';
+import 'package:vitta/app/data/premium/premium_repository.dart';
 import 'package:vitta/app/data/reminder/datasources/supabase/supabase_reminder_datasource.dart';
 import 'package:vitta/app/data/reminder/reminder_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
@@ -82,6 +85,7 @@ import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
+import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
@@ -164,6 +168,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetAppSettingsUseCase(settingsRepository: G()));
   G.registerFactory(() => SaveAppSettingsUseCase(settingsRepository: G()));
   G.registerLazySingleton(() => AppCubit(getAppSettingsUseCase: G(), saveAppSettingsUseCase: G()));
+  G.registerLazySingleton(() => PremiumCubit(getPremiumStatusUseCase: G()));
 
   G.registerLazySingleton(() => supabaseService);
   G.registerLazySingleton(ImagePickerService.new);
@@ -200,6 +205,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
+  G.registerLazySingleton(() => SupabasePremiumDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => PremiumRepository(supabasePremiumDataSource: G()));
   G.registerLazySingleton(() => SupabaseReminderDataSource(supabaseService: G()));
   G.registerLazySingleton(() => ReminderRepository(supabaseReminderDataSource: G()));
   G.registerLazySingleton(() => SupabaseExerciseDataSource(supabaseService: G()));
@@ -259,6 +266,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => ImportSleepFromHealthUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetPremiumStatusUseCase(premiumRepository: G()));
   G.registerFactory(() => GetRemindersForDateUseCase(reminderRepository: G()));
   G.registerFactory(() => GetRemindersInRangeUseCase(reminderRepository: G()));
   G.registerFactory(() => CreateReminderUseCase(reminderRepository: G()));

@@ -37,6 +37,7 @@ import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
+import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
@@ -236,3 +237,5 @@ class MockUpdateReminderUseCase extends Mock implements UpdateReminderUseCase {}
 class MockCompleteReminderUseCase extends Mock implements CompleteReminderUseCase {}
 
 class MockDeleteReminderUseCase extends Mock implements DeleteReminderUseCase {}
+
+class MockGetPremiumStatusUseCase extends Mock implements GetPremiumStatusUseCase {}

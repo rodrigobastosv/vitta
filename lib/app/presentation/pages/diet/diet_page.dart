@@ -18,9 +18,9 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
-import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_extra.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
@@ -60,16 +60,12 @@ class DietPage extends StatelessWidget {
                 }
               },
             ),
-            IconButton(
-              icon: const Icon(Icons.photo_camera_outlined),
-              tooltip: l10n.mealScanTitle,
-              onPressed: () async {
-                final hasLogged = await context.pushRoute<bool>(.mealScan, extra: MealScanExtra(loggedDate: state.date));
-                if (hasLogged ?? false) {
-                  await cubit.refresh();
-                  if (context.mounted) {
-                    context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
-                  }
+            MealScanAction(
+              date: state.date,
+              onLogged: () async {
+                await cubit.refresh();
+                if (context.mounted) {
+                  context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
                 }
               },
             ),

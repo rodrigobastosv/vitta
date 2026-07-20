@@ -6,6 +6,7 @@ import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/main.dart';
 
 import '../../../../fixtures/local_storage_fixture.dart';
+import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/repositories_mocks.dart';
 import '../../../../mocks/services_mocks.dart';
 
@@ -22,6 +23,7 @@ void main() {
     when(onboardingRepository.completeOnboarding).thenAnswer((_) async => hasSeenOnboarding = true);
     G.unregister<OnboardingRepository>();
     G.registerLazySingleton<OnboardingRepository>(() => onboardingRepository);
+    registerTestPremiumCubit();
   });
 
   testWidgets('shows onboarding on first launch and tapping create account opens the auth page', (tester) async {

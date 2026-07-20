@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
@@ -12,6 +14,7 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart'
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_energy_split_card.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_nutrient_field.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_scan_card.dart';
+import 'package:vitta/app/presentation/pages/premium/paywall_extra.dart';
 
 class CustomFoodForm extends StatefulWidget {
   const CustomFoodForm({required this.state, super.key});
@@ -57,6 +60,10 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
   String _formatNutrient(double value) => value == value.roundToDouble() ? value.toInt().toString() : value.toString();
 
   Future<void> _scanNutritionLabel() async {
+    if (!context.read<PremiumCubit>().state.isPremium) {
+      await context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .nutritionLabelScan));
+      return;
+    }
     final source = await showImageSourceSheet(context: context);
     if (source == null || !mounted) {
       return;
@@ -110,7 +117,10 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           const VTGap.m(),
           VTAppearEffect(
             delay: const Duration(milliseconds: 100),
-            child: CustomFoodScanCard(onTap: _scanNutritionLabel),
+            child: CustomFoodScanCard(
+              onTap: _scanNutritionLabel,
+              isLocked: !context.watch<PremiumCubit>().state.isPremium,
+            ),
           ),
           const VTGap.l(),
           VTAppearEffect(

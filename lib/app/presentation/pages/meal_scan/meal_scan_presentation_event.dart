@@ -17,6 +17,10 @@ class MealScanLogged implements MealScanPresentationEvent {
   final int itemCount;
 }
 
+// The Edge Function refused the scan (see PremiumRequiredError): the local lock
+// was stale, so the page opens the paywall instead of showing a failure.
+class MealScanPremiumRequired implements MealScanPresentationEvent {}
+
 class MealScanError implements MealScanPresentationEvent {
   const MealScanError({required this.message});
 

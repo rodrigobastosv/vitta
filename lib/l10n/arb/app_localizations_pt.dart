@@ -1054,6 +1054,79 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileSettingsSubtitle => 'Idioma, tema e unidades';
 
   @override
+  String get premiumTitle => 'Vitta Premium';
+
+  @override
+  String get premiumTagline => 'Registro com IA, sem digitar';
+
+  @override
+  String get premiumIntro =>
+      'O escaneamento por foto usa IA para ler o alimento por você. Isso custa dinheiro de verdade, então fica no Premium — todo o resto do Vitta continua gratuito.';
+
+  @override
+  String get premiumFeaturesTitle => 'O que você libera';
+
+  @override
+  String get premiumFeatureMealScanTitle => 'Escanear foto da refeição';
+
+  @override
+  String get premiumFeatureMealScanSubtitle => 'Fotografe o prato e registre todos os itens de uma vez';
+
+  @override
+  String get premiumFeatureNutritionLabelScanTitle => 'Escanear rótulo nutricional';
+
+  @override
+  String get premiumFeatureNutritionLabelScanSubtitle => 'Aponte para o rótulo e os macros são preenchidos';
+
+  @override
+  String get premiumFreeTitle => 'Gratuito para sempre';
+
+  @override
+  String get premiumFreeMessage =>
+      'Busca de alimentos, catálogo, receitas, água, sono, treinos, lembretes e todos os gráficos continuam gratuitos.';
+
+  @override
+  String get premiumComingSoonAction => 'Assinaturas em breve';
+
+  @override
+  String get premiumComingSoonHint => 'As compras no app ainda não estão abertas. Esta tela é onde elas vão ficar.';
+
+  @override
+  String get premiumSignUpPrompt => 'A assinatura fica vinculada à sua conta, então você precisa criar uma antes.';
+
+  @override
+  String get premiumSignUpAction => 'Criar uma conta';
+
+  @override
+  String get premiumActiveTitle => 'Premium ativo';
+
+  @override
+  String get premiumActiveMessage => 'Você tem acesso completo aos escaneamentos com IA. Obrigado por apoiar o Vitta.';
+
+  @override
+  String premiumRenewsOn(String date) {
+    return 'Renova em $date';
+  }
+
+  @override
+  String get premiumLockedBadge => 'Premium';
+
+  @override
+  String get premiumRequiredTitle => 'Premium necessário';
+
+  @override
+  String get premiumRequiredMessage => 'Sua assinatura não está ativa, então o escaneamento não foi feito.';
+
+  @override
+  String get profilePremiumTitle => 'Premium';
+
+  @override
+  String get profilePremiumSubtitleActive => 'Assinatura ativa';
+
+  @override
+  String get profilePremiumSubtitleFree => 'Libere os escaneamentos com IA';
+
+  @override
   String get profileDeleteAccountTitle => 'Excluir conta';
 
   @override

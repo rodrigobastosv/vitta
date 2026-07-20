@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_premium_badge.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class CustomFoodScanCard extends StatelessWidget {
-  const CustomFoodScanCard({required this.onTap, super.key});
+  const CustomFoodScanCard({required this.onTap, this.isLocked = false, super.key});
 
   final VoidCallback onTap;
+  final bool isLocked;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +37,7 @@ class CustomFoodScanCard extends StatelessWidget {
             ),
           ),
           const VTGap.s(),
+          if (isLocked) VTPremiumBadge(label: l10n.premiumLockedBadge),
           Icon(Icons.chevron_right, color: context.colorScheme.onSurfaceVariant),
         ],
       ),

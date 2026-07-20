@@ -444,6 +444,31 @@ create table if not exists reminders (
 
 create index if not exists reminders_user_id_due_date_idx on reminders (user_id, due_date);
 
+-- Premium entitlement (issue #153). One row per user, so user_id is the primary
+-- key rather than a surrogate id: this records what a user is entitled to *now*,
+-- not a purchase history (the store keeps that).
+--
+-- This deliberately is NOT auth.users.user_metadata, which is where display_name
+-- and avatar_id live. user_metadata is writable by the client through
+-- auth.updateUser - SupabaseAuthDataSource already calls it - so an is_premium
+-- flag there could be set by any user against themselves. The profile fields are
+-- safe there precisely because nothing is gated on them.
+--
+-- expires_at is checked alongside status by the app and the Edge Functions: a
+-- lapsed subscription's row is only corrected when the store tells us, so the
+-- status alone can lag reality by up to a billing cycle.
+--
+-- store is 'manual' for a row inserted by hand in the SQL editor (how premium is
+-- granted for testing until the purchase flow lands - see docs/premium-setup.md).
+create table if not exists subscriptions (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  product_id text not null,
+  status text not null check (status in ('active', 'expired', 'cancelled', 'in_grace_period')),
+  store text check (store in ('app_store', 'play_store', 'manual')),
+  expires_at timestamptz,
+  updated_at timestamptz not null default now()
+);
+
 -- Keeps exercises.times_logged in sync, mirroring bump_food_times_logged.
 -- security definer for the same reason: the logging user doesn't own the
 -- (imported, null user_id) exercise row, so exercises' update policy would
@@ -494,6 +519,7 @@ alter table workout_sets enable row level security;
 alter table routines enable row level security;
 alter table routine_exercises enable row level security;
 alter table reminders enable row level security;
+alter table subscriptions enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
 -- authenticated can read every row, but only the row's own author can
@@ -702,3 +728,14 @@ create policy "Users manage their own reminders" on reminders
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+-- subscriptions is the one table a user can read but never write. The absence of
+-- an insert/update/delete policy IS the security property: under RLS an operation
+-- with no matching policy is denied, so entitlement can only be granted by the
+-- service_role key (which bypasses RLS entirely) - a human in the SQL editor
+-- today, the store's webhook later. Do not "complete the set" by adding the
+-- other three policies; that would let any user grant themselves premium.
+drop policy if exists "Users read their own subscription" on subscriptions;
+create policy "Users read their own subscription" on subscriptions
+  for select
+  using (auth.uid() = user_id);
