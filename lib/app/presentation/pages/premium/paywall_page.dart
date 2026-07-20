@@ -21,6 +21,7 @@ import 'package:vitta/app/presentation/pages/premium/widgets/paywall_active_card
 import 'package:vitta/app/presentation/pages/premium/widgets/paywall_feature_row.dart';
 import 'package:vitta/app/presentation/pages/premium/widgets/paywall_free_card.dart';
 import 'package:vitta/app/presentation/pages/premium/widgets/paywall_header.dart';
+import 'package:vitta/app/presentation/pages/premium/widgets/paywall_legal_footer.dart';
 import 'package:vitta/app/presentation/pages/premium/widgets/paywall_purchase_section.dart';
 
 // Hangs off AuthCubit because whether to show a purchase CTA or a sign-up CTA is
@@ -76,6 +77,8 @@ class PaywallPage extends StatelessWidget {
                       PaywallActiveCard(expiresAt: premiumState.status.expiresAt)
                     else
                       PaywallPurchaseSection(isSignedIn: authState.user is AuthenticatedUser, onSignUp: () => _signUp(context, authCubit)),
+                    const VTGap.l(),
+                    const PaywallLegalFooter(),
                   ],
                 ),
               ),

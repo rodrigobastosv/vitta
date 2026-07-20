@@ -1110,6 +1110,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumLockedBadge => 'Premium';
 
   @override
+  String get premiumTermsAction => 'Terms of Use';
+
+  @override
+  String get premiumPrivacyAction => 'Privacy Policy';
+
+  @override
+  String get premiumAutoRenewalDisclosure =>
+      'Payment is charged to your Apple ID account at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it any time in your App Store account settings.';
+
+  @override
+  String get premiumLinkFailed => 'Couldn\'t open that link.';
+
+  @override
   String get premiumRequiredTitle => 'Premium required';
 
   @override
