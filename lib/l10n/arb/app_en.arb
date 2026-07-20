@@ -542,6 +542,10 @@
     }
   },
   "premiumLockedBadge": "Premium",
+  "premiumTermsAction": "Terms of Use",
+  "premiumPrivacyAction": "Privacy Policy",
+  "premiumAutoRenewalDisclosure": "Payment is charged to your Apple ID account at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it any time in your App Store account settings.",
+  "premiumLinkFailed": "Couldn't open that link.",
   "premiumRequiredTitle": "Premium required",
   "premiumRequiredMessage": "Your subscription is not active, so this scan was not run.",
   "profilePremiumTitle": "Premium",

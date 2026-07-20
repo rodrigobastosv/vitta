@@ -2066,6 +2066,30 @@ abstract class AppLocalizations {
   /// **'Premium'**
   String get premiumLockedBadge;
 
+  /// No description provided for @premiumTermsAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Use'**
+  String get premiumTermsAction;
+
+  /// No description provided for @premiumPrivacyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get premiumPrivacyAction;
+
+  /// No description provided for @premiumAutoRenewalDisclosure.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment is charged to your Apple ID account at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it any time in your App Store account settings.'**
+  String get premiumAutoRenewalDisclosure;
+
+  /// No description provided for @premiumLinkFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t open that link.'**
+  String get premiumLinkFailed;
+
   /// No description provided for @premiumRequiredTitle.
   ///
   /// In en, this message translates to:

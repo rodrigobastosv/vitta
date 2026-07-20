@@ -1112,6 +1112,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumLockedBadge => 'Premium';
 
   @override
+  String get premiumTermsAction => 'Termos de Uso';
+
+  @override
+  String get premiumPrivacyAction => 'Política de Privacidade';
+
+  @override
+  String get premiumAutoRenewalDisclosure =>
+      'A cobrança é feita na sua conta do Apple ID ao confirmar a compra. A assinatura é renovada automaticamente, a menos que seja cancelada com pelo menos 24 horas de antecedência do fim do período atual. Você pode gerenciar ou cancelar quando quiser nos ajustes da sua conta da App Store.';
+
+  @override
+  String get premiumLinkFailed => 'Não foi possível abrir o link.';
+
+  @override
   String get premiumRequiredTitle => 'Premium necessário';
 
   @override
