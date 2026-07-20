@@ -27,6 +27,7 @@ import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 
 import '../mocks/repositories_mocks.dart';
+import '../mocks/services_mocks.dart';
 
 abstract class UseCasesFactories {
   static GetAppSettingsUseCase buildGetAppSettingsUseCase({MockSettingsRepository? settingsRepository}) =>
@@ -104,9 +105,17 @@ abstract class UseCasesFactories {
   static SignInUseCase buildSignInUseCase({MockAuthRepository? authRepository}) =>
       SignInUseCase(authRepository: authRepository ?? MockAuthRepository());
 
-  static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository}) =>
-      SignOutUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository, MockPurchaseService? purchaseService}) =>
+      SignOutUseCase(
+        authRepository: authRepository ?? MockAuthRepository(),
+        purchaseService: purchaseService ?? MockPurchaseService(),
+      );
 
-  static DeleteAccountUseCase buildDeleteAccountUseCase({MockAuthRepository? authRepository}) =>
-      DeleteAccountUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static DeleteAccountUseCase buildDeleteAccountUseCase({
+    MockAuthRepository? authRepository,
+    MockPurchaseService? purchaseService,
+  }) => DeleteAccountUseCase(
+    authRepository: authRepository ?? MockAuthRepository(),
+    purchaseService: purchaseService ?? MockPurchaseService(),
+  );
 }

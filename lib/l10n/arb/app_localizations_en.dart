@@ -1124,7 +1124,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String premiumSubscribeAction(String price) {
-    return 'Subscribe for $price';
+    return 'Subscribe for $price/month';
   }
 
   @override
