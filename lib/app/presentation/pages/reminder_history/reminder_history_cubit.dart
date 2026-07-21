@@ -4,7 +4,7 @@ import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_p
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_state.dart';
 
 class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, ReminderHistoryPresentationEvent> {
-  ReminderHistoryCubit({required this._getRemindersInRangeUseCase}) : super(ReminderHistoryState(month: _monthOf(DateTime.now())));
+  ReminderHistoryCubit({required this._getRemindersInRangeUseCase}) : super(ReminderHistoryState(isLoaded: false, month: _monthOf(DateTime.now())));
 
   final GetRemindersInRangeUseCase _getRemindersInRangeUseCase;
 
@@ -23,7 +23,7 @@ class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, Remin
     // A fresh state (not copyWith) so the previous month's selected day clears -
     // copyWith can't null a field back out.
     final month = DateTime(state.month.year, state.month.month + monthDelta);
-    emit(ReminderHistoryState(month: month));
+    emit(ReminderHistoryState(month: month, isLoaded: state.isLoaded));
     return loadMonth(month);
   }
 
@@ -33,7 +33,10 @@ class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, Remin
     emitPresentation(ReminderHistoryHideLoading());
     remindersResult.when(
       (error) => emitPresentation(ReminderHistoryError(message: error.message)),
-      (remindersInMonth) => emit(state.copyWith(remindersInMonth: remindersInMonth)),
+      (remindersInMonth) => emit(state.copyWith(remindersInMonth: remindersInMonth, isLoaded: true)),
     );
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 }

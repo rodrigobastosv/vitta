@@ -46,6 +46,9 @@ void main() {
       );
     },
     act: (cubit) => cubit.changeTrendRange(TrendRange.week),
-    expect: () => [isA<BodyWeightHistoryState>().having((state) => state.trendRange, 'trendRange', TrendRange.week)],
+    expect: () => [
+      isA<BodyWeightHistoryState>().having((state) => state.trendRange, 'trendRange', TrendRange.week),
+      isA<BodyWeightHistoryState>().having((state) => state.isLoaded, 'loaded once the range resolves', isTrue),
+    ],
   );
 }

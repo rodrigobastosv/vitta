@@ -8,5 +8,6 @@ class ExerciseProgressionListRoute extends VTRoute {
   AppRoute get route => .exerciseProgressionList;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const ExerciseProgressionListPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const ExerciseProgressionListPage();
 }

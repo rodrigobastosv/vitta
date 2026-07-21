@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_extra.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
@@ -38,6 +39,8 @@ class RecipesPage extends StatelessWidget {
         appBar: AppBar(title: Text(l10n.dietRecipesTitle)),
         body: VTRefreshable(
           onRefresh: cubit.loadRecipes,
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(),
           hasData: state.recipes.isNotEmpty,
           emptyState: VTEmptyState(
             icon: Icons.menu_book_outlined,
@@ -64,11 +67,9 @@ class RecipesPage extends StatelessWidget {
             ],
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _openForm(context, cubit),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.dietCreateRecipeTitle),
-        ),
+        floatingActionButton: state.recipes.isEmpty
+            ? null
+            : FloatingActionButton.extended(onPressed: () => _openForm(context, cubit), icon: const Icon(Icons.add), label: Text(l10n.dietCreateRecipeTitle)),
       ),
     );
   }

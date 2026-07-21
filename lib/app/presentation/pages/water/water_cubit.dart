@@ -20,6 +20,7 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
     required this._getAppSettingsUseCase,
   }) : super(
          WaterState(
+           isLoaded: false,
            date: _dateOnly(DateTime.now()),
            dailyWater: const DailyWater(entries: []),
            dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl,
@@ -52,6 +53,9 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
       (error) => emitPresentation(WaterError(message: error.message)),
       (value) => emit(WaterState(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),
     );
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> addWater({required double amountMl}) async {

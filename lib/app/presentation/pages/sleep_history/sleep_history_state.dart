@@ -9,6 +9,7 @@ class SleepHistoryState extends Equatable {
     this.sleepInMonth = const {},
     this.sleepInTrendRange = const {},
     this.trendRange = TrendRange.month,
+    this.isLoaded = true,
   });
 
   final DateTime month;
@@ -17,15 +18,19 @@ class SleepHistoryState extends Equatable {
   final Map<DateTime, DailySleep> sleepInTrendRange;
   final TrendRange trendRange;
 
+  final bool isLoaded;
+
   bool get hasData => sleepInMonth.isNotEmpty || sleepInTrendRange.isNotEmpty;
 
   SleepHistoryState copyWith({
+    bool? isLoaded,
     DateTime? month,
     double? durationGoalHours,
     Map<DateTime, DailySleep>? sleepInMonth,
     Map<DateTime, DailySleep>? sleepInTrendRange,
     TrendRange? trendRange,
   }) => SleepHistoryState(
+    isLoaded: isLoaded ?? this.isLoaded,
     month: month ?? this.month,
     durationGoalHours: durationGoalHours ?? this.durationGoalHours,
     sleepInMonth: sleepInMonth ?? this.sleepInMonth,
@@ -34,5 +39,5 @@ class SleepHistoryState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [month, durationGoalHours, sleepInMonth, sleepInTrendRange, trendRange];
+  List<Object?> get props => [isLoaded, month, durationGoalHours, sleepInMonth, sleepInTrendRange, trendRange];
 }

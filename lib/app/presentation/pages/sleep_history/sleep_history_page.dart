@@ -7,6 +7,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
@@ -38,6 +39,8 @@ class SleepHistoryPage extends StatelessWidget {
         body: VTRefreshable(
           onRefresh: cubit.refresh,
           hasData: state.hasData,
+          isLoaded: state.isLoaded,
+          skeleton: const HistorySkeleton(),
           emptyState: VTEmptyState(
             icon: Icons.bedtime_outlined,
             title: l10n.sleepHistoryEmptyTitle,

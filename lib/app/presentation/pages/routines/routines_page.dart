@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_extra.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
@@ -29,12 +30,12 @@ class RoutinesPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutRoutinesTitle)),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _openForm(context, cubit),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.workoutRoutineNewAction),
-        ),
-        body: state.routines.isEmpty
+        floatingActionButton: state.routines.isEmpty
+            ? null
+            : FloatingActionButton.extended(onPressed: () => _openForm(context, cubit), icon: const Icon(Icons.add), label: Text(l10n.workoutRoutineNewAction)),
+        body: !state.isLoaded
+            ? const Padding(padding: EdgeInsets.all(VTSpacing.m), child: ListSkeleton())
+            : state.routines.isEmpty
             ? VTEmptyState(
                 icon: Icons.repeat,
                 title: l10n.workoutRoutinesEmptyTitle,

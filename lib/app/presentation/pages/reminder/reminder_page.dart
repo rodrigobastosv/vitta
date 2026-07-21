@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/components/general/vt_segmented_tabs.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_filter.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_presentation_event.dart';
@@ -48,11 +49,13 @@ class ReminderPage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.reminderAddAction),
-        ),
+        floatingActionButton: state.reminders.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.reminderAddAction),
+              ),
         body: Column(
           children: [
             Padding(
@@ -89,6 +92,8 @@ class _ReminderList extends StatelessWidget {
     final reminders = state.visibleReminders;
     return VTRefreshable(
       onRefresh: () => cubit.loadDate(state.date),
+      isLoaded: state.isLoaded,
+      skeleton: const ListSkeleton(),
       padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.m, VTSpacing.xxl),
       hasData: reminders.isNotEmpty,
       emptyState: state.reminders.isEmpty

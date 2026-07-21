@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/workout_history/workout_history_sta
 
 class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, WorkoutHistoryPresentationEvent> {
   WorkoutHistoryCubit({required this._getDailyWorkoutsInRangeUseCase, required this._getAppSettingsUseCase})
-    : super(WorkoutHistoryState(month: _monthOf(DateTime.now())));
+    : super(WorkoutHistoryState(isLoaded: false, month: _monthOf(DateTime.now())));
 
   final GetDailyWorkoutsInRangeUseCase _getDailyWorkoutsInRangeUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
@@ -34,6 +34,9 @@ class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, Workout
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
     emitPresentation(WorkoutHistoryHideLoading());
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> goToPreviousMonth() => _changeMonth(-1);
@@ -59,7 +62,7 @@ class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, Workout
     final workoutsResult = await _getDailyWorkoutsInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
     workoutsResult.when(
       (error) => emitPresentation(WorkoutHistoryError(message: error.message)),
-      (workoutsByDate) => emit(state.copyWith(workoutsInMonth: workoutsByDate)),
+      (workoutsByDate) => emit(state.copyWith(workoutsInMonth: workoutsByDate, isLoaded: true)),
     );
   }
 

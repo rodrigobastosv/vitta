@@ -63,6 +63,8 @@ void main() {
     },
     seed: () => ReminderHistoryState(month: DateTime(2026, 7)),
     act: (cubit) => cubit.goToNextMonth(),
-    expect: () => [isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8))],
+    expect: () => [
+      isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8)),
+    ],
   );
 }

@@ -41,7 +41,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._getAppSettingsUseCase,
     required this._hasSeenWorkoutIntroUseCase,
     required this._markWorkoutIntroSeenUseCase,
-  }) : super(WorkoutState(date: _today(), workouts: const []));
+  }) : super(WorkoutState(isLoaded: false, date: _today(), workouts: const []));
 
   final GetWorkoutsForDateUseCase _getWorkoutsForDateUseCase;
   final AddExerciseToWorkoutUseCase _addExerciseToWorkoutUseCase;
@@ -84,11 +84,14 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     emitPresentation(WorkoutHideLoading());
     workoutsResult.when(
       (error) => emitPresentation(WorkoutError(message: error.message, date: date)),
-      (value) => emit(state.copyWith(date: date, workouts: value)),
+      (value) => emit(state.copyWith(isLoaded: true, date: date, workouts: value)),
     );
     await _loadCycle();
     await _loadLastSets(date);
     await _loadLatestBodyWeight();
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> _loadCycle() async {

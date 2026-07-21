@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/water_history/water_history_state.d
 
 class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistoryPresentationEvent> {
   WaterHistoryCubit({required this._getWaterInRangeUseCase, required this._getWaterGoalUseCase})
-    : super(WaterHistoryState(month: _monthOf(DateTime.now()), dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl));
+    : super(WaterHistoryState(isLoaded: false, month: _monthOf(DateTime.now()), dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl));
 
   final GetWaterInRangeUseCase _getWaterInRangeUseCase;
   final GetWaterGoalUseCase _getWaterGoalUseCase;
@@ -33,6 +33,9 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
     emitPresentation(WaterHistoryHideLoading());
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> goToPreviousMonth() => _changeMonth(-1);
@@ -56,7 +59,10 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
 
   Future<void> _loadMonth(DateTime month) async {
     final waterResult = await _getWaterInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
-    waterResult.when((error) => emitPresentation(WaterHistoryError(message: error.message)), (waterByDate) => emit(state.copyWith(waterInMonth: waterByDate)));
+    waterResult.when(
+      (error) => emitPresentation(WaterHistoryError(message: error.message)),
+      (waterByDate) => emit(state.copyWith(waterInMonth: waterByDate, isLoaded: true)),
+    );
   }
 
   Future<void> _loadTrend(TrendRange trendRange) async {

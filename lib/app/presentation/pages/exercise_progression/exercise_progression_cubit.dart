@@ -11,6 +11,7 @@ class ExerciseProgressionCubit extends PresentationCubit<ExerciseProgressionStat
   ExerciseProgressionCubit({required this._getExerciseProgressionUseCase, required this._getAppSettingsUseCase, required Exercise exercise})
     : super(
         ExerciseProgressionState(
+          isLoaded: false,
           exercise: exercise,
           progression: const ExerciseProgression(points: []),
         ),
@@ -29,8 +30,11 @@ class ExerciseProgressionCubit extends PresentationCubit<ExerciseProgressionStat
     final progressionResult = await _getExerciseProgressionUseCase(exerciseId: state.exercise.id);
     progressionResult.when(
       (error) => emitPresentation(ExerciseProgressionError(message: error.message)),
-      (progression) => emit(state.copyWith(progression: progression)),
+      (progression) => emit(state.copyWith(isLoaded: true, progression: progression)),
     );
     emitPresentation(ExerciseProgressionHideLoading());
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 }

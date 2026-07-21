@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_extra.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_cubit.dart';
@@ -34,7 +35,9 @@ class ExerciseProgressionListPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutProgressionListTitle)),
-        body: state.exercises.isEmpty
+        body: !state.isLoaded
+            ? const Padding(padding: EdgeInsets.all(VTSpacing.m), child: ListSkeleton())
+            : state.exercises.isEmpty
             ? VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutProgressionListEmptyTitle, message: l10n.workoutProgressionListEmptyMessage)
             : ListView.separated(
                 padding: const EdgeInsets.all(VTSpacing.m),

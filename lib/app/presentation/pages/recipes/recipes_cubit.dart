@@ -6,7 +6,7 @@ import 'package:vitta/app/presentation/pages/recipes/recipes_presentation_event.
 import 'package:vitta/app/presentation/pages/recipes/recipes_state.dart';
 
 class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEvent> {
-  RecipesCubit({required this._getRecipesUseCase, required this._deleteRecipeUseCase}) : super(const RecipesState());
+  RecipesCubit({required this._getRecipesUseCase, required this._deleteRecipeUseCase}) : super(const RecipesState(isLoaded: false));
 
   final GetRecipesUseCase _getRecipesUseCase;
   final DeleteRecipeUseCase _deleteRecipeUseCase;
@@ -18,7 +18,10 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
     emitPresentation(RecipesShowLoading());
     final recipesResult = await _getRecipesUseCase();
     emitPresentation(RecipesHideLoading());
-    recipesResult.when((error) => emitPresentation(RecipesError(message: error.message)), (recipes) => emit(state.copyWith(recipes: recipes)));
+    recipesResult.when((error) => emitPresentation(RecipesError(message: error.message)), (recipes) => emit(state.copyWith(isLoaded: true, recipes: recipes)));
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> deleteRecipe({required String recipeId}) async {

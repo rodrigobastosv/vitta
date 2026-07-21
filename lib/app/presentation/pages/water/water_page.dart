@@ -7,6 +7,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
@@ -42,6 +43,8 @@ class WaterPage extends StatelessWidget {
         ),
         body: VTRefreshable(
           onRefresh: cubit.loadToday,
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(headerHeight: 260),
           children: [
             WaterProgressCard(
               dailyWater: state.dailyWater,

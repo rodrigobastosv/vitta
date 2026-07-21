@@ -20,7 +20,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
     required this._completeReminderUseCase,
     required this._deleteReminderUseCase,
     required this._notificationService,
-  }) : super(ReminderState(date: _dateOnly(DateTime.now()), reminders: const [], filter: ReminderFilter.all));
+  }) : super(ReminderState(isLoaded: false, date: _dateOnly(DateTime.now()), reminders: const [], filter: ReminderFilter.all));
 
   final GetRemindersForDateUseCase _getRemindersForDateUseCase;
   final CreateReminderUseCase _createReminderUseCase;
@@ -43,6 +43,9 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
       (error) => emitPresentation(ReminderError(message: error.message)),
       (reminders) => emit(ReminderState(date: day, reminders: reminders, filter: state.filter)),
     );
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> previousDay() => loadDate(state.date.subtract(const Duration(days: 1)));

@@ -6,6 +6,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
+import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_presentation_event.dart';
@@ -36,6 +37,8 @@ class ReminderHistoryPage extends StatelessWidget {
         body: VTRefreshable(
           onRefresh: () => cubit.loadMonth(state.month),
           hasData: state.hasData,
+          isLoaded: state.isLoaded,
+          skeleton: const HistorySkeleton(),
           emptyState: VTEmptyState(
             icon: Icons.event_available_outlined,
             title: l10n.reminderHistoryEmptyTitle,

@@ -59,7 +59,21 @@ void main() {
 
     await cubit.loadToday();
 
-    expect(cubit.state, initialState);
+    expect(cubit.state, initialState.copyWith(isLoaded: true));
+  });
+
+  test('a failed first load still marks itself loaded, so the page falls through to its empty state', () async {
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+
+    expect(cubit.state.isLoaded, isFalse);
+
+    await cubit.loadToday();
+
+    expect(cubit.state.isLoaded, isTrue);
   });
 
   blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(

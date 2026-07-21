@@ -9,5 +9,6 @@ class PremiumRoute extends VTRoute {
   AppRoute get route => .premium;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => PaywallPage(extra: state.extra as PaywallExtra?);
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => PaywallPage(extra: state.extra as PaywallExtra?);
 }

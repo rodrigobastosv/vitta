@@ -22,7 +22,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     required this._saveSleepGoalUseCase,
     required this._importSleepFromHealthUseCase,
     required this._healthService,
-  }) : super(const SleepState(logs: []));
+  }) : super(const SleepState(logs: [], isLoaded: false));
 
   final GetRecentSleepLogsUseCase _getRecentSleepLogsUseCase;
   final LogSleepUseCase _logSleepUseCase;
@@ -52,6 +52,9 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     final recentLogsResult = await _getRecentSleepLogsUseCase(days: _recentDays);
     emitPresentation(SleepHideLoading());
     recentLogsResult.when((error) => emitPresentation(SleepError(message: error.message)), (value) => emit(SleepState(logs: value)));
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) async {
