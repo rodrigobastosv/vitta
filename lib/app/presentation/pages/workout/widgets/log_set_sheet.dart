@@ -9,6 +9,7 @@ import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/labelled_field.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -103,21 +104,24 @@ class _LogSetSheetState extends State<LogSetSheet> {
           Text(widget.set == null ? l10n.workoutAddSet : l10n.workoutEditSet, style: VTTextStyles.title(context)),
           const VTGap.l(),
           Row(
+            crossAxisAlignment: .start,
             children: [
               Expanded(
-                child: InputDecorator(
-                  decoration: InputDecoration(labelText: l10n.workoutRepsLabel, contentPadding: EdgeInsets.zero),
+                child: LabelledField(
+                  label: l10n.workoutRepsLabel,
                   child: VTStepper(controller: _repsController),
                 ),
               ),
               const SizedBox(width: VTSpacing.m),
               Expanded(
-                child: TextField(
-                  controller: _loadController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  textInputAction: .done,
-                  onSubmitted: (_) => _submit(),
-                  decoration: InputDecoration(labelText: l10n.workoutLoadLabel(widget.unitSystem.loadUnitLabel)),
+                child: LabelledField(
+                  label: l10n.workoutLoadLabel(widget.unitSystem.loadUnitLabel),
+                  child: TextField(
+                    controller: _loadController,
+                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    textInputAction: .done,
+                    onSubmitted: (_) => _submit(),
+                  ),
                 ),
               ),
             ],

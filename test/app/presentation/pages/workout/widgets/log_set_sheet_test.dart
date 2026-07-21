@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/labelled_field.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
@@ -130,8 +131,9 @@ void main() {
   testWidgets('reps and load line up, so the row does not read as two different controls', (tester) async {
     await pumpLogSetSheet(tester, defaultReps: 8);
 
-    final repsTop = tester.getTopLeft(find.byType(InputDecorator).first).dy;
-    final loadTop = tester.getTopLeft(find.byType(TextField).last).dy;
+    final fields = find.byType(LabelledField);
+    final repsTop = tester.getTopLeft(fields.first).dy;
+    final loadTop = tester.getTopLeft(fields.last).dy;
 
     expect((repsTop - loadTop).abs(), lessThan(4), reason: 'the reps stepper and the load field share a top edge');
   });
