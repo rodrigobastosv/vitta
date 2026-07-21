@@ -10,7 +10,7 @@ enum AppRoute {
   recipes('/diet/recipes'),
   recipeForm('/diet/recipes/new'),
   ingredientPicker('/diet/recipes/new/ingredient'),
-  foodSearch('/diet/food-search'),
+  addFood('/diet/add-food'),
   customFood('/diet/food-search/custom-food'),
   water('/water'),
   waterHistory('/water/history'),

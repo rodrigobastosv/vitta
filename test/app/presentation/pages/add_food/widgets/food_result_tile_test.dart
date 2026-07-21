@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_tile.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/food_factory.dart';
@@ -13,7 +13,7 @@ void main() {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: FoodSearchResultTile(
+        body: FoodResultTile(
           food: food ?? FoodFactory.build(brand: 'Chiquita'),
           heroTag: 'tag',
           onTap: onTap ?? () {},
@@ -34,10 +34,10 @@ void main() {
 
   testWidgets('a branded and an unbranded row are the same height, so the list is not ragged', (tester) async {
     await pumpTile(tester);
-    final branded = tester.getSize(find.byType(FoodSearchResultTile)).height;
+    final branded = tester.getSize(find.byType(FoodResultTile)).height;
 
     await pumpTile(tester, food: FoodFactory.build());
-    final unbranded = tester.getSize(find.byType(FoodSearchResultTile)).height;
+    final unbranded = tester.getSize(find.byType(FoodResultTile)).height;
 
     expect(unbranded, branded);
   });

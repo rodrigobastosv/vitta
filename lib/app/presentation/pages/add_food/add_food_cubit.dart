@@ -19,12 +19,12 @@ import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_event.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 
-class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPresentationEvent> {
-  FoodSearchCubit({
+class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEvent> {
+  AddFoodCubit({
     required this._searchFoodsUseCase,
     required this._logFoodUseCase,
     required this._getAppSettingsUseCase,
@@ -36,7 +36,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     required this._removeRecentSearchUseCase,
     required this._clearRecentSearchesUseCase,
     required this._getRecentlyLoggedFoodsUseCase,
-  }) : super(const FoodSearchState());
+  }) : super(const AddFoodState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
   final LogFoodUseCase _logFoodUseCase;
@@ -66,13 +66,13 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     recentResult.when((_) {}, (recentFoods) => emit(state.copyWith(recentFoods: recentFoods)));
   }
 
-  void changeTab(FoodSearchTab tab) => emit(state.copyWith(tab: tab));
+  void changeTab(AddFoodTab tab) => emit(state.copyWith(tab: tab));
 
   Future<void> loadFavorites() async {
-    emitPresentation(FoodSearchShowLoading());
+    emitPresentation(AddFoodShowLoading());
     final favoritesResult = await _getFavoriteFoodsUseCase();
-    emitPresentation(FoodSearchHideLoading());
-    favoritesResult.when((error) => emitPresentation(FoodSearchError(message: error.message)), (favorites) => emit(state.copyWith(favorites: favorites)));
+    emitPresentation(AddFoodHideLoading());
+    favoritesResult.when((error) => emitPresentation(AddFoodError(message: error.message)), (favorites) => emit(state.copyWith(favorites: favorites)));
   }
 
   static const Duration _debounce = Duration(milliseconds: 350);
@@ -97,15 +97,15 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
 
   Future<void> search({required String query}) async {
     if (query.trim().isEmpty) {
-      emit(FoodSearchState(favorites: state.favorites, recentSearches: state.recentSearches, tab: state.tab));
+      emit(AddFoodState(favorites: state.favorites, recentSearches: state.recentSearches, tab: state.tab));
       return;
     }
-    emitPresentation(FoodSearchShowLoading());
+    emitPresentation(AddFoodShowLoading());
     final foodsResult = await _searchFoodsUseCase(query: query);
-    emitPresentation(FoodSearchHideLoading());
+    emitPresentation(AddFoodHideLoading());
     final foods = foodsResult.when((_) => null, (value) => value);
     if (foods == null) {
-      emitPresentation(FoodSearchError(message: foodsResult.when((error) => error.message, (_) => '')));
+      emitPresentation(AddFoodError(message: foodsResult.when((error) => error.message, (_) => '')));
       return;
     }
     emit(state.copyWith(results: foods, query: query));
@@ -174,7 +174,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
 
   void _revert(List<Food> previousFavorites, String message) {
     emit(state.copyWith(favorites: previousFavorites));
-    emitPresentation(FoodSearchError(message: message));
+    emitPresentation(AddFoodError(message: message));
   }
 
   List<Food>? _replaceInResults(Food food, Food savedFood) {

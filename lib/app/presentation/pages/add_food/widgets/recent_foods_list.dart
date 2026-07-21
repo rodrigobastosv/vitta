@@ -5,7 +5,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/recent_food_tile.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/recent_food_tile.dart';
 
 class RecentFoodsList extends StatelessWidget {
   const RecentFoodsList({required this.entries, required this.onOpenFood, required this.onQuickAdd, super.key});

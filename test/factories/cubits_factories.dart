@@ -1,6 +1,7 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart'
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
@@ -124,7 +124,7 @@ abstract class CubitsFactories {
         saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
       );
 
-  static FoodSearchCubit buildFoodSearchCubit({
+  static AddFoodCubit buildAddFoodCubit({
     MockSearchFoodsUseCase? searchFoodsUseCase,
     MockLogFoodUseCase? logFoodUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
@@ -136,7 +136,7 @@ abstract class CubitsFactories {
     MockRemoveRecentSearchUseCase? removeRecentSearchUseCase,
     MockClearRecentSearchesUseCase? clearRecentSearchesUseCase,
     MockGetRecentlyLoggedFoodsUseCase? getRecentlyLoggedFoodsUseCase,
-  }) => FoodSearchCubit(
+  }) => AddFoodCubit(
     searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
     logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),

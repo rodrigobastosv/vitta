@@ -8,11 +8,11 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/food_source_badge.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_source_badge.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
-class FoodSearchResultTile extends StatelessWidget {
-  const FoodSearchResultTile({
+class FoodResultTile extends StatelessWidget {
+  const FoodResultTile({
     required this.food,
     required this.heroTag,
     required this.onTap,

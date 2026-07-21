@@ -7,8 +7,8 @@ import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/cubits_factories.dart';
@@ -19,18 +19,18 @@ import '../../../../../mocks/use_cases_mocks.dart';
 final _weightField = find.byWidgetPredicate((widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false));
 final _unitsField = find.descendant(of: find.byType(VTStepper), matching: find.byType(TextField));
 
-FoodSearchCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
+AddFoodCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
-  return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase, getAppSettingsUseCase: getAppSettingsUseCase);
+  return CubitsFactories.buildAddFoodCubit(logFoodUseCase: logFoodUseCase, getAppSettingsUseCase: getAppSettingsUseCase);
 }
 
-Future<void> _pumpSheet(WidgetTester tester, {required FoodSearchCubit cubit, required Food food}) async {
+Future<void> _pumpSheet(WidgetTester tester, {required AddFoodCubit cubit, required Food food}) async {
   await tester.pumpWidget(
     MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      home: BlocProvider<FoodSearchCubit>.value(
+      home: BlocProvider<AddFoodCubit>.value(
         value: cubit,
         child: Builder(
           builder: (context) => Scaffold(

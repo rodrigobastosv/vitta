@@ -1,6 +1,6 @@
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
-enum FoodSearchTab {
+enum AddFoodTab {
   search,
   recent,
   favorites;

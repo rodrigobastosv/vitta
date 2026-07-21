@@ -1,16 +1,16 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 
-class FoodSearchState extends Equatable {
-  const FoodSearchState({
+class AddFoodState extends Equatable {
+  const AddFoodState({
     this.results,
     this.favorites = const [],
     this.recentSearches = const [],
     this.recentFoods = const [],
     this.query = '',
-    this.tab = FoodSearchTab.search,
+    this.tab = AddFoodTab.search,
   });
 
   final List<Food>? results;
@@ -23,20 +23,20 @@ class FoodSearchState extends Equatable {
 
   final String query;
 
-  final FoodSearchTab tab;
+  final AddFoodTab tab;
 
   Set<String> get favoriteFoodIds => {for (final food in favorites) ?food.id};
 
   bool isFavorite(Food food) => food.id == null ? favorites.contains(food) : favoriteFoodIds.contains(food.id);
 
-  FoodSearchState copyWith({
+  AddFoodState copyWith({
     List<Food>? results,
     List<Food>? favorites,
     List<String>? recentSearches,
     List<FoodLogEntry>? recentFoods,
     String? query,
-    FoodSearchTab? tab,
-  }) => FoodSearchState(
+    AddFoodTab? tab,
+  }) => AddFoodState(
     results: results ?? this.results,
     favorites: favorites ?? this.favorites,
     recentSearches: recentSearches ?? this.recentSearches,

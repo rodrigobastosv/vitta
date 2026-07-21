@@ -8,16 +8,16 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
 Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
       builder: (sheetContext) => BlocProvider.value(
-        value: context.read<FoodSearchCubit>(),
+        value: context.read<AddFoodCubit>(),
         child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
       ),
     );
@@ -34,7 +34,7 @@ class _LogFoodSheet extends StatefulWidget {
 }
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
-  late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
+  late final UnitSystem _unitSystem = context.read<AddFoodCubit>().unitSystem;
   late final double? _initialUnits = widget.food.isCountable ? 1 : null;
   late final double _initialGrams = widget.food.gramsPerUnit ?? 100;
   late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: _initialGrams, quantityUnits: _initialUnits);
@@ -55,7 +55,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       _errorMessage = null;
     });
 
-    final loggedResult = await context.read<FoodSearchCubit>().logFood(
+    final loggedResult = await context.read<AddFoodCubit>().logFood(
       food: widget.food,
       loggedDate: widget.loggedDate,
       mealType: _mealType,

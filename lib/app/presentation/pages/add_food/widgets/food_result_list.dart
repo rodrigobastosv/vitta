@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_tile.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_tile.dart';
 
-class FoodSearchResultList extends StatelessWidget {
-  const FoodSearchResultList({
+class FoodResultList extends StatelessWidget {
+  const FoodResultList({
     required this.foods,
     required this.heroPrefix,
     required this.isFavorite,
@@ -34,7 +34,7 @@ class FoodSearchResultList extends StatelessWidget {
       return VTAppearEffect(
         key: ValueKey('$heroPrefix-$index-${food.id ?? food.barcode ?? food.name}'),
         index: index,
-        child: FoodSearchResultTile(
+        child: FoodResultTile(
           food: food,
           heroTag: heroTag,
           isFavorite: isFavorite(food),

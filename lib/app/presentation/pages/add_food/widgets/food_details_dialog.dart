@@ -8,8 +8,8 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/macro_pill.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/macro_pill.dart';
 
 Future<void> showFoodDetailsDialog({required BuildContext context, required Food food, required Object heroTag}) => Navigator.of(context).push(
   PageRouteBuilder<void>(

@@ -131,6 +131,7 @@ import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dar
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_cubit.dart';
@@ -141,7 +142,6 @@ import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dar
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
@@ -322,7 +322,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(
-    () => FoodSearchCubit(
+    () => AddFoodCubit(
       searchFoodsUseCase: G(),
       logFoodUseCase: G(),
       getAppSettingsUseCase: G(),
