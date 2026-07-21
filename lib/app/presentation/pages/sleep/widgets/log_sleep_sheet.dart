@@ -6,6 +6,9 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_duration_hero.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_quality_selector.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_time_row.dart';
 
 Future<void> showLogSleepSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
@@ -24,7 +27,10 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
   late DateTime _wakeTime = DateTime.now();
   late DateTime _bedTime = _wakeTime.subtract(const Duration(hours: 8));
   int? _qualityRating;
-  String? _errorMessage;
+
+  Duration get _duration => _wakeTime.difference(_bedTime);
+
+  bool get _isValid => _duration > Duration.zero;
 
   Future<void> _pickDateTime({required DateTime initial, required ValueChanged<DateTime> onPicked}) async {
     final pickedDate = await showDatePicker(
@@ -44,11 +50,6 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
   }
 
   Future<void> _submit() async {
-    final l10n = context.l10n;
-    if (!_wakeTime.isAfter(_bedTime)) {
-      setState(() => _errorMessage = l10n.sleepInvalidRange);
-      return;
-    }
     await context.read<SleepCubit>().logSleep(bedTime: _bedTime, wakeTime: _wakeTime, qualityRating: _qualityRating);
     if (mounted) {
       Navigator.of(context).pop();
@@ -58,7 +59,6 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final materialLocalizations = context.materialLocalizations;
     return Padding(
       padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
@@ -67,36 +67,25 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
         children: [
           Text(l10n.sleepLogSheetTitle, style: VTTextStyles.title(context)),
           const VTGap.m(),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.sleepBedTimeLabel),
-            subtitle: Text('${materialLocalizations.formatShortDate(_bedTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_bedTime))}'),
-            trailing: const Icon(Icons.edit_outlined),
+          SleepDurationHero(duration: _duration, isValid: _isValid),
+          const VTGap.m(),
+          SleepTimeRow(
+            icon: Icons.bedtime_rounded,
+            label: l10n.sleepBedTimeLabel,
+            dateTime: _bedTime,
             onTap: () => _pickDateTime(initial: _bedTime, onPicked: (value) => setState(() => _bedTime = value)),
           ),
-          ListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(l10n.sleepWakeTimeLabel),
-            subtitle: Text('${materialLocalizations.formatShortDate(_wakeTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_wakeTime))}'),
-            trailing: const Icon(Icons.edit_outlined),
+          const VTGap.s(),
+          SleepTimeRow(
+            icon: Icons.wb_sunny_rounded,
+            label: l10n.sleepWakeTimeLabel,
+            dateTime: _wakeTime,
             onTap: () => _pickDateTime(initial: _wakeTime, onPicked: (value) => setState(() => _wakeTime = value)),
           ),
-          const VTGap.m(),
-          Text(l10n.sleepQualityLabel, style: VTTextStyles.body(context)),
-          const VTGap.xs(),
-          Row(
-            children: List.generate(
-              5,
-              (index) => IconButton(
-                icon: Icon(index < (_qualityRating ?? 0) ? Icons.star : Icons.star_border, color: Theme.of(context).colorScheme.primary),
-                tooltip: context.l10n.sleepQualityStars(index + 1),
-                onPressed: () => setState(() => _qualityRating = _qualityRating == index + 1 ? null : index + 1),
-              ),
-            ),
-          ),
-          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error))],
           const VTGap.l(),
-          VTPrimaryButton(label: l10n.sleepLogAction, onPressed: _submit),
+          SleepQualitySelector(rating: _qualityRating, onChanged: (rating) => setState(() => _qualityRating = rating)),
+          const VTGap.l(),
+          VTPrimaryButton(label: l10n.sleepLogAction, onPressed: _isValid ? _submit : null),
         ],
       ),
     );

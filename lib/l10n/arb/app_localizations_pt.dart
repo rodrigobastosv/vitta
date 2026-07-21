@@ -1229,6 +1229,38 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sleepHealthPermissionDeniedMessage => 'A permissão de sono foi negada. Conceda-a para importar suas noites.';
 
   @override
+  String get sleepSourceHealth => 'Saúde';
+
+  @override
+  String get sleepSyncStatusTitle => 'App de saúde';
+
+  @override
+  String sleepLastSyncedLabel(String when) {
+    return 'Sincronizado $when';
+  }
+
+  @override
+  String get sleepSyncNowTooltip => 'Sincronizar agora';
+
+  @override
+  String get sleepLogDurationHint => 'Tempo dormindo';
+
+  @override
+  String get sleepQualityPoor => 'Ruim';
+
+  @override
+  String get sleepQualityFair => 'Razoável';
+
+  @override
+  String get sleepQualityGood => 'Boa';
+
+  @override
+  String get sleepQualityGreat => 'Ótima';
+
+  @override
+  String get sleepQualityExcellent => 'Excelente';
+
+  @override
   String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
 
   @override

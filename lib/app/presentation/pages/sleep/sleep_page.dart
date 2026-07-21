@@ -17,6 +17,7 @@ import 'package:vitta/app/presentation/pages/sleep/widgets/edit_sleep_goal_dialo
 import 'package:vitta/app/presentation/pages/sleep/widgets/log_sleep_sheet.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_log_tile.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_summary_card.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_sync_status_card.dart';
 
 class SleepPage extends StatelessWidget {
   const SleepPage({super.key});
@@ -78,6 +79,10 @@ class SleepPage extends StatelessWidget {
                   }
                 },
               ),
+              if (cubit.lastSyncedAt case final lastSyncedAt?) ...[
+                const VTGap.m(),
+                SleepSyncStatusCard(lastSyncedAt: lastSyncedAt, onSync: cubit.importFromHealth),
+              ],
               const VTGap.l(),
               for (final log in state.logs) ...[
                 SleepLogTile(

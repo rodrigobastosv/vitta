@@ -16,6 +16,8 @@ class SleepRepository {
 
   Future<void> saveDurationGoalHours(double goalHours) => _sleepLocalDataSource.saveDurationGoalHours(goalHours);
 
+  DateTime? getLastSyncedAt() => _sleepLocalDataSource.getLastSyncedAt();
+
   Future<Result<VTError, Map<DateTime, DailySleep>>> getSleepInRange({required DateTime from, required DateTime to}) async {
     final logsResult = await _supabaseSleepDataSource.getLogsInRange(from: from, to: to);
     return logsResult.when(Failure.new, (logs) => Success(_groupByDate(logs)));
@@ -34,7 +36,11 @@ class SleepRepository {
 
   Future<Result<VTError, List<SleepLog>>> getRecentSleepLogs({required int days}) => _supabaseSleepDataSource.getRecentLogs(days: days);
 
-  Future<Result<VTError, int>> importSleepLogs({required List<SleepImport> imports}) => _supabaseSleepDataSource.importSleepLogs(imports: imports);
+  Future<Result<VTError, int>> importSleepLogs({required List<SleepImport> imports}) async {
+    final importedResult = await _supabaseSleepDataSource.importSleepLogs(imports: imports);
+    await importedResult.when((_) => Future<void>.value(), (_) => _sleepLocalDataSource.saveLastSyncedAt(DateTime.now()));
+    return importedResult;
+  }
 
   Future<Result<VTError, void>> deleteSleepLog({required String logId}) => _supabaseSleepDataSource.deleteSleepLog(logId: logId);
 }

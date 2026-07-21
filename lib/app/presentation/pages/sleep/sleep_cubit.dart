@@ -6,6 +6,7 @@ import 'package:vitta/app/domain/sleep/entities/sleep_import.dart';
 import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_last_synced_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
@@ -20,6 +21,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     required this._deleteSleepLogUseCase,
     required this._getSleepGoalUseCase,
     required this._saveSleepGoalUseCase,
+    required this._getSleepLastSyncedUseCase,
     required this._importSleepFromHealthUseCase,
     required this._healthService,
   }) : super(const SleepState(logs: [], isLoaded: false));
@@ -29,10 +31,13 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   final DeleteSleepLogUseCase _deleteSleepLogUseCase;
   final GetSleepGoalUseCase _getSleepGoalUseCase;
   final SaveSleepGoalUseCase _saveSleepGoalUseCase;
+  final GetSleepLastSyncedUseCase _getSleepLastSyncedUseCase;
   final ImportSleepFromHealthUseCase _importSleepFromHealthUseCase;
   final HealthService _healthService;
 
   double get durationGoalHours => _getSleepGoalUseCase();
+
+  DateTime? get lastSyncedAt => _getSleepLastSyncedUseCase();
 
   Future<void> saveDurationGoalHours(double goalHours) => _saveSleepGoalUseCase(goalHours: goalHours);
 

@@ -101,6 +101,7 @@ import 'package:vitta/app/domain/sleep/use_cases/delete_sleep_log_use_case.dart'
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/get_sleep_last_synced_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
@@ -275,6 +276,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetSleepInRangeUseCase(sleepRepository: G()));
   G.registerFactory(() => GetSleepGoalUseCase(sleepRepository: G()));
   G.registerFactory(() => SaveSleepGoalUseCase(sleepRepository: G()));
+  G.registerFactory(() => GetSleepLastSyncedUseCase(sleepRepository: G()));
   G.registerFactory(() => DeleteSleepLogUseCase(sleepRepository: G()));
   G.registerFactory(() => ImportSleepFromHealthUseCase(sleepRepository: G()));
   G.registerFactory(() => GetPremiumStatusUseCase(premiumRepository: G()));
@@ -436,6 +438,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       deleteSleepLogUseCase: G(),
       getSleepGoalUseCase: G(),
       saveSleepGoalUseCase: G(),
+      getSleepLastSyncedUseCase: G(),
       importSleepFromHealthUseCase: G(),
       healthService: G(),
     ),

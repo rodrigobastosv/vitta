@@ -1228,6 +1228,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepHealthPermissionDeniedMessage => 'Sleep permission was denied. Grant it to import your nights.';
 
   @override
+  String get sleepSourceHealth => 'Health';
+
+  @override
+  String get sleepSyncStatusTitle => 'Health app';
+
+  @override
+  String sleepLastSyncedLabel(String when) {
+    return 'Last synced $when';
+  }
+
+  @override
+  String get sleepSyncNowTooltip => 'Sync now';
+
+  @override
+  String get sleepLogDurationHint => 'Time asleep';
+
+  @override
+  String get sleepQualityPoor => 'Poor';
+
+  @override
+  String get sleepQualityFair => 'Fair';
+
+  @override
+  String get sleepQualityGood => 'Good';
+
+  @override
+  String get sleepQualityGreat => 'Great';
+
+  @override
+  String get sleepQualityExcellent => 'Excellent';
+
+  @override
   String get onboardingWelcomeTitle => 'Welcome to Vitta';
 
   @override
