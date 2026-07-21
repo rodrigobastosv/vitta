@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTLabeledSlider extends StatelessWidget {
@@ -21,6 +22,17 @@ class VTLabeledSlider extends StatelessWidget {
   final double max;
   final Color color;
   final ValueChanged<double> onChanged;
+
+  static const int _hapticDivisions = 100;
+
+  int _tickFor(double value) => ((value - min) / (max - min) * _hapticDivisions).round();
+
+  void _onChanged(double newValue) {
+    if (_tickFor(newValue) != _tickFor(value)) {
+      VTHaptics.selection();
+    }
+    onChanged(newValue);
+  }
 
   @override
   Widget build(BuildContext context) => Column(
@@ -49,7 +61,7 @@ class VTLabeledSlider extends StatelessWidget {
           inactiveTrackColor: color.withValues(alpha: 0.20),
           trackHeight: 4,
         ),
-        child: Slider(value: value.clamp(min, max), min: min, max: max, onChanged: onChanged),
+        child: Slider(value: value.clamp(min, max), min: min, max: max, onChanged: _onChanged),
       ),
     ],
   );

@@ -3,6 +3,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -100,7 +101,16 @@ class WorkoutExerciseCard extends StatelessWidget {
                     (false, true) => l10n.workoutCompleteExerciseAction,
                     (false, false) => l10n.workoutCompleteNeedsSetTooltip,
                   },
-                  onPressed: canComplete || isCompleted ? () => onToggleCompleted(!isCompleted) : null,
+                  onPressed: canComplete || isCompleted
+                      ? () {
+                          if (isCompleted) {
+                            VTHaptics.selection();
+                          } else {
+                            VTHaptics.success();
+                          }
+                          onToggleCompleted(!isCompleted);
+                        }
+                      : null,
                 ),
               if (onRemove != null && !isCompleted)
                 IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutDeleteExercise, onPressed: onRemove),

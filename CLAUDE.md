@@ -124,6 +124,23 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Haptics
+
+Every physical feedback goes through `VTHaptics` (`design_system/components/general/vt_haptics.dart`, issue #163) — call sites express **intent** (`.selection()`, `.success()`, `.warning()`, `.error()`, `.drag()`), never an impact strength, so the mapping is tuned in one place rather than re-decided per screen.
+
+**Flutter does not expose iOS's `UINotificationFeedbackGenerator` types**, so success/warning/error cannot be told apart semantically — only by weight. The mapping is therefore an **escalation**: success is `lightImpact`, warning `mediumImpact`, error `heavyImpact`. The worse it is, the harder it hits. `selection` is `selectionClick` (the discrete tick) and `drag` is `mediumImpact`.
+
+**Wire it at the choke point, not per call site.** Every toast's haptic comes from `_showToast` switching on the `VTToast`'s own `VTSeverity`, so all three toast helpers — and therefore every error, warning and success in the app — are covered without a single page changing. The same idea puts the tick inside `VTSegmentedTabs`, `VTStepper`, `VTLabeledSlider`, `VTWeightPicker` and `VTCalendarDayCell` rather than at the screens that use them. A new screen built from `VT` components gets its haptics for free; **if you find yourself adding `VTHaptics` to a page, ask whether it belongs in the component instead.**
+
+Two rules that are easy to get wrong and are pinned by `vt_haptics_test.dart`:
+
+- **A continuous control ticks per division, never per event.** `VTLabeledSlider` is continuous, so firing on every `onChanged` machine-guns; it quantizes the range into `_hapticDivisions` (100) and only ticks when the bucket changes, so one full sweep is a ruler regardless of whether the slider spans 300g or 3000 kcal. `VTWeightPicker` gets this free — `_onScroll` already gated on crossing a step.
+- **A no-op action gets no feedback.** Re-tapping the already-selected segment doesn't tick. Feedback for something that didn't happen is worse than none.
+
+**A toggle is not symmetric**: completing an exercise or ticking a reminder is `.success()`, undoing it is `.selection()` — un-completing is a correction, not an achievement.
+
+The test **records real platform channel calls** (`SystemChannels.platform`, `HapticFeedback.vibrate`) rather than asserting a `VTHaptics` method was called, so it pins the actual mapping. Both behavioural tests were verified by mutating the component and watching them fail — the same discipline `vt_toast_test.dart`'s contrast assertions follow.
+
 ## Toasts
 
 **A toast is how the app says anything one-off** — it worked, it failed, you left a field empty. All three follow the same presentation-event shape: a cubit emits a one-off event (`FoodLogged`, carrying what the toast renders — `foodName`, `mealType`) and the page's `onPresentation` switch calls `context.showToast(...)` / `showErrorToast(...)` / `showWarningToast(...)` (`lib/app/core/toast/toast_extensions.dart`). Each shows a floating, transparent-background `SnackBar` whose `content` is `VTToast` (design system) — a rounded elevated card with a leading circular icon avatar, a title, a subtitle, and an optional action, so the toast fully owns its look rather than the Material `SnackBar` chrome. `FoodSearchCubit.logFood` still returns its `Result` to `_LogFoodSheet` (which pops on success) *and* emits `FoodLogged` on success — the sheet's inline error handling and the page's toast are two different concerns on the same call.

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -22,6 +23,7 @@ class VTStepper extends StatelessWidget {
   double get _decremented => _current.ceilToDouble() - step;
 
   void _setValue(double value) {
+    VTHaptics.selection();
     final clamped = value < min ? min.toDouble() : value;
     final text = QuantityFormat.format(clamped);
     controller.value = TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length));
