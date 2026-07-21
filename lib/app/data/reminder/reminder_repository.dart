@@ -10,8 +10,7 @@ class ReminderRepository {
 
   final SupabaseReminderDataSource _supabaseReminderDataSource;
 
-  Future<Result<VTError, List<Reminder>>> getRemindersForDate({required DateTime date}) =>
-      _supabaseReminderDataSource.getRemindersForDate(date: date);
+  Future<Result<VTError, List<Reminder>>> getRemindersForDate({required DateTime date}) => _supabaseReminderDataSource.getRemindersForDate(date: date);
 
   Future<Result<VTError, Map<DateTime, List<Reminder>>>> getRemindersInRange({required DateTime from, required DateTime to}) async {
     final remindersResult = await _supabaseReminderDataSource.getRemindersInRange(from: from, to: to);
@@ -33,8 +32,7 @@ class ReminderRepository {
     String? notes,
     DateTime? remindAt,
     ReminderRecurrence recurrence = .none,
-  }) =>
-      _supabaseReminderDataSource.createReminder(title: title, dueDate: dueDate, notes: notes, remindAt: remindAt, recurrence: recurrence);
+  }) => _supabaseReminderDataSource.createReminder(title: title, dueDate: dueDate, notes: notes, remindAt: remindAt, recurrence: recurrence);
 
   Future<Result<VTError, Reminder>> updateReminder({
     required String reminderId,
@@ -52,16 +50,12 @@ class ReminderRepository {
     recurrence: recurrence,
   );
 
-  Future<Result<VTError, void>> deleteReminder({required String reminderId}) =>
-      _supabaseReminderDataSource.deleteReminder(reminderId: reminderId);
+  Future<Result<VTError, void>> deleteReminder({required String reminderId}) => _supabaseReminderDataSource.deleteReminder(reminderId: reminderId);
 
   // Completing a recurring reminder spawns its next occurrence (sequential writes, no
   // RPC, same shape as SaveRecipeUseCase); un-completing or a one-off just flips the flag.
   Future<Result<VTError, ReminderCompletion>> completeReminder({required Reminder reminder, required bool completed}) async {
-    final updatedResult = await _supabaseReminderDataSource.setCompleted(
-      reminderId: reminder.id,
-      completedAt: completed ? DateTime.now() : null,
-    );
+    final updatedResult = await _supabaseReminderDataSource.setCompleted(reminderId: reminder.id, completedAt: completed ? DateTime.now() : null);
     final updateError = updatedResult.when((error) => error, (_) => null);
     if (updateError != null) {
       return Failure(updateError);

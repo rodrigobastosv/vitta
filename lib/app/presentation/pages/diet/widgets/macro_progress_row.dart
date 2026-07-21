@@ -29,9 +29,13 @@ class MacroProgressRow extends StatelessWidget {
             ),
             const VTGap.s(),
             Expanded(child: Text(label, style: VTTextStyles.bodyStrong(context))),
-            Text(
-              l10n.progressLabel(consumed.round().toString(), goal.round().toString(), 'g'),
-              style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+            Flexible(
+              child: Text(
+                l10n.progressLabel(consumed.round().toString(), goal.round().toString(), 'g'),
+                style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                maxLines: 1,
+                overflow: .ellipsis,
+              ),
             ),
           ],
         ),

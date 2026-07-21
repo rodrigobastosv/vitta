@@ -84,13 +84,7 @@ class DietRepository {
     required MealType mealType,
     required double quantityGrams,
     double? quantityUnits,
-  }) => _supabaseDietDataSource.logFood(
-    foodId: foodId,
-    loggedDate: loggedDate,
-    mealType: mealType,
-    quantityGrams: quantityGrams,
-    quantityUnits: quantityUnits,
-  );
+  }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
 
   Future<Result<VTError, void>> copyFoodLogs({required List<FoodLogEntry> entries, required DateTime targetDate}) =>
       _supabaseDietDataSource.copyFoodLogs(entries: entries, targetDate: targetDate);
@@ -100,12 +94,8 @@ class DietRepository {
     return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));
   }
 
-  Future<Result<VTError, FoodLog>> updateFoodLog({
-    required String logId,
-    required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
-  }) => _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+  Future<Result<VTError, FoodLog>> updateFoodLog({required String logId, required MealType mealType, required double quantityGrams, double? quantityUnits}) =>
+      _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 
@@ -113,8 +103,7 @@ class DietRepository {
 
   Future<Result<VTError, void>> addFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);
 
-  Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) =>
-      _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
+  Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
 
   Future<Result<VTError, List<Recipe>>> getRecipes() => _supabaseRecipeDataSource.getRecipes();
 
@@ -176,6 +165,5 @@ class DietRepository {
   Future<Result<VTError, ScannedNutritionFacts>> scanNutritionLabel({required String imagePath}) =>
       _supabaseNutritionScanDataSource.scanLabel(imagePath: imagePath);
 
-  Future<Result<VTError, ScannedMeal>> scanMeal({required String imagePath}) =>
-      _supabaseMealScanDataSource.scanMeal(imagePath: imagePath);
+  Future<Result<VTError, ScannedMeal>> scanMeal({required String imagePath}) => _supabaseMealScanDataSource.scanMeal(imagePath: imagePath);
 }

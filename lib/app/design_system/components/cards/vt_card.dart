@@ -25,9 +25,7 @@ class VTCard extends StatelessWidget {
         border: isDark ? Border.all(color: colorScheme.outline.withValues(alpha: 0.4)) : null,
         boxShadow: [
           BoxShadow(
-            color: isDark
-                ? Colors.black.withValues(alpha: 0.22)
-                : const Color(0xFF2D4632).withValues(alpha: 0.09),
+            color: isDark ? Colors.black.withValues(alpha: 0.22) : const Color(0xFF2D4632).withValues(alpha: 0.09),
             blurRadius: 22,
             offset: const Offset(0, 8),
           ),

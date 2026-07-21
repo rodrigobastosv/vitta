@@ -1,14 +1,7 @@
 import 'package:vitta/app/domain/reminder/entities/reminder_recurrence.dart';
 
 class CreateReminderRequest {
-  CreateReminderRequest({
-    required this.userId,
-    required this.title,
-    required this.dueDate,
-    this.notes,
-    this.remindAt,
-    this.recurrence = .none,
-  });
+  CreateReminderRequest({required this.userId, required this.title, required this.dueDate, this.notes, this.remindAt, this.recurrence = .none});
 
   final String userId;
   final String title;

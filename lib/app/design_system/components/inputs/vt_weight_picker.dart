@@ -127,7 +127,11 @@ class _VTWeightPickerState extends State<VTWeightPicker> {
                     ),
                   ),
                   IgnorePointer(
-                    child: Container(width: 3, height: 40, decoration: BoxDecoration(color: colorScheme.primary, borderRadius: BorderRadius.circular(2))),
+                    child: Container(
+                      width: 3,
+                      height: 40,
+                      decoration: BoxDecoration(color: colorScheme.primary, borderRadius: BorderRadius.circular(2)),
+                    ),
                   ),
                 ],
               );
@@ -165,13 +169,22 @@ class _Tick extends StatelessWidget {
       clipBehavior: .none,
       alignment: .bottomCenter,
       children: [
-        Container(width: 1.5, height: isMajor ? 24 : 12, color: color.withValues(alpha: isMajor ? 0.9 : 0.4)),
+        Container(
+          width: 1.5,
+          height: isMajor ? 24 : 12,
+          color: color.withValues(alpha: isMajor ? 0.9 : 0.4),
+        ),
         if (isMajor)
           Positioned(
             bottom: 28,
             left: (slotWidth - _labelWidth) / 2,
             width: _labelWidth,
-            child: Text(label!, textAlign: .center, softWrap: false, style: VTTextStyles.overline(context).copyWith(color: color)),
+            child: Text(
+              label!,
+              textAlign: .center,
+              softWrap: false,
+              style: VTTextStyles.overline(context).copyWith(color: color),
+            ),
           ),
       ],
     );

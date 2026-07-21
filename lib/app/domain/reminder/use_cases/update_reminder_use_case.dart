@@ -16,6 +16,5 @@ class UpdateReminderUseCase {
     String? notes,
     DateTime? remindAt,
     ReminderRecurrence recurrence = .none,
-  }) =>
-      _reminderRepository.updateReminder(reminderId: reminderId, title: title, dueDate: dueDate, notes: notes, remindAt: remindAt, recurrence: recurrence);
+  }) => _reminderRepository.updateReminder(reminderId: reminderId, title: title, dueDate: dueDate, notes: notes, remindAt: remindAt, recurrence: recurrence);
 }

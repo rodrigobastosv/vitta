@@ -13,11 +13,7 @@ class SupabasePremiumDataSource {
   // user is not met with an error toast every time the status is read.
   Future<Result<VTError, PremiumStatus>> getStatus() async {
     try {
-      final row = await _supabaseService
-          .from(.subscriptions)
-          .select()
-          .eq('user_id', _supabaseService.currentUserId)
-          .maybeSingle();
+      final row = await _supabaseService.from(.subscriptions).select().eq('user_id', _supabaseService.currentUserId).maybeSingle();
       return Success(row == null ? const PremiumStatus.free() : PremiumStatus.fromMap(row));
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load the subscription', cause: error));

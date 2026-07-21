@@ -2,12 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:vitta/app/core/goals/goal_adherence.dart';
 
 class MacroGoals extends Equatable {
-  const MacroGoals({
-    required this.proteinGoalGrams,
-    required this.carbsGoalGrams,
-    required this.fatGoalGrams,
-    required this.fiberGoalGrams,
-  });
+  const MacroGoals({required this.proteinGoalGrams, required this.carbsGoalGrams, required this.fatGoalGrams, required this.fiberGoalGrams});
 
   // Grams that put `calories` behind the given protein/carbs/fat energy split
   // (fractions of total calories, e.g. 0.30/0.40/0.30). The kcal-per-gram
@@ -37,8 +32,7 @@ class MacroGoals extends Equatable {
   final double fatGoalGrams;
   final double fiberGoalGrams;
 
-  double get calorieGoal =>
-      proteinGoalGrams * _caloriesPerGramProtein + carbsGoalGrams * _caloriesPerGramCarbs + fatGoalGrams * _caloriesPerGramFat;
+  double get calorieGoal => proteinGoalGrams * _caloriesPerGramProtein + carbsGoalGrams * _caloriesPerGramCarbs + fatGoalGrams * _caloriesPerGramFat;
 
   double get calorieMin => calorieGoal * GoalAdherence.metLowerBound;
   double get calorieMax => calorieGoal * GoalAdherence.metUpperBound;
@@ -67,11 +61,7 @@ class MacroGoals extends Equatable {
       );
     }
     final factor = target / calorieGoal;
-    return copyWith(
-      proteinGoalGrams: proteinGoalGrams * factor,
-      carbsGoalGrams: carbsGoalGrams * factor,
-      fatGoalGrams: fatGoalGrams * factor,
-    );
+    return copyWith(proteinGoalGrams: proteinGoalGrams * factor, carbsGoalGrams: carbsGoalGrams * factor, fatGoalGrams: fatGoalGrams * factor);
   }
 
   @override

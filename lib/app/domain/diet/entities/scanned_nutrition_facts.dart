@@ -17,8 +17,7 @@ class ScannedNutritionFacts extends Equatable {
   final double? fatPer100g;
   final double? fiberPer100g;
 
-  bool get hasAnyValue =>
-      caloriesPer100g != null || proteinPer100g != null || carbsPer100g != null || fatPer100g != null || fiberPer100g != null;
+  bool get hasAnyValue => caloriesPer100g != null || proteinPer100g != null || carbsPer100g != null || fatPer100g != null || fiberPer100g != null;
 
   @override
   List<Object?> get props => [caloriesPer100g, proteinPer100g, carbsPer100g, fatPer100g, fiberPer100g];

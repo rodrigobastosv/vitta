@@ -542,6 +542,84 @@ abstract class AppLocalizations {
   /// **'You have reminders on this day, just none in this view. Try another filter.'**
   String get reminderFilterNoResultsMessage;
 
+  /// No description provided for @homeTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get homeTodayTitle;
+
+  /// No description provided for @homeAlsoTodayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Also today'**
+  String get homeAlsoTodayTitle;
+
+  /// No description provided for @homeTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Track'**
+  String get homeTrackTitle;
+
+  /// No description provided for @homeMealsLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing logged yet} =1{1 meal logged} other{{count} meals logged}}'**
+  String homeMealsLogged(int count);
+
+  /// No description provided for @homeWaterLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{amount} {unit} to go'**
+  String homeWaterLeft(String amount, String unit);
+
+  /// No description provided for @homeWaterDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached'**
+  String get homeWaterDone;
+
+  /// No description provided for @homeNextReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Next reminder'**
+  String get homeNextReminder;
+
+  /// No description provided for @homeNoReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing due today'**
+  String get homeNoReminders;
+
+  /// No description provided for @homeWorkoutProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} of {total} done'**
+  String homeWorkoutProgress(int done, int total);
+
+  /// No description provided for @homeNoWorkout.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged today'**
+  String get homeNoWorkout;
+
+  /// No description provided for @homeSleepLastNight.
+  ///
+  /// In en, this message translates to:
+  /// **'Last night'**
+  String get homeSleepLastNight;
+
+  /// No description provided for @homeWeightLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'Latest'**
+  String get homeWeightLatest;
+
+  /// No description provided for @homeNotTrackedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Not tracked yet'**
+  String get homeNotTrackedYet;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

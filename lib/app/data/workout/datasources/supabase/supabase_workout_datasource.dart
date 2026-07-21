@@ -52,10 +52,7 @@ class SupabaseWorkoutDataSource {
     }
   }
 
-  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({
-    required List<String> exerciseIds,
-    DateTime? before,
-  }) async {
+  Future<Result<VTError, Map<String, List<WorkoutSet>>>> getLastSetsByExercise({required List<String> exerciseIds, DateTime? before}) async {
     if (exerciseIds.isEmpty) {
       return const Success({});
     }
@@ -79,10 +76,7 @@ class SupabaseWorkoutDataSource {
             continue;
           }
           final sets =
-              (workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const [])
-                  .cast<Map<String, dynamic>>()
-                  .map(WorkoutSet.fromMap)
-                  .toList()
+              (workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const []).cast<Map<String, dynamic>>().map(WorkoutSet.fromMap).toList()
                 ..sort((a, b) => a.position.compareTo(b.position));
           if (sets.isNotEmpty) {
             lastSets[exerciseId] = sets;
@@ -111,9 +105,7 @@ class SupabaseWorkoutDataSource {
         final workoutExercises = (row[SupabaseTable.workoutExercises.wireName] as List<dynamic>).cast<Map<String, dynamic>>();
         final sets = [
           for (final workoutExercise in workoutExercises)
-            ...(workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const [])
-                .cast<Map<String, dynamic>>()
-                .map(WorkoutSet.fromMap),
+            ...(workoutExercise[SupabaseTable.workoutSets.wireName] as List<dynamic>? ?? const []).cast<Map<String, dynamic>>().map(WorkoutSet.fromMap),
         ]..sort((a, b) => a.position.compareTo(b.position));
         if (sets.isNotEmpty) {
           sessions.add((performedDate, sets));

@@ -24,6 +24,5 @@ class SupabaseService {
 
   StorageFileApi storage(SupabaseBucket bucket) => _client.storage.from(bucket.wireName);
 
-  Future<FunctionResponse> invoke(SupabaseFunction function, {required Map<String, dynamic> body}) =>
-      _client.functions.invoke(function.wireName, body: body);
+  Future<FunctionResponse> invoke(SupabaseFunction function, {required Map<String, dynamic> body}) => _client.functions.invoke(function.wireName, body: body);
 }

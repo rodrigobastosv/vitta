@@ -7,6 +7,5 @@ class ReorderRoutinesUseCase {
 
   final WorkoutRepository _workoutRepository;
 
-  Future<Result<VTError, void>> call({required List<String> orderedRoutineIds}) =>
-      _workoutRepository.reorderRoutines(orderedRoutineIds: orderedRoutineIds);
+  Future<Result<VTError, void>> call({required List<String> orderedRoutineIds}) => _workoutRepository.reorderRoutines(orderedRoutineIds: orderedRoutineIds);
 }

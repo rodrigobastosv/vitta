@@ -5,15 +5,7 @@ import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTCalendarDayCell extends StatelessWidget {
-  const VTCalendarDayCell({
-    required this.day,
-    required this.isToday,
-    required this.isFuture,
-    this.valueColor,
-    this.isSelected = false,
-    this.onTap,
-    super.key,
-  });
+  const VTCalendarDayCell({required this.day, required this.isToday, required this.isFuture, this.valueColor, this.isSelected = false, this.onTap, super.key});
 
   final DateTime day;
   final bool isToday;
@@ -58,9 +50,7 @@ class VTCalendarDayCell extends StatelessWidget {
               style: VTTextStyles.caption(context).copyWith(
                 // A day with reminders keeps its accent even in the future; only
                 // empty future days (the history calendars) dim.
-                color: isSelected
-                    ? colorScheme.onPrimary
-                    : valueColor ?? (isFuture ? colorScheme.onSurface.withValues(alpha: 0.3) : colorScheme.onSurface),
+                color: isSelected ? colorScheme.onPrimary : valueColor ?? (isFuture ? colorScheme.onSurface.withValues(alpha: 0.3) : colorScheme.onSurface),
                 fontWeight: _hasValue ? .w700 : .w400,
               ),
             ),

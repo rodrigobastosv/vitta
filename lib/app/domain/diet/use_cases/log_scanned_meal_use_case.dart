@@ -9,11 +9,7 @@ class LogScannedMealUseCase {
 
   final DietRepository _dietRepository;
 
-  Future<Result<VTError, void>> call({
-    required List<ScannedMealLogItem> items,
-    required DateTime loggedDate,
-    required MealType mealType,
-  }) async {
+  Future<Result<VTError, void>> call({required List<ScannedMealLogItem> items, required DateTime loggedDate, required MealType mealType}) async {
     for (final logItem in items) {
       final savedFoodResult = await _dietRepository.saveFood(food: logItem.item.toFood());
       final saveError = savedFoodResult.when((error) => error, (_) => null);
@@ -21,12 +17,7 @@ class LogScannedMealUseCase {
         return Failure(saveError);
       }
       final foodId = savedFoodResult.when((_) => null, (food) => food.id);
-      final loggedResult = await _dietRepository.logFood(
-        foodId: foodId!,
-        loggedDate: loggedDate,
-        mealType: mealType,
-        quantityGrams: logItem.quantityGrams,
-      );
+      final loggedResult = await _dietRepository.logFood(foodId: foodId!, loggedDate: loggedDate, mealType: mealType, quantityGrams: logItem.quantityGrams);
       final logError = loggedResult.when((error) => error, (_) => null);
       if (logError != null) {
         return Failure(logError);

@@ -16,8 +16,7 @@ class VTSkeleton extends StatefulWidget {
 }
 
 class _VTSkeletonState extends State<VTSkeleton> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(vsync: this, duration: VTMotion.data)
-    ..repeat(reverse: true);
+  late final AnimationController _controller = AnimationController(vsync: this, duration: VTMotion.data)..repeat(reverse: true);
 
   @override
   void dispose() {
@@ -33,10 +32,7 @@ class _VTSkeletonState extends State<VTSkeleton> with SingleTickerProviderStateM
       child: Container(
         height: widget.height,
         width: widget.width,
-        decoration: BoxDecoration(
-          color: colorScheme.onSurface.withValues(alpha: 0.10),
-          borderRadius: widget.borderRadius ?? VTRadius.borderRadiusS,
-        ),
+        decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.10), borderRadius: widget.borderRadius ?? VTRadius.borderRadiusS),
       ),
     );
   }

@@ -23,13 +23,7 @@ class LogFoodUseCase {
     };
     return foodIdResult.when(
       (error) => Future.value(Failure(error)),
-      (value) => _dietRepository.logFood(
-        foodId: value,
-        loggedDate: loggedDate,
-        mealType: mealType,
-        quantityGrams: quantityGrams,
-        quantityUnits: quantityUnits,
-      ),
+      (value) => _dietRepository.logFood(foodId: value, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits),
     );
   }
 

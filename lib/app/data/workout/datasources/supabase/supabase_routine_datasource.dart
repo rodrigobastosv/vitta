@@ -54,11 +54,7 @@ class SupabaseRoutineDataSource {
     }
   }
 
-  Future<Result<VTError, Routine>> updateRoutine({
-    required String routineId,
-    required String name,
-    required List<String> exerciseIds,
-  }) async {
+  Future<Result<VTError, Routine>> updateRoutine({required String routineId, required String name, required List<String> exerciseIds}) async {
     try {
       await _supabaseService.from(.routines).update(UpdateRoutineRequest(name: name).toJson()).eq('id', routineId).eq('user_id', _userId);
       await _replaceExercises(routineId: routineId, exerciseIds: exerciseIds);
@@ -80,12 +76,7 @@ class SupabaseRoutineDataSource {
   Future<Result<VTError, void>> reorderRoutines({required List<String> orderedRoutineIds}) async {
     try {
       for (final (position, routineId) in orderedRoutineIds.indexed) {
-        final updated = await _supabaseService
-            .from(.routines)
-            .update({'position': position})
-            .eq('id', routineId)
-            .eq('user_id', _userId)
-            .select('id');
+        final updated = await _supabaseService.from(.routines).update({'position': position}).eq('id', routineId).eq('user_id', _userId).select('id');
         if (updated.isEmpty) {
           return Failure(VTError(message: 'Routine $routineId was not updated (no row matched)'));
         }
@@ -114,12 +105,7 @@ class SupabaseRoutineDataSource {
   }
 
   Future<int> _nextPosition() async {
-    final rows = await _supabaseService
-        .from(.routines)
-        .select('position')
-        .eq('user_id', _userId)
-        .order('position', ascending: false)
-        .limit(1);
+    final rows = await _supabaseService.from(.routines).select('position').eq('user_id', _userId).order('position', ascending: false).limit(1);
     if (rows.isEmpty) {
       return 0;
     }

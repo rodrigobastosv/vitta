@@ -100,7 +100,11 @@ class PremiumCubit extends Cubit<PremiumState> {
   // it durable. If that read disagrees it wins, and the scans would fail server
   // side anyway: this is optimism about timing, not about entitlement.
   void _entitleOptimistically() {
-    emit(state.copyWith(status: PremiumStatus(status: SubscriptionStatus.active, productId: state.offer?.productId)));
+    emit(
+      state.copyWith(
+        status: PremiumStatus(status: SubscriptionStatus.active, productId: state.offer?.productId),
+      ),
+    );
     unawaited(refresh());
   }
 }

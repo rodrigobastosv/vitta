@@ -9,8 +9,7 @@ class VTLoadingOverlayIndicator extends StatefulWidget {
 }
 
 class _VTLoadingOverlayIndicatorState extends State<VTLoadingOverlayIndicator> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))
-    ..repeat(reverse: true);
+  late final AnimationController _controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 1100))..repeat(reverse: true);
 
   @override
   void dispose() {

@@ -2,15 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_recurrence.dart';
 
 class Reminder extends Equatable {
-  const Reminder({
-    required this.id,
-    required this.title,
-    required this.dueDate,
-    this.notes,
-    this.remindAt,
-    this.recurrence = .none,
-    this.completedAt,
-  });
+  const Reminder({required this.id, required this.title, required this.dueDate, this.notes, this.remindAt, this.recurrence = .none, this.completedAt});
 
   factory Reminder.fromMap(Map<String, dynamic> row) => Reminder(
     id: row['id'] as String,

@@ -8,6 +8,5 @@ class GetBodyWeightInRangeUseCase {
 
   final BodyWeightRepository _bodyWeightRepository;
 
-  Future<Result<VTError, List<BodyWeightLog>>> call({required DateTime from, required DateTime to}) =>
-      _bodyWeightRepository.getLogsInRange(from: from, to: to);
+  Future<Result<VTError, List<BodyWeightLog>>> call({required DateTime from, required DateTime to}) => _bodyWeightRepository.getLogsInRange(from: from, to: to);
 }

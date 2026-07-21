@@ -10,10 +10,7 @@ class Recipe extends Equatable with MacroTotals {
   factory Recipe.fromMap(Map<String, dynamic> row) => Recipe(
     id: row['id'] as String,
     food: Food.fromMap(row['foods'] as Map<String, dynamic>),
-    ingredients: [
-      for (final ingredientRow in row['recipe_ingredients'] as List<dynamic>)
-        RecipeIngredient.fromMap(ingredientRow as Map<String, dynamic>),
-    ],
+    ingredients: [for (final ingredientRow in row['recipe_ingredients'] as List<dynamic>) RecipeIngredient.fromMap(ingredientRow as Map<String, dynamic>)],
   );
 
   final String id;

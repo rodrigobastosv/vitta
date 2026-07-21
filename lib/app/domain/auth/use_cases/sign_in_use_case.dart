@@ -8,6 +8,5 @@ class SignInUseCase {
 
   final AuthRepository _authRepository;
 
-  Future<Result<VTError, User>> call({required String email, required String password}) =>
-      _authRepository.signIn(email: email, password: password);
+  Future<Result<VTError, User>> call({required String email, required String password}) => _authRepository.signIn(email: email, password: password);
 }

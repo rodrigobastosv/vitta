@@ -29,13 +29,7 @@ class SupabaseAuthDataSource {
     );
   }
 
-  Future<Result<VTError, User>> signUp({
-    required String email,
-    required String password,
-    String? displayName,
-    String? avatarId,
-    String? avatarUrl,
-  }) async {
+  Future<Result<VTError, User>> signUp({required String email, required String password, String? displayName, String? avatarId, String? avatarUrl}) async {
     try {
       await _supabaseService.auth.updateUser(
         UserAttributes(
