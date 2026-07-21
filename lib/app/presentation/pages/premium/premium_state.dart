@@ -17,8 +17,7 @@ class PremiumState extends Equatable {
 
   bool get canPurchase => offer != null && !isPremium;
 
-  PremiumState copyWith({PremiumStatus? status, PremiumOffer? offer}) =>
-      PremiumState(status: status ?? this.status, offer: offer ?? this.offer);
+  PremiumState copyWith({PremiumStatus? status, PremiumOffer? offer}) => PremiumState(status: status ?? this.status, offer: offer ?? this.offer);
 
   @override
   List<Object?> get props => [status, offer];

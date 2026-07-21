@@ -42,28 +42,18 @@ class OnboardingPage extends StatelessWidget {
                 const VTGap.m(),
                 _OnboardingFeatureRow(icon: Icons.bedtime_outlined, title: l10n.sleepFeatureTitle, subtitle: l10n.sleepFeatureSubtitle),
                 const VTGap.m(),
-                _OnboardingFeatureRow(
-                  icon: Icons.fitness_center_outlined,
-                  title: l10n.workoutFeatureTitle,
-                  subtitle: l10n.workoutFeatureSubtitle,
-                ),
+                _OnboardingFeatureRow(icon: Icons.fitness_center_outlined, title: l10n.workoutFeatureTitle, subtitle: l10n.workoutFeatureSubtitle),
                 const VTGap.xl(),
                 Text(l10n.onboardingAccountBenefitMessage, style: VTTextStyles.caption(context)),
                 const VTGap.m(),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () => _authenticateThenFinish(context, cubit, .signUp),
-                    child: Text(l10n.onboardingCreateAccountAction),
-                  ),
+                  child: ElevatedButton(onPressed: () => _authenticateThenFinish(context, cubit, .signUp), child: Text(l10n.onboardingCreateAccountAction)),
                 ),
                 const VTGap.s(),
                 SizedBox(
                   width: double.infinity,
-                  child: TextButton(
-                    onPressed: () => _authenticateThenFinish(context, cubit, .signIn),
-                    child: Text(l10n.authHasAccountAction),
-                  ),
+                  child: TextButton(onPressed: () => _authenticateThenFinish(context, cubit, .signIn), child: Text(l10n.authHasAccountAction)),
                 ),
                 SizedBox(
                   width: double.infinity,

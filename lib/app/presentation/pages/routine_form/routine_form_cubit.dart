@@ -42,10 +42,7 @@ class RoutineFormCubit extends PresentationCubit<RoutineFormState, RoutineFormPr
     final savedResult = await _saveRoutineUseCase(draft: state.draft, routine: state.routine);
     emitPresentation(RoutineFormHideLoading());
     savedResult.when((error) => emitPresentation(RoutineFormError(message: error.message)), (_) {
-      Log.action(
-        state.isEditing ? 'workout_routine_updated' : 'workout_routine_created',
-        data: {'exercises': state.draft.exercises.length},
-      );
+      Log.action(state.isEditing ? 'workout_routine_updated' : 'workout_routine_created', data: {'exercises': state.draft.exercises.length});
       emitPresentation(RoutineFormSaved());
     });
   }

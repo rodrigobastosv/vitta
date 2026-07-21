@@ -7,7 +7,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_presentation_event.dart';
@@ -46,57 +46,45 @@ class SleepPage extends StatelessWidget {
           title: Text(l10n.sleepFeatureTitle),
           actions: [
             if (kDebugMode)
-              IconButton(
-                icon: const Icon(Icons.bug_report_outlined),
-                tooltip: l10n.sleepSyncDebugTooltip,
-                onPressed: cubit.seedSampleSleepForDebug,
-              ),
-            IconButton(
-              icon: const Icon(Icons.sync),
-              tooltip: l10n.sleepSyncTooltip,
-              onPressed: cubit.importFromHealth,
-            ),
-            IconButton(
-              icon: const Icon(Icons.calendar_month_outlined),
-              tooltip: l10n.sleepHistoryTitle,
-              onPressed: () => context.pushRoute(.sleepHistory),
-            ),
+              IconButton(icon: const Icon(Icons.bug_report_outlined), tooltip: l10n.sleepSyncDebugTooltip, onPressed: cubit.seedSampleSleepForDebug),
+            IconButton(icon: const Icon(Icons.sync), tooltip: l10n.sleepSyncTooltip, onPressed: cubit.importFromHealth),
+            IconButton(icon: const Icon(Icons.calendar_month_outlined), tooltip: l10n.sleepHistoryTitle, onPressed: () => context.pushRoute(.sleepHistory)),
           ],
         ),
-        body: RefreshIndicator(
+        body: VTRefreshable(
           onRefresh: cubit.loadRecent,
-          child: ListView(
-            padding: const EdgeInsets.all(VTSpacing.m),
-            children: [
-              if (state.logs.isEmpty)
-                VTEmptyState(
-                  icon: Icons.bedtime_outlined,
-                  title: l10n.sleepEmptyTitle,
-                  message: l10n.sleepEmptyMessage,
-                  actionLabel: l10n.sleepLogAction,
-                  actionIcon: Icons.add,
-                  onAction: () => showLogSleepSheet(context: context),
-                )
-              else ...[
-                SleepSummaryCard(
-                  logs: state.logs,
-                  goalHours: cubit.durationGoalHours,
-                  onEditGoal: () async {
-                    final goalHours = await showEditSleepGoalDialog(context: context, currentGoalHours: cubit.durationGoalHours);
-                    if (goalHours != null) {
-                      await cubit.saveDurationGoalHours(goalHours);
-                      await cubit.loadRecent();
-                    }
-                  },
+          children: [
+            if (state.logs.isEmpty)
+              VTEmptyState(
+                icon: Icons.bedtime_outlined,
+                title: l10n.sleepEmptyTitle,
+                message: l10n.sleepEmptyMessage,
+                actionLabel: l10n.sleepLogAction,
+                actionIcon: Icons.add,
+                onAction: () => showLogSleepSheet(context: context),
+              )
+            else ...[
+              SleepSummaryCard(
+                logs: state.logs,
+                goalHours: cubit.durationGoalHours,
+                onEditGoal: () async {
+                  final goalHours = await showEditSleepGoalDialog(context: context, currentGoalHours: cubit.durationGoalHours);
+                  if (goalHours != null) {
+                    await cubit.saveDurationGoalHours(goalHours);
+                    await cubit.loadRecent();
+                  }
+                },
+              ),
+              const VTGap.l(),
+              for (final log in state.logs) ...[
+                SleepLogTile(
+                  log: log,
+                  onDelete: () => cubit.deleteLog(logId: log.id),
                 ),
-                const VTGap.l(),
-                for (final log in state.logs) ...[
-                  SleepLogTile(log: log, onDelete: () => cubit.deleteLog(logId: log.id)),
-                  const VTGap.s(),
-                ],
+                const VTGap.s(),
               ],
             ],
-          ),
+          ],
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => showLogSleepSheet(context: context),

@@ -16,8 +16,7 @@ class CustomFoodEnergySplitCard extends StatelessWidget {
 
   static const Map<CustomFoodNutrient, double> _caloriesPerGram = {.protein: 4, .carbs: 4, .fat: 9};
 
-  static bool hasSplit(Map<CustomFoodNutrient, double> nutrients) =>
-      _caloriesPerGram.keys.any((nutrient) => (nutrients[nutrient] ?? 0) > 0);
+  static bool hasSplit(Map<CustomFoodNutrient, double> nutrients) => _caloriesPerGram.keys.any((nutrient) => (nutrients[nutrient] ?? 0) > 0);
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +29,11 @@ class CustomFoodEnergySplitCard extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(l10n.dietEnergySplitTitle, style: VTTextStyles.bodyStrong(context))),
-              VTBadge(
-                label: l10n.dietMealCalories((nutrients[CustomFoodNutrient.calories] ?? 0).round()),
-                color: context.colorScheme.primary,
-              ),
+              VTBadge(label: l10n.dietMealCalories((nutrients[CustomFoodNutrient.calories] ?? 0).round()), color: context.colorScheme.primary),
             ],
           ),
           VTDistributionBar(
-            segments: [
-              for (final entry in shares.entries) VTBarChartSegment(value: entry.value, color: entry.key.getColor(context.colorScheme)),
-            ],
+            segments: [for (final entry in shares.entries) VTBarChartSegment(value: entry.value, color: entry.key.getColor(context.colorScheme))],
           ),
           const VTGap.m(),
           Wrap(

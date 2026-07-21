@@ -60,12 +60,7 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
     final l10n = context.l10n;
     final materialLocalizations = context.materialLocalizations;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -75,18 +70,14 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(l10n.sleepBedTimeLabel),
-            subtitle: Text(
-              '${materialLocalizations.formatShortDate(_bedTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_bedTime))}',
-            ),
+            subtitle: Text('${materialLocalizations.formatShortDate(_bedTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_bedTime))}'),
             trailing: const Icon(Icons.edit_outlined),
             onTap: () => _pickDateTime(initial: _bedTime, onPicked: (value) => setState(() => _bedTime = value)),
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(l10n.sleepWakeTimeLabel),
-            subtitle: Text(
-              '${materialLocalizations.formatShortDate(_wakeTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_wakeTime))}',
-            ),
+            subtitle: Text('${materialLocalizations.formatShortDate(_wakeTime)} ${materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(_wakeTime))}'),
             trailing: const Icon(Icons.edit_outlined),
             onTap: () => _pickDateTime(initial: _wakeTime, onPicked: (value) => setState(() => _wakeTime = value)),
           ),
@@ -103,10 +94,7 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
               ),
             ),
           ),
-          if (_errorMessage case final errorMessage?) ...[
-            const VTGap.s(),
-            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          ],
+          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.sleepLogAction, onPressed: _submit),
         ],

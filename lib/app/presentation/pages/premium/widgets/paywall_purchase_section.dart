@@ -6,14 +6,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class PaywallPurchaseSection extends StatelessWidget {
-  const PaywallPurchaseSection({
-    required this.isSignedIn,
-    required this.onSignUp,
-    required this.onSubscribe,
-    required this.onRestore,
-    this.offer,
-    super.key,
-  });
+  const PaywallPurchaseSection({required this.isSignedIn, required this.onSignUp, required this.onSubscribe, required this.onRestore, this.offer, super.key});
 
   final bool isSignedIn;
   final VoidCallback onSignUp;
@@ -58,11 +51,7 @@ class PaywallPurchaseSection extends StatelessWidget {
             style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
           )
         else
-          VTPrimaryButton(
-            label: l10n.premiumSubscribeAction(currentOffer.priceLabel),
-            icon: Icons.workspace_premium_outlined,
-            onPressed: onSubscribe,
-          ),
+          VTPrimaryButton(label: l10n.premiumSubscribeAction(currentOffer.priceLabel), icon: Icons.workspace_premium_outlined, onPressed: onSubscribe),
         const VTGap.s(),
         // Required by App Review, and the only way a reinstalling user gets
         // their entitlement back - so it shows even with no offer loaded.

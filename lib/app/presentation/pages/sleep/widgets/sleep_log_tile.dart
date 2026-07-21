@@ -51,11 +51,7 @@ class SleepLogTile extends StatelessWidget {
                       for (var index = 0; index < 5; index++)
                         Padding(
                           padding: const EdgeInsets.only(right: 2),
-                          child: Icon(
-                            index < qualityRating ? Icons.star_rounded : Icons.star_outline_rounded,
-                            size: 16,
-                            color: VTColors.sleep,
-                          ),
+                          child: Icon(index < qualityRating ? Icons.star_rounded : Icons.star_outline_rounded, size: 16, color: VTColors.sleep),
                         ),
                     ],
                   ),

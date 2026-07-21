@@ -118,16 +118,10 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           const VTGap.m(),
           VTAppearEffect(
             index: 4,
-            child: CustomFoodScanCard(
-              onTap: _scanNutritionLabel,
-              isLocked: !context.watch<PremiumCubit>().state.isPremium,
-            ),
+            child: CustomFoodScanCard(onTap: _scanNutritionLabel, isLocked: !context.watch<PremiumCubit>().state.isPremium),
           ),
           const VTGap.l(),
-          VTAppearEffect(
-            index: 5,
-            child: Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.title(context)),
-          ),
+          VTAppearEffect(index: 5, child: Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.title(context))),
           const VTGap.m(),
           for (final (index, nutrient) in CustomFoodNutrient.values.indexed) ...[
             VTAppearEffect(

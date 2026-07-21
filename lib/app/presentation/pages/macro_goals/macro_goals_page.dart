@@ -61,10 +61,7 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
     return ListView(
       padding: const EdgeInsets.all(VTSpacing.m),
       children: [
-        DietModalitySelector(
-          selected: DietModality.matching(_goals),
-          onSelected: (modality) => setState(() => _goals = modality.applyTo(_goals)),
-        ),
+        DietModalitySelector(selected: DietModality.matching(_goals), onSelected: (modality) => setState(() => _goals = modality.applyTo(_goals))),
         const VTGap.l(),
         CalorieTargetCard(goals: _goals, onCaloriesChanged: (calories) => setState(() => _goals = _goals.withScaledCalories(calories))),
         const VTGap.l(),

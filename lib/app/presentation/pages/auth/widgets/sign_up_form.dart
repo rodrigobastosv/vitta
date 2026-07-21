@@ -37,11 +37,7 @@ class _SignUpFormState extends State<SignUpForm> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
-    await widget.onSubmit(
-      email: _emailController.text.trim(),
-      password: _passwordController.text,
-      displayName: _nameController.text.trim(),
-    );
+    await widget.onSubmit(email: _emailController.text.trim(), password: _passwordController.text, displayName: _nameController.text.trim());
   }
 
   @override

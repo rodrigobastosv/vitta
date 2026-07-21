@@ -64,11 +64,7 @@ class DietIntroView extends StatelessWidget {
                 const VTGap.xl(),
                 SizedBox(
                   width: double.infinity,
-                  child: ElevatedButton.icon(
-                    onPressed: onSetGoals,
-                    icon: const Icon(Icons.flag_outlined, size: 20),
-                    label: Text(l10n.dietIntroSetGoalsAction),
-                  ),
+                  child: ElevatedButton.icon(onPressed: onSetGoals, icon: const Icon(Icons.flag_outlined, size: 20), label: Text(l10n.dietIntroSetGoalsAction)),
                 ),
                 SizedBox(
                   width: double.infinity,

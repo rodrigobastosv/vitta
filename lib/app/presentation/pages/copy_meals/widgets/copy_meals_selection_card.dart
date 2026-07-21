@@ -22,11 +22,7 @@ class CopyMealsSelectionCard extends StatelessWidget {
         Text(context.l10n.dietCopyMealsSelectionTitle, style: VTTextStyles.title(context)),
         const VTGap.s(),
         for (final section in meals)
-          CopyMealsMealTile(
-            section: section,
-            isSelected: selectedMealTypes.contains(section.mealType),
-            onToggle: () => onToggleMeal(section.mealType),
-          ),
+          CopyMealsMealTile(section: section, isSelected: selectedMealTypes.contains(section.mealType), onToggle: () => onToggleMeal(section.mealType)),
       ],
     ),
   );

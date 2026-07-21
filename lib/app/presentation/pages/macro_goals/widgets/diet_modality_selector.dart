@@ -88,11 +88,7 @@ class _DietModalitySelectorState extends State<DietModalitySelector> {
             separatorBuilder: (context, index) => const VTGap.s(),
             itemBuilder: (context, index) {
               final modality = DietModality.values[index];
-              return DietModalityCard(
-                modality: modality,
-                isSelected: modality == widget.selected,
-                onTap: () => widget.onSelected(modality),
-              );
+              return DietModalityCard(modality: modality, isSelected: modality == widget.selected, onTap: () => widget.onSelected(modality));
             },
           ),
         ),

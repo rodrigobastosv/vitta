@@ -29,9 +29,7 @@ class DietModalityCard extends StatelessWidget {
       width: _width,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: isSelected
-              ? colorScheme.primary.withValues(alpha: isDark ? 0.18 : 0.08)
-              : (isDark ? VTColors.cardDark : VTColors.cardLight),
+          color: isSelected ? colorScheme.primary.withValues(alpha: isDark ? 0.18 : 0.08) : (isDark ? VTColors.cardDark : VTColors.cardLight),
           borderRadius: VTRadius.borderRadiusL,
           border: Border.all(
             color: isSelected ? colorScheme.primary : colorScheme.outline.withValues(alpha: isDark ? 0.4 : 0.6),

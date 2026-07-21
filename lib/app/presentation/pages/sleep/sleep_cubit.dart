@@ -64,15 +64,19 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
 
   Future<void> deleteLog({required String logId}) async {
     final previous = state.logs;
-    emit(state.copyWith(logs: [for (final log in previous) if (log.id != logId) log]));
-    final deletedResult = await _deleteSleepLogUseCase(logId: logId);
-    deletedResult.when(
-      (error) {
-        emit(state.copyWith(logs: previous));
-        emitPresentation(SleepError(message: error.message));
-      },
-      (_) => Log.action('sleep_log_deleted'),
+    emit(
+      state.copyWith(
+        logs: [
+          for (final log in previous)
+            if (log.id != logId) log,
+        ],
+      ),
     );
+    final deletedResult = await _deleteSleepLogUseCase(logId: logId);
+    deletedResult.when((error) {
+      emit(state.copyWith(logs: previous));
+      emitPresentation(SleepError(message: error.message));
+    }, (_) => Log.action('sleep_log_deleted'));
   }
 
   Future<void> importFromHealth() async {
@@ -131,7 +135,10 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
 
   Future<Result<VTError, int>> _readAndImportFromHealth() async {
     final to = DateTime.now();
-    final sessions = await _healthService.readSleepSessions(from: to.subtract(const Duration(days: _importWindowDays)), to: to);
+    final sessions = await _healthService.readSleepSessions(
+      from: to.subtract(const Duration(days: _importWindowDays)),
+      to: to,
+    );
     final imports = [for (final session in sessions) SleepImport(start: session.start, end: session.end, externalId: session.externalId)];
     return _importSleepFromHealthUseCase(imports: imports);
   }

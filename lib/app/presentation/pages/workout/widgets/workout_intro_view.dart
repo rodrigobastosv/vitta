@@ -37,12 +37,7 @@ class WorkoutIntroView extends StatelessWidget {
                 const VTGap.xl(),
                 _point(context, icon: Icons.checklist_rounded, title: l10n.workoutIntroLogTitle, message: l10n.workoutIntroLogMessage),
                 const VTGap.l(),
-                _point(
-                  context,
-                  icon: Icons.trending_up_rounded,
-                  title: l10n.workoutIntroProgressTitle,
-                  message: l10n.workoutIntroProgressMessage,
-                ),
+                _point(context, icon: Icons.trending_up_rounded, title: l10n.workoutIntroProgressTitle, message: l10n.workoutIntroProgressMessage),
                 const VTGap.xl(),
                 VTCard(
                   child: Column(
@@ -56,10 +51,7 @@ class WorkoutIntroView extends StatelessWidget {
                         ],
                       ),
                       const VTGap.s(),
-                      Text(
-                        l10n.workoutIntroRoutineMessage,
-                        style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant),
-                      ),
+                      Text(l10n.workoutIntroRoutineMessage, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
                     ],
                   ),
                 ),

@@ -50,11 +50,7 @@ class RecipeFormPage extends StatelessWidget {
               backgroundColor: context.colorScheme.surface,
               flexibleSpace: FlexibleSpaceBar(
                 stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
-                background: VTPhotoHeader(
-                  imageBytes: state.imageBytes,
-                  imageUrl: state.draft.imageUrl,
-                  onTap: () => _pickPhoto(context, cubit),
-                ),
+                background: VTPhotoHeader(imageBytes: state.imageBytes, imageUrl: state.draft.imageUrl, onTap: () => _pickPhoto(context, cubit)),
               ),
             ),
             SliverToBoxAdapter(child: RecipeFormBody(state: state)),

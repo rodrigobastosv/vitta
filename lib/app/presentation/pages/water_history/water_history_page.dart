@@ -5,7 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -34,26 +34,26 @@ class WaterHistoryPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.waterHistoryTitle)),
-        body: !state.hasData
-            ? VTEmptyState(
-                icon: Icons.water_drop_outlined,
-                title: l10n.waterHistoryEmptyTitle,
-                message: l10n.waterHistoryEmptyMessage,
-                actionLabel: l10n.waterHistoryEmptyAction,
-                onAction: () => Navigator.of(context).pop(),
-              )
-            : ListView(
-                padding: const EdgeInsets.all(VTSpacing.m),
-                children: [
-                  WaterHistoryCalendarCard(cubit: cubit, state: state),
-                  const VTGap.l(),
-                  Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
-                  const VTGap.m(),
-                  TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-                  const VTGap.m(),
-                  WaterTrendCard(days: cubit.trendDays, waterByDate: state.waterInTrendRange, dailyGoalMl: state.dailyGoalMl),
-                ],
-              ),
+        body: VTRefreshable(
+          onRefresh: cubit.refresh,
+          hasData: state.hasData,
+          emptyState: VTEmptyState(
+            icon: Icons.water_drop_outlined,
+            title: l10n.waterHistoryEmptyTitle,
+            message: l10n.waterHistoryEmptyMessage,
+            actionLabel: l10n.waterHistoryEmptyAction,
+            onAction: () => Navigator.of(context).pop(),
+          ),
+          children: [
+            WaterHistoryCalendarCard(cubit: cubit, state: state),
+            const VTGap.l(),
+            Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
+            const VTGap.m(),
+            TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+            const VTGap.m(),
+            WaterTrendCard(days: cubit.trendDays, waterByDate: state.waterInTrendRange, dailyGoalMl: state.dailyGoalMl),
+          ],
+        ),
       ),
     );
   }

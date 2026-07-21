@@ -52,10 +52,7 @@ class BodyWeightSummaryCard extends StatelessWidget {
           ),
           if (logs.length > 1) ...[
             const VTGap.m(),
-            VTLineChart(
-              points: [for (final log in chronological) VTLineChartPoint(value: unitSystem.kilogramsToDisplayLoad(log.weightKg))],
-              height: 120,
-            ),
+            VTLineChart(points: [for (final log in chronological) VTLineChartPoint(value: unitSystem.kilogramsToDisplayLoad(log.weightKg))], height: 120),
           ],
         ],
       ),

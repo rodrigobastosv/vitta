@@ -40,11 +40,7 @@ class BodyWeightLogTile extends StatelessWidget {
             ),
           ),
           if (previous != null && (log.weightKg - previous).abs() >= 0.05) _delta(context, log.weightKg - previous),
-          IconButton(
-            icon: const Icon(Icons.delete_outline),
-            tooltip: context.materialLocalizations.deleteButtonTooltip,
-            onPressed: onDelete,
-          ),
+          IconButton(icon: const Icon(Icons.delete_outline), tooltip: context.materialLocalizations.deleteButtonTooltip, onPressed: onDelete),
         ],
       ),
     );
@@ -60,10 +56,7 @@ class BodyWeightLogTile extends StatelessWidget {
         children: [
           Icon(deltaKg < 0 ? Icons.south : Icons.north, size: 14, color: colorScheme.onSurfaceVariant),
           const VTGap.xs(),
-          Text(
-            bodyWeightDisplay(l10n, unitSystem, deltaKg.abs()),
-            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
-          ),
+          Text(bodyWeightDisplay(l10n, unitSystem, deltaKg.abs()), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
         ],
       ),
     );

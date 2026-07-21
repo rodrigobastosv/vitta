@@ -11,11 +11,7 @@ class ExerciseSearchState extends Equatable {
   final MuscleGroup? muscleGroup;
 
   ExerciseSearchState copyWith({String? query, List<Exercise>? results, MuscleGroup? muscleGroup, bool clearMuscleGroup = false}) =>
-      ExerciseSearchState(
-        query: query ?? this.query,
-        results: results ?? this.results,
-        muscleGroup: clearMuscleGroup ? null : muscleGroup ?? this.muscleGroup,
-      );
+      ExerciseSearchState(query: query ?? this.query, results: results ?? this.results, muscleGroup: clearMuscleGroup ? null : muscleGroup ?? this.muscleGroup);
 
   @override
   List<Object?> get props => [query, results, muscleGroup];

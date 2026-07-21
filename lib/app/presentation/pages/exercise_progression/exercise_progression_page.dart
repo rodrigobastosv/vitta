@@ -42,11 +42,7 @@ class ExerciseProgressionPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(title: Text(l10n.workoutProgressionTitle)),
           body: !progression.hasData
-              ? VTEmptyState(
-                  icon: Icons.show_chart,
-                  title: l10n.workoutProgressionEmptyTitle,
-                  message: l10n.workoutProgressionEmptyMessage,
-                )
+              ? VTEmptyState(icon: Icons.show_chart, title: l10n.workoutProgressionEmptyTitle, message: l10n.workoutProgressionEmptyMessage)
               : ListView(
                   padding: const EdgeInsets.all(VTSpacing.m),
                   children: [

@@ -9,15 +9,12 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 
-Future<RecipeIngredient?> showIngredientQuantitySheet({
-  required BuildContext context,
-  required Food food,
-  required UnitSystem unitSystem,
-}) => showModalBottomSheet<RecipeIngredient>(
-  context: context,
-  isScrollControlled: true,
-  builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
-);
+Future<RecipeIngredient?> showIngredientQuantitySheet({required BuildContext context, required Food food, required UnitSystem unitSystem}) =>
+    showModalBottomSheet<RecipeIngredient>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
+    );
 
 class IngredientQuantitySheet extends StatefulWidget {
   const IngredientQuantitySheet({required this.food, required this.unitSystem, super.key});
@@ -30,9 +27,7 @@ class IngredientQuantitySheet extends StatefulWidget {
 }
 
 class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
-  late final TextEditingController _quantityController = TextEditingController(
-    text: _formatNumber(widget.unitSystem.gramsToDisplayWeight(100)),
-  );
+  late final TextEditingController _quantityController = TextEditingController(text: _formatNumber(widget.unitSystem.gramsToDisplayWeight(100)));
   String? _errorMessage;
 
   @override
@@ -52,21 +47,14 @@ class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
       setState(() => _errorMessage = context.l10n.dietInvalidQuantity);
       return;
     }
-    Navigator.of(
-      context,
-    ).pop(RecipeIngredient(food: widget.food, quantityGrams: widget.unitSystem.displayWeightToGrams(quantityDisplayValue)));
+    Navigator.of(context).pop(RecipeIngredient(food: widget.food, quantityGrams: widget.unitSystem.displayWeightToGrams(quantityDisplayValue)));
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,

@@ -46,11 +46,7 @@ class ExerciseProgressionRecordsCard extends StatelessWidget {
                 ),
               ),
               Expanded(
-                child: WorkoutMetric(
-                  icon: Icons.fitness_center,
-                  label: l10n.workoutProgressionHeaviestLabel,
-                  value: _formatLoad(progression.heaviestWeightKg),
-                ),
+                child: WorkoutMetric(icon: Icons.fitness_center, label: l10n.workoutProgressionHeaviestLabel, value: _formatLoad(progression.heaviestWeightKg)),
               ),
             ],
           ),

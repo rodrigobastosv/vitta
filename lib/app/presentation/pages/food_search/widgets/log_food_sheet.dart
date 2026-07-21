@@ -12,19 +12,15 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.da
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 
-Future<void> showLogFoodSheet({
-  required BuildContext context,
-  required Food food,
-  required DateTime loggedDate,
-  MealType? initialMealType,
-}) => showModalBottomSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(
-    value: context.read<FoodSearchCubit>(),
-    child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
-  ),
-);
+Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => BlocProvider.value(
+        value: context.read<FoodSearchCubit>(),
+        child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
+      ),
+    );
 
 class _LogFoodSheet extends StatefulWidget {
   const _LogFoodSheet({required this.food, required this.loggedDate, required this.initialMealType});
@@ -41,10 +37,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<FoodSearchCubit>().unitSystem;
   late final double? _initialUnits = widget.food.isCountable ? 1 : null;
   late final double _initialGrams = widget.food.gramsPerUnit ?? 100;
-  late FoodQuantitySelection _selection = FoodQuantitySelection(
-    quantityGrams: _initialGrams,
-    quantityUnits: _initialUnits,
-  );
+  late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: _initialGrams, quantityUnits: _initialUnits);
   late MealType _mealType = widget.initialMealType;
   bool _isSaving = false;
   String? _errorMessage;
@@ -86,12 +79,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -110,17 +98,10 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
             spacing: VTSpacing.s,
             children: [
               for (final mealType in MealType.values)
-                ChoiceChip(
-                  label: Text(mealType.getLabel(l10n)),
-                  selected: _mealType == mealType,
-                  onSelected: (_) => setState(() => _mealType = mealType),
-                ),
+                ChoiceChip(label: Text(mealType.getLabel(l10n)), selected: _mealType == mealType, onSelected: (_) => setState(() => _mealType = mealType)),
             ],
           ),
-          if (_errorMessage case final errorMessage?) ...[
-            const VTGap.s(),
-            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-          ],
+          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietLogFoodAction, isLoading: _isSaving, onPressed: _submit),
         ],

@@ -51,12 +51,7 @@ class WorkoutSummaryCard extends StatelessWidget {
               Expanded(
                 child: Column(
                   children: [
-                    WorkoutMetric(
-                      icon: Icons.fitness_center,
-                      label: l10n.workoutVolumeLabel,
-                      value: _formatLoad(state.volumeKg),
-                      color: colorScheme.primary,
-                    ),
+                    WorkoutMetric(icon: Icons.fitness_center, label: l10n.workoutVolumeLabel, value: _formatLoad(state.volumeKg), color: colorScheme.primary),
                     const VTGap.m(),
                     WorkoutMetric(icon: Icons.layers_outlined, label: l10n.workoutSetsLabel, value: '${state.totalSets}'),
                     const VTGap.m(),

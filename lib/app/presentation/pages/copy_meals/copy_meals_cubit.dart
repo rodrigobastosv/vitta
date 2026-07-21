@@ -56,10 +56,7 @@ class CopyMealsCubit extends PresentationCubit<CopyMealsState, CopyMealsPresenta
   }
 
   void selectSourceDate(DateTime date) => emit(
-    state.copyWith(
-      sourceDate: date,
-      selectedMealTypes: {for (final section in state.macrosByDate[date]?.meals ?? const <MealSection>[]) section.mealType},
-    ),
+    state.copyWith(sourceDate: date, selectedMealTypes: {for (final section in state.macrosByDate[date]?.meals ?? const <MealSection>[]) section.mealType}),
   );
 
   void toggleMeal(MealType mealType) {

@@ -24,12 +24,7 @@ class LoggedExerciseTile extends StatelessWidget {
       padding: const EdgeInsets.all(VTSpacing.s),
       child: Row(
         children: [
-          VTRemoteImage(
-            imageUrl: exercise.imageUrl,
-            placeholderIcon: Icons.fitness_center_outlined,
-            size: 56,
-            borderRadius: VTRadius.borderRadiusM,
-          ),
+          VTRemoteImage(imageUrl: exercise.imageUrl, placeholderIcon: Icons.fitness_center_outlined, size: 56, borderRadius: VTRadius.borderRadiusM),
           const SizedBox(width: VTSpacing.m),
           Expanded(
             child: Column(
@@ -38,9 +33,7 @@ class LoggedExerciseTile extends StatelessWidget {
                 Text(exercise.nameFor(l10n.localeName), style: VTTextStyles.bodyStrong(context)),
                 const VTGap.xs(),
                 Text(
-                  [
-                    for (final muscle in exercise.primaryMuscles.take(2)) muscle.getLabel(l10n),
-                  ].join(' · '),
+                  [for (final muscle in exercise.primaryMuscles.take(2)) muscle.getLabel(l10n)].join(' · '),
                   style: VTTextStyles.caption(context).copyWith(color: accent),
                 ),
               ],

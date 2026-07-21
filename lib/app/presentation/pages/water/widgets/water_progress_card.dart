@@ -50,16 +50,11 @@ class WaterProgressCard extends StatelessWidget {
                   mainAxisSize: .min,
                   children: [
                     Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.headline(context)),
-                    Text(
-                      l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit),
-                      style: VTTextStyles.caption(context),
-                    ),
+                    Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
                     const VTGap.xs(),
                     Text(
                       reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
-                      style: VTTextStyles.overline(
-                        context,
-                      ).copyWith(color: reached ? VTColors.success : VTColors.water, fontWeight: .w700),
+                      style: VTTextStyles.overline(context).copyWith(color: reached ? VTColors.success : VTColors.water, fontWeight: .w700),
                     ),
                   ],
                 ),
@@ -88,12 +83,7 @@ class WaterProgressCard extends StatelessWidget {
                       label: l10n.waterGoalMetric,
                     ),
                     const VTGap.m(),
-                    _metric(
-                      context,
-                      icon: Icons.local_drink_rounded,
-                      value: '${dailyWater.entries.length}',
-                      label: l10n.waterLogsMetric,
-                    ),
+                    _metric(context, icon: Icons.local_drink_rounded, value: '${dailyWater.entries.length}', label: l10n.waterLogsMetric),
                   ],
                 ),
               ),

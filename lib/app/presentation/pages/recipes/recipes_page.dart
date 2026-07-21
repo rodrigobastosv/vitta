@@ -7,7 +7,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -36,34 +36,34 @@ class RecipesPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.dietRecipesTitle)),
-        body: state.recipes.isEmpty
-            ? VTEmptyState(
-                icon: Icons.menu_book_outlined,
-                title: l10n.dietRecipesEmptyTitle,
-                message: l10n.dietRecipesEmptyMessage,
-                actionLabel: l10n.dietCreateRecipeTitle,
-                actionIcon: Icons.add,
-                onAction: () => _openForm(context, cubit),
-              )
-            : ListView(
-                padding: const EdgeInsets.all(VTSpacing.m),
-                children: [
-                  Text(l10n.dietRecipeLogHint, style: VTTextStyles.caption(context)),
-                  const VTGap.m(),
-                  for (final (index, recipe) in state.recipes.indexed) ...[
-                    VTAppearEffect(
-                      key: ValueKey(recipe.id),
-                      index: index,
-                      child: RecipeTile(
-                        recipe: recipe,
-                        onEdit: () => _openForm(context, cubit, recipe: recipe),
-                        onDelete: () => cubit.deleteRecipe(recipeId: recipe.id),
-                      ),
-                    ),
-                    const VTGap.m(),
-                  ],
-                ],
+        body: VTRefreshable(
+          onRefresh: cubit.loadRecipes,
+          hasData: state.recipes.isNotEmpty,
+          emptyState: VTEmptyState(
+            icon: Icons.menu_book_outlined,
+            title: l10n.dietRecipesEmptyTitle,
+            message: l10n.dietRecipesEmptyMessage,
+            actionLabel: l10n.dietCreateRecipeTitle,
+            actionIcon: Icons.add,
+            onAction: () => _openForm(context, cubit),
+          ),
+          children: [
+            Text(l10n.dietRecipeLogHint, style: VTTextStyles.caption(context)),
+            const VTGap.m(),
+            for (final (index, recipe) in state.recipes.indexed) ...[
+              VTAppearEffect(
+                key: ValueKey(recipe.id),
+                index: index,
+                child: RecipeTile(
+                  recipe: recipe,
+                  onEdit: () => _openForm(context, cubit, recipe: recipe),
+                  onDelete: () => cubit.deleteRecipe(recipeId: recipe.id),
+                ),
               ),
+              const VTGap.m(),
+            ],
+          ],
+        ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _openForm(context, cubit),
           icon: const Icon(Icons.add),

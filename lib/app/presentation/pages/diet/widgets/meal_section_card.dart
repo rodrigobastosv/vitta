@@ -10,14 +10,7 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_log_tile.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_avatar.dart';
 
 class MealSectionCard extends StatefulWidget {
-  const MealSectionCard({
-    required this.section,
-    this.onAddFood,
-    this.onEditEntry,
-    this.onDeleteEntry,
-    this.initiallyExpanded = false,
-    super.key,
-  });
+  const MealSectionCard({required this.section, this.onAddFood, this.onEditEntry, this.onDeleteEntry, this.initiallyExpanded = false, super.key});
 
   final MealSection section;
   final VoidCallback? onAddFood;
@@ -55,12 +48,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
                     Text(section.mealType.getLabel(l10n), style: VTTextStyles.title(context)),
                     const VTGap.xs(),
                     Text(
-                      l10n.dietMealMacros(
-                        section.totalProtein.round(),
-                        section.totalCarbs.round(),
-                        section.totalFat.round(),
-                        section.totalFiber.round(),
-                      ),
+                      l10n.dietMealMacros(section.totalProtein.round(), section.totalCarbs.round(), section.totalFat.round(), section.totalFiber.round()),
                       style: VTTextStyles.caption(context),
                     ),
                   ],

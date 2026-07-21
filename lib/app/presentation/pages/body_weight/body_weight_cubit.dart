@@ -32,10 +32,7 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
     emitPresentation(BodyWeightShowLoading());
     final recentLogsResult = await _getRecentBodyWeightLogsUseCase(days: _recentDays);
     emitPresentation(BodyWeightHideLoading());
-    recentLogsResult.when(
-      (error) => emitPresentation(BodyWeightError(message: error.message)),
-      (value) => emit(BodyWeightState(logs: value)),
-    );
+    recentLogsResult.when((error) => emitPresentation(BodyWeightError(message: error.message)), (value) => emit(BodyWeightState(logs: value)));
   }
 
   Future<void> logWeight({required DateTime loggedDate, required double weightKg}) async {
@@ -49,14 +46,18 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
 
   Future<void> deleteLog({required String logId}) async {
     final previous = state.logs;
-    emit(state.copyWith(logs: [for (final log in previous) if (log.id != logId) log]));
-    final deletedResult = await _deleteBodyWeightLogUseCase(logId: logId);
-    deletedResult.when(
-      (error) {
-        emit(state.copyWith(logs: previous));
-        emitPresentation(BodyWeightError(message: error.message));
-      },
-      (_) => Log.action('body_weight_log_deleted'),
+    emit(
+      state.copyWith(
+        logs: [
+          for (final log in previous)
+            if (log.id != logId) log,
+        ],
+      ),
     );
+    final deletedResult = await _deleteBodyWeightLogUseCase(logId: logId);
+    deletedResult.when((error) {
+      emit(state.copyWith(logs: previous));
+      emitPresentation(BodyWeightError(message: error.message));
+    }, (_) => Log.action('body_weight_log_deleted'));
   }
 }

@@ -9,6 +9,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/workout/entities/equipment.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
@@ -35,20 +36,13 @@ class WorkoutPage extends StatelessWidget {
         WorkoutShowLoading() => context.showLoading(),
         WorkoutHideLoading() => context.hideLoading(),
         WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
-        WorkoutError(:final message, :final date) => context.showErrorToast(
-          message: message,
-          onRetry: () => context.read<WorkoutCubit>().goToDate(date),
-        ),
+        WorkoutError(:final message, :final date) => context.showErrorToast(message: message, onRetry: () => context.read<WorkoutCubit>().goToDate(date)),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
           title: Text(l10n.workoutFeatureTitle),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.calendar_month),
-              tooltip: l10n.workoutHistoryTitle,
-              onPressed: () => context.pushRoute(.workoutHistory),
-            ),
+            IconButton(icon: const Icon(Icons.calendar_month), tooltip: l10n.workoutHistoryTitle, onPressed: () => context.pushRoute(.workoutHistory)),
             IconButton(
               icon: const Icon(Icons.query_stats),
               tooltip: l10n.workoutProgressionListTitle,
@@ -71,7 +65,8 @@ class WorkoutPage extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: Text(l10n.workoutAddExercise),
         ),
-        body: ListView(
+        body: VTRefreshable(
+          onRefresh: () => cubit.loadDate(state.date),
           padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
           children: [
             WorkoutDateSelector(
@@ -112,8 +107,7 @@ class WorkoutPage extends StatelessWidget {
                         context: context,
                         unitSystem: cubit.unitSystem,
                         defaultLoadKg: workoutExercise.exercise.equipment == Equipment.bodyOnly ? state.latestBodyWeightKg : null,
-                        onSubmit: ({required reps, required weightKg}) =>
-                            cubit.logSet(workoutExerciseId: workoutExercise.id, reps: reps, weightKg: weightKg),
+                        onSubmit: ({required reps, required weightKg}) => cubit.logSet(workoutExerciseId: workoutExercise.id, reps: reps, weightKg: weightKg),
                       ),
                       onEditSet: (set) => showLogSetSheet(
                         context: context,

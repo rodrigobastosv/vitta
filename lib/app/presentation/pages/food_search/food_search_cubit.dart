@@ -61,10 +61,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     emitPresentation(FoodSearchShowLoading());
     final favoritesResult = await _getFavoriteFoodsUseCase();
     emitPresentation(FoodSearchHideLoading());
-    favoritesResult.when(
-      (error) => emitPresentation(FoodSearchError(message: error.message)),
-      (favorites) => emit(state.copyWith(favorites: favorites)),
-    );
+    favoritesResult.when((error) => emitPresentation(FoodSearchError(message: error.message)), (favorites) => emit(state.copyWith(favorites: favorites)));
   }
 
   Future<void> search({required String query}) async {
@@ -87,8 +84,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     emit(state.copyWith(recentSearches: await _addRecentSearchUseCase(query: query)));
   }
 
-  Future<void> removeRecentSearch({required String query}) async =>
-      emit(state.copyWith(recentSearches: await _removeRecentSearchUseCase(query: query)));
+  Future<void> removeRecentSearch({required String query}) async => emit(state.copyWith(recentSearches: await _removeRecentSearchUseCase(query: query)));
 
   Future<void> clearRecentSearches() async => emit(state.copyWith(recentSearches: await _clearRecentSearchesUseCase()));
 

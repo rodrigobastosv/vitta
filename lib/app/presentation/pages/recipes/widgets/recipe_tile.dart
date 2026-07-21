@@ -32,10 +32,7 @@ class RecipeTile extends StatelessWidget {
                   children: [
                     Text(recipe.food.name, style: VTTextStyles.bodyStrong(context)),
                     const VTGap.xs(),
-                    Text(
-                      l10n.dietRecipeIngredientCount(recipe.ingredients.length, recipe.totalGrams.round()),
-                      style: VTTextStyles.caption(context),
-                    ),
+                    Text(l10n.dietRecipeIngredientCount(recipe.ingredients.length, recipe.totalGrams.round()), style: VTTextStyles.caption(context)),
                   ],
                 ),
               ),

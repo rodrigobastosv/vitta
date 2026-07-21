@@ -13,12 +13,8 @@ import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_presentation_ev
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_state.dart';
 
 class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentationEvent> {
-  MealScanCubit({
-    required this._scanMealUseCase,
-    required this._logScannedMealUseCase,
-    required this._imagePickerService,
-    required this._loggedDate,
-  }) : super(MealScanState(mealType: _mealTypeForNow()));
+  MealScanCubit({required this._scanMealUseCase, required this._logScannedMealUseCase, required this._imagePickerService, required this._loggedDate})
+    : super(MealScanState(mealType: _mealTypeForNow()));
 
   final ScanMealUseCase _scanMealUseCase;
   final LogScannedMealUseCase _logScannedMealUseCase;
@@ -39,9 +35,7 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
     scannedMealResult.when(_onScanFailed, _applyScannedMeal);
   }
 
-  void _onScanFailed(VTError error) => emitPresentation(
-    error is PremiumRequiredError ? MealScanPremiumRequired() : MealScanError(message: error.message),
-  );
+  void _onScanFailed(VTError error) => emitPresentation(error is PremiumRequiredError ? MealScanPremiumRequired() : MealScanError(message: error.message));
 
   void _applyScannedMeal(ScannedMeal meal) {
     if (!meal.hasItems) {
@@ -59,14 +53,18 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
 
   void gramsChanged({required int index, required String text}) => emit(
     state.copyWith(
-      entries: [for (final (i, entry) in state.entries.indexed) if (i == index) entry.copyWith(gramsText: text) else entry],
+      entries: [
+        for (final (i, entry) in state.entries.indexed)
+          if (i == index) entry.copyWith(gramsText: text) else entry,
+      ],
     ),
   );
 
   void toggleIncluded({required int index}) => emit(
     state.copyWith(
       entries: [
-        for (final (i, entry) in state.entries.indexed) if (i == index) entry.copyWith(isIncluded: !entry.isIncluded) else entry,
+        for (final (i, entry) in state.entries.indexed)
+          if (i == index) entry.copyWith(isIncluded: !entry.isIncluded) else entry,
       ],
     ),
   );
@@ -106,6 +104,5 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
     return MealType.snack;
   }
 
-  static String _formatGrams(double grams) =>
-      grams == grams.roundToDouble() ? grams.toStringAsFixed(0) : grams.toStringAsFixed(1);
+  static String _formatGrams(double grams) => grams == grams.roundToDouble() ? grams.toStringAsFixed(0) : grams.toStringAsFixed(1);
 }

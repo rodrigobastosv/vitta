@@ -101,10 +101,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
           ),
           const VTGap.s(),
           Text(_isPrefilled ? l10n.workoutBodyweightPrefillNote : l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
-          if (_errorMessage case final message?) ...[
-            const VTGap.s(),
-            Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error)),
-          ],
+          if (_errorMessage case final message?) ...[const VTGap.s(), Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.workoutLogSetAction, onPressed: _submit),
         ],

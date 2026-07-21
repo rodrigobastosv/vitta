@@ -72,12 +72,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: .start,
             children: [
-              HomeHeader(
-                user: state.user,
-                greeting: _greeting(l10n),
-                appTitle: l10n.appTitle,
-                tagline: l10n.homeTagline,
-              ),
+              HomeHeader(user: state.user, greeting: _greeting(l10n), appTitle: l10n.appTitle, tagline: l10n.homeTagline),
               const VTGap.xl(),
               GridView(
                 shrinkWrap: true,

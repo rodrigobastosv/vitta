@@ -38,11 +38,9 @@ class RecipeFormCubit extends PresentationCubit<RecipeFormState, RecipeFormPrese
 
   void nameChanged(String name) => emit(state.copyWith(draft: state.draft.copyWith(name: name)));
 
-  void addIngredient(RecipeIngredient ingredient) =>
-      emit(state.copyWith(draft: state.draft.copyWith(ingredients: [...state.draft.ingredients, ingredient])));
+  void addIngredient(RecipeIngredient ingredient) => emit(state.copyWith(draft: state.draft.copyWith(ingredients: [...state.draft.ingredients, ingredient])));
 
-  void removeIngredientAt(int index) =>
-      emit(state.copyWith(draft: state.draft.copyWith(ingredients: [...state.draft.ingredients]..removeAt(index))));
+  void removeIngredientAt(int index) => emit(state.copyWith(draft: state.draft.copyWith(ingredients: [...state.draft.ingredients]..removeAt(index))));
 
   Future<void> pickPhoto({required ImagePickerSource source}) async {
     final pickedImage = await _imagePickerService.pickImage(source: source, maxWidth: _photoMaxWidth);

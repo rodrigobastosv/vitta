@@ -18,10 +18,7 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
     emitPresentation(RecipesShowLoading());
     final recipesResult = await _getRecipesUseCase();
     emitPresentation(RecipesHideLoading());
-    recipesResult.when(
-      (error) => emitPresentation(RecipesError(message: error.message)),
-      (recipes) => emit(state.copyWith(recipes: recipes)),
-    );
+    recipesResult.when((error) => emitPresentation(RecipesError(message: error.message)), (recipes) => emit(state.copyWith(recipes: recipes)));
   }
 
   Future<void> deleteRecipe({required String recipeId}) async {

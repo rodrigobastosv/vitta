@@ -68,8 +68,7 @@ class _ScannedMealItemCardState extends State<ScannedMealItemCard> {
                       ),
                     ),
                     const Spacer(),
-                    if (entry.isIncluded)
-                      VTBadge(label: l10n.dietMealCalories(entry.calories.round()), color: colorScheme.primary),
+                    if (entry.isIncluded) VTBadge(label: l10n.dietMealCalories(entry.calories.round()), color: colorScheme.primary),
                   ],
                 ),
               ],

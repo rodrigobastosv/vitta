@@ -124,6 +124,27 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Pull to refresh
+
+Every screen that loads remote data is refreshable through `VTRefreshable` (`design_system/components/general/`, issue #163) — 12 screens, up from 4. **There are no raw `RefreshIndicator`s left**; once the component exists, reaching for the Material widget is the "never add a raw Material widget where a `VT` component exists" rule being broken.
+
+The API is one widget with `hasData` + `emptyState` rather than a ternary between two constructors, so `onRefresh` is named once:
+
+```dart
+VTRefreshable(
+  onRefresh: cubit.refresh,
+  hasData: state.hasData,
+  emptyState: VTEmptyState(...),
+  children: [...],
+)
+```
+
+**The reason the component exists rather than a bare `RefreshIndicator` is the empty state.** A `RefreshIndicator` only fires if its child is a *scrollable* — and a `VTEmptyState` is a `Center`, so pull-to-refresh silently did nothing on exactly the screens a new user would most want to retry on (a regression the Phase 1.4 empty states introduced). `VTRefreshable` wraps a non-scrollable `emptyState` in a `SingleChildScrollView` with `AlwaysScrollableScrollPhysics` and a viewport-height `ConstrainedBox`, so the pull works and the state stays centred. `vt_refreshable_test.dart` pins it, verified by deleting the wrapper and watching the test fail.
+
+Worth knowing, because the obvious guess is wrong: a **short `ListView` refreshes fine** under default physics. Measured, not assumed — the only case that genuinely fails is a child that isn't a scroll view at all.
+
+**`RoutinesPage` is the one deliberate omission.** It is a `ReorderableListView`, so pulling down at the top competes with dragging the first row upward, and routines are user-created and only ever change from this device — there is no remote update a pull could fetch. If it ever needs one, it needs a gesture decision first, not a wrapper.
+
 ## Empty states
 
 **An empty state that only apologises wastes the moment** (issue #163) — so `VTEmptyState` takes an `actionLabel`/`actionIcon`/`onAction` and renders the CTA itself. Before this it *couldn't*: `MealScanPage` was stacking a separate `VTPrimaryButton` under it, which is the workaround that proved the gap, and none of the other ~22 empty states offered anything at all while a FAB with exactly the right action sat in the corner.

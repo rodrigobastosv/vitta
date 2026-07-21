@@ -61,13 +61,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
     ReminderRecurrence recurrence = .none,
   }) async {
     emitPresentation(ReminderShowLoading());
-    final createdResult = await _createReminderUseCase(
-      title: title,
-      dueDate: dueDate,
-      notes: notes,
-      remindAt: remindAt,
-      recurrence: recurrence,
-    );
+    final createdResult = await _createReminderUseCase(title: title, dueDate: dueDate, notes: notes, remindAt: remindAt, recurrence: recurrence);
     emitPresentation(ReminderHideLoading());
     final created = createdResult.when((error) {
       emitPresentation(ReminderError(message: error.message));
@@ -186,11 +180,6 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
       return;
     }
     await _notificationService.requestPermission();
-    await _notificationService.scheduleReminder(
-      id: reminder.notificationId,
-      title: reminder.title,
-      body: reminder.notes ?? '',
-      dateTime: remindAt,
-    );
+    await _notificationService.scheduleReminder(id: reminder.notificationId, title: reminder.title, body: reminder.notes ?? '', dateTime: remindAt);
   }
 }
