@@ -11,27 +11,23 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 import '../../../../../factories/entities/workout_exercise_factory.dart';
 import '../../../../../factories/entities/workout_set_factory.dart';
 
-Future<void> pumpCard(
-  WidgetTester tester, {
-  required WorkoutExercise workoutExercise,
-  VoidCallback? onRepeatSet,
-  ValueChanged<bool>? onToggleCompleted,
-}) => tester.pumpWidget(
-  MaterialApp(
-    theme: VTTheme.light,
-    localizationsDelegates: AppLocalizations.localizationsDelegates,
-    supportedLocales: AppLocalizations.supportedLocales,
-    home: Scaffold(
-      body: WorkoutExerciseCard(
-        workoutExercise: workoutExercise,
-        unitSystem: UnitSystem.metric,
-        onAddSet: () {},
-        onRepeatSet: onRepeatSet,
-        onToggleCompleted: onToggleCompleted,
+Future<void> pumpCard(WidgetTester tester, {required WorkoutExercise workoutExercise, VoidCallback? onRepeatSet, ValueChanged<bool>? onToggleCompleted}) =>
+    tester.pumpWidget(
+      MaterialApp(
+        theme: VTTheme.light,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(
+          body: WorkoutExerciseCard(
+            workoutExercise: workoutExercise,
+            unitSystem: UnitSystem.metric,
+            onAddSet: () {},
+            onRepeatSet: onRepeatSet,
+            onToggleCompleted: onToggleCompleted,
+          ),
+        ),
       ),
-    ),
-  ),
-);
+    );
 
 void main() {
   testWidgets('offers Repeat only once there is a set to repeat', (tester) async {

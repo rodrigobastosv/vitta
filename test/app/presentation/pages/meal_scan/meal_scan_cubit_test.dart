@@ -23,7 +23,10 @@ ScannedMealItem _item(String name) =>
 MockImagePickerService _pickerReturning(PickedImage image) {
   final imagePickerService = MockImagePickerService();
   when(
-    () => imagePickerService.pickImage(source: .camera, maxWidth: any(named: 'maxWidth')),
+    () => imagePickerService.pickImage(
+      source: .camera,
+      maxWidth: any(named: 'maxWidth'),
+    ),
   ).thenAnswer((_) async => image);
   return imagePickerService;
 }
@@ -41,9 +44,7 @@ void main() {
     'scanMeal stores the photo and populates entries from the detected items',
     build: () {
       final scanMealUseCase = MockScanMealUseCase();
-      when(
-        () => scanMealUseCase(imagePath: '/tmp/meal.jpg'),
-      ).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
+      when(() => scanMealUseCase(imagePath: '/tmp/meal.jpg')).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
       return CubitsFactories.buildMealScanCubit(imagePickerService: _pickerReturning(pickedMeal), scanMealUseCase: scanMealUseCase);
     },
     act: (cubit) => cubit.scanMeal(source: .camera),
@@ -84,9 +85,7 @@ void main() {
 
   test('gramsChanged updates the amount and toggleIncluded excludes an item', () async {
     final scanMealUseCase = MockScanMealUseCase();
-    when(
-      () => scanMealUseCase(imagePath: '/tmp/meal.jpg'),
-    ).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
+    when(() => scanMealUseCase(imagePath: '/tmp/meal.jpg')).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
     final cubit = CubitsFactories.buildMealScanCubit(imagePickerService: _pickerReturning(pickedMeal), scanMealUseCase: scanMealUseCase);
 
     await cubit.scanMeal(source: .camera);
@@ -122,9 +121,7 @@ void main() {
     'logMeal logs only the included items and emits MealScanLogged',
     build: () {
       final scanMealUseCase = MockScanMealUseCase();
-      when(
-        () => scanMealUseCase(imagePath: '/tmp/meal.jpg'),
-      ).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
+      when(() => scanMealUseCase(imagePath: '/tmp/meal.jpg')).thenAnswer((_) async => Success(ScannedMeal(items: [_item('Rice'), _item('Chicken')])));
       when(
         () => logScannedMealUseCase(
           items: any(named: 'items'),
@@ -149,18 +146,18 @@ void main() {
       isA<MealScanHideLoading>(),
       isA<MealScanShowLoading>(),
       isA<MealScanHideLoading>(),
-      isA<MealScanLogged>()
-          .having((event) => event.mealType, 'mealType', MealType.dinner)
-          .having((event) => event.itemCount, 'itemCount', 1),
+      isA<MealScanLogged>().having((event) => event.mealType, 'mealType', MealType.dinner).having((event) => event.itemCount, 'itemCount', 1),
     ],
     verify: (_) {
-      final captured = verify(
-        () => logScannedMealUseCase(
-          items: captureAny(named: 'items'),
-          loggedDate: any(named: 'loggedDate'),
-          mealType: MealType.dinner,
-        ),
-      ).captured.single as List<ScannedMealLogItem>;
+      final captured =
+          verify(
+                () => logScannedMealUseCase(
+                  items: captureAny(named: 'items'),
+                  loggedDate: any(named: 'loggedDate'),
+                  mealType: MealType.dinner,
+                ),
+              ).captured.single
+              as List<ScannedMealLogItem>;
       expect(captured.map((logItem) => logItem.item.name), ['Rice']);
     },
   );

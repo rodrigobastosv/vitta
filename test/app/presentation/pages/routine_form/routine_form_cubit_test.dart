@@ -32,11 +32,7 @@ void main() {
     },
     skip: 3,
     expect: () => [
-      isA<RoutineFormState>().having((state) => [for (final exercise in state.draft.exercises) exercise.id], 'exercise order', [
-        'b',
-        'c',
-        'a',
-      ]),
+      isA<RoutineFormState>().having((state) => [for (final exercise in state.draft.exercises) exercise.id], 'exercise order', ['b', 'c', 'a']),
     ],
   );
 

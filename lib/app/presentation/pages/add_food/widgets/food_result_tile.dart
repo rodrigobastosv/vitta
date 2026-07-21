@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/buttons/vt_quick_add_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_source_badge.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
-class FoodSearchResultTile extends StatelessWidget {
-  const FoodSearchResultTile({
+class FoodResultTile extends StatelessWidget {
+  const FoodResultTile({
     required this.food,
     required this.heroTag,
     required this.onTap,
@@ -26,6 +30,14 @@ class FoodSearchResultTile extends StatelessWidget {
 
   final VoidCallback? onToggleFavorite;
 
+  String subtitle(AppLocalizations l10n) {
+    final calories = l10n.dietCaloriesPer100g(food.caloriesPer100g.round());
+    return switch (food.brand) {
+      final brand? when brand.trim().isNotEmpty => '$brand · $calories',
+      _ => calories,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -42,18 +54,21 @@ class FoodSearchResultTile extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: .start,
+              mainAxisSize: .min,
               children: [
-                Text(food.name, style: VTTextStyles.bodyStrong(context), maxLines: 2, overflow: .ellipsis),
-                if (food.brand case final brand?)
-                  Text(
-                    brand,
-                    style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
-                    maxLines: 1,
-                    overflow: .ellipsis,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(food.name, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
+                    ),
+                    if (food.source == FoodSource.recipe) ...[const VTGap.xs(), FoodSourceBadge(source: food.source)],
+                  ],
+                ),
                 Text(
-                  l10n.dietCaloriesPer100g(food.caloriesPer100g.round()),
+                  subtitle(l10n),
                   style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                  maxLines: 1,
+                  overflow: .ellipsis,
                 ),
               ],
             ),
@@ -65,7 +80,7 @@ class FoodSearchResultTile extends StatelessWidget {
               color: isFavorite ? VTColors.macroProtein : colorScheme.onSurfaceVariant,
               tooltip: isFavorite ? l10n.dietUnfavoriteFoodTooltip : l10n.dietFavoriteFoodTooltip,
             ),
-          IconButton.filledTonal(onPressed: onAdd, icon: const Icon(Icons.add), tooltip: l10n.dietLogFoodAction),
+          VTQuickAddButton(onPressed: onAdd, tooltip: l10n.dietLogFoodAction),
         ],
       ),
     );

@@ -140,6 +140,34 @@ This is the same trap the `VTSeverity` section already tells a story about, and 
 
 `vt_colors_ink_test.dart` asserts the 3:1 floor across every accent, asserts `inkOn` beats the alternative ink each time, and pins the 16%-tint failure so nobody reintroduces it. **Reach for `inkOn` whenever an accent carries an icon**; the 16% tint is still fine as a *background* behind neutral ink, which is what the meal and badge tints do.
 
+## Food search: the idle state is the feature
+
+The screen every logged meal passes through, reworked in issue #163. Four things were wrong and they compound:
+
+**The hint named the fallback.** "Search Open Food Facts" — but `DietRepository.searchFoods` queries **our catalog first** and only augments with OFF when results are sparse (see Food data). It advertised the wrong source, and one the user should never have to know exists. It is now just "Search foods".
+
+**Search was submit-only.** Results came from `onSubmitted`, so every lookup cost a keyboard return. `FoodSearchCubit.queryChanged` now debounces (350ms, minimum 2 characters) and `VTSearchField` gained an `onChanged` to feed it. The debounce lives in the cubit, not the widget, so the timer is cancelled in `close()`. It is listed in `motion_tokens_test.dart`'s `_allowed`: **an input delay is not a transition**, the same category as the HTTP retry backoff.
+
+**The idle state remembered the wrong thing.** It listed past *queries* — text you typed. What a food tracker is actually asked for is **the food you logged last time**, because eating is repetitive.
+
+**The `+` means the same thing in both modes: accept the last amount.** Tapping a recent food's row opens a sheet to adjust; tapping its `+` takes the quantity you used last time — logging it when adding food, popping a `RecipeIngredient` when picking for a recipe. The first cut opened the quantity sheet on `+` while picking, which made the same button mean "accept" in one flow and "adjust" in the other. Pinned by a test that asserts the picked ingredient carries the last amount.
+
+**Recently-logged foods are their own tab, not the Search tab's idle state.** Putting them above the recent searches was tried first and buried them — on the Search tab, the thing you want is your recent *searches*. So the strip is now **Search / Recent / Favourites**: Search idles into recent-search chips, Recent lists the foods you've logged with the amount you used last time so one tap re-logs it. The tabs carry no icons, because three labelled tabs across a phone is already tight.
+
+Recent searches are `InputChip`s, not rows. A row per past query ate the whole tab for something that is one word long; a chip wraps, and its built-in `onDeleted` is the ×.
+
+`DietRepository.getRecentlyLoggedFoods` is the new read behind it. It is **deduped in the repository, not the query**: PostgREST has no usable `DISTINCT ON`, so the datasource takes the newest `_recentEntryLookback` (80) rows and the repository keeps the first entry per food id. It returns `FoodLogEntry` rather than `Food` precisely because the entry carries the quantity — that is what makes the one-tap re-log possible.
+
+**Nothing tonal may default to `secondaryContainer`.** `IconButton.filledTonal` and a selected `ChoiceChip` both do, and the app's secondary is coral — which in dark resolves to `coralContainerDark` (#7A3A18) and reads as **brown against an otherwise green app**. `VTQuickAddButton` wraps the add affordance in `primaryContainer`/`onPrimaryContainer`, and `VTTheme` sets `chipTheme.selectedColor` to the same, so the meal chips in the log sheet follow. Reach for the quick-add component rather than a bare `filledTonal`.
+
+**Rows were ragged.** The catalog/OFF merge means some rows have a brand and some do not, and the name could wrap to two lines — so a list had visibly uneven row heights. `FoodSearchResultTile` now gives the name **one line** and always renders **one** meta line (`brand · kcal`, or just kcal), which is pinned by a test asserting a branded and an unbranded row measure the same height.
+
+## Picking a day is not judging a day
+
+`CopyMealsPage`'s calendar used `GoalAdherence.color`, so a day you ate badly on showed **red** — in a picker whose only question is "does this day have meals I can copy?". Adherence is the diet *history* calendar's job; here every logged day is equally valid, so they are all `VTColors.success`.
+
+**Empty days are pickable too.** They used to be inert, which reads as a broken tap — the user has no way to tell "nothing here" from "this control is dead". `VTCalendarDayCell`/`VTCalendarMonthGrid` gained `allowsEmptySelection` (opt-in, so the diet/water/sleep history calendars keep refusing empty days as before), and picking one swaps the "No day picked" prompt for "Nothing logged that day". Both pinned, both mutation-verified.
+
 ## Adding food is one place, not four
 
 Scanning a meal photo used to be an icon in the **diet** app bar, next to recipes, copy and history — isolated from the flow it belongs to, and part of why that bar carried four actions. `MealScanAction` now lives on `FoodSearchPage` beside the custom-food action, so the three ways to add food (**search it, type it, photograph it**) sit together in the one place a user goes to add food. The diet bar is down to three actions. A fourth way to add food goes there too, not back on the diet page.
@@ -322,7 +350,7 @@ A recipe is a set of foods eaten together (issue #63). The modelling decision th
 
 **`MacroTotals` was generalised for this**: it now folds over `FoodPortion` (a mixin pairing a `Food` with `quantityGrams`, and deriving calories/protein/carbs/fat/fiber/micronutrients from it) rather than `FoodLogEntry` specifically, so a recipe ingredient and a logged food total up through the exact same code. `FoodLogEntry` and `RecipeIngredient` both mix in `FoodPortion`; `DailyMacros` still narrows `entries` back to `List<FoodLogEntry>` via a covariant override. `MacroTotals` also gained `totalGrams`, which is what the issue's "somar ... gramas" asks for and is meaningful for a day too.
 
-UI: a book icon in the diet `AppBar` opens `RecipesPage` (`/diet/recipes`, list + delete + FAB); tapping a recipe or the FAB opens `RecipeFormPage` (`/diet/recipes/new`), which creates or edits depending on the `Recipe?` in its `RecipeFormExtra`. The form's "add ingredient" pushes `IngredientPickerPage` (`/diet/recipes/new/ingredient`), which reuses `FoodSearchCubit` and `FoodSearchResultTile` but pops a `RecipeIngredient` instead of logging — `FoodSearchPage` stays single-purpose rather than growing a "pick" mode. `RecipeTotalsCard` shows the live roll-up as the draft grows. A recipe can carry a photo, picked and uploaded exactly like a custom food's: the cubit uploads the bytes and puts the resulting URL on the draft, so the domain only ever sees `RecipeDraft.imageUrl` and the raw `Uint8List` stays in `RecipeFormState`.
+UI: a book icon in the diet `AppBar` opens `RecipesPage` (`/diet/recipes`, list + delete + FAB); tapping a recipe or the FAB opens `RecipeFormPage` (`/diet/recipes/new`), which creates or edits depending on the `Recipe?` in its `RecipeFormExtra`. The form's "add ingredient" opens `AddFoodPage` in `AddFoodMode.pickIngredient` (`/diet/recipes/new/ingredient`), which reuses `FoodSearchCubit` and `FoodSearchResultTile` but pops a `RecipeIngredient` instead of logging — `FoodSearchPage` stays single-purpose rather than growing a "pick" mode. `RecipeTotalsCard` shows the live roll-up as the draft grows. A recipe can carry a photo, picked and uploaded exactly like a custom food's: the cubit uploads the bytes and puts the resulting URL on the draft, so the domain only ever sees `RecipeDraft.imageUrl` and the raw `Uint8List` stays in `RecipeFormState`.
 
 **`VTPage` gained an optional `cubitParam`** for this: `RecipeFormCubit` needs the recipe being edited at construction, and it's handed to `G<C>(param1: ...)` against a `registerFactoryParam` registration. Passing `param1: null` to a plain `registerFactory` is a no-op, so every other page is unaffected. Reach for this rather than a `create:` callback or seeding a cubit from a widget's `initState` — `VTPage` stays the one place that resolves a page's cubit.
 

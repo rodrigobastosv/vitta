@@ -27,13 +27,11 @@ abstract class RepositoriesFactories {
     dietIntroLocalDataSource: dietIntroLocalDataSource ?? MockDietIntroLocalDataSource(),
   );
 
-  static WaterRepository buildWaterRepository({
-    MockSupabaseWaterDataSource? supabaseWaterDataSource,
-    MockWaterLocalDataSource? waterLocalDataSource,
-  }) => WaterRepository(
-    supabaseWaterDataSource: supabaseWaterDataSource ?? MockSupabaseWaterDataSource(),
-    waterLocalDataSource: waterLocalDataSource ?? MockWaterLocalDataSource(),
-  );
+  static WaterRepository buildWaterRepository({MockSupabaseWaterDataSource? supabaseWaterDataSource, MockWaterLocalDataSource? waterLocalDataSource}) =>
+      WaterRepository(
+        supabaseWaterDataSource: supabaseWaterDataSource ?? MockSupabaseWaterDataSource(),
+        waterLocalDataSource: waterLocalDataSource ?? MockWaterLocalDataSource(),
+      );
 
   static WorkoutRepository buildWorkoutRepository({
     MockSupabaseExerciseDataSource? supabaseExerciseDataSource,

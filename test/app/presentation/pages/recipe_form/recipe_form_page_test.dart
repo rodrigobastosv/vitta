@@ -20,23 +20,14 @@ import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/recipe_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
-Future<void> pumpRecipeForm(
-  WidgetTester tester, {
-  required MockSaveRecipeUseCase saveRecipeUseCase,
-  RecipeIngredient? pickedIngredient,
-  Recipe? recipe,
-}) async {
+Future<void> pumpRecipeForm(WidgetTester tester, {required MockSaveRecipeUseCase saveRecipeUseCase, RecipeIngredient? pickedIngredient, Recipe? recipe}) async {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
   if (G.isRegistered<RecipeFormCubit>()) {
     G.unregister<RecipeFormCubit>();
   }
   G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(
-    (param, _) => CubitsFactories.buildRecipeFormCubit(
-      saveRecipeUseCase: saveRecipeUseCase,
-      getAppSettingsUseCase: getAppSettingsUseCase,
-      recipe: param,
-    ),
+    (param, _) => CubitsFactories.buildRecipeFormCubit(saveRecipeUseCase: saveRecipeUseCase, getAppSettingsUseCase: getAppSettingsUseCase, recipe: param),
   );
 
   await tester.pumpWidget(
@@ -60,7 +51,7 @@ Future<void> pumpRecipeForm(
           ),
           GoRoute(
             path: '/ingredient',
-            name: 'ingredientPicker',
+            name: 'addFood',
             builder: (context, state) => Scaffold(
               body: Center(
                 child: ElevatedButton(onPressed: () => Navigator.of(context).pop(pickedIngredient), child: const Text('pick')),

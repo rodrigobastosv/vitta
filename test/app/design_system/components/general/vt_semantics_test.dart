@@ -21,10 +21,7 @@ void main() {
       const VTMacroRing(
         value: 0.9,
         color: Colors.green,
-        child: Column(
-          mainAxisSize: .min,
-          children: [Text('1850'), Text('of 2000 kcal'), Text('150 left')],
-        ),
+        child: Column(mainAxisSize: .min, children: [Text('1850'), Text('of 2000 kcal'), Text('150 left')]),
       ),
     );
 

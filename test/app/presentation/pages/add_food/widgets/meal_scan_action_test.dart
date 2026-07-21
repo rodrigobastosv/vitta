@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/meal_scan_action.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -18,7 +18,9 @@ void main() {
           path: AppRoute.diet.path,
           name: AppRoute.diet.name,
           builder: (context, state) => Scaffold(
-            appBar: AppBar(actions: [MealScanAction(date: DateTime(2026, 7, 19), onLogged: () {})]),
+            appBar: AppBar(
+              actions: [MealScanAction(date: DateTime(2026, 7, 19), onLogged: () {})],
+            ),
           ),
         ),
         for (final route in [AppRoute.mealScan, AppRoute.premium])

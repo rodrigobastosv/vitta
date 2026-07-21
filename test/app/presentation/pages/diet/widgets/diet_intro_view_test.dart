@@ -4,11 +4,7 @@ import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/diet_intro_view.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
-Future<void> pumpIntro(
-  WidgetTester tester, {
-  required VoidCallback onSetGoals,
-  required VoidCallback onSkip,
-}) async {
+Future<void> pumpIntro(WidgetTester tester, {required VoidCallback onSetGoals, required VoidCallback onSkip}) async {
   tester.view.physicalSize = const Size(1000, 1600);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);

@@ -22,18 +22,15 @@ void main() {
   test('logs a pop with the popped route name', () {
     final loggingService = useMockLog();
 
-    LoggingNavigatorObserver().didPop(route('foodSearch'), route('diet'));
+    LoggingNavigatorObserver().didPop(route('addFood'), route('diet'));
 
-    verify(() => loggingService.logNavigation(action: 'pop', route: 'foodSearch')).called(1);
+    verify(() => loggingService.logNavigation(action: 'pop', route: 'addFood')).called(1);
   });
 
   test('falls back to unknown when the route has no name', () {
     final loggingService = useMockLog();
 
-    LoggingNavigatorObserver().didPush(
-      PageRouteBuilder<void>(pageBuilder: (context, animation, secondaryAnimation) => const SizedBox()),
-      null,
-    );
+    LoggingNavigatorObserver().didPush(PageRouteBuilder<void>(pageBuilder: (context, animation, secondaryAnimation) => const SizedBox()), null);
 
     verify(() => loggingService.logNavigation(action: 'push', route: 'unknown')).called(1);
   });

@@ -12,11 +12,7 @@ Future<void> settleToast(WidgetTester tester) async {
   await tester.pump(const Duration(milliseconds: 400));
 }
 
-Future<void> pumpToast(
-  WidgetTester tester, {
-  required void Function(BuildContext context) show,
-  Brightness brightness = Brightness.light,
-}) async {
+Future<void> pumpToast(WidgetTester tester, {required void Function(BuildContext context) show, Brightness brightness = Brightness.light}) async {
   await tester.pumpWidget(
     MaterialApp(
       theme: brightness == Brightness.light ? VTTheme.light : VTTheme.dark,
@@ -40,8 +36,7 @@ Color discColorOf(WidgetTester tester) {
 
 Color iconColorOf(WidgetTester tester) => tester.widget<Icon>(find.byType(Icon).first).color!;
 
-Color cardColorOf(WidgetTester tester) =>
-    tester.widget<Material>(find.ancestor(of: find.byType(Icon).first, matching: find.byType(Material)).first).color!;
+Color cardColorOf(WidgetTester tester) => tester.widget<Material>(find.ancestor(of: find.byType(Icon).first, matching: find.byType(Material)).first).color!;
 
 Color textColorOf(WidgetTester tester, String text) => tester.widget<Text>(find.text(text)).style!.color!;
 

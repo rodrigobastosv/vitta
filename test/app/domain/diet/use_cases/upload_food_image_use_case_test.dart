@@ -16,9 +16,7 @@ void main() {
     final dietRepository = MockDietRepository();
     final useCase = UseCasesFactories.buildUploadFoodImageUseCase(dietRepository: dietRepository);
     final bytes = Uint8List.fromList([1, 2, 3]);
-    when(
-      () => dietRepository.uploadFoodImage(bytes: bytes, fileExtension: 'jpg'),
-    ).thenAnswer((_) async => const Success('https://example.com/food.jpg'));
+    when(() => dietRepository.uploadFoodImage(bytes: bytes, fileExtension: 'jpg')).thenAnswer((_) async => const Success('https://example.com/food.jpg'));
 
     final uploadResult = await useCase(bytes: bytes, fileExtension: 'jpg');
 

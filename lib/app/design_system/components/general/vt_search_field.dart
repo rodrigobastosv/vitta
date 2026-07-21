@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 
 class VTSearchField extends StatefulWidget {
-  const VTSearchField({required this.hintText, required this.onSubmitted, this.text, this.autofocus = false, super.key});
+  const VTSearchField({required this.hintText, required this.onSubmitted, this.onChanged, this.text, this.autofocus = false, super.key});
 
   final String hintText;
   final ValueChanged<String> onSubmitted;
+  final ValueChanged<String>? onChanged;
 
   final String? text;
 
@@ -43,7 +44,10 @@ class _VTSearchFieldState extends State<VTSearchField> {
     controller: _controller,
     autofocus: widget.autofocus,
     textInputAction: .search,
-    onChanged: (_) => setState(() {}),
+    onChanged: (value) {
+      setState(() {});
+      widget.onChanged?.call(value);
+    },
     onSubmitted: widget.onSubmitted,
     decoration: InputDecoration(
       hintText: widget.hintText,

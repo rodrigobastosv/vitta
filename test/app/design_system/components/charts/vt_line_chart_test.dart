@@ -9,17 +9,16 @@ Future<void> pumpChart(WidgetTester tester, List<VTLineChartPoint> points) {
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
   return tester.pumpWidget(
-    MaterialApp(theme: VTTheme.light, home: Scaffold(body: VTLineChart(points: points))),
+    MaterialApp(
+      theme: VTTheme.light,
+      home: Scaffold(body: VTLineChart(points: points)),
+    ),
   );
 }
 
 void main() {
   testWidgets('renders a multi-point series without overflow', (tester) async {
-    await pumpChart(tester, const [
-      VTLineChartPoint(value: 75, label: 'Jul 1'),
-      VTLineChartPoint(value: 74.2),
-      VTLineChartPoint(value: 73.5, label: 'Jul 30'),
-    ]);
+    await pumpChart(tester, const [VTLineChartPoint(value: 75, label: 'Jul 1'), VTLineChartPoint(value: 74.2), VTLineChartPoint(value: 73.5, label: 'Jul 30')]);
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);

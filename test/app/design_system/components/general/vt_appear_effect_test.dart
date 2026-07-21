@@ -19,11 +19,7 @@ void main() {
   });
 
   testWidgets('stays hidden until its staggered turn comes round', (tester) async {
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: VTAppearEffect(index: 3, child: Text('hi')),
-      ),
-    );
+    await tester.pumpWidget(const MaterialApp(home: VTAppearEffect(index: 3, child: Text('hi'))));
 
     await tester.pump(VTMotion.staggerFor(3) - const Duration(milliseconds: 1));
     expect(opacityOf(tester), 0);

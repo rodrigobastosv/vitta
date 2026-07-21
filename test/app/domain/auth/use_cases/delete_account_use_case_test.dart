@@ -16,10 +16,7 @@ void main() {
     when(authRepository.signOut).thenAnswer((_) async => const Success(null));
     when(authRepository.signInAnonymously).thenAnswer((_) async => const Success(AnonymousUser()));
     when(purchaseService.logOut).thenAnswer((_) async {});
-    final useCase = UseCasesFactories.buildDeleteAccountUseCase(
-      authRepository: authRepository,
-      purchaseService: purchaseService,
-    );
+    final useCase = UseCasesFactories.buildDeleteAccountUseCase(authRepository: authRepository, purchaseService: purchaseService);
 
     final statusResult = await useCase();
 
@@ -33,10 +30,7 @@ void main() {
     final authRepository = MockAuthRepository();
     final purchaseService = MockPurchaseService();
     when(authRepository.deleteAccount).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-    final useCase = UseCasesFactories.buildDeleteAccountUseCase(
-      authRepository: authRepository,
-      purchaseService: purchaseService,
-    );
+    final useCase = UseCasesFactories.buildDeleteAccountUseCase(authRepository: authRepository, purchaseService: purchaseService);
 
     final statusResult = await useCase();
 

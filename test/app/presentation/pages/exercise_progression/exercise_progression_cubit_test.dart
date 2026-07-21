@@ -41,9 +41,7 @@ void main() {
     'load brackets the fetch with loading events',
     build: () {
       final getExerciseProgressionUseCase = MockGetExerciseProgressionUseCase();
-      when(
-        () => getExerciseProgressionUseCase(exerciseId: 'exercise-1'),
-      ).thenAnswer((_) async => const Success(ExerciseProgression(points: [])));
+      when(() => getExerciseProgressionUseCase(exerciseId: 'exercise-1')).thenAnswer((_) async => const Success(ExerciseProgression(points: [])));
       return _buildCubit(getExerciseProgressionUseCase);
     },
     act: (cubit) => cubit.load(),
@@ -54,9 +52,7 @@ void main() {
     'load surfaces a failure as an error event',
     build: () {
       final getExerciseProgressionUseCase = MockGetExerciseProgressionUseCase();
-      when(
-        () => getExerciseProgressionUseCase(exerciseId: 'exercise-1'),
-      ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+      when(() => getExerciseProgressionUseCase(exerciseId: 'exercise-1')).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
       return _buildCubit(getExerciseProgressionUseCase);
     },
     act: (cubit) => cubit.load(),

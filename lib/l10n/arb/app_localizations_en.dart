@@ -311,6 +311,43 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get dietRecipeBadge => 'Recipe';
+
+  @override
+  String dietQuantityUnits(String units) {
+    return '$units un';
+  }
+
+  @override
+  String dietQuantityGrams(int grams) {
+    return '$grams g';
+  }
+
+  @override
+  String get dietLogAgainAction => 'Log again';
+
+  @override
+  String get dietRecentlyLoggedTitle => 'Recently logged';
+
+  @override
+  String get dietRecentSearchesTitle => 'Recent searches';
+
+  @override
+  String get dietRecentTabLabel => 'Recent';
+
+  @override
+  String get dietRecentEmptyTitle => 'Nothing logged yet';
+
+  @override
+  String get dietRecentEmptyMessage => 'Foods you log will show up here, ready to add again in one tap.';
+
+  @override
+  String get dietCopyMealsEmptyDayTitle => 'Nothing logged that day';
+
+  @override
+  String get dietCopyMealsEmptyDayMessage => 'Pick another day — this one has no meals to copy.';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -632,16 +669,13 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get dietFoodSearchTitle => 'Search foods';
+  String get dietFoodSearchTitle => 'Add food';
 
   @override
   String get dietFavoritesTitle => 'Favorites';
 
   @override
   String get dietSearchTabLabel => 'Search';
-
-  @override
-  String get dietRecentSearchesTitle => 'Recent searches';
 
   @override
   String get dietClearRecentSearchesAction => 'Clear';
@@ -662,7 +696,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietUnfavoriteFoodTooltip => 'Remove from favorites';
 
   @override
-  String get dietSearchFieldLabel => 'Search Open Food Facts';
+  String get dietSearchFieldLabel => 'Search foods';
 
   @override
   String get dietSearchPrompt => 'Search for a food to log it.';

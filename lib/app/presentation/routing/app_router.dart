@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/app/presentation/routing/logging_navigator_observer.dart';
+import 'package:vitta/app/presentation/routing/routes/add_food_route.dart';
 import 'package:vitta/app/presentation/routing/routes/body_weight_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/body_weight_route.dart';
 import 'package:vitta/app/presentation/routing/routes/copy_meals_route.dart';
@@ -15,9 +16,7 @@ import 'package:vitta/app/presentation/routing/routes/exercise_detail_route.dart
 import 'package:vitta/app/presentation/routing/routes/exercise_progression_list_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_progression_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_search_route.dart';
-import 'package:vitta/app/presentation/routing/routes/food_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
-import 'package:vitta/app/presentation/routing/routes/ingredient_picker_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
@@ -53,8 +52,7 @@ abstract class AppRouter {
     DietDayRoute(),
     RecipesRoute(),
     RecipeFormRoute(),
-    IngredientPickerRoute(),
-    FoodSearchRoute(),
+    AddFoodRoute(),
     CustomFoodRoute(),
     WaterRoute(),
     WaterHistoryRoute(),

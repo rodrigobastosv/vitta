@@ -21,9 +21,7 @@ Future<void> pumpListPage(WidgetTester tester, {required List<Exercise> exercise
   if (G.isRegistered<ExerciseProgressionListCubit>()) {
     G.unregister<ExerciseProgressionListCubit>();
   }
-  G.registerFactory<ExerciseProgressionListCubit>(
-    () => ExerciseProgressionListCubit(getLoggedExercisesUseCase: getLoggedExercisesUseCase),
-  );
+  G.registerFactory<ExerciseProgressionListCubit>(() => ExerciseProgressionListCubit(getLoggedExercisesUseCase: getLoggedExercisesUseCase));
 
   await tester.pumpWidget(
     MaterialApp.router(

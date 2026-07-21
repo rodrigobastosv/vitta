@@ -48,9 +48,7 @@ void main() {
 
   test('getExerciseProgression forwards a datasource failure', () async {
     final supabaseWorkoutDataSource = MockSupabaseWorkoutDataSource();
-    when(
-      () => supabaseWorkoutDataSource.getSessionsForExercise(exerciseId: 'ex-1'),
-    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    when(() => supabaseWorkoutDataSource.getSessionsForExercise(exerciseId: 'ex-1')).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
     final repository = RepositoriesFactories.buildWorkoutRepository(supabaseWorkoutDataSource: supabaseWorkoutDataSource);
 
     final progressionResult = await repository.getExerciseProgression(exerciseId: 'ex-1');

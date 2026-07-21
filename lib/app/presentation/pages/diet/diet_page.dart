@@ -12,6 +12,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_extra.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_extra.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
@@ -20,7 +21,6 @@ import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dar
 import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
@@ -50,7 +50,7 @@ class DietPage extends StatelessWidget {
               icon: const Icon(Icons.copy_all_outlined),
               tooltip: l10n.dietCopyMealsTitle,
               onPressed: () async {
-                final hasCopied = await context.pushRoute<bool>(.dietCopy, extra: CopyMealsExtra(targetDate: state.date));
+                final hasCopied = await context.pushRoute<bool>(.copyMeals, extra: CopyMealsExtra(targetDate: state.date));
                 if (hasCopied ?? false) {
                   await cubit.refresh();
                 }
@@ -91,7 +91,7 @@ class DietPage extends StatelessWidget {
                 actionLabel: l10n.dietAddFood,
                 actionIcon: Icons.add,
                 onAction: () async {
-                  await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
+                  await context.pushRoute(.addFood, extra: AddFoodExtra(loggedDate: state.date));
                   await cubit.refresh();
                 },
               )
@@ -104,8 +104,8 @@ class DietPage extends StatelessWidget {
                     section: section,
                     onAddFood: () async {
                       await context.pushRoute(
-                        .foodSearch,
-                        extra: FoodSearchExtra(loggedDate: state.date, initialMealType: section.mealType),
+                        .addFood,
+                        extra: AddFoodExtra(loggedDate: state.date, initialMealType: section.mealType),
                       );
                       await cubit.refresh();
                     },
@@ -121,7 +121,7 @@ class DietPage extends StatelessWidget {
             ? null
             : FloatingActionButton.extended(
                 onPressed: () async {
-                  await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
+                  await context.pushRoute(.addFood, extra: AddFoodExtra(loggedDate: state.date));
                   await cubit.refresh();
                 },
                 icon: const Icon(Icons.add),

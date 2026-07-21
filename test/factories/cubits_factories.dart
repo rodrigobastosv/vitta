@@ -1,6 +1,7 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_cubit.dart';
@@ -9,7 +10,6 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart'
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
-import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
@@ -31,11 +31,10 @@ import '../mocks/services_mocks.dart';
 import '../mocks/use_cases_mocks.dart';
 
 abstract class CubitsFactories {
-  static AppCubit buildAppCubit({MockGetAppSettingsUseCase? getAppSettingsUseCase, MockSaveAppSettingsUseCase? saveAppSettingsUseCase}) =>
-      AppCubit(
-        getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
-        saveAppSettingsUseCase: saveAppSettingsUseCase ?? MockSaveAppSettingsUseCase(),
-      );
+  static AppCubit buildAppCubit({MockGetAppSettingsUseCase? getAppSettingsUseCase, MockSaveAppSettingsUseCase? saveAppSettingsUseCase}) => AppCubit(
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    saveAppSettingsUseCase: saveAppSettingsUseCase ?? MockSaveAppSettingsUseCase(),
+  );
 
   static AuthCubit buildAuthCubit({
     MockGetUserUseCase? getUserUseCase,
@@ -101,13 +100,11 @@ abstract class CubitsFactories {
     markDietIntroSeenUseCase: markDietIntroSeenUseCase ?? MockMarkDietIntroSeenUseCase(),
   );
 
-  static DietHistoryCubit buildDietHistoryCubit({
-    MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
-    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
-  }) => DietHistoryCubit(
-    getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
-    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
-  );
+  static DietHistoryCubit buildDietHistoryCubit({MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase, MockGetMacroGoalsUseCase? getMacroGoalsUseCase}) =>
+      DietHistoryCubit(
+        getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
+        getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+      );
 
   static CopyMealsCubit buildCopyMealsCubit({
     MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
@@ -121,15 +118,13 @@ abstract class CubitsFactories {
     targetDate: targetDate ?? DateTime(2026, 7, 14),
   );
 
-  static MacroGoalsCubit buildMacroGoalsCubit({
-    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
-    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
-  }) => MacroGoalsCubit(
-    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
-    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
-  );
+  static MacroGoalsCubit buildMacroGoalsCubit({MockGetMacroGoalsUseCase? getMacroGoalsUseCase, MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase}) =>
+      MacroGoalsCubit(
+        getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+        saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+      );
 
-  static FoodSearchCubit buildFoodSearchCubit({
+  static AddFoodCubit buildAddFoodCubit({
     MockSearchFoodsUseCase? searchFoodsUseCase,
     MockLogFoodUseCase? logFoodUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
@@ -140,7 +135,8 @@ abstract class CubitsFactories {
     MockAddRecentSearchUseCase? addRecentSearchUseCase,
     MockRemoveRecentSearchUseCase? removeRecentSearchUseCase,
     MockClearRecentSearchesUseCase? clearRecentSearchesUseCase,
-  }) => FoodSearchCubit(
+    MockGetRecentlyLoggedFoodsUseCase? getRecentlyLoggedFoodsUseCase,
+  }) => AddFoodCubit(
     searchFoodsUseCase: searchFoodsUseCase ?? MockSearchFoodsUseCase(),
     logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
@@ -151,6 +147,7 @@ abstract class CubitsFactories {
     addRecentSearchUseCase: addRecentSearchUseCase ?? MockAddRecentSearchUseCase(),
     removeRecentSearchUseCase: removeRecentSearchUseCase ?? MockRemoveRecentSearchUseCase(),
     clearRecentSearchesUseCase: clearRecentSearchesUseCase ?? MockClearRecentSearchesUseCase(),
+    getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase ?? MockGetRecentlyLoggedFoodsUseCase(),
   );
 
   static CustomFoodCubit buildCustomFoodCubit({
@@ -176,10 +173,7 @@ abstract class CubitsFactories {
   );
 
   static RecipesCubit buildRecipesCubit({MockGetRecipesUseCase? getRecipesUseCase, MockDeleteRecipeUseCase? deleteRecipeUseCase}) =>
-      RecipesCubit(
-        getRecipesUseCase: getRecipesUseCase ?? MockGetRecipesUseCase(),
-        deleteRecipeUseCase: deleteRecipeUseCase ?? MockDeleteRecipeUseCase(),
-      );
+      RecipesCubit(getRecipesUseCase: getRecipesUseCase ?? MockGetRecipesUseCase(), deleteRecipeUseCase: deleteRecipeUseCase ?? MockDeleteRecipeUseCase());
 
   static RecipeFormCubit buildRecipeFormCubit({
     MockSaveRecipeUseCase? saveRecipeUseCase,
@@ -195,13 +189,11 @@ abstract class CubitsFactories {
     recipe: recipe,
   );
 
-  static OnboardingCubit buildOnboardingCubit({
-    MockCompleteOnboardingUseCase? completeOnboardingUseCase,
-    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
-  }) => OnboardingCubit(
-    completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase(),
-    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
-  );
+  static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase, MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase}) =>
+      OnboardingCubit(
+        completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase(),
+        saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+      );
 
   static WaterCubit buildWaterCubit({
     MockGetDailyWaterUseCase? getDailyWaterUseCase,
@@ -217,21 +209,17 @@ abstract class CubitsFactories {
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
-  static WaterHistoryCubit buildWaterHistoryCubit({
-    MockGetWaterInRangeUseCase? getWaterInRangeUseCase,
-    MockGetWaterGoalUseCase? getWaterGoalUseCase,
-  }) => WaterHistoryCubit(
-    getWaterInRangeUseCase: getWaterInRangeUseCase ?? MockGetWaterInRangeUseCase(),
-    getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
-  );
+  static WaterHistoryCubit buildWaterHistoryCubit({MockGetWaterInRangeUseCase? getWaterInRangeUseCase, MockGetWaterGoalUseCase? getWaterGoalUseCase}) =>
+      WaterHistoryCubit(
+        getWaterInRangeUseCase: getWaterInRangeUseCase ?? MockGetWaterInRangeUseCase(),
+        getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
+      );
 
-  static SleepHistoryCubit buildSleepHistoryCubit({
-    MockGetSleepInRangeUseCase? getSleepInRangeUseCase,
-    MockGetSleepGoalUseCase? getSleepGoalUseCase,
-  }) => SleepHistoryCubit(
-    getSleepInRangeUseCase: getSleepInRangeUseCase ?? MockGetSleepInRangeUseCase(),
-    getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
-  );
+  static SleepHistoryCubit buildSleepHistoryCubit({MockGetSleepInRangeUseCase? getSleepInRangeUseCase, MockGetSleepGoalUseCase? getSleepGoalUseCase}) =>
+      SleepHistoryCubit(
+        getSleepInRangeUseCase: getSleepInRangeUseCase ?? MockGetSleepInRangeUseCase(),
+        getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
+      );
 
   static BodyWeightCubit buildBodyWeightCubit({
     MockGetRecentBodyWeightLogsUseCase? getRecentBodyWeightLogsUseCase,

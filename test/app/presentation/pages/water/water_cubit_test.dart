@@ -65,9 +65,7 @@ void main() {
     'optimistically shows the added water, then swaps in the saved log without reloading',
     build: () {
       final logWaterUseCase = MockLogWaterUseCase();
-      when(
-        () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
-      ).thenAnswer((_) async => Success(WaterLogFactory.build()));
+      when(() => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250)).thenAnswer((_) async => Success(WaterLogFactory.build()));
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: addReloadSpy, logWaterUseCase: logWaterUseCase);
     },
     act: (cubit) => cubit.addWater(amountMl: 250),
@@ -82,9 +80,7 @@ void main() {
     'reverts the optimistic add when logging fails',
     build: () {
       final logWaterUseCase = MockLogWaterUseCase();
-      when(
-        () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
-      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      when(() => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildWaterCubit(logWaterUseCase: logWaterUseCase);
     },
     act: (cubit) => cubit.addWater(amountMl: 250),
@@ -99,9 +95,7 @@ void main() {
     final logWaterUseCase = MockLogWaterUseCase();
     final getDailyWaterUseCase = MockGetDailyWaterUseCase();
     final waterLocalDataSource = MockWaterLocalDataSource();
-    when(
-      () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250),
-    ).thenAnswer((_) async => Success(WaterLogFactory.build()));
+    when(() => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: 250)).thenAnswer((_) async => Success(WaterLogFactory.build()));
     when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
     when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
     final cubit = CubitsFactories.buildWaterCubit(

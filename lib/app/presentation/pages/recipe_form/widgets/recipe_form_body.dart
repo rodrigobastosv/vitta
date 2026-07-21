@@ -9,6 +9,7 @@ import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_extra.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_state.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/widgets/recipe_ingredient_tile.dart';
@@ -34,7 +35,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
 
   Future<void> _addIngredient() async {
     final cubit = context.read<RecipeFormCubit>();
-    final ingredient = await context.pushRoute<RecipeIngredient>(.ingredientPicker, extra: cubit.unitSystem);
+    final ingredient = await context.pushRoute<RecipeIngredient>(.addFood, extra: AddFoodExtra.pickIngredient(unitSystem: cubit.unitSystem));
     if (ingredient != null) {
       cubit.addIngredient(ingredient);
     }

@@ -39,8 +39,7 @@ abstract class UseCasesFactories {
   static SearchFoodsUseCase buildSearchFoodsUseCase({MockDietRepository? dietRepository}) =>
       SearchFoodsUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
-  static LogFoodUseCase buildLogFoodUseCase({MockDietRepository? dietRepository}) =>
-      LogFoodUseCase(dietRepository: dietRepository ?? MockDietRepository());
+  static LogFoodUseCase buildLogFoodUseCase({MockDietRepository? dietRepository}) => LogFoodUseCase(dietRepository: dietRepository ?? MockDietRepository());
 
   static LogScannedMealUseCase buildLogScannedMealUseCase({MockDietRepository? dietRepository}) =>
       LogScannedMealUseCase(dietRepository: dietRepository ?? MockDietRepository());
@@ -96,26 +95,15 @@ abstract class UseCasesFactories {
   static HasSeenOnboardingUseCase buildHasSeenOnboardingUseCase({MockOnboardingRepository? onboardingRepository}) =>
       HasSeenOnboardingUseCase(onboardingRepository: onboardingRepository ?? MockOnboardingRepository());
 
-  static GetUserUseCase buildGetUserUseCase({MockAuthRepository? authRepository}) =>
-      GetUserUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static GetUserUseCase buildGetUserUseCase({MockAuthRepository? authRepository}) => GetUserUseCase(authRepository: authRepository ?? MockAuthRepository());
 
-  static SignUpUseCase buildSignUpUseCase({MockAuthRepository? authRepository}) =>
-      SignUpUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static SignUpUseCase buildSignUpUseCase({MockAuthRepository? authRepository}) => SignUpUseCase(authRepository: authRepository ?? MockAuthRepository());
 
-  static SignInUseCase buildSignInUseCase({MockAuthRepository? authRepository}) =>
-      SignInUseCase(authRepository: authRepository ?? MockAuthRepository());
+  static SignInUseCase buildSignInUseCase({MockAuthRepository? authRepository}) => SignInUseCase(authRepository: authRepository ?? MockAuthRepository());
 
   static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository, MockPurchaseService? purchaseService}) =>
-      SignOutUseCase(
-        authRepository: authRepository ?? MockAuthRepository(),
-        purchaseService: purchaseService ?? MockPurchaseService(),
-      );
+      SignOutUseCase(authRepository: authRepository ?? MockAuthRepository(), purchaseService: purchaseService ?? MockPurchaseService());
 
-  static DeleteAccountUseCase buildDeleteAccountUseCase({
-    MockAuthRepository? authRepository,
-    MockPurchaseService? purchaseService,
-  }) => DeleteAccountUseCase(
-    authRepository: authRepository ?? MockAuthRepository(),
-    purchaseService: purchaseService ?? MockPurchaseService(),
-  );
+  static DeleteAccountUseCase buildDeleteAccountUseCase({MockAuthRepository? authRepository, MockPurchaseService? purchaseService}) =>
+      DeleteAccountUseCase(authRepository: authRepository ?? MockAuthRepository(), purchaseService: purchaseService ?? MockPurchaseService());
 }

@@ -63,10 +63,7 @@ void main() {
     final reorderRoutinesUseCase = MockReorderRoutinesUseCase();
     when(getRoutinesUseCase.call).thenAnswer((_) async => Success(RoutineFactory.buildCycle()));
     when(() => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds'))).thenAnswer((_) async => const Success(null));
-    final cubit = CubitsFactories.buildRoutinesCubit(
-      getRoutinesUseCase: getRoutinesUseCase,
-      reorderRoutinesUseCase: reorderRoutinesUseCase,
-    );
+    final cubit = CubitsFactories.buildRoutinesCubit(getRoutinesUseCase: getRoutinesUseCase, reorderRoutinesUseCase: reorderRoutinesUseCase);
     await cubit.loadRoutines();
 
     await pumpRoutinesPage(tester, cubit: cubit);

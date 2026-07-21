@@ -28,15 +28,9 @@ void main() {
         exerciseId: any(named: 'exerciseId'),
       ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-9')));
-    when(
-      () => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')),
-    ).thenAnswer((_) async => const Success(null));
+    when(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise'))).thenAnswer((_) async => const Success(null));
 
-    await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(
-      date: DateTime(2026, 7, 20),
-      exerciseId: 'exercise-1',
-      workoutId: 'workout-1',
-    );
+    await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(date: DateTime(2026, 7, 20), exerciseId: 'exercise-1', workoutId: 'workout-1');
 
     final captured =
         verify(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: captureAny(named: 'setsByWorkoutExercise'))).captured.single
@@ -59,11 +53,7 @@ void main() {
       ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-9')));
 
-    await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(
-      date: DateTime(2026, 7, 20),
-      exerciseId: 'brand-new',
-      workoutId: 'workout-1',
-    );
+    await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(date: DateTime(2026, 7, 20), exerciseId: 'brand-new', workoutId: 'workout-1');
 
     verifyNever(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')));
   });
@@ -105,10 +95,7 @@ void main() {
       ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
 
-    final addedResult = await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(
-      date: DateTime(2026, 7, 20),
-      exerciseId: 'exercise-1',
-    );
+    final addedResult = await AddExerciseToWorkoutUseCase(workoutRepository: workoutRepository)(date: DateTime(2026, 7, 20), exerciseId: 'exercise-1');
 
     expect(addedResult, isA<Failure<VTError, dynamic>>());
     verifyNever(

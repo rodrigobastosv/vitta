@@ -29,9 +29,7 @@ void main() {
     final getUserUseCase = MockGetUserUseCase();
     when(getUserUseCase.call).thenReturn(const AnonymousUser());
     final signInUseCase = MockSignInUseCase();
-    when(
-      () => signInUseCase(email: 'a@b.com', password: 'secret1'),
-    ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
+    when(() => signInUseCase(email: 'a@b.com', password: 'secret1')).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
     final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
 
     await cubit.signIn(email: 'a@b.com', password: 'secret1');
@@ -71,7 +69,11 @@ void main() {
       return cubit;
     },
     act: (cubit) => cubit.refreshUser(),
-    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
+    expect: () => [
+      const AuthState(
+        user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'),
+      ),
+    ],
   );
 
   blocTest<AuthCubit, AuthState>(
@@ -86,7 +88,11 @@ void main() {
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase);
     },
     act: (cubit) => cubit.signUp(email: 'a@b.com', password: 'secret1'),
-    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
+    expect: () => [
+      const AuthState(
+        user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'),
+      ),
+    ],
   );
 
   blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(
@@ -142,8 +148,7 @@ void main() {
         avatarUrl: any(named: 'avatarUrl'),
       ),
     ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com')));
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)
-      ..setAvatarPreset('man-light');
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signUpUseCase: signUpUseCase)..setAvatarPreset('man-light');
 
     await cubit.signUp(email: 'a@b.com', password: 'secret1', displayName: 'Rod');
 
@@ -224,8 +229,7 @@ void main() {
         avatarUrl: any(named: 'avatarUrl'),
       ),
     ).thenAnswer((_) async => const Success(AuthenticatedUser(id: 'user-1', email: 'a@b.com', displayName: 'Rod', avatarId: 'man-light')));
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase)
-      ..setAvatarPreset('man-light');
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, updateProfileUseCase: updateProfileUseCase)..setAvatarPreset('man-light');
 
     await cubit.updateProfile(displayName: 'Rod');
 
@@ -264,7 +268,11 @@ void main() {
       return CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, signInUseCase: signInUseCase);
     },
     act: (cubit) => cubit.signIn(email: 'a@b.com', password: 'secret1'),
-    expect: () => [const AuthState(user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'))],
+    expect: () => [
+      const AuthState(
+        user: AuthenticatedUser(id: 'user-1', email: 'a@b.com'),
+      ),
+    ],
   );
 
   blocPresentationTest<AuthCubit, AuthState, AuthPresentationEvent>(

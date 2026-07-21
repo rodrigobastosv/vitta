@@ -10,6 +10,7 @@ class VTCalendarMonthGrid extends StatelessWidget {
     required this.onDaySelected,
     this.selectedDay,
     this.isDayEnabled,
+    this.allowsEmptySelection = false,
     this.weekBadge,
     super.key,
   });
@@ -24,6 +25,8 @@ class VTCalendarMonthGrid extends StatelessWidget {
   final DateTime? selectedDay;
 
   final bool Function(DateTime day)? isDayEnabled;
+
+  final bool allowsEmptySelection;
 
   final Widget Function(List<DateTime> daysInWeek)? weekBadge;
 
@@ -49,6 +52,7 @@ class VTCalendarMonthGrid extends StatelessWidget {
                           : VTCalendarDayCell(
                               day: day,
                               valueColor: dayColor(day),
+                              allowsEmptySelection: allowsEmptySelection,
                               isToday: day == today,
                               isFuture: day.isAfter(today),
                               isSelected: day == selectedDay,

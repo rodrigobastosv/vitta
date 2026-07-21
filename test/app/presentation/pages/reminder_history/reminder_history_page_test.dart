@@ -20,7 +20,12 @@ void main() {
 
   Future<void> pumpHistory(WidgetTester tester, {required Map<DateTime, List<Reminder>> monthReminders}) async {
     final getRange = MockGetRemindersInRangeUseCase();
-    when(() => getRange(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(monthReminders));
+    when(
+      () => getRange(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => Success(monthReminders));
     final cubit = CubitsFactories.buildReminderHistoryCubit(getRemindersInRangeUseCase: getRange);
     G.registerFactory<ReminderHistoryCubit>(() => cubit);
     addTearDown(() => G.unregister<ReminderHistoryCubit>());
@@ -40,9 +45,12 @@ void main() {
   testWidgets('renders the month calendar once the month has reminders', (tester) async {
     final now = DateTime.now();
     final day = DateTime(now.year, now.month, 15);
-    await pumpHistory(tester, monthReminders: {
-      day: [ReminderFactory.build(title: 'Pay rent', dueDate: day)],
-    });
+    await pumpHistory(
+      tester,
+      monthReminders: {
+        day: [ReminderFactory.build(title: 'Pay rent', dueDate: day)],
+      },
+    );
 
     expect(find.byType(VTCalendarMonthGrid), findsOneWidget);
   });
@@ -58,9 +66,12 @@ void main() {
   testWidgets('tapping a day with reminders shows that day below the calendar', (tester) async {
     final now = DateTime.now();
     final day = DateTime(now.year, now.month, 15);
-    await pumpHistory(tester, monthReminders: {
-      day: [ReminderFactory.build(title: 'Pay rent', dueDate: day)],
-    });
+    await pumpHistory(
+      tester,
+      monthReminders: {
+        day: [ReminderFactory.build(title: 'Pay rent', dueDate: day)],
+      },
+    );
 
     expect(find.text('Pay rent'), findsNothing);
 

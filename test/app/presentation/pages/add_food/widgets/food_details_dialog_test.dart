@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_details_dialog.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/food_factory.dart';

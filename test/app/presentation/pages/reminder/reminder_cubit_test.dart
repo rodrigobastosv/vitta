@@ -20,7 +20,14 @@ import '../../../../mocks/use_cases_mocks.dart';
 MockNotificationService _permissiveNotifications() {
   final notifications = MockNotificationService();
   when(notifications.requestPermission).thenAnswer((_) async => true);
-  when(() => notifications.scheduleReminder(id: any(named: 'id'), title: any(named: 'title'), body: any(named: 'body'), dateTime: any(named: 'dateTime'))).thenAnswer((_) async {});
+  when(
+    () => notifications.scheduleReminder(
+      id: any(named: 'id'),
+      title: any(named: 'title'),
+      body: any(named: 'body'),
+      dateTime: any(named: 'dateTime'),
+    ),
+  ).thenAnswer((_) async {});
   when(() => notifications.cancel(any())).thenAnswer((_) async {});
   return notifications;
 }
@@ -61,14 +68,15 @@ void main() {
     build: CubitsFactories.buildReminderCubit,
     seed: () => ReminderState(
       date: today,
-      reminders: [ReminderFactory.build(id: 'a'), ReminderFactory.build(id: 'b', completedAt: DateTime(2026, 7, 18, 9))],
+      reminders: [
+        ReminderFactory.build(id: 'a'),
+        ReminderFactory.build(id: 'b', completedAt: DateTime(2026, 7, 18, 9)),
+      ],
       filter: ReminderFilter.all,
     ),
     act: (cubit) => cubit.changeFilter(ReminderFilter.completed),
     expect: () => [
-      isA<ReminderState>()
-          .having((state) => state.filter, 'filter', ReminderFilter.completed)
-          .having((state) => state.visibleReminders.length, 'visible', 1),
+      isA<ReminderState>().having((state) => state.filter, 'filter', ReminderFilter.completed).having((state) => state.visibleReminders.length, 'visible', 1),
     ],
   );
 
@@ -100,9 +108,9 @@ void main() {
       final complete = MockCompleteReminderUseCase();
       final completed = ReminderFactory.build(id: 'a', completedAt: DateTime(2026, 7, 18, 10));
       final spawned = ReminderFactory.build(id: 'a-next', dueDate: today);
-      when(() => complete(reminder: any(named: 'reminder'), completed: true)).thenAnswer(
-        (_) async => Success(ReminderCompletion(reminder: completed, nextOccurrence: spawned)),
-      );
+      when(
+        () => complete(reminder: any(named: 'reminder'), completed: true),
+      ).thenAnswer((_) async => Success(ReminderCompletion(reminder: completed, nextOccurrence: spawned)));
       return CubitsFactories.buildReminderCubit(completeReminderUseCase: complete, notificationService: _permissiveNotifications());
     },
     seed: () => ReminderState(
@@ -110,7 +118,10 @@ void main() {
       reminders: [ReminderFactory.build(id: 'a', recurrence: ReminderRecurrence.monthly)],
       filter: ReminderFilter.all,
     ),
-    act: (cubit) => cubit.setCompleted(reminder: ReminderFactory.build(id: 'a', recurrence: ReminderRecurrence.monthly), completed: true),
+    act: (cubit) => cubit.setCompleted(
+      reminder: ReminderFactory.build(id: 'a', recurrence: ReminderRecurrence.monthly),
+      completed: true,
+    ),
     expect: () => [
       // optimistic tick
       isA<ReminderState>().having((state) => state.reminders.first.isCompleted, 'optimistic completed', true),
@@ -128,7 +139,11 @@ void main() {
       when(() => delete(reminderId: 'a')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildReminderCubit(deleteReminderUseCase: delete, notificationService: _permissiveNotifications());
     },
-    seed: () => ReminderState(date: today, reminders: [ReminderFactory.build(id: 'a')], filter: ReminderFilter.all),
+    seed: () => ReminderState(
+      date: today,
+      reminders: [ReminderFactory.build(id: 'a')],
+      filter: ReminderFilter.all,
+    ),
     act: (cubit) => cubit.deleteReminder(reminder: ReminderFactory.build(id: 'a')),
     expect: () => [
       isA<ReminderState>().having((state) => state.reminders, 'removed', isEmpty),

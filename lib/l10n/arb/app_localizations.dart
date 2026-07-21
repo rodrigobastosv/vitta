@@ -668,6 +668,72 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @dietRecipeBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe'**
+  String get dietRecipeBadge;
+
+  /// No description provided for @dietQuantityUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'{units} un'**
+  String dietQuantityUnits(String units);
+
+  /// No description provided for @dietQuantityGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'{grams} g'**
+  String dietQuantityGrams(int grams);
+
+  /// No description provided for @dietLogAgainAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log again'**
+  String get dietLogAgainAction;
+
+  /// No description provided for @dietRecentlyLoggedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently logged'**
+  String get dietRecentlyLoggedTitle;
+
+  /// No description provided for @dietRecentSearchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get dietRecentSearchesTitle;
+
+  /// No description provided for @dietRecentTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get dietRecentTabLabel;
+
+  /// No description provided for @dietRecentEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get dietRecentEmptyTitle;
+
+  /// No description provided for @dietRecentEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Foods you log will show up here, ready to add again in one tap.'**
+  String get dietRecentEmptyMessage;
+
+  /// No description provided for @dietCopyMealsEmptyDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged that day'**
+  String get dietCopyMealsEmptyDayTitle;
+
+  /// No description provided for @dietCopyMealsEmptyDayMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick another day — this one has no meals to copy.'**
+  String get dietCopyMealsEmptyDayMessage;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
@@ -1259,7 +1325,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietFoodSearchTitle.
   ///
   /// In en, this message translates to:
-  /// **'Search foods'**
+  /// **'Add food'**
   String get dietFoodSearchTitle;
 
   /// No description provided for @dietFavoritesTitle.
@@ -1273,12 +1339,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search'**
   String get dietSearchTabLabel;
-
-  /// No description provided for @dietRecentSearchesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent searches'**
-  String get dietRecentSearchesTitle;
 
   /// No description provided for @dietClearRecentSearchesAction.
   ///
@@ -1319,7 +1379,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietSearchFieldLabel.
   ///
   /// In en, this message translates to:
-  /// **'Search Open Food Facts'**
+  /// **'Search foods'**
   String get dietSearchFieldLabel;
 
   /// No description provided for @dietSearchPrompt.

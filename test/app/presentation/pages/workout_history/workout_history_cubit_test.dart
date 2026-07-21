@@ -20,8 +20,15 @@ void main() {
     build: () {
       final getDailyWorkoutsInRangeUseCase = MockGetDailyWorkoutsInRangeUseCase();
       final day = DateTime(2026, 7, 15);
-      when(() => getDailyWorkoutsInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
-        (_) async => Success({day: DailyWorkout(date: day, workouts: [WorkoutFactory.build()])}),
+      when(
+        () => getDailyWorkoutsInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer(
+        (_) async => Success({
+          day: DailyWorkout(date: day, workouts: [WorkoutFactory.build()]),
+        }),
       );
       return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase());
     },
@@ -37,7 +44,10 @@ void main() {
     build: () {
       final getDailyWorkoutsInRangeUseCase = MockGetDailyWorkoutsInRangeUseCase();
       when(
-        () => getDailyWorkoutsInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+        () => getDailyWorkoutsInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
       return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase());
     },

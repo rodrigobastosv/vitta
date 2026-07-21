@@ -20,7 +20,10 @@ void main() {
       final reminder = ReminderFactory.build();
       final completed = ReminderFactory.build(completedAt: DateTime(2026, 7, 18, 10));
       when(
-        () => dataSource.setCompleted(reminderId: 'reminder-1', completedAt: any(named: 'completedAt')),
+        () => dataSource.setCompleted(
+          reminderId: 'reminder-1',
+          completedAt: any(named: 'completedAt'),
+        ),
       ).thenAnswer((_) async => Success(completed));
 
       final result = await ReminderRepository(supabaseReminderDataSource: dataSource).completeReminder(reminder: reminder, completed: true);
@@ -41,13 +44,12 @@ void main() {
 
     test('completing a monthly reminder spawns the next month occurrence', () async {
       final dataSource = MockSupabaseReminderDataSource();
-      final reminder = ReminderFactory.build(
-        dueDate: DateTime(2026, 7, 18),
-        remindAt: DateTime(2026, 7, 18, 9),
-        recurrence: ReminderRecurrence.monthly,
-      );
+      final reminder = ReminderFactory.build(dueDate: DateTime(2026, 7, 18), remindAt: DateTime(2026, 7, 18, 9), recurrence: ReminderRecurrence.monthly);
       when(
-        () => dataSource.setCompleted(reminderId: 'reminder-1', completedAt: any(named: 'completedAt')),
+        () => dataSource.setCompleted(
+          reminderId: 'reminder-1',
+          completedAt: any(named: 'completedAt'),
+        ),
       ).thenAnswer((_) async => Success(ReminderFactory.build(completedAt: DateTime(2026, 7, 18, 10))));
       final spawned = ReminderFactory.build(id: 'reminder-2', dueDate: DateTime(2026, 8, 18));
       when(
@@ -80,9 +82,7 @@ void main() {
     test('un-completing a recurring reminder does not spawn an occurrence', () async {
       final dataSource = MockSupabaseReminderDataSource();
       final reminder = ReminderFactory.build(recurrence: ReminderRecurrence.monthly, completedAt: DateTime(2026, 7, 18, 10));
-      when(
-        () => dataSource.setCompleted(reminderId: 'reminder-1', completedAt: null),
-      ).thenAnswer((_) async => Success(ReminderFactory.build()));
+      when(() => dataSource.setCompleted(reminderId: 'reminder-1', completedAt: null)).thenAnswer((_) async => Success(ReminderFactory.build()));
 
       await ReminderRepository(supabaseReminderDataSource: dataSource).completeReminder(reminder: reminder, completed: false);
 
@@ -100,12 +100,13 @@ void main() {
     test('a failed status update propagates the error', () async {
       final dataSource = MockSupabaseReminderDataSource();
       when(
-        () => dataSource.setCompleted(reminderId: any(named: 'reminderId'), completedAt: any(named: 'completedAt')),
+        () => dataSource.setCompleted(
+          reminderId: any(named: 'reminderId'),
+          completedAt: any(named: 'completedAt'),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
 
-      final result = await ReminderRepository(
-        supabaseReminderDataSource: dataSource,
-      ).completeReminder(reminder: ReminderFactory.build(), completed: true);
+      final result = await ReminderRepository(supabaseReminderDataSource: dataSource).completeReminder(reminder: ReminderFactory.build(), completed: true);
 
       expect(result.when((error) => error.message, (_) => null), 'boom');
     });

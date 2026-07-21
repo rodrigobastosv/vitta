@@ -15,18 +15,18 @@ import '../mocks/use_cases_mocks.dart';
 // cubit reads its use case from its own constructor.
 PremiumCubit buildTestPremiumCubit({bool isPremium = false}) {
   final getPremiumStatusUseCase = MockGetPremiumStatusUseCase();
-  when(getPremiumStatusUseCase.call).thenAnswer(
-    (_) => Future.value(
-      Success(isPremium ? const PremiumStatus(status: .active, productId: 'vitta_premium_monthly') : const PremiumStatus.free()),
-    ),
-  );
+  when(
+    getPremiumStatusUseCase.call,
+  ).thenAnswer((_) => Future.value(Success(isPremium ? const PremiumStatus(status: .active, productId: 'vitta_premium_monthly') : const PremiumStatus.free())));
   final purchaseService = MockPurchaseService();
   when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
   return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
 }
 
-Widget withTestPremium(Widget child, {bool isPremium = false}) =>
-    BlocProvider<PremiumCubit>(create: (_) => buildTestPremiumCubit(isPremium: isPremium), child: child);
+Widget withTestPremium(Widget child, {bool isPremium = false}) => BlocProvider<PremiumCubit>(
+  create: (_) => buildTestPremiumCubit(isPremium: isPremium),
+  child: child,
+);
 
 // For a test that pumps the real VittaApp: it resolves PremiumCubit out of DI,
 // where the registered one would reach a mocked SupabaseService and blow up.

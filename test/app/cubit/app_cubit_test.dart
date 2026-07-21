@@ -71,9 +71,7 @@ void main() {
 
   test('loads the persisted settings on construction', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-    when(
-      getAppSettingsUseCase.call,
-    ).thenReturn(const AppSettings(locale: Locale('pt'), themeMode: ThemeMode.dark, unitSystem: UnitSystem.imperial));
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(locale: Locale('pt'), themeMode: ThemeMode.dark, unitSystem: UnitSystem.imperial));
 
     final cubit = CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase);
 
@@ -100,10 +98,7 @@ void main() {
     final saveAppSettingsUseCase = MockSaveAppSettingsUseCase();
     when(() => saveAppSettingsUseCase(any())).thenAnswer((_) async {});
 
-    CubitsFactories.buildAppCubit(
-      getAppSettingsUseCase: getAppSettingsUseCase,
-      saveAppSettingsUseCase: saveAppSettingsUseCase,
-    ).useSystemLocale();
+    CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase, saveAppSettingsUseCase: saveAppSettingsUseCase).useSystemLocale();
 
     verify(() => saveAppSettingsUseCase(const AppSettings())).called(1);
   });
@@ -114,10 +109,7 @@ void main() {
     final saveAppSettingsUseCase = MockSaveAppSettingsUseCase();
     when(() => saveAppSettingsUseCase(any())).thenAnswer((_) async {});
 
-    CubitsFactories.buildAppCubit(
-      getAppSettingsUseCase: getAppSettingsUseCase,
-      saveAppSettingsUseCase: saveAppSettingsUseCase,
-    ).changeThemeMode(ThemeMode.dark);
+    CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase, saveAppSettingsUseCase: saveAppSettingsUseCase).changeThemeMode(ThemeMode.dark);
 
     verify(() => saveAppSettingsUseCase(const AppSettings(themeMode: ThemeMode.dark))).called(1);
   });

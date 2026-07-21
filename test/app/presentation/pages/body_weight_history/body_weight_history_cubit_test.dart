@@ -24,12 +24,13 @@ void main() {
     'loads the logs for the selected trend range',
     build: () {
       final getBodyWeightInRangeUseCase = MockGetBodyWeightInRangeUseCase();
-      when(() => getBodyWeightInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')))
-          .thenAnswer((_) async => Success([BodyWeightLogFactory.build()]));
-      return CubitsFactories.buildBodyWeightHistoryCubit(
-        getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase,
-        getAppSettingsUseCase: _settingsUseCase(),
-      );
+      when(
+        () => getBodyWeightInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer((_) async => Success([BodyWeightLogFactory.build()]));
+      return CubitsFactories.buildBodyWeightHistoryCubit(getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.onInit(),
     expect: () => [isA<BodyWeightHistoryState>().having((state) => state.logs.length, 'logs', 1)],
@@ -39,11 +40,13 @@ void main() {
     'changeTrendRange updates the range and reloads',
     build: () {
       final getBodyWeightInRangeUseCase = MockGetBodyWeightInRangeUseCase();
-      when(() => getBodyWeightInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => const Success([]));
-      return CubitsFactories.buildBodyWeightHistoryCubit(
-        getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase,
-        getAppSettingsUseCase: _settingsUseCase(),
-      );
+      when(
+        () => getBodyWeightInRangeUseCase(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer((_) async => const Success([]));
+      return CubitsFactories.buildBodyWeightHistoryCubit(getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.changeTrendRange(TrendRange.week),
     expect: () => [

@@ -16,9 +16,7 @@ void main() {
     'load emits the logged exercises',
     build: () {
       final getLoggedExercisesUseCase = MockGetLoggedExercisesUseCase();
-      when(getLoggedExercisesUseCase.call).thenAnswer(
-        (_) async => Success([ExerciseFactory.build(id: 'a'), ExerciseFactory.build(id: 'b')]),
-      );
+      when(getLoggedExercisesUseCase.call).thenAnswer((_) async => Success([ExerciseFactory.build(id: 'a'), ExerciseFactory.build(id: 'b')]));
       return ExerciseProgressionListCubit(getLoggedExercisesUseCase: getLoggedExercisesUseCase);
     },
     act: (cubit) => cubit.load(),

@@ -18,7 +18,12 @@ void main() {
     'loadMonth groups reminders by their day',
     build: () {
       final getRange = MockGetRemindersInRangeUseCase();
-      when(() => getRange(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
+      when(
+        () => getRange(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer(
         (_) async => Success({
           today: [ReminderFactory.build(id: 'a'), ReminderFactory.build(id: 'b')],
         }),
@@ -33,7 +38,12 @@ void main() {
     'selectDay exposes that day reminders and goToNextMonth clears the selection',
     build: () {
       final getRange = MockGetRemindersInRangeUseCase();
-      when(() => getRange(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => const Success({}));
+      when(
+        () => getRange(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer((_) async => const Success({}));
       return CubitsFactories.buildReminderHistoryCubit(getRemindersInRangeUseCase: getRange);
     },
     seed: () => ReminderHistoryState(
@@ -58,13 +68,16 @@ void main() {
     'goToNextMonth advances the month and reloads',
     build: () {
       final getRange = MockGetRemindersInRangeUseCase();
-      when(() => getRange(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => const Success({}));
+      when(
+        () => getRange(
+          from: any(named: 'from'),
+          to: any(named: 'to'),
+        ),
+      ).thenAnswer((_) async => const Success({}));
       return CubitsFactories.buildReminderHistoryCubit(getRemindersInRangeUseCase: getRange);
     },
     seed: () => ReminderHistoryState(month: DateTime(2026, 7)),
     act: (cubit) => cubit.goToNextMonth(),
-    expect: () => [
-      isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8)),
-    ],
+    expect: () => [isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8))],
   );
 }

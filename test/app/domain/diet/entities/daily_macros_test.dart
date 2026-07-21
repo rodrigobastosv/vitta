@@ -9,22 +9,10 @@ import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
 
-DailyMacros _dayWith({
-  required double calories,
-  required double protein,
-  required double carbs,
-  required double fat,
-  required double fiber,
-}) => DailyMacros(
+DailyMacros _dayWith({required double calories, required double protein, required double carbs, required double fat, required double fiber}) => DailyMacros(
   entries: [
     FoodLogEntryFactory.build(
-      food: FoodFactory.build(
-        caloriesPer100g: calories,
-        proteinPer100g: protein,
-        carbsPer100g: carbs,
-        fatPer100g: fat,
-        fiberPer100g: fiber,
-      ),
+      food: FoodFactory.build(caloriesPer100g: calories, proteinPer100g: protein, carbsPer100g: carbs, fatPer100g: fat, fiberPer100g: fiber),
       log: FoodLogFactory.build(),
     ),
   ],
