@@ -37,10 +37,22 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('renders the month calendar', (tester) async {
-    await pumpHistory(tester, monthReminders: const {});
+  testWidgets('renders the month calendar once the month has reminders', (tester) async {
+    final now = DateTime.now();
+    final day = DateTime(now.year, now.month, 15);
+    await pumpHistory(tester, monthReminders: {
+      day: [ReminderFactory.build(title: 'Pay rent', dueDate: day)],
+    });
 
     expect(find.byType(VTCalendarMonthGrid), findsOneWidget);
+  });
+
+  testWidgets('invites a first reminder instead of showing an empty calendar', (tester) async {
+    await pumpHistory(tester, monthReminders: const {});
+
+    expect(find.text('Nothing this month'), findsOneWidget);
+    expect(find.text('Create a reminder'), findsOneWidget);
+    expect(find.byType(VTCalendarMonthGrid), findsNothing);
   });
 
   testWidgets('tapping a day with reminders shows that day below the calendar', (tester) async {

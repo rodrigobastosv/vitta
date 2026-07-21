@@ -29,10 +29,7 @@ class MealSplitCard extends StatelessWidget {
             Text(l10n.dietTrendEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
             VTDistributionBar(
-              segments: [
-                for (final mealType in split.presentMealTypes)
-                  VTBarChartSegment(value: split.caloriesByMealType[mealType]!, color: mealType.color),
-              ],
+              segments: [for (final mealType in split.presentMealTypes) VTBarChartSegment(value: split.caloriesByMealType[mealType]!, color: mealType.color)],
             ),
             const VTGap.m(),
             for (final mealType in split.presentMealTypes) ...[

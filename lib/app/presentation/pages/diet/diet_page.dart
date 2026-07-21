@@ -105,6 +105,12 @@ class DietPage extends StatelessWidget {
                   icon: Icons.restaurant_outlined,
                   title: cubit.isViewingToday ? l10n.dietEmptyTitle : l10n.dietNotTodayEmptyTitle,
                   message: cubit.isViewingToday ? l10n.dietEmptyMessage : l10n.dietNotTodayEmptyMessage,
+                  actionLabel: l10n.dietAddFood,
+                  actionIcon: Icons.add,
+                  onAction: () async {
+                    await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
+                    await cubit.refresh();
+                  },
                 )
               else
                 for (final (index, section) in state.dailyMacros.meals.indexed) ...[

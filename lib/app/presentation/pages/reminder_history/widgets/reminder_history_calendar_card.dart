@@ -22,12 +22,7 @@ class ReminderHistoryCalendarCard extends StatelessWidget {
     return VTCard(
       child: Column(
         children: [
-          VTMonthNavigator(
-            month: state.month,
-            canGoToNextMonth: true,
-            onPreviousMonth: cubit.goToPreviousMonth,
-            onNextMonth: cubit.goToNextMonth,
-          ),
+          VTMonthNavigator(month: state.month, canGoToNextMonth: true, onPreviousMonth: cubit.goToPreviousMonth, onNextMonth: cubit.goToNextMonth),
           const VTGap.s(),
           const VTCalendarWeekdayHeader(),
           const VTGap.s(),

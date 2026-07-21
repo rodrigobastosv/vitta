@@ -20,6 +20,8 @@ class WaterHistoryState extends Equatable {
 
   final TrendRange trendRange;
 
+  bool get hasData => waterInMonth.isNotEmpty || waterInTrendRange.isNotEmpty;
+
   WaterHistoryState copyWith({
     DateTime? month,
     double? dailyGoalMl,

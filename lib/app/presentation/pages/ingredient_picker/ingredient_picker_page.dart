@@ -52,7 +52,7 @@ class IngredientPickerPage extends StatelessWidget {
             Expanded(
               child: switch (state) {
                 FoodSearchState(results: null) => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
-                FoodSearchState(results: final results?) when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
+                FoodSearchState(results: final results?) when results.isEmpty => VTEmptyState.noResults(message: l10n.dietSearchNoResults),
                 FoodSearchState(results: final results?) => ListView.separated(
                   padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
                   itemCount: results.length,

@@ -65,12 +65,22 @@ void main() {
   setUpAll(() => registerFallbackValue(DateTime(2026)));
 
   testWidgets('shows the calendar and the trends section', (tester) async {
-    await pumpHistoryPage(tester);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    await pumpHistoryPage(tester, workoutsByDate: {today: buildTrainedDay(today)});
 
     expect(find.text('History'), findsOneWidget);
     expect(find.text('Trends'), findsOneWidget);
     expect(find.text('Volume per session'), findsOneWidget);
     expect(find.text('Volume by muscle group'), findsOneWidget);
+  });
+
+  testWidgets('invites a first session instead of showing an empty calendar and flat charts', (tester) async {
+    await pumpHistoryPage(tester);
+
+    expect(find.text('No sessions logged yet'), findsOneWidget);
+    expect(find.text('Start a workout'), findsOneWidget);
+    expect(find.text('Trends'), findsNothing);
   });
 
   testWidgets('renders the volume chart and muscle split once there is a trained day', (tester) async {

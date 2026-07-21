@@ -57,10 +57,7 @@ class WaterTrendCard extends StatelessWidget {
       if (waterByDate[day] case final water? when water.entries.isNotEmpty)
         VTBarChartBar(
           segments: [
-            VTBarChartSegment(
-              value: water.totalMl,
-              color: dailyGoalMl <= 0 ? fallbackColor : GoalAdherence.forRatio(water.totalMl / dailyGoalMl).color,
-            ),
+            VTBarChartSegment(value: water.totalMl, color: dailyGoalMl <= 0 ? fallbackColor : GoalAdherence.forRatio(water.totalMl / dailyGoalMl).color),
           ],
         )
       else

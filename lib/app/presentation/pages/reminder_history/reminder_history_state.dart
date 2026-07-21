@@ -8,15 +8,15 @@ class ReminderHistoryState extends Equatable {
   final Map<DateTime, List<Reminder>> remindersInMonth;
   final DateTime? selectedDay;
 
-  List<Reminder> get selectedReminders =>
-      selectedDay == null ? const [] : (remindersInMonth[selectedDay] ?? const []);
+  bool get hasData => remindersInMonth.isNotEmpty;
 
-  ReminderHistoryState copyWith({DateTime? month, Map<DateTime, List<Reminder>>? remindersInMonth, DateTime? selectedDay}) =>
-      ReminderHistoryState(
-        month: month ?? this.month,
-        remindersInMonth: remindersInMonth ?? this.remindersInMonth,
-        selectedDay: selectedDay ?? this.selectedDay,
-      );
+  List<Reminder> get selectedReminders => selectedDay == null ? const [] : (remindersInMonth[selectedDay] ?? const []);
+
+  ReminderHistoryState copyWith({DateTime? month, Map<DateTime, List<Reminder>>? remindersInMonth, DateTime? selectedDay}) => ReminderHistoryState(
+    month: month ?? this.month,
+    remindersInMonth: remindersInMonth ?? this.remindersInMonth,
+    selectedDay: selectedDay ?? this.selectedDay,
+  );
 
   @override
   List<Object?> get props => [month, remindersInMonth, selectedDay];

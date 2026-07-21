@@ -25,10 +25,7 @@ class ReminderDaySection extends StatelessWidget {
         if (reminders.isEmpty)
           Text(l10n.reminderEmptyTitle, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant))
         else
-          for (final reminder in reminders) ...[
-            ReminderTile(reminder: reminder),
-            const VTGap.s(),
-          ],
+          for (final reminder in reminders) ...[ReminderTile(reminder: reminder), const VTGap.s()],
       ],
     );
   }

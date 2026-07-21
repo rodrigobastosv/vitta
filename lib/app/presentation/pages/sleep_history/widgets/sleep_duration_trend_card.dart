@@ -31,8 +31,7 @@ class SleepDurationTrendCard extends StatelessWidget {
           Row(
             children: [
               Expanded(child: Text(l10n.sleepDurationTrendTitle, style: VTTextStyles.bodyStrong(context))),
-              if (average.hasData)
-                VTBadge(label: l10n.sleepTrendAverageLabel(average.average.toStringAsFixed(1)), color: colorScheme.primary),
+              if (average.hasData) VTBadge(label: l10n.sleepTrendAverageLabel(average.average.toStringAsFixed(1)), color: colorScheme.primary),
             ],
           ),
           const VTGap.xs(),

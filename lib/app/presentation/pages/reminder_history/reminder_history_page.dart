@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -32,19 +33,27 @@ class ReminderHistoryPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.reminderHistoryTitle)),
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.all(VTSpacing.m),
-          child: Column(
-            crossAxisAlignment: .start,
-            children: [
-              ReminderHistoryCalendarCard(cubit: cubit, state: state),
-              if (state.selectedDay case final selectedDay?) ...[
-                const VTGap.l(),
-                ReminderDaySection(date: selectedDay, reminders: state.selectedReminders),
-              ],
-            ],
-          ),
-        ),
+        body: !state.hasData
+            ? VTEmptyState(
+                icon: Icons.event_available_outlined,
+                title: l10n.reminderHistoryEmptyTitle,
+                message: l10n.reminderHistoryEmptyMessage,
+                actionLabel: l10n.reminderHistoryEmptyAction,
+                onAction: () => Navigator.of(context).pop(),
+              )
+            : SingleChildScrollView(
+                padding: const EdgeInsets.all(VTSpacing.m),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  children: [
+                    ReminderHistoryCalendarCard(cubit: cubit, state: state),
+                    if (state.selectedDay case final selectedDay?) ...[
+                      const VTGap.l(),
+                      ReminderDaySection(date: selectedDay, reminders: state.selectedReminders),
+                    ],
+                  ],
+                ),
+              ),
       ),
     );
   }

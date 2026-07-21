@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -34,20 +35,28 @@ class WorkoutHistoryPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutHistoryTitle)),
-        body: ListView(
-          padding: const EdgeInsets.all(VTSpacing.m),
-          children: [
-            WorkoutHistoryCalendarCard(cubit: cubit, state: state),
-            const VTGap.l(),
-            Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
-            const VTGap.m(),
-            TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-            const VTGap.m(),
-            WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
-            const VTGap.m(),
-            MuscleRegionSplitCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
-          ],
-        ),
+        body: !state.hasData
+            ? VTEmptyState(
+                icon: Icons.fitness_center_outlined,
+                title: l10n.workoutHistoryEmptyTitle,
+                message: l10n.workoutHistoryEmptyMessage,
+                actionLabel: l10n.workoutHistoryEmptyAction,
+                onAction: () => Navigator.of(context).pop(),
+              )
+            : ListView(
+                padding: const EdgeInsets.all(VTSpacing.m),
+                children: [
+                  WorkoutHistoryCalendarCard(cubit: cubit, state: state),
+                  const VTGap.l(),
+                  Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
+                  const VTGap.m(),
+                  TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+                  const VTGap.m(),
+                  WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
+                  const VTGap.m(),
+                  MuscleRegionSplitCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
+                ],
+              ),
       ),
     );
   }

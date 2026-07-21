@@ -124,6 +124,18 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Empty states
+
+**An empty state that only apologises wastes the moment** (issue #163) — so `VTEmptyState` takes an `actionLabel`/`actionIcon`/`onAction` and renders the CTA itself. Before this it *couldn't*: `MealScanPage` was stacking a separate `VTPrimaryButton` under it, which is the workaround that proved the gap, and none of the other ~22 empty states offered anything at all while a FAB with exactly the right action sat in the corner.
+
+**"No data yet" and "no results" are different states and read differently.** `VTEmptyState.noResults` is the search-shaped one (it fixes the `search_off` icon, which used to be the *default* — so every first-run screen was wearing a search metaphor until it overrode it). No-data-yet gets an onboarding tone and a CTA; no-results suggests a fix and usually has no action worth offering. `ReminderPage` is where both live on one screen: nothing logged at all invites a first reminder, while a filter hiding everything says so and points at the filter — those used to share one message.
+
+**Never name a control glyph in a message.** Six messages said "Tap the + button" — and *none of them was accurate*: water has no FAB at all (its quick-add chips are the action, and they sit right above the empty state), while diet, sleep, reminders and recipes use a **labelled** `FloatingActionButton.extended`, not a bare `+`. Directions to a control go stale the moment the layout moves and are redundant once the empty state carries its own CTA. Describe what the feature gives the user and let the CTA carry the verb.
+
+**A CTA is only added when the action isn't already on screen.** Water's chips are visible directly above its empty state, so a duplicate button there would be noise — the fix was the wording alone.
+
+**The five history screens now distinguish two levels of empty**, and both are real: `XHistoryState.hasData` (any data in the displayed month *or* the trend range) routes a brand-new user to a full-page `VTEmptyState` with a CTA back to the logging screen, while a month that *has* data but an empty trend range keeps the existing per-card "Nothing logged in this period yet." messages. Diet history already had that per-card treatment — the issue's claim that these screens render flat charts with no data was only half right — so the full-page state is layered above it, not in place of it. `diet_history_page_test.dart` pins both, including the partial case (stub the range use case per-range: the month query starts on day 1).
+
 ## Motion
 
 Motion is a shared language, not per-screen taste. Every duration and curve comes from `VTMotion` (`design_system/tokens/vt_motion.dart`, issue #163) and `test/app/design_system/motion_tokens_test.dart` **scans `lib/` and fails on any raw `Duration(milliseconds:)` or `Curves.`** — the same source-scan shape as `order_direction_test.dart`, and for the same reason: the drift is invisible at any single call site.

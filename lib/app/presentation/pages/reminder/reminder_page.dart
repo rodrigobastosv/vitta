@@ -90,7 +90,16 @@ class _ReminderList extends StatelessWidget {
     final l10n = context.l10n;
     final reminders = state.visibleReminders;
     if (reminders.isEmpty) {
-      return VTEmptyState(icon: Icons.check_circle_outline, title: l10n.reminderEmptyTitle, message: l10n.reminderEmptyMessage);
+      return state.reminders.isEmpty
+          ? VTEmptyState(
+              icon: Icons.check_circle_outline,
+              title: l10n.reminderEmptyTitle,
+              message: l10n.reminderEmptyMessage,
+              actionLabel: l10n.reminderAddAction,
+              actionIcon: Icons.add,
+              onAction: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
+            )
+          : VTEmptyState.noResults(title: l10n.reminderFilterNoResultsTitle, message: l10n.reminderFilterNoResultsMessage);
     }
     return ListView.separated(
       padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.m, VTSpacing.xxl),

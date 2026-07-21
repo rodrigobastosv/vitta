@@ -51,7 +51,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reminderEmptyTitle => 'Nenhum lembrete';
 
   @override
-  String get reminderEmptyMessage => 'Toque em + para adicionar um lembrete para este dia.';
+  String get reminderEmptyMessage => 'Adicione um lembrete para este dia e ele estará esperando por você aqui.';
 
   @override
   String get reminderNewTitle => 'Novo lembrete';
@@ -180,6 +180,61 @@ class AppLocalizationsPt extends AppLocalizations {
   String get clearSearch => 'Limpar busca';
 
   @override
+  String get dietHistoryEmptyTitle => 'Nenhuma refeição registrada';
+
+  @override
+  String get dietHistoryEmptyMessage =>
+      'Registre alguns dias de refeições e seu calendário, tendências e divisão por refeição aparecerão aqui.';
+
+  @override
+  String get dietHistoryEmptyAction => 'Registrar refeição';
+
+  @override
+  String get waterHistoryEmptyTitle => 'Nenhuma água registrada';
+
+  @override
+  String get waterHistoryEmptyMessage => 'Acompanhe alguns dias e você verá como seu consumo evolui em relação à meta.';
+
+  @override
+  String get waterHistoryEmptyAction => 'Registrar água';
+
+  @override
+  String get sleepHistoryEmptyTitle => 'Nenhuma noite registrada';
+
+  @override
+  String get sleepHistoryEmptyMessage => 'Registre algumas noites e sua tendência de duração e divisão por qualidade aparecerão aqui.';
+
+  @override
+  String get sleepHistoryEmptyAction => 'Registrar sono';
+
+  @override
+  String get workoutHistoryEmptyTitle => 'Nenhum treino registrado';
+
+  @override
+  String get workoutHistoryEmptyMessage => 'Treine algumas sessões e você verá sua tendência de volume e quais músculos está trabalhando.';
+
+  @override
+  String get workoutHistoryEmptyAction => 'Começar um treino';
+
+  @override
+  String get reminderHistoryEmptyTitle => 'Nada neste mês';
+
+  @override
+  String get reminderHistoryEmptyMessage => 'Os lembretes que você criar aparecerão neste calendário, para você rever o que concluiu.';
+
+  @override
+  String get reminderHistoryEmptyAction => 'Criar lembrete';
+
+  @override
+  String get bodyWeightHistoryEmptyAction => 'Registrar peso';
+
+  @override
+  String get reminderFilterNoResultsTitle => 'Nada corresponde a este filtro';
+
+  @override
+  String get reminderFilterNoResultsMessage => 'Você tem lembretes neste dia, mas nenhum nesta visualização. Tente outro filtro.';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override
@@ -295,10 +350,10 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietNotTodayEmptyTitle => 'Nada registrado nesse dia';
 
   @override
-  String get dietEmptyMessage => 'Toque no botão + para adicionar o primeiro alimento do dia.';
+  String get dietEmptyMessage => 'Adicione o que você comeu e suas calorias e macros se preenchem conforme o dia passa.';
 
   @override
-  String get dietNotTodayEmptyMessage => 'Toque em + para adicionar um alimento nesse dia.';
+  String get dietNotTodayEmptyMessage => 'Nada foi registrado neste dia. Você ainda pode adicionar o que comeu.';
 
   @override
   String get dietInvalidQuantity => 'Informe uma quantidade maior que zero.';
@@ -727,7 +782,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietRecipesEmptyTitle => 'Nenhuma receita ainda';
 
   @override
-  String get dietRecipesEmptyMessage => 'Toque em + para juntar alimentos numa receita e registrar de uma vez.';
+  String get dietRecipesEmptyMessage => 'Junte alimentos que você come sempre numa receita e registre tudo de uma vez.';
 
   @override
   String get dietEditRecipeTitle => 'Editar receita';
@@ -830,7 +885,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get waterEmptyTitle => 'Nada registrado ainda';
 
   @override
-  String get waterEmptyMessage => 'Toque no botão + para registrar o primeiro copo d\'água.';
+  String get waterEmptyMessage => 'Use uma adição rápida acima para registrar o primeiro copo do dia.';
 
   @override
   String get bodyWeightFeatureTitle => 'Peso corporal';
@@ -942,7 +997,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get sleepEmptyTitle => 'Nada registrado ainda';
 
   @override
-  String get sleepEmptyMessage => 'Toque no botão + para registrar sua primeira noite de sono.';
+  String get sleepEmptyMessage => 'Registre uma noite e você começará a ver como seu descanso se compara à sua meta.';
 
   @override
   String get sleepDeleteLogTooltip => 'Remover';
