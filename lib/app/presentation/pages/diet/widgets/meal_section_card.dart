@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_section.dart';
@@ -33,7 +35,10 @@ class _MealSectionCardState extends State<MealSectionCard> {
     final onEditEntry = widget.onEditEntry;
     final onDeleteEntry = widget.onDeleteEntry;
     return VTCard(
-      onTap: () => setState(() => _isExpanded = !_isExpanded),
+      onTap: () {
+        VTHaptics.selection();
+        setState(() => _isExpanded = !_isExpanded);
+      },
       child: Column(
         crossAxisAlignment: .start,
         children: [
@@ -56,29 +61,44 @@ class _MealSectionCardState extends State<MealSectionCard> {
               ),
               const VTGap.s(),
               CaloriePill(calories: section.totalCalories.round(), color: section.mealType.color),
-              Icon(_isExpanded ? Icons.expand_less : Icons.expand_more, color: colorScheme.onSurfaceVariant),
+              AnimatedRotation(
+                turns: _isExpanded ? 0.5 : 0,
+                duration: VTMotion.transition,
+                curve: VTMotion.curve,
+                child: Icon(Icons.expand_more, color: colorScheme.onSurfaceVariant),
+              ),
             ],
           ),
-          if (_isExpanded) ...[
-            const VTGap.m(),
-            for (final entry in section.entries) ...[
-              FoodLogTile(
-                entry: entry,
-                onEdit: onEditEntry == null ? null : () => onEditEntry(entry),
-                onDelete: onDeleteEntry == null ? null : () => onDeleteEntry(entry),
-              ),
-              const VTGap.s(),
-            ],
-            if (widget.onAddFood != null)
-              Align(
-                alignment: .centerLeft,
-                child: TextButton.icon(
-                  onPressed: widget.onAddFood,
-                  icon: const Icon(Icons.add),
-                  label: Text(l10n.dietAddToMeal(section.mealType.getLabel(l10n))),
-                ),
-              ),
-          ],
+          AnimatedSize(
+            duration: VTMotion.transition,
+            curve: VTMotion.curve,
+            alignment: .topCenter,
+            child: !_isExpanded
+                ? const SizedBox(width: double.infinity)
+                : Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      const VTGap.m(),
+                      for (final entry in section.entries) ...[
+                        FoodLogTile(
+                          entry: entry,
+                          onEdit: onEditEntry == null ? null : () => onEditEntry(entry),
+                          onDelete: onDeleteEntry == null ? null : () => onDeleteEntry(entry),
+                        ),
+                        const VTGap.s(),
+                      ],
+                      if (widget.onAddFood != null)
+                        Align(
+                          alignment: .centerLeft,
+                          child: TextButton.icon(
+                            onPressed: widget.onAddFood,
+                            icon: const Icon(Icons.add),
+                            label: Text(l10n.dietAddToMeal(section.mealType.getLabel(l10n))),
+                          ),
+                        ),
+                    ],
+                  ),
+          ),
         ],
       ),
     );

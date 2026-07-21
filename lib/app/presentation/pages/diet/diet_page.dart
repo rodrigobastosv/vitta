@@ -19,7 +19,6 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_extra.dart';
 
@@ -54,15 +53,6 @@ class DietPage extends StatelessWidget {
                 final hasCopied = await context.pushRoute<bool>(.dietCopy, extra: CopyMealsExtra(targetDate: state.date));
                 if (hasCopied ?? false) {
                   await cubit.refresh();
-                }
-              },
-            ),
-            MealScanAction(
-              date: state.date,
-              onLogged: () async {
-                await cubit.refresh();
-                if (context.mounted) {
-                  context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
                 }
               },
             ),

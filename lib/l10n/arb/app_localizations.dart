@@ -662,6 +662,12 @@ abstract class AppLocalizations {
   /// **'Back'**
   String get onboardingBackAction;
 
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

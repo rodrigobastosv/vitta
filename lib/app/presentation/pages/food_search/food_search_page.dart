@@ -18,6 +18,7 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_list.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -47,6 +48,13 @@ class FoodSearchPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.dietFoodSearchTitle),
           actions: [
+            MealScanAction(
+              date: loggedDate,
+              onLogged: () {
+                context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
+                Navigator.of(context).pop();
+              },
+            ),
             IconButton(
               icon: const Icon(Icons.add_circle_outline),
               tooltip: l10n.dietCustomFoodTitle,

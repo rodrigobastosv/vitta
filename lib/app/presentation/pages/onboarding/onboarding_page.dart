@@ -83,15 +83,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 child: state.isLastStep
                     ? Column(
                         children: [
-                          VTPrimaryButton(
-                            label: l10n.onboardingCreateAccountAction,
-                            onPressed: () => _authenticateThenFinish(context, cubit, .signUp),
-                          ),
+                          VTPrimaryButton(label: l10n.onboardingCreateAccountAction, onPressed: () => _authenticateThenFinish(context, cubit, .signUp)),
                           const VTGap.m(),
-                          TextButton(
-                            onPressed: () => _authenticateThenFinish(context, cubit, .signIn),
-                            child: Text(l10n.authHasAccountAction),
-                          ),
+                          TextButton(onPressed: () => _authenticateThenFinish(context, cubit, .signIn), child: Text(l10n.authHasAccountAction)),
                           TextButton(onPressed: () => _finish(context, cubit), child: Text(l10n.onboardingContinueWithoutAccountAction)),
                         ],
                       )
@@ -99,18 +93,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         children: [
                           VTPrimaryButton(
                             label: l10n.onboardingNextAction,
-                            onPressed: state.step == _goalsStep
-                                ? () => _acceptGoalsThenNext(cubit, state.step)
-                                : () => _goTo(state.step + 1),
+                            onPressed: state.step == _goalsStep ? () => _acceptGoalsThenNext(cubit, state.step) : () => _goTo(state.step + 1),
                           ),
                           const VTGap.s(),
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
                               onPressed: state.step == _goalsStep ? () => _goTo(state.step + 1) : () => _finish(context, cubit),
-                              child: Text(
-                                state.step == _goalsStep ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction,
-                              ),
+                              child: Text(state.step == _goalsStep ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction),
                             ),
                           ),
                         ],

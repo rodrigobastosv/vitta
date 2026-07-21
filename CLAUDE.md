@@ -140,6 +140,18 @@ This is the same trap the `VTSeverity` section already tells a story about, and 
 
 `vt_colors_ink_test.dart` asserts the 3:1 floor across every accent, asserts `inkOn` beats the alternative ink each time, and pins the 16%-tint failure so nobody reintroduces it. **Reach for `inkOn` whenever an accent carries an icon**; the 16% tint is still fine as a *background* behind neutral ink, which is what the meal and badge tints do.
 
+## Adding food is one place, not four
+
+Scanning a meal photo used to be an icon in the **diet** app bar, next to recipes, copy and history — isolated from the flow it belongs to, and part of why that bar carried four actions. `MealScanAction` now lives on `FoodSearchPage` beside the custom-food action, so the three ways to add food (**search it, type it, photograph it**) sit together in the one place a user goes to add food. The diet bar is down to three actions. A fourth way to add food goes there too, not back on the diet page.
+
+## Swipe to delete
+
+`VTSwipeToDelete` (`design_system/components/general/`) wraps a row in a `Dismissible` with an error-tinted background, `endToStart` only, and a `VTHaptics.warning()` on dismissal. Used by `FoodLogTile`; reminders are the next call site.
+
+**It does not replace the visible delete button, it joins it.** A swipe is invisible to VoiceOver and undiscoverable to anyone who has not been taught it, so removing the `IconButton` would trade a small gain in tidiness for a real accessibility regression — the opposite of what the Accessibility section is for. Swipe is the shortcut; the button is the affordance.
+
+**`endToStart` only** is deliberate and pinned by a test: a bidirectional `Dismissible` turns a mis-aimed horizontal scroll into a deletion.
+
 ## Celebration
 
 `VTCelebration` (`design_system/components/general/`, issue #163) wraps a widget and bursts confetti when its `trigger` flips **false → true**. It is hand-rolled (a `CustomPainter` over an `AnimationController`) rather than a Lottie/Rive dependency — the same "own the look" call the charts and `VTWeightPicker` make, and it avoids shipping a third-party animation asset whose licence would have to be cleared for App Store submission. Every call site goes through the one component, so swapping the visual for a Lottie file later is a single-widget change.
