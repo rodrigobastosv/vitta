@@ -6,6 +6,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
@@ -61,6 +62,8 @@ class RoutineFormPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, 0, VTSpacing.m, VTSpacing.m),
                 itemCount: state.draft.exercises.length,
                 buildDefaultDragHandles: false,
+                onReorderStart: (_) => VTHaptics.drag(),
+                onReorderEnd: (_) => VTHaptics.drag(),
                 onReorderItem: (oldIndex, newIndex) => cubit.reorderExercise(oldIndex: oldIndex, newIndex: newIndex),
                 itemBuilder: (context, index) => Padding(
                   key: ValueKey(state.draft.exercises[index].id),

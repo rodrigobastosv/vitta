@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 // A horizontal ruler the user scrolls to dial in a weight, with a fixed centre
@@ -56,6 +57,7 @@ class _VTWeightPickerState extends State<VTWeightPicker> {
     final index = (controller.offset / _tickSpacing).round().clamp(0, _tickCount - 1);
     final value = _valueFor(index);
     if ((value - _value).abs() >= widget.step / 2) {
+      VTHaptics.selection();
       setState(() => _value = value);
       widget.onChanged(value);
     }

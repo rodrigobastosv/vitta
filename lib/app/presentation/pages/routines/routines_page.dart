@@ -6,6 +6,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_drag_handle.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_extra.dart';
@@ -39,6 +40,8 @@ class RoutinesPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
                 itemCount: state.routines.length,
                 buildDefaultDragHandles: false,
+                onReorderStart: (_) => VTHaptics.drag(),
+                onReorderEnd: (_) => VTHaptics.drag(),
                 onReorderItem: (oldIndex, newIndex) => cubit.reorderRoutines(oldIndex: oldIndex, newIndex: newIndex),
                 itemBuilder: (context, index) {
                   final routine = state.routines[index];

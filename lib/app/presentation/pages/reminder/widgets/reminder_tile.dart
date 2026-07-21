@@ -3,6 +3,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -17,6 +18,16 @@ class ReminderTile extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
 
+  void _onChanged(bool? value) {
+    final completed = value ?? false;
+    if (completed) {
+      VTHaptics.success();
+    } else {
+      VTHaptics.selection();
+    }
+    onToggle!(completed);
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -27,7 +38,7 @@ class ReminderTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.xs),
       child: Row(
         children: [
-          Checkbox(value: completed, shape: const CircleBorder(), onChanged: onToggle == null ? null : (value) => onToggle!(value ?? false)),
+          Checkbox(value: completed, shape: const CircleBorder(), onChanged: onToggle == null ? null : _onChanged),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

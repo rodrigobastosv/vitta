@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/components/general/vt_toast.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 
@@ -30,6 +31,14 @@ extension BuildContextToastExt on BuildContext {
       _showToast(VTToast(title: title ?? l10n.warningTitle, message: message, severity: .warning), _failureDuration);
 
   void _showToast(VTToast toast, Duration duration) {
+    switch (toast.severity) {
+      case .success:
+        VTHaptics.success();
+      case .warning:
+        VTHaptics.warning();
+      case .error:
+        VTHaptics.error();
+    }
     ScaffoldMessenger.of(this)
       ..hideCurrentSnackBar()
       ..showSnackBar(
