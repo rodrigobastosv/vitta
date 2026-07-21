@@ -32,7 +32,7 @@ enum AppRoute {
   profile('/profile'),
   editProfile('/profile/edit'),
   macroGoals('/profile/macro-goals'),
-  premium('/premium'),
+  paywall('/paywall'),
   settings('/settings'),
   signIn('/auth/sign-in'),
   signUp('/auth/sign-up');

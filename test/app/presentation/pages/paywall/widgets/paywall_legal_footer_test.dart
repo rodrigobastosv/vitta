@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_legal_footer.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_legal_footer.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 void main() {

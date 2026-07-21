@@ -15,7 +15,7 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart'
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_energy_split_card.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_nutrient_field.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_scan_card.dart';
-import 'package:vitta/app/presentation/pages/premium/paywall_extra.dart';
+import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
 
 class CustomFoodForm extends StatefulWidget {
   const CustomFoodForm({required this.state, super.key});
@@ -62,7 +62,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
 
   Future<void> _scanNutritionLabel() async {
     if (!context.read<PremiumCubit>().state.isPremium) {
-      await context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .nutritionLabelScan));
+      await context.pushRoute(.paywall, extra: const PaywallExtra(highlightedFeature: .nutritionLabelScan));
       return;
     }
     final source = await showImageSourceSheet(context: context);

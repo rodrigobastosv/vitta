@@ -46,4 +46,20 @@ void main() {
 
     expect(contrast(VTColors.water, tinted), lessThan(3));
   });
+
+  // The paywall wore the tinted-disc shortcut on its hero and every feature row
+  // until this was measured: premium is not in the CLAUDE.md table but fails the
+  // same way, and the paywall is the screen App Review looks hardest at.
+  test('premium fails the tinted-disc shortcut and clears it as a solid disc', () {
+    final tinted = Color.alphaBlend(VTColors.premium.withValues(alpha: 0.16), VTColors.cardLight);
+
+    expect(contrast(VTColors.premium, tinted), lessThan(3));
+    expect(contrast(VTColors.premium, VTColors.inkOn(VTColors.premium)), greaterThanOrEqualTo(4.5));
+  });
+
+  // Which is also why the highlighted feature row is a border and not coloured
+  // text: premium as body text on a card misses AA outright.
+  test('premium is not a text colour on a card', () {
+    expect(contrast(VTColors.premium, VTColors.cardLight), lessThan(4.5));
+  });
 }

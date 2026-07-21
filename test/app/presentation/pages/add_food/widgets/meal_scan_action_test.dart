@@ -23,7 +23,7 @@ void main() {
             ),
           ),
         ),
-        for (final route in [AppRoute.mealScan, AppRoute.premium])
+        for (final route in [AppRoute.mealScan, AppRoute.paywall])
           GoRoute(
             path: route.path,
             name: route.name,
@@ -58,7 +58,7 @@ void main() {
   testWidgets('a free user is sent to the paywall instead of the scanner', (tester) async {
     await pumpAction(tester, isPremium: false);
 
-    expect(await tapAction(tester), AppRoute.premium.name);
+    expect(await tapAction(tester), AppRoute.paywall.name);
   });
 
   testWidgets('a subscriber reaches the scanner', (tester) async {

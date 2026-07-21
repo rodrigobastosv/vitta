@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
+import 'package:vitta/app/cubit/premium_state.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
 import 'package:vitta/app/domain/premium/entities/subscription_status.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
-import 'package:vitta/app/presentation/pages/premium/premium_state.dart';
 
 // A plain Cubit provided once at the root, like AppCubit, rather than a
 // PresentationCubit resolved per page: the entitlement gates affordances on
@@ -43,15 +43,22 @@ class PremiumCubit extends Cubit<PremiumState> {
   // A store that cannot be reached just leaves the paywall without a price,
   // which reads as "not available right now" rather than an error the user can
   // do anything about.
+  //
+  // Every exit marks the offer loaded, including the failures: what the paywall
+  // needs to distinguish is "still asking" from "asked", and a failed ask is
+  // answered. Leaving it false on error would pulse a skeleton forever - the
+  // same trailing-guard reasoning the history cubits' failure path follows.
   Future<void> loadOffer() async {
     try {
       final offers = await _purchaseService.fetchOffers();
       if (offers.isEmpty) {
+        emit(state.copyWith(isOfferLoaded: true));
         return;
       }
-      emit(state.copyWith(offer: offers.first));
+      emit(state.copyWith(offer: offers.first, isOfferLoaded: true));
     } on Exception catch (error) {
       Log.action('premium_offer_unavailable', data: {'error': error.toString()});
+      emit(state.copyWith(isOfferLoaded: true));
     }
   }
 
