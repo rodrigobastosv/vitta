@@ -34,8 +34,7 @@ class SleepRepository {
 
   Future<Result<VTError, List<SleepLog>>> getRecentSleepLogs({required int days}) => _supabaseSleepDataSource.getRecentLogs(days: days);
 
-  Future<Result<VTError, int>> importSleepLogs({required List<SleepImport> imports}) =>
-      _supabaseSleepDataSource.importSleepLogs(imports: imports);
+  Future<Result<VTError, int>> importSleepLogs({required List<SleepImport> imports}) => _supabaseSleepDataSource.importSleepLogs(imports: imports);
 
   Future<Result<VTError, void>> deleteSleepLog({required String logId}) => _supabaseSleepDataSource.deleteSleepLog(logId: logId);
 }

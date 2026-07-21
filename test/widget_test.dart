@@ -5,6 +5,9 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/local/workout_local_datasource.dart';
+import 'package:vitta/app/design_system/components/tiles/vt_feature_tile.dart';
+import 'package:vitta/app/presentation/pages/home/widgets/home_supporting_row.dart';
+import 'package:vitta/app/presentation/pages/home/widgets/home_today_card.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
 import 'package:vitta/main.dart';
 
@@ -24,11 +27,13 @@ void main() {
     await G<WorkoutLocalDataSource>().markIntroSeen();
   });
 
-  testWidgets('renders the home page with its feature tiles and a profile action', (tester) async {
+  testWidgets('leads with the day and keeps a profile action', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 
-    expect(find.byType(GridView), findsOneWidget);
+    expect(find.byType(HomeTodayCard), findsOneWidget);
+    expect(find.byType(HomeSupportingRow), findsNWidgets(3));
+    expect(find.byType(VTFeatureTile), findsNWidgets(2));
     expect(find.byIcon(Icons.person_outline), findsOneWidget);
   });
 

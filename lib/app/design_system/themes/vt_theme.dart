@@ -74,12 +74,7 @@ abstract class VTTheme {
         foregroundColor: colorScheme.onSurface,
         elevation: 0,
         centerTitle: false,
-        titleTextStyle: GoogleFonts.archivo(
-          fontSize: 22,
-          fontWeight: .w800,
-          letterSpacing: -0.5,
-          color: colorScheme.onSurface,
-        ),
+        titleTextStyle: GoogleFonts.archivo(fontSize: 22, fontWeight: .w800, letterSpacing: -0.5, color: colorScheme.onSurface),
       ),
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerHighest,

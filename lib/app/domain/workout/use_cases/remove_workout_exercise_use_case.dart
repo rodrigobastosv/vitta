@@ -7,6 +7,5 @@ class RemoveWorkoutExerciseUseCase {
 
   final WorkoutRepository _workoutRepository;
 
-  Future<Result<VTError, void>> call({required String workoutExerciseId}) =>
-      _workoutRepository.removeWorkoutExercise(workoutExerciseId: workoutExerciseId);
+  Future<Result<VTError, void>> call({required String workoutExerciseId}) => _workoutRepository.removeWorkoutExercise(workoutExerciseId: workoutExerciseId);
 }

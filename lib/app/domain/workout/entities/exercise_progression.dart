@@ -12,8 +12,7 @@ class ExerciseProgression extends Equatable {
 
   double get heaviestWeightKg => points.fold(0, (record, point) => point.heaviestWeightKg > record ? point.heaviestWeightKg : record);
 
-  double get bestEstimatedOneRepMax =>
-      points.fold(0, (record, point) => point.estimatedOneRepMax > record ? point.estimatedOneRepMax : record);
+  double get bestEstimatedOneRepMax => points.fold(0, (record, point) => point.estimatedOneRepMax > record ? point.estimatedOneRepMax : record);
 
   @override
   List<Object?> get props => [points];

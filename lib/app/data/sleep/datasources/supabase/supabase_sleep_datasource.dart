@@ -13,12 +13,7 @@ class SupabaseSleepDataSource {
 
   Future<Result<VTError, SleepLog>> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) async {
     try {
-      final request = CreateSleepLogRequest(
-        userId: _supabaseService.currentUserId,
-        bedTime: bedTime,
-        wakeTime: wakeTime,
-        qualityRating: qualityRating,
-      );
+      final request = CreateSleepLogRequest(userId: _supabaseService.currentUserId, bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
       final row = await _supabaseService.from(.sleepLogs).insert(request.toJson()).select().single();
       return Success(SleepLog.fromMap(row));
     } on Exception catch (error) {
@@ -75,10 +70,7 @@ class SupabaseSleepDataSource {
       ];
       // ignoreDuplicates so a re-sync skips nights already imported (deduped on the
       // user_id + external_id unique index); .select() then returns only the new rows.
-      final inserted = await _supabaseService
-          .from(.sleepLogs)
-          .upsert(rows, onConflict: 'user_id,external_id', ignoreDuplicates: true)
-          .select();
+      final inserted = await _supabaseService.from(.sleepLogs).upsert(rows, onConflict: 'user_id,external_id', ignoreDuplicates: true).select();
       return Success(inserted.length);
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to import sleep logs', cause: error));

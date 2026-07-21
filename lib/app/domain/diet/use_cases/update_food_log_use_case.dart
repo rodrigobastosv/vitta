@@ -9,10 +9,6 @@ class UpdateFoodLogUseCase {
 
   final DietRepository _dietRepository;
 
-  Future<Result<VTError, FoodLog>> call({
-    required String logId,
-    required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
-  }) => _dietRepository.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+  Future<Result<VTError, FoodLog>> call({required String logId, required MealType mealType, required double quantityGrams, double? quantityUnits}) =>
+      _dietRepository.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
 }

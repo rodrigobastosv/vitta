@@ -19,8 +19,7 @@ class Workout extends Equatable with WorkoutVolume {
     if (raw is! List<dynamic>) {
       return const [];
     }
-    final exercises = raw.cast<Map<String, dynamic>>().map(WorkoutExercise.fromMap).toList()
-      ..sort((a, b) => a.position.compareTo(b.position));
+    final exercises = raw.cast<Map<String, dynamic>>().map(WorkoutExercise.fromMap).toList()..sort((a, b) => a.position.compareTo(b.position));
     return exercises;
   }
 

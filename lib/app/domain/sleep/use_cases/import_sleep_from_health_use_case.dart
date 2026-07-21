@@ -8,6 +8,5 @@ class ImportSleepFromHealthUseCase {
 
   final SleepRepository _sleepRepository;
 
-  Future<Result<VTError, int>> call({required List<SleepImport> imports}) =>
-      _sleepRepository.importSleepLogs(imports: imports);
+  Future<Result<VTError, int>> call({required List<SleepImport> imports}) => _sleepRepository.importSleepLogs(imports: imports);
 }

@@ -17,10 +17,7 @@ class SupabaseMealScanDataSource {
   Future<Result<VTError, ScannedMeal>> scanMeal({required String imagePath}) async {
     try {
       final bytes = await File(imagePath).readAsBytes();
-      final response = await _supabaseService.invoke(
-        .scanMeal,
-        body: {'imageBase64': base64Encode(bytes), 'fileExtension': imagePath.split('.').last},
-      );
+      final response = await _supabaseService.invoke(.scanMeal, body: {'imageBase64': base64Encode(bytes), 'fileExtension': imagePath.split('.').last});
       return Success(ScannedMeal.fromMap(response.data as Map<String, dynamic>));
     } on FunctionException catch (error) {
       if (error.isPremiumRequired) {

@@ -18,7 +18,5 @@ mixin FoodPortion {
 
   double get fiber => food.fiberPer100g * _ratio;
 
-  Map<Nutrient, double> get micronutrients => {
-    for (final MapEntry(:key, :value) in food.micronutrientsPer100g.entries) key: value * _ratio,
-  };
+  Map<Nutrient, double> get micronutrients => {for (final MapEntry(:key, :value) in food.micronutrientsPer100g.entries) key: value * _ratio};
 }

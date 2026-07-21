@@ -141,6 +141,7 @@ import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progr
 import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -216,12 +217,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseRoutineDataSource(supabaseService: G()));
   G.registerLazySingleton(() => WorkoutLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(
-    () => WorkoutRepository(
-      supabaseExerciseDataSource: G(),
-      supabaseWorkoutDataSource: G(),
-      supabaseRoutineDataSource: G(),
-      workoutLocalDataSource: G(),
-    ),
+    () => WorkoutRepository(supabaseExerciseDataSource: G(), supabaseWorkoutDataSource: G(), supabaseRoutineDataSource: G(), workoutLocalDataSource: G()),
   );
   G.registerLazySingleton(() => SupabaseAuthDataSource(supabaseService: G()));
   G.registerLazySingleton(() => AuthRepository(supabaseAuthDataSource: G()));
@@ -320,8 +316,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => DietHistoryCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G()));
   G.registerFactoryParam<CopyMealsCubit, DateTime, void>(
-    (targetDate, _) =>
-        CopyMealsCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G(), copyFoodLogsUseCase: G(), targetDate: targetDate),
+    (targetDate, _) => CopyMealsCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G(), copyFoodLogsUseCase: G(), targetDate: targetDate),
   );
   G.registerFactory(() => MacroGoalsCubit(getMacroGoalsUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(
@@ -340,18 +335,11 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));
   G.registerFactoryParam<MealScanCubit, DateTime, void>(
-    (loggedDate, _) =>
-        MealScanCubit(scanMealUseCase: G(), logScannedMealUseCase: G(), imagePickerService: G(), loggedDate: loggedDate),
+    (loggedDate, _) => MealScanCubit(scanMealUseCase: G(), logScannedMealUseCase: G(), imagePickerService: G(), loggedDate: loggedDate),
   );
   G.registerFactory(() => RecipesCubit(getRecipesUseCase: G(), deleteRecipeUseCase: G()));
   G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(
-    (recipe, _) => RecipeFormCubit(
-      saveRecipeUseCase: G(),
-      getAppSettingsUseCase: G(),
-      uploadFoodImageUseCase: G(),
-      imagePickerService: G(),
-      recipe: recipe,
-    ),
+    (recipe, _) => RecipeFormCubit(saveRecipeUseCase: G(), getAppSettingsUseCase: G(), uploadFoodImageUseCase: G(), imagePickerService: G(), recipe: recipe),
   );
   G.registerFactory(
     () => WorkoutCubit(
@@ -380,6 +368,20 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
   G.registerFactoryParam<RoutineFormCubit, Routine?, void>((routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine));
+  G.registerFactory(
+    () => HomeCubit(
+      getUserUseCase: G(),
+      getMacroGoalsUseCase: G(),
+      getDailyMacrosUseCase: G(),
+      getDailyWaterUseCase: G(),
+      getWaterGoalUseCase: G(),
+      getRemindersInRangeUseCase: G(),
+      getWorkoutsForDateUseCase: G(),
+      getRecentSleepLogsUseCase: G(),
+      getLatestBodyWeightUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
   G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
   G.registerFactory(
     () => AuthCubit(
@@ -394,13 +396,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactory(
-    () => WaterCubit(
-      getDailyWaterUseCase: G(),
-      logWaterUseCase: G(),
-      deleteWaterLogUseCase: G(),
-      waterLocalDataSource: G(),
-      getAppSettingsUseCase: G(),
-    ),
+    () => WaterCubit(getDailyWaterUseCase: G(), logWaterUseCase: G(), deleteWaterLogUseCase: G(), waterLocalDataSource: G(), getAppSettingsUseCase: G()),
   );
   G.registerFactory(() => WaterHistoryCubit(getWaterInRangeUseCase: G(), getWaterGoalUseCase: G()));
   G.registerFactory(
@@ -415,12 +411,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerFactory(() => ReminderHistoryCubit(getRemindersInRangeUseCase: G()));
   G.registerFactory(
-    () => BodyWeightCubit(
-      getRecentBodyWeightLogsUseCase: G(),
-      logBodyWeightUseCase: G(),
-      deleteBodyWeightLogUseCase: G(),
-      getAppSettingsUseCase: G(),
-    ),
+    () => BodyWeightCubit(getRecentBodyWeightLogsUseCase: G(), logBodyWeightUseCase: G(), deleteBodyWeightLogUseCase: G(), getAppSettingsUseCase: G()),
   );
   G.registerFactory(() => BodyWeightHistoryCubit(getBodyWeightInRangeUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactory(() => SleepHistoryCubit(getSleepInRangeUseCase: G(), getSleepGoalUseCase: G()));

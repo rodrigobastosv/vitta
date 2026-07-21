@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 abstract class VTColors {
@@ -64,4 +66,12 @@ abstract class VTColors {
   static const Color errorContainerDark = Color(0xFF93000A);
   static const Color onErrorContainerLight = Color(0xFF410002);
   static const Color onErrorContainerDark = Color(0xFFFFDAD6);
+
+  static Color inkOn(Color accent) => _contrast(accent, onGreen) >= _contrast(accent, onSurfaceLight) ? onGreen : onSurfaceLight;
+
+  static double _contrast(Color a, Color b) {
+    final luminanceA = a.computeLuminance();
+    final luminanceB = b.computeLuminance();
+    return (math.max(luminanceA, luminanceB) + 0.05) / (math.min(luminanceA, luminanceB) + 0.05);
+  }
 }

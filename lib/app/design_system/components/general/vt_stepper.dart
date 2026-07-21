@@ -26,7 +26,10 @@ class VTStepper extends StatelessWidget {
     VTHaptics.selection();
     final clamped = value < min ? min.toDouble() : value;
     final text = QuantityFormat.format(clamped);
-    controller.value = TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length));
+    controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
   }
 
   @override

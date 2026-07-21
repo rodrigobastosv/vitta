@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 
 class VTPrimaryButton extends StatelessWidget {
-  const VTPrimaryButton({
-    required this.label,
-    required this.onPressed,
-    this.icon,
-    this.isLoading = false,
-    this.isExpanded = true,
-    super.key,
-  });
+  const VTPrimaryButton({required this.label, required this.onPressed, this.icon, this.isLoading = false, this.isExpanded = true, super.key});
 
   final String label;
   final VoidCallback? onPressed;
@@ -19,11 +12,7 @@ class VTPrimaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final child = isLoading
-        ? SizedBox(
-            width: 20,
-            height: 20,
-            child: CircularProgressIndicator(strokeWidth: 2.5, color: Theme.of(context).colorScheme.onPrimary),
-          )
+        ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2.5, color: Theme.of(context).colorScheme.onPrimary))
         : Row(
             mainAxisSize: .min,
             children: [

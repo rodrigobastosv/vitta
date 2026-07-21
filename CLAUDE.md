@@ -124,6 +124,22 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## The accent-avatar shortcut has a contrast floor — use `VTColors.inkOn`
+
+The "circular icon avatar tinted with an accent at ~16% alpha, with the accent itself as the icon colour" convention **fails WCAG's 3:1 non-text floor for almost every accent the app owns**, in one theme or the other. Measured on the app's own card surfaces:
+
+| accent | on light card | on dark card |
+|---|---|---|
+| `water` | **2.11** | 4.30 |
+| `coral` | **2.54** | 3.66 |
+| `green` | 3.57 | **2.63** |
+| `sleep` | 3.47 | **2.72** |
+| `success` | **2.87** | 3.23 |
+
+This is the same trap the `VTSeverity` section already tells a story about, and the Home redesign walked straight into it before the numbers were run. **A solid accent disc with the right ink clears it every time** (worst case 4.45:1), so `VTColors.inkOn(accent)` returns whichever of `onGreen`/`onSurfaceLight` actually contrasts better — computed, not thresholded. A luminance cutoff was tried first and mispicks `water`, whose best ink is the dark one despite a mid luminance.
+
+`vt_colors_ink_test.dart` asserts the 3:1 floor across every accent, asserts `inkOn` beats the alternative ink each time, and pins the 16%-tint failure so nobody reintroduces it. **Reach for `inkOn` whenever an accent carries an icon**; the 16% tint is still fine as a *background* behind neutral ink, which is what the meal and badge tints do.
+
 ## Celebration
 
 `VTCelebration` (`design_system/components/general/`, issue #163) wraps a widget and bursts confetti when its `trigger` flips **false → true**. It is hand-rolled (a `CustomPainter` over an `AnimationController`) rather than a Lottie/Rive dependency — the same "own the look" call the charts and `VTWeightPicker` make, and it avoids shipping a third-party animation asset whose licence would have to be cleared for App Store submission. Every call site goes through the one component, so swapping the visual for a Lottie file later is a single-widget change.

@@ -11,14 +11,12 @@ class BodyWeightRepository {
   Future<Result<VTError, BodyWeightLog>> logBodyWeight({required DateTime loggedDate, required double weightKg}) =>
       _supabaseBodyWeightDataSource.logBodyWeight(loggedDate: loggedDate, weightKg: weightKg);
 
-  Future<Result<VTError, List<BodyWeightLog>>> getRecentLogs({required int days}) =>
-      _supabaseBodyWeightDataSource.getRecentLogs(days: days);
+  Future<Result<VTError, List<BodyWeightLog>>> getRecentLogs({required int days}) => _supabaseBodyWeightDataSource.getRecentLogs(days: days);
 
   Future<Result<VTError, List<BodyWeightLog>>> getLogsInRange({required DateTime from, required DateTime to}) =>
       _supabaseBodyWeightDataSource.getLogsInRange(from: from, to: to);
 
   Future<Result<VTError, BodyWeightLog?>> getLatest() => _supabaseBodyWeightDataSource.getLatest();
 
-  Future<Result<VTError, void>> deleteBodyWeightLog({required String logId}) =>
-      _supabaseBodyWeightDataSource.deleteBodyWeightLog(logId: logId);
+  Future<Result<VTError, void>> deleteBodyWeightLog({required String logId}) => _supabaseBodyWeightDataSource.deleteBodyWeightLog(logId: logId);
 }

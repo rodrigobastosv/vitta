@@ -29,11 +29,7 @@ class SupabaseRecipeDataSource {
 
   Future<Result<VTError, Recipe>> createRecipe({required String foodId, required List<RecipeIngredient> ingredients}) async {
     try {
-      final recipeRow = await _supabaseService
-          .from(.recipes)
-          .insert(CreateRecipeRequest(userId: _userId, foodId: foodId).toJson())
-          .select()
-          .single();
+      final recipeRow = await _supabaseService.from(.recipes).insert(CreateRecipeRequest(userId: _userId, foodId: foodId).toJson()).select().single();
       final recipeId = recipeRow['id'] as String;
       await _supabaseService.from(.recipeIngredients).insert([
         for (final ingredient in ingredients)

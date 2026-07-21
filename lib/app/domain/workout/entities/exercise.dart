@@ -84,16 +84,5 @@ class Exercise extends Equatable {
   String? get imageUrl => imageUrls.firstOrNull;
 
   @override
-  List<Object?> get props => [
-    id,
-    names,
-    instructions,
-    category,
-    level,
-    equipment,
-    primaryMuscles,
-    secondaryMuscles,
-    imageUrls,
-    timesLogged,
-  ];
+  List<Object?> get props => [id, names, instructions, category, level, equipment, primaryMuscles, secondaryMuscles, imageUrls, timesLogged];
 }

@@ -5,18 +5,9 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTEmptyState extends StatelessWidget {
-  const VTEmptyState({
-    required this.message,
-    required this.icon,
-    this.title,
-    this.actionLabel,
-    this.actionIcon,
-    this.onAction,
-    super.key,
-  });
+  const VTEmptyState({required this.message, required this.icon, this.title, this.actionLabel, this.actionIcon, this.onAction, super.key});
 
-  const VTEmptyState.noResults({required this.message, this.title, this.actionLabel, this.actionIcon, this.onAction, super.key})
-    : icon = Icons.search_off;
+  const VTEmptyState.noResults({required this.message, this.title, this.actionLabel, this.actionIcon, this.onAction, super.key}) : icon = Icons.search_off;
 
   final String message;
   final String? title;

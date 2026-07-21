@@ -5,15 +5,7 @@ import 'package:vitta/app/design_system/components/general/vt_remote_image_place
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 
 class VTRemoteImage extends StatelessWidget {
-  const VTRemoteImage({
-    required this.imageUrl,
-    required this.placeholderIcon,
-    this.size = 48,
-    this.width,
-    this.height,
-    this.borderRadius,
-    super.key,
-  });
+  const VTRemoteImage({required this.imageUrl, required this.placeholderIcon, this.size = 48, this.width, this.height, this.borderRadius, super.key});
 
   final String? imageUrl;
   final IconData placeholderIcon;

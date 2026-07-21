@@ -12,13 +12,7 @@ class AuthRepository {
 
   User get status => _supabaseAuthDataSource.status;
 
-  Future<Result<VTError, User>> signUp({
-    required String email,
-    required String password,
-    String? displayName,
-    String? avatarId,
-    String? avatarUrl,
-  }) =>
+  Future<Result<VTError, User>> signUp({required String email, required String password, String? displayName, String? avatarId, String? avatarUrl}) =>
       _supabaseAuthDataSource.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
 
   Future<Result<VTError, User>> updateProfile({String? displayName, String? avatarId, String? avatarUrl}) =>
@@ -27,8 +21,7 @@ class AuthRepository {
   Future<Result<VTError, String>> uploadAvatar({required Uint8List bytes, required String fileExtension}) =>
       _supabaseAuthDataSource.uploadAvatar(bytes: bytes, fileExtension: fileExtension);
 
-  Future<Result<VTError, User>> signIn({required String email, required String password}) =>
-      _supabaseAuthDataSource.signIn(email: email, password: password);
+  Future<Result<VTError, User>> signIn({required String email, required String password}) => _supabaseAuthDataSource.signIn(email: email, password: password);
 
   Future<Result<VTError, void>> signOut() => _supabaseAuthDataSource.signOut();
 

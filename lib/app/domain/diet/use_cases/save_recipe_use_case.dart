@@ -48,9 +48,7 @@ class SaveRecipeUseCase {
       if (error != null) {
         return Failure(error);
       }
-      saved.add(
-        RecipeIngredient(food: savedFoodResult.when((_) => ingredient.food, (value) => value), quantityGrams: ingredient.quantityGrams),
-      );
+      saved.add(RecipeIngredient(food: savedFoodResult.when((_) => ingredient.food, (value) => value), quantityGrams: ingredient.quantityGrams));
     }
     return Success(saved);
   }

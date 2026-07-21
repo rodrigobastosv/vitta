@@ -8,6 +8,5 @@ class GetExerciseProgressionUseCase {
 
   final WorkoutRepository _workoutRepository;
 
-  Future<Result<VTError, ExerciseProgression>> call({required String exerciseId}) =>
-      _workoutRepository.getExerciseProgression(exerciseId: exerciseId);
+  Future<Result<VTError, ExerciseProgression>> call({required String exerciseId}) => _workoutRepository.getExerciseProgression(exerciseId: exerciseId);
 }

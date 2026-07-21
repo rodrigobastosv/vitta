@@ -30,11 +30,7 @@ class VTPhotoHeader extends StatelessWidget {
               gradient: LinearGradient(begin: .topLeft, end: .bottomLeft, colors: [colorScheme.primaryContainer, colorScheme.surface]),
             ),
           ),
-          AnimatedSwitcher(
-            duration: VTMotion.entrance,
-            switchInCurve: VTMotion.curve,
-            child: photo ?? _placeholder(context),
-          ),
+          AnimatedSwitcher(duration: VTMotion.entrance, switchInCurve: VTMotion.curve, child: photo ?? _placeholder(context)),
           if (photo != null) Positioned(right: VTSpacing.m, bottom: VTSpacing.m, child: _changePhotoChip(context)),
         ],
       ),

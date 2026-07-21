@@ -8,6 +8,5 @@ class ScanNutritionLabelUseCase {
 
   final DietRepository _dietRepository;
 
-  Future<Result<VTError, ScannedNutritionFacts>> call({required String imagePath}) =>
-      _dietRepository.scanNutritionLabel(imagePath: imagePath);
+  Future<Result<VTError, ScannedNutritionFacts>> call({required String imagePath}) => _dietRepository.scanNutritionLabel(imagePath: imagePath);
 }

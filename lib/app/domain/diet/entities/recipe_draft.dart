@@ -8,8 +8,7 @@ import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 class RecipeDraft extends Equatable with MacroTotals {
   const RecipeDraft({this.name = '', this.ingredients = const [], this.imageUrl});
 
-  factory RecipeDraft.fromRecipe(Recipe recipe) =>
-      RecipeDraft(name: recipe.food.name, ingredients: recipe.ingredients, imageUrl: recipe.food.imageUrl);
+  factory RecipeDraft.fromRecipe(Recipe recipe) => RecipeDraft(name: recipe.food.name, ingredients: recipe.ingredients, imageUrl: recipe.food.imageUrl);
 
   final String name;
   final List<RecipeIngredient> ingredients;

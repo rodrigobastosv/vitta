@@ -12,8 +12,7 @@ class RoutineDraft extends Equatable {
 
   bool get isComplete => name.trim().isNotEmpty && exercises.isNotEmpty;
 
-  RoutineDraft copyWith({String? name, List<Exercise>? exercises}) =>
-      RoutineDraft(name: name ?? this.name, exercises: exercises ?? this.exercises);
+  RoutineDraft copyWith({String? name, List<Exercise>? exercises}) => RoutineDraft(name: name ?? this.name, exercises: exercises ?? this.exercises);
 
   @override
   List<Object?> get props => [name, exercises];

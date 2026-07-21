@@ -36,10 +36,7 @@ class HealthService {
 
   Future<bool> requestSleepAuthorization() async {
     await _health.configure();
-    return _health.requestAuthorization(
-      _sleepTypes,
-      permissions: List<HealthDataAccess>.filled(_sleepTypes.length, HealthDataAccess.READ),
-    );
+    return _health.requestAuthorization(_sleepTypes, permissions: List<HealthDataAccess>.filled(_sleepTypes.length, HealthDataAccess.READ));
   }
 
   Future<List<HealthSleepSession>> readSleepSessions({required DateTime from, required DateTime to}) async {
@@ -85,11 +82,8 @@ class HealthService {
     return sessions;
   }
 
-  HealthSleepSession _session(DateTime start, DateTime end) => HealthSleepSession(
-    start: start,
-    end: end,
-    externalId: 'ios-${start.toUtc().toIso8601String()}-${end.toUtc().toIso8601String()}',
-  );
+  HealthSleepSession _session(DateTime start, DateTime end) =>
+      HealthSleepSession(start: start, end: end, externalId: 'ios-${start.toUtc().toIso8601String()}-${end.toUtc().toIso8601String()}');
 
   /// Debug-only helper to seed a sleep session so the import flow can be exercised
   /// on an emulator/device without a real watch. Not called in release builds.

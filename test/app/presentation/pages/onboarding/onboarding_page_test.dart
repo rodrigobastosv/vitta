@@ -3,8 +3,10 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/presentation/pages/home/widgets/home_today_card.dart';
 import 'package:vitta/main.dart';
 
+import '../../../../fixtures/home_fixture.dart';
 import '../../../../fixtures/local_storage_fixture.dart';
 import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/repositories_mocks.dart';
@@ -24,6 +26,7 @@ void main() {
     G.unregister<OnboardingRepository>();
     G.registerLazySingleton<OnboardingRepository>(() => onboardingRepository);
     registerTestPremiumCubit();
+    registerTestHomeCubit();
   });
 
   testWidgets('shows onboarding on first launch and tapping create account opens the auth page', (tester) async {
@@ -69,7 +72,7 @@ void main() {
     await tester.tap(find.text('Continue without an account'));
     await tester.pumpAndSettle();
 
-    expect(find.byType(GridView), findsOneWidget);
+    expect(find.byType(HomeTodayCard), findsOneWidget);
     expect(G<OnboardingRepository>().hasSeenOnboarding(), isTrue);
   });
 }

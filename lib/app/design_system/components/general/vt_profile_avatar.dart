@@ -39,12 +39,7 @@ class VTProfileAvatar extends StatelessWidget {
       );
     }
     if (avatarUrl != null) {
-      return VTRemoteImage(
-        imageUrl: avatarUrl,
-        placeholderIcon: Icons.person_outline,
-        size: size,
-        borderRadius: BorderRadius.circular(size / 2),
-      );
+      return VTRemoteImage(imageUrl: avatarUrl, placeholderIcon: Icons.person_outline, size: size, borderRadius: BorderRadius.circular(size / 2));
     }
     if (VTAvatarCatalog.byId(avatarId) case final option?) {
       return VTAvatarCatalog.buildAvatar(option, size: size);

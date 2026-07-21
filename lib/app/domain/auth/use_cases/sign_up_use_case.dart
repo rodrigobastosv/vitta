@@ -8,11 +8,6 @@ class SignUpUseCase {
 
   final AuthRepository _authRepository;
 
-  Future<Result<VTError, User>> call({
-    required String email,
-    required String password,
-    String? displayName,
-    String? avatarId,
-    String? avatarUrl,
-  }) => _authRepository.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
+  Future<Result<VTError, User>> call({required String email, required String password, String? displayName, String? avatarId, String? avatarUrl}) =>
+      _authRepository.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
 }

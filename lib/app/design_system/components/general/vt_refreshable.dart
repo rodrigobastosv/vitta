@@ -26,11 +26,7 @@ class VTRefreshable extends StatelessWidget {
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: onRefresh,
     child: switch ((skeleton, emptyState)) {
-      (final skeleton?, _) when !isLoaded => ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: padding,
-        children: [skeleton],
-      ),
+      (final skeleton?, _) when !isLoaded => ListView(physics: const AlwaysScrollableScrollPhysics(), padding: padding, children: [skeleton]),
       (_, final emptyState?) when !hasData => LayoutBuilder(
         builder: (context, constraints) => SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),

@@ -10,6 +10,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -54,6 +55,30 @@ abstract class CubitsFactories {
     uploadAvatarUseCase: uploadAvatarUseCase ?? MockUploadAvatarUseCase(),
     deleteAccountUseCase: deleteAccountUseCase ?? MockDeleteAccountUseCase(),
     imagePickerService: imagePickerService ?? MockImagePickerService(),
+  );
+
+  static HomeCubit buildHomeCubit({
+    MockGetUserUseCase? getUserUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
+    MockGetDailyWaterUseCase? getDailyWaterUseCase,
+    MockGetWaterGoalUseCase? getWaterGoalUseCase,
+    MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase,
+    MockGetWorkoutsForDateUseCase? getWorkoutsForDateUseCase,
+    MockGetRecentSleepLogsUseCase? getRecentSleepLogsUseCase,
+    MockGetLatestBodyWeightUseCase? getLatestBodyWeightUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => HomeCubit(
+    getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
+    getDailyWaterUseCase: getDailyWaterUseCase ?? MockGetDailyWaterUseCase(),
+    getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
+    getRemindersInRangeUseCase: getRemindersInRangeUseCase ?? MockGetRemindersInRangeUseCase(),
+    getWorkoutsForDateUseCase: getWorkoutsForDateUseCase ?? MockGetWorkoutsForDateUseCase(),
+    getRecentSleepLogsUseCase: getRecentSleepLogsUseCase ?? MockGetRecentSleepLogsUseCase(),
+    getLatestBodyWeightUseCase: getLatestBodyWeightUseCase ?? MockGetLatestBodyWeightUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
   static DietCubit buildDietCubit({
