@@ -4,7 +4,6 @@ import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/recent_search_tile.dart';
 
 class RecentSearchesList extends StatelessWidget {
   const RecentSearchesList({required this.queries, required this.onSelect, required this.onRemove, required this.onClear, super.key});
@@ -29,12 +28,26 @@ class RecentSearchesList extends StatelessWidget {
             TextButton(onPressed: onClear, child: Text(l10n.dietClearRecentSearchesAction)),
           ],
         ),
-        for (final (index, query) in queries.indexed)
-          VTAppearEffect(
-            key: ValueKey(query),
-            index: index,
-            child: RecentSearchTile(query: query, onTap: () => onSelect(query), onRemove: () => onRemove(query)),
-          ),
+        const VTGap.s(),
+        Wrap(
+          spacing: VTSpacing.s,
+          runSpacing: VTSpacing.s,
+          children: [
+            for (final (index, query) in queries.indexed)
+              VTAppearEffect(
+                key: ValueKey(query),
+                index: index,
+                child: InputChip(
+                  label: Text(query, style: VTTextStyles.body(context)),
+                  avatar: Icon(Icons.history, size: 16, color: colorScheme.onSurfaceVariant),
+                  onPressed: () => onSelect(query),
+                  onDeleted: () => onRemove(query),
+                  deleteIcon: const Icon(Icons.close, size: 16),
+                  deleteButtonTooltipMessage: l10n.dietRemoveRecentSearchTooltip,
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }

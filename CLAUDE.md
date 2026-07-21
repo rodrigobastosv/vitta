@@ -148,9 +148,15 @@ The screen every logged meal passes through, reworked in issue #163. Four things
 
 **Search was submit-only.** Results came from `onSubmitted`, so every lookup cost a keyboard return. `FoodSearchCubit.queryChanged` now debounces (350ms, minimum 2 characters) and `VTSearchField` gained an `onChanged` to feed it. The debounce lives in the cubit, not the widget, so the timer is cancelled in `close()`. It is listed in `motion_tokens_test.dart`'s `_allowed`: **an input delay is not a transition**, the same category as the HTTP retry backoff.
 
-**The idle state remembered the wrong thing.** It listed past *queries* — text you typed. What a food tracker is actually asked for is **the food you logged last time**, because eating is repetitive. `FoodSearchIdleView` now leads with recently-logged foods, each carrying the amount you used last time so one tap re-logs it, and demotes past queries to chips underneath.
+**The idle state remembered the wrong thing.** It listed past *queries* — text you typed. What a food tracker is actually asked for is **the food you logged last time**, because eating is repetitive.
+
+**Recently-logged foods are their own tab, not the Search tab's idle state.** Putting them above the recent searches was tried first and buried them — on the Search tab, the thing you want is your recent *searches*. So the strip is now **Search / Recent / Favourites**: Search idles into recent-search chips, Recent lists the foods you've logged with the amount you used last time so one tap re-logs it. The tabs carry no icons, because three labelled tabs across a phone is already tight.
+
+Recent searches are `InputChip`s, not rows. A row per past query ate the whole tab for something that is one word long; a chip wraps, and its built-in `onDeleted` is the ×.
 
 `DietRepository.getRecentlyLoggedFoods` is the new read behind it. It is **deduped in the repository, not the query**: PostgREST has no usable `DISTINCT ON`, so the datasource takes the newest `_recentEntryLookback` (80) rows and the repository keeps the first entry per food id. It returns `FoodLogEntry` rather than `Food` precisely because the entry carries the quantity — that is what makes the one-tap re-log possible.
+
+**Nothing tonal may default to `secondaryContainer`.** `IconButton.filledTonal` and a selected `ChoiceChip` both do, and the app's secondary is coral — which in dark resolves to `coralContainerDark` (#7A3A18) and reads as **brown against an otherwise green app**. `VTQuickAddButton` wraps the add affordance in `primaryContainer`/`onPrimaryContainer`, and `VTTheme` sets `chipTheme.selectedColor` to the same, so the meal chips in the log sheet follow. Reach for the quick-add component rather than a bare `filledTonal`.
 
 **Rows were ragged.** The catalog/OFF merge means some rows have a brand and some do not, and the name could wrap to two lines — so a list had visibly uneven row heights. `FoodSearchResultTile` now gives the name **one line** and always renders **one** meta line (`brand · kcal`, or just kcal), which is pinned by a test asserting a branded and an unbranded row measure the same height.
 

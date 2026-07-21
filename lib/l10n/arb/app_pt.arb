@@ -102,6 +102,9 @@
   "dietLogAgainAction": "Registrar de novo",
   "dietRecentlyLoggedTitle": "Registrados recentemente",
   "dietRecentSearchesTitle": "Buscas recentes",
+  "dietRecentTabLabel": "Recentes",
+  "dietRecentEmptyTitle": "Nada registrado ainda",
+  "dietRecentEmptyMessage": "Os alimentos que você registrar aparecerão aqui, prontos para adicionar de novo com um toque.",
   "retry": "Tentar novamente",
   "ok": "OK",
   "errorTitle": "Algo deu errado",
@@ -265,7 +268,7 @@
       "calories": {"type": "int"}
     }
   },
-  "dietFoodSearchTitle": "Buscar alimentos",
+  "dietFoodSearchTitle": "Adicionar alimento",
   "dietFavoritesTitle": "Favoritos",
   "dietSearchTabLabel": "Busca",
   "dietRecentSearchesTitle": "Buscas recentes",

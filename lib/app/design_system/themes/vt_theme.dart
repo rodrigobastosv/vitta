@@ -76,6 +76,12 @@ abstract class VTTheme {
         centerTitle: false,
         titleTextStyle: GoogleFonts.archivo(fontSize: 22, fontWeight: .w800, letterSpacing: -0.5, color: colorScheme.onSurface),
       ),
+      chipTheme: ChipThemeData(
+        selectedColor: colorScheme.primaryContainer,
+        checkmarkColor: colorScheme.onPrimaryContainer,
+        secondarySelectedColor: colorScheme.primaryContainer,
+        shape: const StadiumBorder(),
+      ),
       cardTheme: CardThemeData(
         color: colorScheme.surfaceContainerHighest,
         elevation: 0,

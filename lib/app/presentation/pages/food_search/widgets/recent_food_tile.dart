@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/text/quantity_format.dart';
+import 'package:vitta/app/design_system/components/buttons/vt_quick_add_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -45,7 +46,7 @@ class RecentFoodTile extends StatelessWidget {
               ],
             ),
           ),
-          IconButton.filledTonal(onPressed: onQuickAdd, icon: const Icon(Icons.add), tooltip: l10n.dietLogAgainAction),
+          VTQuickAddButton(onPressed: onQuickAdd, tooltip: l10n.dietLogAgainAction),
         ],
       ),
     );

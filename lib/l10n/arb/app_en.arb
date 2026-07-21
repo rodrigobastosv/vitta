@@ -107,6 +107,9 @@
   "dietLogAgainAction": "Log again",
   "dietRecentlyLoggedTitle": "Recently logged",
   "dietRecentSearchesTitle": "Recent searches",
+  "dietRecentTabLabel": "Recent",
+  "dietRecentEmptyTitle": "Nothing logged yet",
+  "dietRecentEmptyMessage": "Foods you log will show up here, ready to add again in one tap.",
   "retry": "Retry",
   "ok": "OK",
   "errorTitle": "Something went wrong",
@@ -270,7 +273,7 @@
       "calories": {"type": "int"}
     }
   },
-  "dietFoodSearchTitle": "Search foods",
+  "dietFoodSearchTitle": "Add food",
   "dietFavoritesTitle": "Favorites",
   "dietSearchTabLabel": "Search",
   "dietRecentSearchesTitle": "Recent searches",

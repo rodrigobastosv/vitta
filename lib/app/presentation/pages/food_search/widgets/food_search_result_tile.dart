@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/buttons/vt_quick_add_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -79,7 +80,7 @@ class FoodSearchResultTile extends StatelessWidget {
               color: isFavorite ? VTColors.macroProtein : colorScheme.onSurfaceVariant,
               tooltip: isFavorite ? l10n.dietUnfavoriteFoodTooltip : l10n.dietFavoriteFoodTooltip,
             ),
-          IconButton.filledTonal(onPressed: onAdd, icon: const Icon(Icons.add), tooltip: l10n.dietLogFoodAction),
+          VTQuickAddButton(onPressed: onAdd, tooltip: l10n.dietLogFoodAction),
         ],
       ),
     );

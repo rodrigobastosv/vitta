@@ -704,6 +704,24 @@ abstract class AppLocalizations {
   /// **'Recent searches'**
   String get dietRecentSearchesTitle;
 
+  /// No description provided for @dietRecentTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent'**
+  String get dietRecentTabLabel;
+
+  /// No description provided for @dietRecentEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged yet'**
+  String get dietRecentEmptyTitle;
+
+  /// No description provided for @dietRecentEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Foods you log will show up here, ready to add again in one tap.'**
+  String get dietRecentEmptyMessage;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
@@ -1295,7 +1313,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietFoodSearchTitle.
   ///
   /// In en, this message translates to:
-  /// **'Search foods'**
+  /// **'Add food'**
   String get dietFoodSearchTitle;
 
   /// No description provided for @dietFavoritesTitle.
