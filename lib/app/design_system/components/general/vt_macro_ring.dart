@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
 
 class VTMacroRing extends StatelessWidget {
   const VTMacroRing({
@@ -10,6 +11,7 @@ class VTMacroRing extends StatelessWidget {
     this.strokeWidth = 12,
     this.trackColor,
     this.child,
+    this.semanticLabel,
     super.key,
   });
 
@@ -19,21 +21,22 @@ class VTMacroRing extends StatelessWidget {
   final double strokeWidth;
   final Color? trackColor;
   final Widget? child;
+  final String? semanticLabel;
 
   @override
-  Widget build(BuildContext context) => TweenAnimationBuilder<double>(
+  Widget build(BuildContext context) => switch (semanticLabel) {
+    final semanticLabel? => VTSemanticSummary(label: semanticLabel, child: _ring()),
+    null => MergeSemantics(child: _ring()),
+  };
+
+  Widget _ring() => TweenAnimationBuilder<double>(
     tween: Tween(begin: 0, end: value.clamp(0, 1).toDouble()),
     duration: const Duration(milliseconds: 800),
     curve: Curves.easeOutCubic,
     builder: (context, animatedValue, _) => SizedBox.square(
       dimension: size,
       child: CustomPaint(
-        painter: _RingPainter(
-          value: animatedValue,
-          color: color,
-          trackColor: trackColor ?? color.withValues(alpha: 0.16),
-          strokeWidth: strokeWidth,
-        ),
+        painter: _RingPainter(value: animatedValue, color: color, trackColor: trackColor ?? color.withValues(alpha: 0.16), strokeWidth: strokeWidth),
         child: Center(child: child),
       ),
     ),
@@ -76,8 +79,5 @@ class _RingPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_RingPainter oldDelegate) =>
-      oldDelegate.value != value ||
-      oldDelegate.color != color ||
-      oldDelegate.trackColor != trackColor ||
-      oldDelegate.strokeWidth != strokeWidth;
+      oldDelegate.value != value || oldDelegate.color != color || oldDelegate.trackColor != trackColor || oldDelegate.strokeWidth != strokeWidth;
 }

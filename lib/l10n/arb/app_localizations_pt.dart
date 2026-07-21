@@ -165,6 +165,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutComingSoonMessage => 'O acompanhamento de treino está a caminho.';
 
   @override
+  String get previousMonth => 'Mês anterior';
+
+  @override
+  String get nextMonth => 'Próximo mês';
+
+  @override
+  String get increase => 'Aumentar';
+
+  @override
+  String get decrease => 'Diminuir';
+
+  @override
+  String get clearSearch => 'Limpar busca';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override

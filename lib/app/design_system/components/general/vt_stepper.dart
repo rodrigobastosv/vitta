@@ -50,6 +50,7 @@ class VTStepper extends StatelessWidget {
               builder: (context, _, _) => IconButton(
                 onPressed: _decremented >= min ? () => _setValue(_decremented) : null,
                 icon: const Icon(Icons.remove_rounded),
+                tooltip: context.l10n.decrease,
                 style: buttonStyle,
                 visualDensity: .compact,
               ),
@@ -78,6 +79,7 @@ class VTStepper extends StatelessWidget {
             IconButton(
               onPressed: () => _setValue(_incremented),
               icon: const Icon(Icons.add_rounded),
+              tooltip: context.l10n.increase,
               style: buttonStyle,
               visualDensity: .compact,
             ),

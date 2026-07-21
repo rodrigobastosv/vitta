@@ -8,9 +8,16 @@ class VTDragHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Semantics(
     label: context.l10n.reorderHandleLabel,
-    child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: VTSpacing.xs, vertical: VTSpacing.s),
-      child: Icon(Icons.drag_indicator, size: 22, color: context.colorScheme.onSurfaceVariant),
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: VTSpacing.minTapTarget, minHeight: VTSpacing.minTapTarget),
+      child: Center(
+        widthFactor: 1,
+        heightFactor: 1,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: VTSpacing.xs, vertical: VTSpacing.s),
+          child: Icon(Icons.drag_indicator, size: 22, color: context.colorScheme.onSurfaceVariant),
+        ),
+      ),
     ),
   );
 }

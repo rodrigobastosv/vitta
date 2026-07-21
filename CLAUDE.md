@@ -124,6 +124,20 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Accessibility
+
+**An `IconButton`'s `tooltip` *is* its accessibility label** — the framework says so in `icon_button.dart` ("is used for accessibility") and `Tooltip` sets `semanticsTooltip` on the node. It lands in the semantics **`tooltip` field, not `label`**, which is why `find.bySemanticsLabel` won't match it — that's a testing gotcha, not a missing label. So **never wrap a tooltipped `IconButton` in a `Semantics(label:)`**: that double-labels it and VoiceOver reads the button twice. An icon-only button needs a `tooltip`, and that is the whole fix.
+
+**A custom-painted widget whose child is already text should `MergeSemantics`, not carry a hand-written label.** All four `VTMacroRing` call sites wrap a `Column` of localized `Text` (the calorie readout, "of 2000 kcal", "150 left") — so the ring was never silent, it just announced as **three separate VoiceOver stops**. `MergeSemantics` collapses them into one, which is the actual improvement, and it **cannot drift out of sync with what's on screen** the way a duplicated `semanticLabel` string would. The ring only takes an explicit `semanticLabel` for a caller that genuinely has no text child.
+
+`VTSemanticSummary` (`components/general/`) is the shared piece: given a label it replaces the subtree's semantics (`excludeSemantics: true, container: true`), given null it leaves the child alone. `VTMacroRing`, `VTProgressBar`, `VTBarChart`, `VTLineChart` and `VTDistributionBar` all take an optional `semanticLabel` through it.
+
+**The charts are deliberately left unlabelled for now.** Every chart in the app sits in a card that already announces its title, its average badge and its logged-day count as ordinary `Text` — what the painting adds is the *shape*, and a single label can't linearize 90 bars into anything useful. Restating the average the card already says would be redundant noise, not accessibility. The real fix for per-point values is the chart **interactivity** item in the issue's Tier 3 (tap a bar to hear its value); the `semanticLabel` hook exists so a chart that ever *is* the only source of its data can be labelled without a component change.
+
+**Tap targets: `VTSpacing.minTapTarget` (44) is the floor**, and it is measured, not eyeballed — `vt_tap_target_test.dart` asserts a rendered `getSize`. `VTDragHandle` shipped at **30×38** and is the reason the token exists; a bare `IconButton` is already 48×48, so the delete buttons that looked suspicious were fine. Measure before "fixing" a tap target.
+
+Adding localized tooltips to a design-system component makes it need `AppLocalizations` delegates — an existing widget test that pumped it in a bare `MaterialApp` will start throwing a null-check on `AppLocalizations.of`. Add the delegates to the test rather than pulling l10n back out of the component.
+
 ## Haptics
 
 Every physical feedback goes through `VTHaptics` (`design_system/components/general/vt_haptics.dart`, issue #163) — call sites express **intent** (`.selection()`, `.success()`, `.warning()`, `.error()`, `.drag()`), never an impact strength, so the mapping is tuned in one place rather than re-decided per screen.

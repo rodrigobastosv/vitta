@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
 
 class VTSearchField extends StatefulWidget {
   const VTSearchField({required this.hintText, required this.onSubmitted, this.text, this.autofocus = false, super.key});
@@ -47,7 +48,7 @@ class _VTSearchFieldState extends State<VTSearchField> {
     decoration: InputDecoration(
       hintText: widget.hintText,
       prefixIcon: const Icon(Icons.search),
-      suffixIcon: _controller.text.isEmpty ? null : IconButton(icon: const Icon(Icons.close), onPressed: _clear),
+      suffixIcon: _controller.text.isEmpty ? null : IconButton(icon: const Icon(Icons.close), tooltip: context.l10n.clearSearch, onPressed: _clear),
     ),
   );
 }

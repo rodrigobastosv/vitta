@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_line_chart_point.dart';
+import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
 
 // A line-over-time chart for a single metric (issue #101 - body weight trend). Owned
 // as a CustomPainter rather than pulled from a package, the same call VTBarChart and
@@ -10,31 +11,35 @@ import 'package:vitta/app/design_system/components/charts/vt_line_chart_point.da
 // 75 -> 73 kg is the whole story, and a zero baseline would flatten it into a
 // featureless line near the top.
 class VTLineChart extends StatelessWidget {
-  const VTLineChart({required this.points, this.lineColor, this.height = 180, super.key});
+  const VTLineChart({required this.points, this.lineColor, this.height = 180, this.semanticLabel, super.key});
 
   final List<VTLineChartPoint> points;
   final Color? lineColor;
   final double height;
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final line = lineColor ?? colorScheme.primary;
-    return TweenAnimationBuilder<double>(
-      key: ValueKey(points.length),
-      tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
-      builder: (context, progress, _) => SizedBox(
-        height: height,
-        width: double.infinity,
-        child: CustomPaint(
-          painter: _LineChartPainter(
-            points: points,
-            progress: progress,
-            lineColor: line,
-            gridColor: colorScheme.onSurface.withValues(alpha: 0.08),
-            labelColor: colorScheme.onSurfaceVariant,
+    return VTSemanticSummary(
+      label: semanticLabel,
+      child: TweenAnimationBuilder<double>(
+        key: ValueKey(points.length),
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeOutCubic,
+        builder: (context, progress, _) => SizedBox(
+          height: height,
+          width: double.infinity,
+          child: CustomPaint(
+            painter: _LineChartPainter(
+              points: points,
+              progress: progress,
+              lineColor: line,
+              gridColor: colorScheme.onSurface.withValues(alpha: 0.08),
+              labelColor: colorScheme.onSurfaceVariant,
+            ),
           ),
         ),
       ),
@@ -43,13 +48,7 @@ class VTLineChart extends StatelessWidget {
 }
 
 class _LineChartPainter extends CustomPainter {
-  _LineChartPainter({
-    required this.points,
-    required this.progress,
-    required this.lineColor,
-    required this.gridColor,
-    required this.labelColor,
-  });
+  _LineChartPainter({required this.points, required this.progress, required this.lineColor, required this.gridColor, required this.labelColor});
 
   final List<VTLineChartPoint> points;
   final double progress;
@@ -140,13 +139,7 @@ class _LineChartPainter extends CustomPainter {
     canvas.drawPath(path, paint);
   }
 
-  void _paintGridAndYLabels(
-    Canvas canvas, {
-    required double plotWidth,
-    required double plotHeight,
-    required double minValue,
-    required double maxValue,
-  }) {
+  void _paintGridAndYLabels(Canvas canvas, {required double plotWidth, required double plotHeight, required double minValue, required double maxValue}) {
     final grid = Paint()
       ..color = gridColor
       ..strokeWidth = 1;
@@ -170,7 +163,10 @@ class _LineChartPainter extends CustomPainter {
 
   void _paintText(Canvas canvas, String text, Offset offset, {required TextAlign align, double? width}) {
     final painter = TextPainter(
-      text: TextSpan(text: text, style: TextStyle(color: labelColor, fontSize: 11)),
+      text: TextSpan(
+        text: text,
+        style: TextStyle(color: labelColor, fontSize: 11),
+      ),
       textAlign: align,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: width ?? _yLabelWidth);
@@ -179,6 +175,5 @@ class _LineChartPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_LineChartPainter oldDelegate) =>
-      oldDelegate.progress != progress || oldDelegate.points != points || oldDelegate.lineColor != lineColor;
+  bool shouldRepaint(_LineChartPainter oldDelegate) => oldDelegate.progress != progress || oldDelegate.points != points || oldDelegate.lineColor != lineColor;
 }

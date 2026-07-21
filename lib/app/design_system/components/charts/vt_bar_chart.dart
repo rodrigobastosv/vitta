@@ -2,33 +2,38 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
+import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
 
 class VTBarChart extends StatelessWidget {
-  const VTBarChart({required this.bars, this.referenceValue, this.referenceColor, this.emptySlotColor, this.height = 140, super.key});
+  const VTBarChart({required this.bars, this.referenceValue, this.referenceColor, this.emptySlotColor, this.height = 140, this.semanticLabel, super.key});
 
   final List<VTBarChartBar> bars;
   final double? referenceValue;
   final Color? referenceColor;
   final Color? emptySlotColor;
   final double height;
+  final String? semanticLabel;
 
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
-      builder: (context, growth, _) => SizedBox(
-        height: height,
-        width: double.infinity,
-        child: CustomPaint(
-          painter: _BarChartPainter(
-            bars: bars,
-            growth: growth,
-            referenceValue: referenceValue,
-            referenceColor: referenceColor ?? colorScheme.onSurfaceVariant,
-            emptySlotColor: emptySlotColor ?? colorScheme.onSurface.withValues(alpha: 0.06),
+    return VTSemanticSummary(
+      label: semanticLabel,
+      child: TweenAnimationBuilder<double>(
+        tween: Tween(begin: 0, end: 1),
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeOutCubic,
+        builder: (context, growth, _) => SizedBox(
+          height: height,
+          width: double.infinity,
+          child: CustomPaint(
+            painter: _BarChartPainter(
+              bars: bars,
+              growth: growth,
+              referenceValue: referenceValue,
+              referenceColor: referenceColor ?? colorScheme.onSurfaceVariant,
+              emptySlotColor: emptySlotColor ?? colorScheme.onSurface.withValues(alpha: 0.06),
+            ),
           ),
         ),
       ),
@@ -37,13 +42,7 @@ class VTBarChart extends StatelessWidget {
 }
 
 class _BarChartPainter extends CustomPainter {
-  _BarChartPainter({
-    required this.bars,
-    required this.growth,
-    required this.referenceValue,
-    required this.referenceColor,
-    required this.emptySlotColor,
-  });
+  _BarChartPainter({required this.bars, required this.growth, required this.referenceValue, required this.referenceColor, required this.emptySlotColor});
 
   final List<VTBarChartBar> bars;
   final double growth;
@@ -102,11 +101,7 @@ class _BarChartPainter extends CustomPainter {
     required Radius radius,
   }) {
     final barHeight = size.height * (bar.total / highestValue) * growth;
-    final barRect = RRect.fromRectAndCorners(
-      Rect.fromLTWH(left, size.height - barHeight, width, barHeight),
-      topLeft: radius,
-      topRight: radius,
-    );
+    final barRect = RRect.fromRectAndCorners(Rect.fromLTWH(left, size.height - barHeight, width, barHeight), topLeft: radius, topRight: radius);
 
     canvas
       ..save()
