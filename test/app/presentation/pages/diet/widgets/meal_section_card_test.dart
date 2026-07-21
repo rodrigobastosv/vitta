@@ -55,6 +55,20 @@ void main() {
     expect(find.text('Oatmeal'), findsOneWidget);
   });
 
+  testWidgets('expanding animates rather than snapping the contents in', (tester) async {
+    await pumpMealSectionCard(tester, section: buildBreakfast());
+
+    await tester.tap(find.text('Breakfast'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+
+    final midFlight = tester.getSize(find.byType(AnimatedSize)).height;
+
+    await tester.pumpAndSettle();
+
+    expect(tester.getSize(find.byType(AnimatedSize)).height, greaterThan(midFlight));
+  });
+
   testWidgets('shows the add-to-meal cta and reports taps when onAddFood is provided', (tester) async {
     var added = false;
     await pumpMealSectionCard(tester, section: buildBreakfast(), onAddFood: () => added = true);

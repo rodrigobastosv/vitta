@@ -308,6 +308,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingBackAction => 'Back';
 
   @override
+  String get delete => 'Delete';
+
+  @override
   String get retry => 'Retry';
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/meal_scan_action.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 

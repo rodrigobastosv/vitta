@@ -308,6 +308,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboardingBackAction => 'Voltar';
 
   @override
+  String get delete => 'Excluir';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override
