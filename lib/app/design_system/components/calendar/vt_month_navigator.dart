@@ -20,9 +20,9 @@ class VTMonthNavigator extends StatelessWidget {
   Widget build(BuildContext context) => Row(
     mainAxisAlignment: .spaceBetween,
     children: [
-      IconButton(icon: const Icon(Icons.chevron_left), onPressed: onPreviousMonth),
+      IconButton(icon: const Icon(Icons.chevron_left), tooltip: context.l10n.previousMonth, onPressed: onPreviousMonth),
       Text(context.materialLocalizations.formatMonthYear(month), style: VTTextStyles.title(context)),
-      IconButton(icon: const Icon(Icons.chevron_right), onPressed: canGoToNextMonth ? onNextMonth : null),
+      IconButton(icon: const Icon(Icons.chevron_right), tooltip: context.l10n.nextMonth, onPressed: canGoToNextMonth ? onNextMonth : null),
     ],
   );
 }

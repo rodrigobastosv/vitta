@@ -98,6 +98,7 @@ class _LogSleepSheetState extends State<_LogSleepSheet> {
               5,
               (index) => IconButton(
                 icon: Icon(index < (_qualityRating ?? 0) ? Icons.star : Icons.star_border, color: Theme.of(context).colorScheme.primary),
+                tooltip: context.l10n.sleepQualityStars(index + 1),
                 onPressed: () => setState(() => _qualityRating = _qualityRating == index + 1 ? null : index + 1),
               ),
             ),

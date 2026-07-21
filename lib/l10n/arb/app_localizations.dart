@@ -404,6 +404,36 @@ abstract class AppLocalizations {
   /// **'Workout tracking is on its way.'**
   String get workoutComingSoonMessage;
 
+  /// No description provided for @previousMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous month'**
+  String get previousMonth;
+
+  /// No description provided for @nextMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Next month'**
+  String get nextMonth;
+
+  /// No description provided for @increase.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase'**
+  String get increase;
+
+  /// No description provided for @decrease.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease'**
+  String get decrease;
+
+  /// No description provided for @clearSearch.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear search'**
+  String get clearSearch;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

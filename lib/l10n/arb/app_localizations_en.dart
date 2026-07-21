@@ -165,6 +165,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutComingSoonMessage => 'Workout tracking is on its way.';
 
   @override
+  String get previousMonth => 'Previous month';
+
+  @override
+  String get nextMonth => 'Next month';
+
+  @override
+  String get increase => 'Increase';
+
+  @override
+  String get decrease => 'Decrease';
+
+  @override
+  String get clearSearch => 'Clear search';
+
+  @override
   String get retry => 'Retry';
 
   @override

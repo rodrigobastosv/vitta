@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> pumpStepper(WidgetTester tester, TextEditingController controller) => tester.pumpWidget(
   MaterialApp(
     theme: VTTheme.light,
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(body: VTStepper(controller: controller)),
   ),
 );

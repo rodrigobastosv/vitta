@@ -61,9 +61,9 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
             Row(
               mainAxisAlignment: .spaceBetween,
               children: [
-                IconButton(icon: const Icon(Icons.chevron_left), onPressed: () => _changeMonth(-1)),
+                IconButton(icon: const Icon(Icons.chevron_left), tooltip: context.l10n.previousMonth, onPressed: () => _changeMonth(-1)),
                 Text(materialLocalizations.formatMonthYear(_displayedMonth), style: VTTextStyles.title(context)),
-                IconButton(icon: const Icon(Icons.chevron_right), onPressed: isCurrentMonth ? null : () => _changeMonth(1)),
+                IconButton(icon: const Icon(Icons.chevron_right), tooltip: context.l10n.nextMonth, onPressed: isCurrentMonth ? null : () => _changeMonth(1)),
               ],
             ),
             const VTGap.m(),

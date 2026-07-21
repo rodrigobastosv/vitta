@@ -5,4 +5,6 @@ abstract class VTSpacing {
   static const double l = 24;
   static const double xl = 32;
   static const double xxl = 48;
+
+  static const double minTapTarget = 44;
 }
