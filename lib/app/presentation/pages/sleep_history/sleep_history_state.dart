@@ -9,7 +9,7 @@ class SleepHistoryState extends Equatable {
     this.sleepInMonth = const {},
     this.sleepInTrendRange = const {},
     this.trendRange = TrendRange.month,
-    this.isLoaded = false,
+    this.isLoaded = true,
   });
 
   final DateTime month;

@@ -13,6 +13,7 @@ import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/workout/entities/equipment.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/exercise_detail_extra.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
@@ -67,6 +68,8 @@ class WorkoutPage extends StatelessWidget {
         ),
         body: VTRefreshable(
           onRefresh: () => cubit.loadDate(state.date),
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(headerHeight: 260),
           padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
           children: [
             WorkoutDateSelector(

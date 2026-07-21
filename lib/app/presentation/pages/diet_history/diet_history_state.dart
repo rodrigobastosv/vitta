@@ -10,7 +10,7 @@ class DietHistoryState extends Equatable {
     this.macrosInMonth = const {},
     this.trendRange = TrendRange.month,
     this.macrosInTrendRange = const {},
-    this.isLoaded = false,
+    this.isLoaded = true,
   });
 
   final DateTime month;

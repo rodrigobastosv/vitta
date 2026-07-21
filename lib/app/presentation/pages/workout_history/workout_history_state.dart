@@ -8,7 +8,7 @@ class WorkoutHistoryState extends Equatable {
     this.workoutsInMonth = const {},
     this.workoutsInTrendRange = const {},
     this.trendRange = TrendRange.month,
-    this.isLoaded = false,
+    this.isLoaded = true,
   });
 
   final DateTime month;

@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_extra.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -70,6 +71,8 @@ class DietPage extends StatelessWidget {
         ),
         body: VTRefreshable(
           onRefresh: cubit.refresh,
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(headerHeight: 300),
           children: [
             DietDateSelector(
               date: state.date,

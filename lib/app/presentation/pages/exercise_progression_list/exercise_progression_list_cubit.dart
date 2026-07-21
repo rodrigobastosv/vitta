@@ -4,7 +4,7 @@ import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_
 import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_state.dart';
 
 class ExerciseProgressionListCubit extends PresentationCubit<ExerciseProgressionListState, ExerciseProgressionListPresentationEvent> {
-  ExerciseProgressionListCubit({required this._getLoggedExercisesUseCase}) : super(const ExerciseProgressionListState());
+  ExerciseProgressionListCubit({required this._getLoggedExercisesUseCase}) : super(const ExerciseProgressionListState(isLoaded: false));
 
   final GetLoggedExercisesUseCase _getLoggedExercisesUseCase;
 
@@ -16,8 +16,11 @@ class ExerciseProgressionListCubit extends PresentationCubit<ExerciseProgression
     final exercisesResult = await _getLoggedExercisesUseCase();
     exercisesResult.when(
       (error) => emitPresentation(ExerciseProgressionListError(message: error.message)),
-      (exercises) => emit(state.copyWith(exercises: exercises)),
+      (exercises) => emit(state.copyWith(isLoaded: true, exercises: exercises)),
     );
     emitPresentation(ExerciseProgressionListHideLoading());
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 }

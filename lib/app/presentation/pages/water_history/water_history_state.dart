@@ -9,7 +9,7 @@ class WaterHistoryState extends Equatable {
     this.waterInMonth = const {},
     this.waterInTrendRange = const {},
     this.trendRange = TrendRange.month,
-    this.isLoaded = false,
+    this.isLoaded = true,
   });
 
   final DateTime month;

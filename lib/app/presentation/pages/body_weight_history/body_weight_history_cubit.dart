@@ -7,7 +7,8 @@ import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_his
 import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_state.dart';
 
 class BodyWeightHistoryCubit extends PresentationCubit<BodyWeightHistoryState, BodyWeightHistoryPresentationEvent> {
-  BodyWeightHistoryCubit({required this._getBodyWeightInRangeUseCase, required this._getAppSettingsUseCase}) : super(const BodyWeightHistoryState());
+  BodyWeightHistoryCubit({required this._getBodyWeightInRangeUseCase, required this._getAppSettingsUseCase})
+    : super(const BodyWeightHistoryState(isLoaded: false));
 
   final GetBodyWeightInRangeUseCase _getBodyWeightInRangeUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
@@ -32,6 +33,9 @@ class BodyWeightHistoryCubit extends PresentationCubit<BodyWeightHistoryState, B
       to: to,
     );
     emitPresentation(BodyWeightHistoryHideLoading());
-    logsResult.when((error) => emitPresentation(BodyWeightHistoryError(message: error.message)), (value) => emit(state.copyWith(logs: value)));
+    logsResult.when((error) => emitPresentation(BodyWeightHistoryError(message: error.message)), (value) => emit(state.copyWith(isLoaded: true, logs: value)));
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 }

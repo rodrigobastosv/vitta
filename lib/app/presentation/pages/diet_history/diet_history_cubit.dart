@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/diet_history/diet_history_state.dar
 
 class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPresentationEvent> {
   DietHistoryCubit({required this._getMacrosInRangeUseCase, required this._getMacroGoalsUseCase})
-    : super(DietHistoryState(month: _monthOf(DateTime.now()), macroGoals: MacroGoals.defaultGoals));
+    : super(DietHistoryState(isLoaded: false, month: _monthOf(DateTime.now()), macroGoals: MacroGoals.defaultGoals));
 
   final GetMacrosInRangeUseCase _getMacrosInRangeUseCase;
   final GetMacroGoalsUseCase _getMacroGoalsUseCase;
@@ -27,10 +27,10 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
     emit(state.copyWith(macroGoals: _getMacroGoalsUseCase()));
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    emitPresentation(DietHistoryHideLoading());
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
-    emitPresentation(DietHistoryHideLoading());
   }
 
   Future<void> goToPreviousMonth() => _changeMonth(-1);

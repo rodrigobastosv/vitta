@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/routines/routines_state.dart';
 
 class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentationEvent> {
   RoutinesCubit({required this._getRoutinesUseCase, required this._deleteRoutineUseCase, required this._reorderRoutinesUseCase})
-    : super(const RoutinesState(routines: []));
+    : super(const RoutinesState(routines: [], isLoaded: false));
 
   final GetRoutinesUseCase _getRoutinesUseCase;
   final DeleteRoutineUseCase _deleteRoutineUseCase;
@@ -22,6 +22,9 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
     final routinesResult = await _getRoutinesUseCase();
     emitPresentation(RoutinesHideLoading());
     routinesResult.when((error) => emitPresentation(RoutinesError(message: error.message)), (value) => emit(RoutinesState(routines: value)));
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> deleteRoutine({required String routineId}) async {

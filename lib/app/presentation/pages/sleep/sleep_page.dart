@@ -8,6 +8,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_presentation_event.dart';
@@ -53,6 +54,8 @@ class SleepPage extends StatelessWidget {
         ),
         body: VTRefreshable(
           onRefresh: cubit.loadRecent,
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(headerHeight: 240),
           children: [
             if (state.logs.isEmpty)
               VTEmptyState(

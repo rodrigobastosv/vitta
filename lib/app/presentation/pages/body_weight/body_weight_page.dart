@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_presentation_event.dart';
@@ -57,6 +58,8 @@ class BodyWeightPage extends StatelessWidget {
               ),
         body: VTRefreshable(
           onRefresh: cubit.loadRecent,
+          isLoaded: state.isLoaded,
+          skeleton: const ListSkeleton(headerHeight: 220),
           hasData: state.logs.isNotEmpty,
           emptyState: VTEmptyState(
             icon: Icons.monitor_weight_outlined,

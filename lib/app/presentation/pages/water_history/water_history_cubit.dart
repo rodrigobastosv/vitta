@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/water_history/water_history_state.d
 
 class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistoryPresentationEvent> {
   WaterHistoryCubit({required this._getWaterInRangeUseCase, required this._getWaterGoalUseCase})
-    : super(WaterHistoryState(month: _monthOf(DateTime.now()), dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl));
+    : super(WaterHistoryState(isLoaded: false, month: _monthOf(DateTime.now()), dailyGoalMl: WaterLocalDataSource.defaultDailyGoalMl));
 
   final GetWaterInRangeUseCase _getWaterInRangeUseCase;
   final GetWaterGoalUseCase _getWaterGoalUseCase;
@@ -32,10 +32,10 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
     emit(state.copyWith(dailyGoalMl: _getWaterGoalUseCase()));
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    emitPresentation(WaterHistoryHideLoading());
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
-    emitPresentation(WaterHistoryHideLoading());
   }
 
   Future<void> goToPreviousMonth() => _changeMonth(-1);

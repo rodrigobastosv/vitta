@@ -30,6 +30,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     required this._markDietIntroSeenUseCase,
   }) : super(
          DietState(
+           isLoaded: false,
            date: _dateOnly(DateTime.now()),
            dailyMacros: const DailyMacros(entries: []),
            macroGoals: MacroGoals.defaultGoals,
@@ -85,8 +86,11 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     emitPresentation(DietHideLoading());
     dailyMacrosResult.when(
       (error) => emitPresentation(DietError(message: error.message, date: date)),
-      (value) => emit(state.copyWith(date: date, dailyMacros: value, macroGoals: macroGoals)),
+      (value) => emit(state.copyWith(isLoaded: true, date: date, dailyMacros: value, macroGoals: macroGoals)),
     );
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
   }
 
   Future<void> loadMonthMacros(DateTime month) async {

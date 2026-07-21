@@ -4,7 +4,7 @@ import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_p
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_state.dart';
 
 class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, ReminderHistoryPresentationEvent> {
-  ReminderHistoryCubit({required this._getRemindersInRangeUseCase}) : super(ReminderHistoryState(month: _monthOf(DateTime.now())));
+  ReminderHistoryCubit({required this._getRemindersInRangeUseCase}) : super(ReminderHistoryState(isLoaded: false, month: _monthOf(DateTime.now())));
 
   final GetRemindersInRangeUseCase _getRemindersInRangeUseCase;
 

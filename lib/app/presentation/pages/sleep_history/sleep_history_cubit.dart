@@ -8,7 +8,7 @@ import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_state.d
 
 class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistoryPresentationEvent> {
   SleepHistoryCubit({required this._getSleepInRangeUseCase, required this._getSleepGoalUseCase})
-    : super(SleepHistoryState(month: _monthOf(DateTime.now()), durationGoalHours: SleepLocalDataSource.defaultDurationGoalHours));
+    : super(SleepHistoryState(isLoaded: false, month: _monthOf(DateTime.now()), durationGoalHours: SleepLocalDataSource.defaultDurationGoalHours));
 
   final GetSleepInRangeUseCase _getSleepInRangeUseCase;
   final GetSleepGoalUseCase _getSleepGoalUseCase;
@@ -32,10 +32,10 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
     emit(state.copyWith(durationGoalHours: _getSleepGoalUseCase()));
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    emitPresentation(SleepHistoryHideLoading());
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
-    emitPresentation(SleepHistoryHideLoading());
   }
 
   Future<void> goToPreviousMonth() => _changeMonth(-1);
