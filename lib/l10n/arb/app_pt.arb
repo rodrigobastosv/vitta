@@ -231,7 +231,7 @@
   "mealScanLogAction": "Adicionar ao diário",
   "mealScanIncomplete": "Escolha pelo menos um item com uma quantidade válida.",
   "mealScanLoggedTitle": "Refeição adicionada",
-  "mealScanLoggedMessage": "Os itens detectados foram registrados no seu dia.",
+  "mealScanLoggedMessage": "Tudo o que você manteve já está no seu dia.",
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
@@ -621,7 +621,7 @@
   "editProfileTitle": "Editar perfil",
   "editProfileSaveAction": "Salvar",
   "profileUpdatedToast": "Perfil atualizado",
-  "profileUpdatedToastMessage": "Suas alterações foram salvas.",
+  "profileUpdatedToastMessage": "Seu perfil está atualizado.",
   "muscleGroupAbdominals": "Abdômen",
   "muscleGroupAbductors": "Abdutores",
   "muscleGroupAdductors": "Adutores",

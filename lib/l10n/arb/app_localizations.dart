@@ -1121,7 +1121,7 @@ abstract class AppLocalizations {
   /// No description provided for @mealScanLoggedMessage.
   ///
   /// In en, this message translates to:
-  /// **'The detected items were logged to your day.'**
+  /// **'Everything you kept is now in your day.'**
   String get mealScanLoggedMessage;
 
   /// No description provided for @dietCaloriesPer100g.
@@ -2591,7 +2591,7 @@ abstract class AppLocalizations {
   /// No description provided for @profileUpdatedToastMessage.
   ///
   /// In en, this message translates to:
-  /// **'Your changes were saved.'**
+  /// **'Your profile is up to date.'**
   String get profileUpdatedToastMessage;
 
   /// No description provided for @muscleGroupAbdominals.

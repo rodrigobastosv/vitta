@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
@@ -20,9 +21,7 @@ class ReminderTile extends StatelessWidget {
 
   void _onChanged(bool? value) {
     final completed = value ?? false;
-    if (completed) {
-      VTHaptics.success();
-    } else {
+    if (!completed) {
       VTHaptics.selection();
     }
     onToggle!(completed);
@@ -38,7 +37,11 @@ class ReminderTile extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.xs),
       child: Row(
         children: [
-          Checkbox(value: completed, shape: const CircleBorder(), onChanged: onToggle == null ? null : _onChanged),
+          VTCelebration(
+            trigger: completed,
+            size: VTCelebrationSize.small,
+            child: Checkbox(value: completed, shape: const CircleBorder(), onChanged: onToggle == null ? null : _onChanged),
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

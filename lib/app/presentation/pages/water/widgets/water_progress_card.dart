@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
+import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
@@ -42,21 +43,24 @@ class WaterProgressCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              VTMacroRing(
-                value: progress,
-                color: ringColor,
-                size: 120,
-                child: Column(
-                  mainAxisSize: .min,
-                  children: [
-                    Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.headline(context)),
-                    Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
-                    const VTGap.xs(),
-                    Text(
-                      reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
-                      style: VTTextStyles.overline(context).copyWith(color: reached ? VTColors.success : VTColors.water, fontWeight: .w700),
-                    ),
-                  ],
+              VTCelebration(
+                trigger: reached,
+                child: VTMacroRing(
+                  value: progress,
+                  color: ringColor,
+                  size: 120,
+                  child: Column(
+                    mainAxisSize: .min,
+                    children: [
+                      Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.headline(context)),
+                      Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
+                      const VTGap.xs(),
+                      Text(
+                        reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
+                        style: VTTextStyles.overline(context).copyWith(color: reached ? VTColors.success : VTColors.water, fontWeight: .w700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const VTGap.l(),

@@ -7,6 +7,7 @@ abstract class VTMotion {
   static const Duration transition = Duration(milliseconds: 250);
   static const Duration entrance = Duration(milliseconds: 400);
   static const Duration data = Duration(milliseconds: 800);
+  static const Duration celebration = Duration(milliseconds: 1400);
 
   static const Duration staggerStep = Duration(milliseconds: 60);
   static const int maxStaggerSteps = 6;

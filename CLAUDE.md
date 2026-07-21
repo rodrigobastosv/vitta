@@ -124,6 +124,22 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Celebration
+
+`VTCelebration` (`design_system/components/general/`, issue #163) wraps a widget and bursts confetti when its `trigger` flips **false → true**. It is hand-rolled (a `CustomPainter` over an `AnimationController`) rather than a Lottie/Rive dependency — the same "own the look" call the charts and `VTWeightPicker` make, and it avoids shipping a third-party animation asset whose licence would have to be cleared for App Store submission. Every call site goes through the one component, so swapping the visual for a Lottie file later is a single-widget change.
+
+**It fires on the edge, never on the state.** `didUpdateWidget` requires `widget.trigger && !oldWidget.trigger`; triggering off the state alone would re-fire on every unrelated rebuild, which is the difference between a reward and an irritation. Pinned by a test, verified by mutation.
+
+**It resets itself.** `forward()` leaves the controller *completed*, not dismissed, so gating the painter on `isDismissed` alone leaves an invisible burst in the tree forever. `_celebrate()` awaits the run then `reset()`s (guarded on `mounted`).
+
+**It honours reduce-motion.** `MediaQuery.disableAnimationsOf(context)` returns the child untouched — a celebration is exactly the kind of motion someone turns that setting on to avoid. Also pinned by mutation.
+
+**Sparingly, and sized to the moment.** Four milestones: finishing a workout (`WorkoutState.isFinished`), closing the calorie ring (`GoalAdherence.met`), hitting the water goal (`WaterProgressCard`'s `reached`), and ticking a reminder. The first three are all **once-a-day, goal-met** moments on a headline metric, which is the bar — the reminder tick is the exception and uses `VTCelebrationSize.small` because it is the most repeated action in the app and a full burst there would go stale within a day. **Do not add a fifth without asking what it costs the others** — the value is in scarcity, and anything that can fire more than once a day needs the small variant at most. The burst carries `VTHaptics.success()` itself, so a call site that celebrates must *not* also fire its own success haptic (`ReminderTile` now only fires `.selection()` on un-completing).
+
+## Toast copy is the app's voice
+
+Audited end to end (issue #163). It is more consistent than expected — titles are uniformly short noun phrases ("Meals copied", "Sleep synced", "Profile updated") and that is the pattern to keep. The one real drift was **passive voice**: "The detected items were logged to your day" and "Your changes were saved" sat against an otherwise active, warm voice ("You're all set", "Saved as a food you can log"). Both were rewritten active. `profileAccountDeletedMessage` stays passive deliberately — the gravity suits it.
+
 ## Skeletons, and the loaded-vs-empty distinction
 
 The global overlay stays for **writes**; an initial **read** shows a `VTSkeleton` instead (issue #163). The overlay is right for a blocking write, but for a read it hides structure the app already knows it is about to draw, and makes the app feel slower than it is.

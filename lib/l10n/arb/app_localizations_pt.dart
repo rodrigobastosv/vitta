@@ -549,7 +549,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealScanLoggedTitle => 'Refeição adicionada';
 
   @override
-  String get mealScanLoggedMessage => 'Os itens detectados foram registrados no seu dia.';
+  String get mealScanLoggedMessage => 'Tudo o que você manteve já está no seu dia.';
 
   @override
   String dietCaloriesPer100g(int calories) {
@@ -1383,7 +1383,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get profileUpdatedToast => 'Perfil atualizado';
 
   @override
-  String get profileUpdatedToastMessage => 'Suas alterações foram salvas.';
+  String get profileUpdatedToastMessage => 'Seu perfil está atualizado.';
 
   @override
   String get muscleGroupAbdominals => 'Abdômen';
