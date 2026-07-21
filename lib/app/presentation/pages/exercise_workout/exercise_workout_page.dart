@@ -30,9 +30,11 @@ class ExerciseWorkoutPage extends StatelessWidget {
   final ExerciseWorkoutExtra extra;
 
   Future<void> _finish(BuildContext context, ExerciseWorkoutCubit cubit, ExerciseWorkoutState state) async {
-    await cubit.setCompleted(completed: !state.isCompleted);
-    if (context.mounted && !state.isCompleted) {
-      Navigator.of(context).pop();
+    final navigator = Navigator.of(context);
+    final wasCompleted = state.isCompleted;
+    final succeeded = await cubit.setCompleted(completed: !wasCompleted);
+    if (succeeded && !wasCompleted) {
+      navigator.pop();
     }
   }
 

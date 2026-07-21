@@ -66,14 +66,23 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
     );
   }
 
-  Future<void> setCompleted({required bool completed}) async {
+  Future<bool> setCompleted({required bool completed}) async {
     if (completed && !state.canComplete) {
-      return;
+      return false;
     }
     emitPresentation(ExerciseWorkoutShowLoading());
     final updatedResult = await _setWorkoutExerciseCompletedUseCase(workoutExerciseId: state.workoutExercise.id, completed: completed);
     emitPresentation(ExerciseWorkoutHideLoading());
-    updatedResult.when((error) => emitPresentation(ExerciseWorkoutError(message: error.message)), (updated) => emit(state.copyWith(workoutExercise: updated)));
+    return updatedResult.when(
+      (error) {
+        emitPresentation(ExerciseWorkoutError(message: error.message));
+        return false;
+      },
+      (updated) {
+        emit(state.copyWith(workoutExercise: updated));
+        return true;
+      },
+    );
   }
 
   WorkoutExercise _withSets(List<WorkoutSet> sets) => WorkoutExercise(

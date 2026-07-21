@@ -18,8 +18,6 @@ class VTRestTimer extends StatelessWidget {
     super.key,
   });
 
-  static const Duration _urgentFrom = Duration(seconds: 10);
-
   final Duration remaining;
   final double progress;
   final VoidCallback onExtend;
@@ -34,61 +32,57 @@ class VTRestTimer extends StatelessWidget {
     return '$minutes:$seconds';
   }
 
-  bool get _isUrgent => remaining <= _urgentFrom;
+  /// Green while there is time, amber as it runs down, red at the end. Every
+  /// stop along the lerp clears 4.5:1 against white, so the ink never changes.
+  Color get _background => switch (progress) {
+    final value when value > 0.5 => Color.lerp(VTColors.warningStrong, VTColors.green, (value - 0.5) * 2)!,
+    final value => Color.lerp(VTColors.error, VTColors.warningStrong, value * 2)!,
+  };
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final background = _isUrgent ? VTColors.coral : VTColors.green;
-    final ink = VTColors.inkOn(background);
-    return DecoratedBox(
-      decoration: BoxDecoration(color: background, borderRadius: VTRadius.borderRadiusL),
-      child: Column(
-        mainAxisSize: .min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.s, VTSpacing.xs),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: .start,
-                    mainAxisSize: .min,
-                    children: [
-                      Text(
-                        _formatted,
-                        style: VTTextStyles.headline(context).copyWith(color: ink, fontFeatures: const [FontFeature.tabularFigures()]),
-                      ),
-                      Text(
-                        label ?? l10n.workoutRestTimerLabel,
-                        style: VTTextStyles.caption(context).copyWith(color: ink.withValues(alpha: 0.85)),
-                        maxLines: 1,
-                        overflow: .ellipsis,
-                      ),
-                    ],
+    const ink = VTColors.onGreen;
+    return TweenAnimationBuilder<Color?>(
+      tween: ColorTween(end: _background),
+      duration: const Duration(seconds: 1),
+      builder: (context, background, child) => DecoratedBox(
+        decoration: BoxDecoration(color: background ?? VTColors.green, borderRadius: VTRadius.borderRadiusL),
+        child: child,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.s, VTSpacing.xs),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: .start,
+                mainAxisSize: .min,
+                children: [
+                  Text(
+                    _formatted,
+                    style: VTTextStyles.headline(context).copyWith(color: ink, fontFeatures: const [FontFeature.tabularFigures()]),
                   ),
-                ),
-                IconButton(onPressed: onShorten, icon: const Icon(Icons.remove), color: ink, tooltip: l10n.workoutRestShortenAction),
-                IconButton(onPressed: onExtend, icon: const Icon(Icons.add), color: ink, tooltip: l10n.workoutRestExtendAction),
-                if (onConfigure != null) IconButton(onPressed: onConfigure, icon: const Icon(Icons.tune), color: ink, tooltip: l10n.workoutRestConfigureAction),
-                const VTGap.xs(),
-                TextButton(
-                  onPressed: onSkip,
-                  style: TextButton.styleFrom(foregroundColor: ink),
-                  child: Text(l10n.workoutRestSkipAction),
-                ),
-              ],
+                  Text(
+                    label ?? l10n.workoutRestTimerLabel,
+                    style: VTTextStyles.caption(context).copyWith(color: ink.withValues(alpha: 0.85)),
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4)),
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(end: progress),
-              duration: const Duration(seconds: 1),
-              builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 5, color: ink, backgroundColor: ink.withValues(alpha: 0.24)),
+            IconButton(onPressed: onShorten, icon: const Icon(Icons.remove), color: ink, tooltip: l10n.workoutRestShortenAction),
+            IconButton(onPressed: onExtend, icon: const Icon(Icons.add), color: ink, tooltip: l10n.workoutRestExtendAction),
+            if (onConfigure != null) IconButton(onPressed: onConfigure, icon: const Icon(Icons.tune), color: ink, tooltip: l10n.workoutRestConfigureAction),
+            const VTGap.xs(),
+            TextButton(
+              onPressed: onSkip,
+              style: TextButton.styleFrom(foregroundColor: ink),
+              child: Text(l10n.workoutRestSkipAction),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
