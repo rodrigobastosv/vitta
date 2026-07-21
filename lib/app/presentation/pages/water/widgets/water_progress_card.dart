@@ -4,7 +4,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
+import 'package:vitta/app/design_system/components/general/vt_water_fill.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
@@ -29,12 +29,11 @@ class WaterProgressCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = context.colorScheme;
     final consumedMl = dailyWater.totalMl;
     final progress = dailyGoalMl <= 0 ? 0.0 : (consumedMl / dailyGoalMl).clamp(0, 1).toDouble();
     final reached = progress >= 1;
     final leftMl = (dailyGoalMl - consumedMl).clamp(0, dailyGoalMl).toDouble();
-    final ringColor = consumedMl <= 0 ? colorScheme.primary : (reached ? VTColors.success : VTColors.water);
+    final accent = reached ? VTColors.success : VTColors.water;
     final unit = unitSystem.volumeUnitLabel;
 
     return VTCard(
@@ -43,30 +42,12 @@ class WaterProgressCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              VTCelebration(
-                trigger: reached,
-                child: VTMacroRing(
-                  value: progress,
-                  color: ringColor,
-                  size: 120,
-                  child: Column(
-                    mainAxisSize: .min,
-                    children: [
-                      Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.headline(context)),
-                      Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
-                      const VTGap.xs(),
-                      Text(
-                        reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
-                        style: VTTextStyles.overline(context).copyWith(color: reached ? VTColors.success : VTColors.water, fontWeight: .w700),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              VTCelebration(trigger: reached, child: VTWaterFill(value: progress, color: accent)),
               const VTGap.l(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: .start,
+                  mainAxisSize: .min,
                   children: [
                     if (onEditGoal != null)
                       Align(
@@ -80,11 +61,12 @@ class WaterProgressCard extends StatelessWidget {
                           onPressed: onEditGoal,
                         ),
                       ),
-                    _metric(
-                      context,
-                      icon: Icons.flag_rounded,
-                      value: '${unitSystem.millilitersToDisplayVolume(dailyGoalMl).round()} $unit',
-                      label: l10n.waterGoalMetric,
+                    Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.display(context)),
+                    Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
+                    const VTGap.xs(),
+                    Text(
+                      reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
+                      style: VTTextStyles.overline(context).copyWith(color: accent, fontWeight: .w700),
                     ),
                     const VTGap.m(),
                     _metric(context, icon: Icons.local_drink_rounded, value: '${dailyWater.entries.length}', label: l10n.waterLogsMetric),

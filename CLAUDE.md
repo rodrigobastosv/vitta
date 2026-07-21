@@ -332,6 +332,16 @@ Charts are hand-rolled `VT` components under `design_system/components/charts/`,
 
 `VTBarChart`/`VTDistributionBar` take `VTBarChartSegment`, so a colour+value pair is the one chart primitive. Bars animate in via `TweenAnimationBuilder` like the rest of the design system. Reach for these before writing a one-off `CustomPainter` in a page.
 
+## Water headline visual
+
+`WaterProgressCard`'s hero is a **`VTWaterFill`** (`design_system/components/general/`, issue #163), not the `VTMacroRing` diet/water/workout otherwise share — a glass-shaped `CustomPainter` that fills bottom-up to `value` with two scrolling sine waves. It's hand-rolled for the same "own the look" reason as the charts and `VTCelebration`, and it suits water specifically: a *level rising* reads as filling a glass in a way a sweeping arc never did, so tapping a quick-add and watching the water climb is the payoff the feature was missing. The ring stays everywhere else — this is the one metric where a fill beats it.
+
+**The fill level animates through `VTMotion.data` (a value growing to its figure, exactly like the ring); only the surface ripple loops.** The wave phase is a continuous `AnimationController.repeat()` — a loop, not a transition — so the file sits in `motion_tokens_test.dart`'s `_allowed` next to the spinner and skeleton. The painter clips both waves to the glass RRect, so a brimming (`value == 1`) or empty fill never pokes outside.
+
+**The readout sits *beside* the fill, never inside it** — deliberately, to sidestep the accent-avatar contrast trap. A number centred over a rising waterline would be over the card surface at the top and over saturated `VTColors.water` at the bottom, and no single ink colour clears WCAG against both; a moving boundary makes it worse. So the consumed total (`display`), the goal, and the left/reached line live in the column to the right, each over the plain card surface. `VTCelebration` wraps the fill (the `reached` edge), the fill turns `VTColors.success` when the goal is met, and `water_progress_card_test.dart` pins the reached copy and no-overflow at 320px in both locales.
+
+**Quick-add is meant to feel satisfying, and the fill is most of that.** `WaterQuickAddPills` fires `VTHaptics.selection()` (the discrete tick, not `.success()` — a sip is a small discrete act, and `reached` already carries the success burst + haptic) on each tap, and the tap drives the fill's rise. The presets (`200/300/500/750/1000` mL) are a glass→litre ladder and were kept as-is.
+
 ## Recipes
 
 A recipe is a set of foods eaten together (issue #63). The modelling decision that makes everything else small: **a recipe is stored as an ordinary `foods` row** with `source: 'recipe'`, whose per-100g macros are the roll-up of its ingredients. Logging a recipe is therefore the plain `logFood` path — search, the log sheet, editing, the calendar, adherence and the history charts all keep working untouched, and "add a recipe to my day" needs no new write path at all. The two alternatives were dropped for good reasons: expanding a recipe into one `food_log` per ingredient loses the recipe's identity in the day view, and hanging a nullable `recipe_id` off `food_logs` would force `food_id` nullable and give `FoodLogEntry`/`DailyMacros`/`MacroTotals`/history two cases to handle forever.

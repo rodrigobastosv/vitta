@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -32,7 +33,10 @@ class WaterQuickAddPills extends StatelessWidget {
                 color: VTColors.water.withValues(alpha: 0.12),
                 borderRadius: VTRadius.borderRadiusFull,
                 child: InkWell(
-                  onTap: () => onAdd(presetMl),
+                  onTap: () {
+                    VTHaptics.selection();
+                    onAdd(presetMl);
+                  },
                   borderRadius: VTRadius.borderRadiusFull,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m, vertical: VTSpacing.s),

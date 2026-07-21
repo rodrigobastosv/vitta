@@ -13,6 +13,9 @@ const _allowed = {
   // A continuous pulse, same as the spinner above. easeInOut is deliberate: a
   // pulse breathes symmetrically, where VTMotion.curve eases out of a change.
   'lib/app/design_system/components/general/vt_skeleton.dart',
+  // A continuous wave loop, not a transition - the fill level itself still
+  // animates through VTMotion.data; only the surface ripple loops.
+  'lib/app/design_system/components/general/vt_water_fill.dart',
 };
 
 void main() {
