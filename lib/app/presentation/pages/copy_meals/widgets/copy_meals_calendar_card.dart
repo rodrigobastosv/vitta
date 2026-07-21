@@ -4,6 +4,7 @@ import 'package:vitta/app/design_system/components/calendar/vt_calendar_weekday_
 import 'package:vitta/app/design_system/components/calendar/vt_month_navigator.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_cubit.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_state.dart';
 
@@ -29,6 +30,7 @@ class CopyMealsCalendarCard extends StatelessWidget {
         VTCalendarMonthGrid(
           month: state.month,
           dayColor: _dayColor,
+          allowsEmptySelection: true,
           selectedDay: state.sourceDate,
           isDayEnabled: (day) => day != state.targetDate,
           onDaySelected: cubit.selectSourceDate,
@@ -42,6 +44,6 @@ class CopyMealsCalendarCard extends StatelessWidget {
     if (macros == null || macros.entries.isEmpty) {
       return null;
     }
-    return macros.adherenceTo(state.macroGoals).color;
+    return VTColors.success;
   }
 }

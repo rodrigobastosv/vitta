@@ -5,7 +5,16 @@ import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTCalendarDayCell extends StatelessWidget {
-  const VTCalendarDayCell({required this.day, required this.isToday, required this.isFuture, this.valueColor, this.isSelected = false, this.onTap, super.key});
+  const VTCalendarDayCell({
+    required this.day,
+    required this.isToday,
+    required this.isFuture,
+    this.valueColor,
+    this.isSelected = false,
+    this.allowsEmptySelection = false,
+    this.onTap,
+    super.key,
+  });
 
   final DateTime day;
   final bool isToday;
@@ -14,6 +23,8 @@ class VTCalendarDayCell extends StatelessWidget {
   final Color? valueColor;
 
   final bool isSelected;
+
+  final bool allowsEmptySelection;
 
   final VoidCallback? onTap;
 
@@ -26,7 +37,7 @@ class VTCalendarDayCell extends StatelessWidget {
       // Gate on whether the day has data, not on isFuture: reminders live in the
       // future, and for the diet/water/sleep calendars a future day has no value
       // anyway, so it stays untappable there.
-      onTap: _hasValue && onTap != null
+      onTap: (_hasValue || allowsEmptySelection) && onTap != null
           ? () {
               VTHaptics.selection();
               onTap!();

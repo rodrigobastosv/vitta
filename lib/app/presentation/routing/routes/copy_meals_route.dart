@@ -6,7 +6,7 @@ import 'package:vitta/app/presentation/routing/vt_route.dart';
 
 class CopyMealsRoute extends VTRoute {
   @override
-  AppRoute get route => .dietCopy;
+  AppRoute get route => .copyMeals;
 
   @override
   GoRouterWidgetBuilder get builder =>

@@ -105,6 +105,8 @@
   "dietRecentTabLabel": "Recentes",
   "dietRecentEmptyTitle": "Nada registrado ainda",
   "dietRecentEmptyMessage": "Os alimentos que você registrar aparecerão aqui, prontos para adicionar de novo com um toque.",
+  "dietCopyMealsEmptyDayTitle": "Nada registrado nesse dia",
+  "dietCopyMealsEmptyDayMessage": "Escolha outro dia — este não tem refeições para copiar.",
   "retry": "Tentar novamente",
   "ok": "OK",
   "errorTitle": "Algo deu errado",

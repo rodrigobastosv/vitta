@@ -3,7 +3,7 @@ enum AppRoute {
   home('/'),
   diet('/diet'),
   dietIntro('/diet/intro'),
-  dietCopy('/diet/copy'),
+  copyMeals('/diet/copy-meals'),
   mealScan('/diet/meal-scan'),
   dietHistory('/diet/history'),
   dietDay('/diet/history/day'),

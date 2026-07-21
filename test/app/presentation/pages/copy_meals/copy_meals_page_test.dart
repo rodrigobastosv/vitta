@@ -5,8 +5,10 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
+import 'package:vitta/app/design_system/components/calendar/vt_calendar_day_cell.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
@@ -115,13 +117,25 @@ void main() {
     expect(tester.widget<VTPrimaryButton>(find.byType(VTPrimaryButton)).onPressed, isNotNull);
   });
 
-  testWidgets('a day with nothing logged cannot be picked as a source', (tester) async {
+  testWidgets('an empty day is pickable and says why it has nothing to offer', (tester) async {
     await pumpCopyMealsPage(tester, buildTestApp(cubit: buildCubit(macrosByDate: aDayWithBreakfastAndLunch())));
 
     await tester.tap(find.text('11'));
     await tester.pumpAndSettle();
 
     expect(find.byType(CopyMealsSelectionCard), findsNothing);
+    expect(find.text('Nothing logged that day'), findsOneWidget);
+    expect(find.text('No day picked'), findsNothing);
+  });
+
+  testWidgets('a day with meals is green rather than coloured by how well it went', (tester) async {
+    await pumpCopyMealsPage(tester, buildTestApp(cubit: buildCubit(macrosByDate: aDayWithBreakfastAndLunch())));
+
+    final cell = tester.widget<VTCalendarDayCell>(
+      find.ancestor(of: find.text('10'), matching: find.byType(VTCalendarDayCell)),
+    );
+
+    expect(cell.valueColor, VTColors.success);
   });
 
   testWidgets('the target day itself cannot be picked as a source', (tester) async {

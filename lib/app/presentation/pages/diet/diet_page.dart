@@ -50,7 +50,7 @@ class DietPage extends StatelessWidget {
               icon: const Icon(Icons.copy_all_outlined),
               tooltip: l10n.dietCopyMealsTitle,
               onPressed: () async {
-                final hasCopied = await context.pushRoute<bool>(.dietCopy, extra: CopyMealsExtra(targetDate: state.date));
+                final hasCopied = await context.pushRoute<bool>(.copyMeals, extra: CopyMealsExtra(targetDate: state.date));
                 if (hasCopied ?? false) {
                   await cubit.refresh();
                 }

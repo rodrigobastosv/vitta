@@ -722,6 +722,18 @@ abstract class AppLocalizations {
   /// **'Foods you log will show up here, ready to add again in one tap.'**
   String get dietRecentEmptyMessage;
 
+  /// No description provided for @dietCopyMealsEmptyDayTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged that day'**
+  String get dietCopyMealsEmptyDayTitle;
+
+  /// No description provided for @dietCopyMealsEmptyDayMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick another day — this one has no meals to copy.'**
+  String get dietCopyMealsEmptyDayMessage;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
