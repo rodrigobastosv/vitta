@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/core/goals/goal_adherence.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
+import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
@@ -45,20 +47,23 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
         children: [
           Row(
             children: [
-              VTMacroRing(
-                value: _getProgress(dailyMacros.totalCalories, macroGoals.calorieGoal),
-                color: ringColor,
-                child: Column(
-                  mainAxisSize: .min,
-                  children: [
-                    Text('$consumed', style: VTTextStyles.headline(context)),
-                    Text(l10n.dietCaloriesOfGoal(goal), style: VTTextStyles.caption(context)),
-                    const VTGap.xs(),
-                    Text(
-                      difference >= 0 ? l10n.dietCaloriesLeft(difference) : l10n.dietCaloriesOver(-difference),
-                      style: VTTextStyles.overline(context).copyWith(color: difference >= 0 ? colorScheme.primary : VTColors.error, fontWeight: .w700),
-                    ),
-                  ],
+              VTCelebration(
+                trigger: dailyMacros.entries.isNotEmpty && dailyMacros.adherenceTo(macroGoals) == GoalAdherence.met,
+                child: VTMacroRing(
+                  value: _getProgress(dailyMacros.totalCalories, macroGoals.calorieGoal),
+                  color: ringColor,
+                  child: Column(
+                    mainAxisSize: .min,
+                    children: [
+                      Text('$consumed', style: VTTextStyles.headline(context)),
+                      Text(l10n.dietCaloriesOfGoal(goal), style: VTTextStyles.caption(context)),
+                      const VTGap.xs(),
+                      Text(
+                        difference >= 0 ? l10n.dietCaloriesLeft(difference) : l10n.dietCaloriesOver(-difference),
+                        style: VTTextStyles.overline(context).copyWith(color: difference >= 0 ? colorScheme.primary : VTColors.error, fontWeight: .w700),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const VTGap.l(),

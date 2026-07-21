@@ -7,6 +7,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
+import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
@@ -90,7 +91,10 @@ class WorkoutPage extends StatelessWidget {
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
               VTAppearEffect(
-                child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
+                child: VTCelebration(
+                  trigger: state.isFinished,
+                  child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
+                ),
               ),
               const VTGap.m(),
               if (state.isFinished) ...[const VTAppearEffect(child: WorkoutFinishedCard()), const VTGap.m()],
