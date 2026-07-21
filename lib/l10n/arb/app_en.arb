@@ -121,6 +121,7 @@
   "workoutRestConfigureAction": "Rest length",
   "workoutRestSettingTitle": "Rest between sets",
   "workoutRestSettingHint": "Used every time you log a set.",
+  "workoutLastSetPrefillNote": "Prefilled from your last set",
   "retry": "Retry",
   "ok": "OK",
   "errorTitle": "Something went wrong",

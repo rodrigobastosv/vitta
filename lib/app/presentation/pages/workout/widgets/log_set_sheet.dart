@@ -9,6 +9,8 @@ import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> showLogSetSheet({
   required BuildContext context,
@@ -17,17 +19,26 @@ Future<void> showLogSetSheet({
   WorkoutSet? set,
   double? defaultLoadKg,
   int? defaultReps,
+  SetPrefill prefill = SetPrefill.none,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   builder: (context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set, defaultLoadKg: defaultLoadKg, defaultReps: defaultReps),
+    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set, defaultLoadKg: defaultLoadKg, defaultReps: defaultReps, prefill: prefill),
   ),
 );
 
 class LogSetSheet extends StatefulWidget {
-  const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, this.defaultLoadKg, this.defaultReps, super.key});
+  const LogSetSheet({
+    required this.unitSystem,
+    required this.onSubmit,
+    this.set,
+    this.defaultLoadKg,
+    this.defaultReps,
+    this.prefill = SetPrefill.none,
+    super.key,
+  });
 
   final UnitSystem unitSystem;
   final Future<Result<VTError, void>> Function({required int reps, required double weightKg}) onSubmit;
@@ -41,6 +52,9 @@ class LogSetSheet extends StatefulWidget {
   // starts where the last set left off rather than at the minimum.
   final int? defaultReps;
 
+  // Where the prefilled numbers came from, so the hint can say so truthfully.
+  final SetPrefill prefill;
+
   @override
   State<LogSetSheet> createState() => _LogSetSheetState();
 }
@@ -52,7 +66,11 @@ class _LogSetSheetState extends State<LogSetSheet> {
   late final TextEditingController _loadController = TextEditingController(text: _initialLoad());
   String? _errorMessage;
 
-  bool get _isPrefilled => widget.set == null && (widget.defaultLoadKg ?? 0) > 0;
+  String _hint(AppLocalizations l10n) => switch (widget.set == null ? widget.prefill : SetPrefill.none) {
+    SetPrefill.lastSet => l10n.workoutLastSetPrefillNote,
+    SetPrefill.bodyWeight => l10n.workoutBodyweightPrefillNote,
+    SetPrefill.none => l10n.workoutLoadHelper,
+  };
 
   String _initialLoad() {
     final set = widget.set;
@@ -87,14 +105,9 @@ class _LogSetSheetState extends State<LogSetSheet> {
           Row(
             children: [
               Expanded(
-                child: Column(
-                  crossAxisAlignment: .start,
-                  mainAxisSize: .min,
-                  children: [
-                    Text(l10n.workoutRepsLabel, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
-                    const VTGap.xs(),
-                    VTStepper(controller: _repsController),
-                  ],
+                child: InputDecorator(
+                  decoration: InputDecoration(labelText: l10n.workoutRepsLabel, contentPadding: EdgeInsets.zero),
+                  child: VTStepper(controller: _repsController),
                 ),
               ),
               const SizedBox(width: VTSpacing.m),
@@ -110,7 +123,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
             ],
           ),
           const VTGap.s(),
-          Text(_isPrefilled ? l10n.workoutBodyweightPrefillNote : l10n.workoutLoadHelper, style: VTTextStyles.caption(context)),
+          Text(_hint(l10n), style: VTTextStyles.caption(context)),
           if (_errorMessage case final message?) ...[const VTGap.s(), Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error))],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.workoutLogSetAction, onPressed: _submit),

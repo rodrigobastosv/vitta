@@ -183,8 +183,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietHistoryEmptyTitle => 'Nenhuma refeição registrada';
 
   @override
-  String get dietHistoryEmptyMessage =>
-      'Registre alguns dias de refeições e seu calendário, tendências e divisão por refeição aparecerão aqui.';
+  String get dietHistoryEmptyMessage => 'Registre alguns dias de refeições e seu calendário, tendências e divisão por refeição aparecerão aqui.';
 
   @override
   String get dietHistoryEmptyAction => 'Registrar refeição';
@@ -375,6 +374,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutRestSettingHint => 'Usado toda vez que você registra uma série.';
 
   @override
+  String get workoutLastSetPrefillNote => 'Preenchido com sua última série';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override
@@ -438,8 +440,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietIntroTrackTitle => 'Acompanhe sua evolução';
 
   @override
-  String get dietIntroTrackMessage =>
-      'Cada registro entra nas suas calorias e macros do dia, em um calendário e em tendências ao longo do tempo.';
+  String get dietIntroTrackMessage => 'Cada registro entra nas suas calorias e macros do dia, em um calendário e em tendências ao longo do tempo.';
 
   @override
   String get dietIntroGoalsTitle => 'Defina uma meta que combina com você';
@@ -1229,8 +1230,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboardingWelcomeTitle => 'Bem-vindo ao Vitta';
 
   @override
-  String get onboardingWelcomeMessage =>
-      'Comida, treinos, água, sono, peso e lembretes — tudo em um só lugar, para manter a consistência dia após dia.';
+  String get onboardingWelcomeMessage => 'Comida, treinos, água, sono, peso e lembretes — tudo em um só lugar, para manter a consistência dia após dia.';
 
   @override
   String get onboardingAccountBenefitMessage =>
@@ -1289,8 +1289,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumFreeTitle => 'Gratuito para sempre';
 
   @override
-  String get premiumFreeMessage =>
-      'Busca de alimentos, catálogo, receitas, água, sono, treinos, lembretes e todos os gráficos continuam gratuitos.';
+  String get premiumFreeMessage => 'Busca de alimentos, catálogo, receitas, água, sono, treinos, lembretes e todos os gráficos continuam gratuitos.';
 
   @override
   String get premiumComingSoonAction => 'Assinaturas em breve';
@@ -1445,8 +1444,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietModalityKeto => 'Cetogênica';
 
   @override
-  String get authAnonymousMessage =>
-      'Seus dados ficam só neste dispositivo. Crie uma conta para mantê-los seguros e acessá-los em qualquer aparelho.';
+  String get authAnonymousMessage => 'Seus dados ficam só neste dispositivo. Crie uma conta para mantê-los seguros e acessá-los em qualquer aparelho.';
 
   @override
   String authSignedInAsLabel(String email) {
@@ -1685,15 +1683,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutIntroLogTitle => 'Registre cada série';
 
   @override
-  String get workoutIntroLogMessage =>
-      'Adicione exercícios e anote repetições e carga — as séries vêm preenchidas da última vez, é só ajustar.';
+  String get workoutIntroLogMessage => 'Adicione exercícios e anote repetições e carga — as séries vêm preenchidas da última vez, é só ajustar.';
 
   @override
   String get workoutIntroProgressTitle => 'Veja sua evolução';
 
   @override
-  String get workoutIntroProgressMessage =>
-      'Volume, histórico e progressão por exercício são montados automaticamente conforme você treina.';
+  String get workoutIntroProgressMessage => 'Volume, histórico e progressão por exercício são montados automaticamente conforme você treina.';
 
   @override
   String get workoutIntroRoutineTitle => 'O que é uma rotina?';
@@ -1865,13 +1861,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutRoutineExerciseCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count exercícios',
-      one: '1 exercício',
-      zero: 'Nenhum exercício',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count exercícios', one: '1 exercício', zero: 'Nenhum exercício');
     return '$_temp0';
   }
 
@@ -1911,13 +1901,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutCompletedSummary(int sets) {
-    String _temp0 = intl.Intl.pluralLogic(
-      sets,
-      locale: localeName,
-      other: '$sets séries feitas',
-      one: '1 série feita',
-      zero: 'Nenhuma série',
-    );
+    String _temp0 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets séries feitas', one: '1 série feita', zero: 'Nenhuma série');
     return '$_temp0';
   }
 
@@ -1956,13 +1940,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutProgressionSessionCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Últimas $count sessões',
-      one: 'Última sessão',
-      zero: 'Nenhuma sessão',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Últimas $count sessões', one: 'Última sessão', zero: 'Nenhuma sessão');
     return '$_temp0';
   }
 
@@ -1973,8 +1951,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutProgressionListEmptyTitle => 'Nenhum exercício registrado ainda';
 
   @override
-  String get workoutProgressionListEmptyMessage =>
-      'Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.';
+  String get workoutProgressionListEmptyMessage => 'Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.';
 
   @override
   String get workoutHistoryTitle => 'Histórico';
@@ -1995,13 +1972,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String workoutHistoryVolumeSummary(int sessions, int sets) {
-    String _temp0 = intl.Intl.pluralLogic(
-      sessions,
-      locale: localeName,
-      other: '$sessions sessões',
-      one: '1 sessão',
-      zero: 'Nenhuma sessão',
-    );
+    String _temp0 = intl.Intl.pluralLogic(sessions, locale: localeName, other: '$sessions sessões', one: '1 sessão', zero: 'Nenhuma sessão');
     String _temp1 = intl.Intl.pluralLogic(sets, locale: localeName, other: '$sets séries', one: '1 série', zero: 'nenhuma série');
     return '$_temp0 · $_temp1';
   }
@@ -2010,6 +1981,5 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutMuscleSplitTitle => 'Volume por grupo muscular';
 
   @override
-  String get workoutMuscleSplitEmptyMessage =>
-      'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
+  String get workoutMuscleSplitEmptyMessage => 'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
 }

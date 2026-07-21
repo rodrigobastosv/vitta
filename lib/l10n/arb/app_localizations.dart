@@ -788,6 +788,12 @@ abstract class AppLocalizations {
   /// **'Used every time you log a set.'**
   String get workoutRestSettingHint;
 
+  /// No description provided for @workoutLastSetPrefillNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefilled from your last set'**
+  String get workoutLastSetPrefillNote;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

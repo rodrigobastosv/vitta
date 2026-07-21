@@ -22,6 +22,7 @@ import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_p
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_state.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/rest_length_sheet.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 
 class ExerciseWorkoutPage extends StatelessWidget {
@@ -154,6 +155,11 @@ class ExerciseWorkoutPage extends StatelessWidget {
                           unitSystem: extra.unitSystem,
                           defaultLoadKg: state.workoutExercise.sets.lastOrNull?.weightKg ?? extra.defaultLoadKg,
                           defaultReps: state.workoutExercise.sets.lastOrNull?.reps,
+                          prefill: switch ((state.workoutExercise.sets.lastOrNull, extra.defaultLoadKg)) {
+                            (final _?, _) => SetPrefill.lastSet,
+                            (null, final bodyWeight?) when bodyWeight > 0 => SetPrefill.bodyWeight,
+                            _ => SetPrefill.none,
+                          },
                           onSubmit: ({required reps, required weightKg}) => cubit.logSet(reps: reps, weightKg: weightKg),
                         ),
                         icon: const Icon(Icons.add),

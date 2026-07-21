@@ -116,6 +116,7 @@
   "workoutRestConfigureAction": "Duração do descanso",
   "workoutRestSettingTitle": "Descanso entre séries",
   "workoutRestSettingHint": "Usado toda vez que você registra uma série.",
+  "workoutLastSetPrefillNote": "Preenchido com sua última série",
   "retry": "Tentar novamente",
   "ok": "OK",
   "errorTitle": "Algo deu errado",
