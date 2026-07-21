@@ -195,8 +195,13 @@ abstract class CubitsFactories {
     recipe: recipe,
   );
 
-  static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase}) =>
-      OnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase());
+  static OnboardingCubit buildOnboardingCubit({
+    MockCompleteOnboardingUseCase? completeOnboardingUseCase,
+    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
+  }) => OnboardingCubit(
+    completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase(),
+    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+  );
 
   static WaterCubit buildWaterCubit({
     MockGetDailyWaterUseCase? getDailyWaterUseCase,

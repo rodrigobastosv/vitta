@@ -620,6 +620,48 @@ abstract class AppLocalizations {
   /// **'Not tracked yet'**
   String get homeNotTrackedYet;
 
+  /// No description provided for @onboardingFeaturesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Many things, one app'**
+  String get onboardingFeaturesTitle;
+
+  /// No description provided for @onboardingGoalsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a daily calorie target'**
+  String get onboardingGoalsTitle;
+
+  /// No description provided for @onboardingGoalsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You can change this any time, and we\'ll split it into protein, carbs and fat for you.'**
+  String get onboardingGoalsMessage;
+
+  /// No description provided for @onboardingGoalsSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip for now'**
+  String get onboardingGoalsSkipAction;
+
+  /// No description provided for @onboardingAccountTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep your data safe'**
+  String get onboardingAccountTitle;
+
+  /// No description provided for @onboardingNextAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNextAction;
+
+  /// No description provided for @onboardingBackAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get onboardingBackAction;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
