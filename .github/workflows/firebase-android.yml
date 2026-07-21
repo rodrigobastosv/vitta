@@ -72,7 +72,7 @@ jobs:
       - name: Build release APK
         run: flutter build apk --release --build-name="$BUILD_NAME" --build-number="${{ github.run_number }}"
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
 
