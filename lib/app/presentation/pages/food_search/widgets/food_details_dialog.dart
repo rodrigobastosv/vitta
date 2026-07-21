@@ -11,18 +11,17 @@ import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/macro_pill.dart';
 
-Future<void> showFoodDetailsDialog({required BuildContext context, required Food food, required Object heroTag}) =>
-    Navigator.of(context).push(
-      PageRouteBuilder<void>(
-        opaque: false,
-        barrierDismissible: true,
-        barrierColor: Colors.black54,
-        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        reverseTransitionDuration: VTMotion.transition,
-        pageBuilder: (context, animation, secondaryAnimation) => FoodDetailsDialog(food: food, heroTag: heroTag),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
-      ),
-    );
+Future<void> showFoodDetailsDialog({required BuildContext context, required Food food, required Object heroTag}) => Navigator.of(context).push(
+  PageRouteBuilder<void>(
+    opaque: false,
+    barrierDismissible: true,
+    barrierColor: Colors.black54,
+    barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+    reverseTransitionDuration: VTMotion.transition,
+    pageBuilder: (context, animation, secondaryAnimation) => FoodDetailsDialog(food: food, heroTag: heroTag),
+    transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
+  ),
+);
 
 class FoodDetailsDialog extends StatelessWidget {
   const FoodDetailsDialog({required this.food, required this.heroTag, super.key});

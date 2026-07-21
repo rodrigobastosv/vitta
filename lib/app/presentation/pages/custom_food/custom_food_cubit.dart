@@ -58,9 +58,7 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     scannedFactsResult.when(_onScanFailed, _applyScannedFacts);
   }
 
-  void _onScanFailed(VTError error) => emitPresentation(
-    error is PremiumRequiredError ? CustomFoodPremiumRequired() : CustomFoodError(message: error.message),
-  );
+  void _onScanFailed(VTError error) => emitPresentation(error is PremiumRequiredError ? CustomFoodPremiumRequired() : CustomFoodError(message: error.message));
 
   void _applyScannedFacts(ScannedNutritionFacts facts) {
     if (!facts.hasAnyValue) {

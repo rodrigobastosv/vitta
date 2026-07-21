@@ -14,12 +14,8 @@ class AuthState extends Equatable {
 
   bool get hasDraftPhoto => draftAvatarBytes != null;
 
-  AuthState copyWith({User? user}) => AuthState(
-    user: user ?? this.user,
-    draftAvatarId: draftAvatarId,
-    draftAvatarBytes: draftAvatarBytes,
-    draftAvatarExtension: draftAvatarExtension,
-  );
+  AuthState copyWith({User? user}) =>
+      AuthState(user: user ?? this.user, draftAvatarId: draftAvatarId, draftAvatarBytes: draftAvatarBytes, draftAvatarExtension: draftAvatarExtension);
 
   AuthState withPresetAvatar(String id) => AuthState(user: user, draftAvatarId: id);
 

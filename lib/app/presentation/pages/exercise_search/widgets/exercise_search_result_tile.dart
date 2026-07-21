@@ -40,8 +40,7 @@ class ExerciseSearchResultTile extends StatelessWidget {
               ],
             ),
           ),
-          if (onAdd != null)
-            IconButton(icon: const Icon(Icons.add_circle_outline), tooltip: l10n.exerciseDetailAddAction, onPressed: onAdd),
+          if (onAdd != null) IconButton(icon: const Icon(Icons.add_circle_outline), tooltip: l10n.exerciseDetailAddAction, onPressed: onAdd),
         ],
       ),
     );

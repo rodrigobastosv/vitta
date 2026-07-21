@@ -129,16 +129,12 @@ class WorkoutExerciseCard extends StatelessWidget {
                       const VTGap.s(),
                       const Divider(height: 1),
                       const VTGap.s(),
-                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n)
-                          case final summary?) ...[
+                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n) case final summary?) ...[
                         Row(
                           children: [
                             Icon(Icons.history, size: 14, color: colorScheme.onSurfaceVariant),
                             const VTGap.xs(),
-                            Text(
-                              l10n.workoutLastTimeLabel(summary),
-                              style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
-                            ),
+                            Text(l10n.workoutLastTimeLabel(summary), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
                           ],
                         ),
                         const VTGap.s(),
@@ -150,10 +146,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                         )
                       else
                         DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: colorScheme.onSurface.withValues(alpha: 0.035),
-                            borderRadius: VTRadius.borderRadiusM,
-                          ),
+                          decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.035), borderRadius: VTRadius.borderRadiusM),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
                             child: Column(

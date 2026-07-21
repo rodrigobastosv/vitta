@@ -5,7 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -35,28 +35,28 @@ class SleepHistoryPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.sleepHistoryTitle)),
-        body: !state.hasData
-            ? VTEmptyState(
-                icon: Icons.bedtime_outlined,
-                title: l10n.sleepHistoryEmptyTitle,
-                message: l10n.sleepHistoryEmptyMessage,
-                actionLabel: l10n.sleepHistoryEmptyAction,
-                onAction: () => Navigator.of(context).pop(),
-              )
-            : ListView(
-                padding: const EdgeInsets.all(VTSpacing.m),
-                children: [
-                  SleepHistoryCalendarCard(cubit: cubit, state: state),
-                  const VTGap.l(),
-                  Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
-                  const VTGap.m(),
-                  TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-                  const VTGap.m(),
-                  SleepDurationTrendCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange, durationGoalHours: state.durationGoalHours),
-                  const VTGap.m(),
-                  SleepQualitySplitCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange),
-                ],
-              ),
+        body: VTRefreshable(
+          onRefresh: cubit.refresh,
+          hasData: state.hasData,
+          emptyState: VTEmptyState(
+            icon: Icons.bedtime_outlined,
+            title: l10n.sleepHistoryEmptyTitle,
+            message: l10n.sleepHistoryEmptyMessage,
+            actionLabel: l10n.sleepHistoryEmptyAction,
+            onAction: () => Navigator.of(context).pop(),
+          ),
+          children: [
+            SleepHistoryCalendarCard(cubit: cubit, state: state),
+            const VTGap.l(),
+            Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
+            const VTGap.m(),
+            TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+            const VTGap.m(),
+            SleepDurationTrendCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange, durationGoalHours: state.durationGoalHours),
+            const VTGap.m(),
+            SleepQualitySplitCard(days: cubit.trendDays, sleepByDate: state.sleepInTrendRange),
+          ],
+        ),
       ),
     );
   }

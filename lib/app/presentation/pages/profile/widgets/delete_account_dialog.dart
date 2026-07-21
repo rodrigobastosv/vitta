@@ -30,11 +30,7 @@ class DeleteAccountDialog extends StatelessWidget {
           children: [
             FilledButton(
               onPressed: () => Navigator.of(context).pop(true),
-              style: FilledButton.styleFrom(
-                backgroundColor: colorScheme.error,
-                foregroundColor: colorScheme.onError,
-                minimumSize: const Size.fromHeight(48),
-              ),
+              style: FilledButton.styleFrom(backgroundColor: colorScheme.error, foregroundColor: colorScheme.onError, minimumSize: const Size.fromHeight(48)),
               child: Text(l10n.deleteAccountConfirmAction),
             ),
             const VTGap.xs(),

@@ -21,10 +21,7 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
     emitPresentation(RoutinesShowLoading());
     final routinesResult = await _getRoutinesUseCase();
     emitPresentation(RoutinesHideLoading());
-    routinesResult.when(
-      (error) => emitPresentation(RoutinesError(message: error.message)),
-      (value) => emit(RoutinesState(routines: value)),
-    );
+    routinesResult.when((error) => emitPresentation(RoutinesError(message: error.message)), (value) => emit(RoutinesState(routines: value)));
   }
 
   Future<void> deleteRoutine({required String routineId}) async {

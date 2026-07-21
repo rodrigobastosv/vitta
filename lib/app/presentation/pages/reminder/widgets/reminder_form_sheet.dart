@@ -9,16 +9,12 @@ import 'package:vitta/app/domain/reminder/entities/reminder_recurrence.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/widgets/reminder_labels.dart';
 
-Future<void> showReminderFormSheet({
-  required BuildContext context,
-  required ReminderCubit cubit,
-  required DateTime date,
-  Reminder? reminder,
-}) => showModalBottomSheet<void>(
-  context: context,
-  isScrollControlled: true,
-  builder: (sheetContext) => _ReminderFormSheet(cubit: cubit, date: date, reminder: reminder),
-);
+Future<void> showReminderFormSheet({required BuildContext context, required ReminderCubit cubit, required DateTime date, Reminder? reminder}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      builder: (sheetContext) => _ReminderFormSheet(cubit: cubit, date: date, reminder: reminder),
+    );
 
 class _ReminderFormSheet extends StatefulWidget {
   const _ReminderFormSheet({required this.cubit, required this.date, this.reminder});
@@ -56,8 +52,7 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
     super.dispose();
   }
 
-  DateTime? get _remindAt =>
-      _remindEnabled ? DateTime(_dueDate.year, _dueDate.month, _dueDate.day, _remindTime.hour, _remindTime.minute) : null;
+  DateTime? get _remindAt => _remindEnabled ? DateTime(_dueDate.year, _dueDate.month, _dueDate.day, _remindTime.hour, _remindTime.minute) : null;
 
   Future<void> _pickDate() async {
     final picked = await showDatePicker(context: context, initialDate: _dueDate, firstDate: DateTime(2020), lastDate: DateTime(2100));
@@ -80,14 +75,7 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
     final title = _titleController.text.trim();
     final notes = _notesController.text.trim().isEmpty ? null : _notesController.text.trim();
     if (widget.reminder case final reminder?) {
-      widget.cubit.updateReminder(
-        original: reminder,
-        title: title,
-        dueDate: _dueDate,
-        notes: notes,
-        remindAt: _remindAt,
-        recurrence: _recurrence,
-      );
+      widget.cubit.updateReminder(original: reminder, title: title, dueDate: _dueDate, notes: notes, remindAt: _remindAt, recurrence: _recurrence);
     } else {
       widget.cubit.createReminder(title: title, dueDate: _dueDate, notes: notes, remindAt: _remindAt, recurrence: _recurrence);
     }
@@ -99,12 +87,7 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,

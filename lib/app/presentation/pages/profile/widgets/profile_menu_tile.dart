@@ -5,14 +5,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class ProfileMenuTile extends StatelessWidget {
-  const ProfileMenuTile({
-    required this.icon,
-    required this.accent,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-    super.key,
-  });
+  const ProfileMenuTile({required this.icon, required this.accent, required this.title, required this.subtitle, required this.onTap, super.key});
 
   final IconData icon;
   final Color accent;

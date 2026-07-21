@@ -5,8 +5,6 @@ class WorkoutIntroPage extends StatelessWidget {
   const WorkoutIntroPage({super.key});
 
   @override
-  Widget build(BuildContext context) => WorkoutIntroView(
-    onCreateRoutine: () => Navigator.of(context).pop(true),
-    onSkip: () => Navigator.of(context).pop(false),
-  );
+  Widget build(BuildContext context) =>
+      WorkoutIntroView(onCreateRoutine: () => Navigator.of(context).pop(true), onSkip: () => Navigator.of(context).pop(false));
 }

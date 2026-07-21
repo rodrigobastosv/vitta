@@ -67,7 +67,12 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
         Log.action('water_logged', data: {'amount_ml': amountMl});
         emit(
           state.copyWith(
-            dailyWater: DailyWater(entries: [for (final entry in state.dailyWater.entries) if (entry.id == optimistic.id) saved else entry]),
+            dailyWater: DailyWater(
+              entries: [
+                for (final entry in state.dailyWater.entries)
+                  if (entry.id == optimistic.id) saved else entry,
+              ],
+            ),
           ),
         );
       },
@@ -78,16 +83,16 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
     final previous = state.dailyWater;
     emit(state.copyWith(dailyWater: DailyWater(entries: _without(logId))));
     final deletedResult = await _deleteWaterLogUseCase(logId: logId);
-    deletedResult.when(
-      (error) {
-        emit(state.copyWith(dailyWater: previous));
-        emitPresentation(WaterError(message: error.message));
-      },
-      (_) => Log.action('water_log_deleted'),
-    );
+    deletedResult.when((error) {
+      emit(state.copyWith(dailyWater: previous));
+      emitPresentation(WaterError(message: error.message));
+    }, (_) => Log.action('water_log_deleted'));
   }
 
-  List<WaterLog> _without(String logId) => [for (final entry in state.dailyWater.entries) if (entry.id != logId) entry];
+  List<WaterLog> _without(String logId) => [
+    for (final entry in state.dailyWater.entries)
+      if (entry.id != logId) entry,
+  ];
 
   Future<void> changeDailyGoal({required double goalMl}) async {
     await _waterLocalDataSource.saveDailyGoalMl(goalMl);

@@ -35,11 +35,7 @@ class ExerciseProgressionListPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutProgressionListTitle)),
         body: state.exercises.isEmpty
-            ? VTEmptyState(
-                icon: Icons.fitness_center_outlined,
-                title: l10n.workoutProgressionListEmptyTitle,
-                message: l10n.workoutProgressionListEmptyMessage,
-              )
+            ? VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutProgressionListEmptyTitle, message: l10n.workoutProgressionListEmptyMessage)
             : ListView.separated(
                 padding: const EdgeInsets.all(VTSpacing.m),
                 itemCount: state.exercises.length,

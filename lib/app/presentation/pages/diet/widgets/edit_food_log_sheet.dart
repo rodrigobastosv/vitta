@@ -34,13 +34,8 @@ class _EditFoodLogSheet extends StatefulWidget {
 class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   late final UnitSystem _unitSystem = context.read<DietCubit>().unitSystem;
 
-  late final double? _initialUnits = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable
-      ? widget.entry.log.quantityUnits
-      : null;
-  late FoodQuantitySelection _selection = FoodQuantitySelection(
-    quantityGrams: widget.entry.log.quantityGrams,
-    quantityUnits: _initialUnits,
-  );
+  late final double? _initialUnits = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable ? widget.entry.log.quantityUnits : null;
+  late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: widget.entry.log.quantityGrams, quantityUnits: _initialUnits);
   late MealType _mealType = widget.entry.log.mealType;
   bool _isSaving = false;
   String? _errorMessage;
@@ -81,12 +76,7 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -112,11 +102,7 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
             spacing: VTSpacing.s,
             children: [
               for (final mealType in MealType.values)
-                ChoiceChip(
-                  label: Text(mealType.getLabel(l10n)),
-                  selected: _mealType == mealType,
-                  onSelected: (_) => setState(() => _mealType = mealType),
-                ),
+                ChoiceChip(label: Text(mealType.getLabel(l10n)), selected: _mealType == mealType, onSelected: (_) => setState(() => _mealType = mealType)),
             ],
           ),
           if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: context.colorScheme.error))],

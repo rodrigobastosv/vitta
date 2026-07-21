@@ -67,10 +67,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
             ),
           ),
           const VTGap.l(),
-          VTAppearEffect(
-            index: 2,
-            child: Text(l10n.dietRecipeIngredientsTitle, style: VTTextStyles.title(context)),
-          ),
+          VTAppearEffect(index: 2, child: Text(l10n.dietRecipeIngredientsTitle, style: VTTextStyles.title(context))),
           const VTGap.m(),
           if (draft.ingredients.isEmpty)
             Text(l10n.dietRecipeNoIngredientsMessage, style: VTTextStyles.caption(context))

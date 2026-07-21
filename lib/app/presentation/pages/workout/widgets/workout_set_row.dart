@@ -9,15 +9,7 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 
 class WorkoutSetRow extends StatelessWidget {
-  const WorkoutSetRow({
-    required this.set,
-    required this.position,
-    required this.unitSystem,
-    required this.color,
-    this.onEdit,
-    this.onDelete,
-    super.key,
-  });
+  const WorkoutSetRow({required this.set, required this.position, required this.unitSystem, required this.color, this.onEdit, this.onDelete, super.key});
 
   final WorkoutSet set;
   final int position;
@@ -49,10 +41,7 @@ class WorkoutSetRow extends StatelessWidget {
             ),
             const VTGap.m(),
             Expanded(child: Text(l10n.workoutSetSummary(set.reps), style: VTTextStyles.bodyStrong(context))),
-            VTBadge(
-              label: set.isBodyweight ? l10n.workoutBodyweightLabel : _load(),
-              color: set.isBodyweight ? colorScheme.onSurfaceVariant : color,
-            ),
+            VTBadge(label: set.isBodyweight ? l10n.workoutBodyweightLabel : _load(), color: set.isBodyweight ? colorScheme.onSurfaceVariant : color),
             if (onDelete != null) ...[
               const VTGap.xs(),
               InkResponse(

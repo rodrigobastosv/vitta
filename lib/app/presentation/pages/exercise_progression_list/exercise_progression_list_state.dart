@@ -6,8 +6,7 @@ class ExerciseProgressionListState extends Equatable {
 
   final List<Exercise> exercises;
 
-  ExerciseProgressionListState copyWith({List<Exercise>? exercises}) =>
-      ExerciseProgressionListState(exercises: exercises ?? this.exercises);
+  ExerciseProgressionListState copyWith({List<Exercise>? exercises}) => ExerciseProgressionListState(exercises: exercises ?? this.exercises);
 
   @override
   List<Object?> get props => [exercises];

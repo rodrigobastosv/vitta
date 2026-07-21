@@ -31,9 +31,7 @@ class _LogBodyWeightSheetState extends State<_LogBodyWeightSheet> {
   static const double _maxKg = 250;
 
   late final UnitSystem _unitSystem = context.read<BodyWeightCubit>().unitSystem;
-  late double _displayWeight = _unitSystem.kilogramsToDisplayLoad(
-    context.read<BodyWeightCubit>().state.latest?.weightKg ?? _defaultKg,
-  );
+  late double _displayWeight = _unitSystem.kilogramsToDisplayLoad(context.read<BodyWeightCubit>().state.latest?.weightKg ?? _defaultKg);
   DateTime _date = DateTime.now();
 
   Future<void> _pickDate() async {
@@ -61,12 +59,7 @@ class _LogBodyWeightSheetState extends State<_LogBodyWeightSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(
-        left: VTSpacing.m,
-        right: VTSpacing.m,
-        top: VTSpacing.m,
-        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
-      ),
+      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,

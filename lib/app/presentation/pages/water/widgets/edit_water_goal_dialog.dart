@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 
-Future<double?> showEditWaterGoalDialog({required BuildContext context, required double currentGoalMl, required UnitSystem unitSystem}) =>
-    showDialog<double>(
-      context: context,
-      builder: (context) => _EditWaterGoalDialog(currentGoalMl: currentGoalMl, unitSystem: unitSystem),
-    );
+Future<double?> showEditWaterGoalDialog({required BuildContext context, required double currentGoalMl, required UnitSystem unitSystem}) => showDialog<double>(
+  context: context,
+  builder: (context) => _EditWaterGoalDialog(currentGoalMl: currentGoalMl, unitSystem: unitSystem),
+);
 
 class _EditWaterGoalDialog extends StatefulWidget {
   const _EditWaterGoalDialog({required this.currentGoalMl, required this.unitSystem});

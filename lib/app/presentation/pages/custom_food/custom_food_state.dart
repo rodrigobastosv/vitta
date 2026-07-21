@@ -4,14 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_nutrient.dart';
 
 class CustomFoodState extends Equatable {
-  const CustomFoodState({
-    this.name = '',
-    this.brand = '',
-    this.nutrients = const {},
-    this.imageBytes,
-    this.imageExtension = '',
-    this.gramsPerUnitText = '',
-  });
+  const CustomFoodState({this.name = '', this.brand = '', this.nutrients = const {}, this.imageBytes, this.imageExtension = '', this.gramsPerUnitText = ''});
 
   final String name;
   final String brand;

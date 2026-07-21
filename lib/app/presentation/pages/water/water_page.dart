@@ -6,7 +6,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
@@ -37,44 +37,37 @@ class WaterPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.waterFeatureTitle),
           actions: [
-            IconButton(
-              icon: const Icon(Icons.calendar_month_outlined),
-              tooltip: l10n.waterHistoryTitle,
-              onPressed: () => context.pushRoute(.waterHistory),
-            ),
+            IconButton(icon: const Icon(Icons.calendar_month_outlined), tooltip: l10n.waterHistoryTitle, onPressed: () => context.pushRoute(.waterHistory)),
           ],
         ),
-        body: RefreshIndicator(
+        body: VTRefreshable(
           onRefresh: cubit.loadToday,
-          child: ListView(
-            padding: const EdgeInsets.all(VTSpacing.m),
-            children: [
-              WaterProgressCard(
-                dailyWater: state.dailyWater,
-                dailyGoalMl: state.dailyGoalMl,
-                unitSystem: unitSystem,
-                onQuickAdd: (amountMl) => cubit.addWater(amountMl: amountMl),
-                onEditGoal: () async {
-                  final newGoalMl = await showEditWaterGoalDialog(context: context, currentGoalMl: state.dailyGoalMl, unitSystem: unitSystem);
-                  if (newGoalMl != null) {
-                    await cubit.changeDailyGoal(goalMl: newGoalMl);
-                  }
-                },
-              ),
-              const VTGap.l(),
-              if (state.dailyWater.entries.isEmpty)
-                VTEmptyState(icon: Icons.water_drop_outlined, title: l10n.waterEmptyTitle, message: l10n.waterEmptyMessage)
-              else
-                for (final log in state.dailyWater.entries) ...[
-                  WaterLogTile(
-                    log: log,
-                    unitSystem: unitSystem,
-                    onDelete: () => cubit.deleteLog(logId: log.id),
-                  ),
-                  const VTGap.s(),
-                ],
-            ],
-          ),
+          children: [
+            WaterProgressCard(
+              dailyWater: state.dailyWater,
+              dailyGoalMl: state.dailyGoalMl,
+              unitSystem: unitSystem,
+              onQuickAdd: (amountMl) => cubit.addWater(amountMl: amountMl),
+              onEditGoal: () async {
+                final newGoalMl = await showEditWaterGoalDialog(context: context, currentGoalMl: state.dailyGoalMl, unitSystem: unitSystem);
+                if (newGoalMl != null) {
+                  await cubit.changeDailyGoal(goalMl: newGoalMl);
+                }
+              },
+            ),
+            const VTGap.l(),
+            if (state.dailyWater.entries.isEmpty)
+              VTEmptyState(icon: Icons.water_drop_outlined, title: l10n.waterEmptyTitle, message: l10n.waterEmptyMessage)
+            else
+              for (final log in state.dailyWater.entries) ...[
+                WaterLogTile(
+                  log: log,
+                  unitSystem: unitSystem,
+                  onDelete: () => cubit.deleteLog(logId: log.id),
+                ),
+                const VTGap.s(),
+              ],
+          ],
         ),
       );
     },

@@ -6,7 +6,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
@@ -53,40 +53,32 @@ class BodyWeightPage extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: Text(l10n.bodyWeightLogAction),
         ),
-        body: RefreshIndicator(
+        body: VTRefreshable(
           onRefresh: cubit.loadRecent,
-          child: state.logs.isEmpty
-              ? ListView(
-                  padding: const EdgeInsets.all(VTSpacing.m),
-                  children: [
-                    VTEmptyState(
-                      icon: Icons.monitor_weight_outlined,
-                      title: l10n.bodyWeightEmptyTitle,
-                      message: l10n.bodyWeightEmptyMessage,
-                      actionLabel: l10n.bodyWeightLogAction,
-                      actionIcon: Icons.add,
-                      onAction: () => showLogBodyWeightSheet(context: context),
-                    ),
-                  ],
-                )
-              : ListView(
-                  padding: const EdgeInsets.all(VTSpacing.m),
-                  children: [
-                    BodyWeightSummaryCard(logs: state.logs, unitSystem: unitSystem),
-                    const VTGap.l(),
-                    Text(l10n.bodyWeightRecentTitle, style: VTTextStyles.title(context)),
-                    const VTGap.s(),
-                    for (final (index, log) in state.logs.indexed) ...[
-                      BodyWeightLogTile(
-                        log: log,
-                        unitSystem: unitSystem,
-                        previousWeightKg: index + 1 < state.logs.length ? state.logs[index + 1].weightKg : null,
-                        onDelete: () => cubit.deleteLog(logId: log.id),
-                      ),
-                      const VTGap.s(),
-                    ],
-                  ],
-                ),
+          hasData: state.logs.isNotEmpty,
+          emptyState: VTEmptyState(
+            icon: Icons.monitor_weight_outlined,
+            title: l10n.bodyWeightEmptyTitle,
+            message: l10n.bodyWeightEmptyMessage,
+            actionLabel: l10n.bodyWeightLogAction,
+            actionIcon: Icons.add,
+            onAction: () => showLogBodyWeightSheet(context: context),
+          ),
+          children: [
+            BodyWeightSummaryCard(logs: state.logs, unitSystem: unitSystem),
+            const VTGap.l(),
+            Text(l10n.bodyWeightRecentTitle, style: VTTextStyles.title(context)),
+            const VTGap.s(),
+            for (final (index, log) in state.logs.indexed) ...[
+              BodyWeightLogTile(
+                log: log,
+                unitSystem: unitSystem,
+                previousWeightKg: index + 1 < state.logs.length ? state.logs[index + 1].weightKg : null,
+                onDelete: () => cubit.deleteLog(logId: log.id),
+              ),
+              const VTGap.s(),
+            ],
+          ],
         ),
       );
     },

@@ -8,11 +8,13 @@ import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progr
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_state.dart';
 
 class ExerciseProgressionCubit extends PresentationCubit<ExerciseProgressionState, ExerciseProgressionPresentationEvent> {
-  ExerciseProgressionCubit({
-    required this._getExerciseProgressionUseCase,
-    required this._getAppSettingsUseCase,
-    required Exercise exercise,
-  }) : super(ExerciseProgressionState(exercise: exercise, progression: const ExerciseProgression(points: [])));
+  ExerciseProgressionCubit({required this._getExerciseProgressionUseCase, required this._getAppSettingsUseCase, required Exercise exercise})
+    : super(
+        ExerciseProgressionState(
+          exercise: exercise,
+          progression: const ExerciseProgression(points: []),
+        ),
+      );
 
   final GetExerciseProgressionUseCase _getExerciseProgressionUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;

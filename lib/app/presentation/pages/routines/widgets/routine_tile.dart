@@ -41,8 +41,7 @@ class RoutineTile extends StatelessWidget {
               ],
             ),
           ),
-          if (onDelete != null)
-            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutRoutineDeleteTooltip, onPressed: onDelete),
+          if (onDelete != null) IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.workoutRoutineDeleteTooltip, onPressed: onDelete),
           ?dragHandle,
         ],
       ),

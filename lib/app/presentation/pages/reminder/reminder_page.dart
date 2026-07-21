@@ -6,6 +6,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/components/general/vt_segmented_tabs.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_filter.dart';
@@ -56,12 +57,7 @@ class ReminderPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.xs),
-              child: ReminderDateSelector(
-                date: state.date,
-                onPreviousDay: cubit.previousDay,
-                onNextDay: cubit.nextDay,
-                onPickDate: cubit.goToDate,
-              ),
+              child: ReminderDateSelector(date: state.date, onPreviousDay: cubit.previousDay, onNextDay: cubit.nextDay, onPickDate: cubit.goToDate),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
@@ -71,7 +67,9 @@ class ReminderPage extends StatelessWidget {
                 tabs: [for (final filter in ReminderFilter.values) VTSegmentedTab(value: filter, label: filter.label(l10n))],
               ),
             ),
-            Expanded(child: _ReminderList(state: state, cubit: cubit)),
+            Expanded(
+              child: _ReminderList(state: state, cubit: cubit),
+            ),
           ],
         ),
       ),
@@ -89,8 +87,11 @@ class _ReminderList extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final reminders = state.visibleReminders;
-    if (reminders.isEmpty) {
-      return state.reminders.isEmpty
+    return VTRefreshable(
+      onRefresh: () => cubit.loadDate(state.date),
+      padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.m, VTSpacing.xxl),
+      hasData: reminders.isNotEmpty,
+      emptyState: state.reminders.isEmpty
           ? VTEmptyState(
               icon: Icons.check_circle_outline,
               title: l10n.reminderEmptyTitle,
@@ -99,21 +100,18 @@ class _ReminderList extends StatelessWidget {
               actionIcon: Icons.add,
               onAction: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
             )
-          : VTEmptyState.noResults(title: l10n.reminderFilterNoResultsTitle, message: l10n.reminderFilterNoResultsMessage);
-    }
-    return ListView.separated(
-      padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.m, VTSpacing.xxl),
-      itemCount: reminders.length,
-      separatorBuilder: (_, _) => const VTGap.s(),
-      itemBuilder: (context, index) {
-        final reminder = reminders[index];
-        return ReminderTile(
-          reminder: reminder,
-          onToggle: (completed) => cubit.setCompleted(reminder: reminder, completed: completed),
-          onTap: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date, reminder: reminder),
-          onDelete: () => cubit.deleteReminder(reminder: reminder),
-        );
-      },
+          : VTEmptyState.noResults(title: l10n.reminderFilterNoResultsTitle, message: l10n.reminderFilterNoResultsMessage),
+      children: [
+        for (final (index, reminder) in reminders.indexed) ...[
+          if (index > 0) const VTGap.s(),
+          ReminderTile(
+            reminder: reminder,
+            onToggle: (completed) => cubit.setCompleted(reminder: reminder, completed: completed),
+            onTap: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date, reminder: reminder),
+            onDelete: () => cubit.deleteReminder(reminder: reminder),
+          ),
+        ],
+      ],
     );
   }
 }

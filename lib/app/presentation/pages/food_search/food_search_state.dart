@@ -3,13 +3,7 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
 
 class FoodSearchState extends Equatable {
-  const FoodSearchState({
-    this.results,
-    this.favorites = const [],
-    this.recentSearches = const [],
-    this.query = '',
-    this.tab = FoodSearchTab.search,
-  });
+  const FoodSearchState({this.results, this.favorites = const [], this.recentSearches = const [], this.query = '', this.tab = FoodSearchTab.search});
 
   final List<Food>? results;
 
@@ -21,20 +15,17 @@ class FoodSearchState extends Equatable {
 
   final FoodSearchTab tab;
 
-  Set<String> get favoriteFoodIds => {
-    for (final food in favorites) ?food.id,
-  };
+  Set<String> get favoriteFoodIds => {for (final food in favorites) ?food.id};
 
   bool isFavorite(Food food) => food.id == null ? favorites.contains(food) : favoriteFoodIds.contains(food.id);
 
-  FoodSearchState copyWith({List<Food>? results, List<Food>? favorites, List<String>? recentSearches, String? query, FoodSearchTab? tab}) =>
-      FoodSearchState(
-        results: results ?? this.results,
-        favorites: favorites ?? this.favorites,
-        recentSearches: recentSearches ?? this.recentSearches,
-        query: query ?? this.query,
-        tab: tab ?? this.tab,
-      );
+  FoodSearchState copyWith({List<Food>? results, List<Food>? favorites, List<String>? recentSearches, String? query, FoodSearchTab? tab}) => FoodSearchState(
+    results: results ?? this.results,
+    favorites: favorites ?? this.favorites,
+    recentSearches: recentSearches ?? this.recentSearches,
+    query: query ?? this.query,
+    tab: tab ?? this.tab,
+  );
 
   @override
   List<Object?> get props => [results, favorites, recentSearches, query, tab];

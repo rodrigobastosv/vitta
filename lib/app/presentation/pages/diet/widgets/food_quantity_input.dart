@@ -42,9 +42,7 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
   void initState() {
     super.initState();
     final grams = widget.initialGrams;
-    _weightController = TextEditingController(
-      text: grams == null ? '' : QuantityFormat.format(widget.unitSystem.gramsToDisplayWeight(grams)),
-    );
+    _weightController = TextEditingController(text: grams == null ? '' : QuantityFormat.format(widget.unitSystem.gramsToDisplayWeight(grams)));
     final gramsPerUnit = widget.food.gramsPerUnit;
     final initialUnits = widget.initialUnits ?? (grams != null && gramsPerUnit != null ? grams / gramsPerUnit : null);
     _unitsController = TextEditingController(text: initialUnits == null ? '' : QuantityFormat.format(initialUnits));
@@ -89,7 +87,10 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
 
   void _sync(TextEditingController controller, String text) {
     _syncing = true;
-    controller.value = TextEditingValue(text: text, selection: TextSelection.collapsed(offset: text.length));
+    controller.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
     _syncing = false;
   }
 

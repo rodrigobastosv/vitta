@@ -21,11 +21,7 @@ class MealScanAction extends StatelessWidget {
     builder: (context, state) => IconButton(
       icon: state.isPremium
           ? const Icon(Icons.photo_camera_outlined)
-          : const Badge(
-              backgroundColor: VTColors.premium,
-              smallSize: 8,
-              child: Icon(Icons.photo_camera_outlined),
-            ),
+          : const Badge(backgroundColor: VTColors.premium, smallSize: 8, child: Icon(Icons.photo_camera_outlined)),
       tooltip: context.l10n.mealScanTitle,
       onPressed: () => state.isPremium ? _scan(context) : _openPaywall(context),
     ),
@@ -38,6 +34,5 @@ class MealScanAction extends StatelessWidget {
     }
   }
 
-  Future<void> _openPaywall(BuildContext context) =>
-      context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .mealScan));
+  Future<void> _openPaywall(BuildContext context) => context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .mealScan));
 }

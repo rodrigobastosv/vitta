@@ -5,8 +5,5 @@ class DietIntroPage extends StatelessWidget {
   const DietIntroPage({super.key});
 
   @override
-  Widget build(BuildContext context) => DietIntroView(
-    onSetGoals: () => Navigator.of(context).pop(true),
-    onSkip: () => Navigator.of(context).pop(false),
-  );
+  Widget build(BuildContext context) => DietIntroView(onSetGoals: () => Navigator.of(context).pop(true), onSkip: () => Navigator.of(context).pop(false));
 }

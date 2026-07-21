@@ -43,8 +43,7 @@ class RoutineExerciseTile extends StatelessWidget {
               ],
             ),
           ),
-          if (onRemove != null)
-            IconButton(icon: const Icon(Icons.close, size: 18), tooltip: l10n.workoutRoutineRemoveExerciseTooltip, onPressed: onRemove),
+          if (onRemove != null) IconButton(icon: const Icon(Icons.close, size: 18), tooltip: l10n.workoutRoutineRemoveExerciseTooltip, onPressed: onRemove),
           ?dragHandle,
         ],
       ),

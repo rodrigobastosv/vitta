@@ -26,9 +26,6 @@ class ExerciseSearchCubit extends PresentationCubit<ExerciseSearchState, Exercis
     emitPresentation(ExerciseSearchShowLoading());
     final exercisesResult = await _searchExercisesUseCase(query: state.query, muscleGroup: state.muscleGroup);
     emitPresentation(ExerciseSearchHideLoading());
-    exercisesResult.when(
-      (error) => emitPresentation(ExerciseSearchError(message: error.message)),
-      (value) => emit(state.copyWith(results: value)),
-    );
+    exercisesResult.when((error) => emitPresentation(ExerciseSearchError(message: error.message)), (value) => emit(state.copyWith(results: value)));
   }
 }

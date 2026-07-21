@@ -69,10 +69,7 @@ class MealScanPage extends StatelessWidget {
                 ),
               ),
               SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.all(VTSpacing.m),
-                  child: _body(context, cubit, state),
-                ),
+                child: Padding(padding: const EdgeInsets.all(VTSpacing.m), child: _body(context, cubit, state)),
               ),
             ],
           ),
@@ -83,10 +80,7 @@ class MealScanPage extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
                 child: SafeArea(
                   minimum: const EdgeInsets.all(VTSpacing.m),
-                  child: VTPrimaryButton(
-                    label: l10n.mealScanLogAction,
-                    onPressed: state.canLog ? cubit.logMeal : null,
-                  ),
+                  child: VTPrimaryButton(label: l10n.mealScanLogAction, onPressed: state.canLog ? cubit.logMeal : null),
                 ),
               ),
       ),

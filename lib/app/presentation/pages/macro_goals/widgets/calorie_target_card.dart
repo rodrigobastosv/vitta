@@ -62,12 +62,7 @@ class CalorieTargetCard extends StatelessWidget {
               inactiveTrackColor: VTColors.green.withValues(alpha: 0.20),
               trackHeight: 4,
             ),
-            child: Slider(
-              value: goals.calorieGoal.clamp(_minCalories, _maxCalories),
-              min: _minCalories,
-              max: _maxCalories,
-              onChanged: onCaloriesChanged,
-            ),
+            child: Slider(value: goals.calorieGoal.clamp(_minCalories, _maxCalories), min: _minCalories, max: _maxCalories, onChanged: onCaloriesChanged),
           ),
           Row(
             mainAxisAlignment: .spaceBetween,

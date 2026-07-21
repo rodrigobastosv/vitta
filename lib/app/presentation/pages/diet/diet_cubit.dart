@@ -90,25 +90,12 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   }
 
   Future<void> loadMonthMacros(DateTime month) async {
-    final monthlyMacrosResult = await _getMacrosInRangeUseCase(
-      from: DateTime(month.year, month.month),
-      to: DateTime(month.year, month.month + 1, 0),
-    );
+    final monthlyMacrosResult = await _getMacrosInRangeUseCase(from: DateTime(month.year, month.month), to: DateTime(month.year, month.month + 1, 0));
     monthlyMacrosResult.when((_) => null, (macrosByDate) => emit(state.copyWith(loggedMacrosInMonth: macrosByDate)));
   }
 
-  Future<Result<VTError, FoodLog>> updateLog({
-    required String logId,
-    required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
-  }) async {
-    final updatedResult = await _updateFoodLogUseCase(
-      logId: logId,
-      mealType: mealType,
-      quantityGrams: quantityGrams,
-      quantityUnits: quantityUnits,
-    );
+  Future<Result<VTError, FoodLog>> updateLog({required String logId, required MealType mealType, required double quantityGrams, double? quantityUnits}) async {
+    final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
     final error = updatedResult.when((error) => error, (_) => null);
     if (error == null) {
       Log.action('food_log_updated', data: {'meal': mealType.wireValue});

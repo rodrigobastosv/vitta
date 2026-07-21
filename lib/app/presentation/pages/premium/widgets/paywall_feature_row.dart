@@ -29,15 +29,9 @@ class PaywallFeatureRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: .start,
             children: [
-              Text(
-                premiumFeatureTitle(l10n, feature),
-                style: VTTextStyles.bodyStrong(context).copyWith(color: isHighlighted ? VTColors.premium : null),
-              ),
+              Text(premiumFeatureTitle(l10n, feature), style: VTTextStyles.bodyStrong(context).copyWith(color: isHighlighted ? VTColors.premium : null)),
               const VTGap.xs(),
-              Text(
-                premiumFeatureSubtitle(l10n, feature),
-                style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
-              ),
+              Text(premiumFeatureSubtitle(l10n, feature), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
             ],
           ),
         ),

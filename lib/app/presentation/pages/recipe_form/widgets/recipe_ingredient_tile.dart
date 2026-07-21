@@ -23,10 +23,7 @@ class RecipeIngredientTile extends StatelessWidget {
             crossAxisAlignment: .start,
             children: [
               Text(ingredient.food.name, style: VTTextStyles.bodyStrong(context)),
-              Text(
-                l10n.dietLogSubtitle(ingredient.quantityGrams.round(), ingredient.calories.round()),
-                style: VTTextStyles.caption(context),
-              ),
+              Text(l10n.dietLogSubtitle(ingredient.quantityGrams.round(), ingredient.calories.round()), style: VTTextStyles.caption(context)),
             ],
           ),
         ),

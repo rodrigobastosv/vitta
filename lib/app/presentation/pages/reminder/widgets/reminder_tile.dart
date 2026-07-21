@@ -60,12 +60,7 @@ class ReminderTile extends StatelessWidget {
             ),
           ),
           if (onDelete case final onDelete?)
-            IconButton(
-              icon: const Icon(Icons.delete_outline),
-              tooltip: l10n.reminderDeleteTooltip,
-              color: colorScheme.onSurfaceVariant,
-              onPressed: onDelete,
-            ),
+            IconButton(icon: const Icon(Icons.delete_outline), tooltip: l10n.reminderDeleteTooltip, color: colorScheme.onSurfaceVariant, onPressed: onDelete),
         ],
       ),
     );

@@ -10,13 +10,12 @@ class DietState extends Equatable {
   final MacroGoals macroGoals;
   final Map<DateTime, DailyMacros> loggedMacrosInMonth;
 
-  DietState copyWith({DateTime? date, DailyMacros? dailyMacros, MacroGoals? macroGoals, Map<DateTime, DailyMacros>? loggedMacrosInMonth}) =>
-      DietState(
-        date: date ?? this.date,
-        dailyMacros: dailyMacros ?? this.dailyMacros,
-        macroGoals: macroGoals ?? this.macroGoals,
-        loggedMacrosInMonth: loggedMacrosInMonth ?? this.loggedMacrosInMonth,
-      );
+  DietState copyWith({DateTime? date, DailyMacros? dailyMacros, MacroGoals? macroGoals, Map<DateTime, DailyMacros>? loggedMacrosInMonth}) => DietState(
+    date: date ?? this.date,
+    dailyMacros: dailyMacros ?? this.dailyMacros,
+    macroGoals: macroGoals ?? this.macroGoals,
+    loggedMacrosInMonth: loggedMacrosInMonth ?? this.loggedMacrosInMonth,
+  );
 
   @override
   List<Object?> get props => [date, dailyMacros, macroGoals, loggedMacrosInMonth];
