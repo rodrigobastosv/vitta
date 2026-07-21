@@ -13,6 +13,7 @@ import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
+import 'package:vitta/app/cubit/rest_timer_cubit.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
 import 'package:vitta/app/data/body_weight/body_weight_repository.dart';
@@ -118,6 +119,7 @@ import 'package:vitta/app/domain/workout/use_cases/get_daily_workouts_in_range_u
 import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_rest_duration_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
@@ -126,6 +128,7 @@ import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/mark_workout_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/save_rest_duration_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
@@ -142,6 +145,8 @@ import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dar
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression_list/exercise_progression_list_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
@@ -172,6 +177,12 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SaveAppSettingsUseCase(settingsRepository: G()));
   G.registerLazySingleton(() => AppCubit(getAppSettingsUseCase: G(), saveAppSettingsUseCase: G()));
   G.registerLazySingleton(() => PremiumCubit(getPremiumStatusUseCase: G(), purchaseService: G()));
+  G.registerFactory(() => GetRestDurationUseCase(workoutRepository: G()));
+  G.registerFactory(() => SaveRestDurationUseCase(workoutRepository: G()));
+  G.registerLazySingleton(() => RestTimerCubit(getRestDurationUseCase: G(), saveRestDurationUseCase: G()));
+  G.registerFactoryParam<ExerciseWorkoutCubit, ExerciseWorkoutExtra, void>(
+    (extra, _) => ExerciseWorkoutCubit(extra: extra, logSetUseCase: G(), updateSetUseCase: G(), deleteSetUseCase: G(), setWorkoutExerciseCompletedUseCase: G()),
+  );
 
   G.registerLazySingleton(() => supabaseService);
   G.registerLazySingleton(ImagePickerService.new);

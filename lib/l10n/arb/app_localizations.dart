@@ -734,6 +734,66 @@ abstract class AppLocalizations {
   /// **'Pick another day — this one has no meals to copy.'**
   String get dietCopyMealsEmptyDayMessage;
 
+  /// No description provided for @workoutRestTimerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get workoutRestTimerLabel;
+
+  /// No description provided for @workoutRestExtendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'+30s'**
+  String get workoutRestExtendAction;
+
+  /// No description provided for @workoutRestSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get workoutRestSkipAction;
+
+  /// No description provided for @workoutNoSetsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No sets logged yet.'**
+  String get workoutNoSetsYet;
+
+  /// No description provided for @workoutInstructionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to'**
+  String get workoutInstructionsTitle;
+
+  /// No description provided for @workoutRestShortenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Take 30 seconds off'**
+  String get workoutRestShortenAction;
+
+  /// No description provided for @workoutRestConfigureAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest length'**
+  String get workoutRestConfigureAction;
+
+  /// No description provided for @workoutRestSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest between sets'**
+  String get workoutRestSettingTitle;
+
+  /// No description provided for @workoutRestSettingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Used every time you log a set.'**
+  String get workoutRestSettingHint;
+
+  /// No description provided for @workoutLastSetPrefillNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Prefilled from your last set'**
+  String get workoutLastSetPrefillNote;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

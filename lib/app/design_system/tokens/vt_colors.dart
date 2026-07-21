@@ -60,6 +60,10 @@ abstract class VTColors {
   static const Color warningContainerDark = Color(0xFF6B4E00);
   static const Color onWarningContainerLight = Color(0xFF3D2E00);
   static const Color onWarningContainerDark = Color(0xFFFBECC7);
+  // A deeper sibling of warning: the same caution reading, dark enough to carry
+  // white ink. warning itself is only 2.17:1 against white and cannot.
+  static const Color warningStrong = Color(0xFFA85F00);
+
   static const Color error = Color(0xFFBA1A1A);
   static const Color onError = Color(0xFFFFFFFF);
   static const Color errorContainerLight = Color(0xFFFFDAD6);

@@ -127,8 +127,6 @@ class WorkoutExerciseCard extends StatelessWidget {
                     crossAxisAlignment: .start,
                     children: [
                       const VTGap.s(),
-                      const Divider(height: 1),
-                      const VTGap.s(),
                       if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n) case final summary?) ...[
                         Row(
                           children: [
@@ -140,10 +138,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                         const VTGap.s(),
                       ],
                       if (workoutExercise.sets.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
-                          child: Text(l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context)),
-                        )
+                        Text(l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context))
                       else
                         DecoratedBox(
                           decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.035), borderRadius: VTRadius.borderRadiusM),
@@ -166,7 +161,6 @@ class WorkoutExerciseCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                      const VTGap.m(),
                       WorkoutSetActions(
                         accent: accent,
                         onAddSet: onAddSet,

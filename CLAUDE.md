@@ -499,6 +499,43 @@ UI: `WorkoutPage` (`/workout`) is a day view with a date selector, a volume/sets
 
 `VTRemoteImage` (design system) is `VTFoodImage` generalised — a network image with a caller-supplied placeholder icon — since the catalog needed the same behaviour with a different fallback. `VTFoodImage` is now a thin wrapper passing `Icons.restaurant_outlined`, so diet's call sites are untouched. **Every network image in the app goes through `cached_network_image_ce`** (issue #59), not raw `Image.network` — the `_ce` fork is used over the mainline `cached_network_image` for the same reason `hive_ce`/`hive_ce_flutter` are (it's the family that stays compatible with the project's `hive_ce` toolchain). `VTRemoteImage` and `VTPhotoHeader` are the only two widgets that build a `CachedNetworkImage`; both fall back to their existing placeholder via `errorBuilder`, so a new call site caches for free just by using them rather than reaching for `Image.network`. Body regions get their own fixed `VTColors.bodyRegion*` accents (the `macro*` idea applied to muscle groups); don't reach for `warning`/`macroCarbs` for a region — they're the same hex, so two regions would collide.
 
+## The rest timer, and the exercise workspace
+
+The workout screen's two gaps were connected (issue #163): there was **no rest timer at all**, and `ExerciseDetailPage` was a **dead end** — photos and instructions, but you had to back out of it to log anything.
+
+**`ExerciseWorkoutPage` is the workspace.** It replaces the read-only detail page as what an exercise card opens: photos, sets, the rest timer, the instructions and Finish, on one screen. `ExerciseWorkoutCubit` takes the `WorkoutExercise` through `VTPage`'s `cubitParam` (the `RecipeFormCubit` shape) and **updates its own state from each use case's return value** rather than reloading — `LogSetUseCase`, `UpdateSetUseCase` and `SetWorkoutExerciseCompletedUseCase` all hand back the persisted entity, so a round trip would be ceremony. `WorkoutPage` reloads the day on pop.
+
+**The exercise page owns adding a set; the day list keeps repeat.** Once the page exists, an "Add set" button on the card is a second door to the same room — so the card offers only **repeat** (one tap, no sheet) and editing an existing set. Anything that needs the sheet happens on the page. Finishing an exercise pops back to the day view, since finishing is the end of what that page is for.
+
+**`RestTimerCubit` is a lazy singleton provided at the root**, next to `AppCubit` and `PremiumCubit` — not a widget and not a page cubit, because a rest has to keep counting while you move between the day view and the exercise page. Three rules, all pinned by `rest_timer_cubit_test.dart` and all mutation-verified:
+
+- **`start` replaces, it never stacks.** Logging a second set mid-rest restarts the clock rather than adding to it.
+- **Extending grows `total` as well as `remaining`.** Growing only `remaining` makes the progress bar jump backwards, since it is the ratio of the two.
+- **A finished rest clears itself** (and fires `VTHaptics.success()`), so nothing lingers at 0:00. The last three seconds tick with `VTHaptics.selection()`, so you can feel it end without watching.
+- **Shortening past zero ends the rest** rather than going negative.
+
+**The rest length is a device-local preference**, not a constant — `WorkoutLocalDataSource`'s `workout.restSeconds` behind `GetRestDurationUseCase`/`SaveRestDurationUseCase`, the same shape as the water and sleep goals. `start()` with no argument reads it, so changing it applies from the next set. The timer turns `VTColors.coral` in its final ten seconds, and carries the exercise's name so a rest you come back to says what it belongs to.
+
+**The exercise page opens on a stretchy photo header**, the `CustomFoodPage` shape: a `SliverAppBar` with `stretch`, `StretchMode.zoomBackground` and `BouncingScrollPhysics` so it zooms on overscroll on both platforms. `ExercisePhotoHeader` keeps **all** of the catalog's photos as a swipeable `PageView` with page dots — the first cut collapsed them to one, which quietly threw away the second and third angles that are often the clearest.
+
+Three details the header needs, each of which shipped wrong first:
+
+- **`expandedTitleScale: 1`.** `FlexibleSpaceBar` scales its title to **1.5×** when expanded, which is what truncates a name like "Smith Machine Bench Press" — restyling the `Text` does nothing until the scale is turned off.
+- **The scrim must be an `IgnorePointer`.** A gradient painted over the `PageView` sits above it in the `Stack` and **swallows the horizontal drag**, so the photos silently stop being swipeable. Pinned by a test that flings and asserts the page changed.
+- **Page dots go bottom-end, not top-end.** Top-end is where the `SliverAppBar`'s actions live, so the dots and the progression icon fight for the same corner. Bottom-end is opposite the title, which is bottom-start.
+
+The title also carries the scrim's contrast: the catalog's shots are mostly bright gym interiors, so white-on-photo would be luck.
+
+**Reps are a `VTStepper`, load is a text field** — the two inputs have different shapes and should not share a control. Reps cluster tightly (5–12) and move by ±1 from the set before, so a stepper is one tap and no keyboard; loads jump (20 → 40 → 82.5) and their sensible increment differs per exercise, so stepping there would be many taps. `VTStepper` keeps an editable field in the middle, so an unusual rep count is still typeable.
+
+**The stepper only works because the field is seeded.** Reps used to start *empty* on every new set even though the app already knew the last one — which is what made a keyboard feel necessary. `LogSetSheet.defaultReps` seeds from the previous set of that exercise (falling back to 10), the same idea as `defaultLoadKg`. Pinned; the mutation that restores the empty field fails.
+
+**The prefill hint has to say where the numbers actually came from.** Once the load started seeding from the last set rather than only from body weight, the "Prefilled with your latest body weight" note was simply false most of the time. `SetPrefill` (`none`/`lastSet`/`bodyWeight`) is passed in by the caller — which is the only thing that knows — and the sheet picks the matching line. A stale hint is worse than none: it teaches the user something untrue about their own data.
+
+**A stepper cannot wear an `InputDecoration` label.** Two attempts failed before the obvious answer: a caption above only the stepper left the two fields at different heights, and an `InputDecorator` around it put the floating label *on top of* the +/− buttons — a floating label needs a text baseline to float against, and a stepper has none. Both fields now use `LabelledField`, a plain caption above the control, so they share one structure. A test asserts they share a top edge.
+
+**The countdown is the colour, not a bar.** `VTRestTimer` has no progress track — the card itself lerps **green → amber → red** as the rest runs down, which reads at a glance without occupying a row. The mid stop is `VTColors.warningStrong`, a deeper sibling of `warning`, because **`warning` itself is only 2.17:1 against white and cannot carry the ink**. Every point along the ramp clears 4.5:1, asserted at 101 samples by `vt_rest_timer_test.dart` — the same class of bug as the accent-avatar floor, caught the same way. `VTRestTimer` otherwise carries the countdown in tabular figures, −30s/+30s, the rest length and Skip. It docks in `WorkoutPage`'s `bottomNavigationBar` and sits inline on the exercise page. A test that exercises the timer needs `TestWidgetsFlutterBinding.ensureInitialized()`, because the completion haptic reaches a platform channel.
+
 ## Workout page visual language
 
 `WorkoutPage` is built from the same vocabulary as the diet page (issue #108) rather than a parallel look — the pieces below are what "match the diet page's polish bar" actually meant in practice:

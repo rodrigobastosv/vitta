@@ -4,7 +4,9 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/labelled_field.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/workout_set_factory.dart';
@@ -14,6 +16,8 @@ Future<void> pumpLogSetSheet(
   UnitSystem unitSystem = UnitSystem.metric,
   Future<Result<VTError, void>> Function({required int reps, required double weightKg})? onSubmit,
   bool editing = false,
+  int? defaultReps,
+  SetPrefill prefill = SetPrefill.none,
 }) => tester.pumpWidget(
   MaterialApp(
     theme: VTTheme.light,
@@ -23,6 +27,8 @@ Future<void> pumpLogSetSheet(
       body: LogSetSheet(
         unitSystem: unitSystem,
         set: editing ? WorkoutSetFactory.build(reps: 8, weightKg: 60) : null,
+        defaultReps: defaultReps,
+        prefill: prefill,
         onSubmit: onSubmit ?? ({required reps, required weightKg}) async => const Success(null),
       ),
     ),
@@ -92,5 +98,43 @@ void main() {
     expect(find.text('Edit set'), findsOneWidget);
     expect(find.text('8'), findsOneWidget);
     expect(find.text('60'), findsOneWidget);
+  });
+
+  testWidgets('a new set starts at the previous set reps, not at nothing', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8);
+
+    expect(find.text('8'), findsOneWidget);
+  });
+
+  testWidgets('reps step by one without a keyboard', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8);
+
+    await tester.tap(find.byIcon(Icons.add_rounded));
+    await tester.pump();
+
+    expect(find.text('9'), findsOneWidget);
+  });
+
+  testWidgets('the hint names the last set when that is where the numbers came from', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8, prefill: SetPrefill.lastSet);
+
+    expect(find.text('Prefilled from your last set'), findsOneWidget);
+    expect(find.text('Prefilled with your latest body weight'), findsNothing);
+  });
+
+  testWidgets('the hint still names body weight on a bodyweight exercise with no sets yet', (tester) async {
+    await pumpLogSetSheet(tester, prefill: SetPrefill.bodyWeight);
+
+    expect(find.text('Prefilled with your latest body weight'), findsOneWidget);
+  });
+
+  testWidgets('reps and load line up, so the row does not read as two different controls', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8);
+
+    final fields = find.byType(LabelledField);
+    final repsTop = tester.getTopLeft(fields.first).dy;
+    final loadTop = tester.getTopLeft(fields.last).dy;
+
+    expect((repsTop - loadTop).abs(), lessThan(4), reason: 'the reps stepper and the load field share a top edge');
   });
 }

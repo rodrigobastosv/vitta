@@ -67,6 +67,7 @@ import 'package:vitta/app/domain/workout/use_cases/get_daily_workouts_in_range_u
 import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_rest_duration_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
@@ -75,6 +76,7 @@ import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/mark_workout_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/save_rest_duration_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
@@ -242,3 +244,7 @@ class MockDeleteReminderUseCase extends Mock implements DeleteReminderUseCase {}
 class MockGetPremiumStatusUseCase extends Mock implements GetPremiumStatusUseCase {}
 
 class MockGetRecentlyLoggedFoodsUseCase extends Mock implements GetRecentlyLoggedFoodsUseCase {}
+
+class MockGetRestDurationUseCase extends Mock implements GetRestDurationUseCase {}
+
+class MockSaveRestDurationUseCase extends Mock implements SaveRestDurationUseCase {}

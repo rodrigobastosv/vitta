@@ -6,19 +6,23 @@ import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/cubit/rest_timer_cubit.dart';
+import 'package:vitta/app/cubit/rest_timer_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
+import 'package:vitta/app/design_system/components/general/vt_rest_timer.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/workout/entities/equipment.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
-import 'package:vitta/app/presentation/pages/exercise_detail/exercise_detail_extra.dart';
+import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/next_routine_card.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/rest_length_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_date_selector.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_finished_card.dart';
@@ -67,6 +71,22 @@ class WorkoutPage extends StatelessWidget {
           icon: const Icon(Icons.add),
           label: Text(l10n.workoutAddExercise),
         ),
+        bottomNavigationBar: BlocBuilder<RestTimerCubit, RestTimerState>(
+          builder: (context, timer) => timer.isRunning
+              ? SafeArea(
+                  minimum: const EdgeInsets.fromLTRB(VTSpacing.m, 0, VTSpacing.m, VTSpacing.s),
+                  child: VTRestTimer(
+                    remaining: timer.remaining,
+                    progress: timer.progress,
+                    label: timer.label,
+                    onExtend: context.read<RestTimerCubit>().extend,
+                    onShorten: context.read<RestTimerCubit>().shorten,
+                    onSkip: context.read<RestTimerCubit>().skip,
+                    onConfigure: () => _configureRest(context),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
         body: VTRefreshable(
           onRefresh: () => cubit.loadDate(state.date),
           isLoaded: state.isLoaded,
@@ -106,16 +126,25 @@ class WorkoutPage extends StatelessWidget {
                       workoutExercise: workoutExercise,
                       unitSystem: cubit.unitSystem,
                       lastSets: state.lastSetsByExercise[workoutExercise.exercise.id],
-                      onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: workoutExercise.exercise)),
+                      onTap: () async {
+                        await context.pushRoute(
+                          .exerciseWorkout,
+                          extra: ExerciseWorkoutExtra(
+                            workoutExercise: workoutExercise,
+                            unitSystem: cubit.unitSystem,
+                            defaultLoadKg: workoutExercise.exercise.equipment == Equipment.bodyOnly ? state.latestBodyWeightKg : null,
+                          ),
+                        );
+                        await cubit.loadDate(state.date);
+                      },
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
                       onToggleCompleted: (completed) => cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
-                      onRepeatSet: () => cubit.repeatLastSet(workoutExercise: workoutExercise),
-                      onAddSet: () => showLogSetSheet(
-                        context: context,
-                        unitSystem: cubit.unitSystem,
-                        defaultLoadKg: workoutExercise.exercise.equipment == Equipment.bodyOnly ? state.latestBodyWeightKg : null,
-                        onSubmit: ({required reps, required weightKg}) => cubit.logSet(workoutExerciseId: workoutExercise.id, reps: reps, weightKg: weightKg),
-                      ),
+                      onRepeatSet: () async {
+                        await cubit.repeatLastSet(workoutExercise: workoutExercise);
+                        if (context.mounted) {
+                          context.read<RestTimerCubit>().start(label: workoutExercise.exercise.nameFor(l10n.localeName));
+                        }
+                      },
                       onEditSet: (set) => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,
@@ -150,6 +179,14 @@ class WorkoutPage extends StatelessWidget {
       if (context.mounted) {
         await cubit.loadDate(cubit.state.date);
       }
+    }
+  }
+
+  Future<void> _configureRest(BuildContext context) async {
+    final timer = context.read<RestTimerCubit>();
+    final rest = await showRestLengthSheet(context: context, current: timer.configuredRest);
+    if (rest != null) {
+      await timer.changeRest(rest);
     }
   }
 
