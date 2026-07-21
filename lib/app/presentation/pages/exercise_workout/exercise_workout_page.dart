@@ -152,7 +152,8 @@ class ExerciseWorkoutPage extends StatelessWidget {
                         onPressed: () => showLogSetSheet(
                           context: context,
                           unitSystem: extra.unitSystem,
-                          defaultLoadKg: extra.defaultLoadKg,
+                          defaultLoadKg: state.workoutExercise.sets.lastOrNull?.weightKg ?? extra.defaultLoadKg,
+                          defaultReps: state.workoutExercise.sets.lastOrNull?.reps,
                           onSubmit: ({required reps, required weightKg}) => cubit.logSet(reps: reps, weightKg: weightKg),
                         ),
                         icon: const Icon(Icons.add),

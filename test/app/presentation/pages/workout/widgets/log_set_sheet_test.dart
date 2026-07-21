@@ -14,6 +14,7 @@ Future<void> pumpLogSetSheet(
   UnitSystem unitSystem = UnitSystem.metric,
   Future<Result<VTError, void>> Function({required int reps, required double weightKg})? onSubmit,
   bool editing = false,
+  int? defaultReps,
 }) => tester.pumpWidget(
   MaterialApp(
     theme: VTTheme.light,
@@ -23,6 +24,7 @@ Future<void> pumpLogSetSheet(
       body: LogSetSheet(
         unitSystem: unitSystem,
         set: editing ? WorkoutSetFactory.build(reps: 8, weightKg: 60) : null,
+        defaultReps: defaultReps,
         onSubmit: onSubmit ?? ({required reps, required weightKg}) async => const Success(null),
       ),
     ),
@@ -92,5 +94,20 @@ void main() {
     expect(find.text('Edit set'), findsOneWidget);
     expect(find.text('8'), findsOneWidget);
     expect(find.text('60'), findsOneWidget);
+  });
+
+  testWidgets('a new set starts at the previous set reps, not at nothing', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8);
+
+    expect(find.text('8'), findsOneWidget);
+  });
+
+  testWidgets('reps step by one without a keyboard', (tester) async {
+    await pumpLogSetSheet(tester, defaultReps: 8);
+
+    await tester.tap(find.byIcon(Icons.add_rounded));
+    await tester.pump();
+
+    expect(find.text('9'), findsOneWidget);
   });
 }

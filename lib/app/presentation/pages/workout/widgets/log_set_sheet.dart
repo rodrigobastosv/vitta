@@ -5,6 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
@@ -15,17 +16,18 @@ Future<void> showLogSetSheet({
   required Future<Result<VTError, void>> Function({required int reps, required double weightKg}) onSubmit,
   WorkoutSet? set,
   double? defaultLoadKg,
+  int? defaultReps,
 }) => showModalBottomSheet<void>(
   context: context,
   isScrollControlled: true,
   builder: (context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set, defaultLoadKg: defaultLoadKg),
+    child: LogSetSheet(unitSystem: unitSystem, onSubmit: onSubmit, set: set, defaultLoadKg: defaultLoadKg, defaultReps: defaultReps),
   ),
 );
 
 class LogSetSheet extends StatefulWidget {
-  const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, this.defaultLoadKg, super.key});
+  const LogSetSheet({required this.unitSystem, required this.onSubmit, this.set, this.defaultLoadKg, this.defaultReps, super.key});
 
   final UnitSystem unitSystem;
   final Future<Result<VTError, void>> Function({required int reps, required double weightKg}) onSubmit;
@@ -35,12 +37,18 @@ class LogSetSheet extends StatefulWidget {
   // bodyweight exercise (issue #101). Ignored when editing an existing set.
   final double? defaultLoadKg;
 
+  // Pre-fills the reps for a *new* set from the previous one, so the stepper
+  // starts where the last set left off rather than at the minimum.
+  final int? defaultReps;
+
   @override
   State<LogSetSheet> createState() => _LogSetSheetState();
 }
 
 class _LogSetSheetState extends State<LogSetSheet> {
-  late final TextEditingController _repsController = TextEditingController(text: widget.set?.reps.toString() ?? '');
+  static const int _defaultReps = 10;
+
+  late final TextEditingController _repsController = TextEditingController(text: '${widget.set?.reps ?? widget.defaultReps ?? _defaultReps}');
   late final TextEditingController _loadController = TextEditingController(text: _initialLoad());
   String? _errorMessage;
 
@@ -79,12 +87,14 @@ class _LogSetSheetState extends State<LogSetSheet> {
           Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _repsController,
-                  autofocus: true,
-                  keyboardType: .number,
-                  textInputAction: .next,
-                  decoration: InputDecoration(labelText: l10n.workoutRepsLabel),
+                child: Column(
+                  crossAxisAlignment: .start,
+                  mainAxisSize: .min,
+                  children: [
+                    Text(l10n.workoutRepsLabel, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+                    const VTGap.xs(),
+                    VTStepper(controller: _repsController),
+                  ],
                 ),
               ),
               const SizedBox(width: VTSpacing.m),
