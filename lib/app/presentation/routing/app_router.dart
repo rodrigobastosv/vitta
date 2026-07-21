@@ -21,7 +21,7 @@ import 'package:vitta/app/presentation/routing/routes/home_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
-import 'package:vitta/app/presentation/routing/routes/premium_route.dart';
+import 'package:vitta/app/presentation/routing/routes/paywall_route.dart';
 import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipe_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';

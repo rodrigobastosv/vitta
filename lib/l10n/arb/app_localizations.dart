@@ -2402,18 +2402,6 @@ abstract class AppLocalizations {
   /// **'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.'**
   String get premiumFreeMessage;
 
-  /// No description provided for @premiumComingSoonAction.
-  ///
-  /// In en, this message translates to:
-  /// **'Subscriptions coming soon'**
-  String get premiumComingSoonAction;
-
-  /// No description provided for @premiumComingSoonHint.
-  ///
-  /// In en, this message translates to:
-  /// **'In-app purchases are not open yet. This screen is where they will live.'**
-  String get premiumComingSoonHint;
-
   /// No description provided for @premiumSignUpPrompt.
   ///
   /// In en, this message translates to:
@@ -2477,8 +2465,8 @@ abstract class AppLocalizations {
   /// No description provided for @premiumSubscribeAction.
   ///
   /// In en, this message translates to:
-  /// **'Subscribe for {price}/month'**
-  String premiumSubscribeAction(String price);
+  /// **'Start Premium'**
+  String get premiumSubscribeAction;
 
   /// No description provided for @premiumRestoreAction.
   ///
@@ -3691,6 +3679,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No load lifted in this period. Weighted sets show their muscle-group split here.'**
   String get workoutMuscleSplitEmptyMessage;
+
+  /// No description provided for @premiumCancelAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel anytime in your App Store settings.'**
+  String get premiumCancelAnytime;
+
+  /// No description provided for @premiumOfferRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get premiumOfferRetryAction;
+
+  /// No description provided for @premiumPeriodWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'per week'**
+  String get premiumPeriodWeekly;
+
+  /// No description provided for @premiumPeriodMonthly.
+  ///
+  /// In en, this message translates to:
+  /// **'per month'**
+  String get premiumPeriodMonthly;
+
+  /// No description provided for @premiumPeriodTwoMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'every 2 months'**
+  String get premiumPeriodTwoMonth;
+
+  /// No description provided for @premiumPeriodThreeMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'every 3 months'**
+  String get premiumPeriodThreeMonth;
+
+  /// No description provided for @premiumPeriodSixMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'every 6 months'**
+  String get premiumPeriodSixMonth;
+
+  /// No description provided for @premiumPeriodAnnual.
+  ///
+  /// In en, this message translates to:
+  /// **'per year'**
+  String get premiumPeriodAnnual;
+
+  /// No description provided for @premiumPeriodLifetime.
+  ///
+  /// In en, this message translates to:
+  /// **'one-time payment'**
+  String get premiumPeriodLifetime;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -5,6 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
+import 'package:vitta/app/cubit/premium_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -15,14 +16,13 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
-import 'package:vitta/app/presentation/pages/premium/paywall_extra.dart';
-import 'package:vitta/app/presentation/pages/premium/premium_state.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_active_card.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_feature_row.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_free_card.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_header.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_legal_footer.dart';
-import 'package:vitta/app/presentation/pages/premium/widgets/paywall_purchase_section.dart';
+import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_active_card.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_feature_row.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_free_card.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_header.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_legal_footer.dart';
+import 'package:vitta/app/presentation/pages/paywall/widgets/paywall_purchase_section.dart';
 
 // Hangs off AuthCubit because whether to show a purchase CTA or a sign-up CTA is
 // a question about the user; the entitlement itself comes from the root
@@ -63,14 +63,19 @@ class PaywallPage extends StatelessWidget {
                   children: [
                     const PaywallHeader(),
                     const VTGap.l(),
-                    Text(l10n.premiumIntro, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
+                    Text(
+                      l10n.premiumIntro,
+                      textAlign: .center,
+                      style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant),
+                    ),
                     const VTGap.xl(),
                     Text(l10n.premiumFeaturesTitle, style: VTTextStyles.title(context)),
                     const VTGap.m(),
                     for (final feature in PremiumFeature.values) ...[
                       PaywallFeatureRow(feature: feature, isHighlighted: feature == extra?.highlightedFeature),
-                      const VTGap.l(),
+                      const VTGap.m(),
                     ],
+                    const VTGap.s(),
                     const PaywallFreeCard(),
                     const VTGap.xl(),
                     if (premiumState.isPremium)
@@ -78,10 +83,12 @@ class PaywallPage extends StatelessWidget {
                     else
                       PaywallPurchaseSection(
                         isSignedIn: authState.user is AuthenticatedUser,
+                        isOfferLoaded: premiumState.isOfferLoaded,
                         offer: premiumState.offer,
                         onSignUp: () => _signUp(context, authCubit),
                         onSubscribe: () => _subscribe(context, authState.user),
                         onRestore: () => _restore(context, authState.user),
+                        onRetryOffer: () => _retryOffer(context),
                       ),
                     const VTGap.l(),
                     const PaywallLegalFooter(),
@@ -94,6 +101,18 @@ class PaywallPage extends StatelessWidget {
       );
     },
   );
+
+  // The overlay rather than sending isOfferLoaded back to false: that flag
+  // records whether the *first* read resolved and is deliberately monotonic, and
+  // a retry is a user-initiated action, which is what the overlay is for.
+  Future<void> _retryOffer(BuildContext context) async {
+    final premiumCubit = context.read<PremiumCubit>();
+    context.showLoading();
+    await premiumCubit.loadOffer();
+    if (context.mounted) {
+      context.hideLoading();
+    }
+  }
 
   Future<void> _subscribe(BuildContext context, User user) async {
     if (user is! AuthenticatedUser) {

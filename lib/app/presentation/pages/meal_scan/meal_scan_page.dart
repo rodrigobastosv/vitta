@@ -19,7 +19,7 @@ import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_presentation_ev
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_state.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_type_selector.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/scanned_meal_item_card.dart';
-import 'package:vitta/app/presentation/pages/premium/paywall_extra.dart';
+import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
 
 class MealScanPage extends StatelessWidget {
   const MealScanPage({required this.loggedDate, super.key});
@@ -45,7 +45,7 @@ class MealScanPage extends StatelessWidget {
             context.showWarningToast(message: l10n.mealScanIncomplete);
           case MealScanPremiumRequired():
             context.showWarningToast(message: l10n.premiumRequiredMessage, title: l10n.premiumRequiredTitle);
-            unawaited(context.pushRoute(.premium, extra: const PaywallExtra(highlightedFeature: .mealScan)));
+            unawaited(context.pushRoute(.paywall, extra: const PaywallExtra(highlightedFeature: .mealScan)));
           case MealScanError(:final message):
             context.showErrorToast(message: message);
           case MealScanLogged():

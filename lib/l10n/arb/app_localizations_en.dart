@@ -1295,12 +1295,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.';
 
   @override
-  String get premiumComingSoonAction => 'Subscriptions coming soon';
-
-  @override
-  String get premiumComingSoonHint => 'In-app purchases are not open yet. This screen is where they will live.';
-
-  @override
   String get premiumSignUpPrompt => 'A subscription is tied to your account, so you need one first.';
 
   @override
@@ -1334,9 +1328,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumLinkFailed => 'Couldn\'t open that link.';
 
   @override
-  String premiumSubscribeAction(String price) {
-    return 'Subscribe for $price/month';
-  }
+  String get premiumSubscribeAction => 'Start Premium';
 
   @override
   String get premiumRestoreAction => 'Restore purchases';
@@ -1993,4 +1985,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workoutMuscleSplitEmptyMessage => 'No load lifted in this period. Weighted sets show their muscle-group split here.';
+
+  @override
+  String get premiumCancelAnytime => 'Cancel anytime in your App Store settings.';
+
+  @override
+  String get premiumOfferRetryAction => 'Try again';
+
+  @override
+  String get premiumPeriodWeekly => 'per week';
+
+  @override
+  String get premiumPeriodMonthly => 'per month';
+
+  @override
+  String get premiumPeriodTwoMonth => 'every 2 months';
+
+  @override
+  String get premiumPeriodThreeMonth => 'every 3 months';
+
+  @override
+  String get premiumPeriodSixMonth => 'every 6 months';
+
+  @override
+  String get premiumPeriodAnnual => 'per year';
+
+  @override
+  String get premiumPeriodLifetime => 'one-time payment';
 }

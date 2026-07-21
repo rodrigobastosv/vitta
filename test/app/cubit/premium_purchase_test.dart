@@ -5,8 +5,8 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/services/purchases/premium_offer.dart';
 import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
+import 'package:vitta/app/cubit/premium_state.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
-import 'package:vitta/app/presentation/pages/premium/premium_state.dart';
 
 import '../../mocks/services_mocks.dart';
 import '../../mocks/use_cases_mocks.dart';

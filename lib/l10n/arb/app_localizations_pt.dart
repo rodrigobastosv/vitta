@@ -1296,12 +1296,6 @@ class AppLocalizationsPt extends AppLocalizations {
       'Busca de alimentos, catálogo, receitas, água, sono, treinos, lembretes e todos os gráficos continuam gratuitos.';
 
   @override
-  String get premiumComingSoonAction => 'Assinaturas em breve';
-
-  @override
-  String get premiumComingSoonHint => 'As compras no app ainda não estão abertas. Esta tela é onde elas vão ficar.';
-
-  @override
   String get premiumSignUpPrompt => 'A assinatura fica vinculada à sua conta, então você precisa criar uma antes.';
 
   @override
@@ -1335,9 +1329,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get premiumLinkFailed => 'Não foi possível abrir o link.';
 
   @override
-  String premiumSubscribeAction(String price) {
-    return 'Assinar por $price/mês';
-  }
+  String get premiumSubscribeAction => 'Assinar o Premium';
 
   @override
   String get premiumRestoreAction => 'Restaurar compras';
@@ -2015,4 +2007,31 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get workoutMuscleSplitEmptyMessage =>
       'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
+
+  @override
+  String get premiumCancelAnytime => 'Cancele quando quiser nos ajustes da App Store.';
+
+  @override
+  String get premiumOfferRetryAction => 'Tentar de novo';
+
+  @override
+  String get premiumPeriodWeekly => 'por semana';
+
+  @override
+  String get premiumPeriodMonthly => 'por mês';
+
+  @override
+  String get premiumPeriodTwoMonth => 'a cada 2 meses';
+
+  @override
+  String get premiumPeriodThreeMonth => 'a cada 3 meses';
+
+  @override
+  String get premiumPeriodSixMonth => 'a cada 6 meses';
+
+  @override
+  String get premiumPeriodAnnual => 'por ano';
+
+  @override
+  String get premiumPeriodLifetime => 'pagamento único';
 }

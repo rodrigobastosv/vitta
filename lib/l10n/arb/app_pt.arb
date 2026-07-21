@@ -124,33 +124,47 @@
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {
     "placeholders": {
-      "consumed": {"type": "String"},
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
+      "consumed": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "dietCaloriesLabel": "{calories} kcal hoje",
   "@dietCaloriesLabel": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesOfGoal": "de {goal} kcal",
   "@dietCaloriesOfGoal": {
     "placeholders": {
-      "goal": {"type": "int"}
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesLeft": "faltam {calories} kcal",
   "@dietCaloriesLeft": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesOver": "{calories} kcal acima",
   "@dietCaloriesOver": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietAddFood": "Adicionar alimento",
@@ -172,8 +186,12 @@
   "dietLogSubtitle": "{grams} g - {calories} kcal",
   "@dietLogSubtitle": {
     "placeholders": {
-      "grams": {"type": "int"},
-      "calories": {"type": "int"}
+      "grams": {
+        "type": "int"
+      },
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietDeleteLogTooltip": "Remover",
@@ -189,15 +207,21 @@
   "dietQuantityLabel": "Quantidade ({unit})",
   "@dietQuantityLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "dietUnitsUnit": "un",
   "dietLogSubtitleUnits": "{units} un - {calories} kcal",
   "@dietLogSubtitleUnits": {
     "placeholders": {
-      "units": {"type": "String"},
-      "calories": {"type": "int"}
+      "units": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietGramsPerUnitLabel": "Peso de uma unidade (g)",
@@ -206,7 +230,9 @@
   "dietFoodLoggedToast": "Adicionado a {meal}",
   "@dietFoodLoggedToast": {
     "placeholders": {
-      "meal": {"type": "String"}
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "dietInvalidCustomFood": "Preencha o nome e todos os macros com números válidos.",
@@ -226,7 +252,9 @@
   "dietMacroPercent": "{percent}%",
   "@dietMacroPercent": {
     "placeholders": {
-      "percent": { "type": "int" }
+      "percent": {
+        "type": "int"
+      }
     }
   },
   "dietFiberLabel": "Fibra",
@@ -234,8 +262,12 @@
   "dietMicronutrientAmount": "{amount} {unit}",
   "@dietMicronutrientAmount": {
     "placeholders": {
-      "amount": { "type": "String" },
-      "unit": { "type": "String" }
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "nutrientVitaminA": "Vitamina A",
@@ -277,13 +309,14 @@
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietFoodSearchTitle": "Adicionar alimento",
   "dietFavoritesTitle": "Favoritos",
   "dietSearchTabLabel": "Busca",
-  "dietRecentSearchesTitle": "Buscas recentes",
   "dietClearRecentSearchesAction": "Limpar",
   "dietRemoveRecentSearchTooltip": "Remover das buscas recentes",
   "dietFavoritesEmptyTitle": "Nenhum favorito ainda",
@@ -297,7 +330,9 @@
   "dietMacroGrams": "{grams} g",
   "@dietMacroGrams": {
     "placeholders": {
-      "grams": {"type": "String"}
+      "grams": {
+        "type": "String"
+      }
     }
   },
   "dietHistoryTitle": "Histórico",
@@ -344,36 +379,52 @@
   "dietMealsCopiedToastMessage": "{count, plural, =0{Nenhuma refeição adicionada} =1{1 refeição adicionada ao seu dia} other{{count} refeições adicionadas ao seu dia}}",
   "@dietWeekAverageTooltip": {
     "placeholders": {
-      "calories": { "type": "int" },
-      "days": { "type": "int" }
+      "calories": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
     }
   },
   "@trendRangeDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "@dietWeekAverageShort": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "@dietTrendAverageLabel": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "@dietTrendLoggedDays": {
     "placeholders": {
-      "days": { "type": "int" },
-      "total": { "type": "int" }
+      "days": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "dietMealSplitTitle": "Calorias por refeição",
   "dietMealSplitAverage": "{calories} kcal/dia",
   "@dietMealSplitAverage": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietRecipesTitle": "Minhas receitas",
@@ -398,13 +449,19 @@
   "dietRecipeLogHint": "Busque pelo nome em Adicionar alimento para registrar em qualquer dia.",
   "@dietRecipeTotalGrams": {
     "placeholders": {
-      "grams": { "type": "int" }
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "@dietRecipeIngredientCount": {
     "placeholders": {
-      "count": { "type": "int" },
-      "grams": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "mealTypeBreakfast": "Café da manhã",
@@ -414,22 +471,34 @@
   "dietMealCalories": "{calories} kcal",
   "@dietMealCalories": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietMealMacros": "P {protein}g · C {carbs}g · G {fat}g · Fibra {fiber}g",
   "@dietMealMacros": {
     "placeholders": {
-      "protein": { "type": "int" },
-      "carbs": { "type": "int" },
-      "fat": { "type": "int" },
-      "fiber": { "type": "int" }
+      "protein": {
+        "type": "int"
+      },
+      "carbs": {
+        "type": "int"
+      },
+      "fat": {
+        "type": "int"
+      },
+      "fiber": {
+        "type": "int"
+      }
     }
   },
   "dietAddToMeal": "Adicionar em {meal}",
   "@dietAddToMeal": {
     "placeholders": {
-      "meal": { "type": "String" }
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "cancelAction": "Cancelar",
@@ -450,8 +519,12 @@
   "bodyWeightValue": "{value} {unit}",
   "@bodyWeightValue": {
     "placeholders": {
-      "value": {"type": "String"},
-      "unit": {"type": "String"}
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "bodyWeightRecentTitle": "Registros recentes",
@@ -468,15 +541,23 @@
   "waterOfGoal": "de {goal} {unit}",
   "@waterOfGoal": {
     "placeholders": {
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
+      "goal": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterLeft": "faltam {amount} {unit}",
   "@waterLeft": {
     "placeholders": {
-      "amount": {"type": "String"},
-      "unit": {"type": "String"}
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterGoalReached": "Meta atingida!",
@@ -485,7 +566,9 @@
   "waterCustomAmountLabel": "Quantidade personalizada ({unit})",
   "@waterCustomAmountLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterLogAction": "Adicionar",
@@ -494,7 +577,9 @@
   "waterGoalLabel": "Meta diária ({unit})",
   "@waterGoalLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "sleepFeatureTitle": "Sono",
@@ -511,20 +596,28 @@
   "sleepDurationLabel": "{hours}h {minutes}m",
   "@sleepDurationLabel": {
     "placeholders": {
-      "hours": {"type": "int"},
-      "minutes": {"type": "int"}
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "sleepHoursOnly": "{hours}h",
   "@sleepHoursOnly": {
     "placeholders": {
-      "hours": {"type": "int"}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "sleepMinutesOnly": "{minutes}m",
   "@sleepMinutesOnly": {
     "placeholders": {
-      "minutes": {"type": "int"}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "sleepLastNightLabel": "Última noite",
@@ -532,13 +625,17 @@
   "sleepShort": "faltam {duration}",
   "@sleepShort": {
     "placeholders": {
-      "duration": {"type": "String"}
+      "duration": {
+        "type": "String"
+      }
     }
   },
   "sleepOfGoal": "de {duration}",
   "@sleepOfGoal": {
     "placeholders": {
-      "duration": {"type": "String"}
+      "duration": {
+        "type": "String"
+      }
     }
   },
   "sleepGoalMetric": "Meta",
@@ -550,7 +647,9 @@
   "sleepImportedMessage": "{count, plural, =0{Nada novo para importar} =1{1 noite importada} other{{count} noites importadas}}",
   "@sleepImportedMessage": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sleepHealthUnavailableMessage": "Os dados de sono não estão disponíveis neste dispositivo. Configure o Health Connect (Android) ou a Apple Saúde (iOS) primeiro.",
@@ -576,8 +675,6 @@
   "premiumFeatureNutritionLabelScanSubtitle": "Aponte para o rótulo e os macros são preenchidos",
   "premiumFreeTitle": "Gratuito para sempre",
   "premiumFreeMessage": "Busca de alimentos, catálogo, receitas, água, sono, treinos, lembretes e todos os gráficos continuam gratuitos.",
-  "premiumComingSoonAction": "Assinaturas em breve",
-  "premiumComingSoonHint": "As compras no app ainda não estão abertas. Esta tela é onde elas vão ficar.",
   "premiumSignUpPrompt": "A assinatura fica vinculada à sua conta, então você precisa criar uma antes.",
   "premiumSignUpAction": "Criar uma conta",
   "premiumActiveTitle": "Premium ativo",
@@ -585,7 +682,9 @@
   "premiumRenewsOn": "Renova em {date}",
   "@premiumRenewsOn": {
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   },
   "premiumLockedBadge": "Premium",
@@ -593,12 +692,7 @@
   "premiumPrivacyAction": "Política de Privacidade",
   "premiumAutoRenewalDisclosure": "A cobrança é feita na sua conta do Apple ID ao confirmar a compra. A assinatura é renovada automaticamente, a menos que seja cancelada com pelo menos 24 horas de antecedência do fim do período atual. Você pode gerenciar ou cancelar quando quiser nos ajustes da sua conta da App Store.",
   "premiumLinkFailed": "Não foi possível abrir o link.",
-  "premiumSubscribeAction": "Assinar por {price}/mês",
-  "@premiumSubscribeAction": {
-    "placeholders": {
-      "price": {"type": "String"}
-    }
-  },
+  "premiumSubscribeAction": "Assinar o Premium",
   "premiumRestoreAction": "Restaurar compras",
   "premiumUnavailable": "As assinaturas não estão disponíveis agora. Tente mais tarde.",
   "premiumPurchaseFailed": "Não foi possível concluir a compra.",
@@ -638,7 +732,9 @@
   "authSignedInAsLabel": "Conectado como {email}",
   "@authSignedInAsLabel": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "authCreateAction": "Criar conta",
@@ -796,18 +892,54 @@
   "workoutProgressionE1rmTitle": "1RM estimado",
   "workoutProgressionHeaviestTitle": "Maior carga",
   "workoutProgressionSessionCount": "{count, plural, =0{Nenhuma sessão} =1{Última sessão} other{Últimas {count} sessões}}",
-  "@workoutProgressionSessionCount": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutProgressionSessionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutProgressionListTitle": "Progressão",
   "workoutProgressionListEmptyTitle": "Nenhum exercício registrado ainda",
   "workoutProgressionListEmptyMessage": "Registre alguns treinos e os exercícios que você fez aparecem aqui para acompanhar a progressão.",
   "workoutHistoryTitle": "Histórico",
   "workoutHistoryWeekSessions": "{count, plural, =0{Nenhum treino} =1{1 treino} other{{count} treinos}}",
-  "@workoutHistoryWeekSessions": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutHistoryWeekSessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutVolumeTrendTitle": "Volume por sessão",
   "workoutVolumeAverageLabel": "{value} méd.",
-  "@workoutVolumeAverageLabel": { "placeholders": { "value": { "type": "String" } } },
+  "@workoutVolumeAverageLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "workoutHistoryVolumeSummary": "{sessions, plural, =0{Nenhuma sessão} =1{1 sessão} other{{sessions} sessões}} · {sets, plural, =0{nenhuma série} =1{1 série} other{{sets} séries}}",
-  "@workoutHistoryVolumeSummary": { "placeholders": { "sessions": { "type": "int" }, "sets": { "type": "int" } } },
+  "@workoutHistoryVolumeSummary": {
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "sets": {
+        "type": "int"
+      }
+    }
+  },
   "workoutMuscleSplitTitle": "Volume por grupo muscular",
-  "workoutMuscleSplitEmptyMessage": "Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular."
+  "workoutMuscleSplitEmptyMessage": "Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.",
+  "premiumCancelAnytime": "Cancele quando quiser nos ajustes da App Store.",
+  "premiumOfferRetryAction": "Tentar de novo",
+  "premiumPeriodWeekly": "por semana",
+  "premiumPeriodMonthly": "por mês",
+  "premiumPeriodTwoMonth": "a cada 2 meses",
+  "premiumPeriodThreeMonth": "a cada 3 meses",
+  "premiumPeriodSixMonth": "a cada 6 meses",
+  "premiumPeriodAnnual": "por ano",
+  "premiumPeriodLifetime": "pagamento único"
 }

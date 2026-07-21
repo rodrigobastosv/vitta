@@ -79,14 +79,38 @@
   "homeAlsoTodayTitle": "Also today",
   "homeTrackTitle": "Track",
   "homeMealsLogged": "{count, plural, =0{Nothing logged yet} =1{1 meal logged} other{{count} meals logged}}",
-  "@homeMealsLogged": {"placeholders": {"count": {"type": "int"}}},
+  "@homeMealsLogged": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeWaterLeft": "{amount} {unit} to go",
-  "@homeWaterLeft": {"placeholders": {"amount": {"type": "String"}, "unit": {"type": "String"}}},
+  "@homeWaterLeft": {
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
   "homeWaterDone": "Goal reached",
   "homeNextReminder": "Next reminder",
   "homeNoReminders": "Nothing due today",
   "homeWorkoutProgress": "{done} of {total} done",
-  "@homeWorkoutProgress": {"placeholders": {"done": {"type": "int"}, "total": {"type": "int"}}},
+  "@homeWorkoutProgress": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "homeNoWorkout": "Nothing logged today",
   "homeSleepLastNight": "Last night",
   "homeWeightLatest": "Latest",
@@ -101,9 +125,21 @@
   "delete": "Delete",
   "dietRecipeBadge": "Recipe",
   "dietQuantityUnits": "{units} un",
-  "@dietQuantityUnits": {"placeholders": {"units": {"type": "String"}}},
+  "@dietQuantityUnits": {
+    "placeholders": {
+      "units": {
+        "type": "String"
+      }
+    }
+  },
   "dietQuantityGrams": "{grams} g",
-  "@dietQuantityGrams": {"placeholders": {"grams": {"type": "int"}}},
+  "@dietQuantityGrams": {
+    "placeholders": {
+      "grams": {
+        "type": "int"
+      }
+    }
+  },
   "dietLogAgainAction": "Log again",
   "dietRecentlyLoggedTitle": "Recently logged",
   "dietRecentSearchesTitle": "Recent searches",
@@ -129,33 +165,47 @@
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {
     "placeholders": {
-      "consumed": {"type": "String"},
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
+      "consumed": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "dietCaloriesLabel": "{calories} kcal today",
   "@dietCaloriesLabel": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesOfGoal": "of {goal} kcal",
   "@dietCaloriesOfGoal": {
     "placeholders": {
-      "goal": {"type": "int"}
+      "goal": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesLeft": "{calories} kcal left",
   "@dietCaloriesLeft": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietCaloriesOver": "{calories} kcal over",
   "@dietCaloriesOver": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietAddFood": "Add food",
@@ -177,8 +227,12 @@
   "dietLogSubtitle": "{grams} g - {calories} kcal",
   "@dietLogSubtitle": {
     "placeholders": {
-      "grams": {"type": "int"},
-      "calories": {"type": "int"}
+      "grams": {
+        "type": "int"
+      },
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietDeleteLogTooltip": "Remove",
@@ -194,15 +248,21 @@
   "dietQuantityLabel": "Quantity ({unit})",
   "@dietQuantityLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "dietUnitsUnit": "un",
   "dietLogSubtitleUnits": "{units} un - {calories} kcal",
   "@dietLogSubtitleUnits": {
     "placeholders": {
-      "units": {"type": "String"},
-      "calories": {"type": "int"}
+      "units": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietGramsPerUnitLabel": "Weight of one unit (g)",
@@ -211,7 +271,9 @@
   "dietFoodLoggedToast": "Added to {meal}",
   "@dietFoodLoggedToast": {
     "placeholders": {
-      "meal": {"type": "String"}
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "dietInvalidCustomFood": "Fill in the name and all macros with valid numbers.",
@@ -231,7 +293,9 @@
   "dietMacroPercent": "{percent}%",
   "@dietMacroPercent": {
     "placeholders": {
-      "percent": { "type": "int" }
+      "percent": {
+        "type": "int"
+      }
     }
   },
   "dietFiberLabel": "Fiber",
@@ -239,8 +303,12 @@
   "dietMicronutrientAmount": "{amount} {unit}",
   "@dietMicronutrientAmount": {
     "placeholders": {
-      "amount": { "type": "String" },
-      "unit": { "type": "String" }
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "nutrientVitaminA": "Vitamin A",
@@ -282,13 +350,14 @@
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
-      "calories": {"type": "int"}
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietFoodSearchTitle": "Add food",
   "dietFavoritesTitle": "Favorites",
   "dietSearchTabLabel": "Search",
-  "dietRecentSearchesTitle": "Recent searches",
   "dietClearRecentSearchesAction": "Clear",
   "dietRemoveRecentSearchTooltip": "Remove from recent searches",
   "dietFavoritesEmptyTitle": "No favorites yet",
@@ -302,7 +371,9 @@
   "dietMacroGrams": "{grams} g",
   "@dietMacroGrams": {
     "placeholders": {
-      "grams": {"type": "String"}
+      "grams": {
+        "type": "String"
+      }
     }
   },
   "dietHistoryTitle": "History",
@@ -324,19 +395,73 @@
   "sleepGoalDialogTitle": "Nightly sleep goal",
   "sleepGoalLabel": "Hours per night",
   "sleepGoalInvalid": "Enter a number of hours greater than zero.",
-  "@sleepTrendAverageLabel": { "placeholders": { "hours": { "type": "String" } } },
-  "@sleepHoursShort": { "placeholders": { "hours": { "type": "String" } } },
-  "@sleepWeekAverageTooltip": { "placeholders": { "hours": { "type": "String" }, "days": { "type": "int" } } },
-  "@sleepRatedNights": { "placeholders": { "nights": { "type": "int" } } },
-  "@sleepQualityStars": { "placeholders": { "rating": { "type": "int" } } },
+  "@sleepTrendAverageLabel": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "@sleepHoursShort": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "@sleepWeekAverageTooltip": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@sleepRatedNights": {
+    "placeholders": {
+      "nights": {
+        "type": "int"
+      }
+    }
+  },
+  "@sleepQualityStars": {
+    "placeholders": {
+      "rating": {
+        "type": "int"
+      }
+    }
+  },
   "waterTrendTitle": "Water",
   "waterTrendAverageLabel": "{ml} ml/day average",
   "waterTrendEmptyMessage": "Nothing logged in this period yet.",
   "waterWeekAverageShort": "{ml}",
   "waterWeekAverageTooltip": "Weekly average: {ml} ml over {days} logged days",
-  "@waterTrendAverageLabel": { "placeholders": { "ml": { "type": "int" } } },
-  "@waterWeekAverageShort": { "placeholders": { "ml": { "type": "int" } } },
-  "@waterWeekAverageTooltip": { "placeholders": { "ml": { "type": "int" }, "days": { "type": "int" } } },
+  "@waterTrendAverageLabel": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
+  },
+  "@waterWeekAverageShort": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
+  },
+  "@waterWeekAverageTooltip": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "trendRangeDays": "{days}d",
   "dietCaloriesTrendTitle": "Calories",
   "dietMacrosTrendTitle": "Macros",
@@ -357,46 +482,66 @@
   "dietMealsCopiedToastMessage": "{count, plural, =0{No meals added} =1{1 meal added to your day} other{{count} meals added to your day}}",
   "@dietCopyMealFoodCount": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "@dietMealsCopiedToastMessage": {
     "placeholders": {
-      "count": { "type": "int" }
+      "count": {
+        "type": "int"
+      }
     }
   },
   "@dietWeekAverageTooltip": {
     "placeholders": {
-      "calories": { "type": "int" },
-      "days": { "type": "int" }
+      "calories": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
     }
   },
   "@trendRangeDays": {
     "placeholders": {
-      "days": { "type": "int" }
+      "days": {
+        "type": "int"
+      }
     }
   },
   "@dietWeekAverageShort": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "@dietTrendAverageLabel": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "@dietTrendLoggedDays": {
     "placeholders": {
-      "days": { "type": "int" },
-      "total": { "type": "int" }
+      "days": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
     }
   },
   "dietMealSplitTitle": "Calories by meal",
   "dietMealSplitAverage": "{calories} kcal/day",
   "@dietMealSplitAverage": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietRecipesTitle": "My recipes",
@@ -421,13 +566,19 @@
   "dietRecipeLogHint": "Search it by name in Add food to log it on any day.",
   "@dietRecipeTotalGrams": {
     "placeholders": {
-      "grams": { "type": "int" }
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "@dietRecipeIngredientCount": {
     "placeholders": {
-      "count": { "type": "int" },
-      "grams": { "type": "int" }
+      "count": {
+        "type": "int"
+      },
+      "grams": {
+        "type": "int"
+      }
     }
   },
   "mealTypeBreakfast": "Breakfast",
@@ -437,22 +588,34 @@
   "dietMealCalories": "{calories} kcal",
   "@dietMealCalories": {
     "placeholders": {
-      "calories": { "type": "int" }
+      "calories": {
+        "type": "int"
+      }
     }
   },
   "dietMealMacros": "P {protein}g · C {carbs}g · F {fat}g · Fiber {fiber}g",
   "@dietMealMacros": {
     "placeholders": {
-      "protein": { "type": "int" },
-      "carbs": { "type": "int" },
-      "fat": { "type": "int" },
-      "fiber": { "type": "int" }
+      "protein": {
+        "type": "int"
+      },
+      "carbs": {
+        "type": "int"
+      },
+      "fat": {
+        "type": "int"
+      },
+      "fiber": {
+        "type": "int"
+      }
     }
   },
   "dietAddToMeal": "Add to {meal}",
   "@dietAddToMeal": {
     "placeholders": {
-      "meal": { "type": "String" }
+      "meal": {
+        "type": "String"
+      }
     }
   },
   "cancelAction": "Cancel",
@@ -473,8 +636,12 @@
   "bodyWeightValue": "{value} {unit}",
   "@bodyWeightValue": {
     "placeholders": {
-      "value": {"type": "String"},
-      "unit": {"type": "String"}
+      "value": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "bodyWeightRecentTitle": "Recent entries",
@@ -491,15 +658,23 @@
   "waterOfGoal": "of {goal} {unit}",
   "@waterOfGoal": {
     "placeholders": {
-      "goal": {"type": "String"},
-      "unit": {"type": "String"}
+      "goal": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterLeft": "{amount} {unit} left",
   "@waterLeft": {
     "placeholders": {
-      "amount": {"type": "String"},
-      "unit": {"type": "String"}
+      "amount": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterGoalReached": "Goal reached!",
@@ -508,7 +683,9 @@
   "waterCustomAmountLabel": "Custom amount ({unit})",
   "@waterCustomAmountLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "waterLogAction": "Add",
@@ -517,7 +694,9 @@
   "waterGoalLabel": "Daily goal ({unit})",
   "@waterGoalLabel": {
     "placeholders": {
-      "unit": {"type": "String"}
+      "unit": {
+        "type": "String"
+      }
     }
   },
   "sleepFeatureTitle": "Sleep",
@@ -534,20 +713,28 @@
   "sleepDurationLabel": "{hours}h {minutes}m",
   "@sleepDurationLabel": {
     "placeholders": {
-      "hours": {"type": "int"},
-      "minutes": {"type": "int"}
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "sleepHoursOnly": "{hours}h",
   "@sleepHoursOnly": {
     "placeholders": {
-      "hours": {"type": "int"}
+      "hours": {
+        "type": "int"
+      }
     }
   },
   "sleepMinutesOnly": "{minutes}m",
   "@sleepMinutesOnly": {
     "placeholders": {
-      "minutes": {"type": "int"}
+      "minutes": {
+        "type": "int"
+      }
     }
   },
   "sleepLastNightLabel": "Last night",
@@ -555,13 +742,17 @@
   "sleepShort": "{duration} short",
   "@sleepShort": {
     "placeholders": {
-      "duration": {"type": "String"}
+      "duration": {
+        "type": "String"
+      }
     }
   },
   "sleepOfGoal": "of {duration}",
   "@sleepOfGoal": {
     "placeholders": {
-      "duration": {"type": "String"}
+      "duration": {
+        "type": "String"
+      }
     }
   },
   "sleepGoalMetric": "Goal",
@@ -573,7 +764,9 @@
   "sleepImportedMessage": "{count, plural, =0{No new sleep to import} =1{1 night imported} other{{count} nights imported}}",
   "@sleepImportedMessage": {
     "placeholders": {
-      "count": {"type": "int"}
+      "count": {
+        "type": "int"
+      }
     }
   },
   "sleepHealthUnavailableMessage": "Sleep data isn't available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.",
@@ -599,8 +792,6 @@
   "premiumFeatureNutritionLabelScanSubtitle": "Point at a label and fill the macros in for you",
   "premiumFreeTitle": "Free forever",
   "premiumFreeMessage": "Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.",
-  "premiumComingSoonAction": "Subscriptions coming soon",
-  "premiumComingSoonHint": "In-app purchases are not open yet. This screen is where they will live.",
   "premiumSignUpPrompt": "A subscription is tied to your account, so you need one first.",
   "premiumSignUpAction": "Create an account",
   "premiumActiveTitle": "Premium active",
@@ -608,7 +799,9 @@
   "premiumRenewsOn": "Renews on {date}",
   "@premiumRenewsOn": {
     "placeholders": {
-      "date": {"type": "String"}
+      "date": {
+        "type": "String"
+      }
     }
   },
   "premiumLockedBadge": "Premium",
@@ -616,12 +809,7 @@
   "premiumPrivacyAction": "Privacy Policy",
   "premiumAutoRenewalDisclosure": "Payment is charged to your Apple ID account at confirmation of purchase. The subscription renews automatically unless it is cancelled at least 24 hours before the end of the current period. Manage or cancel it any time in your App Store account settings.",
   "premiumLinkFailed": "Couldn't open that link.",
-  "premiumSubscribeAction": "Subscribe for {price}/month",
-  "@premiumSubscribeAction": {
-    "placeholders": {
-      "price": {"type": "String"}
-    }
-  },
+  "premiumSubscribeAction": "Start Premium",
   "premiumRestoreAction": "Restore purchases",
   "premiumUnavailable": "Subscriptions aren't available right now. Try again later.",
   "premiumPurchaseFailed": "The purchase couldn't be completed.",
@@ -651,7 +839,9 @@
   "macroGoalsKcal": "{value} kcal",
   "@macroGoalsKcal": {
     "placeholders": {
-      "value": {"type": "int"}
+      "value": {
+        "type": "int"
+      }
     }
   },
   "macroGoalsModalityTitle": "Diet modality",
@@ -666,7 +856,9 @@
   "authSignedInAsLabel": "Signed in as {email}",
   "@authSignedInAsLabel": {
     "placeholders": {
-      "email": {"type": "String"}
+      "email": {
+        "type": "String"
+      }
     }
   },
   "authCreateAction": "Create account",
@@ -758,9 +950,21 @@
   "workoutRepsLabel": "Reps",
   "workoutExercisesLabel": "exercises",
   "workoutExercisesLeft": "{count, plural, =0{All done} =1{1 to go} other{{count} to go}}",
-  "@workoutExercisesLeft": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutExercisesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutLoadLabel": "Load ({unit})",
-  "@workoutLoadLabel": { "placeholders": { "unit": { "type": "String" } } },
+  "@workoutLoadLabel": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
   "workoutLoadHelper": "Leave the load empty for a bodyweight set.",
   "workoutTotalRepsLabel": "Total reps",
   "workoutHeaviestLabel": "Heaviest",
@@ -776,13 +980,40 @@
   "workoutInvalidRepsMessage": "Enter how many reps you did.",
   "workoutInvalidLoadMessage": "Enter a valid load, or leave it empty for bodyweight.",
   "workoutSetSummary": "{reps} reps",
-  "@workoutSetSummary": { "placeholders": { "reps": { "type": "int" } } },
+  "@workoutSetSummary": {
+    "placeholders": {
+      "reps": {
+        "type": "int"
+      }
+    }
+  },
   "workoutLastTimeLabel": "Last time: {summary}",
-  "@workoutLastTimeLabel": { "placeholders": { "summary": { "type": "String" } } },
+  "@workoutLastTimeLabel": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      }
+    }
+  },
   "workoutSetsSummaryUniform": "{sets}×{reps}",
-  "@workoutSetsSummaryUniform": { "placeholders": { "sets": { "type": "int" }, "reps": { "type": "int" } } },
+  "@workoutSetsSummaryUniform": {
+    "placeholders": {
+      "sets": {
+        "type": "int"
+      },
+      "reps": {
+        "type": "int"
+      }
+    }
+  },
   "workoutSetsSummaryMixed": "{sets, plural, =0{no sets} =1{1 set} other{{sets} sets}}",
-  "@workoutSetsSummaryMixed": { "placeholders": { "sets": { "type": "int" } } },
+  "@workoutSetsSummaryMixed": {
+    "placeholders": {
+      "sets": {
+        "type": "int"
+      }
+    }
+  },
   "exerciseSearchTitle": "Exercises",
   "exerciseSearchHint": "Search exercises",
   "exerciseSearchEmptyTitle": "No exercises found",
@@ -807,13 +1038,31 @@
   "workoutRoutineRemoveExerciseTooltip": "Remove from routine",
   "workoutRoutineIncompleteMessage": "Give the routine a name and at least one exercise.",
   "workoutRoutineExerciseCount": "{count, plural, =0{No exercises} =1{1 exercise} other{{count} exercises}}",
-  "@workoutRoutineExerciseCount": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutRoutineExerciseCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutNextRoutineLabel": "Next up",
   "workoutStartRoutineAction": "Start {name}",
-  "@workoutStartRoutineAction": { "placeholders": { "name": { "type": "String" } } },
+  "@workoutStartRoutineAction": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "workoutRoutineLastTrainedNever": "Not trained yet",
   "workoutFromRoutineLabel": "From {name}",
-  "@workoutFromRoutineLabel": { "placeholders": { "name": { "type": "String" } } },
+  "@workoutFromRoutineLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
   "workoutStartRoutineHint": "Sets are pre-filled with your last session — adjust what changed.",
   "reorderHandleLabel": "Reorder",
   "workoutRepeatSetAction": "Repeat set",
@@ -821,7 +1070,13 @@
   "workoutCompleteExerciseAction": "Done",
   "workoutReopenExerciseAction": "Reopen",
   "workoutCompletedSummary": "{sets, plural, =0{No sets} =1{1 set done} other{{sets} sets done}}",
-  "@workoutCompletedSummary": { "placeholders": { "sets": { "type": "int" } } },
+  "@workoutCompletedSummary": {
+    "placeholders": {
+      "sets": {
+        "type": "int"
+      }
+    }
+  },
   "workoutFinishedTitle": "Workout done",
   "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session.",
   "workoutCompleteNeedsSetTooltip": "Log a set before finishing this exercise",
@@ -834,18 +1089,54 @@
   "workoutProgressionE1rmTitle": "Estimated 1RM",
   "workoutProgressionHeaviestTitle": "Heaviest load",
   "workoutProgressionSessionCount": "{count, plural, =0{No sessions} =1{Last session} other{Last {count} sessions}}",
-  "@workoutProgressionSessionCount": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutProgressionSessionCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutProgressionListTitle": "Progress",
   "workoutProgressionListEmptyTitle": "No exercises logged yet",
   "workoutProgressionListEmptyMessage": "Log a few workouts and the exercises you trained show up here to track their progression.",
   "workoutHistoryTitle": "History",
   "workoutHistoryWeekSessions": "{count, plural, =0{No workouts} =1{1 workout} other{{count} workouts}}",
-  "@workoutHistoryWeekSessions": { "placeholders": { "count": { "type": "int" } } },
+  "@workoutHistoryWeekSessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "workoutVolumeTrendTitle": "Volume per session",
   "workoutVolumeAverageLabel": "{value} avg",
-  "@workoutVolumeAverageLabel": { "placeholders": { "value": { "type": "String" } } },
+  "@workoutVolumeAverageLabel": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
   "workoutHistoryVolumeSummary": "{sessions, plural, =0{No sessions} =1{1 session} other{{sessions} sessions}} · {sets, plural, =0{no sets} =1{1 set} other{{sets} sets}}",
-  "@workoutHistoryVolumeSummary": { "placeholders": { "sessions": { "type": "int" }, "sets": { "type": "int" } } },
+  "@workoutHistoryVolumeSummary": {
+    "placeholders": {
+      "sessions": {
+        "type": "int"
+      },
+      "sets": {
+        "type": "int"
+      }
+    }
+  },
   "workoutMuscleSplitTitle": "Volume by muscle group",
-  "workoutMuscleSplitEmptyMessage": "No load lifted in this period. Weighted sets show their muscle-group split here."
+  "workoutMuscleSplitEmptyMessage": "No load lifted in this period. Weighted sets show their muscle-group split here.",
+  "premiumCancelAnytime": "Cancel anytime in your App Store settings.",
+  "premiumOfferRetryAction": "Try again",
+  "premiumPeriodWeekly": "per week",
+  "premiumPeriodMonthly": "per month",
+  "premiumPeriodTwoMonth": "every 2 months",
+  "premiumPeriodThreeMonth": "every 3 months",
+  "premiumPeriodSixMonth": "every 6 months",
+  "premiumPeriodAnnual": "per year",
+  "premiumPeriodLifetime": "one-time payment"
 }

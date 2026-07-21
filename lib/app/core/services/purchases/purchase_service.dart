@@ -2,6 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:vitta/app/core/env/env.dart';
 import 'package:vitta/app/core/services/purchases/premium_offer.dart';
+import 'package:vitta/app/core/services/purchases/premium_period.dart';
 import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 
 // The entitlement identifier configured in RevenueCat. A typo here reads as
@@ -76,10 +77,25 @@ class PurchaseService {
             productId: package.storeProduct.identifier,
             // The store's own localized string, never a number formatted here.
             priceLabel: package.storeProduct.priceString,
+            period: _periodOf(package.packageType),
           ),
         )
         .toList();
   }
+
+  // custom and unknown map to null rather than to a default: the paywall states
+  // the period it is given, so guessing "monthly" here would put a false claim
+  // about the charge on the most scrutinised screen in the app.
+  PremiumPeriod? _periodOf(PackageType type) => switch (type) {
+    PackageType.weekly => PremiumPeriod.weekly,
+    PackageType.monthly => PremiumPeriod.monthly,
+    PackageType.twoMonth => PremiumPeriod.twoMonth,
+    PackageType.threeMonth => PremiumPeriod.threeMonth,
+    PackageType.sixMonth => PremiumPeriod.sixMonth,
+    PackageType.annual => PremiumPeriod.annual,
+    PackageType.lifetime => PremiumPeriod.lifetime,
+    PackageType.custom || PackageType.unknown => null,
+  };
 
   Future<PurchaseOutcome> purchase(String packageId) async {
     final package = _packages[packageId];
