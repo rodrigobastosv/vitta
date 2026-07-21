@@ -179,7 +179,7 @@ abstract class AppLocalizations {
   /// No description provided for @reminderEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap + to add a reminder for this day.'**
+  /// **'Add a reminder for this day and it\'ll be waiting for you here.'**
   String get reminderEmptyMessage;
 
   /// No description provided for @reminderNewTitle.
@@ -434,6 +434,114 @@ abstract class AppLocalizations {
   /// **'Clear search'**
   String get clearSearch;
 
+  /// No description provided for @dietHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No meals logged yet'**
+  String get dietHistoryEmptyTitle;
+
+  /// No description provided for @dietHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few days of meals and your calendar, trends and meal split will show up here.'**
+  String get dietHistoryEmptyMessage;
+
+  /// No description provided for @dietHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a meal'**
+  String get dietHistoryEmptyAction;
+
+  /// No description provided for @waterHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No water logged yet'**
+  String get waterHistoryEmptyTitle;
+
+  /// No description provided for @waterHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Track a few days and you\'ll see how your intake trends against your goal.'**
+  String get waterHistoryEmptyMessage;
+
+  /// No description provided for @waterHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log water'**
+  String get waterHistoryEmptyAction;
+
+  /// No description provided for @sleepHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No nights logged yet'**
+  String get sleepHistoryEmptyTitle;
+
+  /// No description provided for @sleepHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few nights and your duration trend and quality split will show up here.'**
+  String get sleepHistoryEmptyMessage;
+
+  /// No description provided for @sleepHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log sleep'**
+  String get sleepHistoryEmptyAction;
+
+  /// No description provided for @workoutHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No sessions logged yet'**
+  String get workoutHistoryEmptyTitle;
+
+  /// No description provided for @workoutHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Train a few sessions and you\'ll see your volume trend and which muscles you\'re hitting.'**
+  String get workoutHistoryEmptyMessage;
+
+  /// No description provided for @workoutHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start a workout'**
+  String get workoutHistoryEmptyAction;
+
+  /// No description provided for @reminderHistoryEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing this month'**
+  String get reminderHistoryEmptyTitle;
+
+  /// No description provided for @reminderHistoryEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders you create will show up on this calendar, so you can look back at what you got done.'**
+  String get reminderHistoryEmptyMessage;
+
+  /// No description provided for @reminderHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Create a reminder'**
+  String get reminderHistoryEmptyAction;
+
+  /// No description provided for @bodyWeightHistoryEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your weight'**
+  String get bodyWeightHistoryEmptyAction;
+
+  /// No description provided for @reminderFilterNoResultsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing matches this filter'**
+  String get reminderFilterNoResultsTitle;
+
+  /// No description provided for @reminderFilterNoResultsMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'You have reminders on this day, just none in this view. Try another filter.'**
+  String get reminderFilterNoResultsMessage;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
@@ -635,13 +743,13 @@ abstract class AppLocalizations {
   /// No description provided for @dietEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap the + button to add the first food of the day.'**
+  /// **'Add what you ate and your calories and macros fill in as you go.'**
   String get dietEmptyMessage;
 
   /// No description provided for @dietNotTodayEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap + to log food for this day.'**
+  /// **'Nothing was logged on this day. You can still add what you ate.'**
   String get dietNotTodayEmptyMessage;
 
   /// No description provided for @dietInvalidQuantity.
@@ -1391,7 +1499,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietRecipesEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap + to combine foods into a recipe you can log in one go.'**
+  /// **'Combine foods you eat together into a recipe, then log the whole thing in one go.'**
   String get dietRecipesEmptyMessage;
 
   /// No description provided for @dietEditRecipeTitle.
@@ -1577,7 +1685,7 @@ abstract class AppLocalizations {
   /// No description provided for @waterEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap the + button to log the first glass of water.'**
+  /// **'Use a quick add above to log your first glass of the day.'**
   String get waterEmptyMessage;
 
   /// No description provided for @bodyWeightFeatureTitle.
@@ -1781,7 +1889,7 @@ abstract class AppLocalizations {
   /// No description provided for @sleepEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Tap the + button to log your first night of sleep.'**
+  /// **'Log a night and you\'ll start seeing how your rest compares to your goal.'**
   String get sleepEmptyMessage;
 
   /// No description provided for @sleepDeleteLogTooltip.

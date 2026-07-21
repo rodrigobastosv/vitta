@@ -5,6 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
+import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -40,44 +41,52 @@ class DietHistoryPage extends StatelessWidget {
         final trendDays = _trendDays(state);
         return Scaffold(
           appBar: AppBar(title: Text(l10n.dietHistoryTitle)),
-          body: ListView(
-            padding: const EdgeInsets.all(VTSpacing.m),
-            children: [
-              VTAppearEffect(
-                child: DietHistoryCalendarCard(
-                  cubit: cubit,
-                  state: state,
-                  onDaySelected: (day) => context.pushRoute(
-                    .dietDay,
-                    extra: DietDayExtra(date: day, dailyMacros: state.macrosInMonth[day]!, macroGoals: state.macroGoals),
-                  ),
+          body: !state.hasData
+              ? VTEmptyState(
+                  icon: Icons.restaurant_outlined,
+                  title: l10n.dietHistoryEmptyTitle,
+                  message: l10n.dietHistoryEmptyMessage,
+                  actionLabel: l10n.dietHistoryEmptyAction,
+                  onAction: () => Navigator.of(context).pop(),
+                )
+              : ListView(
+                  padding: const EdgeInsets.all(VTSpacing.m),
+                  children: [
+                    VTAppearEffect(
+                      child: DietHistoryCalendarCard(
+                        cubit: cubit,
+                        state: state,
+                        onDaySelected: (day) => context.pushRoute(
+                          .dietDay,
+                          extra: DietDayExtra(date: day, dailyMacros: state.macrosInMonth[day]!, macroGoals: state.macroGoals),
+                        ),
+                      ),
+                    ),
+                    const VTGap.l(),
+                    Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
+                    const VTGap.m(),
+                    Center(
+                      child: TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+                    ),
+                    const VTGap.m(),
+                    VTAppearEffect(
+                      key: ValueKey('calories-${state.trendRange}'),
+                      child: CaloriesTrendCard(days: trendDays, macrosByDate: state.macrosInTrendRange, macroGoals: state.macroGoals),
+                    ),
+                    const VTGap.m(),
+                    VTAppearEffect(
+                      key: ValueKey('macros-${state.trendRange}'),
+                      index: 1,
+                      child: MacrosTrendCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
+                    ),
+                    const VTGap.m(),
+                    VTAppearEffect(
+                      key: ValueKey('meal-split-${state.trendRange}'),
+                      index: 2,
+                      child: MealSplitCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
+                    ),
+                  ],
                 ),
-              ),
-              const VTGap.l(),
-              Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
-              const VTGap.m(),
-              Center(
-                child: TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-              ),
-              const VTGap.m(),
-              VTAppearEffect(
-                key: ValueKey('calories-${state.trendRange}'),
-                child: CaloriesTrendCard(days: trendDays, macrosByDate: state.macrosInTrendRange, macroGoals: state.macroGoals),
-              ),
-              const VTGap.m(),
-              VTAppearEffect(
-                key: ValueKey('macros-${state.trendRange}'),
-                index: 1,
-                child: MacrosTrendCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
-              ),
-              const VTGap.m(),
-              VTAppearEffect(
-                key: ValueKey('meal-split-${state.trendRange}'),
-                index: 2,
-                child: MealSplitCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
-              ),
-            ],
-          ),
         );
       },
     );

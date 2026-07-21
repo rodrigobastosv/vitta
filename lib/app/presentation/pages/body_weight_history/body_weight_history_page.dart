@@ -42,6 +42,8 @@ class BodyWeightHistoryPage extends StatelessWidget {
                 icon: Icons.monitor_weight_outlined,
                 title: l10n.bodyWeightHistoryEmptyTitle,
                 message: l10n.bodyWeightHistoryEmptyMessage,
+                actionLabel: l10n.bodyWeightHistoryEmptyAction,
+                onAction: () => Navigator.of(context).pop(),
               )
             else
               BodyWeightTrendCard(logs: state.logs, unitSystem: cubit.unitSystem),

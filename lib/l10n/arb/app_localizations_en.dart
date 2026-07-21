@@ -51,7 +51,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderEmptyTitle => 'No reminders';
 
   @override
-  String get reminderEmptyMessage => 'Tap + to add a reminder for this day.';
+  String get reminderEmptyMessage => 'Add a reminder for this day and it\'ll be waiting for you here.';
 
   @override
   String get reminderNewTitle => 'New reminder';
@@ -180,6 +180,61 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clearSearch => 'Clear search';
 
   @override
+  String get dietHistoryEmptyTitle => 'No meals logged yet';
+
+  @override
+  String get dietHistoryEmptyMessage => 'Log a few days of meals and your calendar, trends and meal split will show up here.';
+
+  @override
+  String get dietHistoryEmptyAction => 'Log a meal';
+
+  @override
+  String get waterHistoryEmptyTitle => 'No water logged yet';
+
+  @override
+  String get waterHistoryEmptyMessage => 'Track a few days and you\'ll see how your intake trends against your goal.';
+
+  @override
+  String get waterHistoryEmptyAction => 'Log water';
+
+  @override
+  String get sleepHistoryEmptyTitle => 'No nights logged yet';
+
+  @override
+  String get sleepHistoryEmptyMessage => 'Log a few nights and your duration trend and quality split will show up here.';
+
+  @override
+  String get sleepHistoryEmptyAction => 'Log sleep';
+
+  @override
+  String get workoutHistoryEmptyTitle => 'No sessions logged yet';
+
+  @override
+  String get workoutHistoryEmptyMessage => 'Train a few sessions and you\'ll see your volume trend and which muscles you\'re hitting.';
+
+  @override
+  String get workoutHistoryEmptyAction => 'Start a workout';
+
+  @override
+  String get reminderHistoryEmptyTitle => 'Nothing this month';
+
+  @override
+  String get reminderHistoryEmptyMessage =>
+      'Reminders you create will show up on this calendar, so you can look back at what you got done.';
+
+  @override
+  String get reminderHistoryEmptyAction => 'Create a reminder';
+
+  @override
+  String get bodyWeightHistoryEmptyAction => 'Log your weight';
+
+  @override
+  String get reminderFilterNoResultsTitle => 'Nothing matches this filter';
+
+  @override
+  String get reminderFilterNoResultsMessage => 'You have reminders on this day, just none in this view. Try another filter.';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -294,10 +349,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietNotTodayEmptyTitle => 'Nothing logged on that day';
 
   @override
-  String get dietEmptyMessage => 'Tap the + button to add the first food of the day.';
+  String get dietEmptyMessage => 'Add what you ate and your calories and macros fill in as you go.';
 
   @override
-  String get dietNotTodayEmptyMessage => 'Tap + to log food for this day.';
+  String get dietNotTodayEmptyMessage => 'Nothing was logged on this day. You can still add what you ate.';
 
   @override
   String get dietInvalidQuantity => 'Enter a quantity greater than zero.';
@@ -726,7 +781,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietRecipesEmptyTitle => 'No recipes yet';
 
   @override
-  String get dietRecipesEmptyMessage => 'Tap + to combine foods into a recipe you can log in one go.';
+  String get dietRecipesEmptyMessage => 'Combine foods you eat together into a recipe, then log the whole thing in one go.';
 
   @override
   String get dietEditRecipeTitle => 'Edit recipe';
@@ -829,7 +884,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waterEmptyTitle => 'Nothing logged yet';
 
   @override
-  String get waterEmptyMessage => 'Tap the + button to log the first glass of water.';
+  String get waterEmptyMessage => 'Use a quick add above to log your first glass of the day.';
 
   @override
   String get bodyWeightFeatureTitle => 'Body weight';
@@ -941,7 +996,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sleepEmptyTitle => 'Nothing logged yet';
 
   @override
-  String get sleepEmptyMessage => 'Tap the + button to log your first night of sleep.';
+  String get sleepEmptyMessage => 'Log a night and you\'ll start seeing how your rest compares to your goal.';
 
   @override
   String get sleepDeleteLogTooltip => 'Remove';

@@ -69,7 +69,14 @@ class SleepPage extends StatelessWidget {
             padding: const EdgeInsets.all(VTSpacing.m),
             children: [
               if (state.logs.isEmpty)
-                VTEmptyState(icon: Icons.bedtime_outlined, title: l10n.sleepEmptyTitle, message: l10n.sleepEmptyMessage)
+                VTEmptyState(
+                  icon: Icons.bedtime_outlined,
+                  title: l10n.sleepEmptyTitle,
+                  message: l10n.sleepEmptyMessage,
+                  actionLabel: l10n.sleepLogAction,
+                  actionIcon: Icons.add,
+                  onAction: () => showLogSleepSheet(context: context),
+                )
               else ...[
                 SleepSummaryCard(
                   logs: state.logs,

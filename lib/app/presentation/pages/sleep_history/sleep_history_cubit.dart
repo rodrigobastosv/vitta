@@ -56,10 +56,7 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
 
   Future<void> _loadMonth(DateTime month) async {
     final sleepResult = await _getSleepInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
-    sleepResult.when(
-      (error) => emitPresentation(SleepHistoryError(message: error.message)),
-      (sleepByDate) => emit(state.copyWith(sleepInMonth: sleepByDate)),
-    );
+    sleepResult.when((error) => emitPresentation(SleepHistoryError(message: error.message)), (sleepByDate) => emit(state.copyWith(sleepInMonth: sleepByDate)));
   }
 
   Future<void> _loadTrend(TrendRange trendRange) async {

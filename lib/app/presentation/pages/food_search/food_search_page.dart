@@ -113,7 +113,7 @@ class FoodSearchPage extends StatelessWidget {
             onRemove: (query) => cubit.removeRecentSearch(query: query),
             onClear: cubit.clearRecentSearches,
           ),
-          final results when results.isEmpty => VTEmptyState(message: l10n.dietSearchNoResults),
+          final results when results.isEmpty => VTEmptyState.noResults(message: l10n.dietSearchNoResults),
           final results => _buildList(context: context, cubit: cubit, state: state, foods: results, heroPrefix: 'food-search'),
         },
       ),

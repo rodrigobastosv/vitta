@@ -35,7 +35,14 @@ class RoutinesPage extends StatelessWidget {
           label: Text(l10n.workoutRoutineNewAction),
         ),
         body: state.routines.isEmpty
-            ? VTEmptyState(icon: Icons.repeat, title: l10n.workoutRoutinesEmptyTitle, message: l10n.workoutRoutinesEmptyMessage)
+            ? VTEmptyState(
+                icon: Icons.repeat,
+                title: l10n.workoutRoutinesEmptyTitle,
+                message: l10n.workoutRoutinesEmptyMessage,
+                actionLabel: l10n.workoutRoutineNewAction,
+                actionIcon: Icons.add,
+                onAction: () => _openForm(context, cubit),
+              )
             : ReorderableListView.builder(
                 padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
                 itemCount: state.routines.length,

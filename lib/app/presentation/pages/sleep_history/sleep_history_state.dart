@@ -17,6 +17,8 @@ class SleepHistoryState extends Equatable {
   final Map<DateTime, DailySleep> sleepInTrendRange;
   final TrendRange trendRange;
 
+  bool get hasData => sleepInMonth.isNotEmpty || sleepInTrendRange.isNotEmpty;
+
   SleepHistoryState copyWith({
     DateTime? month,
     double? durationGoalHours,

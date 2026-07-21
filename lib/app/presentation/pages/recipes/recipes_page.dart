@@ -37,7 +37,14 @@ class RecipesPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.dietRecipesTitle)),
         body: state.recipes.isEmpty
-            ? VTEmptyState(icon: Icons.menu_book_outlined, title: l10n.dietRecipesEmptyTitle, message: l10n.dietRecipesEmptyMessage)
+            ? VTEmptyState(
+                icon: Icons.menu_book_outlined,
+                title: l10n.dietRecipesEmptyTitle,
+                message: l10n.dietRecipesEmptyMessage,
+                actionLabel: l10n.dietCreateRecipeTitle,
+                actionIcon: Icons.add,
+                onAction: () => _openForm(context, cubit),
+              )
             : ListView(
                 padding: const EdgeInsets.all(VTSpacing.m),
                 children: [

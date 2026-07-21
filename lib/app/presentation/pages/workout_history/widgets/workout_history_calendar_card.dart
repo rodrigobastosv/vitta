@@ -50,10 +50,6 @@ class WorkoutHistoryCalendarCard extends StatelessWidget {
     if (sessionCount == 0) {
       return const VTCalendarWeekBadge();
     }
-    return VTCalendarWeekBadge(
-      label: '$sessionCount',
-      color: context.colorScheme.primary,
-      tooltip: l10n.workoutHistoryWeekSessions(sessionCount),
-    );
+    return VTCalendarWeekBadge(label: '$sessionCount', color: context.colorScheme.primary, tooltip: l10n.workoutHistoryWeekSessions(sessionCount));
   }
 }

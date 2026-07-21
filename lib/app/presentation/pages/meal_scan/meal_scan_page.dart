@@ -98,24 +98,26 @@ class MealScanPage extends StatelessWidget {
     if (!state.hasScanned) {
       return Padding(
         padding: const EdgeInsets.only(top: VTSpacing.xl),
-        child: Column(
-          children: [
-            VTEmptyState(icon: Icons.center_focus_strong_outlined, title: l10n.mealScanIntroTitle, message: l10n.mealScanIntroMessage),
-            const VTGap.m(),
-            VTPrimaryButton(label: l10n.mealScanTakePhotoAction, icon: Icons.photo_camera_outlined, onPressed: () => _scan(context, cubit)),
-          ],
+        child: VTEmptyState(
+          icon: Icons.center_focus_strong_outlined,
+          title: l10n.mealScanIntroTitle,
+          message: l10n.mealScanIntroMessage,
+          actionLabel: l10n.mealScanTakePhotoAction,
+          actionIcon: Icons.photo_camera_outlined,
+          onAction: () => _scan(context, cubit),
         ),
       );
     }
     if (state.entries.isEmpty) {
       return Padding(
         padding: const EdgeInsets.only(top: VTSpacing.xl),
-        child: Column(
-          children: [
-            VTEmptyState(icon: Icons.no_food_outlined, title: l10n.mealScanNoDataTitle, message: l10n.mealScanNoData),
-            const VTGap.m(),
-            VTPrimaryButton(label: l10n.mealScanRetakeAction, icon: Icons.photo_camera_outlined, onPressed: () => _scan(context, cubit)),
-          ],
+        child: VTEmptyState(
+          icon: Icons.no_food_outlined,
+          title: l10n.mealScanNoDataTitle,
+          message: l10n.mealScanNoData,
+          actionLabel: l10n.mealScanRetakeAction,
+          actionIcon: Icons.photo_camera_outlined,
+          onAction: () => _scan(context, cubit),
         ),
       );
     }

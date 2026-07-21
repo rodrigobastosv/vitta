@@ -3,17 +3,14 @@ import 'package:vitta/app/domain/workout/entities/daily_workout.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 
 class WorkoutHistoryState extends Equatable {
-  const WorkoutHistoryState({
-    required this.month,
-    this.workoutsInMonth = const {},
-    this.workoutsInTrendRange = const {},
-    this.trendRange = TrendRange.month,
-  });
+  const WorkoutHistoryState({required this.month, this.workoutsInMonth = const {}, this.workoutsInTrendRange = const {}, this.trendRange = TrendRange.month});
 
   final DateTime month;
   final Map<DateTime, DailyWorkout> workoutsInMonth;
   final Map<DateTime, DailyWorkout> workoutsInTrendRange;
   final TrendRange trendRange;
+
+  bool get hasData => workoutsInMonth.isNotEmpty || workoutsInTrendRange.isNotEmpty;
 
   WorkoutHistoryState copyWith({
     DateTime? month,

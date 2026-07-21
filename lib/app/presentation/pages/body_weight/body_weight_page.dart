@@ -63,6 +63,9 @@ class BodyWeightPage extends StatelessWidget {
                       icon: Icons.monitor_weight_outlined,
                       title: l10n.bodyWeightEmptyTitle,
                       message: l10n.bodyWeightEmptyMessage,
+                      actionLabel: l10n.bodyWeightLogAction,
+                      actionIcon: Icons.add,
+                      onAction: () => showLogBodyWeightSheet(context: context),
                     ),
                   ],
                 )

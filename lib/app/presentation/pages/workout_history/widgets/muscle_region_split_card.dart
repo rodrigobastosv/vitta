@@ -32,15 +32,10 @@ class MuscleRegionSplitCard extends StatelessWidget {
             Text(l10n.workoutMuscleSplitEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
             VTDistributionBar(
-              segments: [
-                for (final region in split.presentRegions) VTBarChartSegment(value: split.volumeOf(region), color: region.color),
-              ],
+              segments: [for (final region in split.presentRegions) VTBarChartSegment(value: split.volumeOf(region), color: region.color)],
             ),
             const VTGap.m(),
-            for (final region in split.presentRegions) ...[
-              MuscleRegionSplitRow(region: region, share: split.shareOf(region)),
-              const VTGap.s(),
-            ],
+            for (final region in split.presentRegions) ...[MuscleRegionSplitRow(region: region, share: split.shareOf(region)), const VTGap.s()],
           ],
         ],
       ),

@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTEmptyState extends StatelessWidget {
-  const VTEmptyState({required this.message, this.icon = Icons.search_off, this.title, super.key});
+  const VTEmptyState({
+    required this.message,
+    required this.icon,
+    this.title,
+    this.actionLabel,
+    this.actionIcon,
+    this.onAction,
+    super.key,
+  });
+
+  const VTEmptyState.noResults({required this.message, this.title, this.actionLabel, this.actionIcon, this.onAction, super.key})
+    : icon = Icons.search_off;
 
   final String message;
   final String? title;
   final IconData icon;
+  final String? actionLabel;
+  final IconData? actionIcon;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +42,10 @@ class VTEmptyState extends StatelessWidget {
               style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant),
               textAlign: .center,
             ),
+            if (actionLabel case final actionLabel? when onAction != null) ...[
+              const VTGap.l(),
+              VTPrimaryButton(label: actionLabel, icon: actionIcon, onPressed: onAction),
+            ],
           ],
         ),
       ),

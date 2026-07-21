@@ -18,6 +18,8 @@ class DietHistoryState extends Equatable {
   final TrendRange trendRange;
   final Map<DateTime, DailyMacros> macrosInTrendRange;
 
+  bool get hasData => macrosInMonth.isNotEmpty || macrosInTrendRange.isNotEmpty;
+
   DietHistoryState copyWith({
     DateTime? month,
     MacroGoals? macroGoals,

@@ -21,7 +21,10 @@ class WorkoutVolumeTrendCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
-    final trainedDays = [for (final day in days) if (workoutsByDate[day] case final workout? when workout.hasData) workout];
+    final trainedDays = [
+      for (final day in days)
+        if (workoutsByDate[day] case final workout? when workout.hasData) workout,
+    ];
     final sessionCount = trainedDays.length;
     final totalVolumeKg = trainedDays.fold<double>(0, (sum, workout) => sum + workout.volumeKg);
     final totalSets = trainedDays.fold<int>(0, (sum, workout) => sum + workout.totalSets);

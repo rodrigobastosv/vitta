@@ -34,8 +34,7 @@ class SleepQualitySplitCard extends StatelessWidget {
             VTDistributionBar(
               segments: [
                 for (final rating in SleepQualitySplit.ratings)
-                  if (split.nightsAt(rating) > 0)
-                    VTBarChartSegment(value: split.nightsAt(rating).toDouble(), color: sleepQualityColor(rating)),
+                  if (split.nightsAt(rating) > 0) VTBarChartSegment(value: split.nightsAt(rating).toDouble(), color: sleepQualityColor(rating)),
               ],
             ),
             const VTGap.m(),

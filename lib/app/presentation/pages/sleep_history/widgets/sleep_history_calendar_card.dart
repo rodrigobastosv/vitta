@@ -44,8 +44,7 @@ class SleepHistoryCalendarCard extends StatelessWidget {
     );
   }
 
-  Color? _adherenceColor(double hours) =>
-      state.durationGoalHours <= 0 ? null : GoalAdherence.forRatio(hours / state.durationGoalHours).color;
+  Color? _adherenceColor(double hours) => state.durationGoalHours <= 0 ? null : GoalAdherence.forRatio(hours / state.durationGoalHours).color;
 
   Color? _dayColor(DateTime day) {
     final sleep = state.sleepInMonth[day];

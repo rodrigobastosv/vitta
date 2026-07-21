@@ -32,15 +32,24 @@ DailyMacros buildDayOf(double calories, {MealType mealType = MealType.breakfast}
   ],
 );
 
-Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyMacros> macrosByDate = const {}}) async {
+Future<void> pumpHistoryPage(
+  WidgetTester tester, {
+  Map<DateTime, DailyMacros> macrosByDate = const {},
+  Map<DateTime, DailyMacros>? trendMacrosByDate,
+}) async {
   final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+  final monthStart = DateTime(DateTime.now().year, DateTime.now().month);
   when(
     () => getMacrosInRangeUseCase(
       from: any(named: 'from'),
       to: any(named: 'to'),
     ),
-  ).thenAnswer((_) async => Success(macrosByDate));
+  ).thenAnswer((invocation) async {
+    final from = invocation.namedArguments[#from] as DateTime;
+    final isMonthQuery = from.year == monthStart.year && from.month == monthStart.month && from.day == 1;
+    return Success(isMonthQuery || trendMacrosByDate == null ? macrosByDate : trendMacrosByDate);
+  });
   when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
   if (G.isRegistered<DietHistoryCubit>()) {
     G.unregister<DietHistoryCubit>();
@@ -80,12 +89,22 @@ void main() {
   });
 
   testWidgets('shows the calendar and the trends section on one page', (tester) async {
-    await pumpHistoryPage(tester);
+    final today = DateTime.now();
+    await pumpHistoryPage(tester, macrosByDate: {DateTime(today.year, today.month, today.day): buildDayOf(2000)});
 
     expect(find.text('History'), findsOneWidget);
     expect(find.text('Avg'), findsOneWidget);
     expect(find.text('Trends'), findsOneWidget);
     expect(find.text('30d'), findsOneWidget);
+  });
+
+  testWidgets('invites a first log instead of showing an empty calendar and flat charts', (tester) async {
+    await pumpHistoryPage(tester);
+
+    expect(find.text('No meals logged yet'), findsOneWidget);
+    expect(find.text('Log a meal'), findsOneWidget);
+    expect(find.text('Trends'), findsNothing);
+    expect(find.byType(VTBarChart), findsNothing);
   });
 
   testWidgets('a week with logged days shows its rounded calorie average', (tester) async {
@@ -110,12 +129,15 @@ void main() {
     expect(find.text('Goal'), findsOneWidget);
   });
 
-  testWidgets('the trends section explains itself instead of drawing empty charts', (tester) async {
-    await pumpHistoryPage(tester);
+  testWidgets('a month with data but an empty trend range still explains each card', (tester) async {
+    final today = DateTime.now();
+    final lastMonth = DateTime(today.year, today.month - 1, 15);
+    await pumpHistoryPage(tester, macrosByDate: {lastMonth: buildDayOf(2000)}, trendMacrosByDate: const {});
 
     await tester.scrollUntilVisible(find.text('Calories by meal'), 200);
     await tester.pumpAndSettle();
 
+    expect(find.text('No meals logged yet'), findsNothing);
     expect(find.text('Nothing logged in this period yet.'), findsNWidgets(3));
     expect(find.byType(VTBarChart), findsNothing);
     expect(find.byType(VTDistributionBar), findsNothing);
