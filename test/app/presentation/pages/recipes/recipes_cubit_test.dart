@@ -43,11 +43,7 @@ void main() {
       return CubitsFactories.buildRecipesCubit(getRecipesUseCase: getRecipesUseCase);
     },
     act: (cubit) => cubit.loadRecipes(),
-    expectPresentation: () => [
-      isA<RecipesShowLoading>(),
-      isA<RecipesHideLoading>(),
-      isA<RecipesError>().having((event) => event.message, 'message', 'boom'),
-    ],
+    expectPresentation: () => [isA<RecipesShowLoading>(), isA<RecipesHideLoading>(), isA<RecipesError>().having((event) => event.message, 'message', 'boom')],
   );
 
   test('deleting a recipe reloads the list', () async {

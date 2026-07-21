@@ -36,11 +36,7 @@ void main() {
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
 
-    final loggedResult = await useCase(
-      items: [_logItem('Rice', 200), _logItem('Chicken', 150)],
-      loggedDate: loggedDate,
-      mealType: MealType.dinner,
-    );
+    final loggedResult = await useCase(items: [_logItem('Rice', 200), _logItem('Chicken', 150)], loggedDate: loggedDate, mealType: MealType.dinner);
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => dietRepository.saveFood(food: any(named: 'food'))).called(2);

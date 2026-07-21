@@ -105,10 +105,7 @@ void main() {
       when(
         () => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg'),
       ).thenAnswer((_) async => const Success(ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10)));
-      return CubitsFactories.buildCustomFoodCubit(
-        imagePickerService: imagePickerService,
-        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
-      );
+      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
     },
     act: (cubit) async {
       cubit.nutrientChanged(nutrient: .fiber, text: '2');
@@ -136,10 +133,7 @@ void main() {
         ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Success(ScannedNutritionFacts()));
-      return CubitsFactories.buildCustomFoodCubit(
-        imagePickerService: imagePickerService,
-        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
-      );
+      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
     expectPresentation: () => [isA<CustomFoodShowLoading>(), isA<CustomFoodHideLoading>(), isA<CustomFoodScanFoundNothing>()],
@@ -157,10 +151,7 @@ void main() {
         ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildCustomFoodCubit(
-        imagePickerService: imagePickerService,
-        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
-      );
+      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
     expectPresentation: () => [

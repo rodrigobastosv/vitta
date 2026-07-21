@@ -10,9 +10,7 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/food_factory.dart';
 
-final _weightField = find.byWidgetPredicate(
-  (widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false),
-);
+final _weightField = find.byWidgetPredicate((widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false));
 final _unitsField = find.descendant(of: find.byType(VTStepper), matching: find.byType(TextField));
 
 Future<void> pumpInput(
@@ -29,27 +27,31 @@ Future<void> pumpInput(
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(
-      body: FoodQuantityInput(
-        food: food,
-        unitSystem: unitSystem,
-        onChanged: onChanged,
-        initialGrams: initialGrams,
-        initialUnits: initialUnits,
-      ),
+      body: FoodQuantityInput(food: food, unitSystem: unitSystem, onChanged: onChanged, initialGrams: initialGrams, initialUnits: initialUnits),
     ),
   ),
 );
 
 void main() {
   testWidgets('a food nobody counts shows only the weight field', (tester) async {
-    await pumpInput(tester, food: FoodFactory.build(name: 'Arroz'), initialGrams: 100, onChanged: (_) {});
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Arroz'),
+      initialGrams: 100,
+      onChanged: (_) {},
+    );
 
     expect(_weightField, findsOneWidget);
     expect(find.byType(VTStepper), findsNothing);
   });
 
   testWidgets('a countable food shows both the weight field and the units stepper', (tester) async {
-    await pumpInput(tester, food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50), initialGrams: 100, onChanged: (_) {});
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
+      initialGrams: 100,
+      onChanged: (_) {},
+    );
 
     expect(_weightField, findsOneWidget);
     expect(find.byType(VTStepper), findsOneWidget);
@@ -58,7 +60,12 @@ void main() {
 
   testWidgets('typing a count fills the weight field and records the count', (tester) async {
     final selections = <FoodQuantitySelection>[];
-    await pumpInput(tester, food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50), initialGrams: 100, onChanged: selections.add);
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
+      initialGrams: 100,
+      onChanged: selections.add,
+    );
 
     await tester.enterText(_unitsField, '3');
     await tester.pump();
@@ -70,7 +77,12 @@ void main() {
 
   testWidgets('typing a weight fills the units and records no count', (tester) async {
     final selections = <FoodQuantitySelection>[];
-    await pumpInput(tester, food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50), initialGrams: 100, onChanged: selections.add);
+    await pumpInput(
+      tester,
+      food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
+      initialGrams: 100,
+      onChanged: selections.add,
+    );
 
     await tester.enterText(_weightField, '200');
     await tester.pump();

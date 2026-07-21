@@ -108,12 +108,7 @@ void main() {
     FoodLogEntry? editedEntry;
     FoodLogEntry? deletedEntry;
     final section = buildBreakfast();
-    await pumpMealSectionCard(
-      tester,
-      section: section,
-      onEditEntry: (entry) => editedEntry = entry,
-      onDeleteEntry: (entry) => deletedEntry = entry,
-    );
+    await pumpMealSectionCard(tester, section: section, onEditEntry: (entry) => editedEntry = entry, onDeleteEntry: (entry) => deletedEntry = entry);
 
     await tester.tap(find.text('Breakfast'));
     await tester.pumpAndSettle();

@@ -145,6 +145,25 @@ class DietRepository {
 
   Future<void> saveMacroGoals(MacroGoals goals) => _dietGoalsLocalDataSource.saveGoals(goals);
 
+  static const int _recentEntryLookback = 80;
+
+  Future<Result<VTError, List<FoodLogEntry>>> getRecentlyLoggedFoods({required int limit}) async {
+    final entriesResult = await _supabaseDietDataSource.getRecentEntries(limit: _recentEntryLookback);
+    return entriesResult.when(Failure.new, (entries) {
+      final seenFoodIds = <String>{};
+      final distinct = <FoodLogEntry>[];
+      for (final entry in entries) {
+        if (entry.food.id case final foodId? when seenFoodIds.add(foodId)) {
+          distinct.add(entry);
+          if (distinct.length == limit) {
+            break;
+          }
+        }
+      }
+      return Success(distinct);
+    });
+  }
+
   Future<Result<VTError, Map<DateTime, DailyMacros>>> getMacrosInRange({required DateTime from, required DateTime to}) async {
     final monthlyLogResult = await _supabaseDietDataSource.getLogsInRange(from: from, to: to);
     return monthlyLogResult.when(Failure.new, (entries) => Success(_groupByDate(entries)));

@@ -15,10 +15,7 @@ void main() {
     when(authRepository.signOut).thenAnswer((_) async => const Success(null));
     when(authRepository.signInAnonymously).thenAnswer((_) async => const Success(AnonymousUser()));
     when(purchaseService.logOut).thenAnswer((_) async {});
-    final useCase = UseCasesFactories.buildSignOutUseCase(
-      authRepository: authRepository,
-      purchaseService: purchaseService,
-    );
+    final useCase = UseCasesFactories.buildSignOutUseCase(authRepository: authRepository, purchaseService: purchaseService);
 
     final statusResult = await useCase();
 
@@ -32,10 +29,7 @@ void main() {
     when(authRepository.signOut).thenAnswer((_) async => const Success(null));
     when(authRepository.signInAnonymously).thenAnswer((_) async => const Success(AnonymousUser()));
     when(purchaseService.logOut).thenAnswer((_) async {});
-    final useCase = UseCasesFactories.buildSignOutUseCase(
-      authRepository: authRepository,
-      purchaseService: purchaseService,
-    );
+    final useCase = UseCasesFactories.buildSignOutUseCase(authRepository: authRepository, purchaseService: purchaseService);
 
     await useCase();
 
@@ -47,10 +41,7 @@ void main() {
     final purchaseService = MockPurchaseService();
     when(authRepository.signOut).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     when(purchaseService.logOut).thenAnswer((_) async {});
-    final useCase = UseCasesFactories.buildSignOutUseCase(
-      authRepository: authRepository,
-      purchaseService: purchaseService,
-    );
+    final useCase = UseCasesFactories.buildSignOutUseCase(authRepository: authRepository, purchaseService: purchaseService);
 
     final statusResult = await useCase();
 

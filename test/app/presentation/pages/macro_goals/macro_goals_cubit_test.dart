@@ -43,10 +43,7 @@ void main() {
     when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
     final newGoals = MacroGoalsFactory.build(proteinGoalGrams: 180);
 
-    await CubitsFactories.buildMacroGoalsCubit(
-      getMacroGoalsUseCase: getMacroGoalsUseCase,
-      saveMacroGoalsUseCase: saveMacroGoalsUseCase,
-    ).saveGoals(newGoals);
+    await CubitsFactories.buildMacroGoalsCubit(getMacroGoalsUseCase: getMacroGoalsUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase).saveGoals(newGoals);
 
     verify(() => saveMacroGoalsUseCase(newGoals)).called(1);
   });

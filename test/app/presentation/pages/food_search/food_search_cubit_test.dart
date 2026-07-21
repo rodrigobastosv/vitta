@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_presentation_event.dart';
@@ -16,6 +17,18 @@ import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
+  MockAddRecentSearchUseCase stubbedAddRecentSearch() {
+    final addRecentSearchUseCase = MockAddRecentSearchUseCase();
+    when(() => addRecentSearchUseCase(query: any(named: 'query'))).thenAnswer((_) async => const <String>[]);
+    return addRecentSearchUseCase;
+  }
+
+  MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
+    final getRecentlyLoggedFoodsUseCase = MockGetRecentlyLoggedFoodsUseCase();
+    when(() => getRecentlyLoggedFoodsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<FoodLogEntry>[]));
+    return getRecentlyLoggedFoodsUseCase;
+  }
+
   MockAddRecentSearchUseCase stubbedAddRecent() {
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     when(() => addRecentSearchUseCase(query: any(named: 'query'))).thenAnswer((_) async => const []);
@@ -29,7 +42,11 @@ void main() {
 
   test('search with a blank query stays idle without hitting the use case', () async {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
-    final cubit = CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, addRecentSearchUseCase: stubbedAddRecent());
+    final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+      searchFoodsUseCase: searchFoodsUseCase,
+      addRecentSearchUseCase: stubbedAddRecent(),
+    );
 
     await cubit.search(query: '   ');
 
@@ -42,7 +59,11 @@ void main() {
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
-      return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, addRecentSearchUseCase: stubbedAddRecent());
+      return CubitsFactories.buildFoodSearchCubit(
+        getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+        searchFoodsUseCase: searchFoodsUseCase,
+        addRecentSearchUseCase: stubbedAddRecent(),
+      );
     },
     act: (cubit) => cubit.search(query: 'banana'),
     expect: () => [predicate<FoodSearchState>((state) => state.results != null)],
@@ -53,7 +74,11 @@ void main() {
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
-      return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, addRecentSearchUseCase: stubbedAddRecent());
+      return CubitsFactories.buildFoodSearchCubit(
+        getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+        searchFoodsUseCase: searchFoodsUseCase,
+        addRecentSearchUseCase: stubbedAddRecent(),
+      );
     },
     act: (cubit) => cubit.search(query: 'banana'),
     expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>()],
@@ -64,7 +89,11 @@ void main() {
     build: () {
       final searchFoodsUseCase = MockSearchFoodsUseCase();
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildFoodSearchCubit(searchFoodsUseCase: searchFoodsUseCase, addRecentSearchUseCase: stubbedAddRecent());
+      return CubitsFactories.buildFoodSearchCubit(
+        getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+        searchFoodsUseCase: searchFoodsUseCase,
+        addRecentSearchUseCase: stubbedAddRecent(),
+      );
     },
     act: (cubit) => cubit.search(query: 'banana'),
     expectPresentation: () => [isA<FoodSearchShowLoading>(), isA<FoodSearchHideLoading>(), isA<FoodSearchError>()],
@@ -72,13 +101,11 @@ void main() {
 
   test('logFood delegates to the use case with the given past date and meal', () async {
     final logFoodUseCase = MockLogFoodUseCase();
-    final cubit = CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    final cubit = CubitsFactories.buildFoodSearchCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     final food = FoodFactory.build();
     final foodLog = FoodLogFactory.build();
     final pastDate = DateTime(2026, 7, 10);
-    when(
-      () => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250),
-    ).thenAnswer((_) async => Success(foodLog));
+    when(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250)).thenAnswer((_) async => Success(foodLog));
 
     final loggedResult = await cubit.logFood(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250);
 
@@ -89,7 +116,7 @@ void main() {
   test('logFood logs a food_logged user action on success', () async {
     final loggingService = useMockLog();
     final logFoodUseCase = MockLogFoodUseCase();
-    final cubit = CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+    final cubit = CubitsFactories.buildFoodSearchCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     final food = FoodFactory.build();
     when(
       () => logFoodUseCase(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
@@ -116,13 +143,11 @@ void main() {
           quantityGrams: 250,
         ),
       ).thenAnswer((_) async => Success(FoodLogFactory.build()));
-      return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+      return CubitsFactories.buildFoodSearchCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     },
     act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
     expectPresentation: () => [
-      isA<FoodLogged>()
-          .having((event) => event.foodName, 'foodName', 'Banana')
-          .having((event) => event.mealType, 'mealType', MealType.dinner),
+      isA<FoodLogged>().having((event) => event.foodName, 'foodName', 'Banana').having((event) => event.mealType, 'mealType', MealType.dinner),
     ],
   );
 
@@ -138,9 +163,42 @@ void main() {
           quantityGrams: 250,
         ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase);
+      return CubitsFactories.buildFoodSearchCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     },
     act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
     expectPresentation: () => <FoodSearchPresentationEvent>[],
   );
+
+  test('typing searches on its own, once the keystrokes stop', () async {
+    final searchFoodsUseCase = MockSearchFoodsUseCase();
+    when(() => searchFoodsUseCase(query: any(named: 'query'))).thenAnswer((_) async => Success([FoodFactory.build()]));
+    final cubit = CubitsFactories.buildFoodSearchCubit(
+      getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+      searchFoodsUseCase: searchFoodsUseCase,
+      addRecentSearchUseCase: stubbedAddRecentSearch(),
+    );
+
+    cubit
+      ..queryChanged('ban')
+      ..queryChanged('bana')
+      ..queryChanged('banana');
+
+    verifyNever(() => searchFoodsUseCase(query: any(named: 'query')));
+
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    verify(() => searchFoodsUseCase(query: 'banana')).called(1);
+    await cubit.close();
+  });
+
+  test('a one-letter query never reaches the network', () async {
+    final searchFoodsUseCase = MockSearchFoodsUseCase();
+    final cubit = CubitsFactories.buildFoodSearchCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), searchFoodsUseCase: searchFoodsUseCase);
+
+    cubit.queryChanged('b');
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    verifyNever(() => searchFoodsUseCase(query: any(named: 'query')));
+    await cubit.close();
+  });
 }

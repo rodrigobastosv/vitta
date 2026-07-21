@@ -6,6 +6,5 @@ import 'food_factory.dart';
 import 'food_log_factory.dart';
 
 abstract class FoodLogEntryFactory {
-  static FoodLogEntry build({FoodLog? log, Food? food}) =>
-      FoodLogEntry(log: log ?? FoodLogFactory.build(), food: food ?? FoodFactory.build());
+  static FoodLogEntry build({FoodLog? log, Food? food}) => FoodLogEntry(log: log ?? FoodLogFactory.build(), food: food ?? FoodFactory.build());
 }

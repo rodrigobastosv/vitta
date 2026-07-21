@@ -32,9 +32,7 @@ void main() {
 
   test('half hours survive the conversion', () {
     final night = DailySleep(
-      entries: [
-        SleepLog(id: 'a', loggedDate: DateTime(2026, 7, 10), bedTime: DateTime(2026, 7, 10, 23), wakeTime: DateTime(2026, 7, 11, 6, 30)),
-      ],
+      entries: [SleepLog(id: 'a', loggedDate: DateTime(2026, 7, 10), bedTime: DateTime(2026, 7, 10, 23), wakeTime: DateTime(2026, 7, 11, 6, 30))],
     );
 
     expect(night.totalHours, 7.5);

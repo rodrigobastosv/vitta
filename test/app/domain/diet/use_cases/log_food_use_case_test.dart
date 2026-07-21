@@ -39,22 +39,10 @@ void main() {
     final loggedDate = DateTime(2026, 7, 11);
     final foodLog = FoodLogFactory.build(quantityUnits: 2);
     when(
-      () => dietRepository.logFood(
-        foodId: 'food-1',
-        loggedDate: loggedDate,
-        mealType: MealType.breakfast,
-        quantityGrams: 100,
-        quantityUnits: 2,
-      ),
+      () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: MealType.breakfast, quantityGrams: 100, quantityUnits: 2),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await useCase(
-      food: egg,
-      loggedDate: loggedDate,
-      mealType: MealType.breakfast,
-      quantityGrams: 100,
-      quantityUnits: 2,
-    );
+    final loggedResult = await useCase(food: egg, loggedDate: loggedDate, mealType: MealType.breakfast, quantityGrams: 100, quantityUnits: 2);
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
   });
@@ -83,12 +71,7 @@ void main() {
     const error = VTError(message: 'could not save food');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => const Failure(error));
 
-    final loggedResult = await useCase(
-      food: unsavedFood,
-      loggedDate: DateTime(2026, 7, 11),
-      mealType: MealType.breakfast,
-      quantityGrams: 100,
-    );
+    final loggedResult = await useCase(food: unsavedFood, loggedDate: DateTime(2026, 7, 11), mealType: MealType.breakfast, quantityGrams: 100);
 
     loggedResult.when((resultError) => expect(resultError, error), (_) => fail('expected Failure, got Success'));
     verifyNever(

@@ -32,10 +32,7 @@ void main() {
   });
 
   test('shows bodyweight rather than a zero load', () {
-    final sets = [
-      WorkoutSetFactory.build(id: 's1', reps: 12, weightKg: 0),
-      WorkoutSetFactory.build(id: 's2', position: 1, reps: 12, weightKg: 0),
-    ];
+    final sets = [WorkoutSetFactory.build(id: 's1', reps: 12, weightKg: 0), WorkoutSetFactory.build(id: 's2', position: 1, reps: 12, weightKg: 0)];
 
     expect(WorkoutSetsSummary.format(sets: sets, unitSystem: UnitSystem.metric, l10n: l10n), '2×12 · Bodyweight');
   });

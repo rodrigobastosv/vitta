@@ -31,10 +31,7 @@ void main() {
     build: () {
       final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
       when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([BodyWeightLogFactory.build()]));
-      return CubitsFactories.buildBodyWeightCubit(
-        getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
-        getAppSettingsUseCase: _settingsUseCase(),
-      );
+      return CubitsFactories.buildBodyWeightCubit(getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.loadRecent(),
     expect: () => [isA<BodyWeightState>().having((state) => state.logs.length, 'logs', 1)],
@@ -45,10 +42,7 @@ void main() {
     build: () {
       final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
       when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
-      return CubitsFactories.buildBodyWeightCubit(
-        getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
-        getAppSettingsUseCase: _settingsUseCase(),
-      );
+      return CubitsFactories.buildBodyWeightCubit(getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.loadRecent(),
     expectPresentation: () => [isA<BodyWeightShowLoading>(), isA<BodyWeightHideLoading>()],
@@ -59,10 +53,7 @@ void main() {
     build: () {
       final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
       when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
-      return CubitsFactories.buildBodyWeightCubit(
-        getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
-        getAppSettingsUseCase: _settingsUseCase(),
-      );
+      return CubitsFactories.buildBodyWeightCubit(getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.loadRecent(),
     expectPresentation: () => [isA<BodyWeightShowLoading>(), isA<BodyWeightHideLoading>(), isA<BodyWeightError>()],
@@ -71,8 +62,12 @@ void main() {
   test('logWeight reloads the recent logs and logs an action', () async {
     useMockLog();
     final logBodyWeightUseCase = MockLogBodyWeightUseCase();
-    when(() => logBodyWeightUseCase(loggedDate: any(named: 'loggedDate'), weightKg: any(named: 'weightKg')))
-        .thenAnswer((_) async => Success(BodyWeightLogFactory.build()));
+    when(
+      () => logBodyWeightUseCase(
+        loggedDate: any(named: 'loggedDate'),
+        weightKg: any(named: 'weightKg'),
+      ),
+    ).thenAnswer((_) async => Success(BodyWeightLogFactory.build()));
     final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
     when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success([BodyWeightLogFactory.build()]));
     final cubit = CubitsFactories.buildBodyWeightCubit(
@@ -92,8 +87,9 @@ void main() {
     final deleteBodyWeightLogUseCase = MockDeleteBodyWeightLogUseCase();
     when(() => deleteBodyWeightLogUseCase(logId: 'bw-old')).thenAnswer((_) async => const Success(null));
     final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
-    when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days')))
-        .thenAnswer((_) async => Success([BodyWeightLogFactory.build(id: 'bw-old'), BodyWeightLogFactory.build(id: 'bw-2')]));
+    when(
+      () => getRecentBodyWeightLogsUseCase(days: any(named: 'days')),
+    ).thenAnswer((_) async => Success([BodyWeightLogFactory.build(id: 'bw-old'), BodyWeightLogFactory.build(id: 'bw-2')]));
     final cubit = CubitsFactories.buildBodyWeightCubit(
       deleteBodyWeightLogUseCase: deleteBodyWeightLogUseCase,
       getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,

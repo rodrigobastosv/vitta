@@ -84,9 +84,7 @@ void main() {
 
   testWidgets('saving a new quantity and meal updates the log and closes the sheet', (tester) async {
     final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
-    when(
-      () => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantityGrams: 180),
-    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+    when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantityGrams: 180)).thenAnswer((_) async => Success(FoodLogFactory.build()));
     await pumpEditSheet(
       tester,
       cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase),
@@ -159,9 +157,7 @@ void main() {
 
   testWidgets('a failed update keeps the sheet open and shows the error inline', (tester) async {
     final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
-    when(
-      () => updateFoodLogUseCase(logId: 'log-1', mealType: .breakfast, quantityGrams: 100),
-    ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .breakfast, quantityGrams: 100)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     await pumpEditSheet(
       tester,
       cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase),

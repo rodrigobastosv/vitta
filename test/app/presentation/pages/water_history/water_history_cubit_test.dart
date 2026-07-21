@@ -47,10 +47,7 @@ void main() {
 
   test('refresh queries the displayed month and the trend window separately', () async {
     final getWaterInRangeUseCase = stubbedRange({});
-    final cubit = CubitsFactories.buildWaterHistoryCubit(
-      getWaterInRangeUseCase: getWaterInRangeUseCase,
-      getWaterGoalUseCase: stubbedGoal(2500),
-    );
+    final cubit = CubitsFactories.buildWaterHistoryCubit(getWaterInRangeUseCase: getWaterInRangeUseCase, getWaterGoalUseCase: stubbedGoal(2500));
 
     await cubit.refresh();
 
@@ -63,10 +60,7 @@ void main() {
 
   test('the trend window is independent of the displayed month', () async {
     final getWaterInRangeUseCase = stubbedRange({});
-    final cubit = CubitsFactories.buildWaterHistoryCubit(
-      getWaterInRangeUseCase: getWaterInRangeUseCase,
-      getWaterGoalUseCase: stubbedGoal(),
-    );
+    final cubit = CubitsFactories.buildWaterHistoryCubit(getWaterInRangeUseCase: getWaterInRangeUseCase, getWaterGoalUseCase: stubbedGoal());
 
     await cubit.changeTrendRange(TrendRange.week);
 

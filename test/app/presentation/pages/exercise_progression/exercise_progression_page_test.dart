@@ -41,7 +41,12 @@ Future<void> pumpProgressionPage(WidgetTester tester, {required ExerciseProgress
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: GoRouter(
-        routes: [GoRoute(path: '/', builder: (context, state) => ExerciseProgressionPage(exercise: ExerciseFactory.build()))],
+        routes: [
+          GoRoute(
+            path: '/',
+            builder: (context, state) => ExerciseProgressionPage(exercise: ExerciseFactory.build()),
+          ),
+        ],
       ),
       builder: (context, child) => LoaderOverlay(child: child!),
     ),

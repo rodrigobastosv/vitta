@@ -311,6 +311,28 @@ class AppLocalizationsPt extends AppLocalizations {
   String get delete => 'Excluir';
 
   @override
+  String get dietRecipeBadge => 'Receita';
+
+  @override
+  String dietQuantityUnits(String units) {
+    return '$units un';
+  }
+
+  @override
+  String dietQuantityGrams(int grams) {
+    return '$grams g';
+  }
+
+  @override
+  String get dietLogAgainAction => 'Registrar de novo';
+
+  @override
+  String get dietRecentlyLoggedTitle => 'Registrados recentemente';
+
+  @override
+  String get dietRecentSearchesTitle => 'Buscas recentes';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override
@@ -642,9 +664,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietSearchTabLabel => 'Busca';
 
   @override
-  String get dietRecentSearchesTitle => 'Buscas recentes';
-
-  @override
   String get dietClearRecentSearchesAction => 'Limpar';
 
   @override
@@ -663,7 +682,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietUnfavoriteFoodTooltip => 'Remover dos favoritos';
 
   @override
-  String get dietSearchFieldLabel => 'Buscar no Open Food Facts';
+  String get dietSearchFieldLabel => 'Buscar alimentos';
 
   @override
   String get dietSearchPrompt => 'Busque um alimento para registrá-lo.';

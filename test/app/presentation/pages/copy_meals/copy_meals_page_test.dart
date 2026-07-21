@@ -38,9 +38,7 @@ Widget buildTestApp({required CopyMealsCubit cubit, void Function({bool? hasCopi
         body: Center(
           child: ElevatedButton(
             onPressed: () async {
-              final hasCopied = await Navigator.of(
-                context,
-              ).push<bool>(MaterialPageRoute(builder: (_) => CopyMealsPage(targetDate: targetDate)));
+              final hasCopied = await Navigator.of(context).push<bool>(MaterialPageRoute(builder: (_) => CopyMealsPage(targetDate: targetDate)));
               onPopped?.call(hasCopied: hasCopied);
             },
             child: const Text('open'),

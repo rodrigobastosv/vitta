@@ -668,6 +668,42 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get delete;
 
+  /// No description provided for @dietRecipeBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipe'**
+  String get dietRecipeBadge;
+
+  /// No description provided for @dietQuantityUnits.
+  ///
+  /// In en, this message translates to:
+  /// **'{units} un'**
+  String dietQuantityUnits(String units);
+
+  /// No description provided for @dietQuantityGrams.
+  ///
+  /// In en, this message translates to:
+  /// **'{grams} g'**
+  String dietQuantityGrams(int grams);
+
+  /// No description provided for @dietLogAgainAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log again'**
+  String get dietLogAgainAction;
+
+  /// No description provided for @dietRecentlyLoggedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently logged'**
+  String get dietRecentlyLoggedTitle;
+
+  /// No description provided for @dietRecentSearchesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent searches'**
+  String get dietRecentSearchesTitle;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
@@ -1274,12 +1310,6 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get dietSearchTabLabel;
 
-  /// No description provided for @dietRecentSearchesTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Recent searches'**
-  String get dietRecentSearchesTitle;
-
   /// No description provided for @dietClearRecentSearchesAction.
   ///
   /// In en, this message translates to:
@@ -1319,7 +1349,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietSearchFieldLabel.
   ///
   /// In en, this message translates to:
-  /// **'Search Open Food Facts'**
+  /// **'Search foods'**
   String get dietSearchFieldLabel;
 
   /// No description provided for @dietSearchPrompt.

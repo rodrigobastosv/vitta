@@ -32,9 +32,7 @@ void main() {
         exerciseId: any(named: 'exerciseId'),
       ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-1')));
-    when(
-      () => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')),
-    ).thenAnswer((_) async => const Success(null));
+    when(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise'))).thenAnswer((_) async => const Success(null));
 
     await StartWorkoutFromRoutineUseCase(workoutRepository: workoutRepository)(routine: routine, date: DateTime(2026, 7, 20));
 
@@ -45,9 +43,7 @@ void main() {
     final workoutRepository = MockWorkoutRepository();
     final lastSets = [WorkoutSetFactory.build(id: 'old-1', reps: 8, weightKg: 60)];
     final routine = RoutineFactory.build(exercises: [ExerciseFactory.build()]);
-    when(
-      () => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds')),
-    ).thenAnswer((_) async => Success({'exercise-1': lastSets}));
+    when(() => workoutRepository.getLastSetsByExercise(exerciseIds: any(named: 'exerciseIds'))).thenAnswer((_) async => Success({'exercise-1': lastSets}));
     when(
       () => workoutRepository.createWorkout(
         performedDate: any(named: 'performedDate'),
@@ -61,9 +57,7 @@ void main() {
         exerciseId: any(named: 'exerciseId'),
       ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-1')));
-    when(
-      () => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')),
-    ).thenAnswer((_) async => const Success(null));
+    when(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise'))).thenAnswer((_) async => const Success(null));
 
     await StartWorkoutFromRoutineUseCase(workoutRepository: workoutRepository)(routine: routine, date: DateTime(2026, 7, 20));
 
@@ -90,9 +84,7 @@ void main() {
         exerciseId: any(named: 'exerciseId'),
       ),
     ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build(id: 'we-1')));
-    when(
-      () => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise')),
-    ).thenAnswer((_) async => const Success(null));
+    when(() => workoutRepository.logSetsBulk(setsByWorkoutExercise: any(named: 'setsByWorkoutExercise'))).thenAnswer((_) async => const Success(null));
 
     await StartWorkoutFromRoutineUseCase(workoutRepository: workoutRepository)(routine: routine, date: DateTime(2026, 7, 20));
 

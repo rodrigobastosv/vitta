@@ -140,6 +140,20 @@ This is the same trap the `VTSeverity` section already tells a story about, and 
 
 `vt_colors_ink_test.dart` asserts the 3:1 floor across every accent, asserts `inkOn` beats the alternative ink each time, and pins the 16%-tint failure so nobody reintroduces it. **Reach for `inkOn` whenever an accent carries an icon**; the 16% tint is still fine as a *background* behind neutral ink, which is what the meal and badge tints do.
 
+## Food search: the idle state is the feature
+
+The screen every logged meal passes through, reworked in issue #163. Four things were wrong and they compound:
+
+**The hint named the fallback.** "Search Open Food Facts" — but `DietRepository.searchFoods` queries **our catalog first** and only augments with OFF when results are sparse (see Food data). It advertised the wrong source, and one the user should never have to know exists. It is now just "Search foods".
+
+**Search was submit-only.** Results came from `onSubmitted`, so every lookup cost a keyboard return. `FoodSearchCubit.queryChanged` now debounces (350ms, minimum 2 characters) and `VTSearchField` gained an `onChanged` to feed it. The debounce lives in the cubit, not the widget, so the timer is cancelled in `close()`. It is listed in `motion_tokens_test.dart`'s `_allowed`: **an input delay is not a transition**, the same category as the HTTP retry backoff.
+
+**The idle state remembered the wrong thing.** It listed past *queries* — text you typed. What a food tracker is actually asked for is **the food you logged last time**, because eating is repetitive. `FoodSearchIdleView` now leads with recently-logged foods, each carrying the amount you used last time so one tap re-logs it, and demotes past queries to chips underneath.
+
+`DietRepository.getRecentlyLoggedFoods` is the new read behind it. It is **deduped in the repository, not the query**: PostgREST has no usable `DISTINCT ON`, so the datasource takes the newest `_recentEntryLookback` (80) rows and the repository keeps the first entry per food id. It returns `FoodLogEntry` rather than `Food` precisely because the entry carries the quantity — that is what makes the one-tap re-log possible.
+
+**Rows were ragged.** The catalog/OFF merge means some rows have a brand and some do not, and the name could wrap to two lines — so a list had visibly uneven row heights. `FoodSearchResultTile` now gives the name **one line** and always renders **one** meta line (`brand · kcal`, or just kcal), which is pinned by a test asserting a branded and an unbranded row measure the same height.
+
 ## Adding food is one place, not four
 
 Scanning a meal photo used to be an icon in the **diet** app bar, next to recipes, copy and history — isolated from the flow it belongs to, and part of why that bar carried four actions. `MealScanAction` now lives on `FoodSearchPage` beside the custom-food action, so the three ways to add food (**search it, type it, photograph it**) sit together in the one place a user goes to add food. The diet bar is down to three actions. A fourth way to add food goes there too, not back on the diet page.

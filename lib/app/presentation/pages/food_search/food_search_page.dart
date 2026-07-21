@@ -16,10 +16,10 @@ import 'package:vitta/app/presentation/pages/food_search/food_search_presentatio
 import 'package:vitta/app/presentation/pages/food_search/food_search_state.dart';
 import 'package:vitta/app/presentation/pages/food_search/food_search_tab.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_details_dialog.dart';
+import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_idle_view.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/food_search_result_list.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/log_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/food_search/widgets/meal_scan_action.dart';
-import 'package:vitta/app/presentation/pages/food_search/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodSearchPage extends StatelessWidget {
@@ -109,17 +109,24 @@ class FoodSearchPage extends StatelessWidget {
           autofocus: true,
           text: state.query,
           hintText: l10n.dietSearchFieldLabel,
+          onChanged: cubit.queryChanged,
           onSubmitted: (query) => cubit.search(query: query),
         ),
       ),
       Expanded(
         child: switch (state.results) {
-          null when state.recentSearches.isEmpty => VTEmptyState(icon: Icons.search, message: l10n.dietSearchPrompt),
-          null => RecentSearchesList(
-            queries: state.recentSearches,
-            onSelect: (query) => cubit.search(query: query),
-            onRemove: (query) => cubit.removeRecentSearch(query: query),
-            onClear: cubit.clearRecentSearches,
+          null => FoodSearchIdleView(
+            recentFoods: state.recentFoods,
+            recentSearches: state.recentSearches,
+            onOpenFood: (entry) => showLogFoodSheet(context: context, food: entry.food, loggedDate: loggedDate, initialMealType: initialMealType),
+            onQuickAdd: (entry) => cubit.logFood(
+              food: entry.food,
+              quantityGrams: entry.log.quantityGrams,
+              mealType: initialMealType ?? entry.log.mealType,
+              loggedDate: loggedDate,
+            ),
+            onSelectSearch: (query) => cubit.search(query: query),
+            onClearSearches: cubit.clearRecentSearches,
           ),
           final results when results.isEmpty => VTEmptyState.noResults(message: l10n.dietSearchNoResults),
           final results => _buildList(context: context, cubit: cubit, state: state, foods: results, heroPrefix: 'food-search'),

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
@@ -10,6 +12,7 @@ import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.d
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
@@ -32,6 +35,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     required this._addRecentSearchUseCase,
     required this._removeRecentSearchUseCase,
     required this._clearRecentSearchesUseCase,
+    required this._getRecentlyLoggedFoodsUseCase,
   }) : super(const FoodSearchState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
@@ -44,6 +48,7 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
   final AddRecentSearchUseCase _addRecentSearchUseCase;
   final RemoveRecentSearchUseCase _removeRecentSearchUseCase;
   final ClearRecentSearchesUseCase _clearRecentSearchesUseCase;
+  final GetRecentlyLoggedFoodsUseCase _getRecentlyLoggedFoodsUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -52,7 +57,13 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
   @override
   void onInit() {
     emit(state.copyWith(recentSearches: _getRecentSearchesUseCase()));
+    loadRecentFoods();
     loadFavorites();
+  }
+
+  Future<void> loadRecentFoods() async {
+    final recentResult = await _getRecentlyLoggedFoodsUseCase();
+    recentResult.when((_) {}, (recentFoods) => emit(state.copyWith(recentFoods: recentFoods)));
   }
 
   void changeTab(FoodSearchTab tab) => emit(state.copyWith(tab: tab));
@@ -62,6 +73,26 @@ class FoodSearchCubit extends PresentationCubit<FoodSearchState, FoodSearchPrese
     final favoritesResult = await _getFavoriteFoodsUseCase();
     emitPresentation(FoodSearchHideLoading());
     favoritesResult.when((error) => emitPresentation(FoodSearchError(message: error.message)), (favorites) => emit(state.copyWith(favorites: favorites)));
+  }
+
+  static const Duration _debounce = Duration(milliseconds: 350);
+  static const int _minQueryLength = 2;
+
+  Timer? _debounceTimer;
+
+  void queryChanged(String query) {
+    _debounceTimer?.cancel();
+    if (query.trim().length < _minQueryLength) {
+      emit(state.copyWith(query: query));
+      return;
+    }
+    _debounceTimer = Timer(_debounce, () => search(query: query));
+  }
+
+  @override
+  Future<void> close() {
+    _debounceTimer?.cancel();
+    return super.close();
   }
 
   Future<void> search({required String query}) async {

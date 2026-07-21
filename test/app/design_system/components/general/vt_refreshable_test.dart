@@ -4,7 +4,12 @@ import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 
 Future<void> pullDown(WidgetTester tester, Widget refreshable) async {
-  await tester.pumpWidget(MaterialApp(theme: VTTheme.light, home: Scaffold(body: refreshable)));
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: VTTheme.light,
+      home: Scaffold(body: refreshable),
+    ),
+  );
   await tester.fling(find.byType(Scaffold), const Offset(0, 400), 1000);
   await tester.pumpAndSettle();
 }

@@ -47,10 +47,7 @@ void main() {
 
   test('refresh picks up the saved goal and queries the month and trend separately', () async {
     final getSleepInRangeUseCase = stubbedRange({});
-    final cubit = CubitsFactories.buildSleepHistoryCubit(
-      getSleepInRangeUseCase: getSleepInRangeUseCase,
-      getSleepGoalUseCase: stubbedGoal(7.5),
-    );
+    final cubit = CubitsFactories.buildSleepHistoryCubit(getSleepInRangeUseCase: getSleepInRangeUseCase, getSleepGoalUseCase: stubbedGoal(7.5));
 
     await cubit.refresh();
 
@@ -66,9 +63,7 @@ void main() {
     build: () => CubitsFactories.buildSleepHistoryCubit(
       getSleepInRangeUseCase: stubbedRange({
         DateTime(2026, 6, 10): DailySleep(
-          entries: [
-            SleepLog(id: 'a', loggedDate: DateTime(2026, 6, 10), bedTime: DateTime(2026, 6, 10, 23), wakeTime: DateTime(2026, 6, 11, 7)),
-          ],
+          entries: [SleepLog(id: 'a', loggedDate: DateTime(2026, 6, 10), bedTime: DateTime(2026, 6, 10, 23), wakeTime: DateTime(2026, 6, 11, 7))],
         ),
       }),
       getSleepGoalUseCase: stubbedGoal(),

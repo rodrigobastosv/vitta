@@ -37,11 +37,7 @@ void main() {
 
   group('fromMap', () {
     test('reads the status, product and expiry off a subscriptions row', () {
-      final status = PremiumStatus.fromMap(const {
-        'status': 'active',
-        'product_id': 'vitta_premium_monthly',
-        'expires_at': '2099-01-15T00:00:00Z',
-      });
+      final status = PremiumStatus.fromMap(const {'status': 'active', 'product_id': 'vitta_premium_monthly', 'expires_at': '2099-01-15T00:00:00Z'});
 
       expect(status.status, SubscriptionStatus.active);
       expect(status.productId, 'vitta_premium_monthly');

@@ -18,7 +18,9 @@ void main() {
           path: AppRoute.diet.path,
           name: AppRoute.diet.name,
           builder: (context, state) => Scaffold(
-            appBar: AppBar(actions: [MealScanAction(date: DateTime(2026, 7, 19), onLogged: () {})]),
+            appBar: AppBar(
+              actions: [MealScanAction(date: DateTime(2026, 7, 19), onLogged: () {})],
+            ),
           ),
         ),
         for (final route in [AppRoute.mealScan, AppRoute.premium])

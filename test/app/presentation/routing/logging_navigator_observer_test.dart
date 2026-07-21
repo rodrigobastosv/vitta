@@ -30,10 +30,7 @@ void main() {
   test('falls back to unknown when the route has no name', () {
     final loggingService = useMockLog();
 
-    LoggingNavigatorObserver().didPush(
-      PageRouteBuilder<void>(pageBuilder: (context, animation, secondaryAnimation) => const SizedBox()),
-      null,
-    );
+    LoggingNavigatorObserver().didPush(PageRouteBuilder<void>(pageBuilder: (context, animation, secondaryAnimation) => const SizedBox()), null);
 
     verify(() => loggingService.logNavigation(action: 'push', route: 'unknown')).called(1);
   });

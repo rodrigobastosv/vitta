@@ -150,6 +150,20 @@ class SupabaseDietDataSource {
     }
   }
 
+  Future<Result<VTError, List<FoodLogEntry>>> getRecentEntries({required int limit}) async {
+    try {
+      final rows = await _supabaseService
+          .from(.foodLogs)
+          .select('*, ${SupabaseTable.foods.wireName}(*)')
+          .eq('user_id', _userId)
+          .order('created_at', ascending: false)
+          .limit(limit);
+      return Success(rows.map(FoodLogEntry.fromMap).toList());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load recently logged foods', cause: error));
+    }
+  }
+
   Future<Result<VTError, List<FoodLogEntry>>> getLogsInRange({required DateTime from, required DateTime to}) async {
     try {
       final rows = await _supabaseService

@@ -71,7 +71,6 @@ void main() {
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
     expect(find.text('Create account'), findsOneWidget);
-
   });
 
   testWidgets('the goals step is skippable and skipping saves nothing', (tester) async {

@@ -40,9 +40,7 @@ void main() {
 
   test('deleteAccount invokes the delete-account function and succeeds', () async {
     final supabaseService = MockSupabaseService();
-    when(
-      () => supabaseService.invoke(SupabaseFunction.deleteAccount, body: const {}),
-    ).thenAnswer((_) async => const FunctionResponse(status: 200));
+    when(() => supabaseService.invoke(SupabaseFunction.deleteAccount, body: const {})).thenAnswer((_) async => const FunctionResponse(status: 200));
     final dataSource = SupabaseAuthDataSource(supabaseService: supabaseService);
 
     final deletedResult = await dataSource.deleteAccount();

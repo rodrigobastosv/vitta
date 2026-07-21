@@ -15,15 +15,15 @@ void main() {
     'emits the entitlement it reads on construction',
     build: () {
       final getPremiumStatusUseCase = MockGetPremiumStatusUseCase();
-      when(getPremiumStatusUseCase.call).thenAnswer(
-        (_) => Future.value(const Success(PremiumStatus(status: .active, productId: 'vitta_premium_monthly'))),
-      );
+      when(getPremiumStatusUseCase.call).thenAnswer((_) => Future.value(const Success(PremiumStatus(status: .active, productId: 'vitta_premium_monthly'))));
       final purchaseService = MockPurchaseService();
       when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
       return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
     },
     expect: () => [
-      const PremiumState(status: PremiumStatus(status: .active, productId: 'vitta_premium_monthly')),
+      const PremiumState(
+        status: PremiumStatus(status: .active, productId: 'vitta_premium_monthly'),
+      ),
     ],
     verify: (cubit) => expect(cubit.state.isPremium, isTrue),
   );
@@ -34,9 +34,7 @@ void main() {
     'leaves the user free when the entitlement cannot be read',
     build: () {
       final getPremiumStatusUseCase = MockGetPremiumStatusUseCase();
-      when(getPremiumStatusUseCase.call).thenAnswer(
-        (_) => Future.value(const Failure(VTError(message: 'offline'))),
-      );
+      when(getPremiumStatusUseCase.call).thenAnswer((_) => Future.value(const Failure(VTError(message: 'offline'))));
       final purchaseService = MockPurchaseService();
       when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
       return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);

@@ -152,9 +152,7 @@ void main() {
     ),
     act: (cubit) => cubit.goToPreviousMonth(),
     expect: () => [
-      isA<CopyMealsState>()
-          .having((state) => state.month, 'month', DateTime(2026, 6))
-          .having((state) => state.macrosByDate, 'macrosByDate', isEmpty),
+      isA<CopyMealsState>().having((state) => state.month, 'month', DateTime(2026, 6)).having((state) => state.macrosByDate, 'macrosByDate', isEmpty),
       isA<CopyMealsState>().having((state) => state.macrosByDate, 'macrosByDate', isNotEmpty),
     ],
   );

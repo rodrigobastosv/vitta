@@ -33,11 +33,7 @@ DailyMacros buildDayOf(double calories, {MealType mealType = MealType.breakfast}
   ],
 );
 
-Future<void> pumpHistoryPage(
-  WidgetTester tester, {
-  Map<DateTime, DailyMacros> macrosByDate = const {},
-  Map<DateTime, DailyMacros>? trendMacrosByDate,
-}) async {
+Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyMacros> macrosByDate = const {}, Map<DateTime, DailyMacros>? trendMacrosByDate}) async {
   final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
   final monthStart = DateTime(DateTime.now().year, DateTime.now().month);
@@ -56,8 +52,7 @@ Future<void> pumpHistoryPage(
     G.unregister<DietHistoryCubit>();
   }
   G.registerFactory<DietHistoryCubit>(
-    () =>
-        CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
+    () => CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
   );
 
   await tester.pumpWidget(
@@ -88,7 +83,12 @@ Future<void> pumpSlowHistoryPage(WidgetTester tester) async {
   final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
   final today = DateTime.now();
-  when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async {
+  when(
+    () => getMacrosInRangeUseCase(
+      from: any(named: 'from'),
+      to: any(named: 'to'),
+    ),
+  ).thenAnswer((_) async {
     await Future<void>.delayed(const Duration(milliseconds: 300));
     return Success({DateTime(today.year, today.month, today.day): buildDayOf(2000)});
   });
@@ -97,8 +97,7 @@ Future<void> pumpSlowHistoryPage(WidgetTester tester) async {
     G.unregister<DietHistoryCubit>();
   }
   G.registerFactory<DietHistoryCubit>(
-    () =>
-        CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
+    () => CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
   );
 
   await tester.pumpWidget(
@@ -153,10 +152,7 @@ void main() {
   testWidgets('a week with logged days shows its rounded calorie average', (tester) async {
     final today = DateTime.now();
     final firstOfMonth = DateTime(today.year, today.month);
-    await pumpHistoryPage(
-      tester,
-      macrosByDate: {firstOfMonth: buildDayOf(1000), firstOfMonth.add(const Duration(days: 1)): buildDayOf(2000)},
-    );
+    await pumpHistoryPage(tester, macrosByDate: {firstOfMonth: buildDayOf(1000), firstOfMonth.add(const Duration(days: 1)): buildDayOf(2000)});
 
     expect(find.text('1500'), findsOneWidget);
   });

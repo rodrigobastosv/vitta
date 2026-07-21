@@ -107,9 +107,7 @@ void main() {
     expectPresentation: () => [
       isA<WorkoutShowLoading>(),
       isA<WorkoutHideLoading>(),
-      isA<WorkoutError>()
-          .having((event) => event.message, 'message', 'offline')
-          .having((event) => event.date, 'date', DateTime(2026, 7, 10)),
+      isA<WorkoutError>().having((event) => event.message, 'message', 'offline').having((event) => event.date, 'date', DateTime(2026, 7, 10)),
     ],
   );
 
@@ -290,9 +288,7 @@ void main() {
     final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
     final getRoutineCycleUseCase = MockGetRoutineCycleUseCase();
     when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
-    when(
-      getRoutineCycleUseCase.call,
-    ).thenAnswer((_) async => Success(RoutineCycle(routines: RoutineFactory.buildCycle(), lastRoutineId: 'routine-a')));
+    when(getRoutineCycleUseCase.call).thenAnswer((_) async => Success(RoutineCycle(routines: RoutineFactory.buildCycle(), lastRoutineId: 'routine-a')));
     final cubit = CubitsFactories.buildWorkoutCubit(
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRoutineCycleUseCase: getRoutineCycleUseCase,

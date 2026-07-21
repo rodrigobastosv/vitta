@@ -27,7 +27,12 @@ void registerTestHomeCubit() {
   final getWaterGoalUseCase = MockGetWaterGoalUseCase();
   when(getWaterGoalUseCase.call).thenReturn(2500);
   final getRemindersInRangeUseCase = MockGetRemindersInRangeUseCase();
-  when(() => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => const Success({}));
+  when(
+    () => getRemindersInRangeUseCase(
+      from: any(named: 'from'),
+      to: any(named: 'to'),
+    ),
+  ).thenAnswer((_) async => const Success({}));
   final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
   when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
   final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();

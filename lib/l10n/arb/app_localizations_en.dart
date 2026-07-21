@@ -311,6 +311,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get dietRecipeBadge => 'Recipe';
+
+  @override
+  String dietQuantityUnits(String units) {
+    return '$units un';
+  }
+
+  @override
+  String dietQuantityGrams(int grams) {
+    return '$grams g';
+  }
+
+  @override
+  String get dietLogAgainAction => 'Log again';
+
+  @override
+  String get dietRecentlyLoggedTitle => 'Recently logged';
+
+  @override
+  String get dietRecentSearchesTitle => 'Recent searches';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -641,9 +663,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietSearchTabLabel => 'Search';
 
   @override
-  String get dietRecentSearchesTitle => 'Recent searches';
-
-  @override
   String get dietClearRecentSearchesAction => 'Clear';
 
   @override
@@ -662,7 +681,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietUnfavoriteFoodTooltip => 'Remove from favorites';
 
   @override
-  String get dietSearchFieldLabel => 'Search Open Food Facts';
+  String get dietSearchFieldLabel => 'Search foods';
 
   @override
   String get dietSearchPrompt => 'Search for a food to log it.';

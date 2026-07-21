@@ -22,6 +22,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -239,3 +240,5 @@ class MockCompleteReminderUseCase extends Mock implements CompleteReminderUseCas
 class MockDeleteReminderUseCase extends Mock implements DeleteReminderUseCase {}
 
 class MockGetPremiumStatusUseCase extends Mock implements GetPremiumStatusUseCase {}
+
+class MockGetRecentlyLoggedFoodsUseCase extends Mock implements GetRecentlyLoggedFoodsUseCase {}

@@ -7,6 +7,9 @@ const _allowed = {
   'lib/app/core/http/vt_http_client.dart',
   // A continuous spinner loop, not a transition between two states.
   'lib/app/design_system/components/general/vt_loading_overlay_indicator.dart',
+  // A search debounce is an input delay, not a transition - the same category
+  // as the HTTP retry backoff above.
+  'lib/app/presentation/pages/food_search/food_search_cubit.dart',
   // A continuous pulse, same as the spinner above. easeInOut is deliberate: a
   // pulse breathes symmetrically, where VTMotion.curve eases out of a change.
   'lib/app/design_system/components/general/vt_skeleton.dart',

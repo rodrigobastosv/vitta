@@ -12,13 +12,7 @@ Future<double?> pumpPicker(WidgetTester tester, {double initialValue = 71.8}) as
     MaterialApp(
       theme: VTTheme.light,
       home: Scaffold(
-        body: VTWeightPicker(
-          initialValue: initialValue,
-          onChanged: (value) => changed = value,
-          unitLabel: 'kg',
-          min: 30,
-          max: 250,
-        ),
+        body: VTWeightPicker(initialValue: initialValue, onChanged: (value) => changed = value, unitLabel: 'kg', min: 30, max: 250),
       ),
     ),
   );

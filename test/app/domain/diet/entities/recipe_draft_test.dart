@@ -15,9 +15,7 @@ void main() {
           food: FoodFactory.build(caloriesPer100g: 100, proteinPer100g: 10, carbsPer100g: 20, fatPer100g: 5, fiberPer100g: 1),
           quantityGrams: 200,
         ),
-        RecipeIngredientFactory.build(
-          food: FoodFactory.build(caloriesPer100g: 50, proteinPer100g: 4, carbsPer100g: 6, fatPer100g: 2, fiberPer100g: 3),
-        ),
+        RecipeIngredientFactory.build(food: FoodFactory.build(caloriesPer100g: 50, proteinPer100g: 4, carbsPer100g: 6, fatPer100g: 2, fiberPer100g: 3)),
       ],
     );
 

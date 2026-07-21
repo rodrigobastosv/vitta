@@ -42,7 +42,10 @@ void main() {
     await pumpInApp(
       tester,
       VTSegmentedTabs<int>(
-        tabs: const [VTSegmentedTab(value: 0, label: 'One'), VTSegmentedTab(value: 1, label: 'Two')],
+        tabs: const [
+          VTSegmentedTab(value: 0, label: 'One'),
+          VTSegmentedTab(value: 1, label: 'Two'),
+        ],
         selected: 0,
         onSelected: (_) {},
       ),

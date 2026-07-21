@@ -39,10 +39,7 @@ void main() {
       ),
     ).thenAnswer((_) async => const Success({}));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietHistoryCubit(
-      getMacrosInRangeUseCase: getMacrosInRangeUseCase,
-      getMacroGoalsUseCase: getMacroGoalsUseCase,
-    );
+    final cubit = CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
 
     await cubit.refresh();
 

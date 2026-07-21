@@ -59,9 +59,12 @@ void main() {
     final getWaterGoalUseCase = MockGetWaterGoalUseCase();
     when(getWaterGoalUseCase.call).thenReturn(2500);
     final getRemindersInRangeUseCase = MockGetRemindersInRangeUseCase();
-    when(() => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
-      (_) async => Success(reminders.isEmpty ? const {} : {todayOnly: reminders}),
-    );
+    when(
+      () => getRemindersInRangeUseCase(
+        from: any(named: 'from'),
+        to: any(named: 'to'),
+      ),
+    ).thenAnswer((_) async => Success(reminders.isEmpty ? const {} : {todayOnly: reminders}));
     final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
     when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
     final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
@@ -106,7 +109,10 @@ void main() {
 
   DailyMacros buildDayWithMeals(double calories) => DailyMacros(
     entries: [
-      FoodLogEntryFactory.build(food: FoodFactory.build(name: 'Oatmeal', caloriesPer100g: calories), log: FoodLogFactory.build()),
+      FoodLogEntryFactory.build(
+        food: FoodFactory.build(name: 'Oatmeal', caloriesPer100g: calories),
+        log: FoodLogFactory.build(),
+      ),
     ],
   );
 

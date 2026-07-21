@@ -25,11 +25,7 @@ void main() {
     },
     act: (cubit) => cubit.loadRoutines(),
     expect: () => [
-      isA<RoutinesState>().having((state) => [for (final routine in state.routines) routine.id], 'routine order', [
-        'routine-a',
-        'routine-b',
-        'routine-c',
-      ]),
+      isA<RoutinesState>().having((state) => [for (final routine in state.routines) routine.id], 'routine order', ['routine-a', 'routine-b', 'routine-c']),
     ],
   );
 
@@ -76,11 +72,7 @@ void main() {
     },
     skip: 1,
     expect: () => [
-      isA<RoutinesState>().having((state) => [for (final routine in state.routines) routine.id], 'routine order', [
-        'routine-c',
-        'routine-a',
-        'routine-b',
-      ]),
+      isA<RoutinesState>().having((state) => [for (final routine in state.routines) routine.id], 'routine order', ['routine-c', 'routine-a', 'routine-b']),
     ],
   );
 
@@ -90,10 +82,7 @@ void main() {
     final reorderRoutinesUseCase = MockReorderRoutinesUseCase();
     when(getRoutinesUseCase.call).thenAnswer((_) async => Success(RoutineFactory.buildCycle()));
     when(() => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds'))).thenAnswer((_) async => const Success(null));
-    final cubit = CubitsFactories.buildRoutinesCubit(
-      getRoutinesUseCase: getRoutinesUseCase,
-      reorderRoutinesUseCase: reorderRoutinesUseCase,
-    );
+    final cubit = CubitsFactories.buildRoutinesCubit(getRoutinesUseCase: getRoutinesUseCase, reorderRoutinesUseCase: reorderRoutinesUseCase);
     await cubit.loadRoutines();
 
     await cubit.reorderRoutines(oldIndex: 0, newIndex: 2);
@@ -106,13 +95,8 @@ void main() {
     final getRoutinesUseCase = MockGetRoutinesUseCase();
     final reorderRoutinesUseCase = MockReorderRoutinesUseCase();
     when(getRoutinesUseCase.call).thenAnswer((_) async => Success(RoutineFactory.buildCycle()));
-    when(
-      () => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds')),
-    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
-    final cubit = CubitsFactories.buildRoutinesCubit(
-      getRoutinesUseCase: getRoutinesUseCase,
-      reorderRoutinesUseCase: reorderRoutinesUseCase,
-    );
+    when(() => reorderRoutinesUseCase(orderedRoutineIds: any(named: 'orderedRoutineIds'))).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = CubitsFactories.buildRoutinesCubit(getRoutinesUseCase: getRoutinesUseCase, reorderRoutinesUseCase: reorderRoutinesUseCase);
     await cubit.loadRoutines();
 
     await cubit.reorderRoutines(oldIndex: 0, newIndex: 2);

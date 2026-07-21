@@ -29,10 +29,7 @@ void main() {
       final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
       when(completeOnboardingUseCase.call).thenAnswer((_) async {});
       when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
-      return CubitsFactories.buildOnboardingCubit(
-        completeOnboardingUseCase: completeOnboardingUseCase,
-        saveMacroGoalsUseCase: saveMacroGoalsUseCase,
-      );
+      return CubitsFactories.buildOnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase);
     },
     act: (cubit) => cubit.completeOnboarding(),
     verify: (cubit) => expect(cubit.state.goalsAccepted, isFalse),
@@ -43,10 +40,7 @@ void main() {
     final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
     when(completeOnboardingUseCase.call).thenAnswer((_) async {});
     when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
-    final cubit = CubitsFactories.buildOnboardingCubit(
-      completeOnboardingUseCase: completeOnboardingUseCase,
-      saveMacroGoalsUseCase: saveMacroGoalsUseCase,
-    );
+    final cubit = CubitsFactories.buildOnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase);
 
     cubit
       ..calorieGoalChanged(2400)
@@ -61,10 +55,7 @@ void main() {
     final saveMacroGoalsUseCase = MockSaveMacroGoalsUseCase();
     final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
     when(completeOnboardingUseCase.call).thenAnswer((_) async {});
-    final cubit = CubitsFactories.buildOnboardingCubit(
-      completeOnboardingUseCase: completeOnboardingUseCase,
-      saveMacroGoalsUseCase: saveMacroGoalsUseCase,
-    );
+    final cubit = CubitsFactories.buildOnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase);
 
     cubit.calorieGoalChanged(2400);
     await cubit.completeOnboarding();

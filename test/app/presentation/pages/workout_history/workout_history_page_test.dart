@@ -38,7 +38,12 @@ DailyWorkout buildTrainedDay(DateTime day) => DailyWorkout(
 Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyWorkout> workoutsByDate = const {}}) async {
   final getDailyWorkoutsInRangeUseCase = MockGetDailyWorkoutsInRangeUseCase();
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-  when(() => getDailyWorkoutsInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(workoutsByDate));
+  when(
+    () => getDailyWorkoutsInRangeUseCase(
+      from: any(named: 'from'),
+      to: any(named: 'to'),
+    ),
+  ).thenAnswer((_) async => Success(workoutsByDate));
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
   await tester.binding.setSurfaceSize(const Size(500, 1800));
   addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -54,7 +59,9 @@ Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyWorkout> w
       theme: VTTheme.light,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      routerConfig: GoRouter(routes: [GoRoute(path: '/', builder: (context, state) => const WorkoutHistoryPage())]),
+      routerConfig: GoRouter(
+        routes: [GoRoute(path: '/', builder: (context, state) => const WorkoutHistoryPage())],
+      ),
       builder: (context, child) => LoaderOverlay(child: child!),
     ),
   );

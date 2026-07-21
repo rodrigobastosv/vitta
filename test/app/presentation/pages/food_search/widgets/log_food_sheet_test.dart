@@ -16,18 +16,13 @@ import '../../../../../factories/entities/food_factory.dart';
 import '../../../../../factories/entities/food_log_factory.dart';
 import '../../../../../mocks/use_cases_mocks.dart';
 
-final _weightField = find.byWidgetPredicate(
-  (widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false),
-);
+final _weightField = find.byWidgetPredicate((widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false));
 final _unitsField = find.descendant(of: find.byType(VTStepper), matching: find.byType(TextField));
 
 FoodSearchCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
-  return CubitsFactories.buildFoodSearchCubit(
-    logFoodUseCase: logFoodUseCase,
-    getAppSettingsUseCase: getAppSettingsUseCase,
-  );
+  return CubitsFactories.buildFoodSearchCubit(logFoodUseCase: logFoodUseCase, getAppSettingsUseCase: getAppSettingsUseCase);
 }
 
 Future<void> _pumpSheet(WidgetTester tester, {required FoodSearchCubit cubit, required Food food}) async {
