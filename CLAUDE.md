@@ -124,6 +124,25 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Motion
+
+Motion is a shared language, not per-screen taste. Every duration and curve comes from `VTMotion` (`design_system/tokens/vt_motion.dart`, issue #163) and `test/app/design_system/motion_tokens_test.dart` **scans `lib/` and fails on any raw `Duration(milliseconds:)` or `Curves.`** — the same source-scan shape as `order_direction_test.dart`, and for the same reason: the drift is invisible at any single call site.
+
+Four durations, chosen by **what the motion is doing**, not by how it feels in isolation:
+
+- **`micro` (150ms)** — a control settling under the finger (`VTWeightPicker`'s snap).
+- **`transition` (250ms)** — one state becoming another: expand/collapse (`AnimatedSize`), a sliding indicator, a route's reverse transition. **This is the one that had drifted worst** — 200/240/250/260/300ms were all doing the same job on different screens.
+- **`entrance` (400ms)** — content arriving (`VTAppearEffect`, `VTPhotoHeader`).
+- **`data` (800ms)** — a value growing to its figure (`VTMacroRing`, `VTProgressBar`, `VTBarChart`, `VTLineChart`). Deliberately the slowest: it is the one animation carrying information rather than decorating a change.
+
+`VTMotion.curve` is `easeOutCubic` everywhere — it was already 12 of 14 uses, so this codified what the app had mostly settled on.
+
+**A stagger is an index, never a millisecond count.** `VTAppearEffect` takes `index:` and derives the delay through `VTMotion.staggerFor` — because the old `delay:` API produced **17 different stagger formulas across 22 call sites** (per-item steps of 40/50/60/80ms, caps of 8, 10 or none, leading offsets of 60/80/200ms). No one designed that; each screen invented its own and none was wrong on its own. Passing an index makes the inconsistency unrepresentable. A list passes the item's own index; a fixed layout passes its ordinal position (`index: 1`, `index: 2`).
+
+**The stagger is capped at `maxStaggerSteps` (6).** Uncapped it delays the very content the user is waiting for — `DietPage` used a bare `index * 80`, so the tenth meal section waited **800ms**, longer than the entrance animation itself. Past the cap every remaining item appears together, which is what "staggered" should have meant all along. The cap is asserted (`staggerFor(50) == staggerFor(maxStaggerSteps)`, and shorter than one `entrance`).
+
+Two things are deliberately **not** motion tokens and are listed in the scan's `_allowed`: `VTHttpClient`'s retry backoff (a network delay) and `VTLoadingOverlayIndicator`'s 1100ms (a continuous loop, not a transition between two states). Toast dwell times (4s/6s/8s, see Errors) are not motion either — they are how long a message stays readable.
+
 ## Accessibility
 
 **An `IconButton`'s `tooltip` *is* its accessibility label** — the framework says so in `icon_button.dart` ("is used for accessibility") and `Tooltip` sets `semanticsTooltip` on the node. It lands in the semantics **`tooltip` field, not `label`**, which is why `find.bySemanticsLabel` won't match it — that's a testing gotcha, not a missing label. So **never wrap a tooltipped `IconButton` in a `Semantics(label:)`**: that double-labels it and VoiceOver reads the button twice. An icon-only button needs a `tooltip`, and that is the whole fix.

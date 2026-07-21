@@ -99,7 +99,7 @@ class WorkoutPage extends StatelessWidget {
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(
-                    delay: Duration(milliseconds: 60 * (index + 1)),
+                    index: index + 1,
                     child: WorkoutExerciseCard(
                       workoutExercise: workoutExercise,
                       unitSystem: cubit.unitSystem,

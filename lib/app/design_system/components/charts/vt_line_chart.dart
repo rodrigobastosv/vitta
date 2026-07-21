@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_line_chart_point.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 
 // A line-over-time chart for a single metric (issue #101 - body weight trend). Owned
 // as a CustomPainter rather than pulled from a package, the same call VTBarChart and
@@ -27,8 +28,8 @@ class VTLineChart extends StatelessWidget {
       child: TweenAnimationBuilder<double>(
         key: ValueKey(points.length),
         tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeOutCubic,
+        duration: VTMotion.data,
+        curve: VTMotion.curve,
         builder: (context, progress, _) => SizedBox(
           height: height,
           width: double.infinity,

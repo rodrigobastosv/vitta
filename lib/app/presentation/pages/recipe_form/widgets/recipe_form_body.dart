@@ -5,6 +5,7 @@ import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
@@ -57,7 +58,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
           ),
           const VTGap.m(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 50),
+            index: 1,
             child: TextField(
               controller: _nameController,
               onChanged: cubit.nameChanged,
@@ -67,7 +68,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
           ),
           const VTGap.l(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 100),
+            index: 2,
             child: Text(l10n.dietRecipeIngredientsTitle, style: VTTextStyles.title(context)),
           ),
           const VTGap.m(),
@@ -90,8 +91,8 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
             child: TextButton.icon(onPressed: _addIngredient, icon: const Icon(Icons.add), label: Text(l10n.dietRecipeAddIngredientAction)),
           ),
           AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
+            duration: VTMotion.transition,
+            curve: VTMotion.curve,
             alignment: .topCenter,
             child: draft.ingredients.isEmpty
                 ? const SizedBox(width: double.infinity)

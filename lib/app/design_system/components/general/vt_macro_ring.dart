@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 
 class VTMacroRing extends StatelessWidget {
   const VTMacroRing({
@@ -31,8 +32,8 @@ class VTMacroRing extends StatelessWidget {
 
   Widget _ring() => TweenAnimationBuilder<double>(
     tween: Tween(begin: 0, end: value.clamp(0, 1).toDouble()),
-    duration: const Duration(milliseconds: 800),
-    curve: Curves.easeOutCubic,
+    duration: VTMotion.data,
+    curve: VTMotion.curve,
     builder: (context, animatedValue, _) => SizedBox.square(
       dimension: size,
       child: CustomPaint(

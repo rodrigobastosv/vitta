@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 
 class VTProgressBar extends StatelessWidget {
@@ -16,8 +17,8 @@ class VTProgressBar extends StatelessWidget {
     label: semanticLabel,
     child: TweenAnimationBuilder<double>(
       tween: Tween(end: value.clamp(0, 1).toDouble()),
-      duration: const Duration(milliseconds: 800),
-      curve: Curves.easeOutCubic,
+      duration: VTMotion.data,
+      curve: VTMotion.curve,
       builder: (context, animatedValue, child) => ClipRRect(
         borderRadius: VTRadius.borderRadiusS,
         child: LinearProgressIndicator(value: animatedValue, minHeight: minHeight, color: color, backgroundColor: trackColor ?? color?.withValues(alpha: 0.16)),

@@ -55,7 +55,7 @@ class ExerciseProgressionPage extends StatelessWidget {
                     ),
                     const VTGap.m(),
                     VTAppearEffect(
-                      delay: const Duration(milliseconds: 80),
+                      index: 1,
                       child: ExerciseProgressionChartCard(
                         title: l10n.workoutProgressionE1rmTitle,
                         points: progression.points,
@@ -66,7 +66,7 @@ class ExerciseProgressionPage extends StatelessWidget {
                     ),
                     const VTGap.m(),
                     VTAppearEffect(
-                      delay: const Duration(milliseconds: 160),
+                      index: 2,
                       child: ExerciseProgressionChartCard(
                         title: l10n.workoutProgressionHeaviestTitle,
                         points: progression.points,

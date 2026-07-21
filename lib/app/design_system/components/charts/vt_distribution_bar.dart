@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 
 class VTDistributionBar extends StatelessWidget {
@@ -32,7 +33,7 @@ class VTDistributionBar extends StatelessWidget {
                     flex: (segment.value / total * _flexPrecision).round(),
                     child: TweenAnimationBuilder<Color?>(
                       tween: ColorTween(end: segment.color),
-                      duration: const Duration(milliseconds: 400),
+                      duration: VTMotion.entrance,
                       builder: (context, color, _) => ColoredBox(color: color ?? Colors.transparent),
                     ),
                   ),

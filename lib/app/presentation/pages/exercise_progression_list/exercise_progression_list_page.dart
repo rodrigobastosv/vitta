@@ -47,7 +47,7 @@ class ExerciseProgressionListPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final exercise = state.exercises[index];
                   return VTAppearEffect(
-                    delay: Duration(milliseconds: 40 * index),
+                    index: index,
                     child: LoggedExerciseTile(
                       exercise: exercise,
                       onTap: () => context.pushRoute(.exerciseProgression, extra: ExerciseProgressionExtra(exercise: exercise)),

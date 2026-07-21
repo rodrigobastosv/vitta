@@ -6,6 +6,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
 import 'package:vitta/app/design_system/components/general/vt_segmented_tabs.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
@@ -70,8 +71,8 @@ class FoodSearchPage extends StatelessWidget {
             ),
             Expanded(
               child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 260),
-                switchInCurve: Curves.easeOutCubic,
+                duration: VTMotion.transition,
+                switchInCurve: VTMotion.curve,
                 transitionBuilder: (child, animation) => FadeTransition(
                   opacity: animation,
                   child: SlideTransition(

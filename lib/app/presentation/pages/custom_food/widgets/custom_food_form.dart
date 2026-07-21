@@ -6,6 +6,7 @@ import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
@@ -84,7 +85,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           VTAppearEffect(child: Text(l10n.dietCustomFoodSubtitle, style: VTTextStyles.caption(context))),
           const VTGap.m(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 50),
+            index: 1,
             child: TextField(
               controller: _nameController,
               onChanged: cubit.nameChanged,
@@ -95,7 +96,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           ),
           const VTGap.s(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 75),
+            index: 2,
             child: TextField(
               controller: _brandController,
               onChanged: cubit.brandChanged,
@@ -106,7 +107,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           ),
           const VTGap.s(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 85),
+            index: 3,
             child: TextField(
               controller: _gramsPerUnitController,
               onChanged: cubit.gramsPerUnitChanged,
@@ -116,7 +117,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           ),
           const VTGap.m(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 100),
+            index: 4,
             child: CustomFoodScanCard(
               onTap: _scanNutritionLabel,
               isLocked: !context.watch<PremiumCubit>().state.isPremium,
@@ -124,13 +125,13 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           ),
           const VTGap.l(),
           VTAppearEffect(
-            delay: const Duration(milliseconds: 150),
+            index: 5,
             child: Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.title(context)),
           ),
           const VTGap.m(),
           for (final (index, nutrient) in CustomFoodNutrient.values.indexed) ...[
             VTAppearEffect(
-              delay: Duration(milliseconds: 200 + index * 50),
+              index: index + 6,
               child: CustomFoodNutrientField(
                 nutrient: nutrient,
                 controller: _nutrientControllers[nutrient]!,
@@ -141,8 +142,8 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
           ],
           const VTGap.s(),
           AnimatedSize(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOutCubic,
+            duration: VTMotion.transition,
+            curve: VTMotion.curve,
             alignment: .topCenter,
             child: CustomFoodEnergySplitCard.hasSplit(state.nutrients)
                 ? CustomFoodEnergySplitCard(nutrients: state.nutrients)

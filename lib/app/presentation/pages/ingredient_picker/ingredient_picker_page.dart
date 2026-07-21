@@ -62,7 +62,7 @@ class IngredientPickerPage extends StatelessWidget {
                     final heroTag = 'ingredient-picker-$index';
                     return VTAppearEffect(
                       key: ValueKey('$index-${food.id ?? food.barcode ?? food.name}'),
-                      delay: Duration(milliseconds: index.clamp(0, 10) * 50),
+                      index: index,
                       child: FoodSearchResultTile(
                         food: food,
                         heroTag: heroTag,

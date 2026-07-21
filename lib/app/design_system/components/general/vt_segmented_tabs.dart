@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -17,7 +18,7 @@ class VTSegmentedTab<T> {
 class VTSegmentedTabs<T> extends StatelessWidget {
   const VTSegmentedTabs({required this.tabs, required this.selected, required this.onSelected, super.key});
 
-  static const Duration _duration = Duration(milliseconds: 240);
+  static const Duration _duration = VTMotion.transition;
   static const double _indicatorHeight = 3;
 
   static const double _indicatorTabFraction = 0.5;
@@ -64,7 +65,7 @@ class VTSegmentedTabs<T> extends StatelessWidget {
           child: AnimatedAlign(
             alignment: Alignment(_indicatorAlignmentX, 0),
             duration: _duration,
-            curve: Curves.easeOutCubic,
+            curve: VTMotion.curve,
             child: FractionallySizedBox(
               widthFactor: _indicatorWidthFactor,
               heightFactor: 1,

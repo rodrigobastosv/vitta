@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 
 class VTBarChart extends StatelessWidget {
   const VTBarChart({required this.bars, this.referenceValue, this.referenceColor, this.emptySlotColor, this.height = 140, this.semanticLabel, super.key});
@@ -21,8 +22,8 @@ class VTBarChart extends StatelessWidget {
       label: semanticLabel,
       child: TweenAnimationBuilder<double>(
         tween: Tween(begin: 0, end: 1),
-        duration: const Duration(milliseconds: 800),
-        curve: Curves.easeOutCubic,
+        duration: VTMotion.data,
+        curve: VTMotion.curve,
         builder: (context, growth, _) => SizedBox(
           height: height,
           width: double.infinity,

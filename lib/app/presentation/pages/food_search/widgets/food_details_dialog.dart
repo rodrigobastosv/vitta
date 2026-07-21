@@ -3,6 +3,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
@@ -17,7 +18,7 @@ Future<void> showFoodDetailsDialog({required BuildContext context, required Food
         barrierDismissible: true,
         barrierColor: Colors.black54,
         barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        reverseTransitionDuration: const Duration(milliseconds: 250),
+        reverseTransitionDuration: VTMotion.transition,
         pageBuilder: (context, animation, secondaryAnimation) => FoodDetailsDialog(food: food, heroTag: heroTag),
         transitionsBuilder: (context, animation, secondaryAnimation, child) => FadeTransition(opacity: animation, child: child),
       ),
