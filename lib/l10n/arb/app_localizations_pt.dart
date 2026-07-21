@@ -348,6 +348,21 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietCopyMealsEmptyDayMessage => 'Escolha outro dia — este não tem refeições para copiar.';
 
   @override
+  String get workoutRestTimerLabel => 'Descanso';
+
+  @override
+  String get workoutRestExtendAction => '+30s';
+
+  @override
+  String get workoutRestSkipAction => 'Pular';
+
+  @override
+  String get workoutNoSetsYet => 'Nenhuma série registrada ainda.';
+
+  @override
+  String get workoutInstructionsTitle => 'Como fazer';
+
+  @override
   String get retry => 'Tentar novamente';
 
   @override

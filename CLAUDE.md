@@ -499,6 +499,22 @@ UI: `WorkoutPage` (`/workout`) is a day view with a date selector, a volume/sets
 
 `VTRemoteImage` (design system) is `VTFoodImage` generalised — a network image with a caller-supplied placeholder icon — since the catalog needed the same behaviour with a different fallback. `VTFoodImage` is now a thin wrapper passing `Icons.restaurant_outlined`, so diet's call sites are untouched. **Every network image in the app goes through `cached_network_image_ce`** (issue #59), not raw `Image.network` — the `_ce` fork is used over the mainline `cached_network_image` for the same reason `hive_ce`/`hive_ce_flutter` are (it's the family that stays compatible with the project's `hive_ce` toolchain). `VTRemoteImage` and `VTPhotoHeader` are the only two widgets that build a `CachedNetworkImage`; both fall back to their existing placeholder via `errorBuilder`, so a new call site caches for free just by using them rather than reaching for `Image.network`. Body regions get their own fixed `VTColors.bodyRegion*` accents (the `macro*` idea applied to muscle groups); don't reach for `warning`/`macroCarbs` for a region — they're the same hex, so two regions would collide.
 
+## The rest timer, and the exercise workspace
+
+The workout screen's two gaps were connected (issue #163): there was **no rest timer at all**, and `ExerciseDetailPage` was a **dead end** — photos and instructions, but you had to back out of it to log anything.
+
+**`ExerciseWorkoutPage` is the workspace.** It replaces the read-only detail page as what an exercise card opens: photos, sets, the rest timer, the instructions and Finish, on one screen. `ExerciseWorkoutCubit` takes the `WorkoutExercise` through `VTPage`'s `cubitParam` (the `RecipeFormCubit` shape) and **updates its own state from each use case's return value** rather than reloading — `LogSetUseCase`, `UpdateSetUseCase` and `SetWorkoutExerciseCompletedUseCase` all hand back the persisted entity, so a round trip would be ceremony. `WorkoutPage` reloads the day on pop.
+
+**The day list keeps its set rows and its one-tap repeat.** Direction A as mocked moved everything onto the exercise page, and that costs a tap on the hot path plus a trip back up to change exercise. Logging from the list stays; the page is for when you want the instructions, the timer and focus.
+
+**`RestTimerCubit` is a lazy singleton provided at the root**, next to `AppCubit` and `PremiumCubit` — not a widget and not a page cubit, because a rest has to keep counting while you move between the day view and the exercise page. Three rules, all pinned by `rest_timer_cubit_test.dart` and all mutation-verified:
+
+- **`start` replaces, it never stacks.** Logging a second set mid-rest restarts the clock rather than adding to it.
+- **Extending grows `total` as well as `remaining`.** Growing only `remaining` makes the progress bar jump backwards, since it is the ratio of the two.
+- **A finished rest clears itself** (and fires `VTHaptics.success()`), so nothing lingers at 0:00.
+
+`VTRestTimer` is the design-system piece: a green bar with the countdown in tabular figures, +30s, Skip, and a progress track. It docks in `WorkoutPage`'s `bottomNavigationBar` and sits inline on the exercise page. A test that exercises the timer needs `TestWidgetsFlutterBinding.ensureInitialized()`, because the completion haptic reaches a platform channel.
+
 ## Workout page visual language
 
 `WorkoutPage` is built from the same vocabulary as the diet page (issue #108) rather than a parallel look — the pieces below are what "match the diet page's polish bar" actually meant in practice:

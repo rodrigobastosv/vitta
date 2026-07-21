@@ -734,6 +734,36 @@ abstract class AppLocalizations {
   /// **'Pick another day — this one has no meals to copy.'**
   String get dietCopyMealsEmptyDayMessage;
 
+  /// No description provided for @workoutRestTimerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest'**
+  String get workoutRestTimerLabel;
+
+  /// No description provided for @workoutRestExtendAction.
+  ///
+  /// In en, this message translates to:
+  /// **'+30s'**
+  String get workoutRestExtendAction;
+
+  /// No description provided for @workoutRestSkipAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get workoutRestSkipAction;
+
+  /// No description provided for @workoutNoSetsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No sets logged yet.'**
+  String get workoutNoSetsYet;
+
+  /// No description provided for @workoutInstructionsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How to'**
+  String get workoutInstructionsTitle;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:
