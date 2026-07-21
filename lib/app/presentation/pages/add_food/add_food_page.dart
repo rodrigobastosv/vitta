@@ -12,11 +12,14 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_extra.dart';
+import 'package:vitta/app/presentation/pages/add_food/add_food_mode.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_list.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/ingredient_quantity_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/meal_scan_action.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_foods_list.dart';
@@ -24,10 +27,14 @@ import 'package:vitta/app/presentation/pages/add_food/widgets/recent_searches_li
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class AddFoodPage extends StatelessWidget {
-  const AddFoodPage({required this.loggedDate, this.initialMealType, super.key});
+  const AddFoodPage({required this.extra, super.key});
 
-  final DateTime loggedDate;
-  final MealType? initialMealType;
+  final AddFoodExtra extra;
+
+  bool get _isPicking => extra.mode == AddFoodMode.pickIngredient;
+
+  DateTime get loggedDate => extra.loggedDate ?? DateTime.now();
+  MealType? get initialMealType => extra.initialMealType;
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +54,23 @@ class AddFoodPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
-          title: Text(l10n.dietFoodSearchTitle),
+          title: Text(_isPicking ? l10n.dietPickIngredientTitle : l10n.dietFoodSearchTitle),
           actions: [
-            MealScanAction(
-              date: loggedDate,
-              onLogged: () {
-                context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
-                Navigator.of(context).pop();
-              },
-            ),
+            if (!_isPicking)
+              MealScanAction(
+                date: loggedDate,
+                onLogged: () {
+                  context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
+                  Navigator.of(context).pop();
+                },
+              ),
             IconButton(
               icon: const Icon(Icons.add_circle_outline),
               tooltip: l10n.dietCustomFoodTitle,
               onPressed: () async {
                 final food = await context.pushRoute<Food>(.customFood);
                 if (food != null && context.mounted) {
-                  await showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType);
+                  await _addFood(context, food);
                 }
               },
             ),
@@ -102,6 +110,17 @@ class AddFoodPage extends StatelessWidget {
     );
   }
 
+  Future<void> _addFood(BuildContext context, Food food) async {
+    if (!_isPicking) {
+      await showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType);
+      return;
+    }
+    final ingredient = await showIngredientQuantitySheet(context: context, food: food, unitSystem: extra.unitSystem!);
+    if (ingredient != null && context.mounted) {
+      Navigator.of(context).pop(ingredient);
+    }
+  }
+
   Widget _buildSearchTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Column(
     key: const ValueKey(AddFoodTab.search),
     children: [
@@ -136,9 +155,10 @@ class AddFoodPage extends StatelessWidget {
     padding: const EdgeInsets.only(top: VTSpacing.m),
     child: RecentFoodsList(
       entries: state.recentFoods,
-      onOpenFood: (entry) => showLogFoodSheet(context: context, food: entry.food, loggedDate: loggedDate, initialMealType: initialMealType),
-      onQuickAdd: (entry) =>
-          cubit.logFood(food: entry.food, quantityGrams: entry.log.quantityGrams, mealType: initialMealType ?? entry.log.mealType, loggedDate: loggedDate),
+      onOpenFood: (entry) => _addFood(context, entry.food),
+      onQuickAdd: (entry) => _isPicking
+          ? _addFood(context, entry.food)
+          : cubit.logFood(food: entry.food, quantityGrams: entry.log.quantityGrams, mealType: initialMealType ?? entry.log.mealType, loggedDate: loggedDate),
     ),
   );
 
@@ -161,7 +181,7 @@ class AddFoodPage extends StatelessWidget {
     heroPrefix: heroPrefix,
     isFavorite: state.isFavorite,
     onTapFood: (food, heroTag) => showFoodDetailsDialog(context: context, food: food, heroTag: heroTag),
-    onAddFood: (food) => showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType),
+    onAddFood: (food) => _addFood(context, food),
     onToggleFavorite: (food) => cubit.toggleFavorite(food: food),
   );
 }

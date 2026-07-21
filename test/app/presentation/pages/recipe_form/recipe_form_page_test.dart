@@ -51,7 +51,7 @@ Future<void> pumpRecipeForm(WidgetTester tester, {required MockSaveRecipeUseCase
           ),
           GoRoute(
             path: '/ingredient',
-            name: 'ingredientPicker',
+            name: 'addFood',
             builder: (context, state) => Scaffold(
               body: Center(
                 child: ElevatedButton(onPressed: () => Navigator.of(context).pop(pickedIngredient), child: const Text('pick')),

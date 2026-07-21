@@ -1,0 +1,1 @@
+enum AddFoodMode { log, pickIngredient }

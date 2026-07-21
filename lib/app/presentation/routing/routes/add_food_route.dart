@@ -11,6 +11,6 @@ class AddFoodRoute extends VTRoute {
   @override
   GoRouterWidgetBuilder get builder => (context, state) {
     final extra = state.extra! as AddFoodExtra;
-    return AddFoodPage(loggedDate: extra.loggedDate, initialMealType: extra.initialMealType);
+    return AddFoodPage(extra: extra);
   };
 }

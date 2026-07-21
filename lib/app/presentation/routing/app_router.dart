@@ -17,7 +17,6 @@ import 'package:vitta/app/presentation/routing/routes/exercise_progression_list_
 import 'package:vitta/app/presentation/routing/routes/exercise_progression_route.dart';
 import 'package:vitta/app/presentation/routing/routes/exercise_search_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
-import 'package:vitta/app/presentation/routing/routes/ingredient_picker_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
@@ -53,7 +52,6 @@ abstract class AppRouter {
     DietDayRoute(),
     RecipesRoute(),
     RecipeFormRoute(),
-    IngredientPickerRoute(),
     AddFoodRoute(),
     CustomFoodRoute(),
     WaterRoute(),
