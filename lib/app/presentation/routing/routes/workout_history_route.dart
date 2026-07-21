@@ -8,5 +8,6 @@ class WorkoutHistoryRoute extends VTRoute {
   AppRoute get route => .workoutHistory;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const WorkoutHistoryPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const WorkoutHistoryPage();
 }

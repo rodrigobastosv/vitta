@@ -48,11 +48,13 @@ class ReminderPage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.reminderAddAction),
-        ),
+        floatingActionButton: state.reminders.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => showReminderFormSheet(context: context, cubit: cubit, date: state.date),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.reminderAddAction),
+              ),
         body: Column(
           children: [
             Padding(

@@ -27,6 +27,9 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
     emit(state.copyWith(macroGoals: _getMacroGoalsUseCase()));
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
     emitPresentation(DietHistoryHideLoading());
   }
 
@@ -53,7 +56,7 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
     final macrosResult = await _getMacrosInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
     macrosResult.when(
       (error) => emitPresentation(DietHistoryError(message: error.message)),
-      (macrosByDate) => emit(state.copyWith(macrosInMonth: macrosByDate)),
+      (macrosByDate) => emit(state.copyWith(macrosInMonth: macrosByDate, isLoaded: true)),
     );
   }
 

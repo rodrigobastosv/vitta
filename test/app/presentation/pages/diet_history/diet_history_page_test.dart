@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/components/charts/vt_distribution_bar.da
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/pages/diet_day/diet_day_extra.dart';
 import 'package:vitta/app/presentation/pages/diet_day/diet_day_page.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
@@ -83,6 +84,34 @@ Future<void> pumpHistoryPage(
   await tester.pumpAndSettle();
 }
 
+Future<void> pumpSlowHistoryPage(WidgetTester tester) async {
+  final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
+  final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+  final today = DateTime.now();
+  when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    return Success({DateTime(today.year, today.month, today.day): buildDayOf(2000)});
+  });
+  when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+  if (G.isRegistered<DietHistoryCubit>()) {
+    G.unregister<DietHistoryCubit>();
+  }
+  G.registerFactory<DietHistoryCubit>(
+    () =>
+        CubitsFactories.buildDietHistoryCubit(getMacrosInRangeUseCase: getMacrosInRangeUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase),
+  );
+
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: VTTheme.light,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      home: const DietHistoryPage(),
+      builder: (context, child) => LoaderOverlay(child: child!),
+    ),
+  );
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
@@ -96,6 +125,20 @@ void main() {
     expect(find.text('Avg'), findsOneWidget);
     expect(find.text('Trends'), findsOneWidget);
     expect(find.text('30d'), findsOneWidget);
+  });
+
+  testWidgets('shows a skeleton while the first read is in flight, never the empty state', (tester) async {
+    await pumpSlowHistoryPage(tester);
+
+    await tester.pump();
+    expect(find.byType(HistorySkeleton), findsOneWidget);
+    expect(find.text('No meals logged yet'), findsNothing);
+
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+
+    expect(find.byType(HistorySkeleton), findsNothing);
+    expect(find.text('No meals logged yet'), findsNothing);
   });
 
   testWidgets('invites a first log instead of showing an empty calendar and flat charts', (tester) async {

@@ -8,5 +8,6 @@ class WorkoutIntroRoute extends VTRoute {
   AppRoute get route => .workoutIntro;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const WorkoutIntroPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const WorkoutIntroPage();
 }

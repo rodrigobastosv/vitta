@@ -8,5 +8,6 @@ class ReminderRoute extends VTRoute {
   AppRoute get route => .reminders;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const ReminderPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const ReminderPage();
 }

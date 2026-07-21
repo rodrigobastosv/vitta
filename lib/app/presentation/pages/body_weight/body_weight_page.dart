@@ -48,11 +48,13 @@ class BodyWeightPage extends StatelessWidget {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => showLogBodyWeightSheet(context: context),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.bodyWeightLogAction),
-        ),
+        floatingActionButton: state.logs.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => showLogBodyWeightSheet(context: context),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.bodyWeightLogAction),
+              ),
         body: VTRefreshable(
           onRefresh: cubit.loadRecent,
           hasData: state.logs.isNotEmpty,

@@ -32,6 +32,9 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
     emit(state.copyWith(dailyGoalMl: _getWaterGoalUseCase()));
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
     emitPresentation(WaterHistoryHideLoading());
   }
 
@@ -56,7 +59,10 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
 
   Future<void> _loadMonth(DateTime month) async {
     final waterResult = await _getWaterInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
-    waterResult.when((error) => emitPresentation(WaterHistoryError(message: error.message)), (waterByDate) => emit(state.copyWith(waterInMonth: waterByDate)));
+    waterResult.when(
+      (error) => emitPresentation(WaterHistoryError(message: error.message)),
+      (waterByDate) => emit(state.copyWith(waterInMonth: waterByDate, isLoaded: true)),
+    );
   }
 
   Future<void> _loadTrend(TrendRange trendRange) async {

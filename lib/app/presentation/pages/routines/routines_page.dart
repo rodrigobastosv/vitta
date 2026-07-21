@@ -29,11 +29,9 @@ class RoutinesPage extends StatelessWidget {
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.workoutRoutinesTitle)),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _openForm(context, cubit),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.workoutRoutineNewAction),
-        ),
+        floatingActionButton: state.routines.isEmpty
+            ? null
+            : FloatingActionButton.extended(onPressed: () => _openForm(context, cubit), icon: const Icon(Icons.add), label: Text(l10n.workoutRoutineNewAction)),
         body: state.routines.isEmpty
             ? VTEmptyState(
                 icon: Icons.repeat,

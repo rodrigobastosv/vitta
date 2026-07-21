@@ -70,14 +70,25 @@ void main() {
     expect(find.text('No reminders'), findsOneWidget);
   });
 
-  testWidgets('the FAB opens the create form', (tester) async {
-    await pumpPage(tester, reminders: const []);
+  testWidgets('the FAB opens the create form once there are reminders', (tester) async {
+    await pumpPage(tester, reminders: [ReminderFactory.build(title: 'Pay rent')]);
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
 
     expect(find.text('New reminder'), findsOneWidget);
     expect(find.text('Repeat'), findsOneWidget);
+  });
+
+  testWidgets('an empty day offers one create action, not a CTA and a FAB saying the same thing', (tester) async {
+    await pumpPage(tester, reminders: const []);
+
+    expect(find.byType(FloatingActionButton), findsNothing);
+
+    await tester.tap(find.text('Add reminder'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('New reminder'), findsOneWidget);
   });
 
   testWidgets('the app bar exposes the history action', (tester) async {

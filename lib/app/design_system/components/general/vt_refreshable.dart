@@ -6,22 +6,32 @@ class VTRefreshable extends StatelessWidget {
     required this.onRefresh,
     required this.children,
     this.hasData = true,
+    this.isLoaded = true,
     this.emptyState,
+    this.skeleton,
     this.padding = const EdgeInsets.all(VTSpacing.m),
     super.key,
-  }) : assert(hasData || emptyState != null, 'A screen without data needs an emptyState to show instead of a blank list.');
+  }) : assert(hasData || emptyState != null, 'A screen without data needs an emptyState to show instead of a blank list.'),
+       assert(isLoaded || skeleton != null, 'A screen still loading needs a skeleton, or it flashes its empty state first.');
 
   final Future<void> Function() onRefresh;
   final List<Widget> children;
   final bool hasData;
+  final bool isLoaded;
   final Widget? emptyState;
+  final Widget? skeleton;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) => RefreshIndicator(
     onRefresh: onRefresh,
-    child: switch (emptyState) {
-      final emptyState? when !hasData => LayoutBuilder(
+    child: switch ((skeleton, emptyState)) {
+      (final skeleton?, _) when !isLoaded => ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: padding,
+        children: [skeleton],
+      ),
+      (_, final emptyState?) when !hasData => LayoutBuilder(
         builder: (context, constraints) => SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
           child: ConstrainedBox(

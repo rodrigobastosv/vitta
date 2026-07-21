@@ -51,6 +51,7 @@ void main() {
       isA<ReminderHistoryState>()
           .having((state) => state.selectedDay, 'cleared on month change', isNull)
           .having((state) => state.month, 'reloaded month', DateTime(2026, 8)),
+      isA<ReminderHistoryState>().having((state) => state.isLoaded, 'loaded once the month resolves', isTrue),
     ],
   );
 
@@ -63,6 +64,9 @@ void main() {
     },
     seed: () => ReminderHistoryState(month: DateTime(2026, 7)),
     act: (cubit) => cubit.goToNextMonth(),
-    expect: () => [isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8))],
+    expect: () => [
+      isA<ReminderHistoryState>().having((state) => state.month, 'month', DateTime(2026, 8)),
+      isA<ReminderHistoryState>().having((state) => state.isLoaded, 'loaded once the month resolves', isTrue),
+    ],
   );
 }

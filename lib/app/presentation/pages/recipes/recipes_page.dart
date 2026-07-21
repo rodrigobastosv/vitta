@@ -64,11 +64,9 @@ class RecipesPage extends StatelessWidget {
             ],
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _openForm(context, cubit),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.dietCreateRecipeTitle),
-        ),
+        floatingActionButton: state.recipes.isEmpty
+            ? null
+            : FloatingActionButton.extended(onPressed: () => _openForm(context, cubit), icon: const Icon(Icons.add), label: Text(l10n.dietCreateRecipeTitle)),
       ),
     );
   }

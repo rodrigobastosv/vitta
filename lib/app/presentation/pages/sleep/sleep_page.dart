@@ -86,11 +86,13 @@ class SleepPage extends StatelessWidget {
             ],
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => showLogSleepSheet(context: context),
-          icon: const Icon(Icons.add),
-          label: Text(l10n.sleepLogAction),
-        ),
+        floatingActionButton: state.logs.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () => showLogSleepSheet(context: context),
+                icon: const Icon(Icons.add),
+                label: Text(l10n.sleepLogAction),
+              ),
       );
     },
   );

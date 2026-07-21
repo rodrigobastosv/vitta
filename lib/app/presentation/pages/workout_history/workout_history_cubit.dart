@@ -33,6 +33,9 @@ class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, Workout
     emitPresentation(WorkoutHistoryShowLoading());
     await _loadMonth(state.month);
     await _loadTrend(state.trendRange);
+    if (!state.isLoaded) {
+      emit(state.copyWith(isLoaded: true));
+    }
     emitPresentation(WorkoutHistoryHideLoading());
   }
 
@@ -59,7 +62,7 @@ class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, Workout
     final workoutsResult = await _getDailyWorkoutsInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
     workoutsResult.when(
       (error) => emitPresentation(WorkoutHistoryError(message: error.message)),
-      (workoutsByDate) => emit(state.copyWith(workoutsInMonth: workoutsByDate)),
+      (workoutsByDate) => emit(state.copyWith(workoutsInMonth: workoutsByDate, isLoaded: true)),
     );
   }
 

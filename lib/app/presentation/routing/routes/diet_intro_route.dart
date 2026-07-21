@@ -8,5 +8,6 @@ class DietIntroRoute extends VTRoute {
   AppRoute get route => .dietIntro;
 
   @override
-  GoRouterWidgetBuilder get builder => (context, state) => const DietIntroPage();
+  GoRouterWidgetBuilder get builder =>
+      (context, state) => const DietIntroPage();
 }

@@ -124,14 +124,16 @@ class DietPage extends StatelessWidget {
               ],
           ],
         ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
-            await cubit.refresh();
-          },
-          icon: const Icon(Icons.add),
-          label: Text(l10n.dietAddFood),
-        ),
+        floatingActionButton: state.dailyMacros.entries.isEmpty
+            ? null
+            : FloatingActionButton.extended(
+                onPressed: () async {
+                  await context.pushRoute(.foodSearch, extra: FoodSearchExtra(loggedDate: state.date));
+                  await cubit.refresh();
+                },
+                icon: const Icon(Icons.add),
+                label: Text(l10n.dietAddFood),
+              ),
       ),
     );
   }

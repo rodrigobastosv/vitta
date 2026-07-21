@@ -124,6 +124,26 @@ Two things this deliberately trades away, both real: a toast **can be missed**, 
 
 **Validation is not a crash and doesn't wear a crash's colours.** `context.showWarningToast(...)` is the sibling of `showErrorToast` for a failure the user can fix from where they already are — the incomplete custom food, the unnamed recipe, the unnamed routine, a scan that read nothing. It picks `VTSeverity.warning` (amber, an info glyph) over `.error` (red), and **deliberately takes no retry**: running the same incomplete form again fails the same way. Both default their title from l10n (`errorTitle` / `warningTitle`) and take an override where the caller has something better to say (`dietNutritionScanNoDataTitle` — its title states the problem so the message is free to state the action).
 
+## Skeletons, and the loaded-vs-empty distinction
+
+The global overlay stays for **writes**; an initial **read** shows a `VTSkeleton` instead (issue #163). The overlay is right for a blocking write, but for a read it hides structure the app already knows it is about to draw, and makes the app feel slower than it is.
+
+**The reason this mattered urgently is a regression the Phase 1.4 empty states introduced.** A `PresentationCubit`'s initial state is deliberately a "loaded but empty" value (see State management), so on first mount `hasData` is false and the full-page empty state rendered *before the first read resolved* — a user with months of history saw "No meals logged yet / Log a meal" every time they opened it. Proven with a probe (`emptyVisible=true` on frame 1), fixed, and now pinned by a regression test that pumps a deliberately slow use case and asserts skeleton-not-empty-state on that frame.
+
+**`XHistoryState.isLoaded` is not a loading flag**, and the "no cubit models loading as a state field" rule still stands. It records whether the first read has *ever resolved* — a fact about whether the data is **known**, the same distinction `FoodSearchState.results` draws by being nullable (`null` = idle, `[]` = searched and found nothing). It never goes back to false, so it is not modelling an operation in flight; that is still the overlay's job via presentation events. The three states are: **not known yet** → skeleton, **known and empty** → `VTEmptyState`, **known** → content.
+
+It is folded into the existing data emit (`copyWith(xInMonth: ..., isLoaded: true)`) rather than emitted separately, so the happy path costs no extra rebuild. The trailing `if (!state.isLoaded)` guard exists only for the **failure** path — a failed first read must fall through to the empty state, never leave a skeleton pulsing forever.
+
+`VTRefreshable` gained `isLoaded` + `skeleton` mirroring `hasData` + `emptyState`, with an assert for each pairing.
+
+**A skeleton pulses; it does not transition.** `VTSkeleton` is in `motion_tokens_test.dart`'s `_allowed` alongside the loading spinner, and its `Curves.easeInOut` is deliberate — a pulse breathes symmetrically, where `VTMotion.curve` eases *out of* a change.
+
+## An empty state's CTA replaces the FAB, it doesn't join it
+
+Once `VTEmptyState` carries a CTA, a screen showing that empty state must **hide its FAB** — otherwise "Log sleep" appears twice, once mid-screen and once in the corner, which is what shipped in #171. Six screens gate it (`floatingActionButton: state.x.isEmpty ? null : ...`): diet, sleep, body weight, recipes, routines and reminders.
+
+**Gate on the same emptiness the CTA is gated on, which is not always the visible list.** `ReminderPage` hides the FAB on `state.reminders.isEmpty`, *not* `visibleReminders` — when a filter hides everything, the `.noResults` state shows and that one has no CTA, so the FAB has to stay or the screen offers no way to add anything.
+
 ## Pull to refresh
 
 Every screen that loads remote data is refreshable through `VTRefreshable` (`design_system/components/general/`, issue #163) — 12 screens, up from 4. **There are no raw `RefreshIndicator`s left**; once the component exists, reaching for the Material widget is the "never add a raw Material widget where a `VT` component exists" rule being broken.

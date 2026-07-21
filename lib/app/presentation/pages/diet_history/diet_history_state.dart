@@ -10,6 +10,7 @@ class DietHistoryState extends Equatable {
     this.macrosInMonth = const {},
     this.trendRange = TrendRange.month,
     this.macrosInTrendRange = const {},
+    this.isLoaded = false,
   });
 
   final DateTime month;
@@ -18,15 +19,19 @@ class DietHistoryState extends Equatable {
   final TrendRange trendRange;
   final Map<DateTime, DailyMacros> macrosInTrendRange;
 
+  final bool isLoaded;
+
   bool get hasData => macrosInMonth.isNotEmpty || macrosInTrendRange.isNotEmpty;
 
   DietHistoryState copyWith({
+    bool? isLoaded,
     DateTime? month,
     MacroGoals? macroGoals,
     Map<DateTime, DailyMacros>? macrosInMonth,
     TrendRange? trendRange,
     Map<DateTime, DailyMacros>? macrosInTrendRange,
   }) => DietHistoryState(
+    isLoaded: isLoaded ?? this.isLoaded,
     month: month ?? this.month,
     macroGoals: macroGoals ?? this.macroGoals,
     macrosInMonth: macrosInMonth ?? this.macrosInMonth,
@@ -35,5 +40,5 @@ class DietHistoryState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [month, macroGoals, macrosInMonth, trendRange, macrosInTrendRange];
+  List<Object?> get props => [isLoaded, month, macroGoals, macrosInMonth, trendRange, macrosInTrendRange];
 }

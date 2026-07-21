@@ -9,6 +9,7 @@ class WaterHistoryState extends Equatable {
     this.waterInMonth = const {},
     this.waterInTrendRange = const {},
     this.trendRange = TrendRange.month,
+    this.isLoaded = false,
   });
 
   final DateTime month;
@@ -20,15 +21,19 @@ class WaterHistoryState extends Equatable {
 
   final TrendRange trendRange;
 
+  final bool isLoaded;
+
   bool get hasData => waterInMonth.isNotEmpty || waterInTrendRange.isNotEmpty;
 
   WaterHistoryState copyWith({
+    bool? isLoaded,
     DateTime? month,
     double? dailyGoalMl,
     Map<DateTime, DailyWater>? waterInMonth,
     Map<DateTime, DailyWater>? waterInTrendRange,
     TrendRange? trendRange,
   }) => WaterHistoryState(
+    isLoaded: isLoaded ?? this.isLoaded,
     month: month ?? this.month,
     dailyGoalMl: dailyGoalMl ?? this.dailyGoalMl,
     waterInMonth: waterInMonth ?? this.waterInMonth,
@@ -37,5 +42,5 @@ class WaterHistoryState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [month, dailyGoalMl, waterInMonth, waterInTrendRange, trendRange];
+  List<Object?> get props => [isLoaded, month, dailyGoalMl, waterInMonth, waterInTrendRange, trendRange];
 }
