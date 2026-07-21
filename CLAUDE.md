@@ -505,13 +505,16 @@ The workout screen's two gaps were connected (issue #163): there was **no rest t
 
 **`ExerciseWorkoutPage` is the workspace.** It replaces the read-only detail page as what an exercise card opens: photos, sets, the rest timer, the instructions and Finish, on one screen. `ExerciseWorkoutCubit` takes the `WorkoutExercise` through `VTPage`'s `cubitParam` (the `RecipeFormCubit` shape) and **updates its own state from each use case's return value** rather than reloading — `LogSetUseCase`, `UpdateSetUseCase` and `SetWorkoutExerciseCompletedUseCase` all hand back the persisted entity, so a round trip would be ceremony. `WorkoutPage` reloads the day on pop.
 
-**The day list keeps its set rows and its one-tap repeat.** Direction A as mocked moved everything onto the exercise page, and that costs a tap on the hot path plus a trip back up to change exercise. Logging from the list stays; the page is for when you want the instructions, the timer and focus.
+**The exercise page owns adding a set; the day list keeps repeat.** Once the page exists, an "Add set" button on the card is a second door to the same room — so the card offers only **repeat** (one tap, no sheet) and editing an existing set. Anything that needs the sheet happens on the page. Finishing an exercise pops back to the day view, since finishing is the end of what that page is for.
 
 **`RestTimerCubit` is a lazy singleton provided at the root**, next to `AppCubit` and `PremiumCubit` — not a widget and not a page cubit, because a rest has to keep counting while you move between the day view and the exercise page. Three rules, all pinned by `rest_timer_cubit_test.dart` and all mutation-verified:
 
 - **`start` replaces, it never stacks.** Logging a second set mid-rest restarts the clock rather than adding to it.
 - **Extending grows `total` as well as `remaining`.** Growing only `remaining` makes the progress bar jump backwards, since it is the ratio of the two.
-- **A finished rest clears itself** (and fires `VTHaptics.success()`), so nothing lingers at 0:00.
+- **A finished rest clears itself** (and fires `VTHaptics.success()`), so nothing lingers at 0:00. The last three seconds tick with `VTHaptics.selection()`, so you can feel it end without watching.
+- **Shortening past zero ends the rest** rather than going negative.
+
+**The rest length is a device-local preference**, not a constant — `WorkoutLocalDataSource`'s `workout.restSeconds` behind `GetRestDurationUseCase`/`SaveRestDurationUseCase`, the same shape as the water and sleep goals. `start()` with no argument reads it, so changing it applies from the next set. The timer turns `VTColors.coral` in its final ten seconds, and carries the exercise's name so a rest you come back to says what it belongs to.
 
 `VTRestTimer` is the design-system piece: a green bar with the countdown in tabular figures, +30s, Skip, and a progress track. It docks in `WorkoutPage`'s `bottomNavigationBar` and sits inline on the exercise page. A test that exercises the timer needs `TestWidgetsFlutterBinding.ensureInitialized()`, because the completion haptic reaches a platform channel.
 

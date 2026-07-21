@@ -7,13 +7,26 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTRestTimer extends StatelessWidget {
-  const VTRestTimer({required this.remaining, required this.progress, required this.onExtend, required this.onSkip, this.label, super.key});
+  const VTRestTimer({
+    required this.remaining,
+    required this.progress,
+    required this.onExtend,
+    required this.onShorten,
+    required this.onSkip,
+    this.label,
+    this.onConfigure,
+    super.key,
+  });
+
+  static const Duration _urgentFrom = Duration(seconds: 10);
 
   final Duration remaining;
   final double progress;
   final VoidCallback onExtend;
+  final VoidCallback onShorten;
   final VoidCallback onSkip;
   final String? label;
+  final VoidCallback? onConfigure;
 
   String get _formatted {
     final minutes = remaining.inMinutes;
@@ -21,37 +34,44 @@ class VTRestTimer extends StatelessWidget {
     return '$minutes:$seconds';
   }
 
+  bool get _isUrgent => remaining <= _urgentFrom;
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final ink = VTColors.inkOn(VTColors.green);
+    final background = _isUrgent ? VTColors.coral : VTColors.green;
+    final ink = VTColors.inkOn(background);
     return DecoratedBox(
-      decoration: const BoxDecoration(color: VTColors.green, borderRadius: VTRadius.borderRadiusL),
+      decoration: BoxDecoration(color: background, borderRadius: VTRadius.borderRadiusL),
       child: Column(
         mainAxisSize: .min,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.s, VTSpacing.s),
+            padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.s, VTSpacing.xs),
             child: Row(
               children: [
-                Text(
-                  _formatted,
-                  style: VTTextStyles.title(context).copyWith(color: ink, fontFeatures: const [FontFeature.tabularFigures()]),
-                ),
-                const VTGap.m(),
                 Expanded(
-                  child: Text(
-                    label ?? l10n.workoutRestTimerLabel,
-                    style: VTTextStyles.caption(context).copyWith(color: ink.withValues(alpha: 0.85)),
-                    maxLines: 1,
-                    overflow: .ellipsis,
+                  child: Column(
+                    crossAxisAlignment: .start,
+                    mainAxisSize: .min,
+                    children: [
+                      Text(
+                        _formatted,
+                        style: VTTextStyles.headline(context).copyWith(color: ink, fontFeatures: const [FontFeature.tabularFigures()]),
+                      ),
+                      Text(
+                        label ?? l10n.workoutRestTimerLabel,
+                        style: VTTextStyles.caption(context).copyWith(color: ink.withValues(alpha: 0.85)),
+                        maxLines: 1,
+                        overflow: .ellipsis,
+                      ),
+                    ],
                   ),
                 ),
-                TextButton(
-                  onPressed: onExtend,
-                  style: TextButton.styleFrom(foregroundColor: ink),
-                  child: Text(l10n.workoutRestExtendAction),
-                ),
+                IconButton(onPressed: onShorten, icon: const Icon(Icons.remove), color: ink, tooltip: l10n.workoutRestShortenAction),
+                IconButton(onPressed: onExtend, icon: const Icon(Icons.add), color: ink, tooltip: l10n.workoutRestExtendAction),
+                if (onConfigure != null) IconButton(onPressed: onConfigure, icon: const Icon(Icons.tune), color: ink, tooltip: l10n.workoutRestConfigureAction),
+                const VTGap.xs(),
                 TextButton(
                   onPressed: onSkip,
                   style: TextButton.styleFrom(foregroundColor: ink),
@@ -62,7 +82,11 @@ class VTRestTimer extends StatelessWidget {
           ),
           ClipRRect(
             borderRadius: const BorderRadius.vertical(bottom: Radius.circular(4)),
-            child: LinearProgressIndicator(value: progress, minHeight: 4, color: ink, backgroundColor: ink.withValues(alpha: 0.24)),
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: progress),
+              duration: const Duration(seconds: 1),
+              builder: (context, value, _) => LinearProgressIndicator(value: value, minHeight: 5, color: ink, backgroundColor: ink.withValues(alpha: 0.24)),
+            ),
           ),
         ],
       ),

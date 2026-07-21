@@ -22,6 +22,7 @@ import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/next_routine_card.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/rest_length_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_date_selector.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_finished_card.dart';
@@ -77,8 +78,11 @@ class WorkoutPage extends StatelessWidget {
                   child: VTRestTimer(
                     remaining: timer.remaining,
                     progress: timer.progress,
+                    label: timer.label,
                     onExtend: context.read<RestTimerCubit>().extend,
+                    onShorten: context.read<RestTimerCubit>().shorten,
                     onSkip: context.read<RestTimerCubit>().skip,
+                    onConfigure: () => _configureRest(context),
                   ),
                 )
               : const SizedBox.shrink(),
@@ -138,19 +142,9 @@ class WorkoutPage extends StatelessWidget {
                       onRepeatSet: () async {
                         await cubit.repeatLastSet(workoutExercise: workoutExercise);
                         if (context.mounted) {
-                          context.read<RestTimerCubit>().start();
+                          context.read<RestTimerCubit>().start(label: workoutExercise.exercise.nameFor(l10n.localeName));
                         }
                       },
-                      onAddSet: () => showLogSetSheet(
-                        context: context,
-                        unitSystem: cubit.unitSystem,
-                        defaultLoadKg: workoutExercise.exercise.equipment == Equipment.bodyOnly ? state.latestBodyWeightKg : null,
-                        onSubmit: ({required reps, required weightKg}) async {
-                          final loggedResult = await cubit.logSet(workoutExerciseId: workoutExercise.id, reps: reps, weightKg: weightKg);
-                          loggedResult.when((_) {}, (_) => context.read<RestTimerCubit>().start());
-                          return loggedResult;
-                        },
-                      ),
                       onEditSet: (set) => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,
@@ -185,6 +179,14 @@ class WorkoutPage extends StatelessWidget {
       if (context.mounted) {
         await cubit.loadDate(cubit.state.date);
       }
+    }
+  }
+
+  Future<void> _configureRest(BuildContext context) async {
+    final timer = context.read<RestTimerCubit>();
+    final rest = await showRestLengthSheet(context: context, current: timer.configuredRest);
+    if (rest != null) {
+      await timer.changeRest(rest);
     }
   }
 

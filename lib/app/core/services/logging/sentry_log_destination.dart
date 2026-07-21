@@ -19,8 +19,8 @@ class SentryLogDestination implements LogDestination {
   }
 
   SentryLevel _sentryLevel(LogLevel level) => switch (level) {
-    .info => SentryLevel.info,
-    .warning => SentryLevel.warning,
-    .error => SentryLevel.error,
+    .info => .info,
+    .warning => .warning,
+    .error => .error,
   };
 }

@@ -219,8 +219,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderHistoryEmptyTitle => 'Nothing this month';
 
   @override
-  String get reminderHistoryEmptyMessage =>
-      'Reminders you create will show up on this calendar, so you can look back at what you got done.';
+  String get reminderHistoryEmptyMessage => 'Reminders you create will show up on this calendar, so you can look back at what you got done.';
 
   @override
   String get reminderHistoryEmptyAction => 'Create a reminder';
@@ -245,13 +244,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String homeMealsLogged(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count meals logged',
-      one: '1 meal logged',
-      zero: 'Nothing logged yet',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count meals logged', one: '1 meal logged', zero: 'Nothing logged yet');
     return '$_temp0';
   }
 
@@ -363,6 +356,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutInstructionsTitle => 'How to';
 
   @override
+  String get workoutRestShortenAction => 'Take 30 seconds off';
+
+  @override
+  String get workoutRestConfigureAction => 'Rest length';
+
+  @override
+  String get workoutRestSettingTitle => 'Rest between sets';
+
+  @override
+  String get workoutRestSettingHint => 'Used every time you log a set.';
+
+  @override
   String get retry => 'Retry';
 
   @override
@@ -412,15 +417,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietIntroLogTitle => 'Log your food';
 
   @override
-  String get dietIntroLogMessage =>
-      'Search a shared catalog, scan a nutrition label, or add a custom food — then log it by weight or by the unit.';
+  String get dietIntroLogMessage => 'Search a shared catalog, scan a nutrition label, or add a custom food — then log it by weight or by the unit.';
 
   @override
   String get dietIntroRecipeTitle => 'Build recipes';
 
   @override
-  String get dietIntroRecipeMessage =>
-      'Save meals you eat often as a recipe, then log the whole thing in one tap instead of adding each ingredient.';
+  String get dietIntroRecipeMessage => 'Save meals you eat often as a recipe, then log the whole thing in one tap instead of adding each ingredient.';
 
   @override
   String get dietIntroTrackTitle => 'Track your progress';
@@ -1195,19 +1198,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String sleepImportedMessage(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count nights imported',
-      one: '1 night imported',
-      zero: 'No new sleep to import',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count nights imported', one: '1 night imported', zero: 'No new sleep to import');
     return '$_temp0';
   }
 
   @override
-  String get sleepHealthUnavailableMessage =>
-      'Sleep data isn\'t available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.';
+  String get sleepHealthUnavailableMessage => 'Sleep data isn\'t available on this device. Set up Health Connect (Android) or Apple Health (iOS) first.';
 
   @override
   String get sleepHealthPermissionDeniedMessage => 'Sleep permission was denied. Grant it to import your nights.';
@@ -1276,8 +1272,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get premiumFreeTitle => 'Free forever';
 
   @override
-  String get premiumFreeMessage =>
-      'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.';
+  String get premiumFreeMessage => 'Food search, the catalog, recipes, water, sleep, workouts, reminders and every history chart stay free.';
 
   @override
   String get premiumComingSoonAction => 'Subscriptions coming soon';
@@ -1432,8 +1427,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietModalityKeto => 'Keto';
 
   @override
-  String get authAnonymousMessage =>
-      'Your data stays on this device only. Create an account to keep it safe and access it from any device.';
+  String get authAnonymousMessage => 'Your data stays on this device only. Create an account to keep it safe and access it from any device.';
 
   @override
   String authSignedInAsLabel(String email) {
@@ -1929,13 +1923,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String workoutProgressionSessionCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'Last $count sessions',
-      one: 'Last session',
-      zero: 'No sessions',
-    );
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Last $count sessions', one: 'Last session', zero: 'No sessions');
     return '$_temp0';
   }
 
@@ -1946,8 +1934,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutProgressionListEmptyTitle => 'No exercises logged yet';
 
   @override
-  String get workoutProgressionListEmptyMessage =>
-      'Log a few workouts and the exercises you trained show up here to track their progression.';
+  String get workoutProgressionListEmptyMessage => 'Log a few workouts and the exercises you trained show up here to track their progression.';
 
   @override
   String get workoutHistoryTitle => 'History';

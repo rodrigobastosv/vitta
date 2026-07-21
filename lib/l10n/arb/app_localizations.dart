@@ -764,6 +764,30 @@ abstract class AppLocalizations {
   /// **'How to'**
   String get workoutInstructionsTitle;
 
+  /// No description provided for @workoutRestShortenAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Take 30 seconds off'**
+  String get workoutRestShortenAction;
+
+  /// No description provided for @workoutRestConfigureAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest length'**
+  String get workoutRestConfigureAction;
+
+  /// No description provided for @workoutRestSettingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest between sets'**
+  String get workoutRestSettingTitle;
+
+  /// No description provided for @workoutRestSettingHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Used every time you log a set.'**
+  String get workoutRestSettingHint;
+
   /// No description provided for @retry.
   ///
   /// In en, this message translates to:

@@ -21,12 +21,28 @@ import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_e
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_state.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/log_set_sheet.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/rest_length_sheet.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 
 class ExerciseWorkoutPage extends StatelessWidget {
   const ExerciseWorkoutPage({required this.extra, super.key});
 
   final ExerciseWorkoutExtra extra;
+
+  Future<void> _finish(BuildContext context, ExerciseWorkoutCubit cubit, ExerciseWorkoutState state) async {
+    await cubit.setCompleted(completed: !state.isCompleted);
+    if (context.mounted && !state.isCompleted) {
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<void> _configureRest(BuildContext context) async {
+    final timer = context.read<RestTimerCubit>();
+    final rest = await showRestLengthSheet(context: context, current: timer.configuredRest);
+    if (rest != null) {
+      await timer.changeRest(rest);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +52,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         ExerciseWorkoutShowLoading() => context.showLoading(),
         ExerciseWorkoutHideLoading() => context.hideLoading(),
-        ExerciseWorkoutSetLogged() => context.read<RestTimerCubit>().start(),
+        ExerciseWorkoutSetLogged() => context.read<RestTimerCubit>().start(label: extra.workoutExercise.exercise.nameFor(l10n.localeName)),
         ExerciseWorkoutError(:final message) => context.showErrorToast(message: message),
       },
       builder: (context, cubit, state) {
@@ -83,8 +99,11 @@ class ExerciseWorkoutPage extends StatelessWidget {
                           child: VTRestTimer(
                             remaining: timer.remaining,
                             progress: timer.progress,
+                            label: timer.label,
                             onExtend: context.read<RestTimerCubit>().extend,
+                            onShorten: context.read<RestTimerCubit>().shorten,
                             onSkip: context.read<RestTimerCubit>().skip,
+                            onConfigure: () => _configureRest(context),
                           ),
                         )
                       : const SizedBox.shrink(),
@@ -158,7 +177,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
               child: VTPrimaryButton(
                 label: state.isCompleted ? l10n.workoutReopenExerciseAction : l10n.workoutCompleteExerciseAction,
                 icon: state.isCompleted ? Icons.undo : Icons.check,
-                onPressed: state.canComplete || state.isCompleted ? () => cubit.setCompleted(completed: !state.isCompleted) : null,
+                onPressed: state.canComplete || state.isCompleted ? () => _finish(context, cubit, state) : null,
               ),
             ),
           ),

@@ -30,6 +30,10 @@ class WorkoutRepository {
 
   bool hasSeenIntro() => _workoutLocalDataSource.hasSeenIntro();
 
+  int getRestSeconds() => _workoutLocalDataSource.getRestSeconds();
+
+  Future<void> saveRestSeconds(int seconds) => _workoutLocalDataSource.saveRestSeconds(seconds);
+
   Future<void> markIntroSeen() => _workoutLocalDataSource.markIntroSeen();
 
   Future<Result<VTError, List<Exercise>>> searchExercises({required String query, MuscleGroup? muscleGroup}) =>
