@@ -518,7 +518,13 @@ The workout screen's two gaps were connected (issue #163): there was **no rest t
 
 **The exercise page opens on a stretchy photo header**, the `CustomFoodPage` shape: a `SliverAppBar` with `stretch`, `StretchMode.zoomBackground` and `BouncingScrollPhysics` so it zooms on overscroll on both platforms. `ExercisePhotoHeader` keeps **all** of the catalog's photos as a swipeable `PageView` with page dots — the first cut collapsed them to one, which quietly threw away the second and third angles that are often the clearest.
 
-Two details the header needs and would otherwise get wrong: the title sits **over** the photo, and the catalog's shots are mostly bright gym interiors, so it carries a bottom scrim rather than relying on luck; and the collapsed title uses `bodyStrong` over two lines rather than the default headline, because catalog names like "Smith Machine Bench Press" truncate at the default size.
+Three details the header needs, each of which shipped wrong first:
+
+- **`expandedTitleScale: 1`.** `FlexibleSpaceBar` scales its title to **1.5×** when expanded, which is what truncates a name like "Smith Machine Bench Press" — restyling the `Text` does nothing until the scale is turned off.
+- **The scrim must be an `IgnorePointer`.** A gradient painted over the `PageView` sits above it in the `Stack` and **swallows the horizontal drag**, so the photos silently stop being swipeable. Pinned by a test that flings and asserts the page changed.
+- **Page dots go bottom-end, not top-end.** Top-end is where the `SliverAppBar`'s actions live, so the dots and the progression icon fight for the same corner. Bottom-end is opposite the title, which is bottom-start.
+
+The title also carries the scrim's contrast: the catalog's shots are mostly bright gym interiors, so white-on-photo would be luck.
 
 **Reps are a `VTStepper`, load is a text field** — the two inputs have different shapes and should not share a control. Reps cluster tightly (5–12) and move by ±1 from the set before, so a stepper is one tap and no keyboard; loads jump (20 → 40 → 82.5) and their sensible increment differs per exercise, so stepping there would be many taps. `VTStepper` keeps an editable field in the middle, so an unusual rep count is still typeable.
 

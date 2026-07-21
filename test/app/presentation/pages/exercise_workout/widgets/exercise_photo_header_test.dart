@@ -21,6 +21,16 @@ void main() {
     expect(find.byType(AnimatedContainer), findsNWidgets(3));
   });
 
+  testWidgets('the scrim does not swallow the swipe that changes photo', (tester) async {
+    await pumpHeader(tester, const ['a.png', 'b.png', 'c.png']);
+
+    await tester.fling(find.byType(PageView), const Offset(-300, 0), 1000);
+    await tester.pumpAndSettle();
+
+    final controller = tester.widget<PageView>(find.byType(PageView)).controller!;
+    expect(controller.page?.round(), 1, reason: 'a gradient painted over the PageView must not absorb pointers');
+  });
+
   testWidgets('a single photo needs no dots', (tester) async {
     await pumpHeader(tester, const ['only.png']);
 

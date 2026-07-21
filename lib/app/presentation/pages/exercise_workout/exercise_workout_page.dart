@@ -79,8 +79,16 @@ class ExerciseWorkoutPage extends StatelessWidget {
                   ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
-                  title: Text(exercise.nameFor(l10n.localeName), maxLines: 1, overflow: .ellipsis),
-                  titlePadding: const EdgeInsetsDirectional.only(start: VTSpacing.m, bottom: VTSpacing.m, end: VTSpacing.xxl),
+                  title: Text(
+                    exercise.nameFor(l10n.localeName),
+                    style: VTTextStyles.bodyStrong(context).copyWith(color: Colors.white),
+                    maxLines: 1,
+                    overflow: .ellipsis,
+                  ),
+                  titlePadding: const EdgeInsetsDirectional.only(start: VTSpacing.m, bottom: VTSpacing.m, end: VTSpacing.xxl + VTSpacing.l),
+                  // FlexibleSpaceBar scales its title to 1.5x when expanded, which
+                  // is what truncates a name like "Smith Machine Bench Press".
+                  expandedTitleScale: 1,
                   stretchModes: const [StretchMode.zoomBackground, StretchMode.fadeTitle],
                   background: ExercisePhotoHeader(imageUrls: exercise.imageUrls),
                 ),

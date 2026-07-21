@@ -49,15 +49,17 @@ class _ExercisePhotoHeaderState extends State<ExercisePhotoHeader> {
           ),
         // The title sits over the photo and the catalog's shots are mostly bright
         // gym interiors, so it needs a scrim rather than luck.
-        const DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(begin: .bottomCenter, end: .center, colors: [Color(0xB3000000), Color(0x00000000)]),
+        const IgnorePointer(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(begin: .bottomCenter, end: .center, colors: [Color(0xB3000000), Color(0x00000000)]),
+            ),
           ),
         ),
         if (widget.imageUrls.length > 1)
-          Positioned(
-            top: VTSpacing.xxl + VTSpacing.m,
-            right: VTSpacing.m,
+          PositionedDirectional(
+            bottom: VTSpacing.m,
+            end: VTSpacing.m,
             child: DecoratedBox(
               decoration: const BoxDecoration(color: Color(0x66000000), borderRadius: VTRadius.borderRadiusFull),
               child: Padding(
