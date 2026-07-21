@@ -2276,6 +2276,66 @@ abstract class AppLocalizations {
   /// **'Sleep permission was denied. Grant it to import your nights.'**
   String get sleepHealthPermissionDeniedMessage;
 
+  /// No description provided for @sleepSourceHealth.
+  ///
+  /// In en, this message translates to:
+  /// **'Health'**
+  String get sleepSourceHealth;
+
+  /// No description provided for @sleepSyncStatusTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Health app'**
+  String get sleepSyncStatusTitle;
+
+  /// No description provided for @sleepLastSyncedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last synced {when}'**
+  String sleepLastSyncedLabel(String when);
+
+  /// No description provided for @sleepSyncNowTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Sync now'**
+  String get sleepSyncNowTooltip;
+
+  /// No description provided for @sleepLogDurationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Time asleep'**
+  String get sleepLogDurationHint;
+
+  /// No description provided for @sleepQualityPoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Poor'**
+  String get sleepQualityPoor;
+
+  /// No description provided for @sleepQualityFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get sleepQualityFair;
+
+  /// No description provided for @sleepQualityGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get sleepQualityGood;
+
+  /// No description provided for @sleepQualityGreat.
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get sleepQualityGreat;
+
+  /// No description provided for @sleepQualityExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get sleepQualityExcellent;
+
   /// No description provided for @onboardingWelcomeTitle.
   ///
   /// In en, this message translates to:

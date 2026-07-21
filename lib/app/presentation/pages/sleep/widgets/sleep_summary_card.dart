@@ -6,7 +6,7 @@ import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
-import 'package:vitta/l10n/arb/app_localizations.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_duration_format.dart';
 
 class SleepSummaryCard extends StatelessWidget {
   const SleepSummaryCard({required this.logs, required this.goalHours, this.onEditGoal, super.key});
@@ -55,11 +55,11 @@ class SleepSummaryCard extends StatelessWidget {
                 child: Column(
                   mainAxisSize: .min,
                   children: [
-                    Text(_format(l10n, lastNight), style: VTTextStyles.headline(context)),
-                    Text(l10n.sleepOfGoal(_format(l10n, goal)), style: VTTextStyles.caption(context)),
+                    Text(formatSleepDuration(l10n, lastNight), style: VTTextStyles.headline(context)),
+                    Text(l10n.sleepOfGoal(formatSleepDuration(l10n, goal)), style: VTTextStyles.caption(context)),
                     const VTGap.xs(),
                     Text(
-                      reached ? l10n.sleepGoalReached : l10n.sleepShort(_format(l10n, deficit)),
+                      reached ? l10n.sleepGoalReached : l10n.sleepShort(formatSleepDuration(l10n, deficit)),
                       style: VTTextStyles.overline(context).copyWith(color: ringColor, fontWeight: .w700),
                     ),
                   ],
@@ -70,9 +70,9 @@ class SleepSummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: .start,
                   children: [
-                    _metric(context, icon: Icons.flag_rounded, value: _format(l10n, goal), label: l10n.sleepGoalMetric),
+                    _metric(context, icon: Icons.flag_rounded, value: formatSleepDuration(l10n, goal), label: l10n.sleepGoalMetric),
                     const VTGap.m(),
-                    _metric(context, icon: Icons.bar_chart_rounded, value: _format(l10n, average), label: l10n.sleepAverageMetric),
+                    _metric(context, icon: Icons.bar_chart_rounded, value: formatSleepDuration(l10n, average), label: l10n.sleepAverageMetric),
                     const VTGap.m(),
                     _metric(context, icon: Icons.bedtime_rounded, value: '${logs.length}', label: l10n.sleepNightsMetric),
                   ],
@@ -83,18 +83,6 @@ class SleepSummaryCard extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _format(AppLocalizations l10n, Duration duration) {
-    final hours = duration.inHours;
-    final minutes = duration.inMinutes.remainder(60);
-    if (hours > 0 && minutes > 0) {
-      return l10n.sleepDurationLabel(hours, minutes);
-    }
-    if (hours > 0) {
-      return l10n.sleepHoursOnly(hours);
-    }
-    return l10n.sleepMinutesOnly(minutes);
   }
 
   Widget _metric(BuildContext context, {required IconData icon, required String value, required String label}) => Row(

@@ -654,6 +654,23 @@
   },
   "sleepHealthUnavailableMessage": "Os dados de sono não estão disponíveis neste dispositivo. Configure o Health Connect (Android) ou a Apple Saúde (iOS) primeiro.",
   "sleepHealthPermissionDeniedMessage": "A permissão de sono foi negada. Conceda-a para importar suas noites.",
+  "sleepSourceHealth": "Saúde",
+  "sleepSyncStatusTitle": "App de saúde",
+  "sleepLastSyncedLabel": "Sincronizado {when}",
+  "@sleepLastSyncedLabel": {
+    "placeholders": {
+      "when": {
+        "type": "String"
+      }
+    }
+  },
+  "sleepSyncNowTooltip": "Sincronizar agora",
+  "sleepLogDurationHint": "Tempo dormindo",
+  "sleepQualityPoor": "Ruim",
+  "sleepQualityFair": "Razoável",
+  "sleepQualityGood": "Boa",
+  "sleepQualityGreat": "Ótima",
+  "sleepQualityExcellent": "Excelente",
   "onboardingWelcomeTitle": "Bem-vindo ao Vitta",
   "onboardingWelcomeMessage": "Comida, treinos, água, sono, peso e lembretes — tudo em um só lugar, para manter a consistência dia após dia.",
   "onboardingAccountBenefitMessage": "Crie uma conta gratuita para manter seus dados seguros e acessá-los em qualquer aparelho. Sem uma conta, seus dados ficam só neste dispositivo.",

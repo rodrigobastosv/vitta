@@ -6,6 +6,7 @@ import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
@@ -27,7 +28,6 @@ class HomeTodayCard extends StatelessWidget {
     final difference = goal - consumed;
     final hasEntries = dailyMacros.entries.isNotEmpty;
     final ringColor = hasEntries ? dailyMacros.adherenceTo(macroGoals).color : colorScheme.primary;
-
     return VTCard(
       onTap: onTap,
       child: Row(
@@ -44,7 +44,9 @@ class HomeTodayCard extends StatelessWidget {
                   Text('$consumed', style: VTTextStyles.headline(context)),
                   Text(
                     difference >= 0 ? l10n.dietCaloriesLeft(difference) : l10n.dietCaloriesOver(-difference),
-                    style: VTTextStyles.overline(context).copyWith(color: difference >= 0 ? colorScheme.onSurfaceVariant : VTColors.error, fontWeight: .w700),
+                    style: VTTextStyles.overline(
+                      context,
+                    ).copyWith(color: difference >= 0 ? colorScheme.onSurfaceVariant : VTColors.error, fontWeight: .w700),
                   ),
                 ],
               ),
@@ -53,6 +55,7 @@ class HomeTodayCard extends StatelessWidget {
           const VTGap.m(),
           Expanded(
             child: Column(
+              spacing: VTSpacing.s,
               mainAxisSize: .min,
               children: [
                 MacroProgressRow(
@@ -61,10 +64,24 @@ class HomeTodayCard extends StatelessWidget {
                   goal: macroGoals.proteinGoalGrams,
                   color: VTColors.macroProtein,
                 ),
-                const VTGap.s(),
-                MacroProgressRow(label: l10n.dietCarbsLabel, consumed: dailyMacros.totalCarbs, goal: macroGoals.carbsGoalGrams, color: VTColors.macroCarbs),
-                const VTGap.s(),
-                MacroProgressRow(label: l10n.dietFatLabel, consumed: dailyMacros.totalFat, goal: macroGoals.fatGoalGrams, color: VTColors.macroFat),
+                MacroProgressRow(
+                  label: l10n.dietCarbsLabel,
+                  consumed: dailyMacros.totalCarbs,
+                  goal: macroGoals.carbsGoalGrams,
+                  color: VTColors.macroCarbs,
+                ),
+                MacroProgressRow(
+                  label: l10n.dietFatLabel,
+                  consumed: dailyMacros.totalFat,
+                  goal: macroGoals.fatGoalGrams,
+                  color: VTColors.macroFat,
+                ),
+                MacroProgressRow(
+                  label: l10n.dietFiberLabel,
+                  consumed: dailyMacros.totalFiber,
+                  goal: macroGoals.fiberGoalGrams,
+                  color: VTColors.macroFiber,
+                ),
               ],
             ),
           ),

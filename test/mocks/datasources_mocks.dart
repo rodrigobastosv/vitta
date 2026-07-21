@@ -10,6 +10,8 @@ import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/reminder/datasources/supabase/supabase_reminder_datasource.dart';
+import 'package:vitta/app/data/sleep/datasources/local/sleep_local_datasource.dart';
+import 'package:vitta/app/data/sleep/datasources/supabase/supabase_sleep_datasource.dart';
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
 import 'package:vitta/app/data/workout/datasources/local/workout_local_datasource.dart';
@@ -50,3 +52,7 @@ class MockSupabaseRoutineDataSource extends Mock implements SupabaseRoutineDataS
 class MockWorkoutLocalDataSource extends Mock implements WorkoutLocalDataSource {}
 
 class MockSupabaseReminderDataSource extends Mock implements SupabaseReminderDataSource {}
+
+class MockSupabaseSleepDataSource extends Mock implements SupabaseSleepDataSource {}
+
+class MockSleepLocalDataSource extends Mock implements SleepLocalDataSource {}

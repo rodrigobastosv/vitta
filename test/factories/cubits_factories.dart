@@ -247,6 +247,7 @@ abstract class CubitsFactories {
     MockDeleteSleepLogUseCase? deleteSleepLogUseCase,
     MockGetSleepGoalUseCase? getSleepGoalUseCase,
     MockSaveSleepGoalUseCase? saveSleepGoalUseCase,
+    MockGetSleepLastSyncedUseCase? getSleepLastSyncedUseCase,
     MockImportSleepFromHealthUseCase? importSleepFromHealthUseCase,
     MockHealthService? healthService,
   }) => SleepCubit(
@@ -255,6 +256,7 @@ abstract class CubitsFactories {
     deleteSleepLogUseCase: deleteSleepLogUseCase ?? MockDeleteSleepLogUseCase(),
     getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
     saveSleepGoalUseCase: saveSleepGoalUseCase ?? MockSaveSleepGoalUseCase(),
+    getSleepLastSyncedUseCase: getSleepLastSyncedUseCase ?? MockGetSleepLastSyncedUseCase(),
     importSleepFromHealthUseCase: importSleepFromHealthUseCase ?? MockImportSleepFromHealthUseCase(),
     healthService: healthService ?? MockHealthService(),
   );
