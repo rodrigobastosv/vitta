@@ -32,7 +32,7 @@ class RecentSearchesList extends StatelessWidget {
         for (final (index, query) in queries.indexed)
           VTAppearEffect(
             key: ValueKey(query),
-            delay: Duration(milliseconds: index.clamp(0, 8) * 40),
+            index: index,
             child: RecentSearchTile(query: query, onTap: () => onSelect(query), onRemove: () => onRemove(query)),
           ),
       ],

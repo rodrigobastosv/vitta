@@ -33,7 +33,7 @@ class FoodSearchResultList extends StatelessWidget {
       final heroTag = '$heroPrefix-$index';
       return VTAppearEffect(
         key: ValueKey('$heroPrefix-$index-${food.id ?? food.barcode ?? food.name}'),
-        delay: Duration(milliseconds: index.clamp(0, 10) * 50),
+        index: index,
         child: FoodSearchResultTile(
           food: food,
           heroTag: heroTag,

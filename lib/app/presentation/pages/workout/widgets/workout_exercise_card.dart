@@ -5,6 +5,7 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -117,8 +118,8 @@ class WorkoutExerciseCard extends StatelessWidget {
             ],
           ),
           AnimatedSize(
-            duration: const Duration(milliseconds: 250),
-            curve: Curves.easeOutCubic,
+            duration: VTMotion.transition,
+            curve: VTMotion.curve,
             alignment: .topCenter,
             child: isCompleted
                 ? const SizedBox(width: double.infinity)

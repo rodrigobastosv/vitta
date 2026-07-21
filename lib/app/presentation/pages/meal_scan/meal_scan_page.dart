@@ -128,7 +128,7 @@ class MealScanPage extends StatelessWidget {
         const VTGap.m(),
         for (final (index, entry) in state.entries.indexed) ...[
           VTAppearEffect(
-            delay: Duration(milliseconds: index * 60),
+            index: index,
             child: ScannedMealItemCard(
               entry: entry,
               onGramsChanged: (text) => cubit.gramsChanged(index: index, text: text),

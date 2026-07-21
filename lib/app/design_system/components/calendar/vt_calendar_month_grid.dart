@@ -37,7 +37,7 @@ class VTCalendarMonthGrid extends StatelessWidget {
         for (final (index, week) in weeks.indexed)
           VTAppearEffect(
             key: ValueKey('$month-$index'),
-            delay: Duration(milliseconds: index * 40),
+            index: index,
             child: SizedBox(
               height: _rowHeight,
               child: Row(

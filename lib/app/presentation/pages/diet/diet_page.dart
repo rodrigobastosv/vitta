@@ -110,7 +110,7 @@ class DietPage extends StatelessWidget {
                 for (final (index, section) in state.dailyMacros.meals.indexed) ...[
                   VTAppearEffect(
                     key: ValueKey('${state.date}-${section.mealType}'),
-                    delay: Duration(milliseconds: index * 80),
+                    index: index,
                     child: MealSectionCard(
                       section: section,
                       onAddFood: () async {

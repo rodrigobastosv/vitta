@@ -46,7 +46,7 @@ class RecipesPage extends StatelessWidget {
                   for (final (index, recipe) in state.recipes.indexed) ...[
                     VTAppearEffect(
                       key: ValueKey(recipe.id),
-                      delay: Duration(milliseconds: index.clamp(0, 10) * 60),
+                      index: index,
                       child: RecipeTile(
                         recipe: recipe,
                         onEdit: () => _openForm(context, cubit, recipe: recipe),

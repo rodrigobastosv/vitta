@@ -67,13 +67,13 @@ class DietHistoryPage extends StatelessWidget {
               const VTGap.m(),
               VTAppearEffect(
                 key: ValueKey('macros-${state.trendRange}'),
-                delay: const Duration(milliseconds: 80),
+                index: 1,
                 child: MacrosTrendCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
               ),
               const VTGap.m(),
               VTAppearEffect(
                 key: ValueKey('meal-split-${state.trendRange}'),
-                delay: const Duration(milliseconds: 160),
+                index: 2,
                 child: MealSplitCard(days: trendDays, macrosByDate: state.macrosInTrendRange),
               ),
             ],

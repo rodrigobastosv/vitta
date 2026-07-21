@@ -34,7 +34,7 @@ class DietDayPage extends StatelessWidget {
             for (final (index, section) in dailyMacros.meals.indexed) ...[
               VTAppearEffect(
                 key: ValueKey(section.mealType),
-                delay: Duration(milliseconds: 80 + index * 80),
+                index: index + 1,
                 child: MealSectionCard(section: section, initiallyExpanded: true),
               ),
               const VTGap.m(),
