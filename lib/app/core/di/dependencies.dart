@@ -382,7 +382,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getAppSettingsUseCase: G(),
     ),
   );
-  G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G()));
+  G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G(), saveMacroGoalsUseCase: G()));
   G.registerFactory(
     () => AuthCubit(
       getUserUseCase: G(),

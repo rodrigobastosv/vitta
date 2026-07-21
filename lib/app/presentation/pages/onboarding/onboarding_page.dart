@@ -1,120 +1,125 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_radius.dart';
+import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
-import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_account_step.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_features_step.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_goals_step.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_step_indicator.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_welcome_step.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 
-class OnboardingPage extends StatelessWidget {
+class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage> {
+  static const int _goalsStep = 2;
+
+  final PageController _controller = PageController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _goTo(int step) => _controller.animateToPage(step, duration: VTMotion.transition, curve: VTMotion.curve);
+
+  Future<void> _finish(BuildContext context, OnboardingCubit cubit) async {
+    await cubit.completeOnboarding();
+    if (context.mounted) {
+      context.goRoute(.home);
+    }
+  }
+
+  void _acceptGoalsThenNext(OnboardingCubit cubit, int step) {
+    cubit.acceptGoals();
+    _goTo(step + 1);
+  }
+
+  Future<void> _authenticateThenFinish(BuildContext context, OnboardingCubit cubit, AppRoute route) async {
+    final authenticated = await context.pushRoute<bool>(route) ?? false;
+    if (authenticated && context.mounted) {
+      await _finish(context, cubit);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final colorScheme = context.colorScheme;
     return VTPage<OnboardingCubit, OnboardingState, OnboardingPresentationEvent>(
       builder: (context, cubit, state) => Scaffold(
         body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(VTSpacing.l),
-            child: Column(
-              crossAxisAlignment: .start,
-              children: [
-                CircleAvatar(
-                  radius: 32,
-                  backgroundColor: colorScheme.primaryContainer,
-                  child: Icon(Icons.eco_outlined, size: 32, color: colorScheme.onPrimaryContainer),
-                ),
-                const VTGap.l(),
-                Text(l10n.onboardingWelcomeTitle, style: VTTextStyles.display(context)),
-                const VTGap.s(),
-                Text(l10n.onboardingWelcomeMessage, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
-                const VTGap.xl(),
-                _OnboardingFeatureRow(icon: Icons.restaurant_outlined, title: l10n.dietFeatureTitle, subtitle: l10n.dietFeatureSubtitle),
-                const VTGap.m(),
-                _OnboardingFeatureRow(icon: Icons.water_drop_outlined, title: l10n.waterFeatureTitle, subtitle: l10n.waterFeatureSubtitle),
-                const VTGap.m(),
-                _OnboardingFeatureRow(icon: Icons.bedtime_outlined, title: l10n.sleepFeatureTitle, subtitle: l10n.sleepFeatureSubtitle),
-                const VTGap.m(),
-                _OnboardingFeatureRow(icon: Icons.fitness_center_outlined, title: l10n.workoutFeatureTitle, subtitle: l10n.workoutFeatureSubtitle),
-                const VTGap.xl(),
-                Text(l10n.onboardingAccountBenefitMessage, style: VTTextStyles.caption(context)),
-                const VTGap.m(),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(onPressed: () => _authenticateThenFinish(context, cubit, .signUp), child: Text(l10n.onboardingCreateAccountAction)),
-                ),
-                const VTGap.s(),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(onPressed: () => _authenticateThenFinish(context, cubit, .signIn), child: Text(l10n.authHasAccountAction)),
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    onPressed: () {
-                      cubit.completeOnboarding();
-                      context.goRoute(.home);
-                    },
-                    child: Text(l10n.onboardingContinueWithoutAccountAction),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Create-account and sign-in differ only by which auth route opens: both return
-  // true once the user is authenticated, and both then close onboarding and land
-  // on home. The mounted checks bracket the two awaits, as elsewhere.
-  Future<void> _authenticateThenFinish(BuildContext context, OnboardingCubit cubit, AppRoute route) async {
-    final authenticated = await context.pushRoute<bool>(route) ?? false;
-    if (authenticated && context.mounted) {
-      await cubit.completeOnboarding();
-      if (context.mounted) {
-        context.goRoute(.home);
-      }
-    }
-  }
-}
-
-class _OnboardingFeatureRow extends StatelessWidget {
-  const _OnboardingFeatureRow({required this.icon, required this.title, required this.subtitle});
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    return Row(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(VTSpacing.s),
-          decoration: BoxDecoration(color: colorScheme.primaryContainer, borderRadius: VTRadius.borderRadiusM),
-          child: Icon(icon, color: colorScheme.onPrimaryContainer),
-        ),
-        const VTGap.m(),
-        Expanded(
           child: Column(
-            crossAxisAlignment: .start,
             children: [
-              Text(title, style: VTTextStyles.bodyStrong(context)),
-              Text(subtitle, style: VTTextStyles.caption(context)),
+              Expanded(
+                child: PageView(
+                  controller: _controller,
+                  onPageChanged: cubit.goToStep,
+                  children: [
+                    const OnboardingWelcomeStep(),
+                    const OnboardingFeaturesStep(),
+                    OnboardingGoalsStep(calorieGoal: state.calorieGoal, goals: state.goals, onChanged: cubit.calorieGoalChanged),
+                    const OnboardingAccountStep(),
+                  ],
+                ),
+              ),
+              const VTGap.m(),
+              OnboardingStepIndicator(stepCount: OnboardingState.stepCount, step: state.step),
+              const VTGap.l(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(VTSpacing.l, 0, VTSpacing.l, VTSpacing.m),
+                child: state.isLastStep
+                    ? Column(
+                        children: [
+                          VTPrimaryButton(
+                            label: l10n.onboardingCreateAccountAction,
+                            onPressed: () => _authenticateThenFinish(context, cubit, .signUp),
+                          ),
+                          const VTGap.m(),
+                          TextButton(
+                            onPressed: () => _authenticateThenFinish(context, cubit, .signIn),
+                            child: Text(l10n.authHasAccountAction),
+                          ),
+                          TextButton(onPressed: () => _finish(context, cubit), child: Text(l10n.onboardingContinueWithoutAccountAction)),
+                        ],
+                      )
+                    : Column(
+                        children: [
+                          VTPrimaryButton(
+                            label: l10n.onboardingNextAction,
+                            onPressed: state.step == _goalsStep
+                                ? () => _acceptGoalsThenNext(cubit, state.step)
+                                : () => _goTo(state.step + 1),
+                          ),
+                          const VTGap.s(),
+                          SizedBox(
+                            width: double.infinity,
+                            child: TextButton(
+                              onPressed: state.step == _goalsStep ? () => _goTo(state.step + 1) : () => _finish(context, cubit),
+                              child: Text(
+                                state.step == _goalsStep ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+              ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
