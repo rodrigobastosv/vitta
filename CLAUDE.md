@@ -150,6 +150,8 @@ The screen every logged meal passes through, reworked in issue #163. Four things
 
 **The idle state remembered the wrong thing.** It listed past *queries* — text you typed. What a food tracker is actually asked for is **the food you logged last time**, because eating is repetitive.
 
+**The `+` means the same thing in both modes: accept the last amount.** Tapping a recent food's row opens a sheet to adjust; tapping its `+` takes the quantity you used last time — logging it when adding food, popping a `RecipeIngredient` when picking for a recipe. The first cut opened the quantity sheet on `+` while picking, which made the same button mean "accept" in one flow and "adjust" in the other. Pinned by a test that asserts the picked ingredient carries the last amount.
+
 **Recently-logged foods are their own tab, not the Search tab's idle state.** Putting them above the recent searches was tried first and buried them — on the Search tab, the thing you want is your recent *searches*. So the strip is now **Search / Recent / Favourites**: Search idles into recent-search chips, Recent lists the foods you've logged with the amount you used last time so one tap re-logs it. The tabs carry no icons, because three labelled tabs across a phone is already tight.
 
 Recent searches are `InputChip`s, not rows. A row per past query ate the whole tab for something that is one word long; a chip wraps, and its built-in `onDeleted` is the ×.

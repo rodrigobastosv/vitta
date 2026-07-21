@@ -9,7 +9,9 @@ import 'package:vitta/app/design_system/components/general/vt_segmented_tabs.dar
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_extra.dart';
@@ -110,6 +112,14 @@ class AddFoodPage extends StatelessWidget {
     );
   }
 
+  void _quickAdd(BuildContext context, AddFoodCubit cubit, FoodLogEntry entry) {
+    if (_isPicking) {
+      Navigator.of(context).pop(RecipeIngredient(food: entry.food, quantityGrams: entry.log.quantityGrams));
+      return;
+    }
+    cubit.logFood(food: entry.food, quantityGrams: entry.log.quantityGrams, mealType: initialMealType ?? entry.log.mealType, loggedDate: loggedDate);
+  }
+
   Future<void> _addFood(BuildContext context, Food food) async {
     if (!_isPicking) {
       await showLogFoodSheet(context: context, food: food, loggedDate: loggedDate, initialMealType: initialMealType);
@@ -156,9 +166,7 @@ class AddFoodPage extends StatelessWidget {
     child: RecentFoodsList(
       entries: state.recentFoods,
       onOpenFood: (entry) => _addFood(context, entry.food),
-      onQuickAdd: (entry) => _isPicking
-          ? _addFood(context, entry.food)
-          : cubit.logFood(food: entry.food, quantityGrams: entry.log.quantityGrams, mealType: initialMealType ?? entry.log.mealType, loggedDate: loggedDate),
+      onQuickAdd: (entry) => _quickAdd(context, cubit, entry),
     ),
   );
 
