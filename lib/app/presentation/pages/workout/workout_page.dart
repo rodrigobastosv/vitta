@@ -148,8 +148,9 @@ class WorkoutPage extends StatelessWidget {
                       onEditSet: (set) => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,
+                        isCardio: workoutExercise.exercise.category.isCardio,
                         set: set,
-                        onSubmit: ({required reps, required weightKg}) => cubit.updateSet(setId: set.id, reps: reps, weightKg: weightKg),
+                        onSubmit: ({required input}) => cubit.updateSet(setId: set.id, input: input),
                       ),
                       onDeleteSet: (set) => cubit.deleteSet(setId: set.id),
                     ),

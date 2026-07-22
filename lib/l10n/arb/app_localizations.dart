@@ -3470,6 +3470,108 @@ abstract class AppLocalizations {
   /// **'{sets, plural, =0{no sets} =1{1 set} other{{sets} sets}}'**
   String workoutSetsSummaryMixed(int sets);
 
+  /// No description provided for @workoutDurationHm.
+  ///
+  /// In en, this message translates to:
+  /// **'{hours}h {minutes}min'**
+  String workoutDurationHm(int hours, int minutes);
+
+  /// No description provided for @workoutDurationMs.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes}m {seconds}s'**
+  String workoutDurationMs(int minutes, int seconds);
+
+  /// No description provided for @workoutDurationM.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min'**
+  String workoutDurationM(int minutes);
+
+  /// No description provided for @workoutDurationS.
+  ///
+  /// In en, this message translates to:
+  /// **'{seconds} s'**
+  String workoutDurationS(int seconds);
+
+  /// No description provided for @workoutDurationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get workoutDurationLabel;
+
+  /// No description provided for @workoutDurationMinutesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Min'**
+  String get workoutDurationMinutesLabel;
+
+  /// No description provided for @workoutDurationSecondsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sec'**
+  String get workoutDurationSecondsLabel;
+
+  /// No description provided for @workoutDistanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance ({unit})'**
+  String workoutDistanceLabel(String unit);
+
+  /// No description provided for @workoutDistanceOptionalHelper.
+  ///
+  /// In en, this message translates to:
+  /// **'Time is required; distance is optional.'**
+  String get workoutDistanceOptionalHelper;
+
+  /// No description provided for @workoutInvalidDurationMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter how long it lasted.'**
+  String get workoutInvalidDurationMessage;
+
+  /// No description provided for @workoutInvalidDistanceMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid distance, or leave it empty.'**
+  String get workoutInvalidDistanceMessage;
+
+  /// No description provided for @workoutTimeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Time'**
+  String get workoutTimeLabel;
+
+  /// No description provided for @workoutDistanceMetricLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Distance'**
+  String get workoutDistanceMetricLabel;
+
+  /// No description provided for @workoutCardioTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cardio time'**
+  String get workoutCardioTrendTitle;
+
+  /// No description provided for @workoutCardioTrendEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No cardio logged in this period yet.'**
+  String get workoutCardioTrendEmptyMessage;
+
+  /// No description provided for @workoutCardioDurationLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get workoutCardioDurationLegend;
+
+  /// No description provided for @workoutCardioTrendAverage.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min/day avg'**
+  String workoutCardioTrendAverage(int minutes);
+
   /// No description provided for @exerciseSearchTitle.
   ///
   /// In en, this message translates to:

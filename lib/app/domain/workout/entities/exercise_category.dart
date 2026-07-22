@@ -25,6 +25,8 @@ enum ExerciseCategory {
     _ => name,
   };
 
+  bool get isCardio => this == ExerciseCategory.cardio;
+
   String getLabel(AppLocalizations l10n) => switch (this) {
     .strength => l10n.exerciseCategoryStrength,
     .cardio => l10n.exerciseCategoryCardio,

@@ -7,6 +7,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
@@ -49,6 +50,7 @@ void main() {
     registerFallbackValue(DateTime(2000));
     registerFallbackValue(RoutineFactory.build());
     registerFallbackValue(<String, Object?>{});
+    registerFallbackValue(const SetInput.strength(reps: 1, weightKg: 0));
   });
 
   blocTest<WorkoutCubit, WorkoutState>(
@@ -147,8 +149,7 @@ void main() {
     when(
       () => logSetUseCase(
         workoutExerciseId: any(named: 'workoutExerciseId'),
-        reps: any(named: 'reps'),
-        weightKg: any(named: 'weightKg'),
+        input: any(named: 'input'),
       ),
     ).thenAnswer((_) async => const Failure(VTError(message: 'nope')));
     final cubit = CubitsFactories.buildWorkoutCubit(
@@ -159,7 +160,7 @@ void main() {
       getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
     );
 
-    final loggedResult = await cubit.logSet(workoutExerciseId: 'we-1', reps: 10, weightKg: 40);
+    final loggedResult = await cubit.logSet(workoutExerciseId: 'we-1', input: const SetInput.strength(reps: 10, weightKg: 40));
 
     expect(loggedResult, isA<Failure<VTError, void>>());
   });
@@ -386,8 +387,7 @@ void main() {
     when(
       () => logSetUseCase(
         workoutExerciseId: any(named: 'workoutExerciseId'),
-        reps: any(named: 'reps'),
-        weightKg: any(named: 'weightKg'),
+        input: any(named: 'input'),
       ),
     ).thenAnswer((_) async => Success(WorkoutSetFactory.build()));
     final cubit = CubitsFactories.buildWorkoutCubit(
@@ -408,7 +408,7 @@ void main() {
       ),
     );
 
-    verify(() => logSetUseCase(workoutExerciseId: 'we-1', reps: 8, weightKg: 50)).called(1);
+    verify(() => logSetUseCase(workoutExerciseId: 'we-1', input: const SetInput.strength(reps: 8, weightKg: 50))).called(1);
   });
 
   test('repeatLastSet does nothing when there is no set to repeat', () async {
@@ -421,8 +421,7 @@ void main() {
     verifyNever(
       () => logSetUseCase(
         workoutExerciseId: any(named: 'workoutExerciseId'),
-        reps: any(named: 'reps'),
-        weightKg: any(named: 'weightKg'),
+        input: any(named: 'input'),
       ),
     );
   });

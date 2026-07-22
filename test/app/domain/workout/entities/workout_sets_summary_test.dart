@@ -40,4 +40,19 @@ void main() {
   test('is null for an exercise with no previous sets', () {
     expect(WorkoutSetsSummary.format(sets: const [], unitSystem: UnitSystem.metric, l10n: l10n), isNull);
   });
+
+  test('sums cardio efforts into total time and distance', () {
+    final sets = [
+      WorkoutSetFactory.cardio(id: 's1'),
+      WorkoutSetFactory.cardio(id: 's2', durationSeconds: 300, distanceMeters: 1000),
+    ];
+
+    expect(WorkoutSetsSummary.format(sets: sets, unitSystem: UnitSystem.metric, l10n: l10n), '30 min · 6 km');
+  });
+
+  test('omits distance from a cardio summary when none was logged', () {
+    final sets = [WorkoutSetFactory.cardio(durationSeconds: 1200, distanceMeters: null)];
+
+    expect(WorkoutSetsSummary.format(sets: sets, unitSystem: UnitSystem.metric, l10n: l10n), '20 min');
+  });
 }

@@ -1866,6 +1866,69 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String workoutDurationHm(int hours, int minutes) {
+    return '${hours}h ${minutes}min';
+  }
+
+  @override
+  String workoutDurationMs(int minutes, int seconds) {
+    return '${minutes}m ${seconds}s';
+  }
+
+  @override
+  String workoutDurationM(int minutes) {
+    return '$minutes min';
+  }
+
+  @override
+  String workoutDurationS(int seconds) {
+    return '$seconds s';
+  }
+
+  @override
+  String get workoutDurationLabel => 'Duração';
+
+  @override
+  String get workoutDurationMinutesLabel => 'Min';
+
+  @override
+  String get workoutDurationSecondsLabel => 'Seg';
+
+  @override
+  String workoutDistanceLabel(String unit) {
+    return 'Distância ($unit)';
+  }
+
+  @override
+  String get workoutDistanceOptionalHelper => 'O tempo é obrigatório; a distância é opcional.';
+
+  @override
+  String get workoutInvalidDurationMessage => 'Informe quanto tempo durou.';
+
+  @override
+  String get workoutInvalidDistanceMessage => 'Informe uma distância válida, ou deixe em branco.';
+
+  @override
+  String get workoutTimeLabel => 'Tempo';
+
+  @override
+  String get workoutDistanceMetricLabel => 'Distância';
+
+  @override
+  String get workoutCardioTrendTitle => 'Tempo de cardio';
+
+  @override
+  String get workoutCardioTrendEmptyMessage => 'Nenhum cardio registrado neste período ainda.';
+
+  @override
+  String get workoutCardioDurationLegend => 'Duração';
+
+  @override
+  String workoutCardioTrendAverage(int minutes) {
+    return '$minutes min/dia méd';
+  }
+
+  @override
   String get exerciseSearchTitle => 'Exercícios';
 
   @override
