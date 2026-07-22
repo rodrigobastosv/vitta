@@ -6,6 +6,7 @@ import 'package:vitta/app/design_system/components/general/vt_avatar_picker_shee
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_profile_avatar.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
@@ -70,6 +71,7 @@ class AvatarPicker extends StatelessWidget {
     final l10n = context.l10n;
     final action = await showModalBottomSheet<_AvatarAction>(
       context: context,
+      routeSettings: VTBottomSheet.avatarAction.settings,
       builder: (sheetContext) => SafeArea(
         child: Column(
           mainAxisSize: .min,

@@ -5,6 +5,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_recurrence.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
@@ -13,6 +14,7 @@ import 'package:vitta/app/presentation/pages/reminder/widgets/reminder_labels.da
 Future<void> showReminderFormSheet({required BuildContext context, required ReminderCubit cubit, required DateTime date, Reminder? reminder}) =>
     showModalBottomSheet<void>(
       context: context,
+      routeSettings: VTBottomSheet.reminderForm.settings,
       isScrollControlled: true,
       builder: (sheetContext) => _ReminderFormSheet(cubit: cubit, date: date, reminder: reminder),
     );

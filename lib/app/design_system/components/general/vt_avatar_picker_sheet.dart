@@ -4,9 +4,10 @@ import 'package:vitta/app/design_system/components/general/vt_avatar_catalog.dar
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 
 Future<String?> showAvatarPickerSheet({required BuildContext context}) =>
-    showModalBottomSheet<String>(context: context, isScrollControlled: true, builder: (sheetContext) => const VTAvatarPickerSheet());
+    showModalBottomSheet<String>(context: context, routeSettings: VTBottomSheet.avatarPicker.settings, isScrollControlled: true, builder: (sheetContext) => const VTAvatarPickerSheet());
 
 class VTAvatarPickerSheet extends StatelessWidget {
   const VTAvatarPickerSheet({super.key});

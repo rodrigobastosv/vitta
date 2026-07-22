@@ -4,6 +4,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -11,6 +12,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 Future<DateTime?> showDietCalendarSheet({required BuildContext context}) => showModalBottomSheet<DateTime>(
   context: context,
+  routeSettings: VTBottomSheet.dietCalendar.settings,
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<DietCubit>(), child: const _DietCalendarSheet()),
 );

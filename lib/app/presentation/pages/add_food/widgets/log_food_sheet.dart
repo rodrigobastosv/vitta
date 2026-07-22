@@ -6,6 +6,7 @@ import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dar
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selectio
 Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
     showModalBottomSheet<void>(
       context: context,
+      routeSettings: VTBottomSheet.logFood.settings,
       isScrollControlled: true,
       builder: (sheetContext) => BlocProvider.value(
         value: context.read<AddFoodCubit>(),
