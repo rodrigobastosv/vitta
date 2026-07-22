@@ -42,11 +42,6 @@ class ExerciseFilterChips extends StatelessWidget {
           // default leaves it onSurfaceVariant even when selected, which is what
           // washed it out on the primaryContainer fill.
           ChoiceChip(
-            avatar: Icon(
-              Icons.directions_run,
-              size: 18,
-              color: isCardioSelected ? context.colorScheme.onPrimaryContainer : context.colorScheme.onSurfaceVariant,
-            ),
             label: Text(ExerciseCategory.cardio.getLabel(l10n)),
             selected: isCardioSelected,
             onSelected: (isSelected) => onCategoryChanged(isSelected ? ExerciseCategory.cardio : null),
