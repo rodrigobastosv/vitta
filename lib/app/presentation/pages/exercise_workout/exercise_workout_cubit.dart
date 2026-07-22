@@ -1,5 +1,6 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
@@ -25,8 +26,8 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
   final DeleteSetUseCase _deleteSetUseCase;
   final SetWorkoutExerciseCompletedUseCase _setWorkoutExerciseCompletedUseCase;
 
-  Future<Result<VTError, void>> logSet({required int reps, required double weightKg}) async {
-    final loggedResult = await _logSetUseCase(workoutExerciseId: state.workoutExercise.id, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, void>> logSet({required SetInput input}) async {
+    final loggedResult = await _logSetUseCase(workoutExerciseId: state.workoutExercise.id, input: input);
     return loggedResult.when(Failure.new, (set) {
       emit(state.copyWith(workoutExercise: _withSets([...state.workoutExercise.sets, set])));
       emitPresentation(ExerciseWorkoutSetLogged());
@@ -39,12 +40,12 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
     if (last == null) {
       return;
     }
-    final repeatedResult = await logSet(reps: last.reps, weightKg: last.weightKg);
+    final repeatedResult = await logSet(input: SetInput.fromSet(last));
     repeatedResult.when((error) => emitPresentation(ExerciseWorkoutError(message: error.message)), (_) {});
   }
 
-  Future<Result<VTError, void>> updateSet({required String setId, required int reps, required double weightKg}) async {
-    final updatedResult = await _updateSetUseCase(setId: setId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, void>> updateSet({required String setId, required SetInput input}) async {
+    final updatedResult = await _updateSetUseCase(setId: setId, input: input);
     return updatedResult.when(Failure.new, (updated) {
       emit(state.copyWith(workoutExercise: _withSets([for (final set in state.workoutExercise.sets) set.id == setId ? updated : set])));
       return const Success(null);

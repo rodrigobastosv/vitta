@@ -6,6 +6,8 @@ import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_us
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
+import 'package:vitta/app/domain/workout/entities/set_kind.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
@@ -151,24 +153,24 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     });
   }
 
-  Future<Result<VTError, void>> logSet({required String workoutExerciseId, required int reps, required double weightKg}) async {
-    final loggedResult = await _logSetUseCase(workoutExerciseId: workoutExerciseId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, void>> logSet({required String workoutExerciseId, required SetInput input}) async {
+    final loggedResult = await _logSetUseCase(workoutExerciseId: workoutExerciseId, input: input);
     final error = loggedResult.when((error) => error, (_) => null);
     if (error != null) {
       return Failure(error);
     }
-    Log.action('workout_set_logged', data: {'reps': reps, 'weight_kg': weightKg});
+    Log.action('workout_set_logged', data: _setLogData(input));
     await loadDate(state.date);
     return const Success(null);
   }
 
-  Future<Result<VTError, void>> updateSet({required String setId, required int reps, required double weightKg}) async {
-    final updatedResult = await _updateSetUseCase(setId: setId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, void>> updateSet({required String setId, required SetInput input}) async {
+    final updatedResult = await _updateSetUseCase(setId: setId, input: input);
     final error = updatedResult.when((error) => error, (_) => null);
     if (error != null) {
       return Failure(error);
     }
-    Log.action('workout_set_updated', data: {'reps': reps, 'weight_kg': weightKg});
+    Log.action('workout_set_updated', data: _setLogData(input));
     await loadDate(state.date);
     return const Success(null);
   }
@@ -178,8 +180,12 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (last == null) {
       return const Success(null);
     }
-    return logSet(workoutExerciseId: workoutExercise.id, reps: last.reps, weightKg: last.weightKg);
+    return logSet(workoutExerciseId: workoutExercise.id, input: SetInput.fromSet(last));
   }
+
+  Map<String, dynamic> _setLogData(SetInput input) => input.kind == SetKind.cardio
+      ? {'duration_seconds': input.durationSeconds, 'distance_meters': input.distanceMeters}
+      : {'reps': input.reps, 'weight_kg': input.weightKg};
 
   Future<void> setExerciseCompleted({required WorkoutExercise workoutExercise, required bool completed}) async {
     if (completed && workoutExercise.sets.isEmpty) {

@@ -45,6 +45,26 @@ extension LoadConversion on UnitSystem {
   };
 }
 
+extension DistanceConversion on UnitSystem {
+  static const _metersPerMile = 1609.344;
+  static const _metersPerKilometer = 1000.0;
+
+  String get distanceUnitLabel => switch (this) {
+    .metric => 'km',
+    .imperial => 'mi',
+  };
+
+  double metersToDisplayDistance(double meters) => switch (this) {
+    .metric => meters / _metersPerKilometer,
+    .imperial => meters / _metersPerMile,
+  };
+
+  double displayDistanceToMeters(double value) => switch (this) {
+    .metric => value * _metersPerKilometer,
+    .imperial => value * _metersPerMile,
+  };
+}
+
 extension VolumeConversion on UnitSystem {
   static const _mlPerFluidOunce = 29.5735;
 

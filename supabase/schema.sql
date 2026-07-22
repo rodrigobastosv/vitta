@@ -408,7 +408,15 @@ alter table workout_exercises add column if not exists completed_at timestamptz;
 create index if not exists workout_exercises_workout_id_idx on workout_exercises (workout_id);
 create index if not exists workout_exercises_exercise_id_idx on workout_exercises (exercise_id);
 
--- One row per set actually performed: reps plus the load lifted.
+-- One row per set actually performed. A set is one of two shapes, told apart by
+-- which metrics it carries (issue #167): a *strength* set has reps (and
+-- weight_kg, 0 for bodyweight); a *cardio* effort (treadmill, bike, row) has
+-- duration_seconds and an optional distance_meters, and no reps at all. This is
+-- nullable-columns-per-mode, the same shape food_logs uses for quantity_units
+-- alongside quantity_grams - a treadmill has no reps and a bench press has no
+-- distance, and keeping both in one table leaves every strength aggregate
+-- (volume, set count, region tonnage) total-able exactly as before, with a
+-- cardio set contributing 0 volume like a bodyweight one.
 --
 -- weight_kg allows 0 rather than being null-for-bodyweight: a pull-up and a 0kg
 -- barbell row are both "no external load", and a single numeric keeps every
@@ -419,9 +427,29 @@ create table if not exists workout_sets (
   id uuid primary key default gen_random_uuid(),
   workout_exercise_id uuid not null references workout_exercises (id) on delete cascade,
   position integer not null,
-  reps integer not null check (reps > 0),
+  reps integer check (reps is null or reps > 0),
   weight_kg numeric not null default 0 check (weight_kg >= 0),
-  created_at timestamptz not null default now()
+  duration_seconds integer check (duration_seconds is null or duration_seconds > 0),
+  distance_meters numeric check (distance_meters is null or distance_meters >= 0),
+  created_at timestamptz not null default now(),
+  -- Exactly one shape: reps xor duration. distance_meters only rides along with a
+  -- cardio effort, never a strength set.
+  constraint workout_sets_shape check (
+    (reps is not null and duration_seconds is null and distance_meters is null)
+    or (reps is null and duration_seconds is not null)
+  )
+);
+
+-- Bring existing databases up to date (the create table above only runs on a fresh db).
+alter table workout_sets add column if not exists duration_seconds integer check (duration_seconds is null or duration_seconds > 0);
+alter table workout_sets add column if not exists distance_meters numeric check (distance_meters is null or distance_meters >= 0);
+alter table workout_sets alter column reps drop not null;
+alter table workout_sets drop constraint if exists workout_sets_reps_check;
+alter table workout_sets add constraint workout_sets_reps_check check (reps is null or reps > 0);
+alter table workout_sets drop constraint if exists workout_sets_shape;
+alter table workout_sets add constraint workout_sets_shape check (
+  (reps is not null and duration_seconds is null and distance_meters is null)
+  or (reps is null and duration_seconds is not null)
 );
 
 create index if not exists workout_sets_workout_exercise_id_idx on workout_sets (workout_exercise_id);

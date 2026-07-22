@@ -1056,6 +1056,71 @@
       }
     }
   },
+  "workoutDurationHm": "{hours}h {minutes}min",
+  "@workoutDurationHm": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      },
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutDurationMs": "{minutes}m {seconds}s",
+  "@workoutDurationMs": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutDurationM": "{minutes} min",
+  "@workoutDurationM": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutDurationS": "{seconds} s",
+  "@workoutDurationS": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutDurationLabel": "Duration",
+  "workoutDurationMinutesLabel": "Min",
+  "workoutDurationSecondsLabel": "Sec",
+  "workoutDistanceLabel": "Distance ({unit})",
+  "@workoutDistanceLabel": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutDistanceOptionalHelper": "Time is required; distance is optional.",
+  "workoutInvalidDurationMessage": "Enter how long it lasted.",
+  "workoutInvalidDistanceMessage": "Enter a valid distance, or leave it empty.",
+  "workoutTimeLabel": "Time",
+  "workoutDistanceMetricLabel": "Distance",
+  "workoutCardioTrendTitle": "Cardio time",
+  "workoutCardioTrendEmptyMessage": "No cardio logged in this period yet.",
+  "workoutCardioDurationLegend": "Duration",
+  "workoutCardioTrendAverage": "{minutes} min/day avg",
+  "@workoutCardioTrendAverage": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
   "exerciseSearchTitle": "Exercises",
   "exerciseSearchHint": "Search exercises",
   "exerciseSearchEmptyTitle": "No exercises found",

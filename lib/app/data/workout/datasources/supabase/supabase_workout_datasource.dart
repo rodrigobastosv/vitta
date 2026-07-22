@@ -7,6 +7,7 @@ import 'package:vitta/app/data/workout/datasources/supabase/requests/create_work
 import 'package:vitta/app/data/workout/datasources/supabase/requests/create_workout_set_request.dart';
 import 'package:vitta/app/data/workout/datasources/supabase/requests/update_workout_set_request.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
@@ -198,13 +199,15 @@ class SupabaseWorkoutDataSource {
     }
   }
 
-  Future<Result<VTError, WorkoutSet>> logSet({required String workoutExerciseId, required int reps, required double weightKg}) async {
+  Future<Result<VTError, WorkoutSet>> logSet({required String workoutExerciseId, required SetInput input}) async {
     try {
       final request = CreateWorkoutSetRequest(
         workoutExerciseId: workoutExerciseId,
         position: await _nextPosition(table: .workoutSets, column: 'workout_exercise_id', parentId: workoutExerciseId),
-        reps: reps,
-        weightKg: weightKg,
+        reps: input.reps,
+        weightKg: input.weightKg,
+        durationSeconds: input.durationSeconds,
+        distanceMeters: input.distanceMeters,
       );
       final row = await _supabaseService.from(.workoutSets).insert(request.toJson()).select().single();
       return Success(WorkoutSet.fromMap(row));
@@ -217,7 +220,14 @@ class SupabaseWorkoutDataSource {
     final requests = [
       for (final MapEntry(key: workoutExerciseId, value: sets) in setsByWorkoutExercise.entries)
         for (final (index, set) in sets.indexed)
-          CreateWorkoutSetRequest(workoutExerciseId: workoutExerciseId, position: index, reps: set.reps, weightKg: set.weightKg).toJson(),
+          CreateWorkoutSetRequest(
+            workoutExerciseId: workoutExerciseId,
+            position: index,
+            reps: set.reps,
+            weightKg: set.weightKg,
+            durationSeconds: set.durationSeconds,
+            distanceMeters: set.distanceMeters,
+          ).toJson(),
     ];
     if (requests.isEmpty) {
       return const Success(null);
@@ -230,9 +240,14 @@ class SupabaseWorkoutDataSource {
     }
   }
 
-  Future<Result<VTError, WorkoutSet>> updateSet({required String setId, required int reps, required double weightKg}) async {
+  Future<Result<VTError, WorkoutSet>> updateSet({required String setId, required SetInput input}) async {
     try {
-      final request = UpdateWorkoutSetRequest(reps: reps, weightKg: weightKg);
+      final request = UpdateWorkoutSetRequest(
+        reps: input.reps,
+        weightKg: input.weightKg,
+        durationSeconds: input.durationSeconds,
+        distanceMeters: input.distanceMeters,
+      );
       final row = await _supabaseService.from(.workoutSets).update(request.toJson()).eq('id', setId).select().single();
       return Success(WorkoutSet.fromMap(row));
     } on Exception catch (error) {

@@ -28,6 +28,25 @@ void main() {
       expect(workoutExercise.totalReps, 12);
     });
 
+    test('a cardio effort sums into duration and distance but adds no volume or reps', () {
+      final workoutExercise = WorkoutExerciseFactory.build(
+        sets: [
+          WorkoutSetFactory.cardio(),
+          WorkoutSetFactory.cardio(id: 'set-2', durationSeconds: 300, distanceMeters: 1000),
+        ],
+      );
+
+      expect(workoutExercise.volumeKg, 0);
+      expect(workoutExercise.totalReps, 0);
+      expect(workoutExercise.totalDurationSeconds, 1800);
+      expect(workoutExercise.totalDistanceMeters, 6000);
+      expect(workoutExercise.hasCardio, isTrue);
+    });
+
+    test('a strength-only exercise reports no cardio', () {
+      expect(WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]).hasCardio, isFalse);
+    });
+
     test('a workout folds over the flattened sets of every exercise', () {
       final workout = WorkoutFactory.build(
         exercises: [

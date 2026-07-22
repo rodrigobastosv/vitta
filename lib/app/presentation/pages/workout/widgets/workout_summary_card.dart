@@ -8,8 +8,10 @@ import 'package:vitta/app/design_system/components/general/vt_macro_ring.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/workout_duration_format.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_metric.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class WorkoutSummaryCard extends StatelessWidget {
   const WorkoutSummaryCard({required this.state, required this.unitSystem, super.key});
@@ -48,17 +50,7 @@ class WorkoutSummaryCard extends StatelessWidget {
                 ),
               ),
               const VTGap.l(),
-              Expanded(
-                child: Column(
-                  children: [
-                    WorkoutMetric(icon: Icons.fitness_center, label: l10n.workoutVolumeLabel, value: _formatLoad(state.volumeKg), color: colorScheme.primary),
-                    const VTGap.m(),
-                    WorkoutMetric(icon: Icons.layers_outlined, label: l10n.workoutSetsLabel, value: '${state.totalSets}'),
-                    const VTGap.m(),
-                    WorkoutMetric(icon: Icons.repeat_rounded, label: l10n.workoutTotalRepsLabel, value: '${state.totalReps}'),
-                  ],
-                ),
-              ),
+              Expanded(child: Column(children: _metrics(context, l10n, colorScheme))),
             ],
           ),
           if (regions.isNotEmpty) ...[
@@ -74,6 +66,27 @@ class WorkoutSummaryCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  List<Widget> _metrics(BuildContext context, AppLocalizations l10n, ColorScheme colorScheme) {
+    final hasStrength = state.sets.any((set) => !set.isCardio);
+    final metrics = <Widget>[
+      if (hasStrength) WorkoutMetric(icon: Icons.fitness_center, label: l10n.workoutVolumeLabel, value: _formatLoad(state.volumeKg), color: colorScheme.primary),
+      WorkoutMetric(icon: Icons.layers_outlined, label: l10n.workoutSetsLabel, value: '${state.totalSets}'),
+      if (hasStrength) WorkoutMetric(icon: Icons.repeat_rounded, label: l10n.workoutTotalRepsLabel, value: '${state.totalReps}'),
+      if (state.hasCardio)
+        WorkoutMetric(
+          icon: Icons.timer_outlined,
+          label: l10n.workoutTimeLabel,
+          value: formatWorkoutDuration(l10n, state.totalDurationSeconds),
+          color: hasStrength ? null : colorScheme.primary,
+        ),
+      if (state.totalDistanceMeters > 0)
+        WorkoutMetric(icon: Icons.straighten, label: l10n.workoutDistanceMetricLabel, value: formatWorkoutDistance(unitSystem, state.totalDistanceMeters)),
+    ];
+    return [
+      for (final (index, metric) in metrics.indexed) ...[if (index > 0) const VTGap.m(), metric],
+    ];
   }
 
   String _formatLoad(double kilograms) {

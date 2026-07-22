@@ -1,6 +1,7 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/workout/workout_repository.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 
 class LogSetUseCase {
@@ -8,6 +9,6 @@ class LogSetUseCase {
 
   final WorkoutRepository _workoutRepository;
 
-  Future<Result<VTError, WorkoutSet>> call({required String workoutExerciseId, required int reps, required double weightKg}) =>
-      _workoutRepository.logSet(workoutExerciseId: workoutExerciseId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, WorkoutSet>> call({required String workoutExerciseId, required SetInput input}) =>
+      _workoutRepository.logSet(workoutExerciseId: workoutExerciseId, input: input);
 }

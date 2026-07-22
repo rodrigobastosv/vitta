@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/muscle_region_split_card.dart';
+import 'package:vitta/app/presentation/pages/workout_history/widgets/workout_cardio_trend_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/workout_history_calendar_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/workout_volume_trend_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/workout_history_cubit.dart';
@@ -56,6 +57,8 @@ class WorkoutHistoryPage extends StatelessWidget {
             TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
             const VTGap.m(),
             WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
+            const VTGap.m(),
+            WorkoutCardioTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
             const VTGap.m(),
             MuscleRegionSplitCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
           ],

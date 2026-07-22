@@ -1,0 +1,1 @@
+enum SetKind { strength, cardio }

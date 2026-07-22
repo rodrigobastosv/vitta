@@ -11,6 +11,7 @@ import 'package:vitta/app/domain/workout/entities/exercise_progression_point.dar
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
+import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
@@ -60,11 +61,11 @@ class WorkoutRepository {
   Future<Result<VTError, void>> removeWorkoutExercise({required String workoutExerciseId}) =>
       _supabaseWorkoutDataSource.removeWorkoutExercise(workoutExerciseId: workoutExerciseId);
 
-  Future<Result<VTError, WorkoutSet>> logSet({required String workoutExerciseId, required int reps, required double weightKg}) =>
-      _supabaseWorkoutDataSource.logSet(workoutExerciseId: workoutExerciseId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, WorkoutSet>> logSet({required String workoutExerciseId, required SetInput input}) =>
+      _supabaseWorkoutDataSource.logSet(workoutExerciseId: workoutExerciseId, input: input);
 
-  Future<Result<VTError, WorkoutSet>> updateSet({required String setId, required int reps, required double weightKg}) =>
-      _supabaseWorkoutDataSource.updateSet(setId: setId, reps: reps, weightKg: weightKg);
+  Future<Result<VTError, WorkoutSet>> updateSet({required String setId, required SetInput input}) =>
+      _supabaseWorkoutDataSource.updateSet(setId: setId, input: input);
 
   Future<Result<VTError, void>> deleteSet({required String setId}) => _supabaseWorkoutDataSource.deleteSet(setId: setId);
 
