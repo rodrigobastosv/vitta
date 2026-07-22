@@ -722,6 +722,120 @@ abstract class AppLocalizations {
   /// **'Assuming {weight} — log a weight for a target built on yours'**
   String objectiveWeightAssumed(String weight);
 
+  /// No description provided for @bodyProfileSexTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Biological sex'**
+  String get bodyProfileSexTitle;
+
+  /// No description provided for @bodyProfileSexHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Men and women burn different amounts at rest, so this moves the estimate.'**
+  String get bodyProfileSexHint;
+
+  /// No description provided for @bodyProfileSexMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get bodyProfileSexMale;
+
+  /// No description provided for @bodyProfileSexFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get bodyProfileSexFemale;
+
+  /// No description provided for @bodyProfileAgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get bodyProfileAgeLabel;
+
+  /// No description provided for @bodyProfileAgeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{years} yrs'**
+  String bodyProfileAgeValue(int years);
+
+  /// No description provided for @bodyProfileActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity level'**
+  String get bodyProfileActivityTitle;
+
+  /// No description provided for @bodyProfileActivityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How much you move on an ordinary day, training included.'**
+  String get bodyProfileActivityHint;
+
+  /// No description provided for @bodyProfileActivitySedentary.
+  ///
+  /// In en, this message translates to:
+  /// **'Sedentary'**
+  String get bodyProfileActivitySedentary;
+
+  /// No description provided for @bodyProfileActivityLightlyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Lightly active'**
+  String get bodyProfileActivityLightlyActive;
+
+  /// No description provided for @bodyProfileActivityModeratelyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderately active'**
+  String get bodyProfileActivityModeratelyActive;
+
+  /// No description provided for @bodyProfileActivityVeryActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Very active'**
+  String get bodyProfileActivityVeryActive;
+
+  /// No description provided for @bodyProfileActivityExtraActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra active'**
+  String get bodyProfileActivityExtraActive;
+
+  /// No description provided for @bodyProfileMetabolismTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Basal metabolism'**
+  String get bodyProfileMetabolismTitle;
+
+  /// No description provided for @bodyProfileMetabolismBasal.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal at rest'**
+  String bodyProfileMetabolismBasal(int calories);
+
+  /// No description provided for @bodyProfileMetabolismMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal to maintain'**
+  String bodyProfileMetabolismMaintenance(int calories);
+
+  /// No description provided for @bodyProfileMetabolismMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Mifflin-St Jeor, multiplied by your activity level.'**
+  String get bodyProfileMetabolismMethod;
+
+  /// No description provided for @bodyProfileMetabolismMeasured.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked out from your weight, height, sex, age and activity level.'**
+  String get bodyProfileMetabolismMeasured;
+
+  /// No description provided for @bodyProfileMetabolismAssumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of this is assumed — fill in your sex, age and activity level for a closer figure.'**
+  String get bodyProfileMetabolismAssumed;
+
   /// No description provided for @objectiveOverwritesGoalsNote.
   ///
   /// In en, this message translates to:

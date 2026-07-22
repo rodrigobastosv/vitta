@@ -6,7 +6,14 @@ import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dar
 import 'package:vitta/app/design_system/components/inputs/vt_weight_picker.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/body_profile/entities/activity_level.dart';
+import 'package:vitta/app/domain/body_profile/entities/basal_metabolism.dart';
+import 'package:vitta/app/domain/body_profile/entities/biological_sex.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
+import 'package:vitta/app/presentation/general/activity_level_selector.dart';
+import 'package:vitta/app/presentation/general/age_slider.dart';
+import 'package:vitta/app/presentation/general/basal_metabolism_card.dart';
+import 'package:vitta/app/presentation/general/biological_sex_selector.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/fitness_objective_tile.dart';
 
 class OnboardingBodyStep extends StatelessWidget {
@@ -14,9 +21,16 @@ class OnboardingBodyStep extends StatelessWidget {
     required this.unitSystem,
     required this.weightKg,
     required this.heightCm,
+    required this.sex,
+    required this.ageYears,
+    required this.activityLevel,
+    required this.metabolism,
     required this.objective,
     required this.onWeightChanged,
     required this.onHeightChanged,
+    required this.onSexChanged,
+    required this.onAgeChanged,
+    required this.onActivityLevelChanged,
     required this.onObjectiveChanged,
     super.key,
   });
@@ -29,9 +43,16 @@ class OnboardingBodyStep extends StatelessWidget {
   final UnitSystem unitSystem;
   final double weightKg;
   final double heightCm;
+  final BiologicalSex? sex;
+  final int ageYears;
+  final ActivityLevel? activityLevel;
+  final BasalMetabolism metabolism;
   final FitnessObjective objective;
   final ValueChanged<double> onWeightChanged;
   final ValueChanged<double> onHeightChanged;
+  final ValueChanged<BiologicalSex> onSexChanged;
+  final ValueChanged<int> onAgeChanged;
+  final ValueChanged<ActivityLevel> onActivityLevelChanged;
   final ValueChanged<FitnessObjective> onObjectiveChanged;
 
   @override
@@ -74,6 +95,17 @@ class OnboardingBodyStep extends StatelessWidget {
             color: colorScheme.primary,
             onChanged: (value) => onHeightChanged(unitSystem.displayHeightToCentimeters(value)),
           ),
+          const VTGap.l(),
+          // Sex, age and activity are what turn weight and height into a real
+          // Mifflin-St Jeor figure (issue #169); each stays optional, and the
+          // card below states when it is filling a gap with an assumption.
+          BiologicalSexSelector(sex: sex, onChanged: onSexChanged),
+          const VTGap.l(),
+          AgeSlider(ageYears: ageYears, onChanged: onAgeChanged),
+          const VTGap.l(),
+          ActivityLevelSelector(activityLevel: activityLevel, onChanged: onActivityLevelChanged),
+          const VTGap.l(),
+          BasalMetabolismCard(metabolism: metabolism),
           const VTGap.l(),
           Text(l10n.onboardingObjectiveTitle, style: VTTextStyles.bodyStrong(context)),
           const VTGap.s(),

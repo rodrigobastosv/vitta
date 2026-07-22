@@ -3,6 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/body_profile/entities/activity_level.dart';
+import 'package:vitta/app/domain/body_profile/entities/biological_sex.dart';
 import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
@@ -152,6 +154,47 @@ void main() {
 
     final saved = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
     expect(saved, const BodyProfile(heightCm: 183, objective: .gainMuscle));
+  });
+
+  test('the metabolic inputs are persisted with the rest of the body', () async {
+    final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
+    when(completeOnboardingUseCase.call).thenAnswer((_) async {});
+    final saveBodyProfileUseCase = buildProfileUseCase();
+    final cubit = CubitsFactories.buildOnboardingCubit(
+      completeOnboardingUseCase: completeOnboardingUseCase,
+      logBodyWeightUseCase: buildLoggingUseCase(),
+      saveBodyProfileUseCase: saveBodyProfileUseCase,
+    );
+
+    cubit
+      ..sexChanged(BiologicalSex.male)
+      ..ageChanged(41)
+      ..activityLevelChanged(ActivityLevel.moderatelyActive)
+      ..acceptBody();
+    await cubit.completeOnboarding();
+
+    final saved = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
+    expect(saved.sex, BiologicalSex.male);
+    expect(saved.ageYears, 41);
+    expect(saved.activityLevel, ActivityLevel.moderatelyActive);
+  });
+
+  test('a skipped body step stores no metabolic assumption as if it were an answer', () {
+    final cubit = CubitsFactories.buildOnboardingCubit();
+
+    expect(cubit.state.sex, isNull);
+    expect(cubit.state.birthDate, isNull);
+    expect(cubit.state.activityLevel, isNull);
+    expect(cubit.state.metabolism.isFullyKnown, isFalse);
+    expect(cubit.state.ageYears, BodyProfile.defaultAgeYears);
+  });
+
+  test('the suggestion follows the metabolic estimate, so a quieter week suggests less', () {
+    final cubit = CubitsFactories.buildOnboardingCubit()..activityLevelChanged(ActivityLevel.extraActive);
+    final active = cubit.state.effectiveCalorieGoal;
+    cubit.activityLevelChanged(ActivityLevel.sedentary);
+
+    expect(cubit.state.effectiveCalorieGoal, lessThan(active));
   });
 
   test('the objective drives the suggestion, and a slider drag overrides it', () {

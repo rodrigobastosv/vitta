@@ -9,6 +9,10 @@ import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dar
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
+import 'package:vitta/app/presentation/general/activity_level_selector.dart';
+import 'package:vitta/app/presentation/general/age_slider.dart';
+import 'package:vitta/app/presentation/general/basal_metabolism_card.dart';
+import 'package:vitta/app/presentation/general/biological_sex_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_presentation_event.dart';
@@ -63,6 +67,17 @@ class ObjectivePage extends StatelessWidget {
                 color: colorScheme.primary,
                 onChanged: (value) => cubit.heightChanged(unitSystem.displayHeightToCentimeters(value)),
               ),
+              const VTGap.l(),
+              BiologicalSexSelector(sex: state.sex, onChanged: cubit.sexChanged),
+              const VTGap.l(),
+              AgeSlider(ageYears: state.ageYears, onChanged: cubit.ageChanged),
+              const VTGap.l(),
+              ActivityLevelSelector(activityLevel: state.activityLevel, onChanged: cubit.activityLevelChanged),
+              const VTGap.l(),
+              // The estimate is shown where it is decided: the calorie target
+              // below is this figure times the objective's factor, so seeing the
+              // two together is what makes the target explainable.
+              BasalMetabolismCard(metabolism: state.metabolism),
               const VTGap.l(),
               if (goals != null) ...[
                 ObjectiveTargetCard(goals: goals, weightKg: state.weightKg, hasWeighIn: state.hasWeighIn, unitSystem: unitSystem),

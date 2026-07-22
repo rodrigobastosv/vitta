@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/body_profile/entities/activity_level.dart';
+import 'package:vitta/app/domain/body_profile/entities/biological_sex.dart';
 import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/diet/entities/diet_modality.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
@@ -95,6 +97,51 @@ void main() {
 
     final savedGoals = verify(() => saveMacroGoalsUseCase(captureAny())).captured.cast<MacroGoals>();
     expect(savedGoals.last.calorieGoal, greaterThan(savedGoals.first.calorieGoal));
+  });
+
+  test('the metabolic inputs are persisted alongside the objective', () async {
+    final saveBodyProfileUseCase = MockSaveBodyProfileUseCase();
+    when(() => saveBodyProfileUseCase(any())).thenAnswer((_) async {});
+    final saveMacroGoalsUseCase = MockSaveMacroGoalsUseCase();
+    when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildObjectiveCubit(saveBodyProfileUseCase: saveBodyProfileUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase)
+      ..objectiveChanged(FitnessObjective.maintainWeight)
+      ..sexChanged(BiologicalSex.female)
+      ..ageChanged(45)
+      ..activityLevelChanged(ActivityLevel.veryActive);
+    await cubit.saveObjective();
+
+    final savedProfile = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
+    expect(savedProfile.sex, BiologicalSex.female);
+    expect(savedProfile.ageYears, 45);
+    expect(savedProfile.activityLevel, ActivityLevel.veryActive);
+  });
+
+  test('a heavier training week raises the saved target, so the activity level is a real input', () async {
+    final saveMacroGoalsUseCase = MockSaveMacroGoalsUseCase();
+    when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
+    final saveBodyProfileUseCase = MockSaveBodyProfileUseCase();
+    when(() => saveBodyProfileUseCase(any())).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildObjectiveCubit(saveBodyProfileUseCase: saveBodyProfileUseCase, saveMacroGoalsUseCase: saveMacroGoalsUseCase)
+      ..objectiveChanged(FitnessObjective.maintainWeight)
+      ..activityLevelChanged(ActivityLevel.sedentary);
+    await cubit.saveObjective();
+    cubit.activityLevelChanged(ActivityLevel.extraActive);
+    await cubit.saveObjective();
+
+    final savedGoals = verify(() => saveMacroGoalsUseCase(captureAny())).captured.cast<MacroGoals>();
+    expect(savedGoals.last.calorieGoal, greaterThan(savedGoals.first.calorieGoal));
+  });
+
+  test('a man and a woman of the same body get different targets', () {
+    final cubit = CubitsFactories.buildObjectiveCubit()..objectiveChanged(FitnessObjective.maintainWeight);
+
+    cubit.sexChanged(BiologicalSex.female);
+    final womanTarget = cubit.state.goals!.calorieGoal;
+    cubit.sexChanged(BiologicalSex.male);
+    final manTarget = cubit.state.goals!.calorieGoal;
+
+    expect(manTarget, greaterThan(womanTarget));
   });
 
   test('nothing is written until an objective is picked', () async {

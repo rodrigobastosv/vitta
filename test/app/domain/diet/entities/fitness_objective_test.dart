@@ -3,37 +3,36 @@ import 'package:vitta/app/domain/diet/entities/diet_modality.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 
 void main() {
-  const weightKg = 70.0;
-  const heightCm = 170.0;
+  const maintenanceCalories = 2400.0;
 
   test('maintenance sits between the cut and the bulk', () {
-    final losing = FitnessObjective.loseWeight.caloriesFor(weightKg: weightKg, heightCm: heightCm);
-    final maintaining = FitnessObjective.maintainWeight.caloriesFor(weightKg: weightKg, heightCm: heightCm);
-    final gaining = FitnessObjective.gainMuscle.caloriesFor(weightKg: weightKg, heightCm: heightCm);
+    final losing = FitnessObjective.loseWeight.caloriesFor(maintenanceCalories: maintenanceCalories);
+    final maintaining = FitnessObjective.maintainWeight.caloriesFor(maintenanceCalories: maintenanceCalories);
+    final gaining = FitnessObjective.gainMuscle.caloriesFor(maintenanceCalories: maintenanceCalories);
 
     expect(losing, lessThan(maintaining));
     expect(gaining, greaterThan(maintaining));
   });
 
-  test('maintaining suggests exactly the maintenance estimate', () {
-    expect(
-      FitnessObjective.maintainWeight.caloriesFor(weightKg: weightKg, heightCm: heightCm),
-      closeTo(FitnessObjective.maintenanceCalories(weightKg: weightKg, heightCm: heightCm), 0.001),
-    );
+  test('maintaining suggests exactly the maintenance estimate it was handed', () {
+    expect(FitnessObjective.maintainWeight.caloriesFor(maintenanceCalories: maintenanceCalories), closeTo(maintenanceCalories, 0.001));
   });
 
-  test('height moves the target, so it is a real input and not decoration', () {
-    final shorter = FitnessObjective.maintainWeight.caloriesFor(weightKg: weightKg, heightCm: 160);
-    final taller = FitnessObjective.maintainWeight.caloriesFor(weightKg: weightKg, heightCm: 190);
-
-    expect(taller, greaterThan(shorter));
+  test('a bigger maintenance moves every target, so the metabolic estimate is a real input', () {
+    for (final objective in FitnessObjective.values) {
+      expect(
+        objective.caloriesFor(maintenanceCalories: 2800),
+        greaterThan(objective.caloriesFor(maintenanceCalories: 2000)),
+        reason: objective.name,
+      );
+    }
   });
 
   test('the suggested macros total the suggested calories', () {
     for (final objective in FitnessObjective.values) {
-      final goals = objective.goalsFor(weightKg: weightKg, heightCm: heightCm);
+      final goals = objective.goalsFor(maintenanceCalories: maintenanceCalories);
 
-      expect(goals.calorieGoal, closeTo(objective.caloriesFor(weightKg: weightKg, heightCm: heightCm), 0.001), reason: objective.name);
+      expect(goals.calorieGoal, closeTo(objective.caloriesFor(maintenanceCalories: maintenanceCalories), 0.001), reason: objective.name);
     }
   });
 
@@ -44,7 +43,7 @@ void main() {
 
   test('the saved grams read back as the objective own modality, so the goals page needs no wiring', () {
     for (final objective in FitnessObjective.values) {
-      final goals = objective.goalsFor(weightKg: weightKg, heightCm: heightCm);
+      final goals = objective.goalsFor(maintenanceCalories: maintenanceCalories);
 
       expect(DietModality.matching(goals), objective.modality, reason: objective.name);
     }
