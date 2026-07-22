@@ -80,6 +80,24 @@ abstract class VTTheme {
         selectedColor: colorScheme.primaryContainer,
         checkmarkColor: colorScheme.onPrimaryContainer,
         secondarySelectedColor: colorScheme.primaryContainer,
+        // The fill was moved off secondaryContainer, but the ink was left behind:
+        // a selected ChoiceChip still defaults its label to onSecondaryContainer
+        // - coral - which then lands on a green fill. The ink is pinned to the
+        // container it sits on so the pair travels together.
+        // (An avatar icon can't be fixed here: RawChip merges chipTheme.iconTheme
+        // into an IconTheme without resolving widget states, so a WidgetStateColor
+        // would collapse to its fallback. A chip with an icon inks it itself.)
+        // The sizing is Material's own labelLarge, restated because setting
+        // labelStyle at all replaces the default rather than merging with it.
+        labelStyle: (textTheme.labelLarge ?? const TextStyle()).copyWith(
+          fontSize: 14,
+          fontWeight: .w500,
+          letterSpacing: 0.1,
+          color: WidgetStateColor.fromMap({
+            WidgetState.selected: colorScheme.onPrimaryContainer,
+            WidgetState.any: colorScheme.onSurfaceVariant,
+          }),
+        ),
         shape: const StadiumBorder(),
       ),
       cardTheme: CardThemeData(

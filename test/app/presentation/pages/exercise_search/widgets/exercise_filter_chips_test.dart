@@ -30,17 +30,25 @@ double contrastRatio(Color foreground, Color background) {
   return (lighter + 0.05) / (darker + 0.05);
 }
 
-Color cardioIconColor(WidgetTester tester) => tester.widget<Icon>(find.byIcon(Icons.directions_run)).color!;
+// The colour actually painted, not the one handed to the widget: a chip's ink can
+// come from the theme, and asserting the argument would miss what the user sees.
+Color paintedColor(WidgetTester tester, Finder of) =>
+    tester.widget<RichText>(find.descendant(of: of, matching: find.byType(RichText))).text.style!.color!;
+
+Color cardioIconColor(WidgetTester tester) => paintedColor(tester, find.byIcon(Icons.directions_run));
+
+Color cardioLabelColor(WidgetTester tester) => paintedColor(tester, find.text('Cardio'));
 
 void main() {
   for (final brightness in Brightness.values) {
-    testWidgets('the cardio glyph is legible on the chip it sits on, selected or not (${brightness.name})', (tester) async {
+    testWidgets('the cardio chip is legible on the fill it sits on, selected or not (${brightness.name})', (tester) async {
       final theme = brightness == Brightness.light ? VTTheme.light : VTTheme.dark;
       final colorScheme = theme.colorScheme;
 
       await pumpFilters(tester, theme: theme);
 
       expect(contrastRatio(cardioIconColor(tester), colorScheme.surface), greaterThanOrEqualTo(4.5));
+      expect(contrastRatio(cardioLabelColor(tester), colorScheme.surface), greaterThanOrEqualTo(4.5));
 
       await pumpFilters(tester, theme: theme, category: ExerciseCategory.cardio);
 
@@ -49,6 +57,17 @@ void main() {
         greaterThanOrEqualTo(4.5),
         reason: 'a selected chip fills with primaryContainer, and the glyph has to be inked for it',
       );
+      expect(
+        contrastRatio(cardioLabelColor(tester), colorScheme.primaryContainer),
+        greaterThanOrEqualTo(4.5),
+        reason: "Material inks a selected ChoiceChip's label with onSecondaryContainer - coral, on this app's green fill",
+      );
+    });
+
+    testWidgets('a selected chip inks its label and its glyph the same (${brightness.name})', (tester) async {
+      await pumpFilters(tester, theme: brightness == Brightness.light ? VTTheme.light : VTTheme.dark, category: ExerciseCategory.cardio);
+
+      expect(cardioLabelColor(tester), cardioIconColor(tester));
     });
   }
 }
