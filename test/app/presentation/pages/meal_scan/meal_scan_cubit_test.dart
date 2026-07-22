@@ -65,7 +65,7 @@ void main() {
       return CubitsFactories.buildMealScanCubit(imagePickerService: _pickerReturning(pickedMeal), scanMealUseCase: scanMealUseCase);
     },
     act: (cubit) => cubit.scanMeal(source: .camera),
-    expectPresentation: () => [isA<MealScanShowLoading>(), isA<MealScanHideLoading>(), isA<MealScanFoundNothing>()],
+    expectPresentation: () => [isA<MealScanScanning>(), isA<MealScanHideLoading>(), isA<MealScanFoundNothing>()],
   );
 
   blocPresentationTest<MealScanCubit, MealScanState, MealScanPresentationEvent>(
@@ -77,7 +77,7 @@ void main() {
     },
     act: (cubit) => cubit.scanMeal(source: .camera),
     expectPresentation: () => [
-      isA<MealScanShowLoading>(),
+      isA<MealScanScanning>(),
       isA<MealScanHideLoading>(),
       isA<MealScanError>().having((event) => event.message, 'message', 'boom'),
     ],
@@ -142,7 +142,7 @@ void main() {
       await cubit.logMeal();
     },
     expectPresentation: () => [
-      isA<MealScanShowLoading>(),
+      isA<MealScanScanning>(),
       isA<MealScanHideLoading>(),
       isA<MealScanShowLoading>(),
       isA<MealScanHideLoading>(),

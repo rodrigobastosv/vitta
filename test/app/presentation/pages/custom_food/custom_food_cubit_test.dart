@@ -136,7 +136,7 @@ void main() {
       return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
-    expectPresentation: () => [isA<CustomFoodShowLoading>(), isA<CustomFoodHideLoading>(), isA<CustomFoodScanFoundNothing>()],
+    expectPresentation: () => [isA<CustomFoodScanning>(), isA<CustomFoodHideLoading>(), isA<CustomFoodScanFoundNothing>()],
   );
 
   blocPresentationTest<CustomFoodCubit, CustomFoodState, CustomFoodPresentationEvent>(
@@ -155,7 +155,7 @@ void main() {
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
     expectPresentation: () => [
-      isA<CustomFoodShowLoading>(),
+      isA<CustomFoodScanning>(),
       isA<CustomFoodHideLoading>(),
       isA<CustomFoodError>().having((event) => event.message, 'message', 'boom'),
     ],

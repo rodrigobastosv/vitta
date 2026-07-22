@@ -52,7 +52,7 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     if (pickedImage == null) {
       return;
     }
-    emitPresentation(CustomFoodShowLoading());
+    emitPresentation(CustomFoodScanning(imageBytes: pickedImage.bytes));
     final scannedFactsResult = await _scanNutritionLabelUseCase(imagePath: pickedImage.path);
     emitPresentation(CustomFoodHideLoading());
     scannedFactsResult.when(_onScanFailed, _applyScannedFacts);

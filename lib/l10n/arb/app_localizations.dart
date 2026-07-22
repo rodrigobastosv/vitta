@@ -1304,6 +1304,18 @@ abstract class AppLocalizations {
   /// **'Enter the values manually, or try another photo.'**
   String get dietNutritionScanNoData;
 
+  /// No description provided for @dietNutritionScanningCaptionReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading the label…'**
+  String get dietNutritionScanningCaptionReading;
+
+  /// No description provided for @dietNutritionScanningCaptionExtracting.
+  ///
+  /// In en, this message translates to:
+  /// **'Extracting the nutrition facts…'**
+  String get dietNutritionScanningCaptionExtracting;
+
   /// No description provided for @mealScanTitle.
   ///
   /// In en, this message translates to:
@@ -1343,8 +1355,26 @@ abstract class AppLocalizations {
   /// No description provided for @mealScanNoData.
   ///
   /// In en, this message translates to:
-  /// **'We couldn\'t spot any food in that photo. Try another one with a clearer view of the plate.'**
+  /// **'We couldn\'t spot any food in that photo. Frame the whole plate in good light, get a little closer, and try again.'**
   String get mealScanNoData;
+
+  /// No description provided for @mealScanScanningCaptionLooking.
+  ///
+  /// In en, this message translates to:
+  /// **'Looking at your plate…'**
+  String get mealScanScanningCaptionLooking;
+
+  /// No description provided for @mealScanScanningCaptionIdentifying.
+  ///
+  /// In en, this message translates to:
+  /// **'Identifying the food…'**
+  String get mealScanScanningCaptionIdentifying;
+
+  /// No description provided for @mealScanScanningCaptionEstimating.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimating portions…'**
+  String get mealScanScanningCaptionEstimating;
 
   /// No description provided for @mealScanItemsTitle.
   ///
@@ -1352,10 +1382,28 @@ abstract class AppLocalizations {
   /// **'Detected items'**
   String get mealScanItemsTitle;
 
+  /// No description provided for @mealScanFoundCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{Found 1 item} other{Found {count} items}}'**
+  String mealScanFoundCount(int count);
+
+  /// No description provided for @mealScanEstimatedTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'~{calories} kcal estimated'**
+  String mealScanEstimatedTotal(int calories);
+
+  /// No description provided for @mealScanPortionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Portion'**
+  String get mealScanPortionLabel;
+
   /// No description provided for @mealScanItemsSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Adjust the amounts, untick anything you don\'t want, then add it to your day.'**
+  /// **'These macros are estimates — adjust the amounts, untick anything you don\'t want, then add it to your day.'**
   String get mealScanItemsSubtitle;
 
   /// No description provided for @mealScanMealTypeTitle.

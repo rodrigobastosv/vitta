@@ -29,7 +29,7 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
       return;
     }
     emit(state.copyWith(imageBytes: pickedImage.bytes));
-    emitPresentation(MealScanShowLoading());
+    emitPresentation(MealScanScanning(imageBytes: pickedImage.bytes));
     final scannedMealResult = await _scanMealUseCase(imagePath: pickedImage.path);
     emitPresentation(MealScanHideLoading());
     scannedMealResult.when(_onScanFailed, _applyScannedMeal);

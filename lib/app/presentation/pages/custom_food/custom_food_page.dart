@@ -8,6 +8,7 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
 import 'package:vitta/app/design_system/components/general/vt_photo_header.dart';
+import 'package:vitta/app/design_system/components/general/vt_scanning_overlay.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
@@ -29,6 +30,13 @@ class CustomFoodPage extends StatelessWidget {
         switch (event) {
           case CustomFoodShowLoading():
             context.showLoading();
+          case CustomFoodScanning(:final imageBytes):
+            context.showLoading(
+              widget: VTScanningOverlay(
+                imageBytes: imageBytes,
+                captions: [l10n.dietNutritionScanningCaptionReading, l10n.dietNutritionScanningCaptionExtracting],
+              ),
+            );
           case CustomFoodHideLoading():
             context.hideLoading();
           case CustomFoodIncomplete():

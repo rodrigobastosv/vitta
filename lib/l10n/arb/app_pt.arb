@@ -294,15 +294,37 @@
   "dietScanLabelAction": "Escanear tabela nutricional",
   "dietNutritionScanNoDataTitle": "Não deu para ler a tabela",
   "dietNutritionScanNoData": "Preencha os valores manualmente, ou tente outra foto.",
+  "dietNutritionScanningCaptionReading": "Lendo o rótulo…",
+  "dietNutritionScanningCaptionExtracting": "Extraindo as informações nutricionais…",
   "mealScanTitle": "Escanear refeição",
   "mealScanIntroTitle": "Fotografe sua refeição",
   "mealScanIntroMessage": "Tire uma foto do seu prato e identificamos os itens e estimamos os macros para você.",
   "mealScanTakePhotoAction": "Tirar uma foto",
   "mealScanRetakeAction": "Tentar outra foto",
   "mealScanNoDataTitle": "Nenhum alimento detectado",
-  "mealScanNoData": "Não encontramos nenhum alimento nessa foto. Tente outra com o prato mais visível.",
+  "mealScanNoData": "Não encontramos nenhum alimento nessa foto. Enquadre o prato inteiro com boa luz, chegue um pouco mais perto e tente de novo.",
+  "mealScanScanningCaptionLooking": "Olhando para o seu prato…",
+  "mealScanScanningCaptionIdentifying": "Identificando os alimentos…",
+  "mealScanScanningCaptionEstimating": "Estimando as porções…",
   "mealScanItemsTitle": "Itens detectados",
-  "mealScanItemsSubtitle": "Ajuste as quantidades, desmarque o que não quiser e adicione ao seu dia.",
+  "mealScanFoundCount": "{count, plural, =1{1 item encontrado} other{{count} itens encontrados}}",
+  "@mealScanFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealScanEstimatedTotal": "~{calories} kcal estimadas",
+  "@mealScanEstimatedTotal": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "mealScanPortionLabel": "Porção",
+  "mealScanItemsSubtitle": "Estes macros são estimativas — ajuste as quantidades, desmarque o que não quiser e adicione ao seu dia.",
   "mealScanMealTypeTitle": "Adicionar à refeição",
   "mealScanLogAction": "Adicionar ao diário",
   "mealScanIncomplete": "Escolha pelo menos um item com uma quantidade válida.",

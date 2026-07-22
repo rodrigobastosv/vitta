@@ -48,18 +48,24 @@ class _ScannedMealItemCardState extends State<ScannedMealItemCard> {
                 Text(entry.item.name, style: VTTextStyles.bodyStrong(context).copyWith(color: nameColor)),
                 const VTGap.s(),
                 Row(
+                  crossAxisAlignment: .end,
                   children: [
                     SizedBox(
-                      width: 96,
+                      width: 116,
                       child: TextField(
                         controller: _controller,
                         enabled: entry.isIncluded,
                         onChanged: widget.onGramsChanged,
                         keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        style: VTTextStyles.bodyStrong(context),
                         decoration: InputDecoration(
                           isDense: true,
+                          labelText: l10n.mealScanPortionLabel,
                           suffixText: l10n.dietGramsUnit,
+                          suffixIcon: Icon(Icons.edit_outlined, size: 16, color: colorScheme.onSurfaceVariant),
+                          suffixIconConstraints: const BoxConstraints(minWidth: 28),
                           contentPadding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.s),
+                          border: const OutlineInputBorder(borderRadius: VTRadius.borderRadiusM),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: VTRadius.borderRadiusM,
                             borderSide: BorderSide(color: colorScheme.primary, width: 2),
@@ -68,7 +74,11 @@ class _ScannedMealItemCardState extends State<ScannedMealItemCard> {
                       ),
                     ),
                     const Spacer(),
-                    if (entry.isIncluded) VTBadge(label: l10n.dietMealCalories(entry.calories.round()), color: colorScheme.primary),
+                    if (entry.isIncluded)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: VTSpacing.s),
+                        child: VTBadge(label: l10n.dietMealCalories(entry.calories.round()), color: colorScheme.primary),
+                      ),
                   ],
                 ),
               ],
