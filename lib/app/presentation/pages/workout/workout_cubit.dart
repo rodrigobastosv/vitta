@@ -109,7 +109,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     // landed, since the summary reads its progression and its calorie estimate
     // from exactly those.
     if (wasUnfinishedToday && state.isFinished) {
-      Log.action('workout_session_finished');
+      Log.action('workout_finished', data: {'exercises': state.exercises.length, 'sets': state.totalSets});
       emitPresentation(WorkoutSessionFinished());
     }
   }
@@ -213,16 +213,11 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (completed && workoutExercise.sets.isEmpty) {
       return;
     }
-    final wasFinished = state.isFinished;
     final completedResult = await _setWorkoutExerciseCompletedUseCase(workoutExerciseId: workoutExercise.id, completed: completed);
     await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
       Log.action(completed ? 'workout_exercise_completed' : 'workout_exercise_reopened');
       return loadDate(state.date);
     });
-    if (!wasFinished && state.isFinished) {
-      Log.action('workout_finished', data: {'exercises': state.exercises.length, 'sets': state.totalSets});
-      emitPresentation(WorkoutFinished());
-    }
   }
 
   Future<void> deleteSet({required String setId}) async {
