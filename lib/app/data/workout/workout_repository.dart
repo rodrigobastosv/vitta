@@ -6,6 +6,7 @@ import 'package:vitta/app/data/workout/datasources/supabase/supabase_routine_dat
 import 'package:vitta/app/data/workout/datasources/supabase/supabase_workout_datasource.dart';
 import 'package:vitta/app/domain/workout/entities/daily_workout.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression_point.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
@@ -37,12 +38,14 @@ class WorkoutRepository {
 
   Future<void> markIntroSeen() => _workoutLocalDataSource.markIntroSeen();
 
-  Future<Result<VTError, List<Exercise>>> searchExercises({required String query, MuscleGroup? muscleGroup}) =>
-      _supabaseExerciseDataSource.searchCatalog(query: query, muscleGroup: muscleGroup);
+  Future<Result<VTError, List<Exercise>>> searchExercises({required String query, MuscleGroup? muscleGroup, ExerciseCategory? category}) =>
+      _supabaseExerciseDataSource.searchCatalog(query: query, muscleGroup: muscleGroup, category: category);
 
-  Future<Result<VTError, Exercise>> getExercise({required String exerciseId}) => _supabaseExerciseDataSource.getExercise(exerciseId: exerciseId);
+  Future<Result<VTError, Exercise>> getExercise({required String exerciseId}) =>
+      _supabaseExerciseDataSource.getExercise(exerciseId: exerciseId);
 
-  Future<Result<VTError, List<Workout>>> getWorkoutsForDate({required DateTime date}) => _supabaseWorkoutDataSource.getWorkoutsInRange(from: date, to: date);
+  Future<Result<VTError, List<Workout>>> getWorkoutsForDate({required DateTime date}) =>
+      _supabaseWorkoutDataSource.getWorkoutsInRange(from: date, to: date);
 
   Future<Result<VTError, List<Workout>>> getWorkoutsInRange({required DateTime from, required DateTime to}) =>
       _supabaseWorkoutDataSource.getWorkoutsInRange(from: from, to: to);
@@ -50,7 +53,8 @@ class WorkoutRepository {
   Future<Result<VTError, Workout>> createWorkout({required DateTime performedDate, String? notes, String? routineId}) =>
       _supabaseWorkoutDataSource.createWorkout(performedDate: performedDate, notes: notes, routineId: routineId);
 
-  Future<Result<VTError, void>> deleteWorkout({required String workoutId}) => _supabaseWorkoutDataSource.deleteWorkout(workoutId: workoutId);
+  Future<Result<VTError, void>> deleteWorkout({required String workoutId}) =>
+      _supabaseWorkoutDataSource.deleteWorkout(workoutId: workoutId);
 
   Future<Result<VTError, WorkoutExercise>> addWorkoutExercise({required String workoutId, required String exerciseId}) =>
       _supabaseWorkoutDataSource.addWorkoutExercise(workoutId: workoutId, exerciseId: exerciseId);
@@ -77,7 +81,8 @@ class WorkoutRepository {
   Future<Result<VTError, Routine>> updateRoutine({required String routineId, required String name, required List<String> exerciseIds}) =>
       _supabaseRoutineDataSource.updateRoutine(routineId: routineId, name: name, exerciseIds: exerciseIds);
 
-  Future<Result<VTError, void>> deleteRoutine({required String routineId}) => _supabaseRoutineDataSource.deleteRoutine(routineId: routineId);
+  Future<Result<VTError, void>> deleteRoutine({required String routineId}) =>
+      _supabaseRoutineDataSource.deleteRoutine(routineId: routineId);
 
   Future<Result<VTError, void>> reorderRoutines({required List<String> orderedRoutineIds}) =>
       _supabaseRoutineDataSource.reorderRoutines(orderedRoutineIds: orderedRoutineIds);
@@ -91,7 +96,8 @@ class WorkoutRepository {
     final lastRoutineIdResult = await _supabaseRoutineDataSource.getLastUsedRoutineId();
     return lastRoutineIdResult.when(
       Failure.new,
-      (lastRoutineId) => Success(RoutineCycle(routines: routinesResult.when((_) => const [], (value) => value), lastRoutineId: lastRoutineId)),
+      (lastRoutineId) =>
+          Success(RoutineCycle(routines: routinesResult.when((_) => const [], (value) => value), lastRoutineId: lastRoutineId)),
     );
   }
 

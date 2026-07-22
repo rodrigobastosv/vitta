@@ -141,6 +141,18 @@ void main() {
     expect((repsTop - loadTop).abs(), lessThan(4), reason: 'the reps stepper and the load field share a top edge');
   });
 
+  testWidgets('a cardio exercise is logged as one effort, so the sheet never says "set"', (tester) async {
+    await pumpLogSetSheet(tester, isCardio: true);
+
+    expect(find.text('Log effort'), findsOneWidget);
+    expect(find.text('Add set'), findsNothing);
+
+    await pumpLogSetSheet(tester, isCardio: true, editing: true);
+
+    expect(find.text('Edit effort'), findsOneWidget);
+    expect(find.text('Edit set'), findsNothing);
+  });
+
   testWidgets('a cardio exercise asks for duration and distance, not reps and load', (tester) async {
     await pumpLogSetSheet(tester, isCardio: true);
 
@@ -163,7 +175,7 @@ void main() {
     await tester.enterText(find.byType(TextField).at(0), '25');
     await tester.enterText(find.byType(TextField).at(1), '30');
     await tester.enterText(find.byType(TextField).at(2), '5');
-    await tester.tap(find.text('Save set'));
+    await tester.tap(find.text('Save effort'));
     await tester.pump();
 
     expect(submitted?.durationSeconds, 1530);
@@ -182,7 +194,7 @@ void main() {
       },
     );
 
-    await tester.tap(find.text('Save set'));
+    await tester.tap(find.text('Save effort'));
     await tester.pump();
 
     expect(submitted, isNull);
@@ -201,7 +213,7 @@ void main() {
     );
 
     await tester.enterText(find.byType(TextField).at(0), '20');
-    await tester.tap(find.text('Save set'));
+    await tester.tap(find.text('Save effort'));
     await tester.pump();
 
     expect(submitted?.durationSeconds, 1200);

@@ -177,7 +177,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
 
   Future<Result<VTError, void>> repeatLastSet({required WorkoutExercise workoutExercise}) async {
     final last = workoutExercise.sets.lastOrNull;
-    if (last == null) {
+    if (last == null || workoutExercise.isCardio) {
       return const Success(null);
     }
     return logSet(workoutExerciseId: workoutExercise.id, input: SetInput.fromSet(last));

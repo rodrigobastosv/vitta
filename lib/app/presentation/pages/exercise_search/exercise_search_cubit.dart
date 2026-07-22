@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
@@ -47,10 +48,23 @@ class ExerciseSearchCubit extends PresentationCubit<ExerciseSearchState, Exercis
     await _runSearch();
   }
 
+  Future<void> changeCategory(ExerciseCategory? category) async {
+    emit(state.copyWith(category: category, clearCategory: category == null));
+    await _runSearch();
+  }
+
+  Future<void> clearFilters() async {
+    emit(state.copyWith(clearMuscleGroup: true, clearCategory: true));
+    await _runSearch();
+  }
+
   Future<void> _runSearch() async {
     emitPresentation(ExerciseSearchShowLoading());
-    final exercisesResult = await _searchExercisesUseCase(query: state.query, muscleGroup: state.muscleGroup);
+    final exercisesResult = await _searchExercisesUseCase(query: state.query, muscleGroup: state.muscleGroup, category: state.category);
     emitPresentation(ExerciseSearchHideLoading());
-    exercisesResult.when((error) => emitPresentation(ExerciseSearchError(message: error.message)), (value) => emit(state.copyWith(results: value)));
+    exercisesResult.when(
+      (error) => emitPresentation(ExerciseSearchError(message: error.message)),
+      (value) => emit(state.copyWith(results: value)),
+    );
   }
 }

@@ -11,10 +11,21 @@ import 'package:vitta/app/presentation/general/workout_duration_format.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class WorkoutSetRow extends StatelessWidget {
-  const WorkoutSetRow({required this.set, required this.position, required this.unitSystem, required this.color, this.onEdit, this.onDelete, super.key});
+  const WorkoutSetRow({
+    required this.set,
+    required this.position,
+    required this.unitSystem,
+    required this.color,
+    this.onEdit,
+    this.onDelete,
+    super.key,
+  });
 
   final WorkoutSet set;
-  final int position;
+
+  // Null on a cardio effort: there is only ever one of them, so numbering it "1"
+  // would advertise a second (issue #212).
+  final int? position;
   final UnitSystem unitSystem;
   final Color color;
   final VoidCallback? onEdit;
@@ -35,17 +46,22 @@ class WorkoutSetRow extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
         child: Row(
           children: [
-            Container(
-              width: 26,
-              height: 26,
-              alignment: .center,
-              decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: VTRadius.borderRadiusS),
-              child: Text(
-                '$position',
-                style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
+            if (position case final position?) ...[
+              Container(
+                width: 26,
+                height: 26,
+                alignment: .center,
+                decoration: BoxDecoration(color: color.withValues(alpha: 0.14), borderRadius: VTRadius.borderRadiusS),
+                child: Text(
+                  '$position',
+                  style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
+                ),
               ),
-            ),
-            const VTGap.m(),
+              const VTGap.m(),
+            ] else ...[
+              Icon(Icons.timer_outlined, size: 20, color: color),
+              const VTGap.m(),
+            ],
             Expanded(child: Text(_primaryLabel(l10n), style: VTTextStyles.bodyStrong(context))),
             if (badgeLabel != null) VTBadge(label: badgeLabel, color: set.isBodyweight ? colorScheme.onSurfaceVariant : color),
             if (onDelete != null) ...[
@@ -68,7 +84,8 @@ class WorkoutSetRow extends StatelessWidget {
     );
   }
 
-  String _primaryLabel(AppLocalizations l10n) => set.isCardio ? formatWorkoutDuration(l10n, set.durationSeconds ?? 0) : l10n.workoutSetSummary(set.reps ?? 0);
+  String _primaryLabel(AppLocalizations l10n) =>
+      set.isCardio ? formatWorkoutDuration(l10n, set.durationSeconds ?? 0) : l10n.workoutSetSummary(set.reps ?? 0);
 
   String _load() {
     final value = unitSystem.kilogramsToDisplayLoad(set.weightKg);

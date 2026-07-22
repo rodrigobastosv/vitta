@@ -61,6 +61,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
       },
       builder: (context, cubit, state) {
         final exercise = state.workoutExercise.exercise;
+        final isCardio = state.workoutExercise.isCardio;
         final instructions = exercise.instructionsFor(l10n.localeName);
         return Scaffold(
           body: CustomScrollView(
@@ -113,7 +114,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
                             )
                           : const SizedBox.shrink(),
                     ),
-                    Text(l10n.workoutSetsLabel, style: VTTextStyles.overline(context)),
+                    Text(isCardio ? l10n.workoutEffortLabel : l10n.workoutSetsLabel, style: VTTextStyles.overline(context)),
                     const VTGap.s(),
                     VTCard(
                       child: Column(
@@ -121,19 +122,22 @@ class ExerciseWorkoutPage extends StatelessWidget {
                           if (state.workoutExercise.sets.isEmpty)
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: VTSpacing.s),
-                              child: Text(l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context)),
+                              child: Text(
+                                isCardio ? l10n.workoutNoEffortMessage : l10n.workoutNoSetsMessage,
+                                style: VTTextStyles.caption(context),
+                              ),
                             )
                           else
                             for (final (index, set) in state.workoutExercise.sets.indexed)
                               WorkoutSetRow(
-                                position: index + 1,
+                                position: isCardio ? null : index + 1,
                                 set: set,
                                 color: exercise.primaryMuscles.firstOrNull?.region.color ?? Theme.of(context).colorScheme.primary,
                                 unitSystem: extra.unitSystem,
                                 onEdit: () => showLogSetSheet(
                                   context: context,
                                   unitSystem: extra.unitSystem,
-                                  isCardio: exercise.category.isCardio,
+                                  isCardio: isCardio,
                                   set: set,
                                   onSubmit: ({required input}) => cubit.updateSet(setId: set.id, input: input),
                                 ),
@@ -143,37 +147,40 @@ class ExerciseWorkoutPage extends StatelessWidget {
                       ),
                     ),
                     const VTGap.m(),
-                    Row(
-                      children: [
-                        if (state.workoutExercise.sets.isNotEmpty) ...[
-                          Expanded(
-                            child: VTPrimaryButton(label: l10n.workoutRepeatSetAction, onPressed: cubit.repeatLastSet),
-                          ),
-                          const VTGap.s(),
-                        ],
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () => showLogSetSheet(
-                              context: context,
-                              unitSystem: extra.unitSystem,
-                              isCardio: exercise.category.isCardio,
-                              defaultLoadKg: state.workoutExercise.sets.lastOrNull?.weightKg ?? extra.defaultLoadKg,
-                              defaultReps: state.workoutExercise.sets.lastOrNull?.reps,
-                              defaultDurationSeconds: state.workoutExercise.sets.lastOrNull?.durationSeconds,
-                              defaultDistanceMeters: state.workoutExercise.sets.lastOrNull?.distanceMeters,
-                              prefill: switch ((state.workoutExercise.sets.lastOrNull, extra.defaultLoadKg)) {
-                                (final _?, _) => SetPrefill.lastSet,
-                                (null, final bodyWeight?) when bodyWeight > 0 => SetPrefill.bodyWeight,
-                                _ => SetPrefill.none,
-                              },
-                              onSubmit: ({required input}) => cubit.logSet(input: input),
+                    // A cardio exercise is one effort: once it is logged there is
+                    // nothing to add or repeat, only the row above to edit.
+                    if (state.workoutExercise.canLogSet)
+                      Row(
+                        children: [
+                          if (!isCardio && state.workoutExercise.sets.isNotEmpty) ...[
+                            Expanded(
+                              child: VTPrimaryButton(label: l10n.workoutRepeatSetAction, onPressed: cubit.repeatLastSet),
                             ),
-                            icon: const Icon(Icons.add),
-                            label: Text(l10n.workoutAddSet),
+                            const VTGap.s(),
+                          ],
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () => showLogSetSheet(
+                                context: context,
+                                unitSystem: extra.unitSystem,
+                                isCardio: isCardio,
+                                defaultLoadKg: state.workoutExercise.sets.lastOrNull?.weightKg ?? extra.defaultLoadKg,
+                                defaultReps: state.workoutExercise.sets.lastOrNull?.reps,
+                                defaultDurationSeconds: state.workoutExercise.sets.lastOrNull?.durationSeconds,
+                                defaultDistanceMeters: state.workoutExercise.sets.lastOrNull?.distanceMeters,
+                                prefill: switch ((state.workoutExercise.sets.lastOrNull, extra.defaultLoadKg)) {
+                                  (final _?, _) => SetPrefill.lastSet,
+                                  (null, final bodyWeight?) when bodyWeight > 0 => SetPrefill.bodyWeight,
+                                  _ => SetPrefill.none,
+                                },
+                                onSubmit: ({required input}) => cubit.logSet(input: input),
+                              ),
+                              icon: const Icon(Icons.add),
+                              label: Text(isCardio ? l10n.workoutLogEffortAction : l10n.workoutAddSet),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
                     if (instructions.isNotEmpty) ...[
                       const VTGap.l(),
                       Text(l10n.workoutInstructionsTitle, style: VTTextStyles.overline(context)),

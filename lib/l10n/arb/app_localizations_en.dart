@@ -1888,6 +1888,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutLogSetAction => 'Save set';
 
   @override
+  String get workoutEffortLabel => 'Effort';
+
+  @override
+  String get workoutLogEffortAction => 'Log effort';
+
+  @override
+  String get workoutEditEffortAction => 'Edit effort';
+
+  @override
+  String get workoutSaveEffortAction => 'Save effort';
+
+  @override
+  String get workoutNoEffortMessage => 'No effort logged yet.';
+
+  @override
+  String get workoutCompleteNeedsEffortTooltip => 'Log the effort before finishing this exercise';
+
+  @override
   String get workoutDeleteSetTooltip => 'Remove set';
 
   @override

@@ -13,8 +13,8 @@ import 'package:vitta/app/presentation/pages/exercise_detail/exercise_detail_ext
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_state.dart';
+import 'package:vitta/app/presentation/pages/exercise_search/widgets/exercise_filter_chips.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/widgets/exercise_search_result_tile.dart';
-import 'package:vitta/app/presentation/pages/exercise_search/widgets/muscle_group_filter.dart';
 
 class ExerciseSearchPage extends StatelessWidget {
   const ExerciseSearchPage({super.key});
@@ -36,7 +36,13 @@ class ExerciseSearchPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.s),
               child: VTSearchField(hintText: l10n.exerciseSearchHint, onSubmitted: cubit.search, onChanged: cubit.queryChanged),
             ),
-            MuscleGroupFilter(selected: state.muscleGroup, onChanged: cubit.changeMuscleGroup),
+            ExerciseFilterChips(
+              muscleGroup: state.muscleGroup,
+              category: state.category,
+              onMuscleGroupChanged: cubit.changeMuscleGroup,
+              onCategoryChanged: cubit.changeCategory,
+              onClear: cubit.clearFilters,
+            ),
             const VTGap.s(),
             Expanded(child: _Results(state: state)),
           ],

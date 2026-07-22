@@ -6,9 +6,10 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class WorkoutSetActions extends StatelessWidget {
-  const WorkoutSetActions({required this.accent, this.onAddSet, this.onRepeatSet, super.key});
+  const WorkoutSetActions({required this.accent, this.isCardio = false, this.onAddSet, this.onRepeatSet, super.key});
 
   final Color accent;
+  final bool isCardio;
   final VoidCallback? onAddSet;
   final VoidCallback? onRepeatSet;
 
@@ -22,7 +23,7 @@ class WorkoutSetActions extends StatelessWidget {
             child: FilledButton.icon(
               onPressed: onAddSet,
               icon: const Icon(Icons.add_rounded, size: 20),
-              label: Text(l10n.workoutAddSet),
+              label: Text(isCardio ? l10n.workoutLogEffortAction : l10n.workoutAddSet),
               style: FilledButton.styleFrom(
                 backgroundColor: accent.withValues(alpha: 0.14),
                 foregroundColor: accent,
