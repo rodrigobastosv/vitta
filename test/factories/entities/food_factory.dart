@@ -1,4 +1,5 @@
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_category.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
@@ -17,6 +18,7 @@ abstract class FoodFactory {
     Map<Nutrient, double> micronutrientsPer100g = const {},
     String? imageUrl,
     double? gramsPerUnit,
+    FoodCategory? category,
   }) => Food(
     id: id,
     name: name,
@@ -31,5 +33,6 @@ abstract class FoodFactory {
     micronutrientsPer100g: micronutrientsPer100g,
     imageUrl: imageUrl,
     gramsPerUnit: gramsPerUnit,
+    category: category,
   );
 }

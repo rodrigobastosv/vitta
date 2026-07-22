@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
-import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
+import 'package:vitta/app/presentation/general/food_image.dart';
 
 Future<RecipeIngredient?> showIngredientQuantitySheet({required BuildContext context, required Food food, required UnitSystem unitSystem}) =>
     showModalBottomSheet<RecipeIngredient>(
@@ -63,7 +63,7 @@ class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
         children: [
           Row(
             children: [
-              VTFoodImage(imageUrl: widget.food.imageUrl),
+              FoodImage(food: widget.food),
               const VTGap.m(),
               Expanded(child: Text(widget.food.name, style: VTTextStyles.title(context))),
             ],

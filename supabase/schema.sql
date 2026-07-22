@@ -60,6 +60,13 @@ alter table foods add column if not exists times_logged integer not null default
 alter table foods add column if not exists grams_per_unit numeric check (grams_per_unit > 0);
 alter table foods add column if not exists grams_per_unit_checked_at timestamptz;
 alter table foods alter column user_id drop not null;
+-- Coarse food group (fruit/grain/protein/...), keyed by FoodCategory.wireValue
+-- (see lib/app/domain/diet/entities/food_category.dart). Populated for curated
+-- generic foods from USDA's own foodCategory (issue #206) so a food with no
+-- photo can show a category icon instead of a generic placeholder. Nullable and
+-- unconstrained text like image_url: an unmapped value is simply read as "no
+-- category" on the app side, so a new group needs no migration here.
+alter table foods add column if not exists category text;
 
 -- 'recipe' was added for issue #63: a recipe is stored as an ordinary foods row
 -- whose macros are the per-100g roll-up of its ingredients, so logging a recipe

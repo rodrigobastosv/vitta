@@ -33,6 +33,7 @@
 // Optional env vars:
 //   CONVERTER_URL=...      converter API base (default the public deployment)
 //   UNIT_MAX_FOODS=...     stop after N foods (default: the whole catalog)
+//   UNIT_SOURCE=generic    only ask about one FoodSource (default: every source)
 //   UNIT_CONCURRENCY=4     foods asked about at once
 //   UNIT_PAGE_SIZE=100     foods fetched per query
 
@@ -71,6 +72,10 @@ Future<void> main() async {
   final maxFoods = _envInt('UNIT_MAX_FOODS');
   final concurrency = _envInt('UNIT_CONCURRENCY') ?? _defaultConcurrency;
   final pageSize = _envInt('UNIT_PAGE_SIZE') ?? _defaultPageSize;
+  // Restrict to one FoodSource.wireValue (e.g. UNIT_SOURCE=generic) so the
+  // curated common foods get unit weights first (issue #206) - they start at
+  // times_logged 0, so an unscoped run reaches them last. Unset = whole catalog.
+  final source = Platform.environment['UNIT_SOURCE']?.trim();
 
   final client = http.Client();
   var countable = 0;
@@ -90,6 +95,7 @@ Future<void> main() async {
         serviceRoleKey: serviceRoleKey,
         limit: remaining < pageSize ? remaining : pageSize,
         offset: unreachable,
+        source: source,
       );
       if (pending.isEmpty) {
         break;
@@ -133,10 +139,12 @@ Future<List<Map<String, dynamic>>> _fetchPendingFoods(
   required String serviceRoleKey,
   required int limit,
   required int offset,
+  String? source,
 }) async {
   final uri = Uri.parse(
     '$supabaseUrl/rest/v1/foods'
     '?grams_per_unit_checked_at=is.null'
+    '${source == null ? '' : '&source=eq.$source'}'
     '&select=id,name,brand'
     '&order=times_logged.desc'
     '&limit=$limit&offset=$offset',

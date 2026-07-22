@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_category.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
@@ -37,7 +38,7 @@ void main() {
     );
   });
 
-  test('fromMap parses a barcode-less generic whole food', () {
+  test('fromMap parses a barcode-less generic whole food with its category', () {
     final food = Food.fromMap(const {
       'id': 'food-1',
       'name': 'Arroz branco cozido',
@@ -49,10 +50,37 @@ void main() {
       'carbs_per_100g': 28,
       'fat_per_100g': 0.3,
       'fiber_per_100g': 0.4,
+      'category': 'grain',
     });
 
     expect(food.source, FoodSource.generic);
     expect(food.barcode, isNull);
+    expect(food.category, FoodCategory.grain);
+  });
+
+  test('fromMap leaves category null when the column is missing or unknown', () {
+    final noColumn = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Banana',
+      'source': 'open_food_facts',
+      'calories_per_100g': 89,
+      'protein_per_100g': 1.1,
+      'carbs_per_100g': 22.8,
+      'fat_per_100g': 0.3,
+    });
+    final unknown = Food.fromMap(const {
+      'id': 'food-2',
+      'name': 'Something',
+      'source': 'open_food_facts',
+      'calories_per_100g': 89,
+      'protein_per_100g': 1.1,
+      'carbs_per_100g': 22.8,
+      'fat_per_100g': 0.3,
+      'category': 'restaurant_foods',
+    });
+
+    expect(noColumn.category, isNull);
+    expect(unknown.category, isNull);
   });
 
   test('fromMap handles null brand and barcode', () {
