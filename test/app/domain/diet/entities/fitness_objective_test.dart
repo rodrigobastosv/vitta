@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vitta/app/domain/diet/entities/diet_modality.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 
 void main() {
@@ -36,15 +37,24 @@ void main() {
     }
   });
 
-  test('protein is set per kilogram of body weight, not as a share of the plate', () {
-    final goals = FitnessObjective.loseWeight.goalsFor(weightKg: weightKg, heightCm: heightCm);
-
-    expect(goals.proteinGoalGrams, closeTo(weightKg * FitnessObjective.loseWeight.proteinGramsPerKilogram, 0.001));
+  test('building muscle is a high-protein diet, so the objective carries the modality', () {
+    expect(FitnessObjective.gainMuscle.modality, DietModality.highProtein);
+    expect(FitnessObjective.maintainWeight.modality, DietModality.balanced);
   });
 
-  test('a body whose protein alone would exceed the target never yields negative carbs', () {
-    final goals = FitnessObjective.loseWeight.goalsFor(weightKg: 300, heightCm: 1);
+  test('the saved grams read back as the objective own modality, so the goals page needs no wiring', () {
+    for (final objective in FitnessObjective.values) {
+      final goals = objective.goalsFor(weightKg: weightKg, heightCm: heightCm);
 
-    expect(goals.carbsGoalGrams, 0);
+      expect(DietModality.matching(goals), objective.modality, reason: objective.name);
+    }
+  });
+
+  test('an objective survives a round trip through its wire value', () {
+    for (final objective in FitnessObjective.values) {
+      expect(FitnessObjective.fromWireValue(objective.wireValue), objective);
+    }
+    expect(FitnessObjective.fromWireValue(null), isNull);
+    expect(FitnessObjective.fromWireValue('bulk'), isNull);
   });
 }

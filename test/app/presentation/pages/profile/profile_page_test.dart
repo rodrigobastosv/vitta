@@ -36,7 +36,7 @@ void main() {
     expect(find.text('Guest'), findsOneWidget);
     expect(find.text('Sign in or create account'), findsOneWidget);
     expect(find.text('Log out'), findsNothing);
-    expect(find.text('Macro goals'), findsOneWidget);
+    expect(find.text('Your objective'), findsOneWidget);
     expect(find.text('Settings'), findsOneWidget);
   });
 

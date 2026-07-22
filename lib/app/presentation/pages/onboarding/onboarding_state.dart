@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 
 class OnboardingState extends Equatable {
   const OnboardingState({
     this.step = 0,
-    this.weightKg = defaultWeightKg,
-    this.heightCm = defaultHeightCm,
+    this.weightKg = BodyProfile.defaultWeightKg,
+    this.heightCm = BodyProfile.defaultHeightCm,
     this.objective = FitnessObjective.maintainWeight,
     this.calorieGoal,
     this.bodyProvided = false,
@@ -14,8 +15,6 @@ class OnboardingState extends Equatable {
   });
 
   static const int stepCount = 5;
-  static const double defaultWeightKg = 70;
-  static const double defaultHeightCm = 170;
 
   final int step;
   final double weightKg;

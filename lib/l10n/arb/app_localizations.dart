@@ -692,6 +692,66 @@ abstract class AppLocalizations {
   /// **'What are you aiming for?'**
   String get onboardingObjectiveTitle;
 
+  /// No description provided for @objectiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your objective'**
+  String get objectiveTitle;
+
+  /// No description provided for @objectiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your objective sets your daily calorie target and how it splits into protein, carbs and fat. Change it whenever your training does.'**
+  String get objectiveMessage;
+
+  /// No description provided for @objectiveTargetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily calorie target'**
+  String get objectiveTargetTitle;
+
+  /// No description provided for @objectiveWeightFromLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'From your latest weigh-in, {weight}'**
+  String objectiveWeightFromLatest(String weight);
+
+  /// No description provided for @objectiveWeightAssumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Assuming {weight} — log a weight for a target built on yours'**
+  String objectiveWeightAssumed(String weight);
+
+  /// No description provided for @objectiveOverwritesGoalsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving replaces your macro goals. You can still fine-tune them from the diet page.'**
+  String get objectiveOverwritesGoalsNote;
+
+  /// No description provided for @objectiveSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save objective'**
+  String get objectiveSaveAction;
+
+  /// No description provided for @objectiveSavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Objective updated'**
+  String get objectiveSavedTitle;
+
+  /// No description provided for @objectiveSavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your calorie target and macros now follow it.'**
+  String get objectiveSavedMessage;
+
+  /// No description provided for @profileObjectiveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your goal and recalculate your targets'**
+  String get profileObjectiveSubtitle;
+
   /// No description provided for @onboardingObjectiveLoseWeight.
   ///
   /// In en, this message translates to:
@@ -2533,12 +2593,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guest'**
   String get profileGuestTitle;
-
-  /// No description provided for @profileMacroGoalsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your daily calorie and macro targets'**
-  String get profileMacroGoalsSubtitle;
 
   /// No description provided for @profileSettingsSubtitle.
   ///

@@ -134,6 +134,30 @@
   "onboardingWeightLabel": "Current weight",
   "onboardingHeightLabel": "Height",
   "onboardingObjectiveTitle": "What are you aiming for?",
+  "objectiveTitle": "Your objective",
+  "objectiveMessage": "Your objective sets your daily calorie target and how it splits into protein, carbs and fat. Change it whenever your training does.",
+  "objectiveTargetTitle": "Daily calorie target",
+  "objectiveWeightFromLatest": "From your latest weigh-in, {weight}",
+  "@objectiveWeightFromLatest": {
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "objectiveWeightAssumed": "Assuming {weight} — log a weight for a target built on yours",
+  "@objectiveWeightAssumed": {
+    "placeholders": {
+      "weight": {
+        "type": "String"
+      }
+    }
+  },
+  "objectiveOverwritesGoalsNote": "Saving replaces your macro goals. You can still fine-tune them from the diet page.",
+  "objectiveSaveAction": "Save objective",
+  "objectiveSavedTitle": "Objective updated",
+  "objectiveSavedMessage": "Your calorie target and macros now follow it.",
+  "profileObjectiveSubtitle": "Set your goal and recalculate your targets",
   "onboardingObjectiveLoseWeight": "Lose weight",
   "onboardingObjectiveLoseWeightMessage": "Eat under maintenance, keep the protein high",
   "onboardingObjectiveMaintainWeight": "Maintain weight",
@@ -842,7 +866,6 @@
   "profileTitle": "Profile",
   "profileSignInAction": "Sign in or create account",
   "profileGuestTitle": "Guest",
-  "profileMacroGoalsSubtitle": "Your daily calorie and macro targets",
   "profileSettingsSubtitle": "Language, theme and units",
   "premiumTitle": "Vitta Premium",
   "premiumTagline": "AI-powered tracking, without the typing",

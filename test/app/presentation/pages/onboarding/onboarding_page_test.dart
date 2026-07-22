@@ -4,6 +4,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -50,6 +52,12 @@ void main() {
     ).thenAnswer((_) async => Success(BodyWeightLogFactory.build()));
     G.unregister<LogBodyWeightUseCase>();
     G.registerFactory<LogBodyWeightUseCase>(() => logBodyWeightUseCase);
+
+    registerFallbackValue(const BodyProfile());
+    final saveBodyProfileUseCase = MockSaveBodyProfileUseCase();
+    when(() => saveBodyProfileUseCase(any())).thenAnswer((_) async {});
+    G.unregister<SaveBodyProfileUseCase>();
+    G.registerFactory<SaveBodyProfileUseCase>(() => saveBodyProfileUseCase);
   });
 
   Future<void> advanceToAccountStep(WidgetTester tester) async {

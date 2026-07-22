@@ -326,6 +326,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingObjectiveTitle => 'What are you aiming for?';
 
   @override
+  String get objectiveTitle => 'Your objective';
+
+  @override
+  String get objectiveMessage =>
+      'Your objective sets your daily calorie target and how it splits into protein, carbs and fat. Change it whenever your training does.';
+
+  @override
+  String get objectiveTargetTitle => 'Daily calorie target';
+
+  @override
+  String objectiveWeightFromLatest(String weight) {
+    return 'From your latest weigh-in, $weight';
+  }
+
+  @override
+  String objectiveWeightAssumed(String weight) {
+    return 'Assuming $weight — log a weight for a target built on yours';
+  }
+
+  @override
+  String get objectiveOverwritesGoalsNote => 'Saving replaces your macro goals. You can still fine-tune them from the diet page.';
+
+  @override
+  String get objectiveSaveAction => 'Save objective';
+
+  @override
+  String get objectiveSavedTitle => 'Objective updated';
+
+  @override
+  String get objectiveSavedMessage => 'Your calorie target and macros now follow it.';
+
+  @override
+  String get profileObjectiveSubtitle => 'Set your goal and recalculate your targets';
+
+  @override
   String get onboardingObjectiveLoseWeight => 'Lose weight';
 
   @override
@@ -1369,9 +1404,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileGuestTitle => 'Guest';
-
-  @override
-  String get profileMacroGoalsSubtitle => 'Your daily calorie and macro targets';
 
   @override
   String get profileSettingsSubtitle => 'Language, theme and units';

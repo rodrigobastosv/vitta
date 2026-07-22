@@ -1,5 +1,7 @@
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -14,12 +16,14 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
     required this._completeOnboardingUseCase,
     required this._saveMacroGoalsUseCase,
     required this._logBodyWeightUseCase,
+    required this._saveBodyProfileUseCase,
     required this._getAppSettingsUseCase,
   }) : super(const OnboardingState());
 
   final CompleteOnboardingUseCase _completeOnboardingUseCase;
   final SaveMacroGoalsUseCase _saveMacroGoalsUseCase;
   final LogBodyWeightUseCase _logBodyWeightUseCase;
+  final SaveBodyProfileUseCase _saveBodyProfileUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
@@ -40,6 +44,7 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
 
   Future<void> completeOnboarding() async {
     if (state.bodyProvided) {
+      await _saveBodyProfileUseCase(BodyProfile(heightCm: state.heightCm, objective: state.objective));
       await _logFirstWeight();
     }
     if (state.goalsAccepted) {

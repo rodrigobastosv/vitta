@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
@@ -13,7 +14,16 @@ import '../../../../factories/entities/body_weight_log_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
-  setUpAll(() => registerFallbackValue(MacroGoals.defaultGoals));
+  setUpAll(() {
+    registerFallbackValue(MacroGoals.defaultGoals);
+    registerFallbackValue(const BodyProfile());
+  });
+
+  MockSaveBodyProfileUseCase buildProfileUseCase() {
+    final saveBodyProfileUseCase = MockSaveBodyProfileUseCase();
+    when(() => saveBodyProfileUseCase(any())).thenAnswer((_) async {});
+    return saveBodyProfileUseCase;
+  }
 
   MockLogBodyWeightUseCase buildLoggingUseCase() {
     final logBodyWeightUseCase = MockLogBodyWeightUseCase();
@@ -79,7 +89,11 @@ void main() {
     final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
     when(completeOnboardingUseCase.call).thenAnswer((_) async {});
     final logBodyWeightUseCase = buildLoggingUseCase();
-    final cubit = CubitsFactories.buildOnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase, logBodyWeightUseCase: logBodyWeightUseCase);
+    final cubit = CubitsFactories.buildOnboardingCubit(
+      completeOnboardingUseCase: completeOnboardingUseCase,
+      logBodyWeightUseCase: logBodyWeightUseCase,
+      saveBodyProfileUseCase: buildProfileUseCase(),
+    );
 
     cubit
       ..weightChanged(82.5)
@@ -108,12 +122,36 @@ void main() {
     when(
       () => logBodyWeightUseCase(loggedDate: any(named: 'loggedDate'), weightKg: any(named: 'weightKg')),
     ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
-    final cubit = CubitsFactories.buildOnboardingCubit(completeOnboardingUseCase: completeOnboardingUseCase, logBodyWeightUseCase: logBodyWeightUseCase);
+    final cubit = CubitsFactories.buildOnboardingCubit(
+      completeOnboardingUseCase: completeOnboardingUseCase,
+      logBodyWeightUseCase: logBodyWeightUseCase,
+      saveBodyProfileUseCase: buildProfileUseCase(),
+    );
 
     cubit.acceptBody();
     await cubit.completeOnboarding();
 
     verify(completeOnboardingUseCase.call).called(1);
+  });
+
+  test('the objective and height are persisted, so they can be changed later', () async {
+    final completeOnboardingUseCase = MockCompleteOnboardingUseCase();
+    when(completeOnboardingUseCase.call).thenAnswer((_) async {});
+    final saveBodyProfileUseCase = buildProfileUseCase();
+    final cubit = CubitsFactories.buildOnboardingCubit(
+      completeOnboardingUseCase: completeOnboardingUseCase,
+      logBodyWeightUseCase: buildLoggingUseCase(),
+      saveBodyProfileUseCase: saveBodyProfileUseCase,
+    );
+
+    cubit
+      ..heightChanged(183)
+      ..objectiveChanged(FitnessObjective.gainMuscle)
+      ..acceptBody();
+    await cubit.completeOnboarding();
+
+    final saved = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
+    expect(saved, const BodyProfile(heightCm: 183, objective: FitnessObjective.gainMuscle));
   });
 
   test('the objective drives the suggestion, and a slider drag overrides it', () {
