@@ -3,10 +3,10 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/text/quantity_format.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_quick_add_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
-import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/presentation/general/food_image.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class RecentFoodTile extends StatelessWidget {
@@ -29,7 +29,7 @@ class RecentFoodTile extends StatelessWidget {
       onTap: onTap,
       child: Row(
         children: [
-          VTFoodImage(imageUrl: entry.food.imageUrl),
+          FoodImage(food: entry.food),
           const VTGap.m(),
           Expanded(
             child: Column(

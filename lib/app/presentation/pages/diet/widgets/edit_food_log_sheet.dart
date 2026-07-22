@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
-import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/presentation/general/food_image.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
@@ -85,7 +85,7 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
         children: [
           Row(
             children: [
-              VTFoodImage(imageUrl: widget.entry.food.imageUrl),
+              FoodImage(food: widget.entry.food),
               const VTGap.m(),
               Expanded(child: Text(widget.entry.food.name, style: VTTextStyles.title(context))),
             ],

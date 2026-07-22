@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:vitta/app/domain/diet/entities/food_category.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
@@ -17,6 +18,7 @@ class Food extends Equatable {
     this.barcode,
     this.imageUrl,
     this.gramsPerUnit,
+    this.category,
   });
 
   factory Food.fromMap(Map<String, dynamic> row) => Food(
@@ -33,6 +35,7 @@ class Food extends Equatable {
     micronutrientsPer100g: _micronutrientsFromMap(row['micronutrients']),
     imageUrl: row['image_url'] as String?,
     gramsPerUnit: (row['grams_per_unit'] as num?)?.toDouble(),
+    category: FoodCategory.fromWireValue(row['category'] as String?),
   );
 
   static Map<Nutrient, double> _micronutrientsFromMap(dynamic raw) {
@@ -60,6 +63,8 @@ class Food extends Equatable {
 
   final double? gramsPerUnit;
 
+  final FoodCategory? category;
+
   bool get isCountable => gramsPerUnit != null;
 
   @override
@@ -77,5 +82,6 @@ class Food extends Equatable {
     micronutrientsPer100g,
     imageUrl,
     gramsPerUnit,
+    category,
   ];
 }

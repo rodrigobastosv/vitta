@@ -60,6 +60,33 @@ const _carbsNumber = '205';
 const _fatNumber = '204';
 const _fiberNumber = '291';
 
+// USDA's own food category -> FoodCategory.wireValue (see
+// lib/app/domain/diet/entities/food_category.dart and issue #206). Covers the
+// SR Legacy taxonomy too, so the same map works for both downloads; an unlisted
+// or mixed category (Restaurant Foods, Snacks, Baby Foods) maps to no category
+// and the app just shows the default placeholder for it.
+const _categoryWireValues = {
+  'Fruits and Fruit Juices': 'fruit',
+  'Vegetables and Vegetable Products': 'vegetable',
+  'Cereal Grains and Pasta': 'grain',
+  'Baked Products': 'grain',
+  'Breakfast Cereals': 'grain',
+  'Beef Products': 'protein',
+  'Pork Products': 'protein',
+  'Poultry Products': 'protein',
+  'Lamb, Veal, and Game Products': 'protein',
+  'Finfish and Shellfish Products': 'protein',
+  'Sausages and Luncheon Meats': 'protein',
+  'Dairy and Egg Products': 'dairy_egg',
+  'Legumes and Legume Products': 'legume_nut',
+  'Nut and Seed Products': 'legume_nut',
+  'Fats and Oils': 'fat_oil',
+  'Beverages': 'beverage',
+  'Sweets': 'sweet',
+  'Spices and Herbs': 'condiment',
+  'Soups, Sauces, and Gravies': 'condiment',
+};
+
 Future<void> main() async {
   final supabaseUrl = Platform.environment['SUPABASE_URL'];
   final serviceRoleKey = Platform.environment['SUPABASE_SERVICE_ROLE_KEY'];
@@ -158,6 +185,7 @@ Map<String, dynamic> _toFoodRow(_UsdaFood food, {required String locale, require
   'carbs_per_100g': food.carbs,
   'fat_per_100g': food.fat,
   'fiber_per_100g': food.fiber ?? 0,
+  'category': food.category,
 };
 
 String _rowId(int fdcId, String locale) {
@@ -320,6 +348,7 @@ class _UsdaFood {
     required this.carbs,
     required this.fat,
     required this.fiber,
+    required this.category,
   });
 
   // Keeps only foods with the four mandatory macros: fiber is optional (defaults
@@ -346,8 +375,17 @@ class _UsdaFood {
       carbs: carbs,
       fat: fat,
       fiber: amounts[_fiberNumber],
+      category: _categoryWireValues[_categoryDescription(json['foodCategory'])],
     );
   }
+
+  // foodCategory is an object ({description: ...}) in the Foundation/SR Legacy
+  // downloads, but a bare string in some exports - handle both.
+  static String? _categoryDescription(dynamic rawCategory) => switch (rawCategory) {
+    final Map<String, dynamic> map => map['description'] as String?,
+    final String description => description,
+    _ => null,
+  };
 
   static Map<String, double> _amountsByNutrientNumber(dynamic rawNutrients) {
     if (rawNutrients is! List) {
@@ -371,4 +409,5 @@ class _UsdaFood {
   final double carbs;
   final double fat;
   final double? fiber;
+  final String? category;
 }

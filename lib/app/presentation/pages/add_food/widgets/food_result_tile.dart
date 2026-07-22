@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_quick_add_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
-import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/presentation/general/food_image.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodResultTile extends StatelessWidget {
@@ -57,7 +57,7 @@ class FoodResultTile extends StatelessWidget {
         children: [
           Hero(
             tag: heroTag,
-            child: VTFoodImage(imageUrl: food.imageUrl),
+            child: FoodImage(food: food),
           ),
           const VTGap.m(),
           Expanded(

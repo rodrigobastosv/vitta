@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
@@ -8,6 +7,7 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
+import 'package:vitta/app/presentation/general/food_image.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/macro_pill.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
 
@@ -49,7 +49,7 @@ class FoodDetailsDialog extends StatelessWidget {
                     Align(
                       child: Hero(
                         tag: heroTag,
-                        child: VTFoodImage(imageUrl: food.imageUrl, size: 112),
+                        child: FoodImage(food: food, size: 112),
                       ),
                     ),
                     const VTGap.m(),
