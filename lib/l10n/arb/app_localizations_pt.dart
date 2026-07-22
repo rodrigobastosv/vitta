@@ -2294,4 +2294,61 @@ class AppLocalizationsPt extends AppLocalizations {
   String dietCopyMealsTargetBanner(String date) {
     return 'Copiando para $date';
   }
+
+  @override
+  String get progressPhotosFeatureTitle => 'Fotos de progresso';
+
+  @override
+  String get progressPhotosFeatureSubtitle => 'Veja seu corpo mudar ao longo do tempo';
+
+  @override
+  String get progressPhotosEmptyTitle => 'Nenhuma foto ainda';
+
+  @override
+  String get progressPhotosEmptyMessage => 'Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas.';
+
+  @override
+  String get progressPhotosAddAction => 'Adicionar foto';
+
+  @override
+  String get progressPhotosSaveAction => 'Salvar foto';
+
+  @override
+  String get progressPhotosAddedMessage => 'Adicionada à sua linha do tempo';
+
+  @override
+  String get progressPhotosDateLabel => 'Data';
+
+  @override
+  String get progressPhotosNoteLabel => 'Observação (opcional)';
+
+  @override
+  String get progressPhotosDeleteAction => 'Excluir';
+
+  @override
+  String get progressPhotosCloseAction => 'Fechar';
+
+  @override
+  String get progressPhotosPickerTitle => 'Escolha uma foto';
+
+  @override
+  String get progressPhotosCompareTitle => 'Comparar';
+
+  @override
+  String get progressPhotosCompareBefore => 'Antes';
+
+  @override
+  String get progressPhotosCompareAfter => 'Depois';
+
+  @override
+  String progressPhotosCompareDaysApart(int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days dias de diferença',
+      one: '1 dia de diferença',
+      zero: 'No mesmo dia',
+    );
+    return '$_temp0';
+  }
 }

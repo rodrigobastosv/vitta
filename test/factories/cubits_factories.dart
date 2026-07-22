@@ -15,6 +15,7 @@ import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart'
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
@@ -263,6 +264,18 @@ abstract class CubitsFactories {
     logBodyWeightUseCase: logBodyWeightUseCase ?? MockLogBodyWeightUseCase(),
     deleteBodyWeightLogUseCase: deleteBodyWeightLogUseCase ?? MockDeleteBodyWeightLogUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static ProgressPhotosCubit buildProgressPhotosCubit({
+    MockGetProgressPhotosUseCase? getProgressPhotosUseCase,
+    MockAddProgressPhotoUseCase? addProgressPhotoUseCase,
+    MockDeleteProgressPhotoUseCase? deleteProgressPhotoUseCase,
+    MockImagePickerService? imagePickerService,
+  }) => ProgressPhotosCubit(
+    getProgressPhotosUseCase: getProgressPhotosUseCase ?? MockGetProgressPhotosUseCase(),
+    addProgressPhotoUseCase: addProgressPhotoUseCase ?? MockAddProgressPhotoUseCase(),
+    deleteProgressPhotoUseCase: deleteProgressPhotoUseCase ?? MockDeleteProgressPhotoUseCase(),
+    imagePickerService: imagePickerService ?? MockImagePickerService(),
   );
 
   static BodyWeightHistoryCubit buildBodyWeightHistoryCubit({

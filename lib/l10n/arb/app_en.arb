@@ -1342,5 +1342,28 @@
         "type": "String"
       }
     }
+  },
+  "progressPhotosFeatureTitle": "Progress photos",
+  "progressPhotosFeatureSubtitle": "See your shape change over time",
+  "progressPhotosEmptyTitle": "No photos yet",
+  "progressPhotosEmptyMessage": "Add a photo now and then to see how your body changes over the weeks.",
+  "progressPhotosAddAction": "Add photo",
+  "progressPhotosSaveAction": "Save photo",
+  "progressPhotosAddedMessage": "Added to your timeline",
+  "progressPhotosDateLabel": "Date",
+  "progressPhotosNoteLabel": "Note (optional)",
+  "progressPhotosDeleteAction": "Delete",
+  "progressPhotosCloseAction": "Close",
+  "progressPhotosPickerTitle": "Choose a photo",
+  "progressPhotosCompareTitle": "Compare",
+  "progressPhotosCompareBefore": "Before",
+  "progressPhotosCompareAfter": "After",
+  "progressPhotosCompareDaysApart": "{days, plural, =0{Same day} =1{1 day apart} other{{days} days apart}}",
+  "@progressPhotosCompareDaysApart": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

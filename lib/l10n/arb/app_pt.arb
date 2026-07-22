@@ -1076,5 +1076,28 @@
         "type": "String"
       }
     }
+  },
+  "progressPhotosFeatureTitle": "Fotos de progresso",
+  "progressPhotosFeatureSubtitle": "Veja seu corpo mudar ao longo do tempo",
+  "progressPhotosEmptyTitle": "Nenhuma foto ainda",
+  "progressPhotosEmptyMessage": "Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas.",
+  "progressPhotosAddAction": "Adicionar foto",
+  "progressPhotosSaveAction": "Salvar foto",
+  "progressPhotosAddedMessage": "Adicionada à sua linha do tempo",
+  "progressPhotosDateLabel": "Data",
+  "progressPhotosNoteLabel": "Observação (opcional)",
+  "progressPhotosDeleteAction": "Excluir",
+  "progressPhotosCloseAction": "Fechar",
+  "progressPhotosPickerTitle": "Escolha uma foto",
+  "progressPhotosCompareTitle": "Comparar",
+  "progressPhotosCompareBefore": "Antes",
+  "progressPhotosCompareAfter": "Depois",
+  "progressPhotosCompareDaysApart": "{days, plural, =0{No mesmo dia} =1{1 dia de diferença} other{{days} dias de diferença}}",
+  "@progressPhotosCompareDaysApart": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

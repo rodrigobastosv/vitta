@@ -485,6 +485,21 @@ create table if not exists reminders (
 
 create index if not exists reminders_user_id_due_date_idx on reminders (user_id, due_date);
 
+-- Progress photos (issue #177). Private per user like reminders. The row stores
+-- the object's *path inside the bucket*, not a public URL: progress-photos is the
+-- one private bucket in the project (see below), so a viewable URL has to be
+-- signed at read time and expires - a stored URL would be dead within the hour.
+create table if not exists progress_photos (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth.users (id) on delete cascade,
+  taken_date date not null,
+  storage_path text not null,
+  note text,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists progress_photos_user_id_taken_date_idx on progress_photos (user_id, taken_date);
+
 -- Premium entitlement (issue #153). One row per user, so user_id is the primary
 -- key rather than a surrogate id: this records what a user is entitled to *now*,
 -- not a purchase history (the store keeps that).
@@ -571,6 +586,7 @@ alter table workout_sets enable row level security;
 alter table routines enable row level security;
 alter table routine_exercises enable row level security;
 alter table reminders enable row level security;
+alter table progress_photos enable row level security;
 alter table subscriptions enable row level security;
 
 -- foods is a shared catalog (see comment on the table above): anyone
@@ -780,6 +796,43 @@ create policy "Users manage their own reminders" on reminders
   for all
   using (auth.uid() = user_id)
   with check (auth.uid() = user_id);
+
+drop policy if exists "Users manage their own progress photos" on progress_photos;
+create policy "Users manage their own progress photos" on progress_photos
+  for all
+  using (auth.uid() = user_id)
+  with check (auth.uid() = user_id);
+
+-- Storage bucket for progress photos (issue #177). This is the ONE private
+-- bucket in the project: food, exercise and avatar images are all public-read
+-- because they are shown to other users or are a face the user chose to publish,
+-- whereas a progress photo is a body shot nobody but its owner ever sees. Public
+-- there would mean anyone holding the URL keeps access forever, so this bucket is
+-- public=false and every object is reachable only through a short-lived signed
+-- URL minted for its owner.
+--
+-- Every policy is scoped to the FIRST PATH SEGMENT being the caller's own user
+-- id - SupabaseProgressPhotosDataSource uploads to '<uid>/<timestamp>.<ext>' - so
+-- one user can never read or delete another's photo, unlike the public buckets
+-- where any authenticated user may upload anywhere.
+insert into storage.buckets (id, name, public)
+values ('progress-photos', 'progress-photos', false)
+on conflict (id) do nothing;
+
+drop policy if exists "Users view their own progress photos" on storage.objects;
+create policy "Users view their own progress photos" on storage.objects
+  for select
+  using (bucket_id = 'progress-photos' and auth.uid()::text = (storage.foldername(name))[1]);
+
+drop policy if exists "Users upload their own progress photos" on storage.objects;
+create policy "Users upload their own progress photos" on storage.objects
+  for insert
+  with check (bucket_id = 'progress-photos' and auth.uid()::text = (storage.foldername(name))[1]);
+
+drop policy if exists "Users delete their own progress photos" on storage.objects;
+create policy "Users delete their own progress photos" on storage.objects
+  for delete
+  using (bucket_id = 'progress-photos' and auth.uid()::text = (storage.foldername(name))[1]);
 
 -- subscriptions is the one table a user can read but never write. The absence of
 -- an insert/update/delete policy IS the security property: under RLS an operation
