@@ -53,9 +53,12 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   }
 
   Future<void> loadRecent() async {
-    emitPresentation(SleepShowLoading());
-    final recentLogsResult = await _getRecentSleepLogsUseCase(days: _recentDays);
-    emitPresentation(SleepHideLoading());
+    final recentLogsResult = await withLoadingOverlay(
+      () => _getRecentSleepLogsUseCase(days: _recentDays),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: SleepShowLoading(),
+      hideLoadingEvent: SleepHideLoading(),
+    );
     recentLogsResult.when((error) => emitPresentation(SleepError(message: error.message)), (value) => emit(SleepState(logs: value)));
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));

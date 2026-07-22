@@ -38,14 +38,14 @@ void main() {
   );
 
   blocPresentationTest<ExerciseProgressionCubit, ExerciseProgressionState, ExerciseProgressionPresentationEvent>(
-    'load brackets the fetch with loading events',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getExerciseProgressionUseCase = MockGetExerciseProgressionUseCase();
       when(() => getExerciseProgressionUseCase(exerciseId: 'exercise-1')).thenAnswer((_) async => const Success(ExerciseProgression(points: [])));
       return _buildCubit(getExerciseProgressionUseCase);
     },
     act: (cubit) => cubit.load(),
-    expectPresentation: () => [isA<ExerciseProgressionShowLoading>(), isA<ExerciseProgressionHideLoading>()],
+    expectPresentation: () => <ExerciseProgressionPresentationEvent>[],
   );
 
   blocPresentationTest<ExerciseProgressionCubit, ExerciseProgressionState, ExerciseProgressionPresentationEvent>(
@@ -56,10 +56,6 @@ void main() {
       return _buildCubit(getExerciseProgressionUseCase);
     },
     act: (cubit) => cubit.load(),
-    expectPresentation: () => [
-      isA<ExerciseProgressionShowLoading>(),
-      isA<ExerciseProgressionError>().having((event) => event.message, 'message', 'offline'),
-      isA<ExerciseProgressionHideLoading>(),
-    ],
+    expectPresentation: () => [isA<ExerciseProgressionError>().having((event) => event.message, 'message', 'offline')],
   );
 }

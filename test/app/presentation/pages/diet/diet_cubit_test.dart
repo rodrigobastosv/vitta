@@ -37,7 +37,7 @@ void main() {
   );
 
   blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
-    'shows then hides loading while loadToday runs',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
@@ -46,7 +46,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
+    expectPresentation: () => <DietPresentationEvent>[],
   );
 
   test('loadToday keeps the previous state when it fails', () async {
@@ -86,7 +86,7 @@ void main() {
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>(), isA<DietError>()],
+    expectPresentation: () => [isA<DietError>()],
   );
 
   blocTest<DietCubit, DietState>(
@@ -305,7 +305,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.onInit(),
-    expectPresentation: () => [isA<DietShowIntro>(), isA<DietShowLoading>(), isA<DietHideLoading>()],
+    expectPresentation: () => [isA<DietShowIntro>()],
   );
 
   blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
@@ -324,7 +324,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.onInit(),
-    expectPresentation: () => [isA<DietShowLoading>(), isA<DietHideLoading>()],
+    expectPresentation: () => <DietPresentationEvent>[],
   );
 
   test('markIntroSeen records that the intro was seen', () async {

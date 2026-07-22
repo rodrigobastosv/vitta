@@ -29,10 +29,16 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
   void onInit() => loadRecent();
 
   Future<void> loadRecent() async {
-    emitPresentation(BodyWeightShowLoading());
-    final recentLogsResult = await _getRecentBodyWeightLogsUseCase(days: _recentDays);
-    emitPresentation(BodyWeightHideLoading());
-    recentLogsResult.when((error) => emitPresentation(BodyWeightError(message: error.message)), (value) => emit(BodyWeightState(logs: value)));
+    final recentLogsResult = await withLoadingOverlay(
+      () => _getRecentBodyWeightLogsUseCase(days: _recentDays),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: BodyWeightShowLoading(),
+      hideLoadingEvent: BodyWeightHideLoading(),
+    );
+    recentLogsResult.when(
+      (error) => emitPresentation(BodyWeightError(message: error.message)),
+      (value) => emit(BodyWeightState(logs: value)),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
@@ -40,10 +46,10 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
 
   Future<void> logWeight({required DateTime loggedDate, required double weightKg}) async {
     final loggedResult = await _logBodyWeightUseCase(loggedDate: loggedDate, weightKg: weightKg);
-    await loggedResult.when((error) => Future.sync(() => emitPresentation(BodyWeightError(message: error.message))), (_) {
+    await loggedResult.when((error) => Future.sync(() => emitPresentation(BodyWeightError(message: error.message))), (_) async {
       Log.action('body_weight_logged', data: {'weight_kg': weightKg});
       emitPresentation(BodyWeightLogged());
-      return loadRecent();
+      await loadRecent();
     });
   }
 

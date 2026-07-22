@@ -37,11 +37,7 @@ void main() {
       return CubitsFactories.buildRoutinesCubit(getRoutinesUseCase: getRoutinesUseCase);
     },
     act: (cubit) => cubit.loadRoutines(),
-    expectPresentation: () => [
-      isA<RoutinesShowLoading>(),
-      isA<RoutinesHideLoading>(),
-      isA<RoutinesError>().having((event) => event.message, 'message', 'offline'),
-    ],
+    expectPresentation: () => [isA<RoutinesError>().having((event) => event.message, 'message', 'offline')],
   );
 
   test('deleting a routine reloads the list so the cycle reflects it', () async {

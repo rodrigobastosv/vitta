@@ -18,9 +18,12 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
   void onInit() => loadRoutines();
 
   Future<void> loadRoutines() async {
-    emitPresentation(RoutinesShowLoading());
-    final routinesResult = await _getRoutinesUseCase();
-    emitPresentation(RoutinesHideLoading());
+    final routinesResult = await withLoadingOverlay(
+      _getRoutinesUseCase.call,
+      showOverlay: state.isLoaded,
+      showLoadingEvent: RoutinesShowLoading(),
+      hideLoadingEvent: RoutinesHideLoading(),
+    );
     routinesResult.when((error) => emitPresentation(RoutinesError(message: error.message)), (value) => emit(RoutinesState(routines: value)));
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));

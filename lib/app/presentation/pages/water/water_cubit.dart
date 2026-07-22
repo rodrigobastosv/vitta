@@ -45,10 +45,13 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   void onInit() => loadToday();
 
   Future<void> loadToday() async {
-    emitPresentation(WaterShowLoading());
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
-    final dailyWaterResult = await _getDailyWaterUseCase(date: _today);
-    emitPresentation(WaterHideLoading());
+    final dailyWaterResult = await withLoadingOverlay(
+      () => _getDailyWaterUseCase(date: _today),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: WaterShowLoading(),
+      hideLoadingEvent: WaterHideLoading(),
+    );
     dailyWaterResult.when(
       (error) => emitPresentation(WaterError(message: error.message)),
       (value) => emit(WaterState(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),

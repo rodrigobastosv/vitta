@@ -36,9 +36,12 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
 
   Future<void> loadDate(DateTime date) async {
     final day = _dateOnly(date);
-    emitPresentation(ReminderShowLoading());
-    final remindersResult = await _getRemindersForDateUseCase(date: day);
-    emitPresentation(ReminderHideLoading());
+    final remindersResult = await withLoadingOverlay(
+      () => _getRemindersForDateUseCase(date: day),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: ReminderShowLoading(),
+      hideLoadingEvent: ReminderHideLoading(),
+    );
     remindersResult.when(
       (error) => emitPresentation(ReminderError(message: error.message)),
       (reminders) => emit(ReminderState(date: day, reminders: reminders, filter: state.filter)),

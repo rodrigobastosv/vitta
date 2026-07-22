@@ -28,9 +28,12 @@ class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, Remin
   }
 
   Future<void> loadMonth(DateTime month) async {
-    emitPresentation(ReminderHistoryShowLoading());
-    final remindersResult = await _getRemindersInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0));
-    emitPresentation(ReminderHistoryHideLoading());
+    final remindersResult = await withLoadingOverlay(
+      () => _getRemindersInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0)),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: ReminderHistoryShowLoading(),
+      hideLoadingEvent: ReminderHistoryHideLoading(),
+    );
     remindersResult.when(
       (error) => emitPresentation(ReminderHistoryError(message: error.message)),
       (remindersInMonth) => emit(state.copyWith(remindersInMonth: remindersInMonth, isLoaded: true)),

@@ -28,11 +28,16 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
   void onInit() => refresh();
 
   Future<void> refresh() async {
-    emitPresentation(SleepHistoryShowLoading());
-    emit(state.copyWith(durationGoalHours: _getSleepGoalUseCase()));
-    await _loadMonth(state.month);
-    await _loadTrend(state.trendRange);
-    emitPresentation(SleepHistoryHideLoading());
+    await withLoadingOverlay(
+      () async {
+        emit(state.copyWith(durationGoalHours: _getSleepGoalUseCase()));
+        await _loadMonth(state.month);
+        await _loadTrend(state.trendRange);
+      },
+      showOverlay: state.isLoaded,
+      showLoadingEvent: SleepHistoryShowLoading(),
+      hideLoadingEvent: SleepHistoryHideLoading(),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

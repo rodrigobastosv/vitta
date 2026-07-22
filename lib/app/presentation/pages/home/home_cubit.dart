@@ -60,22 +60,25 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   void onInit() => refresh();
 
   Future<void> refresh() async {
-    emitPresentation(HomeShowLoading());
     final today = _today;
+    await withLoadingOverlay(
+      () async {
+        final dailyMacrosResult = await _getDailyMacrosUseCase(date: today);
+        dailyMacrosResult.when(
+          (error) => emitPresentation(HomeError(message: error.message)),
+          (value) => emit(state.copyWith(isLoaded: true, dailyMacros: value, macroGoals: _getMacroGoalsUseCase(), user: _getUserUseCase())),
+        );
 
-    final dailyMacrosResult = await _getDailyMacrosUseCase(date: today);
-    dailyMacrosResult.when(
-      (error) => emitPresentation(HomeError(message: error.message)),
-      (value) => emit(state.copyWith(isLoaded: true, dailyMacros: value, macroGoals: _getMacroGoalsUseCase(), user: _getUserUseCase())),
+        await _loadWater(today);
+        await _loadNextReminder(today);
+        await _loadWorkout(today);
+        await _loadSleep();
+        await _loadWeight();
+      },
+      showOverlay: state.isLoaded,
+      showLoadingEvent: HomeShowLoading(),
+      hideLoadingEvent: HomeHideLoading(),
     );
-
-    await _loadWater(today);
-    await _loadNextReminder(today);
-    await _loadWorkout(today);
-    await _loadSleep();
-    await _loadWeight();
-
-    emitPresentation(HomeHideLoading());
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

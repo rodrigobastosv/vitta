@@ -53,14 +53,14 @@ void main() {
   );
 
   blocPresentationTest<ReminderCubit, ReminderState, ReminderPresentationEvent>(
-    'loadDate emits show/hide loading',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getReminders = MockGetRemindersForDateUseCase();
       when(() => getReminders(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
       return CubitsFactories.buildReminderCubit(getRemindersForDateUseCase: getReminders);
     },
     act: (cubit) => cubit.loadDate(today),
-    expectPresentation: () => [isA<ReminderShowLoading>(), isA<ReminderHideLoading>()],
+    expectPresentation: () => <ReminderPresentationEvent>[],
   );
 
   blocTest<ReminderCubit, ReminderState>(

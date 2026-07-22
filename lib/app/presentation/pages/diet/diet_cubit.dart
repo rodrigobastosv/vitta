@@ -80,10 +80,13 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   }
 
   Future<void> _loadDate(DateTime date) async {
-    emitPresentation(DietShowLoading());
     final macroGoals = _getMacroGoalsUseCase();
-    final dailyMacrosResult = await _getDailyMacrosUseCase(date: date);
-    emitPresentation(DietHideLoading());
+    final dailyMacrosResult = await withLoadingOverlay(
+      () => _getDailyMacrosUseCase(date: date),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: DietShowLoading(),
+      hideLoadingEvent: DietHideLoading(),
+    );
     dailyMacrosResult.when(
       (error) => emitPresentation(DietError(message: error.message, date: date)),
       (value) => emit(state.copyWith(isLoaded: true, date: date, dailyMacros: value, macroGoals: macroGoals)),

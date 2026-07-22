@@ -53,10 +53,8 @@ void main() {
     },
     act: (cubit) => cubit.refresh(),
     expectPresentation: () => [
-      isA<WorkoutHistoryShowLoading>(),
       isA<WorkoutHistoryError>().having((event) => event.message, 'message', 'offline'),
       isA<WorkoutHistoryError>().having((event) => event.message, 'message', 'offline'),
-      isA<WorkoutHistoryHideLoading>(),
     ],
   );
 }

@@ -79,9 +79,12 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> goToDate(DateTime date) => loadDate(date);
 
   Future<void> loadDate(DateTime date) async {
-    emitPresentation(WorkoutShowLoading());
-    final workoutsResult = await _getWorkoutsForDateUseCase(date: date);
-    emitPresentation(WorkoutHideLoading());
+    final workoutsResult = await withLoadingOverlay(
+      () => _getWorkoutsForDateUseCase(date: date),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: WorkoutShowLoading(),
+      hideLoadingEvent: WorkoutHideLoading(),
+    );
     workoutsResult.when(
       (error) => emitPresentation(WorkoutError(message: error.message, date: date)),
       (value) => emit(state.copyWith(isLoaded: true, date: date, workouts: value)),
