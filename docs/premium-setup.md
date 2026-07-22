@@ -215,19 +215,36 @@ platform simply has no purchasable offer.
 
 ### The rest is Play-side, and none of it lives in this repo
 
-Work through these in order — every one of them produces the same `PRODUCT_NOT_FOUND` when missing:
+Work through these in order:
 
 1. **Play Console → Monetize → Subscriptions**: create `vitta_premium_monthly` with a base plan, and
    **activate** both the subscription and the base plan. A draft product is not fetchable.
 2. **RevenueCat → your project → Apps → + Android**: package `com.rodrigobastosv.vitta`, and upload the
    **Play service-account JSON** (Google Cloud → IAM → service account, granted access in Play Console →
    Users and permissions). Without those credentials RevenueCat cannot validate a Play purchase.
-3. **RevenueCat → Products / Offerings**: attach the Play product to the *same* offering the iOS product is
+3. **RevenueCat → Products**: add the Play product. A Play *subscription* is identified as
+   **`subscriptionId:basePlanId`** (e.g. `vitta_premium_monthly:monthly`), not by the subscription id
+   alone the way an App Store product is — entering just `vitta_premium_monthly` is the usual reason a
+   product looks registered but never resolves.
+4. **RevenueCat → Offerings**: attach that product to a package in the *same* offering the iOS product is
    in, and make sure that offering is the **current** one — `PurchaseService.fetchOffers` reads
-   `offerings.current`.
-4. **The app must exist on a Play track.** Play Billing only serves products to a build whose package and
+   `offerings.current`, so a product sitting in Products but in no current offering is invisible to the app.
+5. **The app must exist on a Play track.** Play Billing only serves products to a build whose package and
    **signing key** match an app uploaded to Play (internal testing is enough), installed by an account on
    that track and listed under **License testing**.
+
+### Read the error text — it names which step you are on
+
+The message changes as you go, and it is the only signal that distinguishes these:
+
+| What the SDK says | What is actually wrong |
+| --- | --- |
+| `PRODUCT_NOT_FOUND` for a product id, `Could not find ProductDetails` | The build is asking Play for ids Play does not have. Either the app is configured with the **iOS key** (fixed in this repo, see above), or step 1 / 5. |
+| `You have configured the SDK with a Play Store API key, but there are no Play Store products registered in the RevenueCat dashboard for your offerings` | The **key is right** and Android is talking to the Android app. The current offering has no Play product attached — steps 3 and 4. |
+| An empty offering with no error | The dashboard is fine and the store returned nothing — step 5, or Play still propagating a just-activated product (up to a few hours). |
+
+The paywall says "unavailable" in all three cases, which is the correct thing to show while any of them is
+true.
 
 ### Why point 4 blocks testing today
 
