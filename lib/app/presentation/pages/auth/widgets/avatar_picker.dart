@@ -70,6 +70,7 @@ class AvatarPicker extends StatelessWidget {
     final l10n = context.l10n;
     final action = await showModalBottomSheet<_AvatarAction>(
       context: context,
+      routeSettings: const RouteSettings(name: 'avatarActionSheet'),
       builder: (sheetContext) => SafeArea(
         child: Column(
           mainAxisSize: .min,

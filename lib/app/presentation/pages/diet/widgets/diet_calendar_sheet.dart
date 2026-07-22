@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
 
 Future<DateTime?> showDietCalendarSheet({required BuildContext context}) => showModalBottomSheet<DateTime>(
   context: context,
+  routeSettings: const RouteSettings(name: 'dietCalendarSheet'),
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<DietCubit>(), child: const _DietCalendarSheet()),
 );

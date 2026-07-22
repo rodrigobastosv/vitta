@@ -59,6 +59,34 @@ void main() {
     verify(() => loggingService.logNavigation(action: 'push', route: 'bottomSheet')).called(1);
   });
 
+  testWidgets('logs a named sheet by its own name', (tester) async {
+    final loggingService = useMockLog();
+    await tester.pumpWidget(
+      MaterialApp(
+        navigatorObservers: [LoggingNavigatorObserver()],
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: ElevatedButton(
+                onPressed: () => showModalBottomSheet<void>(
+                  context: context,
+                  routeSettings: const RouteSettings(name: 'logSleepSheet'),
+                  builder: (_) => const SizedBox(height: 120),
+                ),
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
+
+    verify(() => loggingService.logNavigation(action: 'push', route: 'logSleepSheet')).called(1);
+  });
+
   testWidgets('logs an anonymous dialog as dialog, not unknown', (tester) async {
     final loggingService = useMockLog();
     await tester.pumpWidget(

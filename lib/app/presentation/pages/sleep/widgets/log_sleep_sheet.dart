@@ -12,6 +12,7 @@ import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_time_row.dart';
 
 Future<void> showLogSleepSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
+  routeSettings: const RouteSettings(name: 'logSleepSheet'),
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<SleepCubit>(), child: const _LogSleepSheet()),
 );

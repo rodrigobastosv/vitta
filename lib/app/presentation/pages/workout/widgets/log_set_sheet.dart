@@ -23,6 +23,7 @@ Future<void> showLogSetSheet({
   SetPrefill prefill = SetPrefill.none,
 }) => showModalBottomSheet<void>(
   context: context,
+  routeSettings: const RouteSettings(name: 'logSetSheet'),
   isScrollControlled: true,
   builder: (context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),

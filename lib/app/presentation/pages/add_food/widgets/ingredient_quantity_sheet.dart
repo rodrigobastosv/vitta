@@ -12,6 +12,7 @@ import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 Future<RecipeIngredient?> showIngredientQuantitySheet({required BuildContext context, required Food food, required UnitSystem unitSystem}) =>
     showModalBottomSheet<RecipeIngredient>(
       context: context,
+      routeSettings: const RouteSettings(name: 'ingredientQuantitySheet'),
       isScrollControlled: true,
       builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
     );

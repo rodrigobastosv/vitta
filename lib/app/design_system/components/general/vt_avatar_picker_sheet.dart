@@ -6,7 +6,7 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 Future<String?> showAvatarPickerSheet({required BuildContext context}) =>
-    showModalBottomSheet<String>(context: context, isScrollControlled: true, builder: (sheetContext) => const VTAvatarPickerSheet());
+    showModalBottomSheet<String>(context: context, routeSettings: const RouteSettings(name: 'avatarPickerSheet'), isScrollControlled: true, builder: (sheetContext) => const VTAvatarPickerSheet());
 
 class VTAvatarPickerSheet extends StatelessWidget {
   const VTAvatarPickerSheet({super.key});

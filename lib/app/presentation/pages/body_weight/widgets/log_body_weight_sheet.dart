@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart'
 
 Future<void> showLogBodyWeightSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
+  routeSettings: const RouteSettings(name: 'logBodyWeightSheet'),
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<BodyWeightCubit>(), child: const _LogBodyWeightSheet()),
 );

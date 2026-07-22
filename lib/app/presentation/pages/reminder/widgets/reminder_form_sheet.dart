@@ -13,6 +13,7 @@ import 'package:vitta/app/presentation/pages/reminder/widgets/reminder_labels.da
 Future<void> showReminderFormSheet({required BuildContext context, required ReminderCubit cubit, required DateTime date, Reminder? reminder}) =>
     showModalBottomSheet<void>(
       context: context,
+      routeSettings: const RouteSettings(name: 'reminderFormSheet'),
       isScrollControlled: true,
       builder: (sheetContext) => _ReminderFormSheet(cubit: cubit, date: date, reminder: reminder),
     );

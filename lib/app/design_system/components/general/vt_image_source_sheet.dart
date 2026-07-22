@@ -3,7 +3,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 
 Future<ImagePickerSource?> showImageSourceSheet({required BuildContext context}) =>
-    showModalBottomSheet<ImagePickerSource>(context: context, builder: (sheetContext) => const VTImageSourceSheet());
+    showModalBottomSheet<ImagePickerSource>(context: context, routeSettings: const RouteSettings(name: 'imageSourceSheet'), builder: (sheetContext) => const VTImageSourceSheet());
 
 class VTImageSourceSheet extends StatelessWidget {
   const VTImageSourceSheet({super.key});

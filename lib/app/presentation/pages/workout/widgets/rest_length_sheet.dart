@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 Future<Duration?> showRestLengthSheet({required BuildContext context, required Duration current}) => showModalBottomSheet<Duration>(
   context: context,
+  routeSettings: const RouteSettings(name: 'restLengthSheet'),
   isScrollControlled: true,
   builder: (sheetContext) => RestLengthSheet(current: current),
 );

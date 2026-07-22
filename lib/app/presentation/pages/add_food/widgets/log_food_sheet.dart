@@ -15,6 +15,7 @@ import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selectio
 Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
     showModalBottomSheet<void>(
       context: context,
+      routeSettings: const RouteSettings(name: 'logFoodSheet'),
       isScrollControlled: true,
       builder: (sheetContext) => BlocProvider.value(
         value: context.read<AddFoodCubit>(),
