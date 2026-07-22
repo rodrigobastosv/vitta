@@ -2135,6 +2135,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
 
   @override
+  String get workoutFinishedCaloriesLabel => 'Estimated burn';
+
+  @override
+  String workoutFinishedCaloriesValue(int calories) {
+    return '~$calories kcal';
+  }
+
+  @override
+  String get workoutFinishedCaloriesHint => 'Worked out from your weight, what you trained and how long it takes.';
+
+  @override
+  String get workoutFinishedCaloriesNoWeightHint => 'A rough figure — log your body weight for a closer one.';
+
+  @override
   String get workoutCompleteNeedsSetTooltip => 'Log a set before finishing this exercise';
 
   @override

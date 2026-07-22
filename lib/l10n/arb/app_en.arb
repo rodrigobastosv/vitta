@@ -1235,6 +1235,17 @@
   },
   "workoutFinishedTitle": "Workout done",
   "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session.",
+  "workoutFinishedCaloriesLabel": "Estimated burn",
+  "workoutFinishedCaloriesValue": "~{calories} kcal",
+  "@workoutFinishedCaloriesValue": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutFinishedCaloriesHint": "Worked out from your weight, what you trained and how long it takes.",
+  "workoutFinishedCaloriesNoWeightHint": "A rough figure — log your body weight for a closer one.",
   "workoutCompleteNeedsSetTooltip": "Log a set before finishing this exercise",
   "workoutProgressionTitle": "Progression",
   "workoutProgressionEmptyTitle": "No history yet",

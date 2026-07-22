@@ -969,6 +969,17 @@
   "workoutCompletedSummary": "{sets, plural, =0{Nenhuma série} =1{1 série feita} other{{sets} séries feitas}}",
   "workoutFinishedTitle": "Treino concluído",
   "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino.",
+  "workoutFinishedCaloriesLabel": "Gasto estimado",
+  "workoutFinishedCaloriesValue": "~{calories} kcal",
+  "@workoutFinishedCaloriesValue": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutFinishedCaloriesHint": "Calculado a partir do seu peso, do que você treinou e do tempo que isso leva.",
+  "workoutFinishedCaloriesNoWeightHint": "Uma estimativa grosseira — registre seu peso para chegar mais perto.",
   "workoutCompleteNeedsSetTooltip": "Registre uma série antes de concluir este exercício",
   "workoutProgressionTitle": "Progressão",
   "workoutProgressionEmptyTitle": "Ainda sem histórico",

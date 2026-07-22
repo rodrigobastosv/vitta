@@ -117,7 +117,15 @@ class WorkoutPage extends StatelessWidget {
                 ),
               ),
               const VTGap.m(),
-              if (state.isFinished) ...[const VTAppearEffect(child: WorkoutFinishedCard()), const VTGap.m()],
+              if (state.isFinished) ...[
+                VTAppearEffect(
+                  child: WorkoutFinishedCard(
+                    estimatedCalories: state.estimatedCalories(bodyWeightKg: state.latestBodyWeightKg).round(),
+                    isBodyWeightKnown: state.isBodyWeightKnown,
+                  ),
+                ),
+                const VTGap.m(),
+              ],
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(

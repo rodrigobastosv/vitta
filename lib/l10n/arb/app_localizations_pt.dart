@@ -2151,6 +2151,20 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
 
   @override
+  String get workoutFinishedCaloriesLabel => 'Gasto estimado';
+
+  @override
+  String workoutFinishedCaloriesValue(int calories) {
+    return '~$calories kcal';
+  }
+
+  @override
+  String get workoutFinishedCaloriesHint => 'Calculado a partir do seu peso, do que você treinou e do tempo que isso leva.';
+
+  @override
+  String get workoutFinishedCaloriesNoWeightHint => 'Uma estimativa grosseira — registre seu peso para chegar mais perto.';
+
+  @override
   String get workoutCompleteNeedsSetTooltip => 'Registre uma série antes de concluir este exercício';
 
   @override

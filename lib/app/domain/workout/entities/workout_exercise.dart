@@ -44,6 +44,18 @@ class WorkoutExercise extends Equatable with WorkoutVolume {
   // Logging is offered until the effort exists; after that the row is edited.
   bool get canLogSet => !isCardio || sets.isEmpty;
 
+  // How long this exercise occupied the session (issue #168). Cardio states it -
+  // duration is the whole point of a cardio effort, so that half is measured, not
+  // guessed. Strength has no clock anywhere in the schema, so a set is counted as
+  // _secondsPerStrengthSet: the work plus the rest that follows it, which is what
+  // the MET figure for resistance training already assumes is included.
+  int get estimatedActiveSeconds => isCardio ? totalDurationSeconds : sets.length * _secondsPerStrengthSet;
+
+  double estimatedCalories({required double bodyWeightKg}) =>
+      exercise.category.metValue * bodyWeightKg * estimatedActiveSeconds / Duration.secondsPerHour;
+
+  static const int _secondsPerStrengthSet = 120;
+
   @override
   List<Object?> get props => [id, exercise, position, sets, completedAt];
 }

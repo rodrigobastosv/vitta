@@ -3956,6 +3956,30 @@ abstract class AppLocalizations {
   /// **'Every exercise is checked off. Well done — see you next session.'**
   String get workoutFinishedMessage;
 
+  /// No description provided for @workoutFinishedCaloriesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated burn'**
+  String get workoutFinishedCaloriesLabel;
+
+  /// No description provided for @workoutFinishedCaloriesValue.
+  ///
+  /// In en, this message translates to:
+  /// **'~{calories} kcal'**
+  String workoutFinishedCaloriesValue(int calories);
+
+  /// No description provided for @workoutFinishedCaloriesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked out from your weight, what you trained and how long it takes.'**
+  String get workoutFinishedCaloriesHint;
+
+  /// No description provided for @workoutFinishedCaloriesNoWeightHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A rough figure — log your body weight for a closer one.'**
+  String get workoutFinishedCaloriesNoWeightHint;
+
   /// No description provided for @workoutCompleteNeedsSetTooltip.
   ///
   /// In en, this message translates to:
