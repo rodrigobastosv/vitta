@@ -65,21 +65,21 @@ class BodyWeightSummaryCard extends StatelessWidget {
     final isDown = deltaKg < 0;
     final isFlat = deltaKg.abs() < 0.05;
     final icon = isFlat
-        ? Icons.trending_flat
+        ? Icons.trending_flat_rounded
         : isDown
-        ? Icons.south
-        : Icons.north;
+        ? Icons.arrow_downward_rounded
+        : Icons.arrow_upward_rounded;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.xs),
-      decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.06), borderRadius: VTRadius.borderRadiusFull),
+      decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.08), borderRadius: VTRadius.borderRadiusFull),
       child: Row(
         mainAxisSize: .min,
         children: [
-          Icon(icon, size: 14, color: colorScheme.onSurfaceVariant),
+          Icon(icon, size: 16, color: colorScheme.onSurface),
           const VTGap.xs(),
           Text(
-            bodyWeightDisplay(l10n, unitSystem, deltaKg.abs()),
-            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant, fontWeight: FontWeight.w600),
+            bodyWeightSignedDisplay(l10n, unitSystem, deltaKg),
+            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w700),
           ),
         ],
       ),
