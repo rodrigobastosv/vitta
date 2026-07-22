@@ -8,6 +8,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/image_picker/picked_image.dart';
+import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_state.dart';
@@ -96,6 +97,7 @@ void main() {
         bytes: any(named: 'bytes'),
         fileExtension: any(named: 'fileExtension'),
         takenDate: any(named: 'takenDate'),
+        pose: ProgressPhotoPose.side,
         note: any(named: 'note'),
       ),
     ).thenAnswer((_) async => Success(ProgressPhotoFactory.build()));
@@ -105,7 +107,7 @@ void main() {
       getProgressPhotosUseCase: getProgressPhotosUseCase,
     );
 
-    await cubit.addPhoto(bytes: Uint8List(3), fileExtension: 'jpg', takenDate: DateTime(2026, 7, 18));
+    await cubit.addPhoto(bytes: Uint8List(3), fileExtension: 'jpg', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.side);
 
     verify(getProgressPhotosUseCase.call).called(1);
     expect(cubit.state.photos, isNotEmpty);
@@ -151,7 +153,7 @@ void main() {
     expect(cubit.state.photos.map((photo) => photo.id), ['photo-old']);
   });
 
-  test('months groups the photos newest month first', () {
+  test('months groups the photos newest month first, one section per day', () {
     final state = ProgressPhotosState(
       photos: [
         ProgressPhotoFactory.build(id: 'a', takenDate: DateTime(2026, 7, 18)),
@@ -161,6 +163,18 @@ void main() {
     );
 
     expect(state.months.map((section) => section.month), [DateTime(2026, 7), DateTime(2026, 6)]);
-    expect(state.months.first.photos.map((photo) => photo.id), ['a', 'b']);
+    expect(state.months.first.days.map((day) => day.day), [DateTime(2026, 7, 18), DateTime(2026, 7, 2)]);
+  });
+
+  test('a day keeps every shot taken that day, ordered front, side, back', () {
+    final state = ProgressPhotosState(
+      photos: [
+        ProgressPhotoFactory.build(id: 'back', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.back),
+        ProgressPhotoFactory.build(id: 'front', takenDate: DateTime(2026, 7, 18)),
+        ProgressPhotoFactory.build(id: 'side', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.side),
+      ],
+    );
+
+    expect(state.months.single.days.single.photos.map((photo) => photo.id), ['front', 'side', 'back']);
   });
 }

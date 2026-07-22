@@ -7,6 +7,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/data/progress_photos/datasources/supabase/requests/create_progress_photo_request.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
+import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 
 class SupabaseProgressPhotosDataSource {
   SupabaseProgressPhotosDataSource({required this._supabaseService});
@@ -41,12 +42,18 @@ class SupabaseProgressPhotosDataSource {
     }
   }
 
-  Future<Result<VTError, ProgressPhoto>> createPhoto({required String storagePath, required DateTime takenDate, String? note}) async {
+  Future<Result<VTError, ProgressPhoto>> createPhoto({
+    required String storagePath,
+    required DateTime takenDate,
+    required ProgressPhotoPose pose,
+    String? note,
+  }) async {
     try {
       final request = CreateProgressPhotoRequest(
         userId: _supabaseService.currentUserId,
         takenDate: takenDate,
         storagePath: storagePath,
+        pose: pose,
         note: note,
       );
       final row = await _supabaseService.from(.progressPhotos).insert(request.toJson()).select().single();

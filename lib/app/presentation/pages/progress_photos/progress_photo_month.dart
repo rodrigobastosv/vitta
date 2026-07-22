@@ -1,12 +1,12 @@
 import 'package:equatable/equatable.dart';
-import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/progress_photo_day.dart';
 
 class ProgressPhotoMonth extends Equatable {
-  const ProgressPhotoMonth({required this.month, required this.photos});
+  const ProgressPhotoMonth({required this.month, required this.days});
 
   final DateTime month;
-  final List<ProgressPhoto> photos;
+  final List<ProgressPhotoDay> days;
 
   @override
-  List<Object?> get props => [month, photos];
+  List<Object?> get props => [month, days];
 }

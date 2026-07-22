@@ -9,7 +9,9 @@ import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
+import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_pose_selector.dart';
 
 Future<void> showAddProgressPhotoSheet({required BuildContext context, required PickedImage pickedImage}) => showModalBottomSheet<void>(
   context: context,
@@ -35,6 +37,7 @@ class _AddProgressPhotoSheetState extends State<AddProgressPhotoSheet> {
 
   final TextEditingController _noteController = TextEditingController();
   DateTime _takenDate = DateTime.now();
+  ProgressPhotoPose _pose = ProgressPhotoPose.front;
 
   @override
   void dispose() {
@@ -62,6 +65,7 @@ class _AddProgressPhotoSheetState extends State<AddProgressPhotoSheet> {
       bytes: widget.pickedImage.bytes,
       fileExtension: widget.pickedImage.fileExtension,
       takenDate: DateTime(_takenDate.year, _takenDate.month, _takenDate.day),
+      pose: _pose,
       note: note.isEmpty ? null : note,
     );
   }
@@ -94,11 +98,31 @@ class _AddProgressPhotoSheetState extends State<AddProgressPhotoSheet> {
               trailing: const Icon(Icons.edit_outlined),
               onTap: _pickDate,
             ),
+            ProgressPhotoPoseSelector(
+              poses: ProgressPhotoPose.values,
+              selected: _pose,
+              hint: l10n.progressPhotosPoseHint,
+              onSelected: (pose) => setState(() => _pose = pose),
+            ),
+            const VTGap.m(),
             VTTextField(
               controller: _noteController,
               label: l10n.progressPhotosNoteLabel,
               prefixIcon: Icons.notes_outlined,
               textCapitalization: .sentences,
+            ),
+            const VTGap.m(),
+            Row(
+              children: [
+                Icon(Icons.lock_outline, size: 16, color: context.colorScheme.onSurfaceVariant),
+                const VTGap.xs(),
+                Expanded(
+                  child: Text(
+                    l10n.progressPhotosPrivacyHint,
+                    style: VTTextStyles.caption(context).copyWith(color: context.colorScheme.onSurfaceVariant),
+                  ),
+                ),
+              ],
             ),
             const VTGap.l(),
             VTPrimaryButton(label: l10n.progressPhotosSaveAction, onPressed: _submit),

@@ -489,14 +489,27 @@ create index if not exists reminders_user_id_due_date_idx on reminders (user_id,
 -- the object's *path inside the bucket*, not a public URL: progress-photos is the
 -- one private bucket in the project (see below), so a viewable URL has to be
 -- signed at read time and expires - a stored URL would be dead within the hour.
+--
+-- There is deliberately no unique constraint on (user_id, taken_date): a session
+-- is several shots of the same body on the same day, and pose is what tells them
+-- apart so a comparison pairs like with like (front against front, never front
+-- against back). It is nullable because photos taken before poses existed have
+-- none, and ProgressPhotoPose.fromWireValue reads that null back as 'other'.
 create table if not exists progress_photos (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
   taken_date date not null,
   storage_path text not null,
+  pose text check (pose in ('front', 'side', 'back', 'other')),
   note text,
   created_at timestamptz not null default now()
 );
+
+-- Bring existing databases up to date (the create table above only runs on a fresh db).
+alter table progress_photos add column if not exists pose text;
+alter table progress_photos drop constraint if exists progress_photos_pose_check;
+alter table progress_photos add constraint progress_photos_pose_check
+  check (pose in ('front', 'side', 'back', 'other'));
 
 create index if not exists progress_photos_user_id_taken_date_idx on progress_photos (user_id, taken_date);
 

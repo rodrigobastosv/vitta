@@ -2305,7 +2305,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressPhotosEmptyTitle => 'Nenhuma foto ainda';
 
   @override
-  String get progressPhotosEmptyMessage => 'Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas.';
+  String get progressPhotosEmptyMessage =>
+      'Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas. Só você pode vê-las.';
 
   @override
   String get progressPhotosAddAction => 'Adicionar foto';
@@ -2332,7 +2333,44 @@ class AppLocalizationsPt extends AppLocalizations {
   String get progressPhotosPickerTitle => 'Escolha uma foto';
 
   @override
+  String get progressPhotosPoseLabel => 'Ângulo';
+
+  @override
+  String get progressPhotosPoseHint => 'Marque o ângulo para comparar sempre a mesma foto ao longo do tempo.';
+
+  @override
+  String get progressPhotosPoseFront => 'Frente';
+
+  @override
+  String get progressPhotosPoseSide => 'Lado';
+
+  @override
+  String get progressPhotosPoseBack => 'Costas';
+
+  @override
+  String get progressPhotosPoseOther => 'Outro';
+
+  @override
+  String get progressPhotosPrivacyTitle => 'Só você vê essas fotos';
+
+  @override
+  String get progressPhotosPrivacyMessage =>
+      'Suas fotos ficam em uma pasta privada, ligada à sua conta. Nenhum outro usuário consegue abri-las, e elas nunca entram em nenhum catálogo compartilhado.';
+
+  @override
+  String get progressPhotosPrivacyHint => 'Privada: ninguém além de você vê esta foto.';
+
+  @override
+  String progressPhotosDayPhotoCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count fotos', one: '1 foto', zero: 'Nenhuma foto');
+    return '$_temp0';
+  }
+
+  @override
   String get progressPhotosCompareTitle => 'Comparar';
+
+  @override
+  String get progressPhotosComparePoseEmpty => 'Ainda não há o que comparar neste ângulo.';
 
   @override
   String get progressPhotosCompareBefore => 'Antes';

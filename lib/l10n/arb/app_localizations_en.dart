@@ -2282,7 +2282,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressPhotosEmptyTitle => 'No photos yet';
 
   @override
-  String get progressPhotosEmptyMessage => 'Add a photo now and then to see how your body changes over the weeks.';
+  String get progressPhotosEmptyMessage => 'Add a photo now and then to see how your body changes over the weeks. Only you can see them.';
 
   @override
   String get progressPhotosAddAction => 'Add photo';
@@ -2309,7 +2309,44 @@ class AppLocalizationsEn extends AppLocalizations {
   String get progressPhotosPickerTitle => 'Choose a photo';
 
   @override
+  String get progressPhotosPoseLabel => 'Shot';
+
+  @override
+  String get progressPhotosPoseHint => 'Tag the angle so you can line up the same shot over time.';
+
+  @override
+  String get progressPhotosPoseFront => 'Front';
+
+  @override
+  String get progressPhotosPoseSide => 'Side';
+
+  @override
+  String get progressPhotosPoseBack => 'Back';
+
+  @override
+  String get progressPhotosPoseOther => 'Other';
+
+  @override
+  String get progressPhotosPrivacyTitle => 'Only you can see these';
+
+  @override
+  String get progressPhotosPrivacyMessage =>
+      'Your photos are kept in a private folder locked to your account. No other user can open them, and they are never part of any shared catalog.';
+
+  @override
+  String get progressPhotosPrivacyHint => 'Private to you. Nobody else can see this photo.';
+
+  @override
+  String progressPhotosDayPhotoCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count shots', one: '1 shot', zero: 'No shots');
+    return '$_temp0';
+  }
+
+  @override
   String get progressPhotosCompareTitle => 'Compare';
+
+  @override
+  String get progressPhotosComparePoseEmpty => 'Nothing to compare for this shot yet.';
 
   @override
   String get progressPhotosCompareBefore => 'Before';
