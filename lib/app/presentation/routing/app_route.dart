@@ -15,6 +15,8 @@ enum AppRoute {
   waterHistory('/water/history'),
   bodyWeight('/body-weight'),
   bodyWeightHistory('/body-weight/history'),
+  progressPhotos('/progress-photos'),
+  progressPhotoCompare('/progress-photos/compare'),
   sleep('/sleep'),
   sleepHistory('/sleep/history'),
   reminders('/reminders'),

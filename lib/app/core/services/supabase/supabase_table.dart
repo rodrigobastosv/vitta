@@ -14,6 +14,7 @@ enum SupabaseTable {
   routines('routines'),
   routineExercises('routine_exercises'),
   reminders('reminders'),
+  progressPhotos('progress_photos'),
   subscriptions('subscriptions');
 
   const SupabaseTable(this.wireName);

@@ -13,6 +13,7 @@ class VTRemoteImage extends StatelessWidget {
     this.width,
     this.height,
     this.borderRadius,
+    this.cacheKey,
     super.key,
   });
 
@@ -23,6 +24,8 @@ class VTRemoteImage extends StatelessWidget {
   final double? width;
   final double? height;
   final BorderRadius? borderRadius;
+
+  final String? cacheKey;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +48,7 @@ class VTRemoteImage extends StatelessWidget {
             ? placeholder
             : CachedNetworkImage(
                 imageUrl: url,
+                cacheKey: cacheKey,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => placeholder,
                 errorBuilder: (context, error, stackTrace) => placeholder,

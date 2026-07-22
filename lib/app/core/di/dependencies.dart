@@ -32,6 +32,8 @@ import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/premium/datasources/supabase_premium_datasource.dart';
 import 'package:vitta/app/data/premium/premium_repository.dart';
+import 'package:vitta/app/data/progress_photos/datasources/supabase/supabase_progress_photos_datasource.dart';
+import 'package:vitta/app/data/progress_photos/progress_photos_repository.dart';
 import 'package:vitta/app/data/reminder/datasources/supabase/supabase_reminder_datasource.dart';
 import 'package:vitta/app/data/reminder/reminder_repository.dart';
 import 'package:vitta/app/data/settings/settings_local_datasource.dart';
@@ -89,6 +91,9 @@ import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart'
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
+import 'package:vitta/app/domain/progress_photos/use_cases/add_progress_photo_use_case.dart';
+import 'package:vitta/app/domain/progress_photos/use_cases/delete_progress_photo_use_case.dart';
+import 'package:vitta/app/domain/progress_photos/use_cases/get_progress_photos_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
@@ -152,6 +157,7 @@ import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
@@ -221,6 +227,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => SupabaseSleepDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SleepLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SleepRepository(supabaseSleepDataSource: G(), sleepLocalDataSource: G()));
+  G.registerLazySingleton(() => SupabaseProgressPhotosDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => ProgressPhotosRepository(supabaseProgressPhotosDataSource: G()));
   G.registerLazySingleton(() => SupabasePremiumDataSource(supabaseService: G()));
   G.registerLazySingleton(() => PremiumRepository(supabasePremiumDataSource: G()));
   G.registerLazySingleton(() => SupabaseReminderDataSource(supabaseService: G()));
@@ -271,6 +279,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetBodyWeightInRangeUseCase(bodyWeightRepository: G()));
   G.registerFactory(() => DeleteBodyWeightLogUseCase(bodyWeightRepository: G()));
   G.registerFactory(() => GetLatestBodyWeightUseCase(bodyWeightRepository: G()));
+  G.registerFactory(() => GetProgressPhotosUseCase(progressPhotosRepository: G()));
+  G.registerFactory(() => AddProgressPhotoUseCase(progressPhotosRepository: G()));
+  G.registerFactory(() => DeleteProgressPhotoUseCase(progressPhotosRepository: G()));
   G.registerFactory(() => LogSleepUseCase(sleepRepository: G()));
   G.registerFactory(() => GetRecentSleepLogsUseCase(sleepRepository: G()));
   G.registerFactory(() => GetSleepInRangeUseCase(sleepRepository: G()));
@@ -430,6 +441,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     () => BodyWeightCubit(getRecentBodyWeightLogsUseCase: G(), logBodyWeightUseCase: G(), deleteBodyWeightLogUseCase: G(), getAppSettingsUseCase: G()),
   );
   G.registerFactory(() => BodyWeightHistoryCubit(getBodyWeightInRangeUseCase: G(), getAppSettingsUseCase: G()));
+  G.registerFactory(
+    () => ProgressPhotosCubit(getProgressPhotosUseCase: G(), addProgressPhotoUseCase: G(), deleteProgressPhotoUseCase: G(), imagePickerService: G()),
+  );
   G.registerFactory(() => SleepHistoryCubit(getSleepInRangeUseCase: G(), getSleepGoalUseCase: G()));
   G.registerFactory(
     () => SleepCubit(

@@ -4015,6 +4015,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Copying into {date}'**
   String dietCopyMealsTargetBanner(String date);
+
+  /// No description provided for @progressPhotosFeatureTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Progress photos'**
+  String get progressPhotosFeatureTitle;
+
+  /// No description provided for @progressPhotosFeatureSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'See your shape change over time'**
+  String get progressPhotosFeatureSubtitle;
+
+  /// No description provided for @progressPhotosEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No photos yet'**
+  String get progressPhotosEmptyTitle;
+
+  /// No description provided for @progressPhotosEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a photo now and then to see how your body changes over the weeks.'**
+  String get progressPhotosEmptyMessage;
+
+  /// No description provided for @progressPhotosAddAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add photo'**
+  String get progressPhotosAddAction;
+
+  /// No description provided for @progressPhotosSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save photo'**
+  String get progressPhotosSaveAction;
+
+  /// No description provided for @progressPhotosAddedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to your timeline'**
+  String get progressPhotosAddedMessage;
+
+  /// No description provided for @progressPhotosDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Date'**
+  String get progressPhotosDateLabel;
+
+  /// No description provided for @progressPhotosNoteLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Note (optional)'**
+  String get progressPhotosNoteLabel;
+
+  /// No description provided for @progressPhotosDeleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get progressPhotosDeleteAction;
+
+  /// No description provided for @progressPhotosCloseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get progressPhotosCloseAction;
+
+  /// No description provided for @progressPhotosPickerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a photo'**
+  String get progressPhotosPickerTitle;
+
+  /// No description provided for @progressPhotosCompareTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Compare'**
+  String get progressPhotosCompareTitle;
+
+  /// No description provided for @progressPhotosCompareBefore.
+  ///
+  /// In en, this message translates to:
+  /// **'Before'**
+  String get progressPhotosCompareBefore;
+
+  /// No description provided for @progressPhotosCompareAfter.
+  ///
+  /// In en, this message translates to:
+  /// **'After'**
+  String get progressPhotosCompareAfter;
+
+  /// No description provided for @progressPhotosCompareDaysApart.
+  ///
+  /// In en, this message translates to:
+  /// **'{days, plural, =0{Same day} =1{1 day apart} other{{days} days apart}}'**
+  String progressPhotosCompareDaysApart(int days);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

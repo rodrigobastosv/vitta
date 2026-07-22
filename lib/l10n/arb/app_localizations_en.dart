@@ -2182,4 +2182,55 @@ class AppLocalizationsEn extends AppLocalizations {
   String dietCopyMealsTargetBanner(String date) {
     return 'Copying into $date';
   }
+
+  @override
+  String get progressPhotosFeatureTitle => 'Progress photos';
+
+  @override
+  String get progressPhotosFeatureSubtitle => 'See your shape change over time';
+
+  @override
+  String get progressPhotosEmptyTitle => 'No photos yet';
+
+  @override
+  String get progressPhotosEmptyMessage => 'Add a photo now and then to see how your body changes over the weeks.';
+
+  @override
+  String get progressPhotosAddAction => 'Add photo';
+
+  @override
+  String get progressPhotosSaveAction => 'Save photo';
+
+  @override
+  String get progressPhotosAddedMessage => 'Added to your timeline';
+
+  @override
+  String get progressPhotosDateLabel => 'Date';
+
+  @override
+  String get progressPhotosNoteLabel => 'Note (optional)';
+
+  @override
+  String get progressPhotosDeleteAction => 'Delete';
+
+  @override
+  String get progressPhotosCloseAction => 'Close';
+
+  @override
+  String get progressPhotosPickerTitle => 'Choose a photo';
+
+  @override
+  String get progressPhotosCompareTitle => 'Compare';
+
+  @override
+  String get progressPhotosCompareBefore => 'Before';
+
+  @override
+  String get progressPhotosCompareAfter => 'After';
+
+  @override
+  String progressPhotosCompareDaysApart(int days) {
+    String _temp0 = intl.Intl.pluralLogic(days, locale: localeName, other: '$days days apart', one: '1 day apart', zero: 'Same day');
+    return '$_temp0';
+  }
 }

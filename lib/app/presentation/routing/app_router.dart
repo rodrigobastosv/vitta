@@ -23,6 +23,8 @@ import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
 import 'package:vitta/app/presentation/routing/routes/paywall_route.dart';
 import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
+import 'package:vitta/app/presentation/routing/routes/progress_photo_compare_route.dart';
+import 'package:vitta/app/presentation/routing/routes/progress_photos_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipe_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';
 import 'package:vitta/app/presentation/routing/routes/reminder_history_route.dart';
@@ -59,6 +61,8 @@ abstract class AppRouter {
     WaterHistoryRoute(),
     BodyWeightRoute(),
     BodyWeightHistoryRoute(),
+    ProgressPhotosRoute(),
+    ProgressPhotoCompareRoute(),
     SleepRoute(),
     SleepHistoryRoute(),
     ReminderRoute(),

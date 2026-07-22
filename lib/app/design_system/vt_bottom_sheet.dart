@@ -19,7 +19,9 @@ enum VTBottomSheet {
   restLength('restLengthSheet'),
   avatarPicker('avatarPickerSheet'),
   avatarAction('avatarActionSheet'),
-  imageSource('imageSourceSheet');
+  imageSource('imageSourceSheet'),
+  addProgressPhoto('addProgressPhotoSheet'),
+  progressPhotoPicker('progressPhotoPickerSheet');
 
   const VTBottomSheet(this.routeName);
 
