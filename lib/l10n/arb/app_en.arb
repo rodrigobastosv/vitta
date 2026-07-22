@@ -1346,7 +1346,7 @@
   "progressPhotosFeatureTitle": "Progress photos",
   "progressPhotosFeatureSubtitle": "See your shape change over time",
   "progressPhotosEmptyTitle": "No photos yet",
-  "progressPhotosEmptyMessage": "Add a photo now and then to see how your body changes over the weeks.",
+  "progressPhotosEmptyMessage": "Add a photo now and then to see how your body changes over the weeks. Only you can see them.",
   "progressPhotosAddAction": "Add photo",
   "progressPhotosSaveAction": "Save photo",
   "progressPhotosAddedMessage": "Added to your timeline",
@@ -1355,7 +1355,25 @@
   "progressPhotosDeleteAction": "Delete",
   "progressPhotosCloseAction": "Close",
   "progressPhotosPickerTitle": "Choose a photo",
+  "progressPhotosPoseLabel": "Shot",
+  "progressPhotosPoseHint": "Tag the angle so you can line up the same shot over time.",
+  "progressPhotosPoseFront": "Front",
+  "progressPhotosPoseSide": "Side",
+  "progressPhotosPoseBack": "Back",
+  "progressPhotosPoseOther": "Other",
+  "progressPhotosPrivacyTitle": "Only you can see these",
+  "progressPhotosPrivacyMessage": "Your photos are kept in a private folder locked to your account. No other user can open them, and they are never part of any shared catalog.",
+  "progressPhotosPrivacyHint": "Private to you. Nobody else can see this photo.",
+  "progressPhotosDayPhotoCount": "{count, plural, =0{No shots} =1{1 shot} other{{count} shots}}",
+  "@progressPhotosDayPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressPhotosCompareTitle": "Compare",
+  "progressPhotosComparePoseEmpty": "Nothing to compare for this shot yet.",
   "progressPhotosCompareBefore": "Before",
   "progressPhotosCompareAfter": "After",
   "progressPhotosCompareDaysApart": "{days, plural, =0{Same day} =1{1 day apart} other{{days} days apart}}",

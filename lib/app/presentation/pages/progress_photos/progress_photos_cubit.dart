@@ -4,6 +4,7 @@ import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
+import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/add_progress_photo_use_case.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/delete_progress_photo_use_case.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/get_progress_photos_use_case.dart';
@@ -53,12 +54,24 @@ class ProgressPhotosCubit extends PresentationCubit<ProgressPhotosState, Progres
     emitPresentation(ProgressPhotoPicked(pickedImage: pickedImage));
   }
 
-  Future<void> addPhoto({required Uint8List bytes, required String fileExtension, required DateTime takenDate, String? note}) async {
+  Future<void> addPhoto({
+    required Uint8List bytes,
+    required String fileExtension,
+    required DateTime takenDate,
+    required ProgressPhotoPose pose,
+    String? note,
+  }) async {
     emitPresentation(ProgressPhotosShowLoading());
-    final addedResult = await _addProgressPhotoUseCase(bytes: bytes, fileExtension: fileExtension, takenDate: takenDate, note: note);
+    final addedResult = await _addProgressPhotoUseCase(
+      bytes: bytes,
+      fileExtension: fileExtension,
+      takenDate: takenDate,
+      pose: pose,
+      note: note,
+    );
     emitPresentation(ProgressPhotosHideLoading());
     await addedResult.when((error) => Future.sync(() => emitPresentation(ProgressPhotosError(message: error.message))), (_) async {
-      Log.action('progress_photo_added');
+      Log.action('progress_photo_added', data: {'pose': pose.wireValue});
       emitPresentation(ProgressPhotoAdded());
       await loadPhotos();
     });

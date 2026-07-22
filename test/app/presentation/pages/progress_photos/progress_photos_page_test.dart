@@ -8,9 +8,12 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
+import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_page.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_day_section.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_privacy_note.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_tile.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -67,18 +70,28 @@ void main() {
     expect(find.byType(FloatingActionButton), findsNothing);
   });
 
-  testWidgets('renders a tile per photo and offers the FAB', (tester) async {
+  testWidgets('renders every shot taken on a day under that day, and offers the FAB', (tester) async {
     await pumpProgressPhotosPage(
       tester,
       photos: [
         ProgressPhotoFactory.build(id: 'a'),
-        ProgressPhotoFactory.build(id: 'b', takenDate: DateTime(2026, 6, 2)),
+        ProgressPhotoFactory.build(id: 'b', pose: ProgressPhotoPose.side),
+        ProgressPhotoFactory.build(id: 'c', pose: ProgressPhotoPose.back),
       ],
     );
     await tester.pumpAndSettle();
 
-    expect(find.byType(ProgressPhotoTile), findsNWidgets(2));
+    expect(find.byType(ProgressPhotoDaySection), findsOneWidget);
+    expect(find.byType(ProgressPhotoTile), findsNWidgets(3));
     expect(find.byType(FloatingActionButton), findsOneWidget);
+  });
+
+  testWidgets('states that the photos are private to the user', (tester) async {
+    await pumpProgressPhotosPage(tester, photos: [ProgressPhotoFactory.build()]);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProgressPhotoPrivacyNote), findsOneWidget);
+    expect(find.text('Only you can see these'), findsOneWidget);
   });
 
   testWidgets('the compare action is disabled until there are two photos', (tester) async {

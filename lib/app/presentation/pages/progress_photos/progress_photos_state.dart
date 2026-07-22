@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/progress_photo_day.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photo_month.dart';
 
 class ProgressPhotosState extends Equatable {
@@ -15,11 +16,16 @@ class ProgressPhotosState extends Equatable {
   bool get canCompare => photos.length > 1;
 
   List<ProgressPhotoMonth> get months {
-    final byMonth = <DateTime, List<ProgressPhoto>>{};
+    final byDay = <DateTime, List<ProgressPhoto>>{};
     for (final photo in photos) {
-      byMonth.putIfAbsent(DateTime(photo.takenDate.year, photo.takenDate.month), () => []).add(photo);
+      byDay.putIfAbsent(photo.takenDay, () => []).add(photo);
     }
-    return [for (final entry in byMonth.entries) ProgressPhotoMonth(month: entry.key, photos: entry.value)];
+    final byMonth = <DateTime, List<ProgressPhotoDay>>{};
+    for (final entry in byDay.entries) {
+      final dayPhotos = [...entry.value]..sort((first, second) => first.pose.index.compareTo(second.pose.index));
+      byMonth.putIfAbsent(DateTime(entry.key.year, entry.key.month), () => []).add(ProgressPhotoDay(day: entry.key, photos: dayPhotos));
+    }
+    return [for (final entry in byMonth.entries) ProgressPhotoMonth(month: entry.key, days: entry.value)];
   }
 
   ProgressPhotosState copyWith({List<ProgressPhoto>? photos, bool? isLoaded}) =>

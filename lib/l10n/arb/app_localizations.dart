@@ -4199,7 +4199,7 @@ abstract class AppLocalizations {
   /// No description provided for @progressPhotosEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Add a photo now and then to see how your body changes over the weeks.'**
+  /// **'Add a photo now and then to see how your body changes over the weeks. Only you can see them.'**
   String get progressPhotosEmptyMessage;
 
   /// No description provided for @progressPhotosAddAction.
@@ -4250,11 +4250,77 @@ abstract class AppLocalizations {
   /// **'Choose a photo'**
   String get progressPhotosPickerTitle;
 
+  /// No description provided for @progressPhotosPoseLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Shot'**
+  String get progressPhotosPoseLabel;
+
+  /// No description provided for @progressPhotosPoseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tag the angle so you can line up the same shot over time.'**
+  String get progressPhotosPoseHint;
+
+  /// No description provided for @progressPhotosPoseFront.
+  ///
+  /// In en, this message translates to:
+  /// **'Front'**
+  String get progressPhotosPoseFront;
+
+  /// No description provided for @progressPhotosPoseSide.
+  ///
+  /// In en, this message translates to:
+  /// **'Side'**
+  String get progressPhotosPoseSide;
+
+  /// No description provided for @progressPhotosPoseBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get progressPhotosPoseBack;
+
+  /// No description provided for @progressPhotosPoseOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get progressPhotosPoseOther;
+
+  /// No description provided for @progressPhotosPrivacyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Only you can see these'**
+  String get progressPhotosPrivacyTitle;
+
+  /// No description provided for @progressPhotosPrivacyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your photos are kept in a private folder locked to your account. No other user can open them, and they are never part of any shared catalog.'**
+  String get progressPhotosPrivacyMessage;
+
+  /// No description provided for @progressPhotosPrivacyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Private to you. Nobody else can see this photo.'**
+  String get progressPhotosPrivacyHint;
+
+  /// No description provided for @progressPhotosDayPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No shots} =1{1 shot} other{{count} shots}}'**
+  String progressPhotosDayPhotoCount(int count);
+
   /// No description provided for @progressPhotosCompareTitle.
   ///
   /// In en, this message translates to:
   /// **'Compare'**
   String get progressPhotosCompareTitle;
+
+  /// No description provided for @progressPhotosComparePoseEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to compare for this shot yet.'**
+  String get progressPhotosComparePoseEmpty;
 
   /// No description provided for @progressPhotosCompareBefore.
   ///

@@ -1080,7 +1080,7 @@
   "progressPhotosFeatureTitle": "Fotos de progresso",
   "progressPhotosFeatureSubtitle": "Veja seu corpo mudar ao longo do tempo",
   "progressPhotosEmptyTitle": "Nenhuma foto ainda",
-  "progressPhotosEmptyMessage": "Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas.",
+  "progressPhotosEmptyMessage": "Adicione uma foto de vez em quando para ver seu corpo mudar ao longo das semanas. Só você pode vê-las.",
   "progressPhotosAddAction": "Adicionar foto",
   "progressPhotosSaveAction": "Salvar foto",
   "progressPhotosAddedMessage": "Adicionada à sua linha do tempo",
@@ -1089,7 +1089,25 @@
   "progressPhotosDeleteAction": "Excluir",
   "progressPhotosCloseAction": "Fechar",
   "progressPhotosPickerTitle": "Escolha uma foto",
+  "progressPhotosPoseLabel": "Ângulo",
+  "progressPhotosPoseHint": "Marque o ângulo para comparar sempre a mesma foto ao longo do tempo.",
+  "progressPhotosPoseFront": "Frente",
+  "progressPhotosPoseSide": "Lado",
+  "progressPhotosPoseBack": "Costas",
+  "progressPhotosPoseOther": "Outro",
+  "progressPhotosPrivacyTitle": "Só você vê essas fotos",
+  "progressPhotosPrivacyMessage": "Suas fotos ficam em uma pasta privada, ligada à sua conta. Nenhum outro usuário consegue abri-las, e elas nunca entram em nenhum catálogo compartilhado.",
+  "progressPhotosPrivacyHint": "Privada: ninguém além de você vê esta foto.",
+  "progressPhotosDayPhotoCount": "{count, plural, =0{Nenhuma foto} =1{1 foto} other{{count} fotos}}",
+  "@progressPhotosDayPhotoCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "progressPhotosCompareTitle": "Comparar",
+  "progressPhotosComparePoseEmpty": "Ainda não há o que comparar neste ângulo.",
   "progressPhotosCompareBefore": "Antes",
   "progressPhotosCompareAfter": "Depois",
   "progressPhotosCompareDaysApart": "{days, plural, =0{No mesmo dia} =1{1 dia de diferença} other{{days} dias de diferença}}",

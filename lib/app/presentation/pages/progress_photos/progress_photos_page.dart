@@ -16,6 +16,7 @@ import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_pre
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_state.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/widgets/add_progress_photo_sheet.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_month_section.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_privacy_note.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_viewer_dialog.dart';
 
 class ProgressPhotosPage extends StatelessWidget {
@@ -83,6 +84,8 @@ class ProgressPhotosPage extends StatelessWidget {
             onAction: () => _addPhoto(context),
           ),
           children: [
+            const ProgressPhotoPrivacyNote(),
+            const VTGap.l(),
             for (final section in state.months) ...[
               ProgressPhotoMonthSection(
                 section: section,

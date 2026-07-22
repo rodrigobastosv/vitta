@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_remote_image.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
@@ -8,6 +9,7 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
+import 'package:vitta/app/presentation/pages/progress_photos/widgets/progress_photo_pose_labels.dart';
 
 Future<void> showProgressPhotoViewer({required BuildContext context, required ProgressPhoto photo}) => showDialog<void>(
   context: context,
@@ -47,7 +49,15 @@ class ProgressPhotoViewerDialog extends StatelessWidget {
               ),
             ),
             const VTGap.m(),
-            Text(context.materialLocalizations.formatFullDate(photo.takenDate), style: VTTextStyles.title(context)),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(context.materialLocalizations.formatFullDate(photo.takenDate), style: VTTextStyles.title(context)),
+                ),
+                const VTGap.s(),
+                VTBadge(label: photo.pose.label(l10n), color: colorScheme.primary),
+              ],
+            ),
             if (photo.note case final note?) ...[
               const VTGap.xs(),
               Text(note, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
