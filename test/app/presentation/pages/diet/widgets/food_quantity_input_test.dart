@@ -98,7 +98,7 @@ void main() {
       tester,
       food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
       initialGrams: 50,
-      unitSystem: UnitSystem.imperial,
+      unitSystem: .imperial,
       onChanged: selections.add,
     );
 

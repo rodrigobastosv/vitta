@@ -34,7 +34,7 @@ class ProfileHeader extends StatelessWidget {
         boxShadow: [BoxShadow(color: VTColors.green.withValues(alpha: 0.3), blurRadius: 20, offset: const Offset(0, 10))],
       ),
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: .stretch,
         children: [
           Row(
             children: [
@@ -68,23 +68,21 @@ class ProfileHeader extends StatelessWidget {
             Text(l10n.authAnonymousMessage, style: VTTextStyles.caption(context).copyWith(color: VTColors.onGreen.withValues(alpha: 0.85))),
           ],
           const VTGap.l(),
-          SizedBox(
-            width: double.infinity,
-            child: _isSignedIn
-                ? OutlinedButton(
-                    onPressed: onAction,
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: VTColors.onGreen,
-                      side: BorderSide(color: VTColors.onGreen.withValues(alpha: 0.6)),
-                    ),
-                    child: Text(l10n.authLogoutAction),
-                  )
-                : FilledButton(
-                    onPressed: onAction,
-                    style: FilledButton.styleFrom(backgroundColor: VTColors.onGreen, foregroundColor: VTColors.green),
-                    child: Text(l10n.profileSignInAction),
-                  ),
-          ),
+          if (_isSignedIn)
+            OutlinedButton(
+              onPressed: onAction,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: VTColors.onGreen,
+                side: BorderSide(color: VTColors.onGreen.withValues(alpha: 0.6)),
+              ),
+              child: Text(l10n.authLogoutAction),
+            )
+          else
+            FilledButton(
+              onPressed: onAction,
+              style: FilledButton.styleFrom(backgroundColor: VTColors.onGreen, foregroundColor: VTColors.green),
+              child: Text(l10n.profileSignInAction),
+            ),
         ],
       ),
     );

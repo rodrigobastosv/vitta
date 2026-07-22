@@ -8,7 +8,6 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/image_picker/picked_image.dart';
-import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_state.dart';
@@ -69,7 +68,7 @@ void main() {
       ).thenAnswer((_) async => PickedImage(path: 'photo.jpg', bytes: Uint8List(3), fileExtension: 'jpg'));
       return CubitsFactories.buildProgressPhotosCubit(imagePickerService: imagePickerService);
     },
-    act: (cubit) => cubit.pickPhoto(source: ImagePickerSource.camera),
+    act: (cubit) => cubit.pickPhoto(source: .camera),
     expectPresentation: () => [isA<ProgressPhotoPicked>()],
   );
 
@@ -85,7 +84,7 @@ void main() {
       ).thenAnswer((_) async => null);
       return CubitsFactories.buildProgressPhotosCubit(imagePickerService: imagePickerService);
     },
-    act: (cubit) => cubit.pickPhoto(source: ImagePickerSource.gallery),
+    act: (cubit) => cubit.pickPhoto(source: .gallery),
     expectPresentation: () => <ProgressPhotosPresentationEvent>[],
   );
 
@@ -97,7 +96,7 @@ void main() {
         bytes: any(named: 'bytes'),
         fileExtension: any(named: 'fileExtension'),
         takenDate: any(named: 'takenDate'),
-        pose: ProgressPhotoPose.side,
+        pose: .side,
         note: any(named: 'note'),
       ),
     ).thenAnswer((_) async => Success(ProgressPhotoFactory.build()));
@@ -107,7 +106,7 @@ void main() {
       getProgressPhotosUseCase: getProgressPhotosUseCase,
     );
 
-    await cubit.addPhoto(bytes: Uint8List(3), fileExtension: 'jpg', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.side);
+    await cubit.addPhoto(bytes: Uint8List(3), fileExtension: 'jpg', takenDate: DateTime(2026, 7, 18), pose: .side);
 
     verify(getProgressPhotosUseCase.call).called(1);
     expect(cubit.state.photos, isNotEmpty);
@@ -169,9 +168,9 @@ void main() {
   test('a day keeps every shot taken that day, ordered front, side, back', () {
     final state = ProgressPhotosState(
       photos: [
-        ProgressPhotoFactory.build(id: 'back', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.back),
+        ProgressPhotoFactory.build(id: 'back', takenDate: DateTime(2026, 7, 18), pose: .back),
         ProgressPhotoFactory.build(id: 'front', takenDate: DateTime(2026, 7, 18)),
-        ProgressPhotoFactory.build(id: 'side', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.side),
+        ProgressPhotoFactory.build(id: 'side', takenDate: DateTime(2026, 7, 18), pose: .side),
       ],
     );
 

@@ -15,9 +15,9 @@ import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 // preset with no extra wiring, and nudging a macro off it reads back as custom
 // exactly as before.
 enum FitnessObjective {
-  loseWeight(calorieFactor: 0.80, modality: DietModality.highProtein),
-  maintainWeight(calorieFactor: 1, modality: DietModality.balanced),
-  gainMuscle(calorieFactor: 1.12, modality: DietModality.highProtein);
+  loseWeight(calorieFactor: 0.80, modality: .highProtein),
+  maintainWeight(calorieFactor: 1, modality: .balanced),
+  gainMuscle(calorieFactor: 1.12, modality: .highProtein);
 
   const FitnessObjective({required this.calorieFactor, required this.modality});
 

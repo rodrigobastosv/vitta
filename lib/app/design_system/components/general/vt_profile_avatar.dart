@@ -35,7 +35,7 @@ class VTProfileAvatar extends StatelessWidget {
     final bytes = previewBytes;
     if (bytes != null) {
       return ClipOval(
-        child: Image.memory(bytes, width: size, height: size, fit: BoxFit.cover),
+        child: Image.memory(bytes, width: size, height: size, fit: .cover),
       );
     }
     if (avatarUrl != null) {
@@ -50,7 +50,7 @@ class VTProfileAvatar extends StatelessWidget {
       child: switch (initial) {
         final initial? => Text(
           initial,
-          style: VTTextStyles.body(context).copyWith(color: foreground, fontWeight: FontWeight.bold, fontSize: size * 0.44),
+          style: VTTextStyles.body(context).copyWith(color: foreground, fontWeight: .bold, fontSize: size * 0.44),
         ),
         _ => Icon(Icons.person_outline, size: size * 0.56, color: foreground),
       },

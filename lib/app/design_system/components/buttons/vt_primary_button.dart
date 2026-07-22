@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 
 class VTPrimaryButton extends StatelessWidget {
   const VTPrimaryButton({required this.label, required this.onPressed, this.icon, this.isLoading = false, this.isExpanded = true, super.key});
@@ -16,7 +17,7 @@ class VTPrimaryButton extends StatelessWidget {
         : Row(
             mainAxisSize: .min,
             children: [
-              if (icon != null) ...[Icon(icon, size: 20), const SizedBox(width: 8)],
+              if (icon != null) ...[Icon(icon, size: 20), const VTGap.s()],
               Text(label),
             ],
           );

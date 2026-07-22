@@ -90,7 +90,7 @@ void main() {
       entries: [
         FoodLogEntryFactory.build(log: FoodLogFactory.build()),
         FoodLogEntryFactory.build(
-          log: FoodLogFactory.build(id: 'log-2', mealType: MealType.lunch),
+          log: FoodLogFactory.build(id: 'log-2', mealType: .lunch),
         ),
       ],
     ),

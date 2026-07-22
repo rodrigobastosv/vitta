@@ -49,7 +49,7 @@ class VTRemoteImage extends StatelessWidget {
             : CachedNetworkImage(
                 imageUrl: url,
                 cacheKey: cacheKey,
-                fit: BoxFit.cover,
+                fit: .cover,
                 placeholder: (context, url) => placeholder,
                 errorBuilder: (context, error, stackTrace) => placeholder,
               ),

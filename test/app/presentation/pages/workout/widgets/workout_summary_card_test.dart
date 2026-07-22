@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_card.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
@@ -21,7 +20,7 @@ Future<void> pumpSummary(WidgetTester tester, {required WorkoutState state, Loca
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: WorkoutSummaryCard(state: state, unitSystem: UnitSystem.metric),
+        body: WorkoutSummaryCard(state: state, unitSystem: .metric),
       ),
     ),
   );

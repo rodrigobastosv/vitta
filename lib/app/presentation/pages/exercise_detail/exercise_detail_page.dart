@@ -41,7 +41,7 @@ class ExerciseDetailPage extends StatelessWidget {
               child: ListView.separated(
                 scrollDirection: .horizontal,
                 itemCount: exercise.imageUrls.length,
-                separatorBuilder: (context, index) => const SizedBox(width: VTSpacing.s),
+                separatorBuilder: (context, index) => const VTGap.s(),
                 itemBuilder: (context, index) => VTRemoteImage(
                   imageUrl: exercise.imageUrls[index],
                   placeholderIcon: Icons.fitness_center_outlined,

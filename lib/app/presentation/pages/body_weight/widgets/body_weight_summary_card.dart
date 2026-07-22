@@ -79,7 +79,7 @@ class BodyWeightSummaryCard extends StatelessWidget {
           const VTGap.xs(),
           Text(
             bodyWeightSignedDisplay(l10n, unitSystem, deltaKg),
-            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurface, fontWeight: FontWeight.w700),
+            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurface, fontWeight: .w700),
           ),
         ],
       ),

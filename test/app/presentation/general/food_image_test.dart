@@ -15,7 +15,7 @@ void main() {
   );
 
   testWidgets('an imageless food shows its category icon instead of the generic placeholder', (tester) async {
-    await pump(tester, category: FoodCategory.dairyEgg);
+    await pump(tester, category: .dairyEgg);
 
     expect(find.byIcon(Icons.egg_outlined), findsOneWidget);
     expect(find.byIcon(Icons.restaurant_outlined), findsNothing);

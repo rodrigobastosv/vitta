@@ -18,13 +18,13 @@ Future<void> pumpTile(WidgetTester tester, {required SleepLogSource source}) => 
 
 void main() {
   testWidgets('marks a night imported from health with a Health badge', (tester) async {
-    await pumpTile(tester, source: SleepLogSource.health);
+    await pumpTile(tester, source: .health);
 
     expect(find.text('Health'), findsOneWidget);
   });
 
   testWidgets('a manually logged night carries no source badge', (tester) async {
-    await pumpTile(tester, source: SleepLogSource.manual);
+    await pumpTile(tester, source: .manual);
 
     expect(find.text('Health'), findsNothing);
   });

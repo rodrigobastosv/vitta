@@ -31,10 +31,10 @@ class _DietModalitySelectorState extends State<DietModalitySelector> {
     final colorScheme = context.colorScheme;
     final selectedLabel = widget.selected == null ? l10n.macroGoalsModalityCustom : dietModalityLabel(l10n, widget.selected!);
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: .stretch,
       children: [
         Material(
-          type: MaterialType.transparency,
+          type: .transparency,
           borderRadius: VTRadius.borderRadiusM,
           child: InkWell(
             onTap: () => setState(() => _expanded = !_expanded),
@@ -64,7 +64,7 @@ class _DietModalitySelectorState extends State<DietModalitySelector> {
         AnimatedSize(
           duration: VTMotion.transition,
           alignment: .topCenter,
-          child: _expanded ? _cards(context) : const SizedBox(width: double.infinity),
+          child: _expanded ? _cards(context) : const SizedBox.shrink(),
         ),
       ],
     );

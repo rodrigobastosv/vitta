@@ -84,11 +84,11 @@ class _VTBarChartState extends State<VTBarChart> {
                 height: widget.height,
                 width: double.infinity,
                 child: Stack(
-                  clipBehavior: Clip.none,
+                  clipBehavior: .none,
                   children: [
                     if (isInteractive)
                       GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                        behavior: .opaque,
                         onTapDown: (details) => _handleTapAt(details.localPosition.dx, width),
                         child: chart,
                       )

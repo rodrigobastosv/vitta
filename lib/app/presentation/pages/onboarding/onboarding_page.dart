@@ -124,15 +124,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         ],
                       )
                     : Column(
+                        crossAxisAlignment: .stretch,
                         children: [
                           VTPrimaryButton(label: l10n.onboardingNextAction, onPressed: () => _next(cubit, state.step)),
                           const VTGap.s(),
-                          SizedBox(
-                            width: double.infinity,
-                            child: TextButton(
-                              onPressed: _isSkippableStep(state.step) ? _skipToAccount : () => _finish(context, cubit),
-                              child: Text(_isSkippableStep(state.step) ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction),
-                            ),
+                          TextButton(
+                            onPressed: _isSkippableStep(state.step) ? _skipToAccount : () => _finish(context, cubit),
+                            child: Text(_isSkippableStep(state.step) ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction),
                           ),
                         ],
                       ),

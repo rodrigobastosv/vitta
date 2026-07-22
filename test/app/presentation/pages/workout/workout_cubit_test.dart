@@ -201,7 +201,7 @@ void main() {
 
   test('unitSystem reads settings directly rather than through AppCubit', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: UnitSystem.imperial));
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: .imperial));
     final cubit = CubitsFactories.buildWorkoutCubit(getAppSettingsUseCase: getAppSettingsUseCase);
 
     expect(cubit.unitSystem, UnitSystem.imperial);

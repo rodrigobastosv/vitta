@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
-import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/pages/progress_photo_compare/progress_photo_compare_page.dart';
 import 'package:vitta/app/presentation/pages/progress_photo_compare/widgets/progress_photo_compare_slot.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
@@ -28,7 +27,7 @@ void main() {
   testWidgets('pairs the oldest and newest shot of the same pose, never across poses', (tester) async {
     await pumpComparePage(tester, [
       ProgressPhotoFactory.build(id: 'front-new', takenDate: DateTime(2026, 7, 18)),
-      ProgressPhotoFactory.build(id: 'back-new', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.back),
+      ProgressPhotoFactory.build(id: 'back-new', takenDate: DateTime(2026, 7, 18), pose: .back),
       ProgressPhotoFactory.build(id: 'front-old', takenDate: DateTime(2026, 5, 2)),
     ]);
     await tester.pumpAndSettle();
@@ -41,8 +40,8 @@ void main() {
     await pumpComparePage(tester, [
       ProgressPhotoFactory.build(id: 'front-new', takenDate: DateTime(2026, 7, 18)),
       ProgressPhotoFactory.build(id: 'front-old', takenDate: DateTime(2026, 5, 2)),
-      ProgressPhotoFactory.build(id: 'back-new', takenDate: DateTime(2026, 7, 18), pose: ProgressPhotoPose.back),
-      ProgressPhotoFactory.build(id: 'back-old', takenDate: DateTime(2026, 5, 2), pose: ProgressPhotoPose.back),
+      ProgressPhotoFactory.build(id: 'back-new', takenDate: DateTime(2026, 7, 18), pose: .back),
+      ProgressPhotoFactory.build(id: 'back-old', takenDate: DateTime(2026, 5, 2), pose: .back),
     ]);
     await tester.pumpAndSettle();
 

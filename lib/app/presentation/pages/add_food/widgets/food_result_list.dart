@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_tile.dart';
@@ -27,7 +28,7 @@ class FoodResultList extends StatelessWidget {
   Widget build(BuildContext context) => ListView.separated(
     padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
     itemCount: foods.length,
-    separatorBuilder: (context, index) => const SizedBox(height: VTSpacing.s),
+    separatorBuilder: (context, index) => const VTGap.s(),
     itemBuilder: (context, index) {
       final food = foods[index];
       final heroTag = '$heroPrefix-$index';

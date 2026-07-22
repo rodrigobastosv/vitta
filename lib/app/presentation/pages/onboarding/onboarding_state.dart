@@ -8,7 +8,7 @@ class OnboardingState extends Equatable {
     this.step = 0,
     this.weightKg = BodyProfile.defaultWeightKg,
     this.heightCm = BodyProfile.defaultHeightCm,
-    this.objective = FitnessObjective.maintainWeight,
+    this.objective = .maintainWeight,
     this.calorieGoal,
     this.bodyProvided = false,
     this.goalsAccepted = false,

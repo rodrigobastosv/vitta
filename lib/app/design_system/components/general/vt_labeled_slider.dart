@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
@@ -45,11 +46,11 @@ class VTLabeledSlider extends StatelessWidget {
             height: 10,
             decoration: BoxDecoration(color: color, shape: .circle),
           ),
-          const SizedBox(width: 8),
+          const VTGap.s(),
           Expanded(
             child: Text(label, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
           ),
-          const SizedBox(width: 8),
+          const VTGap.s(),
           VTBadge(label: valueLabel, color: color),
         ],
       ),

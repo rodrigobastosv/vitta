@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -91,7 +92,7 @@ class _VTWeightPickerState extends State<VTWeightPicker> {
           textBaseline: .alphabetic,
           children: [
             Text(_format(_value), style: VTTextStyles.display(context)),
-            const SizedBox(width: 4),
+            const VTGap.xs(),
             Text(widget.unitLabel, style: VTTextStyles.title(context).copyWith(color: colorScheme.onSurfaceVariant)),
           ],
         ),
@@ -115,7 +116,7 @@ class _VTWeightPickerState extends State<VTWeightPicker> {
                     },
                     child: ListView.builder(
                       controller: _controller,
-                      scrollDirection: Axis.horizontal,
+                      scrollDirection: .horizontal,
                       itemExtent: _tickSpacing,
                       padding: EdgeInsets.symmetric(horizontal: sidePadding),
                       itemCount: _tickCount,

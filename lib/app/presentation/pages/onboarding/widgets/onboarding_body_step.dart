@@ -59,7 +59,7 @@ class OnboardingBodyStep extends StatelessWidget {
             unitLabel: unitSystem.loadUnitLabel,
             min: unitSystem.kilogramsToDisplayLoad(minWeightKg),
             max: unitSystem.kilogramsToDisplayLoad(maxWeightKg),
-            step: unitSystem == UnitSystem.metric ? 0.1 : 0.2,
+            step: unitSystem == .metric ? 0.1 : 0.2,
           ),
           const VTGap.l(),
           // Height is a slider rather than a second ruler: it is set once and

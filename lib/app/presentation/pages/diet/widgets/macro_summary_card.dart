@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/goals/goal_adherence.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
@@ -48,7 +47,7 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
           Row(
             children: [
               VTCelebration(
-                trigger: dailyMacros.entries.isNotEmpty && dailyMacros.adherenceTo(macroGoals) == GoalAdherence.met,
+                trigger: dailyMacros.entries.isNotEmpty && dailyMacros.adherenceTo(macroGoals) == .met,
                 child: VTMacroRing(
                   value: _getProgress(dailyMacros.totalCalories, macroGoals.calorieGoal),
                   color: ringColor,

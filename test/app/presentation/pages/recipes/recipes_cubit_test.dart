@@ -90,11 +90,11 @@ void main() {
       final recipe = RecipeFactory.build();
       final logFoodUseCase = MockLogFoodUseCase();
       when(
-        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: MealType.dinner, quantityGrams: 450),
+        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
       ).thenAnswer((_) async => Success(FoodLogFactory.build()));
       return CubitsFactories.buildRecipesCubit(logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22, 15, 30), mealType: MealType.dinner, quantityGrams: 450),
+    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22, 15, 30), mealType: .dinner, quantityGrams: 450),
     expectPresentation: () => [isA<RecipeLogged>().having((event) => event.mealType, 'mealType', MealType.dinner)],
   );
 
@@ -104,11 +104,11 @@ void main() {
       final recipe = RecipeFactory.build();
       final logFoodUseCase = MockLogFoodUseCase();
       when(
-        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: MealType.dinner, quantityGrams: 450),
+        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildRecipesCubit(logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22), mealType: MealType.dinner, quantityGrams: 450),
+    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
     expectPresentation: () => <RecipesPresentationEvent>[],
   );
 }

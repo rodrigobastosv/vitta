@@ -3,7 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class ProgressPhotoPrivacyNote extends StatelessWidget {
@@ -32,7 +31,7 @@ class ProgressPhotoPrivacyNote extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(l10n.progressPhotosPrivacyTitle, style: VTTextStyles.title(context)),
-                const SizedBox(height: VTSpacing.xs),
+                const VTGap.xs(),
                 Text(
                   l10n.progressPhotosPrivacyMessage,
                   style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),

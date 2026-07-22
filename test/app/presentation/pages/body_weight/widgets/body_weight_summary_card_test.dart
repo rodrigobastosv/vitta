@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/body_weight/entities/body_weight_log.dart';
 import 'package:vitta/app/presentation/pages/body_weight/widgets/body_weight_summary_card.dart';
@@ -14,7 +13,7 @@ Future<void> pumpCard(WidgetTester tester, {required List<BodyWeightLog> logs}) 
     theme: VTTheme.light,
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
-    home: Scaffold(body: BodyWeightSummaryCard(logs: logs, unitSystem: UnitSystem.metric)),
+    home: Scaffold(body: BodyWeightSummaryCard(logs: logs, unitSystem: .metric)),
   ),
 );
 

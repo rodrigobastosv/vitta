@@ -3,7 +3,7 @@ import 'package:vitta/app/domain/body_weight/entities/body_weight_log.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 
 class BodyWeightHistoryState extends Equatable {
-  const BodyWeightHistoryState({this.logs = const [], this.trendRange = TrendRange.month, this.isLoaded = true});
+  const BodyWeightHistoryState({this.logs = const [], this.trendRange = .month, this.isLoaded = true});
 
   // Oldest first, ready to plot left-to-right.
   final List<BodyWeightLog> logs;

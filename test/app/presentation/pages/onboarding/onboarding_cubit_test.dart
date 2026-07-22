@@ -151,7 +151,7 @@ void main() {
     await cubit.completeOnboarding();
 
     final saved = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
-    expect(saved, const BodyProfile(heightCm: 183, objective: FitnessObjective.gainMuscle));
+    expect(saved, const BodyProfile(heightCm: 183, objective: .gainMuscle));
   });
 
   test('the objective drives the suggestion, and a slider drag overrides it', () {
