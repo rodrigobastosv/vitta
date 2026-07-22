@@ -6,6 +6,31 @@ abstract class PresentationCubit<S, P> extends Cubit<S> with BlocPresentationMix
 
   void onInit() {}
 
+  /// Guards every state emit against a closed cubit. A page-scoped cubit is
+  /// closed when its page pops, but an in-flight async load (a Supabase call, a
+  /// debounce) can resolve afterwards and try to `emit(...)` — which `bloc`
+  /// turns into an uncaught `StateError` that Sentry then reports as a crash.
+  /// Dropping the emit is correct: a closed cubit's state is never read again.
+  @override
+  void emit(S state) {
+    if (isClosed) {
+      return;
+    }
+    super.emit(state);
+  }
+
+  /// The presentation-event twin of the [emit] guard above. `emitPresentation`
+  /// adds to a broadcast `StreamController` that `close()` has already closed,
+  /// so a late one throws `Bad state: Cannot add event after closing` — the same
+  /// crash from the same async-gap cause. See CLAUDE.md > State management.
+  @override
+  void emitPresentation(P event) {
+    if (isClosed) {
+      return;
+    }
+    super.emitPresentation(event);
+  }
+
   /// Runs [load] bracketed by the loading overlay, but only when [showOverlay] is
   /// true. Skeleton-backed reads pass `showOverlay: state.isLoaded`: the first
   /// read (isLoaded == false) shows the skeleton instead of the overlay, while a
