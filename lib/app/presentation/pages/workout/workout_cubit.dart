@@ -198,7 +198,11 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (last == null || workoutExercise.isCardio) {
       return const Success(null);
     }
-    return logSet(workoutExerciseId: workoutExercise.id, input: SetInput.fromSet(last));
+    final loggedResult = await logSet(workoutExerciseId: workoutExercise.id, input: SetInput.fromSet(last));
+    // Announced here rather than at the tap, so a repeat that no-op'd or failed
+    // cannot start a rest for a set that was never written (issue #228).
+    loggedResult.when((_) {}, (_) => emitPresentation(WorkoutSetRepeated(workoutExercise: workoutExercise)));
+    return loggedResult;
   }
 
   Map<String, dynamic> _setLogData(SetInput input) => input.kind == SetKind.cardio
