@@ -1299,6 +1299,7 @@
   "workoutSummaryExercisesTitle": "What you did",
   "workoutFinishedTitle": "Workout done",
   "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session.",
+  "workoutSummaryViewAction": "View summary",
   "workoutFinishedCaloriesLabel": "Estimated burn",
   "workoutFinishedCaloriesValue": "~{calories} kcal",
   "@workoutFinishedCaloriesValue": {

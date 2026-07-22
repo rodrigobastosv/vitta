@@ -12,6 +12,13 @@ class LoggingNavigatorObserver extends NavigatorObserver {
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     super.didPop(route, previousRoute);
     _log('pop', route);
+    // A pop names the screen being left, which leaves the screen being returned
+    // to unrecorded - so nothing downstream can tell that Home came back into
+    // view. `reveal` is that second half, and it is what AnalyticsLogDestination
+    // counts as the screen view (a pop is an exit, not an arrival).
+    if (previousRoute != null) {
+      _log('reveal', previousRoute);
+    }
   }
 
   @override

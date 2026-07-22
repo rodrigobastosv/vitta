@@ -6,12 +6,20 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class WorkoutFinishedCard extends StatelessWidget {
-  const WorkoutFinishedCard({required this.estimatedCalories, required this.isBodyWeightKnown, super.key});
+  const WorkoutFinishedCard({required this.estimatedCalories, required this.isBodyWeightKnown, this.onViewSummary, super.key});
 
   static const double _avatarSize = 44;
 
   final int estimatedCalories;
   final bool isBodyWeightKnown;
+
+  /// Opens the day's summary. Null renders the card without a CTA - the "pass no
+  /// callback to disable" convention `MealSectionCard` established.
+  ///
+  /// This is what a day finished *earlier* offers: finishing the last exercise
+  /// pushes the summary itself, but a past day has no such moment to ride on, so
+  /// the way back to it has to be on the card.
+  final VoidCallback? onViewSummary;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +62,14 @@ class WorkoutFinishedCard extends StatelessWidget {
             style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
             textAlign: .center,
           ),
+          if (onViewSummary case final onViewSummary?) ...[
+            const VTGap.s(),
+            TextButton.icon(
+              onPressed: onViewSummary,
+              icon: const Icon(Icons.arrow_forward, size: 18),
+              label: Text(l10n.workoutSummaryViewAction),
+            ),
+          ],
         ],
       ),
     );

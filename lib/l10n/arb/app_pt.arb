@@ -1033,6 +1033,7 @@
   "workoutSummaryExercisesTitle": "O que você fez",
   "workoutFinishedTitle": "Treino concluído",
   "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino.",
+  "workoutSummaryViewAction": "Ver resumo",
   "workoutFinishedCaloriesLabel": "Gasto estimado",
   "workoutFinishedCaloriesValue": "~{calories} kcal",
   "@workoutFinishedCaloriesValue": {

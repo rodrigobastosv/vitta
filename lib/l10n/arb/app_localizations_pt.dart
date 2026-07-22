@@ -2209,6 +2209,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
 
   @override
+  String get workoutSummaryViewAction => 'Ver resumo';
+
+  @override
   String get workoutFinishedCaloriesLabel => 'Gasto estimado';
 
   @override

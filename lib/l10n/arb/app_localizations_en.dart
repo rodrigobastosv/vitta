@@ -2193,6 +2193,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
 
   @override
+  String get workoutSummaryViewAction => 'View summary';
+
+  @override
   String get workoutFinishedCaloriesLabel => 'Estimated burn';
 
   @override

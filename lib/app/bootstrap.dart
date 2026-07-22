@@ -5,6 +5,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/env/env.dart';
+import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
@@ -25,6 +26,9 @@ Future<void> bootstrap({required AppRunner appRunner}) async {
       setupDependencies(appBox: appBox, supabaseService: supabaseService);
       await G<NotificationService>().init();
       await G<PurchaseService>().init();
+      final analyticsService = G<AnalyticsService>();
+      await analyticsService.init();
+      analyticsService.setUserId(supabaseService.currentUserId);
       await appRunner();
     },
   );

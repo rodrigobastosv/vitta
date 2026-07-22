@@ -147,6 +147,7 @@ class WorkoutPage extends StatelessWidget {
                   child: WorkoutFinishedCard(
                     estimatedCalories: state.estimatedCalories(bodyWeightKg: state.latestBodyWeightKg).round(),
                     isBodyWeightKnown: state.isBodyWeightKnown,
+                    onViewSummary: () => unawaited(_showSummary(context, cubit)),
                   ),
                 ),
                 const VTGap.m(),

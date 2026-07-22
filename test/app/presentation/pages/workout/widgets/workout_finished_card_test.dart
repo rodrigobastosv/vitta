@@ -10,6 +10,7 @@ Future<void> pumpFinishedCard(
   bool isBodyWeightKnown = true,
   Locale locale = const Locale('en'),
   double width = 320,
+  VoidCallback? onViewSummary,
 }) async {
   tester.view.physicalSize = Size(width, 900);
   tester.view.devicePixelRatio = 1;
@@ -21,7 +22,11 @@ Future<void> pumpFinishedCard(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: WorkoutFinishedCard(estimatedCalories: estimatedCalories, isBodyWeightKnown: isBodyWeightKnown),
+        body: WorkoutFinishedCard(
+          estimatedCalories: estimatedCalories,
+          isBodyWeightKnown: isBodyWeightKnown,
+          onViewSummary: onViewSummary,
+        ),
       ),
     ),
   );
@@ -56,4 +61,19 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('offers a way back to the summary when a callback is passed', (tester) async {
+    var opened = 0;
+    await pumpFinishedCard(tester, onViewSummary: () => opened++);
+
+    await tester.tap(find.text('View summary'));
+
+    expect(opened, 1);
+  });
+
+  testWidgets('renders no CTA when there is nowhere to go', (tester) async {
+    await pumpFinishedCard(tester);
+
+    expect(find.text('View summary'), findsNothing);
+  });
 }

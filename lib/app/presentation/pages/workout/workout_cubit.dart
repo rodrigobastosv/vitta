@@ -109,7 +109,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     // landed, since the summary reads its progression and its calorie estimate
     // from exactly those.
     if (wasUnfinishedToday && state.isFinished) {
-      Log.action('workout_session_finished');
+      Log.action('workout_finished', data: {'exercises': state.exercises.length, 'sets': state.totalSets});
       emitPresentation(WorkoutSessionFinished());
     }
   }

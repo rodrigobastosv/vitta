@@ -4034,6 +4034,12 @@ abstract class AppLocalizations {
   /// **'Every exercise is checked off. Well done — see you next session.'**
   String get workoutFinishedMessage;
 
+  /// No description provided for @workoutSummaryViewAction.
+  ///
+  /// In en, this message translates to:
+  /// **'View summary'**
+  String get workoutSummaryViewAction;
+
   /// No description provided for @workoutFinishedCaloriesLabel.
   ///
   /// In en, this message translates to:
