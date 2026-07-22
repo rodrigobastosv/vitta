@@ -23,6 +23,7 @@ class ExerciseFilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final isCardioSelected = category == ExerciseCategory.cardio;
     return SizedBox(
       height: 40,
       child: ListView(
@@ -37,10 +38,17 @@ class ExerciseFilterChips extends StatelessWidget {
           const SizedBox(width: VTSpacing.s),
           // Cardio filters on a different column than the muscle chips beside it,
           // so it carries an icon: "Cardio" is a kind of exercise, not a body part.
+          // The glyph is inked against whichever surface it lands on - Material's
+          // default leaves it onSurfaceVariant even when selected, which is what
+          // washed it out on the primaryContainer fill.
           ChoiceChip(
-            avatar: Icon(Icons.directions_run, size: 18, color: category == null ? context.colorScheme.onSurfaceVariant : null),
+            avatar: Icon(
+              Icons.directions_run,
+              size: 18,
+              color: isCardioSelected ? context.colorScheme.onPrimaryContainer : context.colorScheme.onSurfaceVariant,
+            ),
             label: Text(ExerciseCategory.cardio.getLabel(l10n)),
-            selected: category == ExerciseCategory.cardio,
+            selected: isCardioSelected,
             onSelected: (isSelected) => onCategoryChanged(isSelected ? ExerciseCategory.cardio : null),
           ),
           for (final muscleGroup in MuscleGroup.values) ...[
