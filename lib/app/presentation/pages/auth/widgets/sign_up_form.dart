@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/inputs/vt_text_field.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 import 'package:vitta/app/presentation/pages/auth/widgets/avatar_picker.dart';
@@ -24,12 +25,16 @@ class _SignUpFormState extends State<SignUpForm> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
     super.dispose();
   }
 
@@ -55,23 +60,37 @@ class _SignUpFormState extends State<SignUpForm> {
           const VTGap.l(),
           AvatarPicker(state: widget.state),
           const VTGap.l(),
-          TextFormField(
+          VTTextField(
             controller: _nameController,
+            label: l10n.authDisplayNameLabel,
+            prefixIcon: Icons.person_outline,
             textCapitalization: TextCapitalization.words,
-            decoration: InputDecoration(labelText: l10n.authDisplayNameLabel),
+            textInputAction: .next,
+            autofillHints: const [AutofillHints.name],
+            onSubmitted: _emailFocus.requestFocus,
           ),
           const VTGap.s(),
-          TextFormField(
+          VTTextField(
             controller: _emailController,
+            focusNode: _emailFocus,
+            label: l10n.authEmailLabel,
+            prefixIcon: Icons.mail_outline,
             keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(labelText: l10n.authEmailLabel),
+            textInputAction: .next,
+            autofillHints: const [AutofillHints.email],
+            onSubmitted: _passwordFocus.requestFocus,
             validator: (value) => value != null && value.contains('@') ? null : l10n.authInvalidEmailMessage,
           ),
           const VTGap.s(),
-          TextFormField(
+          VTTextField(
             controller: _passwordController,
-            obscureText: true,
-            decoration: InputDecoration(labelText: l10n.authPasswordLabel),
+            focusNode: _passwordFocus,
+            label: l10n.authPasswordLabel,
+            prefixIcon: Icons.lock_outline,
+            obscurable: true,
+            textInputAction: .done,
+            autofillHints: const [AutofillHints.newPassword],
+            onSubmitted: _submit,
             validator: (value) => value != null && value.length >= 6 ? null : l10n.authInvalidPasswordMessage,
           ),
           const VTGap.l(),

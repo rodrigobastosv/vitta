@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/inputs/vt_text_field.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 typedef SignInSubmit = Future<void> Function({required String email, required String password});
@@ -20,11 +21,13 @@ class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordFocus = FocusNode();
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _passwordFocus.dispose();
     super.dispose();
   }
 
@@ -46,17 +49,26 @@ class _SignInFormState extends State<SignInForm> {
         children: [
           Text(l10n.signInTitle, style: VTTextStyles.title(context)),
           const VTGap.l(),
-          TextFormField(
+          VTTextField(
             controller: _emailController,
+            label: l10n.authEmailLabel,
+            prefixIcon: Icons.mail_outline,
             keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(labelText: l10n.authEmailLabel),
+            textInputAction: .next,
+            autofillHints: const [AutofillHints.email],
+            onSubmitted: _passwordFocus.requestFocus,
             validator: (value) => value != null && value.contains('@') ? null : l10n.authInvalidEmailMessage,
           ),
           const VTGap.s(),
-          TextFormField(
+          VTTextField(
             controller: _passwordController,
-            obscureText: true,
-            decoration: InputDecoration(labelText: l10n.authPasswordLabel),
+            focusNode: _passwordFocus,
+            label: l10n.authPasswordLabel,
+            prefixIcon: Icons.lock_outline,
+            obscurable: true,
+            textInputAction: .done,
+            autofillHints: const [AutofillHints.password],
+            onSubmitted: _submit,
             validator: (value) => value != null && value.length >= 6 ? null : l10n.authInvalidPasswordMessage,
           ),
           const VTGap.l(),

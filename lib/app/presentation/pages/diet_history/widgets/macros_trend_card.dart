@@ -30,7 +30,7 @@ class MacrosTrendCard extends StatelessWidget {
           if (!hasAnyLog)
             Text(l10n.dietTrendEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
-            VTBarChart(bars: _bars()),
+            VTBarChart(bars: _bars(context)),
             const VTGap.s(),
             Wrap(
               spacing: VTSpacing.m,
@@ -47,17 +47,27 @@ class MacrosTrendCard extends StatelessWidget {
     );
   }
 
-  List<VTBarChartBar> _bars() => [
-    for (final day in days)
-      if (macrosByDate[day] case final macros? when macros.entries.isNotEmpty)
-        VTBarChartBar(
-          segments: [
-            VTBarChartSegment(value: macros.totalProtein, color: VTColors.macroProtein),
-            VTBarChartSegment(value: macros.totalCarbs, color: VTColors.macroCarbs),
-            VTBarChartSegment(value: macros.totalFat, color: VTColors.macroFat),
-          ],
-        )
-      else
-        const VTBarChartBar.empty(),
-  ];
+  List<VTBarChartBar> _bars(BuildContext context) {
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
+    return [
+      for (final day in days)
+        if (macrosByDate[day] case final macros? when macros.entries.isNotEmpty)
+          VTBarChartBar(
+            segments: [
+              VTBarChartSegment(value: macros.totalProtein, color: VTColors.macroProtein),
+              VTBarChartSegment(value: macros.totalCarbs, color: VTColors.macroCarbs),
+              VTBarChartSegment(value: macros.totalFat, color: VTColors.macroFat),
+            ],
+            tooltip: l10n.chartTooltipMacros(
+              materialLocalizations.formatShortDate(day),
+              macros.totalProtein.round(),
+              macros.totalCarbs.round(),
+              macros.totalFat.round(),
+            ),
+          )
+        else
+          const VTBarChartBar.empty(),
+    ];
+  }
 }

@@ -39,7 +39,8 @@
       "Bash(dart format *)",
       "Bash(dart fix *)",
       "Bash(sed -i *)",
-      "Bash(xargs *)"
+      "Bash(xargs *)",
+      "Bash(grep *)"
     ]
   }
 }

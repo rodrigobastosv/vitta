@@ -320,6 +320,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietRecipeBadge => 'Receita';
 
   @override
+  String get dietCommonFoodBadge => 'Comum';
+
+  @override
   String dietQuantityUnits(String units) {
     return '$units un';
   }
@@ -2103,4 +2106,36 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get premiumPeriodLifetime => 'pagamento único';
+
+  @override
+  String chartTooltipEntry(String date, String value) {
+    return '$date · $value';
+  }
+
+  @override
+  String waterTrendTooltipValue(int ml) {
+    return '$ml ml';
+  }
+
+  @override
+  String chartTooltipMacros(String date, int protein, int carbs, int fat) {
+    return '$date\nP ${protein}g · C ${carbs}g · G ${fat}g';
+  }
+
+  @override
+  String get dietDayReadOnlyBadge => 'Somente leitura';
+
+  @override
+  String get workoutProgressionRecordLegend => 'Recorde pessoal';
+
+  @override
+  String get passwordShow => 'Mostrar senha';
+
+  @override
+  String get passwordHide => 'Ocultar senha';
+
+  @override
+  String dietCopyMealsTargetBanner(String date) {
+    return 'Copiando para $date';
+  }
 }

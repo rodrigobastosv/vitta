@@ -40,7 +40,7 @@ class SleepDurationTrendCard extends StatelessWidget {
           if (!average.hasData)
             Text(l10n.sleepTrendEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
-            VTBarChart(bars: _bars(colorScheme.primary), referenceValue: durationGoalHours, referenceColor: colorScheme.onSurfaceVariant),
+            VTBarChart(bars: _bars(context, colorScheme.primary), referenceValue: durationGoalHours, referenceColor: colorScheme.onSurfaceVariant),
             const VTGap.s(),
             VTLegendDot(label: l10n.dietGoalLineLabel, color: colorScheme.onSurfaceVariant, isDashed: true),
           ],
@@ -54,18 +54,23 @@ class SleepDurationTrendCard extends StatelessWidget {
       if (sleepByDate[day] case final sleep? when sleep.entries.isNotEmpty) sleep.totalHours,
   ];
 
-  List<VTBarChartBar> _bars(Color fallbackColor) => [
-    for (final day in days)
-      if (sleepByDate[day] case final sleep? when sleep.entries.isNotEmpty)
-        VTBarChartBar(
-          segments: [
-            VTBarChartSegment(
-              value: sleep.totalHours,
-              color: durationGoalHours <= 0 ? fallbackColor : GoalAdherence.forRatio(sleep.totalHours / durationGoalHours).color,
-            ),
-          ],
-        )
-      else
-        const VTBarChartBar.empty(),
-  ];
+  List<VTBarChartBar> _bars(BuildContext context, Color fallbackColor) {
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
+    return [
+      for (final day in days)
+        if (sleepByDate[day] case final sleep? when sleep.entries.isNotEmpty)
+          VTBarChartBar(
+            segments: [
+              VTBarChartSegment(
+                value: sleep.totalHours,
+                color: durationGoalHours <= 0 ? fallbackColor : GoalAdherence.forRatio(sleep.totalHours / durationGoalHours).color,
+              ),
+            ],
+            tooltip: l10n.chartTooltipEntry(materialLocalizations.formatShortDate(day), l10n.sleepHoursShort(sleep.totalHours.toStringAsFixed(1))),
+          )
+        else
+          const VTBarChartBar.empty(),
+    ];
+  }
 }

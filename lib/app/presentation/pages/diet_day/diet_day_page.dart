@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
+import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -20,7 +21,15 @@ class DietDayPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Scaffold(
-      appBar: AppBar(title: Text(context.materialLocalizations.formatFullDate(date))),
+      appBar: AppBar(
+        title: Text(context.materialLocalizations.formatFullDate(date)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: VTSpacing.m),
+            child: Center(child: VTBadge(label: l10n.dietDayReadOnlyBadge, color: context.colorScheme.onSurfaceVariant)),
+          ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(VTSpacing.m),
         children: [

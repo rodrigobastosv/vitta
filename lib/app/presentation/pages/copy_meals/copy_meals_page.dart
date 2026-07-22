@@ -14,6 +14,7 @@ import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_presentation_
 import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_state.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/widgets/copy_meals_calendar_card.dart';
 import 'package:vitta/app/presentation/pages/copy_meals/widgets/copy_meals_selection_card.dart';
+import 'package:vitta/app/presentation/pages/copy_meals/widgets/copy_meals_target_banner.dart';
 
 class CopyMealsPage extends StatelessWidget {
   const CopyMealsPage({required this.targetDate, super.key});
@@ -43,6 +44,8 @@ class CopyMealsPage extends StatelessWidget {
         body: ListView(
           padding: const EdgeInsets.all(VTSpacing.m),
           children: [
+            CopyMealsTargetBanner(targetDate: targetDate),
+            const VTGap.m(),
             Text(l10n.dietCopyMealsPrompt, style: VTTextStyles.body(context)),
             const VTGap.m(),
             CopyMealsCalendarCard(cubit: cubit, state: state),

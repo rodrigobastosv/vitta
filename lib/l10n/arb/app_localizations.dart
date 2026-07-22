@@ -686,6 +686,12 @@ abstract class AppLocalizations {
   /// **'Recipe'**
   String get dietRecipeBadge;
 
+  /// No description provided for @dietCommonFoodBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Common'**
+  String get dietCommonFoodBadge;
+
   /// No description provided for @dietQuantityUnits.
   ///
   /// In en, this message translates to:
@@ -3853,6 +3859,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'one-time payment'**
   String get premiumPeriodLifetime;
+
+  /// No description provided for @chartTooltipEntry.
+  ///
+  /// In en, this message translates to:
+  /// **'{date} · {value}'**
+  String chartTooltipEntry(String date, String value);
+
+  /// No description provided for @waterTrendTooltipValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{ml} ml'**
+  String waterTrendTooltipValue(int ml);
+
+  /// No description provided for @chartTooltipMacros.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}\nP {protein}g · C {carbs}g · F {fat}g'**
+  String chartTooltipMacros(String date, int protein, int carbs, int fat);
+
+  /// No description provided for @dietDayReadOnlyBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'View only'**
+  String get dietDayReadOnlyBadge;
+
+  /// No description provided for @workoutProgressionRecordLegend.
+  ///
+  /// In en, this message translates to:
+  /// **'Personal record'**
+  String get workoutProgressionRecordLegend;
+
+  /// No description provided for @passwordShow.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get passwordShow;
+
+  /// No description provided for @passwordHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get passwordHide;
+
+  /// No description provided for @dietCopyMealsTargetBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'Copying into {date}'**
+  String dietCopyMealsTargetBanner(String date);
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

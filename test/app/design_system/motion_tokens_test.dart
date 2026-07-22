@@ -10,6 +10,7 @@ const _allowed = {
   // A search debounce is an input delay, not a transition - the same category
   // as the HTTP retry backoff above.
   'lib/app/presentation/pages/add_food/add_food_cubit.dart',
+  'lib/app/presentation/pages/exercise_search/exercise_search_cubit.dart',
   // A continuous pulse, same as the spinner above. easeInOut is deliberate: a
   // pulse breathes symmetrically, where VTMotion.curve eases out of a change.
   'lib/app/design_system/components/general/vt_skeleton.dart',

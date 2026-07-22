@@ -34,7 +34,7 @@ class ExerciseSearchPage extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.s),
-              child: VTSearchField(hintText: l10n.exerciseSearchHint, onSubmitted: cubit.search),
+              child: VTSearchField(hintText: l10n.exerciseSearchHint, onSubmitted: cubit.search, onChanged: cubit.queryChanged),
             ),
             MuscleGroupFilter(selected: state.muscleGroup, onChanged: cubit.changeMuscleGroup),
             const VTGap.s(),

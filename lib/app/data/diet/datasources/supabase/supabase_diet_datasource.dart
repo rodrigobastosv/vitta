@@ -53,21 +53,46 @@ class SupabaseDietDataSource {
     }
   }
 
+  static const _catalogSearchLimit = 20;
+
+  // Curated generic whole foods (source 'generic', see issue #180) rank above
+  // every other source: Open Food Facts is a barcode database of packaged
+  // products, so a plain "banana" or "rice" was absent or buried under brands.
+  // The two queries run in parallel and generic is prepended, rather than one
+  // query ordered by source, because generic rows start at times_logged 0 and a
+  // single `.limit(20)` ordered by popularity would truncate them out before the
+  // app ever saw them. Within each tier the #56 popularity order is preserved.
   Future<Result<VTError, List<Food>>> searchCatalog({required String query}) async {
     try {
-      final rows = await _supabaseService
-          .from(.foods)
-          .select()
-          .ilike('name', '%$query%')
-          .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
-          .order('times_logged', ascending: false)
-          .order('name', ascending: true)
-          .limit(20);
-      return Success(rows.map(Food.fromMap).toList());
+      final tiers = await Future.wait([_genericCatalogRows(query: query), _nonGenericCatalogRows(query: query)]);
+      final foods = [
+        for (final rows in tiers)
+          for (final row in rows) Food.fromMap(row),
+      ];
+      return Success(foods.take(_catalogSearchLimit).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to search food catalog', cause: error));
     }
   }
+
+  Future<List<Map<String, dynamic>>> _genericCatalogRows({required String query}) => _supabaseService
+      .from(.foods)
+      .select()
+      .ilike('name', '%$query%')
+      .eq('source', FoodSource.generic.wireValue)
+      .order('times_logged', ascending: false)
+      .order('name', ascending: true)
+      .limit(_catalogSearchLimit);
+
+  Future<List<Map<String, dynamic>>> _nonGenericCatalogRows({required String query}) => _supabaseService
+      .from(.foods)
+      .select()
+      .ilike('name', '%$query%')
+      .neq('source', FoodSource.generic.wireValue)
+      .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
+      .order('times_logged', ascending: false)
+      .order('name', ascending: true)
+      .limit(_catalogSearchLimit);
 
   Future<Result<VTError, FoodLog>> logFood({
     required String foodId,

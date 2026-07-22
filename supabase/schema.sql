@@ -65,8 +65,14 @@ alter table foods alter column user_id drop not null;
 -- whose macros are the per-100g roll-up of its ingredients, so logging a recipe
 -- is the plain logFood path and every day/calendar/history view keeps working
 -- untouched. The recipes table below only holds the ingredient list behind it.
+-- 'generic' was added for issue #180: curated whole foods (fruit, rice, egg)
+-- seeded from USDA FoodData Central via tool/import_usda_foods.dart. Open Food
+-- Facts is a barcode database of packaged products, so simple foods were absent
+-- or buried under brands; generic rows are barcode-less, unowned (user_id null,
+-- like the imported OFF rows) and ranked above every other source in catalog
+-- search (see SupabaseDietDataSource.searchCatalog) so common foods surface first.
 alter table foods drop constraint if exists foods_source_check;
-alter table foods add constraint foods_source_check check (source in ('custom', 'open_food_facts', 'recipe'));
+alter table foods add constraint foods_source_check check (source in ('custom', 'open_food_facts', 'generic', 'recipe'));
 
 create index if not exists foods_user_id_idx on foods (user_id);
 

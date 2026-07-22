@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_bar.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
+import 'package:vitta/app/design_system/components/charts/vt_chart_tooltip.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 
 Future<void> pumpChart(WidgetTester tester, VTBarChart chart) => tester.pumpWidget(
@@ -74,5 +75,67 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('tapping a bar reveals its value tooltip and tapping again dismisses it', (tester) async {
+    await pumpChart(
+      tester,
+      const VTBarChart(
+        bars: [
+          VTBarChartBar(segments: [VTBarChartSegment(value: 1800, color: VTColors.green)], tooltip: 'Jul 1 - 1800 kcal'),
+          VTBarChartBar(segments: [VTBarChartSegment(value: 2400, color: VTColors.warning)], tooltip: 'Jul 2 - 2400 kcal'),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(VTChartTooltip), findsNothing);
+
+    final origin = tester.getTopLeft(find.byType(VTBarChart));
+    await tester.tapAt(origin + const Offset(75, 100));
+    await tester.pumpAndSettle();
+    expect(find.text('Jul 1 - 1800 kcal'), findsOneWidget);
+
+    await tester.tapAt(origin + const Offset(75, 100));
+    await tester.pumpAndSettle();
+    expect(find.byType(VTChartTooltip), findsNothing);
+  });
+
+  testWidgets('tapping a different bar moves the tooltip to it', (tester) async {
+    await pumpChart(
+      tester,
+      const VTBarChart(
+        bars: [
+          VTBarChartBar(segments: [VTBarChartSegment(value: 1800, color: VTColors.green)], tooltip: 'Jul 1 - 1800 kcal'),
+          VTBarChartBar(segments: [VTBarChartSegment(value: 2400, color: VTColors.warning)], tooltip: 'Jul 2 - 2400 kcal'),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final origin = tester.getTopLeft(find.byType(VTBarChart));
+    await tester.tapAt(origin + const Offset(75, 100));
+    await tester.pumpAndSettle();
+    expect(find.text('Jul 1 - 1800 kcal'), findsOneWidget);
+
+    await tester.tapAt(origin + const Offset(225, 100));
+    await tester.pumpAndSettle();
+    expect(find.text('Jul 1 - 1800 kcal'), findsNothing);
+    expect(find.text('Jul 2 - 2400 kcal'), findsOneWidget);
+  });
+
+  testWidgets('a bar with no tooltip is not tappable', (tester) async {
+    await pumpChart(
+      tester,
+      const VTBarChart(
+        bars: [
+          VTBarChartBar(segments: [VTBarChartSegment(value: 1800, color: VTColors.green)]),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tapAt(tester.getCenter(find.byType(VTBarChart)));
+    await tester.pumpAndSettle();
+    expect(find.byType(VTChartTooltip), findsNothing);
   });
 }

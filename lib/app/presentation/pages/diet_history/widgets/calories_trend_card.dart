@@ -43,7 +43,7 @@ class CaloriesTrendCard extends StatelessWidget {
           if (!average.hasData)
             Text(l10n.dietTrendEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
-            VTBarChart(bars: _bars(), referenceValue: macroGoals.calorieGoal, referenceColor: colorScheme.onSurfaceVariant),
+            VTBarChart(bars: _bars(context), referenceValue: macroGoals.calorieGoal, referenceColor: colorScheme.onSurfaceVariant),
             const VTGap.s(),
             VTLegendDot(label: l10n.dietGoalLineLabel, color: colorScheme.onSurfaceVariant, isDashed: true),
           ],
@@ -52,13 +52,18 @@ class CaloriesTrendCard extends StatelessWidget {
     );
   }
 
-  List<VTBarChartBar> _bars() => [
-    for (final day in days)
-      if (macrosByDate[day] case final macros? when macros.entries.isNotEmpty)
-        VTBarChartBar(
-          segments: [VTBarChartSegment(value: macros.totalCalories, color: macros.adherenceTo(macroGoals).color)],
-        )
-      else
-        const VTBarChartBar.empty(),
-  ];
+  List<VTBarChartBar> _bars(BuildContext context) {
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
+    return [
+      for (final day in days)
+        if (macrosByDate[day] case final macros? when macros.entries.isNotEmpty)
+          VTBarChartBar(
+            segments: [VTBarChartSegment(value: macros.totalCalories, color: macros.adherenceTo(macroGoals).color)],
+            tooltip: l10n.chartTooltipEntry(materialLocalizations.formatShortDate(day), l10n.dietMealCalories(macros.totalCalories.round())),
+          )
+        else
+          const VTBarChartBar.empty(),
+    ];
+  }
 }
