@@ -178,10 +178,87 @@ Still to do:
 
 - Paid Applications agreement cleared (Banking status **Clear**) — until then the SDK returns an empty
   offering and the paywall shows "unavailable" rather than a price. That is expected, not a bug.
-- `REVENUECAT_API_KEY` added as a GitHub secret, so release builds carry it. It is **optional** by design:
-  a build without it still launches and works, it just has no purchasable offer, because nothing else in
-  the app depends on purchases.
+- `REVENUECAT_IOS_API_KEY` and `REVENUECAT_ANDROID_API_KEY` added as GitHub secrets, so release builds
+  carry them. Both are **optional** by design: a build without its platform's key still launches and works,
+  it just has no purchasable offer, because nothing else in the app depends on purchases.
 - Sandbox verification: buy, cancel, refund, restore — see #155's Phase 4.
 
 Nothing in the domain, the data layer, the gate, or the two scan Edge Functions changed when this landed —
 which was the point of granting premium by hand first.
+
+## Android (issue #218)
+
+Android reported, on every launch:
+
+```
+Product not found: vitta_premium_monthly - Product Type: subs, Reason: PRODUCT_NOT_FOUND
+Could not find ProductDetails for vitta_premium_monthly
+Error fetching offerings - PurchasesError(code=ConfigurationError, ...)
+```
+
+The app handles this correctly already — `PremiumCubit.loadOffer` catches it, marks the offer loaded, and
+the paywall says "unavailable" instead of naming a price. **Nothing crashes and no user sees an error**;
+what you are reading is RevenueCat's own native logging. So this is a configuration story, plus one real
+code defect that was hiding inside it.
+
+### The code defect: one key cannot serve two stores
+
+`Env.revenueCatApiKey` used to read a single `REVENUECAT_API_KEY`, and `.env.example` documented it as the
+**App Store** key. A RevenueCat project holds one app per store, each with its own public SDK key, and the
+key is what tells the SDK *which app it is*. An Android build configured with the `appl_` key therefore
+fetches the App Store app's offering and asks Play for App Store product ids — which Play has never heard
+of. The failure never mentions the key; it says `PRODUCT_NOT_FOUND`.
+
+`Env` now picks by `defaultTargetPlatform`, and the two keys are separate variables and separate GitHub
+secrets. Each release workflow writes only its own platform's key. Leaving one empty is legitimate: that
+platform simply has no purchasable offer.
+
+### The rest is Play-side, and none of it lives in this repo
+
+Work through these in order:
+
+1. **Play Console → Monetize → Subscriptions**: create `vitta_premium_monthly` with a base plan, and
+   **activate** both the subscription and the base plan. A draft product is not fetchable.
+2. **RevenueCat → your project → Apps → + Android**: package `com.rodrigobastosv.vitta`, and upload the
+   **Play service-account JSON** (Google Cloud → IAM → service account, granted access in Play Console →
+   Users and permissions). Without those credentials RevenueCat cannot validate a Play purchase.
+3. **RevenueCat → Products**: add the Play product. A Play *subscription* is identified as
+   **`subscriptionId:basePlanId`** (e.g. `vitta_premium_monthly:monthly`), not by the subscription id
+   alone the way an App Store product is — entering just `vitta_premium_monthly` is the usual reason a
+   product looks registered but never resolves.
+4. **RevenueCat → Offerings**: attach that product to a package in the *same* offering the iOS product is
+   in, and make sure that offering is the **current** one — `PurchaseService.fetchOffers` reads
+   `offerings.current`, so a product sitting in Products but in no current offering is invisible to the app.
+5. **The app must exist on a Play track.** Play Billing only serves products to a build whose package and
+   **signing key** match an app uploaded to Play (internal testing is enough), installed by an account on
+   that track and listed under **License testing**.
+
+### Read the error text — it names which step you are on
+
+The message changes as you go, and it is the only signal that distinguishes these:
+
+| What the SDK says | What is actually wrong |
+| --- | --- |
+| `PRODUCT_NOT_FOUND` for a product id, `Could not find ProductDetails` | The build is asking Play for ids Play does not have. Either the app is configured with the **iOS key** (fixed in this repo, see above), or step 1 / 5. |
+| `You have configured the SDK with a Play Store API key, but there are no Play Store products registered in the RevenueCat dashboard for your offerings` | The **key is right** and Android is talking to the Android app. The current offering has no Play product attached — steps 3 and 4. |
+| An empty offering with no error | The dashboard is fine and the store returned nothing — step 5, or Play still propagating a just-activated product (up to a few hours). |
+
+The paywall says "unavailable" in all three cases, which is the correct thing to show while any of them is
+true.
+
+### Why point 4 blocks testing today
+
+The Android pipeline distributes through **Firebase App Distribution**, signed with the committed
+`android/app/debug.keystore` (see [firebase-distribution-setup.md](firebase-distribution-setup.md)) — a
+build that never passed through Play and carries a signature Play does not know. **Play Billing cannot
+serve products to it, whatever the RevenueCat side looks like.** `statusCode=3` in those logs is
+`BILLING_UNAVAILABLE`, which is exactly this and not a missing product.
+
+So there is no fix that makes purchases work on a Firebase-distributed build. Testing Android purchases
+needs a Play internal-testing track: a Play Console app record, a release signed with the **upload key**
+Play holds, and testers installing from Play rather than from Firebase. That is a Play Console pipeline this
+repo does not have yet — Firebase App Distribution is beta delivery, not a store listing — and it is the one
+piece of Android premium that is genuinely blocked rather than merely unconfigured.
+
+Until then the honest state is: Android launches, everything free works, and the paywall says purchases are
+unavailable, which is true.
