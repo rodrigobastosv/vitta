@@ -1003,6 +1003,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietRecipeDeleteTooltip => 'Remover';
 
   @override
+  String get dietRecipeAddToMealAction => 'Adicionar à refeição';
+
+  @override
   String dietRecipeIngredientCount(int count, int grams) {
     return '$count ingredientes - $grams g';
   }
@@ -1014,7 +1017,8 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietRecipeSubtitle => 'Receitas são só suas e nunca aparecem na busca de outra pessoa.';
 
   @override
-  String get dietRecipeLogHint => 'Busque pelo nome em Adicionar alimento para registrar em qualquer dia.';
+  String get dietRecipeLogHint =>
+      'Toque em Adicionar à refeição para registrar a receita inteira, ou busque pelo nome em Adicionar alimento.';
 
   @override
   String get mealTypeBreakfast => 'Café da manhã';

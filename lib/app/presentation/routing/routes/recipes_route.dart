@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:vitta/app/presentation/pages/recipes/recipes_extra.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_page.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 import 'package:vitta/app/presentation/routing/vt_route.dart';
@@ -9,5 +10,5 @@ class RecipesRoute extends VTRoute {
 
   @override
   GoRouterWidgetBuilder get builder =>
-      (context, state) => const RecipesPage();
+      (context, state) => RecipesPage(targetDate: (state.extra as RecipesExtra?)?.targetDate ?? DateTime.now());
 }

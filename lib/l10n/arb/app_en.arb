@@ -584,10 +584,11 @@
   "dietRecipeSaveAction": "Save recipe",
   "dietRecipeSavedToast": "Saved as a food you can log",
   "dietRecipeDeleteTooltip": "Remove",
+  "dietRecipeAddToMealAction": "Add to meal",
   "dietRecipeIngredientCount": "{count} ingredients - {grams} g",
   "dietPickIngredientTitle": "Pick a food",
   "dietRecipeSubtitle": "Recipes are yours only and never show up in anyone else's search.",
-  "dietRecipeLogHint": "Search it by name in Add food to log it on any day.",
+  "dietRecipeLogHint": "Tap Add to meal to log the whole recipe, or search it by name in Add food.",
   "@dietRecipeTotalGrams": {
     "placeholders": {
       "grams": {

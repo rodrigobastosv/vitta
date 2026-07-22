@@ -1886,6 +1886,12 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get dietRecipeDeleteTooltip;
 
+  /// No description provided for @dietRecipeAddToMealAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to meal'**
+  String get dietRecipeAddToMealAction;
+
   /// No description provided for @dietRecipeIngredientCount.
   ///
   /// In en, this message translates to:
@@ -1907,7 +1913,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietRecipeLogHint.
   ///
   /// In en, this message translates to:
-  /// **'Search it by name in Add food to log it on any day.'**
+  /// **'Tap Add to meal to log the whole recipe, or search it by name in Add food.'**
   String get dietRecipeLogHint;
 
   /// No description provided for @mealTypeBreakfast.

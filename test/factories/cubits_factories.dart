@@ -172,8 +172,17 @@ abstract class CubitsFactories {
     loggedDate: loggedDate ?? DateTime(2026, 7, 19),
   );
 
-  static RecipesCubit buildRecipesCubit({MockGetRecipesUseCase? getRecipesUseCase, MockDeleteRecipeUseCase? deleteRecipeUseCase}) =>
-      RecipesCubit(getRecipesUseCase: getRecipesUseCase ?? MockGetRecipesUseCase(), deleteRecipeUseCase: deleteRecipeUseCase ?? MockDeleteRecipeUseCase());
+  static RecipesCubit buildRecipesCubit({
+    MockGetRecipesUseCase? getRecipesUseCase,
+    MockDeleteRecipeUseCase? deleteRecipeUseCase,
+    MockLogFoodUseCase? logFoodUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => RecipesCubit(
+    getRecipesUseCase: getRecipesUseCase ?? MockGetRecipesUseCase(),
+    deleteRecipeUseCase: deleteRecipeUseCase ?? MockDeleteRecipeUseCase(),
+    logFoodUseCase: logFoodUseCase ?? MockLogFoodUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
 
   static RecipeFormCubit buildRecipeFormCubit({
     MockSaveRecipeUseCase? saveRecipeUseCase,
