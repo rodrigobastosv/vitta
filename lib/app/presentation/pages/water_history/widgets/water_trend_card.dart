@@ -43,7 +43,7 @@ class WaterTrendCard extends StatelessWidget {
           if (!average.hasData)
             Text(l10n.waterTrendEmptyMessage, style: VTTextStyles.caption(context))
           else ...[
-            VTBarChart(bars: _bars(colorScheme.primary), referenceValue: dailyGoalMl, referenceColor: colorScheme.onSurfaceVariant),
+            VTBarChart(bars: _bars(context, colorScheme.primary), referenceValue: dailyGoalMl, referenceColor: colorScheme.onSurfaceVariant),
             const VTGap.s(),
             VTLegendDot(label: l10n.dietGoalLineLabel, color: colorScheme.onSurfaceVariant, isDashed: true),
           ],
@@ -52,15 +52,20 @@ class WaterTrendCard extends StatelessWidget {
     );
   }
 
-  List<VTBarChartBar> _bars(Color fallbackColor) => [
-    for (final day in days)
-      if (waterByDate[day] case final water? when water.entries.isNotEmpty)
-        VTBarChartBar(
-          segments: [
-            VTBarChartSegment(value: water.totalMl, color: dailyGoalMl <= 0 ? fallbackColor : GoalAdherence.forRatio(water.totalMl / dailyGoalMl).color),
-          ],
-        )
-      else
-        const VTBarChartBar.empty(),
-  ];
+  List<VTBarChartBar> _bars(BuildContext context, Color fallbackColor) {
+    final l10n = context.l10n;
+    final materialLocalizations = context.materialLocalizations;
+    return [
+      for (final day in days)
+        if (waterByDate[day] case final water? when water.entries.isNotEmpty)
+          VTBarChartBar(
+            segments: [
+              VTBarChartSegment(value: water.totalMl, color: dailyGoalMl <= 0 ? fallbackColor : GoalAdherence.forRatio(water.totalMl / dailyGoalMl).color),
+            ],
+            tooltip: l10n.chartTooltipEntry(materialLocalizations.formatShortDate(day), l10n.waterTrendTooltipValue(water.totalMl.round())),
+          )
+        else
+          const VTBarChartBar.empty(),
+    ];
+  }
 }

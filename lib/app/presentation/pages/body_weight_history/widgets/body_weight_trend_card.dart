@@ -36,6 +36,7 @@ class BodyWeightTrendCard extends StatelessWidget {
                 VTLineChartPoint(
                   value: unitSystem.kilogramsToDisplayLoad(log.weightKg),
                   label: index == 0 || index == logs.length - 1 ? materialLocalizations.formatShortDate(log.loggedDate) : null,
+                  tooltip: l10n.chartTooltipEntry(materialLocalizations.formatShortDate(log.loggedDate), bodyWeightDisplay(l10n, unitSystem, log.weightKg)),
                 ),
             ],
           ),

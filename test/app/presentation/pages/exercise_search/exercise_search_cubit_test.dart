@@ -94,4 +94,34 @@ void main() {
       isA<ExerciseSearchError>().having((event) => event.message, 'message', 'offline'),
     ],
   );
+
+  test('typing searches on its own, once the keystrokes stop', () async {
+    final searchExercisesUseCase = MockSearchExercisesUseCase();
+    when(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')))
+        .thenAnswer((_) async => Success([ExerciseFactory.build()]));
+    final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
+
+    cubit
+      ..queryChanged('sup')
+      ..queryChanged('supi')
+      ..queryChanged('supino');
+
+    verifyNever(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')));
+
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    verify(() => searchExercisesUseCase(query: 'supino', muscleGroup: any(named: 'muscleGroup'))).called(1);
+    await cubit.close();
+  });
+
+  test('a one-letter query never reaches the network', () async {
+    final searchExercisesUseCase = MockSearchExercisesUseCase();
+    final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
+
+    cubit.queryChanged('s');
+    await Future<void>.delayed(const Duration(milliseconds: 500));
+
+    verifyNever(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')));
+    await cubit.close();
+  });
 }

@@ -37,6 +37,24 @@ void main() {
     );
   });
 
+  test('fromMap parses a barcode-less generic whole food', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Arroz branco cozido',
+      'brand': null,
+      'barcode': null,
+      'source': 'generic',
+      'calories_per_100g': 130,
+      'protein_per_100g': 2.7,
+      'carbs_per_100g': 28,
+      'fat_per_100g': 0.3,
+      'fiber_per_100g': 0.4,
+    });
+
+    expect(food.source, FoodSource.generic);
+    expect(food.barcode, isNull);
+  });
+
   test('fromMap handles null brand and barcode', () {
     final food = Food.fromMap(const {
       'id': 'food-1',

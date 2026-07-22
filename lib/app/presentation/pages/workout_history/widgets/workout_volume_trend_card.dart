@@ -51,6 +51,7 @@ class WorkoutVolumeTrendCard extends StatelessWidget {
                   if (workoutsByDate[day] case final workout? when workout.hasData)
                     VTBarChartBar(
                       segments: [VTBarChartSegment(value: unitSystem.kilogramsToDisplayLoad(workout.volumeKg), color: colorScheme.primary)],
+                      tooltip: l10n.chartTooltipEntry(context.materialLocalizations.formatShortDate(day), _formatVolume(workout.volumeKg)),
                     )
                   else
                     const VTBarChartBar.empty(),

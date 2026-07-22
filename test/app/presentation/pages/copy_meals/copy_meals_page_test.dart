@@ -104,6 +104,12 @@ void main() {
     expect(tester.widget<VTPrimaryButton>(find.byType(VTPrimaryButton)).onPressed, isNull);
   });
 
+  testWidgets('names the destination day so the calendar reads as the source', (tester) async {
+    await pumpCopyMealsPage(tester, buildTestApp(cubit: buildCubit(macrosByDate: aDayWithBreakfastAndLunch())));
+
+    expect(find.text('Copying into Tuesday, July 14, 2026'), findsOneWidget);
+  });
+
   testWidgets('picking a day lists its meals ticked and enables copying', (tester) async {
     await pumpCopyMealsPage(tester, buildTestApp(cubit: buildCubit(macrosByDate: aDayWithBreakfastAndLunch())));
 

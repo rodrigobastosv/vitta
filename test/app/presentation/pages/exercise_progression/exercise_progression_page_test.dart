@@ -70,6 +70,7 @@ void main() {
     expect(find.text('Estimated 1RM'), findsOneWidget);
     expect(find.text('Heaviest load'), findsWidgets);
     expect(find.byType(VTBarChart), findsNWidgets(2));
+    expect(find.text('Personal record'), findsNWidgets(2));
   });
 
   testWidgets('shows the empty state when the exercise has no history', (tester) async {

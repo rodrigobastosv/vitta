@@ -126,6 +126,7 @@
   "onboardingBackAction": "Back",
   "delete": "Delete",
   "dietRecipeBadge": "Recipe",
+  "dietCommonFoodBadge": "Common",
   "dietQuantityUnits": "{units} un",
   "@dietQuantityUnits": {
     "placeholders": {
@@ -1180,5 +1181,53 @@
   "premiumPeriodThreeMonth": "every 3 months",
   "premiumPeriodSixMonth": "every 6 months",
   "premiumPeriodAnnual": "per year",
-  "premiumPeriodLifetime": "one-time payment"
+  "premiumPeriodLifetime": "one-time payment",
+  "chartTooltipEntry": "{date} · {value}",
+  "@chartTooltipEntry": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "waterTrendTooltipValue": "{ml} ml",
+  "@waterTrendTooltipValue": {
+    "placeholders": {
+      "ml": {
+        "type": "int"
+      }
+    }
+  },
+  "chartTooltipMacros": "{date}\nP {protein}g · C {carbs}g · F {fat}g",
+  "@chartTooltipMacros": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "protein": {
+        "type": "int"
+      },
+      "carbs": {
+        "type": "int"
+      },
+      "fat": {
+        "type": "int"
+      }
+    }
+  },
+  "dietDayReadOnlyBadge": "View only",
+  "workoutProgressionRecordLegend": "Personal record",
+  "passwordShow": "Show password",
+  "passwordHide": "Hide password",
+  "dietCopyMealsTargetBanner": "Copying into {date}",
+  "@dietCopyMealsTargetBanner": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  }
 }

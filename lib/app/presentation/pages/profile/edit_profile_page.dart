@@ -5,6 +5,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/inputs/vt_text_field.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
@@ -86,10 +87,13 @@ class _EditProfileFormState extends State<_EditProfileForm> {
       children: [
         AvatarPicker(state: widget.state),
         const VTGap.l(),
-        TextField(
+        VTTextField(
           controller: _nameController,
+          label: l10n.authDisplayNameLabel,
+          prefixIcon: Icons.person_outline,
           textCapitalization: TextCapitalization.words,
-          decoration: InputDecoration(labelText: l10n.authDisplayNameLabel),
+          textInputAction: .done,
+          autofillHints: const [AutofillHints.name],
         ),
         const VTGap.l(),
         VTPrimaryButton(

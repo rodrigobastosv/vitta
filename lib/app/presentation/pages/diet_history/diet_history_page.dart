@@ -68,9 +68,7 @@ class DietHistoryPage extends StatelessWidget {
               const VTGap.l(),
               Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
               const VTGap.m(),
-              Center(
-                child: TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-              ),
+              TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
               const VTGap.m(),
               VTAppearEffect(
                 key: ValueKey('calories-${state.trendRange}'),

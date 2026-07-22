@@ -63,6 +63,12 @@ void main() {
     expect(find.textContaining('Add to'), findsNothing);
   });
 
+  testWidgets('marks itself view only so the missing controls read as deliberate', (tester) async {
+    await pumpDietDayPage(tester, dailyMacros: DailyMacros(entries: [FoodLogEntryFactory.build()]));
+
+    expect(find.text('View only'), findsOneWidget);
+  });
+
   testWidgets('still surfaces micronutrients so the day reads as complete', (tester) async {
     await pumpDietDayPage(
       tester,

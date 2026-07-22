@@ -8,7 +8,6 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
-import 'package:vitta/app/presentation/pages/add_food/widgets/food_source_badge.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodResultTile extends StatelessWidget {
@@ -38,6 +37,16 @@ class FoodResultTile extends StatelessWidget {
     };
   }
 
+  // The source tag rides on the meta line, not next to the name, so a badge word
+  // ("Common"/"Recipe") can't shrink the name to an ellipsis (see issue #180). It
+  // is inline colored text rather than a padded pill so every row keeps one
+  // meta-line height and the list stays un-ragged.
+  (String, Color)? _sourceTag(AppLocalizations l10n) => switch (food.source) {
+    FoodSource.generic => (l10n.dietCommonFoodBadge, VTColors.green),
+    FoodSource.recipe => (l10n.dietRecipeBadge, VTColors.macroFiber),
+    _ => null,
+  };
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -56,17 +65,16 @@ class FoodResultTile extends StatelessWidget {
               crossAxisAlignment: .start,
               mainAxisSize: .min,
               children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(food.name, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
-                    ),
-                    if (food.source == FoodSource.recipe) ...[const VTGap.xs(), FoodSourceBadge(source: food.source)],
-                  ],
-                ),
-                Text(
-                  subtitle(l10n),
-                  style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                Text(food.name, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
+                Text.rich(
+                  TextSpan(
+                    style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                    children: [
+                      if (_sourceTag(l10n) case (final label, final color))
+                        TextSpan(text: '$label · ', style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700)),
+                      TextSpan(text: subtitle(l10n)),
+                    ],
+                  ),
                   maxLines: 1,
                   overflow: .ellipsis,
                 ),
