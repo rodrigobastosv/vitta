@@ -670,4 +670,64 @@ void main() {
 
     expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
   });
+
+  test('repeating a set announces it, so the rest starts for a set that exists', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => Success(WorkoutSetFactory.build()));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      logSetUseCase: logSetUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), hasLength(1));
+  });
+
+  // The rest exists to time a set that was written. A failed write leaves nothing
+  // to rest after, so announcing it would start a phantom countdown (issue #228).
+  test('a failed repeat announces nothing', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      logSetUseCase: logSetUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
+  });
+
+  test('repeating an exercise with nothing to repeat announces nothing', () async {
+    final logSetUseCase = MockLogSetUseCase();
+    final cubit = CubitsFactories.buildWorkoutCubit(logSetUseCase: logSetUseCase);
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build());
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
+    verifyNever(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')));
+  });
 }

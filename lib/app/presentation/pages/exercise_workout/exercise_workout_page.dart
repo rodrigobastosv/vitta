@@ -33,9 +33,14 @@ class ExerciseWorkoutPage extends StatelessWidget {
 
   Future<void> _finish(BuildContext context, ExerciseWorkoutCubit cubit, ExerciseWorkoutState state) async {
     final navigator = Navigator.of(context);
+    final timer = context.read<RestTimerCubit>();
     final wasCompleted = state.isCompleted;
     final succeeded = await cubit.setCompleted(completed: !wasCompleted);
     if (succeeded && !wasCompleted) {
+      // A rest times the gap before the next set of this exercise, and there is
+      // no next set once it is finished - leaving it running would count down
+      // over the next exercise the user opens (issue #228).
+      timer.skip();
       navigator.pop();
     }
   }

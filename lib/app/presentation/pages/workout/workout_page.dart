@@ -16,6 +16,7 @@ import 'package:vitta/app/design_system/components/general/vt_rest_timer.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/workout/entities/equipment.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
@@ -33,6 +34,22 @@ import 'package:vitta/app/presentation/pages/workout_summary/workout_summary_ext
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({super.key});
+
+  // A rest times the gap before the next set of *that* exercise, so finishing it
+  // ends the rest rather than leaving it counting down over whatever the user
+  // opens next (issue #228) - the same "there is no next set to rest for" rule
+  // that already withholds a rest after a cardio effort.
+  static Future<void> _setCompleted(
+    BuildContext context,
+    WorkoutCubit cubit, {
+    required WorkoutExercise workoutExercise,
+    required bool completed,
+  }) async {
+    if (completed) {
+      context.read<RestTimerCubit>().skip();
+    }
+    await cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed);
+  }
 
   static Future<void> _showSummary(BuildContext context, WorkoutCubit cubit) => context.pushRoute(
     .workoutSummary,
@@ -55,6 +72,7 @@ class WorkoutPage extends StatelessWidget {
         WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
         WorkoutError(:final message, :final date) => context.showErrorToast(message: message, onRetry: () => context.read<WorkoutCubit>().goToDate(date)),
         WorkoutSessionFinished() => unawaited(_showSummary(context, context.read<WorkoutCubit>())),
+        WorkoutSetRepeated(:final workoutExercise) => context.read<RestTimerCubit>().start(label: workoutExercise.exercise.nameFor(l10n.localeName)),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
@@ -153,13 +171,8 @@ class WorkoutPage extends StatelessWidget {
                         await cubit.loadDate(state.date);
                       },
                       onRemove: () => cubit.removeExercise(workoutExerciseId: workoutExercise.id),
-                      onToggleCompleted: (completed) => cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed),
-                      onRepeatSet: () async {
-                        await cubit.repeatLastSet(workoutExercise: workoutExercise);
-                        if (context.mounted) {
-                          context.read<RestTimerCubit>().start(label: workoutExercise.exercise.nameFor(l10n.localeName));
-                        }
-                      },
+                      onToggleCompleted: (completed) => _setCompleted(context, cubit, workoutExercise: workoutExercise, completed: completed),
+                      onRepeatSet: () => cubit.repeatLastSet(workoutExercise: workoutExercise),
                       onEditSet: (set) => showLogSetSheet(
                         context: context,
                         unitSystem: cubit.unitSystem,
