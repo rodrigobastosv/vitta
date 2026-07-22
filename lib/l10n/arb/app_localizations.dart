@@ -260,6 +260,18 @@ abstract class AppLocalizations {
   /// **'Delete'**
   String get reminderDeleteTooltip;
 
+  /// No description provided for @reminderCompleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get reminderCompleteAction;
+
+  /// No description provided for @reminderOverdueBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Overdue'**
+  String get reminderOverdueBadge;
+
   /// No description provided for @reminderPreviousDayTooltip.
   ///
   /// In en, this message translates to:

@@ -93,6 +93,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderDeleteTooltip => 'Delete';
 
   @override
+  String get reminderCompleteAction => 'Complete';
+
+  @override
+  String get reminderOverdueBadge => 'Overdue';
+
+  @override
   String get reminderPreviousDayTooltip => 'Previous day';
 
   @override
