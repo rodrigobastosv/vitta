@@ -28,6 +28,8 @@
   "reminderRepeatWeekly": "Weekly",
   "reminderRepeatMonthly": "Monthly",
   "reminderDeleteTooltip": "Delete",
+  "reminderCompleteAction": "Complete",
+  "reminderOverdueBadge": "Overdue",
   "reminderPreviousDayTooltip": "Previous day",
   "reminderNextDayTooltip": "Next day",
   "reminderToday": "Today",

@@ -5,6 +5,8 @@ import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
+import 'package:vitta/app/design_system/components/general/vt_swipe_actions.dart';
+import 'package:vitta/app/design_system/components/inputs/vt_check_circle.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
@@ -19,8 +21,7 @@ class ReminderTile extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onDelete;
 
-  void _onChanged(bool? value) {
-    final completed = value ?? false;
+  void _onChanged(bool completed) {
     if (!completed) {
       VTHaptics.selection();
     }
@@ -29,6 +30,24 @@ class ReminderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final card = _card(context);
+    final onDelete = this.onDelete;
+    if (onDelete == null) {
+      return card;
+    }
+    return VTSwipeActions(
+      itemKey: ValueKey(reminder.id),
+      onDelete: onDelete,
+      deleteLabel: l10n.reminderDeleteTooltip,
+      leading: onToggle != null && !reminder.isCompleted
+          ? VTSwipeAction(onTrigger: () => onToggle!(true), icon: Icons.check_rounded, color: VTColors.success, semanticLabel: l10n.reminderCompleteAction)
+          : null,
+      child: card,
+    );
+  }
+
+  Widget _card(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
     final completed = reminder.isCompleted;
@@ -40,8 +59,9 @@ class ReminderTile extends StatelessWidget {
           VTCelebration(
             trigger: completed,
             size: VTCelebrationSize.small,
-            child: Checkbox(value: completed, shape: const CircleBorder(), onChanged: onToggle == null ? null : _onChanged),
+            child: VTCheckCircle(value: completed, onChanged: onToggle == null ? null : _onChanged),
           ),
+          const VTGap.s(),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,
@@ -57,7 +77,7 @@ class ReminderTile extends StatelessWidget {
                 ),
                 if (_meta(context) case final meta when meta.isNotEmpty) ...[
                   const VTGap.xs(),
-                  Wrap(spacing: VTSpacing.s, runSpacing: VTSpacing.xs, children: meta),
+                  Wrap(spacing: VTSpacing.s, runSpacing: VTSpacing.xs, crossAxisAlignment: .center, children: meta),
                 ],
               ],
             ),
@@ -72,14 +92,20 @@ class ReminderTile extends StatelessWidget {
   List<Widget> _meta(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
+    final overdue = reminder.isOverdue();
+    final remindAt = reminder.remindAt;
     return [
-      if (reminder.remindAt case final remindAt?)
+      if (overdue) VTBadge(label: l10n.reminderOverdueBadge, color: VTColors.error),
+      if (remindAt != null)
         Row(
           mainAxisSize: .min,
           children: [
-            Icon(Icons.notifications_none_rounded, size: 14, color: colorScheme.onSurfaceVariant),
+            Icon(Icons.notifications_none_rounded, size: 14, color: overdue ? VTColors.error : colorScheme.onSurfaceVariant),
             const VTGap.xs(),
-            Text(context.materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(remindAt)), style: VTTextStyles.caption(context)),
+            Text(
+              context.materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(remindAt)),
+              style: VTTextStyles.caption(context).copyWith(color: overdue ? VTColors.error : null, fontWeight: overdue ? .w700 : null),
+            ),
           ],
         ),
       if (reminder.recurrence != .none) VTBadge(label: reminder.recurrence.label(l10n), color: VTColors.macroFat),

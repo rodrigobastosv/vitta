@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
@@ -120,7 +121,6 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
             contentPadding: EdgeInsets.zero,
             secondary: Icon(Icons.notifications_none_rounded, color: colorScheme.primary),
             title: Text(l10n.reminderRemindLabel, style: VTTextStyles.body(context)),
-            subtitle: _remindEnabled ? Text(_remindTime.format(context), style: VTTextStyles.caption(context)) : null,
             value: _remindEnabled,
             onChanged: (value) async {
               setState(() => _remindEnabled = value);
@@ -130,21 +130,35 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
             },
           ),
           if (_remindEnabled)
-            Align(
-              alignment: .centerLeft,
-              child: TextButton.icon(onPressed: _pickTime, icon: const Icon(Icons.schedule), label: Text(_remindTime.format(context))),
+            Padding(
+              padding: const EdgeInsets.only(left: 40),
+              child: Align(
+                alignment: .centerLeft,
+                child: ActionChip(avatar: const Icon(Icons.schedule, size: 18), label: Text(_remindTime.format(context)), onPressed: _pickTime),
+              ),
             ),
+          const VTGap.m(),
+          Row(
+            children: [
+              Icon(Icons.repeat_rounded, color: colorScheme.primary),
+              const VTGap.m(),
+              Text(l10n.reminderRepeatLabel, style: VTTextStyles.body(context)),
+            ],
+          ),
           const VTGap.s(),
-          Text(l10n.reminderRepeatLabel, style: VTTextStyles.caption(context)),
-          const VTGap.xs(),
           Wrap(
             spacing: VTSpacing.s,
+            runSpacing: VTSpacing.xs,
             children: [
               for (final recurrence in ReminderRecurrence.values)
                 ChoiceChip(
                   label: Text(recurrence.label(l10n)),
                   selected: _recurrence == recurrence,
-                  onSelected: (_) => setState(() => _recurrence = recurrence),
+                  showCheckmark: false,
+                  onSelected: (_) {
+                    VTHaptics.selection();
+                    setState(() => _recurrence = recurrence);
+                  },
                 ),
             ],
           ),

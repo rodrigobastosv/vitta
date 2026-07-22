@@ -26,6 +26,17 @@ class Reminder extends Equatable {
 
   bool get isRecurring => recurrence != .none;
 
+  // Past its deadline and still open. The deadline is the reminder time when set,
+  // otherwise the end of the due day, so an all-day reminder only reads as overdue
+  // once the day is fully gone.
+  bool isOverdue([DateTime? now]) {
+    if (isCompleted) {
+      return false;
+    }
+    final deadline = remindAt ?? DateTime(dueDate.year, dueDate.month, dueDate.day, 23, 59, 59);
+    return deadline.isBefore(now ?? DateTime.now());
+  }
+
   // flutter_local_notifications keys schedules by int; derive a stable, non-negative
   // one from the row id so scheduling and cancelling always target the same slot.
   int get notificationId => id.hashCode & 0x7fffffff;
