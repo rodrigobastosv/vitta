@@ -178,6 +178,7 @@ import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dar
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
+import 'package:vitta/app/presentation/pages/trends/trends_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water_history/water_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
@@ -364,6 +365,19 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactory(() => DietHistoryCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G()));
+  G.registerFactory(
+    () => TrendsCubit(
+      getMacrosInRangeUseCase: G(),
+      getMacroGoalsUseCase: G(),
+      getWaterInRangeUseCase: G(),
+      getWaterGoalUseCase: G(),
+      getSleepInRangeUseCase: G(),
+      getSleepGoalUseCase: G(),
+      getDailyWorkoutsInRangeUseCase: G(),
+      getBodyWeightInRangeUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
   G.registerFactoryParam<CopyMealsCubit, DateTime, void>(
     (targetDate, _) => CopyMealsCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G(), copyFoodLogsUseCase: G(), targetDate: targetDate),
   );

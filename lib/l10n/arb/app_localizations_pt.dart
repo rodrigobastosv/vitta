@@ -409,6 +409,70 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileSexTitle => 'Sexo biológico';
+
+  @override
+  String get bodyProfileSexHint => 'Homens e mulheres gastam quantidades diferentes em repouso, então isso muda a estimativa.';
+
+  @override
+  String get bodyProfileSexMale => 'Masculino';
+
+  @override
+  String get bodyProfileSexFemale => 'Feminino';
+
+  @override
+  String get bodyProfileAgeLabel => 'Idade';
+
+  @override
+  String bodyProfileAgeValue(int years) {
+    return '$years anos';
+  }
+
+  @override
+  String get bodyProfileActivityTitle => 'Nível de atividade';
+
+  @override
+  String get bodyProfileActivityHint => 'O quanto você se movimenta num dia comum, treino incluído.';
+
+  @override
+  String get bodyProfileActivitySedentary => 'Sedentário';
+
+  @override
+  String get bodyProfileActivityLightlyActive => 'Pouco ativo';
+
+  @override
+  String get bodyProfileActivityModeratelyActive => 'Moderadamente ativo';
+
+  @override
+  String get bodyProfileActivityVeryActive => 'Muito ativo';
+
+  @override
+  String get bodyProfileActivityExtraActive => 'Extremamente ativo';
+
+  @override
+  String get bodyProfileMetabolismTitle => 'Metabolismo basal';
+
+  @override
+  String bodyProfileMetabolismBasal(int calories) {
+    return '$calories kcal em repouso';
+  }
+
+  @override
+  String bodyProfileMetabolismMaintenance(int calories) {
+    return '$calories kcal para manter';
+  }
+
+  @override
+  String get bodyProfileMetabolismMethod => 'Mifflin-St Jeor, multiplicado pelo seu nível de atividade.';
+
+  @override
+  String get bodyProfileMetabolismMeasured => 'Calculado a partir do seu peso, altura, sexo, idade e nível de atividade.';
+
+  @override
+  String get bodyProfileMetabolismAssumed =>
+      'Parte disso é suposição — informe sexo, idade e nível de atividade para um número mais próximo.';
+
+  @override
   String get objectiveOverwritesGoalsNote => 'Salvar substitui suas metas de macros. Você ainda pode ajustá-las na página de dieta.';
 
   @override
@@ -2527,4 +2591,77 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trendsTitle => 'Tendências';
+
+  @override
+  String get trendsFeatureTooltip => 'Tendências';
+
+  @override
+  String get trendsAreasTitle => 'Área por área';
+
+  @override
+  String get trendsRingCaption => 'no alvo';
+
+  @override
+  String get trendsVerdictOnTrackTitle => 'Você está no caminho';
+
+  @override
+  String get trendsVerdictMixedTitle => 'Quase lá';
+
+  @override
+  String get trendsVerdictOffTrackTitle => 'Fora do caminho';
+
+  @override
+  String get trendsVerdictUnknownTitle => 'Ainda não dá para dizer';
+
+  @override
+  String get trendsVerdictUnknownMessage => 'Registre alguns dias de comida, água ou sono e esta tela vai dizer como você está indo.';
+
+  @override
+  String trendsVerdictSummary(int onTrack, int total, int days) {
+    return '$onTrack de $total metas no alvo nos últimos $days dias';
+  }
+
+  @override
+  String trendsChangeVsPrevious(String change, int days) {
+    return '$change em relação aos $days dias anteriores';
+  }
+
+  @override
+  String get trendsNoComparison => 'Ainda não há dados anteriores para comparar';
+
+  @override
+  String get trendsAdherenceMet => 'No alvo';
+
+  @override
+  String get trendsAdherenceClose => 'Perto';
+
+  @override
+  String get trendsAdherenceOff => 'Fora do alvo';
+
+  @override
+  String get trendsMetricCalories => 'Calorias por dia';
+
+  @override
+  String get trendsMetricWater => 'Água por dia';
+
+  @override
+  String get trendsMetricSleep => 'Sono por noite';
+
+  @override
+  String get trendsMetricVolume => 'Volume por sessão';
+
+  @override
+  String get trendsMetricBodyWeight => 'Peso';
+
+  @override
+  String get trendsEmptyTitle => 'Ainda sem tendências';
+
+  @override
+  String get trendsEmptyMessage => 'Registre comida, água, sono, treinos ou peso por alguns dias e a sua história aparece aqui.';
+
+  @override
+  String get trendsEmptyAction => 'Começar a registrar';
 }

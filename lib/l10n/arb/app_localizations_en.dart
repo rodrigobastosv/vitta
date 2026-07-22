@@ -409,6 +409,69 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileSexTitle => 'Biological sex';
+
+  @override
+  String get bodyProfileSexHint => 'Men and women burn different amounts at rest, so this moves the estimate.';
+
+  @override
+  String get bodyProfileSexMale => 'Male';
+
+  @override
+  String get bodyProfileSexFemale => 'Female';
+
+  @override
+  String get bodyProfileAgeLabel => 'Age';
+
+  @override
+  String bodyProfileAgeValue(int years) {
+    return '$years yrs';
+  }
+
+  @override
+  String get bodyProfileActivityTitle => 'Activity level';
+
+  @override
+  String get bodyProfileActivityHint => 'How much you move on an ordinary day, training included.';
+
+  @override
+  String get bodyProfileActivitySedentary => 'Sedentary';
+
+  @override
+  String get bodyProfileActivityLightlyActive => 'Lightly active';
+
+  @override
+  String get bodyProfileActivityModeratelyActive => 'Moderately active';
+
+  @override
+  String get bodyProfileActivityVeryActive => 'Very active';
+
+  @override
+  String get bodyProfileActivityExtraActive => 'Extra active';
+
+  @override
+  String get bodyProfileMetabolismTitle => 'Basal metabolism';
+
+  @override
+  String bodyProfileMetabolismBasal(int calories) {
+    return '$calories kcal at rest';
+  }
+
+  @override
+  String bodyProfileMetabolismMaintenance(int calories) {
+    return '$calories kcal to maintain';
+  }
+
+  @override
+  String get bodyProfileMetabolismMethod => 'Mifflin-St Jeor, multiplied by your activity level.';
+
+  @override
+  String get bodyProfileMetabolismMeasured => 'Worked out from your weight, height, sex, age and activity level.';
+
+  @override
+  String get bodyProfileMetabolismAssumed => 'Part of this is assumed — fill in your sex, age and activity level for a closer figure.';
+
+  @override
   String get objectiveOverwritesGoalsNote => 'Saving replaces your macro goals. You can still fine-tune them from the diet page.';
 
   @override
@@ -2497,4 +2560,77 @@ class AppLocalizationsEn extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(days, locale: localeName, other: '$days days apart', one: '1 day apart', zero: 'Same day');
     return '$_temp0';
   }
+
+  @override
+  String get trendsTitle => 'Trends';
+
+  @override
+  String get trendsFeatureTooltip => 'Trends';
+
+  @override
+  String get trendsAreasTitle => 'Area by area';
+
+  @override
+  String get trendsRingCaption => 'on track';
+
+  @override
+  String get trendsVerdictOnTrackTitle => 'You\'re on track';
+
+  @override
+  String get trendsVerdictMixedTitle => 'Mostly on track';
+
+  @override
+  String get trendsVerdictOffTrackTitle => 'Off track';
+
+  @override
+  String get trendsVerdictUnknownTitle => 'Nothing to judge yet';
+
+  @override
+  String get trendsVerdictUnknownMessage => 'Log a few days of food, water or sleep and this page will tell you how you\'re doing.';
+
+  @override
+  String trendsVerdictSummary(int onTrack, int total, int days) {
+    return '$onTrack of $total goals on target over the last $days days';
+  }
+
+  @override
+  String trendsChangeVsPrevious(String change, int days) {
+    return '$change vs the previous $days days';
+  }
+
+  @override
+  String get trendsNoComparison => 'No earlier data to compare with yet';
+
+  @override
+  String get trendsAdherenceMet => 'On target';
+
+  @override
+  String get trendsAdherenceClose => 'Close';
+
+  @override
+  String get trendsAdherenceOff => 'Off target';
+
+  @override
+  String get trendsMetricCalories => 'Calories per day';
+
+  @override
+  String get trendsMetricWater => 'Water per day';
+
+  @override
+  String get trendsMetricSleep => 'Sleep per night';
+
+  @override
+  String get trendsMetricVolume => 'Volume per session';
+
+  @override
+  String get trendsMetricBodyWeight => 'Weight';
+
+  @override
+  String get trendsEmptyTitle => 'No trends yet';
+
+  @override
+  String get trendsEmptyMessage => 'Track your food, water, sleep, workouts or weight for a few days and your story shows up here.';
+
+  @override
+  String get trendsEmptyAction => 'Start tracking';
 }

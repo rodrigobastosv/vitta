@@ -818,6 +818,120 @@ abstract class AppLocalizations {
   /// **'Assuming {weight} — log a weight for a target built on yours'**
   String objectiveWeightAssumed(String weight);
 
+  /// No description provided for @bodyProfileSexTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Biological sex'**
+  String get bodyProfileSexTitle;
+
+  /// No description provided for @bodyProfileSexHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Men and women burn different amounts at rest, so this moves the estimate.'**
+  String get bodyProfileSexHint;
+
+  /// No description provided for @bodyProfileSexMale.
+  ///
+  /// In en, this message translates to:
+  /// **'Male'**
+  String get bodyProfileSexMale;
+
+  /// No description provided for @bodyProfileSexFemale.
+  ///
+  /// In en, this message translates to:
+  /// **'Female'**
+  String get bodyProfileSexFemale;
+
+  /// No description provided for @bodyProfileAgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Age'**
+  String get bodyProfileAgeLabel;
+
+  /// No description provided for @bodyProfileAgeValue.
+  ///
+  /// In en, this message translates to:
+  /// **'{years} yrs'**
+  String bodyProfileAgeValue(int years);
+
+  /// No description provided for @bodyProfileActivityTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Activity level'**
+  String get bodyProfileActivityTitle;
+
+  /// No description provided for @bodyProfileActivityHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How much you move on an ordinary day, training included.'**
+  String get bodyProfileActivityHint;
+
+  /// No description provided for @bodyProfileActivitySedentary.
+  ///
+  /// In en, this message translates to:
+  /// **'Sedentary'**
+  String get bodyProfileActivitySedentary;
+
+  /// No description provided for @bodyProfileActivityLightlyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Lightly active'**
+  String get bodyProfileActivityLightlyActive;
+
+  /// No description provided for @bodyProfileActivityModeratelyActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Moderately active'**
+  String get bodyProfileActivityModeratelyActive;
+
+  /// No description provided for @bodyProfileActivityVeryActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Very active'**
+  String get bodyProfileActivityVeryActive;
+
+  /// No description provided for @bodyProfileActivityExtraActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra active'**
+  String get bodyProfileActivityExtraActive;
+
+  /// No description provided for @bodyProfileMetabolismTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Basal metabolism'**
+  String get bodyProfileMetabolismTitle;
+
+  /// No description provided for @bodyProfileMetabolismBasal.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal at rest'**
+  String bodyProfileMetabolismBasal(int calories);
+
+  /// No description provided for @bodyProfileMetabolismMaintenance.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal to maintain'**
+  String bodyProfileMetabolismMaintenance(int calories);
+
+  /// No description provided for @bodyProfileMetabolismMethod.
+  ///
+  /// In en, this message translates to:
+  /// **'Mifflin-St Jeor, multiplied by your activity level.'**
+  String get bodyProfileMetabolismMethod;
+
+  /// No description provided for @bodyProfileMetabolismMeasured.
+  ///
+  /// In en, this message translates to:
+  /// **'Worked out from your weight, height, sex, age and activity level.'**
+  String get bodyProfileMetabolismMeasured;
+
+  /// No description provided for @bodyProfileMetabolismAssumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Part of this is assumed — fill in your sex, age and activity level for a closer figure.'**
+  String get bodyProfileMetabolismAssumed;
+
   /// No description provided for @objectiveOverwritesGoalsNote.
   ///
   /// In en, this message translates to:
@@ -4543,6 +4657,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days, plural, =0{Same day} =1{1 day apart} other{{days} days apart}}'**
   String progressPhotosCompareDaysApart(int days);
+
+  /// No description provided for @trendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get trendsTitle;
+
+  /// No description provided for @trendsFeatureTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get trendsFeatureTooltip;
+
+  /// No description provided for @trendsAreasTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Area by area'**
+  String get trendsAreasTitle;
+
+  /// No description provided for @trendsRingCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'on track'**
+  String get trendsRingCaption;
+
+  /// No description provided for @trendsVerdictOnTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on track'**
+  String get trendsVerdictOnTrackTitle;
+
+  /// No description provided for @trendsVerdictMixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mostly on track'**
+  String get trendsVerdictMixedTitle;
+
+  /// No description provided for @trendsVerdictOffTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Off track'**
+  String get trendsVerdictOffTrackTitle;
+
+  /// No description provided for @trendsVerdictUnknownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to judge yet'**
+  String get trendsVerdictUnknownTitle;
+
+  /// No description provided for @trendsVerdictUnknownMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few days of food, water or sleep and this page will tell you how you\'re doing.'**
+  String get trendsVerdictUnknownMessage;
+
+  /// No description provided for @trendsVerdictSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{onTrack} of {total} goals on target over the last {days} days'**
+  String trendsVerdictSummary(int onTrack, int total, int days);
+
+  /// No description provided for @trendsChangeVsPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'{change} vs the previous {days} days'**
+  String trendsChangeVsPrevious(String change, int days);
+
+  /// No description provided for @trendsNoComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier data to compare with yet'**
+  String get trendsNoComparison;
+
+  /// No description provided for @trendsAdherenceMet.
+  ///
+  /// In en, this message translates to:
+  /// **'On target'**
+  String get trendsAdherenceMet;
+
+  /// No description provided for @trendsAdherenceClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get trendsAdherenceClose;
+
+  /// No description provided for @trendsAdherenceOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off target'**
+  String get trendsAdherenceOff;
+
+  /// No description provided for @trendsMetricCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories per day'**
+  String get trendsMetricCalories;
+
+  /// No description provided for @trendsMetricWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water per day'**
+  String get trendsMetricWater;
+
+  /// No description provided for @trendsMetricSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep per night'**
+  String get trendsMetricSleep;
+
+  /// No description provided for @trendsMetricVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume per session'**
+  String get trendsMetricVolume;
+
+  /// No description provided for @trendsMetricBodyWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get trendsMetricBodyWeight;
+
+  /// No description provided for @trendsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No trends yet'**
+  String get trendsEmptyTitle;
+
+  /// No description provided for @trendsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your food, water, sleep, workouts or weight for a few days and your story shows up here.'**
+  String get trendsEmptyMessage;
+
+  /// No description provided for @trendsEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking'**
+  String get trendsEmptyAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

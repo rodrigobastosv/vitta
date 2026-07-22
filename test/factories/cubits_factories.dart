@@ -25,6 +25,7 @@ import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dar
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
+import 'package:vitta/app/presentation/pages/trends/trends_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water_history/water_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
@@ -379,6 +380,28 @@ abstract class CubitsFactories {
     completeReminderUseCase: completeReminderUseCase ?? MockCompleteReminderUseCase(),
     deleteReminderUseCase: deleteReminderUseCase ?? MockDeleteReminderUseCase(),
     notificationService: notificationService ?? MockNotificationService(),
+  );
+
+  static TrendsCubit buildTrendsCubit({
+    MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockGetWaterInRangeUseCase? getWaterInRangeUseCase,
+    MockGetWaterGoalUseCase? getWaterGoalUseCase,
+    MockGetSleepInRangeUseCase? getSleepInRangeUseCase,
+    MockGetSleepGoalUseCase? getSleepGoalUseCase,
+    MockGetDailyWorkoutsInRangeUseCase? getDailyWorkoutsInRangeUseCase,
+    MockGetBodyWeightInRangeUseCase? getBodyWeightInRangeUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => TrendsCubit(
+    getMacrosInRangeUseCase: getMacrosInRangeUseCase ?? MockGetMacrosInRangeUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    getWaterInRangeUseCase: getWaterInRangeUseCase ?? MockGetWaterInRangeUseCase(),
+    getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
+    getSleepInRangeUseCase: getSleepInRangeUseCase ?? MockGetSleepInRangeUseCase(),
+    getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
+    getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase ?? MockGetDailyWorkoutsInRangeUseCase(),
+    getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase ?? MockGetBodyWeightInRangeUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
   static ReminderHistoryCubit buildReminderHistoryCubit({MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase}) =>
