@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
+import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/health/health_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
+import 'package:vitta/app/core/services/logging/analytics_log_destination.dart';
 import 'package:vitta/app/core/services/logging/console_log_destination.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/logging/logging_service.dart';
@@ -201,7 +203,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(HealthService.new);
   G.registerLazySingleton(NotificationService.new);
   G.registerLazySingleton(PurchaseService.new);
-  Log.service = LoggingService(destinations: const [ConsoleLogDestination(), SentryLogDestination()]);
+  G.registerLazySingleton(AnalyticsService.new);
+  Log.service = LoggingService(
+    destinations: [const ConsoleLogDestination(), const SentryLogDestination(), AnalyticsLogDestination(analyticsService: G())],
+  );
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
   G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
@@ -446,6 +451,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       uploadAvatarUseCase: G(),
       deleteAccountUseCase: G(),
       imagePickerService: G(),
+      analyticsService: G(),
     ),
   );
   G.registerFactory(

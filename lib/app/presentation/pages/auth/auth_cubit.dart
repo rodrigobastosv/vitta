@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
@@ -26,6 +27,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     required this._uploadAvatarUseCase,
     required this._deleteAccountUseCase,
     required this._imagePickerService,
+    required this._analyticsService,
   }) : _getUserUseCase = getUserUseCase,
        super(AuthState(user: getUserUseCase()));
 
@@ -37,6 +39,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
   final UploadAvatarUseCase _uploadAvatarUseCase;
   final DeleteAccountUseCase _deleteAccountUseCase;
   final ImagePickerService _imagePickerService;
+  final AnalyticsService _analyticsService;
 
   static const double _avatarMaxWidth = 512;
 
@@ -93,6 +96,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
   void _onAuthResult(Result<VTError, User> statusResult, {required String action}) {
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (value) {
       Log.action(action);
+      _identify(value);
       emit(state.copyWith(user: value));
       emitPresentation(AuthSignedIn());
     });
@@ -131,12 +135,25 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
 
+  // Analytics is identified here rather than only at bootstrap, because signing
+  // in or out swaps the auth.uid() mid-session and the events after it belong to
+  // whoever is signed in now. An anonymous user clears the id: the fresh
+  // per-device session that sign-out and account deletion leave behind must not
+  // inherit the previous person's funnel.
+  void _identify(User user) {
+    _analyticsService.setUserId(switch (user) {
+      AuthenticatedUser(:final id) => id,
+      AnonymousUser() => null,
+    });
+  }
+
   Future<void> signOut() async {
     emitPresentation(AuthShowLoading());
     final statusResult = await _signOutUseCase();
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
       Log.action('sign_out');
+      _identify(user);
       emit(state.copyWith(user: user));
     });
   }
@@ -147,6 +164,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
       Log.action('account_deleted');
+      _identify(user);
       emit(state.copyWith(user: user));
       emitPresentation(AuthAccountDeleted());
     });

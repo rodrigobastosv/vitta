@@ -2151,6 +2151,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
 
   @override
+  String get workoutSummaryTitle => 'Resumo do treino';
+
+  @override
+  String get workoutSummaryViewAction => 'Ver resumo';
+
+  @override
+  String get workoutSummaryExercisesTitle => 'O que você treinou';
+
+  @override
+  String get workoutSummaryDoneAction => 'Concluir';
+
+  @override
   String get workoutCompleteNeedsSetTooltip => 'Registre uma série antes de concluir este exercício';
 
   @override

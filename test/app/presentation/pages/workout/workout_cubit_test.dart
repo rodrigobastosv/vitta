@@ -568,4 +568,77 @@ void main() {
 
     verify(markIntroSeen.call).called(1);
   });
+
+  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
+    'signals the finish when the last exercise is checked off',
+    build: () {
+      final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+      when(
+        () => setCompleted(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
+      ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+        (_) async => Success([
+          WorkoutFactory.build(
+            exercises: [
+              WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 15)),
+            ],
+          ),
+        ]),
+      );
+      return CubitsFactories.buildWorkoutCubit(
+        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+        setWorkoutExerciseCompletedUseCase: setCompleted,
+        getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+      );
+    },
+    act: (cubit) => cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
+      completed: true,
+    ),
+    expectPresentation: () => [isA<WorkoutFinished>()],
+  );
+
+  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
+    'does not signal the finish again for a workout that was already finished',
+    build: () {
+      final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+      when(
+        () => setCompleted(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
+      ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+        (_) async => Success([
+          WorkoutFactory.build(
+            exercises: [
+              WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 15)),
+            ],
+          ),
+        ]),
+      );
+      return CubitsFactories.buildWorkoutCubit(
+        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+        setWorkoutExerciseCompletedUseCase: setCompleted,
+        getRoutineCycleUseCase: _emptyCycleUseCase(),
+        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+      );
+    },
+    act: (cubit) async {
+      await cubit.setExerciseCompleted(
+        workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
+        completed: true,
+      );
+      await cubit.setExerciseCompleted(
+        workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
+        completed: true,
+      );
+    },
+    // The reload behind the second call still raises the overlay (the day is
+    // already loaded by then) - what matters is that WorkoutFinished appears
+    // once, on the edge, and not again for a workout that was already finished.
+    expectPresentation: () => [isA<WorkoutFinished>(), isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+  );
 }

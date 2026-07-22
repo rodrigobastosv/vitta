@@ -24,6 +24,7 @@ enum AppRoute {
   workout('/workout'),
   workoutIntro('/workout/intro'),
   workoutHistory('/workout/history'),
+  workoutSummary('/workout/summary'),
   routines('/workout/routines'),
   routineForm('/workout/routines/new'),
   exerciseSearch('/workout/exercise-search'),

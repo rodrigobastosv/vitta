@@ -2135,6 +2135,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
 
   @override
+  String get workoutSummaryTitle => 'Workout summary';
+
+  @override
+  String get workoutSummaryViewAction => 'View summary';
+
+  @override
+  String get workoutSummaryExercisesTitle => 'What you trained';
+
+  @override
+  String get workoutSummaryDoneAction => 'Done';
+
+  @override
   String get workoutCompleteNeedsSetTooltip => 'Log a set before finishing this exercise';
 
   @override

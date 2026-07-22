@@ -27,6 +27,22 @@ void main() {
     verify(() => loggingService.logNavigation(action: 'pop', route: 'addFood')).called(1);
   });
 
+  test('logs a reveal for the route a pop returns to, which a pop alone never names', () {
+    final loggingService = useMockLog();
+
+    LoggingNavigatorObserver().didPop(route('addFood'), route('diet'));
+
+    verify(() => loggingService.logNavigation(action: 'reveal', route: 'diet')).called(1);
+  });
+
+  test('logs no reveal when a pop returns to nothing', () {
+    final loggingService = useMockLog();
+
+    LoggingNavigatorObserver().didPop(route('diet'), null);
+
+    verifyNever(() => loggingService.logNavigation(action: 'reveal', route: any(named: 'route')));
+  });
+
   test('falls back to unknown when an unnamed route is not a known popup', () {
     final loggingService = useMockLog();
 

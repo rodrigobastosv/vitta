@@ -9,7 +9,6 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
 import 'package:vitta/app/cubit/rest_timer_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
-import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
@@ -30,6 +29,7 @@ import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_car
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
+import 'package:vitta/app/presentation/pages/workout_summary/workout_summary_extra.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({super.key});
@@ -42,6 +42,7 @@ class WorkoutPage extends StatelessWidget {
         WorkoutShowLoading() => context.showLoading(),
         WorkoutHideLoading() => context.hideLoading(),
         WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
+        WorkoutFinished() => unawaited(_openSummary(context, context.read<WorkoutCubit>(), celebrate: true)),
         WorkoutError(:final message, :final date) => context.showErrorToast(message: message, onRetry: () => context.read<WorkoutCubit>().goToDate(date)),
       },
       builder: (context, cubit, state) => Scaffold(
@@ -111,13 +112,15 @@ class WorkoutPage extends StatelessWidget {
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
               VTAppearEffect(
-                child: VTCelebration(
-                  trigger: state.isFinished,
-                  child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
-                ),
+                child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
               ),
               const VTGap.m(),
-              if (state.isFinished) ...[const VTAppearEffect(child: WorkoutFinishedCard()), const VTGap.m()],
+              if (state.isFinished) ...[
+                VTAppearEffect(
+                  child: WorkoutFinishedCard(onViewSummary: () => _openSummary(context, cubit)),
+                ),
+                const VTGap.m(),
+              ],
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(
@@ -163,6 +166,14 @@ class WorkoutPage extends StatelessWidget {
       ),
     );
   }
+
+  // The summary takes the day whole rather than re-fetching it, so it is read off
+  // the cubit at the moment of the tap - `state` in the builder can be a frame
+  // stale after the reload that finishing triggers.
+  Future<void> _openSummary(BuildContext context, WorkoutCubit cubit, {bool celebrate = false}) => context.pushRoute(
+    .workoutSummary,
+    extra: WorkoutSummaryExtra(state: cubit.state, unitSystem: cubit.unitSystem, celebrate: celebrate),
+  );
 
   static DateTime _today() {
     final now = DateTime.now();
