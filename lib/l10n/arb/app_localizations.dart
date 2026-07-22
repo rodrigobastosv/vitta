@@ -656,6 +656,138 @@ abstract class AppLocalizations {
   /// **'Skip for now'**
   String get onboardingGoalsSkipAction;
 
+  /// No description provided for @onboardingGoalsSuggestedFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested for {objective}'**
+  String onboardingGoalsSuggestedFor(String objective);
+
+  /// No description provided for @onboardingBodyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about you'**
+  String get onboardingBodyTitle;
+
+  /// No description provided for @onboardingBodyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weight and height let us suggest a calorie target. We\'ll save this weight as your first entry.'**
+  String get onboardingBodyMessage;
+
+  /// No description provided for @onboardingWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current weight'**
+  String get onboardingWeightLabel;
+
+  /// No description provided for @onboardingHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get onboardingHeightLabel;
+
+  /// No description provided for @onboardingObjectiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you aiming for?'**
+  String get onboardingObjectiveTitle;
+
+  /// No description provided for @objectiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your objective'**
+  String get objectiveTitle;
+
+  /// No description provided for @objectiveMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your objective sets your daily calorie target and how it splits into protein, carbs and fat. Change it whenever your training does.'**
+  String get objectiveMessage;
+
+  /// No description provided for @objectiveTargetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily calorie target'**
+  String get objectiveTargetTitle;
+
+  /// No description provided for @objectiveWeightFromLatest.
+  ///
+  /// In en, this message translates to:
+  /// **'From your latest weigh-in, {weight}'**
+  String objectiveWeightFromLatest(String weight);
+
+  /// No description provided for @objectiveWeightAssumed.
+  ///
+  /// In en, this message translates to:
+  /// **'Assuming {weight} — log a weight for a target built on yours'**
+  String objectiveWeightAssumed(String weight);
+
+  /// No description provided for @objectiveOverwritesGoalsNote.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving replaces your macro goals. You can still fine-tune them from the diet page.'**
+  String get objectiveOverwritesGoalsNote;
+
+  /// No description provided for @objectiveSaveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save objective'**
+  String get objectiveSaveAction;
+
+  /// No description provided for @objectiveSavedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Objective updated'**
+  String get objectiveSavedTitle;
+
+  /// No description provided for @objectiveSavedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your calorie target and macros now follow it.'**
+  String get objectiveSavedMessage;
+
+  /// No description provided for @profileObjectiveSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Set your goal and recalculate your targets'**
+  String get profileObjectiveSubtitle;
+
+  /// No description provided for @onboardingObjectiveLoseWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Lose weight'**
+  String get onboardingObjectiveLoseWeight;
+
+  /// No description provided for @onboardingObjectiveLoseWeightMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Eat under maintenance, keep the protein high'**
+  String get onboardingObjectiveLoseWeightMessage;
+
+  /// No description provided for @onboardingObjectiveMaintainWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain weight'**
+  String get onboardingObjectiveMaintainWeight;
+
+  /// No description provided for @onboardingObjectiveMaintainWeightMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay where you are, with a balanced split'**
+  String get onboardingObjectiveMaintainWeightMessage;
+
+  /// No description provided for @onboardingObjectiveGainMuscle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gain muscle'**
+  String get onboardingObjectiveGainMuscle;
+
+  /// No description provided for @onboardingObjectiveGainMuscleMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Eat a little over maintenance to build'**
+  String get onboardingObjectiveGainMuscleMessage;
+
   /// No description provided for @onboardingAccountTitle.
   ///
   /// In en, this message translates to:
@@ -2461,12 +2593,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Guest'**
   String get profileGuestTitle;
-
-  /// No description provided for @profileMacroGoalsSubtitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Your daily calorie and macro targets'**
-  String get profileMacroGoalsSubtitle;
 
   /// No description provided for @profileSettingsSubtitle.
   ///

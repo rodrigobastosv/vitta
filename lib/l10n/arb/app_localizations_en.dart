@@ -305,6 +305,80 @@ class AppLocalizationsEn extends AppLocalizations {
   String get onboardingGoalsSkipAction => 'Skip for now';
 
   @override
+  String onboardingGoalsSuggestedFor(String objective) {
+    return 'Suggested for $objective';
+  }
+
+  @override
+  String get onboardingBodyTitle => 'Tell us about you';
+
+  @override
+  String get onboardingBodyMessage =>
+      'Your weight and height let us suggest a calorie target. We\'ll save this weight as your first entry.';
+
+  @override
+  String get onboardingWeightLabel => 'Current weight';
+
+  @override
+  String get onboardingHeightLabel => 'Height';
+
+  @override
+  String get onboardingObjectiveTitle => 'What are you aiming for?';
+
+  @override
+  String get objectiveTitle => 'Your objective';
+
+  @override
+  String get objectiveMessage =>
+      'Your objective sets your daily calorie target and how it splits into protein, carbs and fat. Change it whenever your training does.';
+
+  @override
+  String get objectiveTargetTitle => 'Daily calorie target';
+
+  @override
+  String objectiveWeightFromLatest(String weight) {
+    return 'From your latest weigh-in, $weight';
+  }
+
+  @override
+  String objectiveWeightAssumed(String weight) {
+    return 'Assuming $weight — log a weight for a target built on yours';
+  }
+
+  @override
+  String get objectiveOverwritesGoalsNote => 'Saving replaces your macro goals. You can still fine-tune them from the diet page.';
+
+  @override
+  String get objectiveSaveAction => 'Save objective';
+
+  @override
+  String get objectiveSavedTitle => 'Objective updated';
+
+  @override
+  String get objectiveSavedMessage => 'Your calorie target and macros now follow it.';
+
+  @override
+  String get profileObjectiveSubtitle => 'Set your goal and recalculate your targets';
+
+  @override
+  String get onboardingObjectiveLoseWeight => 'Lose weight';
+
+  @override
+  String get onboardingObjectiveLoseWeightMessage => 'Eat under maintenance, keep the protein high';
+
+  @override
+  String get onboardingObjectiveMaintainWeight => 'Maintain weight';
+
+  @override
+  String get onboardingObjectiveMaintainWeightMessage => 'Stay where you are, with a balanced split';
+
+  @override
+  String get onboardingObjectiveGainMuscle => 'Gain muscle';
+
+  @override
+  String get onboardingObjectiveGainMuscleMessage => 'Eat a little over maintenance to build';
+
+  @override
   String get onboardingAccountTitle => 'Keep your data safe';
 
   @override
@@ -1330,9 +1404,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get profileGuestTitle => 'Guest';
-
-  @override
-  String get profileMacroGoalsSubtitle => 'Your daily calorie and macro targets';
 
   @override
   String get profileSettingsSubtitle => 'Language, theme and units';

@@ -20,6 +20,7 @@ import 'package:vitta/app/presentation/routing/routes/exercise_workout_route.dar
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
+import 'package:vitta/app/presentation/routing/routes/objective_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
 import 'package:vitta/app/presentation/routing/routes/paywall_route.dart';
 import 'package:vitta/app/presentation/routing/routes/profile_route.dart';
@@ -77,6 +78,7 @@ abstract class AppRouter {
     ProfileRoute(),
     EditProfileRoute(),
     MacroGoalsRoute(),
+    ObjectiveRoute(),
     SettingsRoute(),
     SignInRoute(),
     SignUpRoute(),

@@ -76,9 +76,9 @@ class ProfilePage extends StatelessWidget {
             ProfileMenuTile(
               icon: Icons.flag_outlined,
               accent: VTColors.macroProtein,
-              title: l10n.macroGoalsTitle,
-              subtitle: l10n.profileMacroGoalsSubtitle,
-              onTap: () => context.pushRoute(.macroGoals),
+              title: l10n.objectiveTitle,
+              subtitle: l10n.profileObjectiveSubtitle,
+              onTap: () => context.pushRoute(.objective),
             ),
             const VTGap.m(),
             ProfileMenuTile(

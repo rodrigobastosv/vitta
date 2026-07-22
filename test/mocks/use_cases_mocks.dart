@@ -6,6 +6,8 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_body_weight_in_range_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
@@ -209,6 +211,10 @@ class MockStartWorkoutFromRoutineUseCase extends Mock implements StartWorkoutFro
 class MockGetLastSetsByExerciseUseCase extends Mock implements GetLastSetsByExerciseUseCase {}
 
 class MockLogBodyWeightUseCase extends Mock implements LogBodyWeightUseCase {}
+
+class MockGetBodyProfileUseCase extends Mock implements GetBodyProfileUseCase {}
+
+class MockSaveBodyProfileUseCase extends Mock implements SaveBodyProfileUseCase {}
 
 class MockGetRecentBodyWeightLogsUseCase extends Mock implements GetRecentBodyWeightLogsUseCase {}
 

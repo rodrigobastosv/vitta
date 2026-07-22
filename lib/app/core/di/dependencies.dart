@@ -16,6 +16,8 @@ import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/auth/datasources/supabase_auth_datasource.dart';
+import 'package:vitta/app/data/body_profile/body_profile_local_datasource.dart';
+import 'package:vitta/app/data/body_profile/body_profile_repository.dart';
 import 'package:vitta/app/data/body_weight/body_weight_repository.dart';
 import 'package:vitta/app/data/body_weight/datasources/supabase/supabase_body_weight_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
@@ -54,6 +56,8 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_body_weight_in_range_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
@@ -151,6 +155,7 @@ import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_e
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
+import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
@@ -195,6 +200,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
   G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
   G.registerLazySingleton(() => DietGoalsLocalDataSource(localStorageService: G()));
+  G.registerLazySingleton(() => BodyProfileLocalDataSource(localStorageService: G()));
+  G.registerLazySingleton(() => BodyProfileRepository(bodyProfileLocalDataSource: G()));
   G.registerLazySingleton(() => RecentSearchesLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => DietIntroLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SupabaseNutritionScanDataSource(supabaseService: G()));
@@ -307,6 +314,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetDailyWorkoutsInRangeUseCase(workoutRepository: G()));
   G.registerFactory(() => HasSeenWorkoutIntroUseCase(workoutRepository: G()));
   G.registerFactory(() => MarkWorkoutIntroSeenUseCase(workoutRepository: G()));
+  G.registerFactory(() => GetBodyProfileUseCase(bodyProfileRepository: G()));
+  G.registerFactory(() => SaveBodyProfileUseCase(bodyProfileRepository: G()));
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
@@ -398,7 +407,24 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getAppSettingsUseCase: G(),
     ),
   );
-  G.registerFactory(() => OnboardingCubit(completeOnboardingUseCase: G(), saveMacroGoalsUseCase: G()));
+  G.registerFactory(
+    () => OnboardingCubit(
+      completeOnboardingUseCase: G(),
+      saveMacroGoalsUseCase: G(),
+      logBodyWeightUseCase: G(),
+      saveBodyProfileUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
+  G.registerFactory(
+    () => ObjectiveCubit(
+      getBodyProfileUseCase: G(),
+      saveBodyProfileUseCase: G(),
+      getLatestBodyWeightUseCase: G(),
+      saveMacroGoalsUseCase: G(),
+      getAppSettingsUseCase: G(),
+    ),
+  );
   G.registerFactory(
     () => AuthCubit(
       getUserUseCase: G(),

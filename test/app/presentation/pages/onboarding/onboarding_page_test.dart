@@ -1,15 +1,22 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
+import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_today_card.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_body_step.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_feature_row.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_step_indicator.dart';
 import 'package:vitta/main.dart';
 
+import '../../../../factories/entities/body_weight_log_factory.dart';
 import '../../../../fixtures/home_fixture.dart';
 import '../../../../fixtures/local_storage_fixture.dart';
 import '../../../../fixtures/premium_fixture.dart';
@@ -38,6 +45,19 @@ void main() {
     when(() => saveMacroGoalsUseCase(any())).thenAnswer((_) async {});
     G.unregister<SaveMacroGoalsUseCase>();
     G.registerFactory<SaveMacroGoalsUseCase>(() => saveMacroGoalsUseCase);
+
+    final logBodyWeightUseCase = MockLogBodyWeightUseCase();
+    when(
+      () => logBodyWeightUseCase(loggedDate: any(named: 'loggedDate'), weightKg: any(named: 'weightKg')),
+    ).thenAnswer((_) async => Success(BodyWeightLogFactory.build()));
+    G.unregister<LogBodyWeightUseCase>();
+    G.registerFactory<LogBodyWeightUseCase>(() => logBodyWeightUseCase);
+
+    registerFallbackValue(const BodyProfile());
+    final saveBodyProfileUseCase = MockSaveBodyProfileUseCase();
+    when(() => saveBodyProfileUseCase(any())).thenAnswer((_) async {});
+    G.unregister<SaveBodyProfileUseCase>();
+    G.registerFactory<SaveBodyProfileUseCase>(() => saveBodyProfileUseCase);
   });
 
   Future<void> advanceToAccountStep(WidgetTester tester) async {
@@ -56,7 +76,7 @@ void main() {
     expect(find.text('Create account'), findsNothing);
   });
 
-  testWidgets('walks welcome, the six areas, goals and only then asks about an account', (tester) async {
+  testWidgets('walks welcome, the six areas, the body, goals and only then asks about an account', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 
@@ -66,14 +86,35 @@ void main() {
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
-    expect(find.text('Skip for now'), findsOneWidget);
+    expect(find.byType(OnboardingBodyStep), findsOneWidget);
+
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Suggested for'), findsOneWidget);
 
     await tester.tap(find.text('Next'));
     await tester.pumpAndSettle();
     expect(find.text('Create account'), findsOneWidget);
   });
 
-  testWidgets('the goals step is skippable and skipping saves nothing', (tester) async {
+  testWidgets('the body step suggests a target for the objective the user picks', (tester) async {
+    await tester.pumpWidget(const VittaApp());
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('Lose weight'), 100, scrollable: find.byType(Scrollable).first);
+    await tester.tap(find.text('Lose weight'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Next'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Suggested for Lose weight'), findsOneWidget);
+  });
+
+  testWidgets('skipping the body step jumps past goals and saves nothing', (tester) async {
     await tester.pumpWidget(const VittaApp());
     await tester.pumpAndSettle();
 

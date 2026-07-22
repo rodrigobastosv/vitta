@@ -13,6 +13,7 @@ import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cub
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
+import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
@@ -198,11 +199,33 @@ abstract class CubitsFactories {
     recipe: recipe,
   );
 
-  static OnboardingCubit buildOnboardingCubit({MockCompleteOnboardingUseCase? completeOnboardingUseCase, MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase}) =>
-      OnboardingCubit(
-        completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase(),
-        saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
-      );
+  static OnboardingCubit buildOnboardingCubit({
+    MockCompleteOnboardingUseCase? completeOnboardingUseCase,
+    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
+    MockLogBodyWeightUseCase? logBodyWeightUseCase,
+    MockSaveBodyProfileUseCase? saveBodyProfileUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => OnboardingCubit(
+    completeOnboardingUseCase: completeOnboardingUseCase ?? MockCompleteOnboardingUseCase(),
+    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+    logBodyWeightUseCase: logBodyWeightUseCase ?? MockLogBodyWeightUseCase(),
+    saveBodyProfileUseCase: saveBodyProfileUseCase ?? MockSaveBodyProfileUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static ObjectiveCubit buildObjectiveCubit({
+    MockGetBodyProfileUseCase? getBodyProfileUseCase,
+    MockSaveBodyProfileUseCase? saveBodyProfileUseCase,
+    MockGetLatestBodyWeightUseCase? getLatestBodyWeightUseCase,
+    MockSaveMacroGoalsUseCase? saveMacroGoalsUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => ObjectiveCubit(
+    getBodyProfileUseCase: getBodyProfileUseCase ?? MockGetBodyProfileUseCase(),
+    saveBodyProfileUseCase: saveBodyProfileUseCase ?? MockSaveBodyProfileUseCase(),
+    getLatestBodyWeightUseCase: getLatestBodyWeightUseCase ?? MockGetLatestBodyWeightUseCase(),
+    saveMacroGoalsUseCase: saveMacroGoalsUseCase ?? MockSaveMacroGoalsUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
 
   static WaterCubit buildWaterCubit({
     MockGetDailyWaterUseCase? getDailyWaterUseCase,
