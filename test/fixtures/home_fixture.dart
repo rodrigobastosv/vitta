@@ -3,6 +3,7 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
@@ -37,8 +38,14 @@ void registerTestHomeCubit() {
   when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
   final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
   when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
+  final getSleepGoalUseCase = MockGetSleepGoalUseCase();
+  when(getSleepGoalUseCase.call).thenReturn(8);
   final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
   when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Success(null));
+  final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
+  when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
+  final getHomeLayoutUseCase = MockGetHomeLayoutUseCase();
+  when(getHomeLayoutUseCase.call).thenReturn(HomeLayout.shipped);
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
 
@@ -55,7 +62,10 @@ void registerTestHomeCubit() {
       getRemindersInRangeUseCase: getRemindersInRangeUseCase,
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
       getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+      getSleepGoalUseCase: getSleepGoalUseCase,
       getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
+      getHomeLayoutUseCase: getHomeLayoutUseCase,
       getAppSettingsUseCase: getAppSettingsUseCase,
     ),
   );

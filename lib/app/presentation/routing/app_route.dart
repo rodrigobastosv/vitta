@@ -38,6 +38,7 @@ enum AppRoute {
   objective('/profile/objective'),
   paywall('/paywall'),
   settings('/settings'),
+  homeLayout('/settings/home-layout'),
   signIn('/auth/sign-in'),
   signUp('/auth/sign-up');
 

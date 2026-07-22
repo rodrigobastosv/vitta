@@ -293,6 +293,69 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeNotTrackedYet => 'Ainda não acompanhado';
 
   @override
+  String homeSleepGoal(String hours) {
+    return 'Meta ${hours}h';
+  }
+
+  @override
+  String get homeWorkoutHeroTitle => 'Treino de hoje';
+
+  @override
+  String homeRemindersOpen(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count ainda a fazer',
+      one: '1 ainda a fazer',
+      zero: 'Tudo feito por hoje',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeRemindersMore(int count) {
+    return '+$count a mais';
+  }
+
+  @override
+  String get homeWeightTrendTitle => 'Tendência de peso';
+
+  @override
+  String get homeLayoutTitle => 'Tela inicial';
+
+  @override
+  String get homeLayoutMessage => 'Arraste para reordenar. Toque em um item para escolher onde ele aparece.';
+
+  @override
+  String homeLayoutSlotQuestion(String feature) {
+    return 'Onde $feature deve aparecer?';
+  }
+
+  @override
+  String get homeLayoutResetMessage => 'Sua tela inicial voltou à ordem padrão.';
+
+  @override
+  String get homeLayoutResetAction => 'Voltar ao padrão';
+
+  @override
+  String get homeSlotHero => 'Destaque';
+
+  @override
+  String get homeSlotSupporting => 'Linha de apoio';
+
+  @override
+  String get homeSlotTile => 'Atalho';
+
+  @override
+  String get homeSlotHidden => 'Oculto';
+
+  @override
+  String get settingsHomeLayoutLabel => 'Tela inicial';
+
+  @override
+  String get settingsHomeLayoutHint => 'Escolha o que lidera, o que apoia e o que fica oculto';
+
+  @override
   String get onboardingFeaturesTitle => 'Muitas coisas, um app';
 
   @override

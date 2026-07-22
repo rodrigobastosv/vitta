@@ -32,6 +32,8 @@ import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_scan_data
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
+import 'package:vitta/app/data/home/home_layout_local_datasource.dart';
+import 'package:vitta/app/data/home/home_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_local_datasource.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/premium/datasources/supabase_premium_datasource.dart';
@@ -94,6 +96,8 @@ import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
+import 'package:vitta/app/domain/home/use_cases/get_home_layout_use_case.dart';
+import 'package:vitta/app/domain/home/use_cases/save_home_layout_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/has_seen_onboarding_use_case.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
@@ -160,6 +164,7 @@ import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cub
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
+import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
@@ -186,6 +191,10 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => WaterLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => OnboardingLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => OnboardingRepository(onboardingLocalDataSource: G()));
+  G.registerLazySingleton(() => HomeLayoutLocalDataSource(localStorageService: G()));
+  G.registerLazySingleton(() => HomeRepository(homeLayoutLocalDataSource: G()));
+  G.registerFactory(() => GetHomeLayoutUseCase(homeRepository: G()));
+  G.registerFactory(() => SaveHomeLayoutUseCase(homeRepository: G()));
   G.registerLazySingleton(() => SettingsRepository(settingsLocalDataSource: G()));
   G.registerFactory(() => GetAppSettingsUseCase(settingsRepository: G()));
   G.registerFactory(() => SaveAppSettingsUseCase(settingsRepository: G()));
@@ -419,10 +428,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getRemindersInRangeUseCase: G(),
       getWorkoutsForDateUseCase: G(),
       getRecentSleepLogsUseCase: G(),
+      getSleepGoalUseCase: G(),
       getLatestBodyWeightUseCase: G(),
+      getRecentBodyWeightLogsUseCase: G(),
+      getHomeLayoutUseCase: G(),
       getAppSettingsUseCase: G(),
     ),
   );
+  G.registerFactory(() => HomeLayoutCubit(getHomeLayoutUseCase: G(), saveHomeLayoutUseCase: G()));
   G.registerFactory(
     () => OnboardingCubit(
       completeOnboardingUseCase: G(),

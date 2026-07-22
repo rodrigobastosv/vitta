@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_navigation_tile.dart';
 import 'package:vitta/app/presentation/pages/settings/widgets/settings_option_tile.dart';
 import 'package:vitta/app/presentation/pages/settings/widgets/settings_section.dart';
 
@@ -23,6 +25,16 @@ class SettingsPage extends StatelessWidget {
           padding: const EdgeInsets.all(VTSpacing.m),
           children: [
             VTAppearEffect(
+              child: SettingsNavigationTile(
+                icon: Icons.dashboard_customize_outlined,
+                title: l10n.settingsHomeLayoutLabel,
+                hint: l10n.settingsHomeLayoutHint,
+                onTap: () => context.pushRoute(.homeLayout),
+              ),
+            ),
+            const VTGap.m(),
+            VTAppearEffect(
+              index: 1,
               child: SettingsSection(
                 icon: Icons.translate,
                 title: l10n.settingsLanguageLabel,
@@ -47,7 +59,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 1,
+              index: 2,
               child: SettingsSection(
                 icon: Icons.brightness_6_outlined,
                 title: l10n.settingsThemeLabel,
@@ -72,7 +84,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 2,
+              index: 3,
               child: SettingsSection(
                 icon: Icons.straighten,
                 title: l10n.settingsUnitSystemLabel,
