@@ -16,10 +16,13 @@ import 'package:vitta/app/presentation/pages/recipe_form/recipe_form_extra.dart'
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_state.dart';
+import 'package:vitta/app/presentation/pages/recipes/widgets/log_recipe_sheet.dart';
 import 'package:vitta/app/presentation/pages/recipes/widgets/recipe_tile.dart';
 
 class RecipesPage extends StatelessWidget {
-  const RecipesPage({super.key});
+  const RecipesPage({required this.targetDate, super.key});
+
+  final DateTime targetDate;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +36,8 @@ class RecipesPage extends StatelessWidget {
             context.hideLoading();
           case RecipesError(:final message):
             context.showErrorToast(message: message, onRetry: context.read<RecipesCubit>().loadRecipes);
+          case RecipeLogged(:final recipeName, :final mealType):
+            context.showToast(title: recipeName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)));
         }
       },
       builder: (context, cubit, state) => Scaffold(
@@ -61,6 +66,7 @@ class RecipesPage extends StatelessWidget {
                   recipe: recipe,
                   onEdit: () => _openForm(context, cubit, recipe: recipe),
                   onDelete: () => cubit.deleteRecipe(recipeId: recipe.id),
+                  onLog: () => showLogRecipeSheet(context: context, recipe: recipe, loggedDate: targetDate),
                 ),
               ),
               const VTGap.m(),

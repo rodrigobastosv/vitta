@@ -467,10 +467,11 @@
   "dietRecipeSaveAction": "Salvar receita",
   "dietRecipeSavedToast": "Salva como um alimento que você pode registrar",
   "dietRecipeDeleteTooltip": "Remover",
+  "dietRecipeAddToMealAction": "Adicionar à refeição",
   "dietRecipeIngredientCount": "{count} ingredientes - {grams} g",
   "dietPickIngredientTitle": "Escolher um alimento",
   "dietRecipeSubtitle": "Receitas são só suas e nunca aparecem na busca de outra pessoa.",
-  "dietRecipeLogHint": "Busque pelo nome em Adicionar alimento para registrar em qualquer dia.",
+  "dietRecipeLogHint": "Toque em Adicionar à refeição para registrar a receita inteira, ou busque pelo nome em Adicionar alimento.",
   "@dietRecipeTotalGrams": {
     "placeholders": {
       "grams": {

@@ -353,7 +353,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactoryParam<MealScanCubit, DateTime, void>(
     (loggedDate, _) => MealScanCubit(scanMealUseCase: G(), logScannedMealUseCase: G(), imagePickerService: G(), loggedDate: loggedDate),
   );
-  G.registerFactory(() => RecipesCubit(getRecipesUseCase: G(), deleteRecipeUseCase: G()));
+  G.registerFactory(() => RecipesCubit(getRecipesUseCase: G(), deleteRecipeUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(
     (recipe, _) => RecipeFormCubit(saveRecipeUseCase: G(), getAppSettingsUseCase: G(), uploadFoodImageUseCase: G(), imagePickerService: G(), recipe: recipe),
   );

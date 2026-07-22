@@ -21,6 +21,7 @@ import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dar
 import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
+import 'package:vitta/app/presentation/pages/recipes/recipes_extra.dart';
 
 class DietPage extends StatelessWidget {
   const DietPage({super.key});
@@ -45,7 +46,11 @@ class DietPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(l10n.dietFeatureTitle),
           actions: [
-            IconButton(icon: const Icon(Icons.menu_book_outlined), tooltip: l10n.dietRecipesTitle, onPressed: () => context.pushRoute(.recipes)),
+            IconButton(
+              icon: const Icon(Icons.menu_book_outlined),
+              tooltip: l10n.dietRecipesTitle,
+              onPressed: () => context.pushRoute(.recipes, extra: RecipesExtra(targetDate: state.date)),
+            ),
             IconButton(
               icon: const Icon(Icons.copy_all_outlined),
               tooltip: l10n.dietCopyMealsTitle,

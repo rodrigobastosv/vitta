@@ -8,6 +8,7 @@ import 'package:flutter/widgets.dart';
 // dependency on presentation/routing.
 enum VTBottomSheet {
   logFood('logFoodSheet'),
+  logRecipe('logRecipeSheet'),
   editFoodLog('editFoodLogSheet'),
   ingredientQuantity('ingredientQuantitySheet'),
   dietCalendar('dietCalendarSheet'),

@@ -1002,6 +1002,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietRecipeDeleteTooltip => 'Remove';
 
   @override
+  String get dietRecipeAddToMealAction => 'Add to meal';
+
+  @override
   String dietRecipeIngredientCount(int count, int grams) {
     return '$count ingredients - $grams g';
   }
@@ -1013,7 +1016,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietRecipeSubtitle => 'Recipes are yours only and never show up in anyone else\'s search.';
 
   @override
-  String get dietRecipeLogHint => 'Search it by name in Add food to log it on any day.';
+  String get dietRecipeLogHint => 'Tap Add to meal to log the whole recipe, or search it by name in Add food.';
 
   @override
   String get mealTypeBreakfast => 'Breakfast';
