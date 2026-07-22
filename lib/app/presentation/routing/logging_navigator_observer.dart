@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 
 class LoggingNavigatorObserver extends NavigatorObserver {
@@ -23,6 +23,22 @@ class LoggingNavigatorObserver extends NavigatorObserver {
   }
 
   void _log(String action, Route<dynamic> route) {
-    Log.navigation(action: action, route: route.settings.name ?? 'unknown');
+    Log.navigation(action: action, route: _routeName(route));
+  }
+
+  // GoRouter pages carry their AppRoute name; modal sheets and dialogs are
+  // launched anonymously (no RouteSettings.name), so they used to all log as
+  // "unknown". Fall back to the popup kind instead, which is at least truthful.
+  String _routeName(Route<dynamic> route) {
+    final name = route.settings.name;
+    if (name != null) {
+      return name;
+    }
+    return switch (route) {
+      ModalBottomSheetRoute() => 'bottomSheet',
+      DialogRoute() || RawDialogRoute() => 'dialog',
+      PopupRoute() => 'popup',
+      _ => 'unknown',
+    };
   }
 }
