@@ -27,17 +27,21 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
   final SetWorkoutExerciseCompletedUseCase _setWorkoutExerciseCompletedUseCase;
 
   Future<Result<VTError, void>> logSet({required SetInput input}) async {
+    final isCardio = state.workoutExercise.isCardio;
     final loggedResult = await _logSetUseCase(workoutExerciseId: state.workoutExercise.id, input: input);
     return loggedResult.when(Failure.new, (set) {
       emit(state.copyWith(workoutExercise: _withSets([...state.workoutExercise.sets, set])));
-      emitPresentation(ExerciseWorkoutSetLogged());
+      // No rest to time after a cardio effort: there is no next set to rest for.
+      if (!isCardio) {
+        emitPresentation(ExerciseWorkoutSetLogged());
+      }
       return const Success(null);
     });
   }
 
   Future<void> repeatLastSet() async {
     final last = state.workoutExercise.sets.lastOrNull;
-    if (last == null) {
+    if (last == null || state.workoutExercise.isCardio) {
       return;
     }
     final repeatedResult = await logSet(input: SetInput.fromSet(last));

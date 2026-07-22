@@ -2,34 +2,77 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_thumbnail.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_set_row.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
+import '../../../../../factories/entities/exercise_factory.dart';
 import '../../../../../factories/entities/workout_exercise_factory.dart';
 import '../../../../../factories/entities/workout_set_factory.dart';
 
-Future<void> pumpCard(WidgetTester tester, {required WorkoutExercise workoutExercise, VoidCallback? onRepeatSet, ValueChanged<bool>? onToggleCompleted}) =>
-    tester.pumpWidget(
-      MaterialApp(
-        theme: VTTheme.light,
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        home: Scaffold(
-          body: WorkoutExerciseCard(
-            workoutExercise: workoutExercise,
-            unitSystem: UnitSystem.metric,
-            onAddSet: () {},
-            onRepeatSet: onRepeatSet,
-            onToggleCompleted: onToggleCompleted,
-          ),
-        ),
+Future<void> pumpCard(
+  WidgetTester tester, {
+  required WorkoutExercise workoutExercise,
+  VoidCallback? onRepeatSet,
+  ValueChanged<bool>? onToggleCompleted,
+}) => tester.pumpWidget(
+  MaterialApp(
+    theme: VTTheme.light,
+    localizationsDelegates: AppLocalizations.localizationsDelegates,
+    supportedLocales: AppLocalizations.supportedLocales,
+    home: Scaffold(
+      body: WorkoutExerciseCard(
+        workoutExercise: workoutExercise,
+        unitSystem: UnitSystem.metric,
+        onAddSet: () {},
+        onRepeatSet: onRepeatSet,
+        onToggleCompleted: onToggleCompleted,
       ),
-    );
+    ),
+  ),
+);
 
 void main() {
+  testWidgets('a cardio exercise is one effort - once it is logged there is nothing to add or repeat', (tester) async {
+    final treadmill = ExerciseFactory.build(names: const {'en': 'Treadmill', 'pt': 'Esteira'}, category: ExerciseCategory.cardio);
+
+    await pumpCard(
+      tester,
+      workoutExercise: WorkoutExerciseFactory.build(exercise: treadmill),
+      onRepeatSet: () {},
+    );
+
+    expect(find.text('Log effort'), findsOneWidget);
+    expect(find.text('Add set'), findsNothing);
+
+    await pumpCard(
+      tester,
+      workoutExercise: WorkoutExerciseFactory.build(exercise: treadmill, sets: [WorkoutSetFactory.cardio()]),
+      onRepeatSet: () {},
+    );
+
+    expect(find.text('Log effort'), findsNothing);
+    expect(find.text('Repeat set'), findsNothing);
+  });
+
+  testWidgets('a cardio effort is not numbered, since there is never a second one', (tester) async {
+    final treadmill = ExerciseFactory.build(category: ExerciseCategory.cardio);
+
+    await pumpCard(
+      tester,
+      workoutExercise: WorkoutExerciseFactory.build(exercise: treadmill, sets: [WorkoutSetFactory.cardio()]),
+    );
+
+    expect(tester.widget<WorkoutSetRow>(find.byType(WorkoutSetRow)).position, isNull);
+
+    await pumpCard(tester, workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+
+    expect(tester.widget<WorkoutSetRow>(find.byType(WorkoutSetRow)).position, 1);
+  });
+
   testWidgets('offers Repeat only once there is a set to repeat', (tester) async {
     await pumpCard(tester, workoutExercise: WorkoutExerciseFactory.build(), onRepeatSet: () {});
 

@@ -1821,6 +1821,24 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutLogSetAction => 'Salvar série';
 
   @override
+  String get workoutEffortLabel => 'Esforço';
+
+  @override
+  String get workoutLogEffortAction => 'Registrar esforço';
+
+  @override
+  String get workoutEditEffortAction => 'Editar esforço';
+
+  @override
+  String get workoutSaveEffortAction => 'Salvar esforço';
+
+  @override
+  String get workoutNoEffortMessage => 'Nenhum esforço registrado ainda.';
+
+  @override
+  String get workoutCompleteNeedsEffortTooltip => 'Registre o esforço antes de concluir este exercício';
+
+  @override
   String get workoutDeleteSetTooltip => 'Remover série';
 
   @override

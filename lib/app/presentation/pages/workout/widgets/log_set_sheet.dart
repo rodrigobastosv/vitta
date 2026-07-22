@@ -91,12 +91,21 @@ class LogSetSheet extends StatefulWidget {
 class _LogSetSheetState extends State<LogSetSheet> {
   static const int _defaultReps = 10;
 
-  late final TextEditingController _repsController = TextEditingController(text: '${widget.set?.reps ?? widget.defaultReps ?? _defaultReps}');
+  late final TextEditingController _repsController = TextEditingController(
+    text: '${widget.set?.reps ?? widget.defaultReps ?? _defaultReps}',
+  );
   late final TextEditingController _loadController = TextEditingController(text: _initialLoad());
   late final TextEditingController _minutesController = TextEditingController(text: _initialMinutes());
   late final TextEditingController _secondsController = TextEditingController(text: _initialSeconds());
   late final TextEditingController _distanceController = TextEditingController(text: _initialDistance());
   String? _errorMessage;
+
+  String _title(AppLocalizations l10n) {
+    if (widget.isCardio) {
+      return widget.set == null ? l10n.workoutLogEffortAction : l10n.workoutEditEffortAction;
+    }
+    return widget.set == null ? l10n.workoutAddSet : l10n.workoutEditSet;
+  }
 
   String _hint(AppLocalizations l10n) {
     if (widget.isCardio) {
@@ -166,14 +175,17 @@ class _LogSetSheetState extends State<LogSetSheet> {
         mainAxisSize: .min,
         crossAxisAlignment: .start,
         children: [
-          Text(widget.set == null ? l10n.workoutAddSet : l10n.workoutEditSet, style: VTTextStyles.title(context)),
+          Text(_title(l10n), style: VTTextStyles.title(context)),
           const VTGap.l(),
           if (widget.isCardio) _cardioFields(l10n) else _strengthFields(l10n),
           const VTGap.s(),
           Text(_hint(l10n), style: VTTextStyles.caption(context)),
-          if (_errorMessage case final message?) ...[const VTGap.s(), Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error))],
+          if (_errorMessage case final message?) ...[
+            const VTGap.s(),
+            Text(message, style: VTTextStyles.caption(context).copyWith(color: colorScheme.error)),
+          ],
           const VTGap.l(),
-          VTPrimaryButton(label: l10n.workoutLogSetAction, onPressed: _submit),
+          VTPrimaryButton(label: widget.isCardio ? l10n.workoutSaveEffortAction : l10n.workoutLogSetAction, onPressed: _submit),
         ],
       ),
     );
@@ -183,7 +195,10 @@ class _LogSetSheetState extends State<LogSetSheet> {
     crossAxisAlignment: .start,
     children: [
       Expanded(
-        child: LabelledField(label: l10n.workoutRepsLabel, child: VTStepper(controller: _repsController)),
+        child: LabelledField(
+          label: l10n.workoutRepsLabel,
+          child: VTStepper(controller: _repsController),
+        ),
       ),
       const SizedBox(width: VTSpacing.m),
       Expanded(

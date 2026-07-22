@@ -49,6 +49,7 @@ class WorkoutExerciseCard extends StatelessWidget {
     final colorScheme = context.colorScheme;
     final exercise = workoutExercise.exercise;
     final isCompleted = workoutExercise.isCompleted;
+    final isCardio = workoutExercise.isCardio;
     final canComplete = workoutExercise.sets.isNotEmpty;
     final onEditSet = this.onEditSet;
     final onDeleteSet = this.onDeleteSet;
@@ -83,7 +84,10 @@ class WorkoutExerciseCard extends StatelessWidget {
                       const VTGap.xs(),
                       Text(
                         isCompleted
-                            ? l10n.workoutCompletedSummary(workoutExercise.totalSets)
+                            ? (isCardio
+                                  ? WorkoutSetsSummary.format(sets: workoutExercise.sets, unitSystem: unitSystem, l10n: l10n) ??
+                                        l10n.workoutNoEffortMessage
+                                  : l10n.workoutCompletedSummary(workoutExercise.totalSets))
                             : [
                                 if (exercise.equipment case final equipment?) equipment.getLabel(l10n),
                                 for (final muscle in exercise.primaryMuscles.take(2)) muscle.getLabel(l10n),
@@ -100,7 +104,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                   tooltip: switch ((isCompleted, canComplete)) {
                     (true, _) => l10n.workoutReopenExerciseAction,
                     (false, true) => l10n.workoutCompleteExerciseAction,
-                    (false, false) => l10n.workoutCompleteNeedsSetTooltip,
+                    (false, false) => isCardio ? l10n.workoutCompleteNeedsEffortTooltip : l10n.workoutCompleteNeedsSetTooltip,
                   },
                   onPressed: canComplete || isCompleted
                       ? () {
@@ -127,21 +131,28 @@ class WorkoutExerciseCard extends StatelessWidget {
                     crossAxisAlignment: .start,
                     children: [
                       const VTGap.s(),
-                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n) case final summary?) ...[
+                      if (WorkoutSetsSummary.format(sets: lastSets ?? const [], unitSystem: unitSystem, l10n: l10n)
+                          case final summary?) ...[
                         Row(
                           children: [
                             Icon(Icons.history, size: 14, color: colorScheme.onSurfaceVariant),
                             const VTGap.xs(),
-                            Text(l10n.workoutLastTimeLabel(summary), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+                            Text(
+                              l10n.workoutLastTimeLabel(summary),
+                              style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+                            ),
                           ],
                         ),
                         const VTGap.s(),
                       ],
                       if (workoutExercise.sets.isEmpty)
-                        Text(l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context))
+                        Text(isCardio ? l10n.workoutNoEffortMessage : l10n.workoutNoSetsMessage, style: VTTextStyles.caption(context))
                       else
                         DecoratedBox(
-                          decoration: BoxDecoration(color: colorScheme.onSurface.withValues(alpha: 0.035), borderRadius: VTRadius.borderRadiusM),
+                          decoration: BoxDecoration(
+                            color: colorScheme.onSurface.withValues(alpha: 0.035),
+                            borderRadius: VTRadius.borderRadiusM,
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
                             child: Column(
@@ -150,7 +161,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                                   if (index > 0) Divider(height: 1, thickness: 1, color: colorScheme.outline.withValues(alpha: 0.4)),
                                   WorkoutSetRow(
                                     set: set,
-                                    position: index + 1,
+                                    position: isCardio ? null : index + 1,
                                     unitSystem: unitSystem,
                                     color: accent,
                                     onEdit: onEditSet == null ? null : () => onEditSet(set),
@@ -163,8 +174,9 @@ class WorkoutExerciseCard extends StatelessWidget {
                         ),
                       WorkoutSetActions(
                         accent: accent,
-                        onAddSet: onAddSet,
-                        onRepeatSet: onRepeatSet != null && workoutExercise.sets.isNotEmpty ? onRepeatSet : null,
+                        isCardio: isCardio,
+                        onAddSet: workoutExercise.canLogSet ? onAddSet : null,
+                        onRepeatSet: onRepeatSet != null && !isCardio && workoutExercise.sets.isNotEmpty ? onRepeatSet : null,
                       ),
                     ],
                   ),

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_presentation_event.dart';
@@ -75,6 +76,57 @@ void main() {
     ],
   );
 
+  test('the cardio pill filters the catalog by category, not by muscle', () async {
+    final searchExercisesUseCase = MockSearchExercisesUseCase();
+    when(
+      () => searchExercisesUseCase(
+        query: any(named: 'query'),
+        muscleGroup: any(named: 'muscleGroup'),
+        category: any(named: 'category'),
+      ),
+    ).thenAnswer((_) async => Success([ExerciseFactory.build(category: ExerciseCategory.cardio)]));
+    final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
+
+    await cubit.changeCategory(ExerciseCategory.cardio);
+
+    expect(cubit.state.category, ExerciseCategory.cardio);
+    verify(
+      () => searchExercisesUseCase(
+        query: '',
+        muscleGroup: any(named: 'muscleGroup', that: isNull),
+        category: ExerciseCategory.cardio,
+      ),
+    ).called(1);
+    await cubit.close();
+  });
+
+  test('clearing the filters drops both the category and the muscle group', () async {
+    final searchExercisesUseCase = MockSearchExercisesUseCase();
+    when(
+      () => searchExercisesUseCase(
+        query: any(named: 'query'),
+        muscleGroup: any(named: 'muscleGroup'),
+        category: any(named: 'category'),
+      ),
+    ).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
+
+    await cubit.changeCategory(ExerciseCategory.cardio);
+    await cubit.changeMuscleGroup(MuscleGroup.chest);
+    await cubit.clearFilters();
+
+    expect(cubit.state.category, isNull);
+    expect(cubit.state.muscleGroup, isNull);
+    verify(
+      () => searchExercisesUseCase(
+        query: '',
+        muscleGroup: any(named: 'muscleGroup', that: isNull),
+        category: any(named: 'category', that: isNull),
+      ),
+    ).called(1);
+    await cubit.close();
+  });
+
   blocPresentationTest<ExerciseSearchCubit, ExerciseSearchState, ExerciseSearchPresentationEvent>(
     'surfaces a failed search as an error event',
     build: () {
@@ -97,8 +149,12 @@ void main() {
 
   test('typing searches on its own, once the keystrokes stop', () async {
     final searchExercisesUseCase = MockSearchExercisesUseCase();
-    when(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')))
-        .thenAnswer((_) async => Success([ExerciseFactory.build()]));
+    when(
+      () => searchExercisesUseCase(
+        query: any(named: 'query'),
+        muscleGroup: any(named: 'muscleGroup'),
+      ),
+    ).thenAnswer((_) async => Success([ExerciseFactory.build()]));
     final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
 
     cubit
@@ -106,11 +162,21 @@ void main() {
       ..queryChanged('supi')
       ..queryChanged('supino');
 
-    verifyNever(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')));
+    verifyNever(
+      () => searchExercisesUseCase(
+        query: any(named: 'query'),
+        muscleGroup: any(named: 'muscleGroup'),
+      ),
+    );
 
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    verify(() => searchExercisesUseCase(query: 'supino', muscleGroup: any(named: 'muscleGroup'))).called(1);
+    verify(
+      () => searchExercisesUseCase(
+        query: 'supino',
+        muscleGroup: any(named: 'muscleGroup'),
+      ),
+    ).called(1);
     await cubit.close();
   });
 
@@ -121,7 +187,12 @@ void main() {
     cubit.queryChanged('s');
     await Future<void>.delayed(const Duration(milliseconds: 500));
 
-    verifyNever(() => searchExercisesUseCase(query: any(named: 'query'), muscleGroup: any(named: 'muscleGroup')));
+    verifyNever(
+      () => searchExercisesUseCase(
+        query: any(named: 'query'),
+        muscleGroup: any(named: 'muscleGroup'),
+      ),
+    );
     await cubit.close();
   });
 }

@@ -36,6 +36,14 @@ class WorkoutExercise extends Equatable with WorkoutVolume {
 
   bool get isCompleted => completedAt != null;
 
+  // A cardio exercise is logged once, as a single effort - a treadmill run is not
+  // four sets of anything (issue #212). Which is why it is asked of the exercise
+  // rather than recorded per set: nothing about the row says "this is the only one".
+  bool get isCardio => exercise.category.isCardio;
+
+  // Logging is offered until the effort exists; after that the row is edited.
+  bool get canLogSet => !isCardio || sets.isEmpty;
+
   @override
   List<Object?> get props => [id, exercise, position, sets, completedAt];
 }

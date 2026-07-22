@@ -3,6 +3,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/core/text/accent_folding.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 
 class SupabaseExerciseDataSource {
@@ -12,7 +13,11 @@ class SupabaseExerciseDataSource {
 
   final SupabaseService _supabaseService;
 
-  Future<Result<VTError, List<Exercise>>> searchCatalog({required String query, MuscleGroup? muscleGroup}) async {
+  Future<Result<VTError, List<Exercise>>> searchCatalog({
+    required String query,
+    MuscleGroup? muscleGroup,
+    ExerciseCategory? category,
+  }) async {
     try {
       var request = _supabaseService.from(.exercises).select();
       if (query.isNotEmpty) {
@@ -20,6 +25,9 @@ class SupabaseExerciseDataSource {
       }
       if (muscleGroup != null) {
         request = request.contains('primary_muscles', [muscleGroup.wireValue]);
+      }
+      if (category != null) {
+        request = request.eq('category', category.wireValue);
       }
       final rows = await request.order('times_logged', ascending: false).order('id', ascending: true).limit(_searchLimit);
       return Success(rows.map(Exercise.fromMap).toList());

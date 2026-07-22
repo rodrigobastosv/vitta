@@ -3398,6 +3398,42 @@ abstract class AppLocalizations {
   /// **'Save set'**
   String get workoutLogSetAction;
 
+  /// No description provided for @workoutEffortLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Effort'**
+  String get workoutEffortLabel;
+
+  /// No description provided for @workoutLogEffortAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log effort'**
+  String get workoutLogEffortAction;
+
+  /// No description provided for @workoutEditEffortAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit effort'**
+  String get workoutEditEffortAction;
+
+  /// No description provided for @workoutSaveEffortAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save effort'**
+  String get workoutSaveEffortAction;
+
+  /// No description provided for @workoutNoEffortMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No effort logged yet.'**
+  String get workoutNoEffortMessage;
+
+  /// No description provided for @workoutCompleteNeedsEffortTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Log the effort before finishing this exercise'**
+  String get workoutCompleteNeedsEffortTooltip;
+
   /// No description provided for @workoutDeleteSetTooltip.
   ///
   /// In en, this message translates to:
