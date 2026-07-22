@@ -4561,6 +4561,144 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{days, plural, =0{Same day} =1{1 day apart} other{{days} days apart}}'**
   String progressPhotosCompareDaysApart(int days);
+
+  /// No description provided for @trendsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get trendsTitle;
+
+  /// No description provided for @trendsFeatureTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Trends'**
+  String get trendsFeatureTooltip;
+
+  /// No description provided for @trendsAreasTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Area by area'**
+  String get trendsAreasTitle;
+
+  /// No description provided for @trendsRingCaption.
+  ///
+  /// In en, this message translates to:
+  /// **'on track'**
+  String get trendsRingCaption;
+
+  /// No description provided for @trendsVerdictOnTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re on track'**
+  String get trendsVerdictOnTrackTitle;
+
+  /// No description provided for @trendsVerdictMixedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Mostly on track'**
+  String get trendsVerdictMixedTitle;
+
+  /// No description provided for @trendsVerdictOffTrackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Off track'**
+  String get trendsVerdictOffTrackTitle;
+
+  /// No description provided for @trendsVerdictUnknownTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing to judge yet'**
+  String get trendsVerdictUnknownTitle;
+
+  /// No description provided for @trendsVerdictUnknownMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a few days of food, water or sleep and this page will tell you how you\'re doing.'**
+  String get trendsVerdictUnknownMessage;
+
+  /// No description provided for @trendsVerdictSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{onTrack} of {total} goals on target over the last {days} days'**
+  String trendsVerdictSummary(int onTrack, int total, int days);
+
+  /// No description provided for @trendsChangeVsPrevious.
+  ///
+  /// In en, this message translates to:
+  /// **'{change} vs the previous {days} days'**
+  String trendsChangeVsPrevious(String change, int days);
+
+  /// No description provided for @trendsNoComparison.
+  ///
+  /// In en, this message translates to:
+  /// **'No earlier data to compare with yet'**
+  String get trendsNoComparison;
+
+  /// No description provided for @trendsAdherenceMet.
+  ///
+  /// In en, this message translates to:
+  /// **'On target'**
+  String get trendsAdherenceMet;
+
+  /// No description provided for @trendsAdherenceClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get trendsAdherenceClose;
+
+  /// No description provided for @trendsAdherenceOff.
+  ///
+  /// In en, this message translates to:
+  /// **'Off target'**
+  String get trendsAdherenceOff;
+
+  /// No description provided for @trendsMetricCalories.
+  ///
+  /// In en, this message translates to:
+  /// **'Calories per day'**
+  String get trendsMetricCalories;
+
+  /// No description provided for @trendsMetricWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Water per day'**
+  String get trendsMetricWater;
+
+  /// No description provided for @trendsMetricSleep.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep per night'**
+  String get trendsMetricSleep;
+
+  /// No description provided for @trendsMetricVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'Volume per session'**
+  String get trendsMetricVolume;
+
+  /// No description provided for @trendsMetricBodyWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get trendsMetricBodyWeight;
+
+  /// No description provided for @trendsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No trends yet'**
+  String get trendsEmptyTitle;
+
+  /// No description provided for @trendsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Track your food, water, sleep, workouts or weight for a few days and your story shows up here.'**
+  String get trendsEmptyMessage;
+
+  /// No description provided for @trendsEmptyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Start tracking'**
+  String get trendsEmptyAction;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
