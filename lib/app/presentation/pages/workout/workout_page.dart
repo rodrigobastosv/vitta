@@ -9,7 +9,6 @@ import 'package:vitta/app/core/toast/toast_extensions.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
 import 'package:vitta/app/cubit/rest_timer_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
-import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
@@ -30,9 +29,21 @@ import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_car
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
+import 'package:vitta/app/presentation/pages/workout_summary/workout_summary_extra.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({super.key});
+
+  static Future<void> _showSummary(BuildContext context, WorkoutCubit cubit) => context.pushRoute(
+    .workoutSummary,
+    extra: WorkoutSummaryExtra(
+      date: cubit.state.date,
+      workouts: cubit.state.workouts,
+      lastSetsByExercise: cubit.state.lastSetsByExercise,
+      latestBodyWeightKg: cubit.state.latestBodyWeightKg,
+      unitSystem: cubit.unitSystem,
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +54,7 @@ class WorkoutPage extends StatelessWidget {
         WorkoutHideLoading() => context.hideLoading(),
         WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
         WorkoutError(:final message, :final date) => context.showErrorToast(message: message, onRetry: () => context.read<WorkoutCubit>().goToDate(date)),
+        WorkoutSessionFinished() => unawaited(_showSummary(context, context.read<WorkoutCubit>())),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(
@@ -110,14 +122,17 @@ class WorkoutPage extends StatelessWidget {
                 ],
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
-              VTAppearEffect(
-                child: VTCelebration(
-                  trigger: state.isFinished,
-                  child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem),
-                ),
-              ),
+              VTAppearEffect(child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem)),
               const VTGap.m(),
-              if (state.isFinished) ...[const VTAppearEffect(child: WorkoutFinishedCard()), const VTGap.m()],
+              if (state.isFinished) ...[
+                VTAppearEffect(
+                  child: WorkoutFinishedCard(
+                    estimatedCalories: state.estimatedCalories(bodyWeightKg: state.latestBodyWeightKg).round(),
+                    isBodyWeightKnown: state.isBodyWeightKnown,
+                  ),
+                ),
+                const VTGap.m(),
+              ],
               for (final workout in state.workouts)
                 for (final (index, workoutExercise) in workout.exercises.indexed) ...[
                   VTAppearEffect(

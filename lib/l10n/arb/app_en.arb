@@ -1233,8 +1233,83 @@
       }
     }
   },
+  "workoutSummaryTitle": "Session summary",
+  "workoutSummaryHeadline": "Session done",
+  "workoutSummaryDoneAction": "Done",
+  "workoutSummaryProgressTitle": "Against last time",
+  "workoutSummaryProgressFirst": "First time",
+  "workoutSummaryProgressFlat": "Same as last time",
+  "workoutSummaryProgressUpVolume": "+{delta} {unit} of volume",
+  "@workoutSummaryProgressUpVolume": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryProgressDownVolume": "−{delta} {unit} of volume",
+  "@workoutSummaryProgressDownVolume": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryProgressUpDuration": "{minutes} min longer",
+  "@workoutSummaryProgressUpDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryProgressDownDuration": "{minutes} min shorter",
+  "@workoutSummaryProgressDownDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryProgressHeavier": "Heaviest set up {delta} {unit}",
+  "@workoutSummaryProgressHeavier": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryImprovedCount": "{count, plural, =0{Nothing moved up this time} =1{1 exercise moved up} other{{count} exercises moved up}}",
+  "@workoutSummaryImprovedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryExercisesTitle": "What you did",
   "workoutFinishedTitle": "Workout done",
   "workoutFinishedMessage": "Every exercise is checked off. Well done — see you next session.",
+  "workoutFinishedCaloriesLabel": "Estimated burn",
+  "workoutFinishedCaloriesValue": "~{calories} kcal",
+  "@workoutFinishedCaloriesValue": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutFinishedCaloriesHint": "Worked out from your weight, what you trained and how long it takes.",
+  "workoutFinishedCaloriesNoWeightHint": "A rough figure — log your body weight for a closer one.",
   "workoutCompleteNeedsSetTooltip": "Log a set before finishing this exercise",
   "workoutProgressionTitle": "Progression",
   "workoutProgressionEmptyTitle": "No history yet",

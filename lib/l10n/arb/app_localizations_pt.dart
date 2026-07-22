@@ -2145,10 +2145,82 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get workoutSummaryTitle => 'Resumo do treino';
+
+  @override
+  String get workoutSummaryHeadline => 'Treino concluído';
+
+  @override
+  String get workoutSummaryDoneAction => 'Concluir';
+
+  @override
+  String get workoutSummaryProgressTitle => 'Comparado à última vez';
+
+  @override
+  String get workoutSummaryProgressFirst => 'Primeira vez';
+
+  @override
+  String get workoutSummaryProgressFlat => 'Igual à última vez';
+
+  @override
+  String workoutSummaryProgressUpVolume(String delta, String unit) {
+    return '+$delta $unit de volume';
+  }
+
+  @override
+  String workoutSummaryProgressDownVolume(String delta, String unit) {
+    return '−$delta $unit de volume';
+  }
+
+  @override
+  String workoutSummaryProgressUpDuration(int minutes) {
+    return '$minutes min a mais';
+  }
+
+  @override
+  String workoutSummaryProgressDownDuration(int minutes) {
+    return '$minutes min a menos';
+  }
+
+  @override
+  String workoutSummaryProgressHeavier(String delta, String unit) {
+    return 'Série mais pesada subiu $delta $unit';
+  }
+
+  @override
+  String workoutSummaryImprovedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exercícios subiram',
+      one: '1 exercício subiu',
+      zero: 'Nada subiu desta vez',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutSummaryExercisesTitle => 'O que você fez';
+
+  @override
   String get workoutFinishedTitle => 'Treino concluído';
 
   @override
   String get workoutFinishedMessage => 'Todos os exercícios estão feitos. Mandou bem — até o próximo treino.';
+
+  @override
+  String get workoutFinishedCaloriesLabel => 'Gasto estimado';
+
+  @override
+  String workoutFinishedCaloriesValue(int calories) {
+    return '~$calories kcal';
+  }
+
+  @override
+  String get workoutFinishedCaloriesHint => 'Calculado a partir do seu peso, do que você treinou e do tempo que isso leva.';
+
+  @override
+  String get workoutFinishedCaloriesNoWeightHint => 'Uma estimativa grosseira — registre seu peso para chegar mais perto.';
 
   @override
   String get workoutCompleteNeedsSetTooltip => 'Registre uma série antes de concluir este exercício';

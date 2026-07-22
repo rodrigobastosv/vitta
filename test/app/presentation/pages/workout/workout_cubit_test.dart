@@ -568,4 +568,106 @@ void main() {
 
     verify(markIntroSeen.call).called(1);
   });
+
+  test('finishing the last exercise announces the session, so the summary can open', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    var isFinished = false;
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(
+              sets: [WorkoutSetFactory.build()],
+              completedAt: isFinished ? DateTime(2026, 7, 20) : null,
+            ),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+
+    isFinished = true;
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]),
+      completed: true,
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), hasLength(1));
+  });
+
+  // Opening a day that was finished days ago is not an achievement happening now,
+  // and replaying the summary over it would be the opposite of a reward.
+  test('opening an already-finished day announces nothing', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 20)),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+  });
+
+  test('paging from an unfinished day to a finished one announces nothing', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: DateTime(2026, 7, 20))).thenAnswer((_) async => const Success([]));
+    when(() => getWorkoutsForDateUseCase(date: DateTime(2026, 7, 19))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 19)),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    await cubit.goToDate(DateTime(2026, 7, 19));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+  });
 }
