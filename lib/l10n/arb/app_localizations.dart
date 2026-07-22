@@ -3944,6 +3944,84 @@ abstract class AppLocalizations {
   /// **'{sets, plural, =0{No sets} =1{1 set done} other{{sets} sets done}}'**
   String workoutCompletedSummary(int sets);
 
+  /// No description provided for @workoutSummaryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Session summary'**
+  String get workoutSummaryTitle;
+
+  /// No description provided for @workoutSummaryHeadline.
+  ///
+  /// In en, this message translates to:
+  /// **'Session done'**
+  String get workoutSummaryHeadline;
+
+  /// No description provided for @workoutSummaryDoneAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get workoutSummaryDoneAction;
+
+  /// No description provided for @workoutSummaryProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Against last time'**
+  String get workoutSummaryProgressTitle;
+
+  /// No description provided for @workoutSummaryProgressFirst.
+  ///
+  /// In en, this message translates to:
+  /// **'First time'**
+  String get workoutSummaryProgressFirst;
+
+  /// No description provided for @workoutSummaryProgressFlat.
+  ///
+  /// In en, this message translates to:
+  /// **'Same as last time'**
+  String get workoutSummaryProgressFlat;
+
+  /// No description provided for @workoutSummaryProgressUpVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'+{delta} {unit} of volume'**
+  String workoutSummaryProgressUpVolume(String delta, String unit);
+
+  /// No description provided for @workoutSummaryProgressDownVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'−{delta} {unit} of volume'**
+  String workoutSummaryProgressDownVolume(String delta, String unit);
+
+  /// No description provided for @workoutSummaryProgressUpDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min longer'**
+  String workoutSummaryProgressUpDuration(int minutes);
+
+  /// No description provided for @workoutSummaryProgressDownDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min shorter'**
+  String workoutSummaryProgressDownDuration(int minutes);
+
+  /// No description provided for @workoutSummaryProgressHeavier.
+  ///
+  /// In en, this message translates to:
+  /// **'Heaviest set up {delta} {unit}'**
+  String workoutSummaryProgressHeavier(String delta, String unit);
+
+  /// No description provided for @workoutSummaryImprovedCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing moved up this time} =1{1 exercise moved up} other{{count} exercises moved up}}'**
+  String workoutSummaryImprovedCount(int count);
+
+  /// No description provided for @workoutSummaryExercisesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What you did'**
+  String get workoutSummaryExercisesTitle;
+
   /// No description provided for @workoutFinishedTitle.
   ///
   /// In en, this message translates to:

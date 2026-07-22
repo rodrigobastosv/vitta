@@ -81,6 +81,14 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> goToDate(DateTime date) => loadDate(date);
 
   Future<void> loadDate(DateTime date) async {
+    // Every mutation reloads through here, so this is the one place that can see a
+    // workout become finished. It has to be the *transition* rather than
+    // state.isFinished: the first load of an already-finished day, and paging back
+    // to one, both arrive at the same finished state without anything having been
+    // achieved just now - and replaying the summary there would be the opposite of
+    // a reward. Requiring the same date and an already-loaded state is what rules
+    // both out.
+    final wasUnfinishedToday = state.isLoaded && _isSameDay(state.date, date) && !state.isFinished;
     final workoutsResult = await withLoadingOverlay(
       () => _getWorkoutsForDateUseCase(date: date),
       showOverlay: state.isLoaded,
@@ -97,7 +105,17 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
+    // Announced only once the previous session's sets and the body weight have
+    // landed, since the summary reads its progression and its calorie estimate
+    // from exactly those.
+    if (wasUnfinishedToday && state.isFinished) {
+      Log.action('workout_session_finished');
+      emitPresentation(WorkoutSessionFinished());
+    }
   }
+
+  static bool _isSameDay(DateTime first, DateTime second) =>
+      first.year == second.year && first.month == second.month && first.day == second.day;
 
   Future<void> _loadCycle() async {
     final cycleResult = await _getRoutineCycleUseCase();

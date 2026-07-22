@@ -42,6 +42,7 @@ import 'package:vitta/app/presentation/routing/routes/water_route.dart';
 import 'package:vitta/app/presentation/routing/routes/workout_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/workout_intro_route.dart';
 import 'package:vitta/app/presentation/routing/routes/workout_route.dart';
+import 'package:vitta/app/presentation/routing/routes/workout_summary_route.dart';
 import 'package:vitta/app/presentation/routing/vt_route.dart';
 
 abstract class AppRouter {
@@ -71,6 +72,7 @@ abstract class AppRouter {
     WorkoutRoute(),
     WorkoutIntroRoute(),
     WorkoutHistoryRoute(),
+    WorkoutSummaryRoute(),
     RoutinesRoute(),
     RoutineFormRoute(),
     ExerciseSearchRoute(),

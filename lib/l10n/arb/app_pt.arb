@@ -967,6 +967,70 @@
   "workoutCompleteExerciseAction": "Concluir",
   "workoutReopenExerciseAction": "Reabrir",
   "workoutCompletedSummary": "{sets, plural, =0{Nenhuma série} =1{1 série feita} other{{sets} séries feitas}}",
+  "workoutSummaryTitle": "Resumo do treino",
+  "workoutSummaryHeadline": "Treino concluído",
+  "workoutSummaryDoneAction": "Concluir",
+  "workoutSummaryProgressTitle": "Comparado à última vez",
+  "workoutSummaryProgressFirst": "Primeira vez",
+  "workoutSummaryProgressFlat": "Igual à última vez",
+  "workoutSummaryProgressUpVolume": "+{delta} {unit} de volume",
+  "@workoutSummaryProgressUpVolume": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryProgressDownVolume": "−{delta} {unit} de volume",
+  "@workoutSummaryProgressDownVolume": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryProgressUpDuration": "{minutes} min a mais",
+  "@workoutSummaryProgressUpDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryProgressDownDuration": "{minutes} min a menos",
+  "@workoutSummaryProgressDownDuration": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryProgressHeavier": "Série mais pesada subiu {delta} {unit}",
+  "@workoutSummaryProgressHeavier": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutSummaryImprovedCount": "{count, plural, =0{Nada subiu desta vez} =1{1 exercício subiu} other{{count} exercícios subiram}}",
+  "@workoutSummaryImprovedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workoutSummaryExercisesTitle": "O que você fez",
   "workoutFinishedTitle": "Treino concluído",
   "workoutFinishedMessage": "Todos os exercícios estão feitos. Mandou bem — até o próximo treino.",
   "workoutFinishedCaloriesLabel": "Gasto estimado",
