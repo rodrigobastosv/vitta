@@ -346,6 +346,70 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileSexTitle => 'Sexo biológico';
+
+  @override
+  String get bodyProfileSexHint => 'Homens e mulheres gastam quantidades diferentes em repouso, então isso muda a estimativa.';
+
+  @override
+  String get bodyProfileSexMale => 'Masculino';
+
+  @override
+  String get bodyProfileSexFemale => 'Feminino';
+
+  @override
+  String get bodyProfileAgeLabel => 'Idade';
+
+  @override
+  String bodyProfileAgeValue(int years) {
+    return '$years anos';
+  }
+
+  @override
+  String get bodyProfileActivityTitle => 'Nível de atividade';
+
+  @override
+  String get bodyProfileActivityHint => 'O quanto você se movimenta num dia comum, treino incluído.';
+
+  @override
+  String get bodyProfileActivitySedentary => 'Sedentário';
+
+  @override
+  String get bodyProfileActivityLightlyActive => 'Pouco ativo';
+
+  @override
+  String get bodyProfileActivityModeratelyActive => 'Moderadamente ativo';
+
+  @override
+  String get bodyProfileActivityVeryActive => 'Muito ativo';
+
+  @override
+  String get bodyProfileActivityExtraActive => 'Extremamente ativo';
+
+  @override
+  String get bodyProfileMetabolismTitle => 'Metabolismo basal';
+
+  @override
+  String bodyProfileMetabolismBasal(int calories) {
+    return '$calories kcal em repouso';
+  }
+
+  @override
+  String bodyProfileMetabolismMaintenance(int calories) {
+    return '$calories kcal para manter';
+  }
+
+  @override
+  String get bodyProfileMetabolismMethod => 'Mifflin-St Jeor, multiplicado pelo seu nível de atividade.';
+
+  @override
+  String get bodyProfileMetabolismMeasured => 'Calculado a partir do seu peso, altura, sexo, idade e nível de atividade.';
+
+  @override
+  String get bodyProfileMetabolismAssumed =>
+      'Parte disso é suposição — informe sexo, idade e nível de atividade para um número mais próximo.';
+
+  @override
   String get objectiveOverwritesGoalsNote => 'Salvar substitui suas metas de macros. Você ainda pode ajustá-las na página de dieta.';
 
   @override

@@ -153,6 +153,46 @@
       }
     }
   },
+  "bodyProfileSexTitle": "Biological sex",
+  "bodyProfileSexHint": "Men and women burn different amounts at rest, so this moves the estimate.",
+  "bodyProfileSexMale": "Male",
+  "bodyProfileSexFemale": "Female",
+  "bodyProfileAgeLabel": "Age",
+  "bodyProfileAgeValue": "{years} yrs",
+  "@bodyProfileAgeValue": {
+    "placeholders": {
+      "years": {
+        "type": "int"
+      }
+    }
+  },
+  "bodyProfileActivityTitle": "Activity level",
+  "bodyProfileActivityHint": "How much you move on an ordinary day, training included.",
+  "bodyProfileActivitySedentary": "Sedentary",
+  "bodyProfileActivityLightlyActive": "Lightly active",
+  "bodyProfileActivityModeratelyActive": "Moderately active",
+  "bodyProfileActivityVeryActive": "Very active",
+  "bodyProfileActivityExtraActive": "Extra active",
+  "bodyProfileMetabolismTitle": "Basal metabolism",
+  "bodyProfileMetabolismBasal": "{calories} kcal at rest",
+  "@bodyProfileMetabolismBasal": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "bodyProfileMetabolismMaintenance": "{calories} kcal to maintain",
+  "@bodyProfileMetabolismMaintenance": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "bodyProfileMetabolismMethod": "Mifflin-St Jeor, multiplied by your activity level.",
+  "bodyProfileMetabolismMeasured": "Worked out from your weight, height, sex, age and activity level.",
+  "bodyProfileMetabolismAssumed": "Part of this is assumed — fill in your sex, age and activity level for a closer figure.",
   "objectiveOverwritesGoalsNote": "Saving replaces your macro goals. You can still fine-tune them from the diet page.",
   "objectiveSaveAction": "Save objective",
   "objectiveSavedTitle": "Objective updated",

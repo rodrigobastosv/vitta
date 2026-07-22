@@ -1,5 +1,7 @@
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/domain/body_profile/entities/activity_level.dart';
+import 'package:vitta/app/domain/body_profile/entities/biological_sex.dart';
 import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
@@ -34,6 +36,12 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
 
   void heightChanged(double heightCm) => emit(state.withBody(heightCm: heightCm));
 
+  void sexChanged(BiologicalSex sex) => emit(state.withBody(sex: sex));
+
+  void ageChanged(int ageYears) => emit(state.withBody(birthDate: BodyProfile.birthDateForAge(ageYears)));
+
+  void activityLevelChanged(ActivityLevel activityLevel) => emit(state.withBody(activityLevel: activityLevel));
+
   void objectiveChanged(FitnessObjective objective) => emit(state.withBody(objective: objective));
 
   void acceptBody() => emit(state.copyWith(bodyProvided: true));
@@ -44,7 +52,7 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
 
   Future<void> completeOnboarding() async {
     if (state.bodyProvided) {
-      await _saveBodyProfileUseCase(BodyProfile(heightCm: state.heightCm, objective: state.objective));
+      await _saveBodyProfileUseCase(state.profile);
       await _logFirstWeight();
     }
     if (state.goalsAccepted) {

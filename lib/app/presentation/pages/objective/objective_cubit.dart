@@ -1,5 +1,7 @@
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/domain/body_profile/entities/activity_level.dart';
+import 'package:vitta/app/domain/body_profile/entities/biological_sex.dart';
 import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
@@ -41,6 +43,9 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
           objective: profile.objective,
           heightCm: profile.effectiveHeightCm,
           weightKg: latest?.weightKg ?? BodyProfile.defaultWeightKg,
+          sex: profile.sex,
+          birthDate: profile.birthDate,
+          activityLevel: profile.activityLevel,
           hasWeighIn: latest != null,
           isLoaded: true,
         ),
@@ -55,6 +60,12 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
 
   void heightChanged(double heightCm) => emit(state.copyWith(heightCm: heightCm));
 
+  void sexChanged(BiologicalSex sex) => emit(state.copyWith(sex: sex));
+
+  void ageChanged(int ageYears) => emit(state.copyWith(birthDate: BodyProfile.birthDateForAge(ageYears)));
+
+  void activityLevelChanged(ActivityLevel activityLevel) => emit(state.copyWith(activityLevel: activityLevel));
+
   // Saving writes both halves: the objective (so it can be switched again later,
   // and so the modality stays derivable from it) and the macro goals it derives.
   // The goals are what every other screen reads - nothing downstream learns about
@@ -64,10 +75,19 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
     if (objective == null) {
       return;
     }
-    final goals = objective.goalsFor(weightKg: state.weightKg, heightCm: state.heightCm);
+    final metabolism = state.metabolism;
+    final goals = objective.goalsFor(maintenanceCalories: metabolism.maintenanceCalories);
     await _saveBodyProfileUseCase(state.profile);
     await _saveMacroGoalsUseCase(goals);
-    Log.action('objective_changed', data: {'objective': objective.wireValue, 'calories': goals.calorieGoal.round()});
+    Log.action(
+      'objective_changed',
+      data: {
+        'objective': objective.wireValue,
+        'calories': goals.calorieGoal.round(),
+        'basal_calories': metabolism.basalCalories.round(),
+        'activity_level': metabolism.effectiveActivityLevel.wireValue,
+      },
+    );
     emitPresentation(ObjectiveSaved());
   }
 }

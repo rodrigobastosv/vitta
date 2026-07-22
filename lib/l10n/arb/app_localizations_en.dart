@@ -346,6 +346,69 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileSexTitle => 'Biological sex';
+
+  @override
+  String get bodyProfileSexHint => 'Men and women burn different amounts at rest, so this moves the estimate.';
+
+  @override
+  String get bodyProfileSexMale => 'Male';
+
+  @override
+  String get bodyProfileSexFemale => 'Female';
+
+  @override
+  String get bodyProfileAgeLabel => 'Age';
+
+  @override
+  String bodyProfileAgeValue(int years) {
+    return '$years yrs';
+  }
+
+  @override
+  String get bodyProfileActivityTitle => 'Activity level';
+
+  @override
+  String get bodyProfileActivityHint => 'How much you move on an ordinary day, training included.';
+
+  @override
+  String get bodyProfileActivitySedentary => 'Sedentary';
+
+  @override
+  String get bodyProfileActivityLightlyActive => 'Lightly active';
+
+  @override
+  String get bodyProfileActivityModeratelyActive => 'Moderately active';
+
+  @override
+  String get bodyProfileActivityVeryActive => 'Very active';
+
+  @override
+  String get bodyProfileActivityExtraActive => 'Extra active';
+
+  @override
+  String get bodyProfileMetabolismTitle => 'Basal metabolism';
+
+  @override
+  String bodyProfileMetabolismBasal(int calories) {
+    return '$calories kcal at rest';
+  }
+
+  @override
+  String bodyProfileMetabolismMaintenance(int calories) {
+    return '$calories kcal to maintain';
+  }
+
+  @override
+  String get bodyProfileMetabolismMethod => 'Mifflin-St Jeor, multiplied by your activity level.';
+
+  @override
+  String get bodyProfileMetabolismMeasured => 'Worked out from your weight, height, sex, age and activity level.';
+
+  @override
+  String get bodyProfileMetabolismAssumed => 'Part of this is assumed — fill in your sex, age and activity level for a closer figure.';
+
+  @override
   String get objectiveOverwritesGoalsNote => 'Saving replaces your macro goals. You can still fine-tune them from the diet page.';
 
   @override
