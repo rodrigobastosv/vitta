@@ -35,7 +35,7 @@ void main() {
   );
 
   blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
-    'shows then hides loading while loadToday runs',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getDailyWaterUseCase = MockGetDailyWaterUseCase();
       final waterLocalDataSource = MockWaterLocalDataSource();
@@ -44,7 +44,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>()],
+    expectPresentation: () => <WaterPresentationEvent>[],
   );
 
   blocPresentationTest<WaterCubit, WaterState, WaterPresentationEvent>(
@@ -57,7 +57,7 @@ void main() {
       return CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
     },
     act: (cubit) => cubit.loadToday(),
-    expectPresentation: () => [isA<WaterShowLoading>(), isA<WaterHideLoading>(), isA<WaterError>()],
+    expectPresentation: () => [isA<WaterError>()],
   );
 
   final addReloadSpy = MockGetDailyWaterUseCase();

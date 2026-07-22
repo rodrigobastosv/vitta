@@ -15,9 +15,12 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
   void onInit() => loadRecipes();
 
   Future<void> loadRecipes() async {
-    emitPresentation(RecipesShowLoading());
-    final recipesResult = await _getRecipesUseCase();
-    emitPresentation(RecipesHideLoading());
+    final recipesResult = await withLoadingOverlay(
+      _getRecipesUseCase.call,
+      showOverlay: state.isLoaded,
+      showLoadingEvent: RecipesShowLoading(),
+      hideLoadingEvent: RecipesHideLoading(),
+    );
     recipesResult.when((error) => emitPresentation(RecipesError(message: error.message)), (recipes) => emit(state.copyWith(isLoaded: true, recipes: recipes)));
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));

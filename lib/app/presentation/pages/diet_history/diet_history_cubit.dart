@@ -23,11 +23,16 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
   void onInit() => refresh();
 
   Future<void> refresh() async {
-    emitPresentation(DietHistoryShowLoading());
-    emit(state.copyWith(macroGoals: _getMacroGoalsUseCase()));
-    await _loadMonth(state.month);
-    await _loadTrend(state.trendRange);
-    emitPresentation(DietHistoryHideLoading());
+    await withLoadingOverlay(
+      () async {
+        emit(state.copyWith(macroGoals: _getMacroGoalsUseCase()));
+        await _loadMonth(state.month);
+        await _loadTrend(state.trendRange);
+      },
+      showOverlay: state.isLoaded,
+      showLoadingEvent: DietHistoryShowLoading(),
+      hideLoadingEvent: DietHistoryHideLoading(),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

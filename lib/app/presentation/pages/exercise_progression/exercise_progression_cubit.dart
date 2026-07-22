@@ -26,13 +26,16 @@ class ExerciseProgressionCubit extends PresentationCubit<ExerciseProgressionStat
   void onInit() => load();
 
   Future<void> load() async {
-    emitPresentation(ExerciseProgressionShowLoading());
-    final progressionResult = await _getExerciseProgressionUseCase(exerciseId: state.exercise.id);
+    final progressionResult = await withLoadingOverlay(
+      () => _getExerciseProgressionUseCase(exerciseId: state.exercise.id),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: ExerciseProgressionShowLoading(),
+      hideLoadingEvent: ExerciseProgressionHideLoading(),
+    );
     progressionResult.when(
       (error) => emitPresentation(ExerciseProgressionError(message: error.message)),
       (progression) => emit(state.copyWith(isLoaded: true, progression: progression)),
     );
-    emitPresentation(ExerciseProgressionHideLoading());
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

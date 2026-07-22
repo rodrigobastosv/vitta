@@ -28,11 +28,16 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
   void onInit() => refresh();
 
   Future<void> refresh() async {
-    emitPresentation(WaterHistoryShowLoading());
-    emit(state.copyWith(dailyGoalMl: _getWaterGoalUseCase()));
-    await _loadMonth(state.month);
-    await _loadTrend(state.trendRange);
-    emitPresentation(WaterHistoryHideLoading());
+    await withLoadingOverlay(
+      () async {
+        emit(state.copyWith(dailyGoalMl: _getWaterGoalUseCase()));
+        await _loadMonth(state.month);
+        await _loadTrend(state.trendRange);
+      },
+      showOverlay: state.isLoaded,
+      showLoadingEvent: WaterHistoryShowLoading(),
+      hideLoadingEvent: WaterHistoryHideLoading(),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

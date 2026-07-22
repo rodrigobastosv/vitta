@@ -35,14 +35,14 @@ void main() {
   );
 
   blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
-    'shows then hides loading while loadRecent runs',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
       when(() => getRecentSleepLogsUseCase(days: 7)).thenAnswer((_) async => const Success([]));
       return CubitsFactories.buildSleepCubit(getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
     },
     act: (cubit) => cubit.loadRecent(),
-    expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHideLoading>()],
+    expectPresentation: () => <SleepPresentationEvent>[],
   );
 
   blocPresentationTest<SleepCubit, SleepState, SleepPresentationEvent>(
@@ -53,7 +53,7 @@ void main() {
       return CubitsFactories.buildSleepCubit(getRecentSleepLogsUseCase: getRecentSleepLogsUseCase);
     },
     act: (cubit) => cubit.loadRecent(),
-    expectPresentation: () => [isA<SleepShowLoading>(), isA<SleepHideLoading>(), isA<SleepError>()],
+    expectPresentation: () => [isA<SleepError>()],
   );
 
   blocTest<SleepCubit, SleepState>(

@@ -31,10 +31,6 @@ void main() {
       return ExerciseProgressionListCubit(getLoggedExercisesUseCase: getLoggedExercisesUseCase);
     },
     act: (cubit) => cubit.load(),
-    expectPresentation: () => [
-      isA<ExerciseProgressionListShowLoading>(),
-      isA<ExerciseProgressionListError>().having((event) => event.message, 'message', 'offline'),
-      isA<ExerciseProgressionListHideLoading>(),
-    ],
+    expectPresentation: () => [isA<ExerciseProgressionListError>().having((event) => event.message, 'message', 'offline')],
   );
 }

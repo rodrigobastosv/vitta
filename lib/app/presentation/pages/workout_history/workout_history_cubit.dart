@@ -30,10 +30,15 @@ class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, Workout
   void onInit() => refresh();
 
   Future<void> refresh() async {
-    emitPresentation(WorkoutHistoryShowLoading());
-    await _loadMonth(state.month);
-    await _loadTrend(state.trendRange);
-    emitPresentation(WorkoutHistoryHideLoading());
+    await withLoadingOverlay(
+      () async {
+        await _loadMonth(state.month);
+        await _loadTrend(state.trendRange);
+      },
+      showOverlay: state.isLoaded,
+      showLoadingEvent: WorkoutHistoryShowLoading(),
+      hideLoadingEvent: WorkoutHistoryHideLoading(),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }

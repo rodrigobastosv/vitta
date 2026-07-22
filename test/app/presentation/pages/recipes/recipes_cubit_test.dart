@@ -25,14 +25,26 @@ void main() {
   );
 
   blocPresentationTest<RecipesCubit, RecipesState, RecipesPresentationEvent>(
-    'shows then hides loading around the load',
+    'shows then hides the overlay on a reload (the first load shows the skeleton)',
+    build: () {
+      final getRecipesUseCase = MockGetRecipesUseCase();
+      when(getRecipesUseCase.call).thenAnswer((_) async => const Success([]));
+      return CubitsFactories.buildRecipesCubit(getRecipesUseCase: getRecipesUseCase);
+    },
+    seed: RecipesState.new,
+    act: (cubit) => cubit.loadRecipes(),
+    expectPresentation: () => [isA<RecipesShowLoading>(), isA<RecipesHideLoading>()],
+  );
+
+  blocPresentationTest<RecipesCubit, RecipesState, RecipesPresentationEvent>(
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getRecipesUseCase = MockGetRecipesUseCase();
       when(getRecipesUseCase.call).thenAnswer((_) async => const Success([]));
       return CubitsFactories.buildRecipesCubit(getRecipesUseCase: getRecipesUseCase);
     },
     act: (cubit) => cubit.loadRecipes(),
-    expectPresentation: () => [isA<RecipesShowLoading>(), isA<RecipesHideLoading>()],
+    expectPresentation: () => <RecipesPresentationEvent>[],
   );
 
   blocPresentationTest<RecipesCubit, RecipesState, RecipesPresentationEvent>(
@@ -43,7 +55,7 @@ void main() {
       return CubitsFactories.buildRecipesCubit(getRecipesUseCase: getRecipesUseCase);
     },
     act: (cubit) => cubit.loadRecipes(),
-    expectPresentation: () => [isA<RecipesShowLoading>(), isA<RecipesHideLoading>(), isA<RecipesError>().having((event) => event.message, 'message', 'boom')],
+    expectPresentation: () => [isA<RecipesError>().having((event) => event.message, 'message', 'boom')],
   );
 
   test('deleting a recipe reloads the list', () async {

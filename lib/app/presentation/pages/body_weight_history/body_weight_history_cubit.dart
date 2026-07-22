@@ -26,13 +26,16 @@ class BodyWeightHistoryCubit extends PresentationCubit<BodyWeightHistoryState, B
   }
 
   Future<void> _loadTrend(TrendRange trendRange) async {
-    emitPresentation(BodyWeightHistoryShowLoading());
     final to = _dateOnly(DateTime.now());
-    final logsResult = await _getBodyWeightInRangeUseCase(
-      from: to.subtract(Duration(days: trendRange.days - 1)),
-      to: to,
+    final logsResult = await withLoadingOverlay(
+      () => _getBodyWeightInRangeUseCase(
+        from: to.subtract(Duration(days: trendRange.days - 1)),
+        to: to,
+      ),
+      showOverlay: state.isLoaded,
+      showLoadingEvent: BodyWeightHistoryShowLoading(),
+      hideLoadingEvent: BodyWeightHistoryHideLoading(),
     );
-    emitPresentation(BodyWeightHistoryHideLoading());
     logsResult.when((error) => emitPresentation(BodyWeightHistoryError(message: error.message)), (value) => emit(state.copyWith(isLoaded: true, logs: value)));
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));

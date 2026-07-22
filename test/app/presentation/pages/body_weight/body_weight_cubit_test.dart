@@ -38,14 +38,14 @@ void main() {
   );
 
   blocPresentationTest<BodyWeightCubit, BodyWeightState, BodyWeightPresentationEvent>(
-    'shows then hides loading while loadRecent runs',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
       when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
       return CubitsFactories.buildBodyWeightCubit(getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.loadRecent(),
-    expectPresentation: () => [isA<BodyWeightShowLoading>(), isA<BodyWeightHideLoading>()],
+    expectPresentation: () => <BodyWeightPresentationEvent>[],
   );
 
   blocPresentationTest<BodyWeightCubit, BodyWeightState, BodyWeightPresentationEvent>(
@@ -56,7 +56,7 @@ void main() {
       return CubitsFactories.buildBodyWeightCubit(getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase, getAppSettingsUseCase: _settingsUseCase());
     },
     act: (cubit) => cubit.loadRecent(),
-    expectPresentation: () => [isA<BodyWeightShowLoading>(), isA<BodyWeightHideLoading>(), isA<BodyWeightError>()],
+    expectPresentation: () => [isA<BodyWeightError>()],
   );
 
   test('logWeight reloads the recent logs and logs an action', () async {

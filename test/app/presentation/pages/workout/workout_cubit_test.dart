@@ -76,7 +76,7 @@ void main() {
   );
 
   blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
-    'shows then hides loading while the day loads',
+    'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
       when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
@@ -88,7 +88,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.loadDate(DateTime(2026, 7, 15)),
-    expectPresentation: () => [isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+    expectPresentation: () => <WorkoutPresentationEvent>[],
   );
 
   blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
@@ -105,8 +105,6 @@ void main() {
     },
     act: (cubit) => cubit.loadDate(DateTime(2026, 7, 10)),
     expectPresentation: () => [
-      isA<WorkoutShowLoading>(),
-      isA<WorkoutHideLoading>(),
       isA<WorkoutError>().having((event) => event.message, 'message', 'offline').having((event) => event.date, 'date', DateTime(2026, 7, 10)),
     ],
   );
@@ -539,7 +537,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.onInit(),
-    expectPresentation: () => [isA<WorkoutShowIntro>(), isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+    expectPresentation: () => [isA<WorkoutShowIntro>()],
   );
 
   blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
@@ -559,7 +557,7 @@ void main() {
       );
     },
     act: (cubit) => cubit.onInit(),
-    expectPresentation: () => [isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
+    expectPresentation: () => <WorkoutPresentationEvent>[],
   );
 
   test('markIntroSeen records that the intro was seen', () async {
