@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vitta/app/domain/diet/entities/food.dart';
 
 sealed class CustomFoodPresentationEvent {}
@@ -5,6 +7,14 @@ sealed class CustomFoodPresentationEvent {}
 class CustomFoodShowLoading implements CustomFoodPresentationEvent {}
 
 class CustomFoodHideLoading implements CustomFoodPresentationEvent {}
+
+// The nutrition-label scan shows the scanning overlay (over the label photo)
+// rather than the generic spinner - the same payoff as the meal scan.
+class CustomFoodScanning implements CustomFoodPresentationEvent {
+  const CustomFoodScanning({this.imageBytes});
+
+  final Uint8List? imageBytes;
+}
 
 class CustomFoodIncomplete implements CustomFoodPresentationEvent {}
 

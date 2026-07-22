@@ -658,6 +658,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietNutritionScanNoData => 'Enter the values manually, or try another photo.';
 
   @override
+  String get dietNutritionScanningCaptionReading => 'Reading the label…';
+
+  @override
+  String get dietNutritionScanningCaptionExtracting => 'Extracting the nutrition facts…';
+
+  @override
   String get mealScanTitle => 'Scan a meal';
 
   @override
@@ -676,13 +682,38 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealScanNoDataTitle => 'No food detected';
 
   @override
-  String get mealScanNoData => 'We couldn\'t spot any food in that photo. Try another one with a clearer view of the plate.';
+  String get mealScanNoData =>
+      'We couldn\'t spot any food in that photo. Frame the whole plate in good light, get a little closer, and try again.';
+
+  @override
+  String get mealScanScanningCaptionLooking => 'Looking at your plate…';
+
+  @override
+  String get mealScanScanningCaptionIdentifying => 'Identifying the food…';
+
+  @override
+  String get mealScanScanningCaptionEstimating => 'Estimating portions…';
 
   @override
   String get mealScanItemsTitle => 'Detected items';
 
   @override
-  String get mealScanItemsSubtitle => 'Adjust the amounts, untick anything you don\'t want, then add it to your day.';
+  String mealScanFoundCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: 'Found $count items', one: 'Found 1 item');
+    return '$_temp0';
+  }
+
+  @override
+  String mealScanEstimatedTotal(int calories) {
+    return '~$calories kcal estimated';
+  }
+
+  @override
+  String get mealScanPortionLabel => 'Portion';
+
+  @override
+  String get mealScanItemsSubtitle =>
+      'These macros are estimates — adjust the amounts, untick anything you don\'t want, then add it to your day.';
 
   @override
   String get mealScanMealTypeTitle => 'Add to meal';

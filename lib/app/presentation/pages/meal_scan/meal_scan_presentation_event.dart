@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 sealed class MealScanPresentationEvent {}
@@ -5,6 +7,14 @@ sealed class MealScanPresentationEvent {}
 class MealScanShowLoading implements MealScanPresentationEvent {}
 
 class MealScanHideLoading implements MealScanPresentationEvent {}
+
+// The multi-second AI scan shows the scanning overlay (over the captured photo)
+// rather than the generic spinner, so it reads as a payoff not a wait.
+class MealScanScanning implements MealScanPresentationEvent {
+  const MealScanScanning({this.imageBytes});
+
+  final Uint8List? imageBytes;
+}
 
 class MealScanFoundNothing implements MealScanPresentationEvent {}
 

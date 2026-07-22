@@ -335,15 +335,37 @@
   "dietScanLabelAction": "Scan nutrition label",
   "dietNutritionScanNoDataTitle": "Couldn't read the label",
   "dietNutritionScanNoData": "Enter the values manually, or try another photo.",
+  "dietNutritionScanningCaptionReading": "Reading the label…",
+  "dietNutritionScanningCaptionExtracting": "Extracting the nutrition facts…",
   "mealScanTitle": "Scan a meal",
   "mealScanIntroTitle": "Snap your meal",
   "mealScanIntroMessage": "Take a photo of your plate and we identify the items and estimate their macros for you.",
   "mealScanTakePhotoAction": "Take a photo",
   "mealScanRetakeAction": "Try another photo",
   "mealScanNoDataTitle": "No food detected",
-  "mealScanNoData": "We couldn't spot any food in that photo. Try another one with a clearer view of the plate.",
+  "mealScanNoData": "We couldn't spot any food in that photo. Frame the whole plate in good light, get a little closer, and try again.",
+  "mealScanScanningCaptionLooking": "Looking at your plate…",
+  "mealScanScanningCaptionIdentifying": "Identifying the food…",
+  "mealScanScanningCaptionEstimating": "Estimating portions…",
   "mealScanItemsTitle": "Detected items",
-  "mealScanItemsSubtitle": "Adjust the amounts, untick anything you don't want, then add it to your day.",
+  "mealScanFoundCount": "{count, plural, =1{Found 1 item} other{Found {count} items}}",
+  "@mealScanFoundCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mealScanEstimatedTotal": "~{calories} kcal estimated",
+  "@mealScanEstimatedTotal": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "mealScanPortionLabel": "Portion",
+  "mealScanItemsSubtitle": "These macros are estimates — adjust the amounts, untick anything you don't want, then add it to your day.",
   "mealScanMealTypeTitle": "Add to meal",
   "mealScanLogAction": "Add to diary",
   "mealScanIncomplete": "Pick at least one item with a valid amount.",

@@ -16,6 +16,9 @@ const _allowed = {
   // A continuous wave loop, not a transition - the fill level itself still
   // animates through VTMotion.data; only the surface ripple loops.
   'lib/app/design_system/components/general/vt_water_fill.dart',
+  // A continuous scan-line sweep and caption rotation while an AI scan runs,
+  // not a transition between two states - same category as the spinner.
+  'lib/app/design_system/components/general/vt_scanning_overlay.dart',
 };
 
 void main() {

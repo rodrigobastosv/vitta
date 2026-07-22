@@ -11,12 +11,14 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_image_source_sheet.dart';
 import 'package:vitta/app/design_system/components/general/vt_photo_header.dart';
+import 'package:vitta/app/design_system/components/general/vt_scanning_overlay.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_state.dart';
+import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_result_header.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_type_selector.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/scanned_meal_item_card.dart';
 import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
@@ -37,6 +39,13 @@ class MealScanPage extends StatelessWidget {
         switch (event) {
           case MealScanShowLoading():
             context.showLoading();
+          case MealScanScanning(:final imageBytes):
+            context.showLoading(
+              widget: VTScanningOverlay(
+                imageBytes: imageBytes,
+                captions: [l10n.mealScanScanningCaptionLooking, l10n.mealScanScanningCaptionIdentifying, l10n.mealScanScanningCaptionEstimating],
+              ),
+            );
           case MealScanHideLoading():
             context.hideLoading();
           case MealScanFoundNothing():
@@ -118,13 +127,15 @@ class MealScanPage extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(l10n.mealScanItemsTitle, style: VTTextStyles.title(context)),
-        const VTGap.xs(),
+        VTAppearEffect(
+          child: MealScanResultHeader(itemCount: state.entries.length, estimatedCalories: state.totalCalories.round()),
+        ),
+        const VTGap.s(),
         Text(l10n.mealScanItemsSubtitle, style: VTTextStyles.caption(context)),
         const VTGap.m(),
         for (final (index, entry) in state.entries.indexed) ...[
           VTAppearEffect(
-            index: index,
+            index: index + 1,
             child: ScannedMealItemCard(
               entry: entry,
               onGramsChanged: (text) => cubit.gramsChanged(index: index, text: text),
