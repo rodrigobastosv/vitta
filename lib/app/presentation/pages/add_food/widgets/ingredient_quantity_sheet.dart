@@ -6,13 +6,14 @@ import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 
 Future<RecipeIngredient?> showIngredientQuantitySheet({required BuildContext context, required Food food, required UnitSystem unitSystem}) =>
     showModalBottomSheet<RecipeIngredient>(
       context: context,
-      routeSettings: const RouteSettings(name: 'ingredientQuantitySheet'),
+      routeSettings: VTBottomSheet.ingredientQuantity.settings,
       isScrollControlled: true,
       builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
     );

@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/labelled_field.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/set_prefill.dart';
@@ -23,7 +24,7 @@ Future<void> showLogSetSheet({
   SetPrefill prefill = SetPrefill.none,
 }) => showModalBottomSheet<void>(
   context: context,
-  routeSettings: const RouteSettings(name: 'logSetSheet'),
+  routeSettings: VTBottomSheet.logSet.settings,
   isScrollControlled: true,
   builder: (context) => Padding(
     padding: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),

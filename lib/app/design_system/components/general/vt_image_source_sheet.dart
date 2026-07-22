@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 
 Future<ImagePickerSource?> showImageSourceSheet({required BuildContext context}) =>
-    showModalBottomSheet<ImagePickerSource>(context: context, routeSettings: const RouteSettings(name: 'imageSourceSheet'), builder: (sheetContext) => const VTImageSourceSheet());
+    showModalBottomSheet<ImagePickerSource>(context: context, routeSettings: VTBottomSheet.imageSource.settings, builder: (sheetContext) => const VTImageSourceSheet());
 
 class VTImageSourceSheet extends StatelessWidget {
   const VTImageSourceSheet({super.key});

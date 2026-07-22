@@ -5,6 +5,7 @@ import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dar
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_duration_hero.dart';
 import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_quality_selector.dart';
@@ -12,7 +13,7 @@ import 'package:vitta/app/presentation/pages/sleep/widgets/sleep_time_row.dart';
 
 Future<void> showLogSleepSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
-  routeSettings: const RouteSettings(name: 'logSleepSheet'),
+  routeSettings: VTBottomSheet.logSleep.settings,
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<SleepCubit>(), child: const _LogSleepSheet()),
 );

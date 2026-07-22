@@ -5,10 +5,11 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 
 Future<Duration?> showRestLengthSheet({required BuildContext context, required Duration current}) => showModalBottomSheet<Duration>(
   context: context,
-  routeSettings: const RouteSettings(name: 'restLengthSheet'),
+  routeSettings: VTBottomSheet.restLength.settings,
   isScrollControlled: true,
   builder: (sheetContext) => RestLengthSheet(current: current),
 );

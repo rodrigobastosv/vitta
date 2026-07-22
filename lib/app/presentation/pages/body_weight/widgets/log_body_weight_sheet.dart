@@ -7,11 +7,12 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/inputs/vt_weight_picker.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 
 Future<void> showLogBodyWeightSheet({required BuildContext context}) => showModalBottomSheet<void>(
   context: context,
-  routeSettings: const RouteSettings(name: 'logBodyWeightSheet'),
+  routeSettings: VTBottomSheet.logBodyWeight.settings,
   isScrollControlled: true,
   builder: (sheetContext) => BlocProvider.value(value: context.read<BodyWeightCubit>(), child: const _LogBodyWeightSheet()),
 );
