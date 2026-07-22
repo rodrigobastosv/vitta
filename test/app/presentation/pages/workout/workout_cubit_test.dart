@@ -201,7 +201,7 @@ void main() {
 
   test('unitSystem reads settings directly rather than through AppCubit', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: UnitSystem.imperial));
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: .imperial));
     final cubit = CubitsFactories.buildWorkoutCubit(getAppSettingsUseCase: getAppSettingsUseCase);
 
     expect(cubit.unitSystem, UnitSystem.imperial);
@@ -569,76 +569,165 @@ void main() {
     verify(markIntroSeen.call).called(1);
   });
 
-  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
-    'signals the finish when the last exercise is checked off',
-    build: () {
-      final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
-      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
-      when(
-        () => setCompleted(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
-      ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
-      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
-        (_) async => Success([
-          WorkoutFactory.build(
-            exercises: [
-              WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 15)),
-            ],
-          ),
-        ]),
-      );
-      return CubitsFactories.buildWorkoutCubit(
-        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
-        setWorkoutExerciseCompletedUseCase: setCompleted,
-        getRoutineCycleUseCase: _emptyCycleUseCase(),
-        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
-        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
-      );
-    },
-    act: (cubit) => cubit.setExerciseCompleted(
-      workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
-      completed: true,
-    ),
-    expectPresentation: () => [isA<WorkoutFinished>()],
-  );
+  test('finishing the last exercise announces the session, so the summary can open', () async {
+    useMockLog();
+    final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
+    when(
+      () => setCompleted(
+        workoutExerciseId: any(named: 'workoutExerciseId'),
+        completed: any(named: 'completed'),
+      ),
+    ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    var isFinished = false;
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(
+              sets: [WorkoutSetFactory.build()],
+              completedAt: isFinished ? DateTime(2026, 7, 20) : null,
+            ),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      setWorkoutExerciseCompletedUseCase: setCompleted,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
 
-  blocPresentationTest<WorkoutCubit, WorkoutState, WorkoutPresentationEvent>(
-    'does not signal the finish again for a workout that was already finished',
-    build: () {
-      final setCompleted = MockSetWorkoutExerciseCompletedUseCase();
-      final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
-      when(
-        () => setCompleted(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
-      ).thenAnswer((_) async => Success(WorkoutExerciseFactory.build()));
-      when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
-        (_) async => Success([
-          WorkoutFactory.build(
-            exercises: [
-              WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 15)),
-            ],
-          ),
-        ]),
-      );
-      return CubitsFactories.buildWorkoutCubit(
-        getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
-        setWorkoutExerciseCompletedUseCase: setCompleted,
-        getRoutineCycleUseCase: _emptyCycleUseCase(),
-        getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
-        getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
-      );
-    },
-    act: (cubit) async {
-      await cubit.setExerciseCompleted(
-        workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
-        completed: true,
-      );
-      await cubit.setExerciseCompleted(
-        workoutExercise: WorkoutExerciseFactory.build(id: 'we-1', sets: [WorkoutSetFactory.build()]),
-        completed: true,
-      );
-    },
-    // The reload behind the second call still raises the overlay (the day is
-    // already loaded by then) - what matters is that WorkoutFinished appears
-    // once, on the edge, and not again for a workout that was already finished.
-    expectPresentation: () => [isA<WorkoutFinished>(), isA<WorkoutShowLoading>(), isA<WorkoutHideLoading>()],
-  );
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+
+    isFinished = true;
+    await cubit.setExerciseCompleted(
+      workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]),
+      completed: true,
+    );
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), hasLength(1));
+  });
+
+  // Opening a day that was finished days ago is not an achievement happening now,
+  // and replaying the summary over it would be the opposite of a reward.
+  test('opening an already-finished day announces nothing', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 20)),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+  });
+
+  test('paging from an unfinished day to a finished one announces nothing', () async {
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: DateTime(2026, 7, 20))).thenAnswer((_) async => const Success([]));
+    when(() => getWorkoutsForDateUseCase(date: DateTime(2026, 7, 19))).thenAnswer(
+      (_) async => Success([
+        WorkoutFactory.build(
+          exercises: [
+            WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()], completedAt: DateTime(2026, 7, 19)),
+          ],
+        ),
+      ]),
+    );
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.loadDate(DateTime(2026, 7, 20));
+    await cubit.goToDate(DateTime(2026, 7, 19));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSessionFinished>(), isEmpty);
+  });
+
+  test('repeating a set announces it, so the rest starts for a set that exists', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => Success(WorkoutSetFactory.build()));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      logSetUseCase: logSetUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), hasLength(1));
+  });
+
+  // The rest exists to time a set that was written. A failed write leaves nothing
+  // to rest after, so announcing it would start a phantom countdown (issue #228).
+  test('a failed repeat announces nothing', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = CubitsFactories.buildWorkoutCubit(
+      logSetUseCase: logSetUseCase,
+      getRoutineCycleUseCase: _emptyCycleUseCase(),
+      getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+      getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
+  });
+
+  test('repeating an exercise with nothing to repeat announces nothing', () async {
+    final logSetUseCase = MockLogSetUseCase();
+    final cubit = CubitsFactories.buildWorkoutCubit(logSetUseCase: logSetUseCase);
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    await cubit.repeatLastSet(workoutExercise: WorkoutExerciseFactory.build());
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
+    verifyNever(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')));
+  });
 }

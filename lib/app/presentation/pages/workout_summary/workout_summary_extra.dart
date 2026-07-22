@@ -1,21 +1,43 @@
 import 'package:vitta/app/core/units/unit_system.dart';
-import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
+import 'package:vitta/app/domain/workout/entities/session_progress.dart';
+import 'package:vitta/app/domain/workout/entities/workout.dart';
+import 'package:vitta/app/domain/workout/entities/workout_energy.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
+import 'package:vitta/app/domain/workout/entities/workout_set.dart';
+import 'package:vitta/app/domain/workout/entities/workout_volume.dart';
 
-class WorkoutSummaryExtra {
-  const WorkoutSummaryExtra({required this.state, required this.unitSystem, this.celebrate = false});
+// The workout page already holds every one of these, so the summary takes them
+// through the route rather than standing up a cubit to fetch them again - the
+// DietDayPage reasoning. lastSetsByExercise is the *previous* session's sets,
+// which is what makes the progression comparison free.
+//
+// It mixes in the totals the same way WorkoutState does, so the page reads figures
+// off it rather than folding sets itself.
+class WorkoutSummaryExtra with WorkoutVolume, WorkoutEnergy {
+  const WorkoutSummaryExtra({
+    required this.date,
+    required this.workouts,
+    required this.lastSetsByExercise,
+    required this.latestBodyWeightKg,
+    required this.unitSystem,
+  });
 
-  /// The day being summarised, handed over whole rather than re-fetched: the
-  /// workout page already holds every set of the day, so the summary has a cubit
-  /// of its own for exactly nothing (`DietDayPage`'s reasoning). It is
-  /// `WorkoutState` rather than a bag of fields because that is the shape
-  /// `WorkoutSummaryCard` already reads, and re-deriving it would be ceremony.
-  final WorkoutState state;
-
+  final DateTime date;
+  final List<Workout> workouts;
+  final Map<String, List<WorkoutSet>> lastSetsByExercise;
+  final double? latestBodyWeightKg;
   final UnitSystem unitSystem;
 
-  /// Whether to burst confetti on arrival. True only when the workout was just
-  /// finished - reopening a past day's summary from its CTA is a look back, not
-  /// an achievement, and a celebration that fires every time it is opened goes
-  /// stale (see the celebration scarcity rule).
-  final bool celebrate;
+  @override
+  List<WorkoutExercise> get exercises => [for (final workout in workouts) ...workout.exercises];
+
+  @override
+  List<WorkoutSet> get sets => [for (final exercise in exercises) ...exercise.sets];
+
+  bool get isBodyWeightKnown => latestBodyWeightKg != null;
+
+  List<SessionProgress> get progress => [
+    for (final exercise in exercises)
+      SessionProgress(exercise: exercise, previousSets: lastSetsByExercise[exercise.exercise.id] ?? const []),
+  ];
 }

@@ -20,7 +20,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
     required this._completeReminderUseCase,
     required this._deleteReminderUseCase,
     required this._notificationService,
-  }) : super(ReminderState(isLoaded: false, date: _dateOnly(DateTime.now()), reminders: const [], filter: ReminderFilter.all));
+  }) : super(ReminderState(isLoaded: false, date: _dateOnly(DateTime.now()), reminders: const [], filter: .all));
 
   final GetRemindersForDateUseCase _getRemindersForDateUseCase;
   final CreateReminderUseCase _createReminderUseCase;

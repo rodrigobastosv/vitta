@@ -2129,22 +2129,82 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get workoutSummaryTitle => 'Session summary';
+
+  @override
+  String get workoutSummaryHeadline => 'Session done';
+
+  @override
+  String get workoutSummaryDoneAction => 'Done';
+
+  @override
+  String get workoutSummaryProgressTitle => 'Against last time';
+
+  @override
+  String get workoutSummaryProgressFirst => 'First time';
+
+  @override
+  String get workoutSummaryProgressFlat => 'Same as last time';
+
+  @override
+  String workoutSummaryProgressUpVolume(String delta, String unit) {
+    return '+$delta $unit of volume';
+  }
+
+  @override
+  String workoutSummaryProgressDownVolume(String delta, String unit) {
+    return '−$delta $unit of volume';
+  }
+
+  @override
+  String workoutSummaryProgressUpDuration(int minutes) {
+    return '$minutes min longer';
+  }
+
+  @override
+  String workoutSummaryProgressDownDuration(int minutes) {
+    return '$minutes min shorter';
+  }
+
+  @override
+  String workoutSummaryProgressHeavier(String delta, String unit) {
+    return 'Heaviest set up $delta $unit';
+  }
+
+  @override
+  String workoutSummaryImprovedCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exercises moved up',
+      one: '1 exercise moved up',
+      zero: 'Nothing moved up this time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get workoutSummaryExercisesTitle => 'What you did';
+
+  @override
   String get workoutFinishedTitle => 'Workout done';
 
   @override
   String get workoutFinishedMessage => 'Every exercise is checked off. Well done — see you next session.';
 
   @override
-  String get workoutSummaryTitle => 'Workout summary';
+  String get workoutFinishedCaloriesLabel => 'Estimated burn';
 
   @override
-  String get workoutSummaryViewAction => 'View summary';
+  String workoutFinishedCaloriesValue(int calories) {
+    return '~$calories kcal';
+  }
 
   @override
-  String get workoutSummaryExercisesTitle => 'What you trained';
+  String get workoutFinishedCaloriesHint => 'Worked out from your weight, what you trained and how long it takes.';
 
   @override
-  String get workoutSummaryDoneAction => 'Done';
+  String get workoutFinishedCaloriesNoWeightHint => 'A rough figure — log your body weight for a closer one.';
 
   @override
   String get workoutCompleteNeedsSetTooltip => 'Log a set before finishing this exercise';

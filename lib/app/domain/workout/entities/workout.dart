@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/workout/entities/body_region.dart';
+import 'package:vitta/app/domain/workout/entities/workout_energy.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/entities/workout_volume.dart';
 
-class Workout extends Equatable with WorkoutVolume {
+class Workout extends Equatable with WorkoutVolume, WorkoutEnergy {
   const Workout({required this.id, required this.performedDate, required this.exercises, this.notes, this.routineId});
 
   factory Workout.fromMap(Map<String, dynamic> row) => Workout(
@@ -25,6 +26,7 @@ class Workout extends Equatable with WorkoutVolume {
 
   final String id;
   final DateTime performedDate;
+  @override
   final List<WorkoutExercise> exercises;
   final String? notes;
 

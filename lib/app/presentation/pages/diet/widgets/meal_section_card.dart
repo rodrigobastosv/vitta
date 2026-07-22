@@ -40,7 +40,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
         setState(() => _isExpanded = !_isExpanded);
       },
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: .stretch,
         children: [
           Row(
             children: [
@@ -74,7 +74,7 @@ class _MealSectionCardState extends State<MealSectionCard> {
             curve: VTMotion.curve,
             alignment: .topCenter,
             child: !_isExpanded
-                ? const SizedBox(width: double.infinity)
+                ? const SizedBox.shrink()
                 : Column(
                     crossAxisAlignment: .start,
                     children: [

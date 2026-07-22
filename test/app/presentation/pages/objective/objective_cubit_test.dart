@@ -26,13 +26,13 @@ void main() {
     'loads the stored objective and the latest weigh-in',
     build: () {
       final getBodyProfileUseCase = MockGetBodyProfileUseCase();
-      when(getBodyProfileUseCase.call).thenReturn(const BodyProfile(heightCm: 180, objective: FitnessObjective.loseWeight));
+      when(getBodyProfileUseCase.call).thenReturn(const BodyProfile(heightCm: 180, objective: .loseWeight));
       final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
       when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => Success(BodyWeightLogFactory.build(weightKg: 82)));
       return CubitsFactories.buildObjectiveCubit(getBodyProfileUseCase: getBodyProfileUseCase, getLatestBodyWeightUseCase: getLatestBodyWeightUseCase);
     },
     act: (cubit) => cubit.load(),
-    expect: () => [const ObjectiveState(objective: FitnessObjective.loseWeight, heightCm: 180, weightKg: 82, hasWeighIn: true, isLoaded: true)],
+    expect: () => [const ObjectiveState(objective: .loseWeight, heightCm: 180, weightKg: 82, hasWeighIn: true, isLoaded: true)],
   );
 
   blocTest<ObjectiveCubit, ObjectiveState>(
@@ -76,7 +76,7 @@ void main() {
     await cubit.saveObjective();
 
     final savedProfile = verify(() => saveBodyProfileUseCase(captureAny())).captured.single as BodyProfile;
-    expect(savedProfile, const BodyProfile(heightCm: 185, objective: FitnessObjective.gainMuscle));
+    expect(savedProfile, const BodyProfile(heightCm: 185, objective: .gainMuscle));
 
     final savedGoals = verify(() => saveMacroGoalsUseCase(captureAny())).captured.single as MacroGoals;
     expect(DietModality.matching(savedGoals), DietModality.highProtein);

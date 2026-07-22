@@ -91,7 +91,7 @@ class _EditProfileFormState extends State<_EditProfileForm> {
           controller: _nameController,
           label: l10n.authDisplayNameLabel,
           prefixIcon: Icons.person_outline,
-          textCapitalization: TextCapitalization.words,
+          textCapitalization: .words,
           textInputAction: .done,
           autofillHints: const [AutofillHints.name],
         ),

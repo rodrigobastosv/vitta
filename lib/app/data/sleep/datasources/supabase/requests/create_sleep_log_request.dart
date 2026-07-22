@@ -6,7 +6,7 @@ class CreateSleepLogRequest {
     required this.bedTime,
     required this.wakeTime,
     this.qualityRating,
-    this.source = SleepLogSource.manual,
+    this.source = .manual,
     this.externalId,
   });
 

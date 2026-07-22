@@ -46,7 +46,7 @@ void main() {
   });
 
   testWidgets('follows the imperial unit', (tester) async {
-    await pumpLogSetSheet(tester, unitSystem: UnitSystem.imperial);
+    await pumpLogSetSheet(tester, unitSystem: .imperial);
 
     expect(find.text('Load (lb)'), findsOneWidget);
   });
@@ -80,7 +80,7 @@ void main() {
     double? submittedWeight;
     await pumpLogSetSheet(
       tester,
-      unitSystem: UnitSystem.imperial,
+      unitSystem: .imperial,
       onSubmit: ({required input}) async {
         submittedWeight = input.weightKg;
         return const Success(null);

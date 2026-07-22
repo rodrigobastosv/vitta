@@ -27,7 +27,7 @@ void main() {
         name: 'Banana',
         brand: 'Chiquita',
         barcode: '1234567890',
-        source: FoodSource.openFoodFacts,
+        source: .openFoodFacts,
         caloriesPer100g: 89,
         proteinPer100g: 1.1,
         carbsPer100g: 22.8,

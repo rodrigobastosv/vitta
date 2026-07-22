@@ -71,11 +71,11 @@ void main() {
     final dailyMacros = DailyMacros(
       entries: [
         FoodLogEntryFactory.build(
-          log: FoodLogFactory.build(id: 'dinner-1', mealType: MealType.dinner),
+          log: FoodLogFactory.build(id: 'dinner-1', mealType: .dinner),
         ),
         FoodLogEntryFactory.build(log: FoodLogFactory.build(id: 'breakfast-1')),
         FoodLogEntryFactory.build(
-          log: FoodLogFactory.build(id: 'dinner-2', mealType: MealType.dinner),
+          log: FoodLogFactory.build(id: 'dinner-2', mealType: .dinner),
         ),
       ],
     );
@@ -96,7 +96,7 @@ void main() {
         ),
         FoodLogEntryFactory.build(
           food: FoodFactory.build(caloriesPer100g: 200, proteinPer100g: 20, carbsPer100g: 10, fatPer100g: 4, fiberPer100g: 6),
-          log: FoodLogFactory.build(mealType: MealType.lunch),
+          log: FoodLogFactory.build(mealType: .lunch),
         ),
       ],
     );

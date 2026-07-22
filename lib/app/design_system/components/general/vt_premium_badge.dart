@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -17,7 +18,7 @@ class VTPremiumBadge extends StatelessWidget {
       mainAxisSize: .min,
       children: [
         const Icon(Icons.lock_outline, size: 12, color: VTColors.premium),
-        const SizedBox(width: VTSpacing.xs),
+        const VTGap.xs(),
         Text(
           label,
           style: VTTextStyles.caption(context).copyWith(color: VTColors.premium, fontWeight: .w700),

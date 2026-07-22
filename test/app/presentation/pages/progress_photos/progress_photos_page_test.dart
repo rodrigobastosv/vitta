@@ -8,7 +8,6 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
-import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.dart';
 import 'package:vitta/app/presentation/general/list_skeleton.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_page.dart';
@@ -75,8 +74,8 @@ void main() {
       tester,
       photos: [
         ProgressPhotoFactory.build(id: 'a'),
-        ProgressPhotoFactory.build(id: 'b', pose: ProgressPhotoPose.side),
-        ProgressPhotoFactory.build(id: 'c', pose: ProgressPhotoPose.back),
+        ProgressPhotoFactory.build(id: 'b', pose: .side),
+        ProgressPhotoFactory.build(id: 'c', pose: .back),
       ],
     );
     await tester.pumpAndSettle();

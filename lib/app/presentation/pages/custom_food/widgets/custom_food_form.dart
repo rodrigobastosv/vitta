@@ -80,7 +80,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
     return Padding(
       padding: const EdgeInsets.all(VTSpacing.m),
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: .stretch,
         children: [
           VTAppearEffect(child: Text(l10n.dietCustomFoodSubtitle, style: VTTextStyles.caption(context))),
           const VTGap.m(),
@@ -141,7 +141,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
             alignment: .topCenter,
             child: CustomFoodEnergySplitCard.hasSplit(state.nutrients)
                 ? CustomFoodEnergySplitCard(nutrients: state.nutrients)
-                : const SizedBox(width: double.infinity),
+                : const SizedBox.shrink(),
           ),
         ],
       ),

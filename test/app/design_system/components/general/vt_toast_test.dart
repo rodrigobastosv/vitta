@@ -15,7 +15,7 @@ Future<void> settleToast(WidgetTester tester) async {
 Future<void> pumpToast(WidgetTester tester, {required void Function(BuildContext context) show, Brightness brightness = Brightness.light}) async {
   await tester.pumpWidget(
     MaterialApp(
-      theme: brightness == Brightness.light ? VTTheme.light : VTTheme.dark,
+      theme: brightness == .light ? VTTheme.light : VTTheme.dark,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
@@ -106,7 +106,7 @@ void main() {
       testWidgets('${severity.name} on ${brightness.name} reads against the page it floats over', (tester) async {
         await pumpToast(tester, show: showFor(severity), brightness: brightness);
 
-        final theme = brightness == Brightness.light ? VTTheme.light : VTTheme.dark;
+        final theme = brightness == .light ? VTTheme.light : VTTheme.dark;
         expect(cardColorOf(tester), isNot(theme.colorScheme.surface));
         expect(cardColorOf(tester), isNot(theme.scaffoldBackgroundColor));
       });

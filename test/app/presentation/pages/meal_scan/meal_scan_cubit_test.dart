@@ -154,7 +154,7 @@ void main() {
                 () => logScannedMealUseCase(
                   items: captureAny(named: 'items'),
                   loggedDate: any(named: 'loggedDate'),
-                  mealType: MealType.dinner,
+                  mealType: .dinner,
                 ),
               ).captured.single
               as List<ScannedMealLogItem>;

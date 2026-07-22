@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/design_system/components/general/vt_avatar_picker_sheet.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_profile_avatar.dart';
@@ -110,9 +109,9 @@ class AvatarPicker extends StatelessWidget {
           cubit.setAvatarPreset(avatarId);
         }
       case _AvatarAction.camera:
-        await cubit.pickAvatarPhoto(ImagePickerSource.camera);
+        await cubit.pickAvatarPhoto(.camera);
       case _AvatarAction.gallery:
-        await cubit.pickAvatarPhoto(ImagePickerSource.gallery);
+        await cubit.pickAvatarPhoto(.gallery);
       case _AvatarAction.remove:
         cubit.clearAvatar();
     }

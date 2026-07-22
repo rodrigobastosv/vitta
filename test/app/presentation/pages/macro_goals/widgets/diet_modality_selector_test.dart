@@ -36,7 +36,7 @@ Future<void> expandSelector(WidgetTester tester) async {
 
 void main() {
   testWidgets('starts collapsed, showing no cards and the current pick', (tester) async {
-    await pumpSelector(tester, selected: DietModality.lowFat, onSelected: (_) {});
+    await pumpSelector(tester, selected: .lowFat, onSelected: (_) {});
 
     expect(find.byType(DietModalityCard), findsNothing);
     expect(find.byIcon(Icons.expand_more), findsOneWidget);
@@ -44,7 +44,7 @@ void main() {
   });
 
   testWidgets('expanding reveals one card per modality without overflow', (tester) async {
-    await pumpSelector(tester, selected: DietModality.balanced, onSelected: (_) {}, width: 900);
+    await pumpSelector(tester, selected: .balanced, onSelected: (_) {}, width: 900);
 
     await expandSelector(tester);
 
@@ -53,7 +53,7 @@ void main() {
   });
 
   testWidgets('renders without overflow at a narrow 320px width', (tester) async {
-    await pumpSelector(tester, selected: DietModality.balanced, onSelected: (_) {});
+    await pumpSelector(tester, selected: .balanced, onSelected: (_) {});
 
     await expandSelector(tester);
 
@@ -71,7 +71,7 @@ void main() {
 
   testWidgets('tapping a card reports its modality', (tester) async {
     DietModality? picked;
-    await pumpSelector(tester, selected: DietModality.balanced, onSelected: (modality) => picked = modality, width: 900);
+    await pumpSelector(tester, selected: .balanced, onSelected: (modality) => picked = modality, width: 900);
     await expandSelector(tester);
 
     await tester.tap(find.text('Low fat'));
@@ -81,7 +81,7 @@ void main() {
   });
 
   testWidgets('each modality card shows its own icon', (tester) async {
-    await pumpSelector(tester, selected: DietModality.balanced, onSelected: (_) {}, width: 900);
+    await pumpSelector(tester, selected: .balanced, onSelected: (_) {}, width: 900);
 
     await expandSelector(tester);
 
@@ -91,7 +91,7 @@ void main() {
   });
 
   testWidgets('the selected card carries no check icon', (tester) async {
-    await pumpSelector(tester, selected: DietModality.balanced, onSelected: (_) {}, width: 900);
+    await pumpSelector(tester, selected: .balanced, onSelected: (_) {}, width: 900);
 
     await expandSelector(tester);
 
@@ -99,7 +99,7 @@ void main() {
   });
 
   testWidgets('collapsing again hides the cards', (tester) async {
-    await pumpSelector(tester, selected: DietModality.lowFat, onSelected: (_) {}, width: 900);
+    await pumpSelector(tester, selected: .lowFat, onSelected: (_) {}, width: 900);
     await expandSelector(tester);
     expect(find.byType(DietModalityCard), findsWidgets);
 

@@ -15,16 +15,16 @@ void main() {
   test('the objective survives a round trip', () async {
     final dataSource = BodyProfileLocalDataSource(localStorageService: await buildTestLocalStorageService());
 
-    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: FitnessObjective.gainMuscle));
+    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: .gainMuscle));
 
-    expect(dataSource.getProfile(), const BodyProfile(heightCm: 178, objective: FitnessObjective.gainMuscle));
+    expect(dataSource.getProfile(), const BodyProfile(heightCm: 178, objective: .gainMuscle));
   });
 
   test('switching objective replaces the stored one', () async {
     final dataSource = BodyProfileLocalDataSource(localStorageService: await buildTestLocalStorageService());
 
-    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: FitnessObjective.loseWeight));
-    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: FitnessObjective.maintainWeight));
+    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: .loseWeight));
+    await dataSource.saveProfile(const BodyProfile(heightCm: 178, objective: .maintainWeight));
 
     expect(dataSource.getProfile().objective, FitnessObjective.maintainWeight);
   });

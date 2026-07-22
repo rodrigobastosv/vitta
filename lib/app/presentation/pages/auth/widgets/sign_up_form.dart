@@ -64,7 +64,7 @@ class _SignUpFormState extends State<SignUpForm> {
             controller: _nameController,
             label: l10n.authDisplayNameLabel,
             prefixIcon: Icons.person_outline,
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: .words,
             textInputAction: .next,
             autofillHints: const [AutofillHints.name],
             onSubmitted: _emailFocus.requestFocus,

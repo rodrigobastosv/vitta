@@ -37,7 +37,7 @@ class _AddProgressPhotoSheetState extends State<AddProgressPhotoSheet> {
 
   final TextEditingController _noteController = TextEditingController();
   DateTime _takenDate = DateTime.now();
-  ProgressPhotoPose _pose = ProgressPhotoPose.front;
+  ProgressPhotoPose _pose = .front;
 
   @override
   void dispose() {

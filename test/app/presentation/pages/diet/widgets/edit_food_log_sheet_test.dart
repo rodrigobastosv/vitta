@@ -135,7 +135,7 @@ void main() {
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     await pumpEditSheet(
       tester,
-      cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase, unitSystem: UnitSystem.imperial),
+      cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase, unitSystem: .imperial),
       entry: FoodLogEntryFactory.build(log: FoodLogFactory.build(quantityGrams: 283.495)),
     );
 

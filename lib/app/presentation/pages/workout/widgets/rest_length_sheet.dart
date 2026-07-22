@@ -41,7 +41,7 @@ class _RestLengthSheetState extends State<RestLengthSheet> {
         padding: const EdgeInsets.all(VTSpacing.l),
         child: Column(
           mainAxisSize: .min,
-          crossAxisAlignment: .start,
+          crossAxisAlignment: .stretch,
           children: [
             Text(l10n.workoutRestSettingTitle, style: VTTextStyles.title(context)),
             const VTGap.xs(),
@@ -57,10 +57,7 @@ class _RestLengthSheetState extends State<RestLengthSheet> {
               onChanged: (seconds) => setState(() => _rest = Duration(seconds: (seconds / 15).round() * 15)),
             ),
             const VTGap.l(),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(onPressed: () => Navigator.of(context).pop(_rest), child: Text(l10n.saveAction)),
-            ),
+            FilledButton(onPressed: () => Navigator.of(context).pop(_rest), child: Text(l10n.saveAction)),
           ],
         ),
       ),

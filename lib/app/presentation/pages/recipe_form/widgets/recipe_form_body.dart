@@ -49,7 +49,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
     return Padding(
       padding: const EdgeInsets.all(VTSpacing.m),
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: .stretch,
         children: [
           VTAppearEffect(
             child: Text(
@@ -93,7 +93,7 @@ class _RecipeFormBodyState extends State<RecipeFormBody> {
             curve: VTMotion.curve,
             alignment: .topCenter,
             child: draft.ingredients.isEmpty
-                ? const SizedBox(width: double.infinity)
+                ? const SizedBox.shrink()
                 : Padding(
                     padding: const EdgeInsets.only(top: VTSpacing.m),
                     child: RecipeTotalsCard(draft: draft),

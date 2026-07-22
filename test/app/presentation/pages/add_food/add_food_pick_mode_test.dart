@@ -5,7 +5,6 @@ import 'package:loader_overlay/loader_overlay.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
@@ -67,7 +66,7 @@ void main() {
             ),
             GoRoute(
               path: '/pick',
-              builder: (context, state) => const AddFoodPage(extra: AddFoodExtra.pickIngredient(unitSystem: UnitSystem.metric)),
+              builder: (context, state) => const AddFoodPage(extra: AddFoodExtra.pickIngredient(unitSystem: .metric)),
             ),
           ],
         ),

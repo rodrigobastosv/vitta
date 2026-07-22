@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
@@ -23,7 +24,7 @@ class ExerciseFilterChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final isCardioSelected = category == ExerciseCategory.cardio;
+    final isCardioSelected = category == .cardio;
     return SizedBox(
       height: 40,
       child: ListView(
@@ -35,7 +36,7 @@ class ExerciseFilterChips extends StatelessWidget {
             selected: muscleGroup == null && category == null,
             onSelected: (_) => onClear(),
           ),
-          const SizedBox(width: VTSpacing.s),
+          const VTGap.s(),
           // Cardio filters on a different column than the muscle chips beside it,
           // so it carries an icon: "Cardio" is a kind of exercise, not a body part.
           // The glyph is inked against whichever surface it lands on - Material's
@@ -57,7 +58,7 @@ class ExerciseFilterChips extends StatelessWidget {
             onSelected: (isSelected) => onCategoryChanged(isSelected ? ExerciseCategory.cardio : null),
           ),
           for (final muscleGroup in MuscleGroup.values) ...[
-            const SizedBox(width: VTSpacing.s),
+            const VTGap.s(),
             ChoiceChip(
               label: Text(muscleGroup.getLabel(l10n)),
               selected: this.muscleGroup == muscleGroup,

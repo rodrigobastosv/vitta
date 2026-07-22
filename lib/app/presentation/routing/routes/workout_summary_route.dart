@@ -9,6 +9,8 @@ class WorkoutSummaryRoute extends VTRoute {
   AppRoute get route => .workoutSummary;
 
   @override
-  GoRouterWidgetBuilder get builder =>
-      (context, state) => WorkoutSummaryPage(extra: state.extra! as WorkoutSummaryExtra);
+  GoRouterWidgetBuilder get builder => (context, state) {
+    final extra = state.extra! as WorkoutSummaryExtra;
+    return WorkoutSummaryPage(extra: extra);
+  };
 }

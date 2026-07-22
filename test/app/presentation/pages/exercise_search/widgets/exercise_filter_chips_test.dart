@@ -42,7 +42,7 @@ Color cardioLabelColor(WidgetTester tester) => paintedColor(tester, find.text('C
 void main() {
   for (final brightness in Brightness.values) {
     testWidgets('the cardio chip is legible on the fill it sits on, selected or not (${brightness.name})', (tester) async {
-      final theme = brightness == Brightness.light ? VTTheme.light : VTTheme.dark;
+      final theme = brightness == .light ? VTTheme.light : VTTheme.dark;
       final colorScheme = theme.colorScheme;
 
       await pumpFilters(tester, theme: theme);
@@ -50,7 +50,7 @@ void main() {
       expect(contrastRatio(cardioIconColor(tester), colorScheme.surface), greaterThanOrEqualTo(4.5));
       expect(contrastRatio(cardioLabelColor(tester), colorScheme.surface), greaterThanOrEqualTo(4.5));
 
-      await pumpFilters(tester, theme: theme, category: ExerciseCategory.cardio);
+      await pumpFilters(tester, theme: theme, category: .cardio);
 
       expect(
         contrastRatio(cardioIconColor(tester), colorScheme.primaryContainer),
@@ -65,7 +65,7 @@ void main() {
     });
 
     testWidgets('a selected chip inks its label and its glyph the same (${brightness.name})', (tester) async {
-      await pumpFilters(tester, theme: brightness == Brightness.light ? VTTheme.light : VTTheme.dark, category: ExerciseCategory.cardio);
+      await pumpFilters(tester, theme: brightness == .light ? VTTheme.light : VTTheme.dark, category: .cardio);
 
       expect(cardioLabelColor(tester), cardioIconColor(tester));
     });

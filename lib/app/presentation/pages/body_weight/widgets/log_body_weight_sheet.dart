@@ -74,7 +74,7 @@ class _LogBodyWeightSheetState extends State<_LogBodyWeightSheet> {
             unitLabel: _unitSystem.loadUnitLabel,
             min: _unitSystem.kilogramsToDisplayLoad(_minKg),
             max: _unitSystem.kilogramsToDisplayLoad(_maxKg),
-            step: _unitSystem == UnitSystem.metric ? 0.1 : 0.2,
+            step: _unitSystem == .metric ? 0.1 : 0.2,
           ),
           ListTile(
             contentPadding: EdgeInsets.zero,

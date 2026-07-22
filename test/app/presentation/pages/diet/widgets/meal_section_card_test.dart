@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/meal_section.dart';
-import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -33,7 +32,7 @@ void main() {
   );
 
   MealSection buildBreakfast() => MealSection(
-    mealType: MealType.breakfast,
+    mealType: .breakfast,
     entries: [
       FoodLogEntryFactory.build(
         food: FoodFactory.build(name: 'Oatmeal'),

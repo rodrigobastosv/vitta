@@ -3,7 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_metric.dart';
@@ -30,7 +29,7 @@ class ExerciseProgressionRecordsCard extends StatelessWidget {
                 decoration: BoxDecoration(color: color.withValues(alpha: 0.16), shape: .circle),
                 child: Icon(Icons.emoji_events_outlined, color: color, size: 20),
               ),
-              const SizedBox(width: VTSpacing.m),
+              const VTGap.m(),
               Text(l10n.workoutProgressionRecordsTitle, style: VTTextStyles.bodyStrong(context)),
             ],
           ),

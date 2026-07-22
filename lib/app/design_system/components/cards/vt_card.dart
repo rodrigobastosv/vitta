@@ -16,7 +16,7 @@ class VTCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    final isDark = colorScheme.brightness == Brightness.dark;
+    final isDark = colorScheme.brightness == .dark;
     final backgroundColor = color ?? (isDark ? VTColors.cardDark : VTColors.cardLight);
     return DecoratedBox(
       decoration: BoxDecoration(
@@ -32,7 +32,7 @@ class VTCard extends StatelessWidget {
         ],
       ),
       child: Material(
-        type: MaterialType.transparency,
+        type: .transparency,
         borderRadius: VTRadius.borderRadiusL,
         child: InkWell(
           onTap: onTap,

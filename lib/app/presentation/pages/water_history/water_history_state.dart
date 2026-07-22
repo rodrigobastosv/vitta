@@ -8,7 +8,7 @@ class WaterHistoryState extends Equatable {
     required this.dailyGoalMl,
     this.waterInMonth = const {},
     this.waterInTrendRange = const {},
-    this.trendRange = TrendRange.month,
+    this.trendRange = .month,
     this.isLoaded = true,
   });
 

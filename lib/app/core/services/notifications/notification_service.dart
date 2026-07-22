@@ -35,7 +35,7 @@ class NotificationService {
       ),
     );
     await _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(
-      const AndroidNotificationChannel(_channelId, _channelName, description: _channelDescription, importance: Importance.high),
+      const AndroidNotificationChannel(_channelId, _channelName, description: _channelDescription, importance: .high),
     );
     _initialized = true;
   }
@@ -68,12 +68,12 @@ class NotificationService {
           _channelId,
           _channelName,
           channelDescription: _channelDescription,
-          importance: Importance.high,
-          priority: Priority.high,
+          importance: .high,
+          priority: .high,
         ),
         iOS: DarwinNotificationDetails(),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: .exactAllowWhileIdle,
     );
   }
 

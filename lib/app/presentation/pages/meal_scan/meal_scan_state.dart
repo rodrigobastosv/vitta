@@ -5,7 +5,7 @@ import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_entry.dart';
 
 class MealScanState extends Equatable {
-  const MealScanState({this.imageBytes, this.entries = const [], this.mealType = MealType.lunch, this.hasScanned = false});
+  const MealScanState({this.imageBytes, this.entries = const [], this.mealType = .lunch, this.hasScanned = false});
 
   final Uint8List? imageBytes;
   final List<MealScanEntry> entries;
