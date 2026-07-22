@@ -89,14 +89,21 @@ abstract class VTTheme {
         // would collapse to its fallback. A chip with an icon inks it itself.)
         // The sizing is Material's own labelLarge, restated because setting
         // labelStyle at all replaces the default rather than merging with it.
+        //
+        // resolveWith, NOT WidgetStateColor.fromMap (issue #217): fromMap returns
+        // a mapper that only *implements* Color through noSuchMethod, so reading
+        // any real field off it throws - and changing the theme makes MaterialApp
+        // lerp one ThemeData into the next, which walks ChipThemeData.lerp ->
+        // TextStyle.lerp -> Color.lerp and does exactly that. resolveWith returns
+        // a genuine Color (its unselected resolution) that RawChip still resolves
+        // per state, so both the theme animation and the selected ink work.
         labelStyle: (textTheme.labelLarge ?? const TextStyle()).copyWith(
           fontSize: 14,
           fontWeight: .w500,
           letterSpacing: 0.1,
-          color: WidgetStateColor.fromMap({
-            WidgetState.selected: colorScheme.onPrimaryContainer,
-            WidgetState.any: colorScheme.onSurfaceVariant,
-          }),
+          color: WidgetStateColor.resolveWith(
+            (states) => states.contains(WidgetState.selected) ? colorScheme.onPrimaryContainer : colorScheme.onSurfaceVariant,
+          ),
         ),
         shape: const StadiumBorder(),
       ),
