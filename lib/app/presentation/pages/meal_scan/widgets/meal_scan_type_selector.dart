@@ -14,6 +14,7 @@ class MealScanTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
+    final colorScheme = context.colorScheme;
     return Column(
       crossAxisAlignment: .start,
       children: [
@@ -24,7 +25,19 @@ class MealScanTypeSelector extends StatelessWidget {
           children: [
             for (final mealType in MealType.values)
               ChoiceChip(
-                avatar: Icon(mealType.icon, size: 18, color: selected == mealType ? mealType.color : null),
+                // Material draws the selection checkmark in the avatar slot, so a
+                // chip that supplies its own glyph stacks the check on top of it.
+                // The fill already says it is selected.
+                showCheckmark: false,
+                // Inked here rather than in chipTheme: RawChip merges
+                // chipTheme.iconTheme without resolving widget states, so a
+                // WidgetStateColor there collapses to its fallback and the glyph
+                // keeps the unselected ink on the selected fill.
+                avatar: Icon(
+                  mealType.icon,
+                  size: 18,
+                  color: selected == mealType ? colorScheme.onPrimaryContainer : colorScheme.onSurfaceVariant,
+                ),
                 label: Text(mealType.getLabel(l10n)),
                 selected: selected == mealType,
                 onSelected: (_) => onSelected(mealType),
