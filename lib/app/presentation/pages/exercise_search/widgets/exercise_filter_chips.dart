@@ -41,7 +41,17 @@ class ExerciseFilterChips extends StatelessWidget {
           // The glyph is inked against whichever surface it lands on - Material's
           // default leaves it onSurfaceVariant even when selected, which is what
           // washed it out on the primaryContainer fill.
+          //
+          // showCheckmark: false because Material draws the selection checkmark in
+          // the *avatar slot*, so a chip that has both stacks the check on its own
+          // glyph. The fill already says the chip is selected.
           ChoiceChip(
+            showCheckmark: false,
+            avatar: Icon(
+              Icons.directions_run,
+              size: 18,
+              color: isCardioSelected ? context.colorScheme.onPrimaryContainer : context.colorScheme.onSurfaceVariant,
+            ),
             label: Text(ExerciseCategory.cardio.getLabel(l10n)),
             selected: isCardioSelected,
             onSelected: (isSelected) => onCategoryChanged(isSelected ? ExerciseCategory.cardio : null),
