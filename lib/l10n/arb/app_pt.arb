@@ -1193,5 +1193,51 @@
         "type": "int"
       }
     }
+  },
+  "trendsTitle": "Tendências",
+  "trendsFeatureTooltip": "Tendências",
+  "trendsAreasTitle": "Área por área",
+  "trendsRingCaption": "no alvo",
+  "trendsVerdictOnTrackTitle": "Você está no caminho",
+  "trendsVerdictMixedTitle": "Quase lá",
+  "trendsVerdictOffTrackTitle": "Fora do caminho",
+  "trendsVerdictUnknownTitle": "Ainda não dá para dizer",
+  "trendsVerdictUnknownMessage": "Registre alguns dias de comida, água ou sono e esta tela vai dizer como você está indo.",
+  "trendsVerdictSummary": "{onTrack} de {total} metas no alvo nos últimos {days} dias",
+  "trendsChangeVsPrevious": "{change} em relação aos {days} dias anteriores",
+  "trendsNoComparison": "Ainda não há dados anteriores para comparar",
+  "trendsAdherenceMet": "No alvo",
+  "trendsAdherenceClose": "Perto",
+  "trendsAdherenceOff": "Fora do alvo",
+  "trendsMetricCalories": "Calorias por dia",
+  "trendsMetricWater": "Água por dia",
+  "trendsMetricSleep": "Sono por noite",
+  "trendsMetricVolume": "Volume por sessão",
+  "trendsMetricBodyWeight": "Peso",
+  "trendsEmptyTitle": "Ainda sem tendências",
+  "trendsEmptyMessage": "Registre comida, água, sono, treinos ou peso por alguns dias e a sua história aparece aqui.",
+  "trendsEmptyAction": "Começar a registrar",
+  "@trendsVerdictSummary": {
+    "placeholders": {
+      "onTrack": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@trendsChangeVsPrevious": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

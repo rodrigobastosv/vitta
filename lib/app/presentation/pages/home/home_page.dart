@@ -40,6 +40,11 @@ class HomePage extends StatelessWidget {
           title: HomeGreeting(user: state.user, mealCount: state.loggedMealCount),
           titleSpacing: VTSpacing.m,
           actions: [
+            IconButton(
+              tooltip: l10n.trendsFeatureTooltip,
+              icon: const Icon(Icons.insights_outlined),
+              onPressed: () => context.pushRoute(.trends),
+            ),
             Padding(
               padding: const EdgeInsets.only(right: VTSpacing.s),
               child: Tooltip(

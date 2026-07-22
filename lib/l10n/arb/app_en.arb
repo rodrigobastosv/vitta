@@ -1459,5 +1459,51 @@
         "type": "int"
       }
     }
+  },
+  "trendsTitle": "Trends",
+  "trendsFeatureTooltip": "Trends",
+  "trendsAreasTitle": "Area by area",
+  "trendsRingCaption": "on track",
+  "trendsVerdictOnTrackTitle": "You're on track",
+  "trendsVerdictMixedTitle": "Mostly on track",
+  "trendsVerdictOffTrackTitle": "Off track",
+  "trendsVerdictUnknownTitle": "Nothing to judge yet",
+  "trendsVerdictUnknownMessage": "Log a few days of food, water or sleep and this page will tell you how you're doing.",
+  "trendsVerdictSummary": "{onTrack} of {total} goals on target over the last {days} days",
+  "trendsChangeVsPrevious": "{change} vs the previous {days} days",
+  "trendsNoComparison": "No earlier data to compare with yet",
+  "trendsAdherenceMet": "On target",
+  "trendsAdherenceClose": "Close",
+  "trendsAdherenceOff": "Off target",
+  "trendsMetricCalories": "Calories per day",
+  "trendsMetricWater": "Water per day",
+  "trendsMetricSleep": "Sleep per night",
+  "trendsMetricVolume": "Volume per session",
+  "trendsMetricBodyWeight": "Weight",
+  "trendsEmptyTitle": "No trends yet",
+  "trendsEmptyMessage": "Track your food, water, sleep, workouts or weight for a few days and your story shows up here.",
+  "trendsEmptyAction": "Start tracking",
+  "@trendsVerdictSummary": {
+    "placeholders": {
+      "onTrack": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@trendsChangeVsPrevious": {
+    "placeholders": {
+      "change": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
   }
 }

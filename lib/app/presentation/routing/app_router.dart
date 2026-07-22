@@ -37,6 +37,7 @@ import 'package:vitta/app/presentation/routing/routes/sign_in_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sign_up_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_route.dart';
+import 'package:vitta/app/presentation/routing/routes/trends_route.dart';
 import 'package:vitta/app/presentation/routing/routes/water_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/water_route.dart';
 import 'package:vitta/app/presentation/routing/routes/workout_history_route.dart';
@@ -49,6 +50,7 @@ abstract class AppRouter {
   static final List<VTRoute> _routes = [
     OnboardingRoute(),
     HomeRoute(hasSeenOnboardingUseCase: G()),
+    TrendsRoute(),
     DietRoute(),
     DietIntroRoute(),
     CopyMealsRoute(),

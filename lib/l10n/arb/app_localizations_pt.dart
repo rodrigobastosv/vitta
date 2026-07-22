@@ -2464,4 +2464,77 @@ class AppLocalizationsPt extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String get trendsTitle => 'Tendências';
+
+  @override
+  String get trendsFeatureTooltip => 'Tendências';
+
+  @override
+  String get trendsAreasTitle => 'Área por área';
+
+  @override
+  String get trendsRingCaption => 'no alvo';
+
+  @override
+  String get trendsVerdictOnTrackTitle => 'Você está no caminho';
+
+  @override
+  String get trendsVerdictMixedTitle => 'Quase lá';
+
+  @override
+  String get trendsVerdictOffTrackTitle => 'Fora do caminho';
+
+  @override
+  String get trendsVerdictUnknownTitle => 'Ainda não dá para dizer';
+
+  @override
+  String get trendsVerdictUnknownMessage => 'Registre alguns dias de comida, água ou sono e esta tela vai dizer como você está indo.';
+
+  @override
+  String trendsVerdictSummary(int onTrack, int total, int days) {
+    return '$onTrack de $total metas no alvo nos últimos $days dias';
+  }
+
+  @override
+  String trendsChangeVsPrevious(String change, int days) {
+    return '$change em relação aos $days dias anteriores';
+  }
+
+  @override
+  String get trendsNoComparison => 'Ainda não há dados anteriores para comparar';
+
+  @override
+  String get trendsAdherenceMet => 'No alvo';
+
+  @override
+  String get trendsAdherenceClose => 'Perto';
+
+  @override
+  String get trendsAdherenceOff => 'Fora do alvo';
+
+  @override
+  String get trendsMetricCalories => 'Calorias por dia';
+
+  @override
+  String get trendsMetricWater => 'Água por dia';
+
+  @override
+  String get trendsMetricSleep => 'Sono por noite';
+
+  @override
+  String get trendsMetricVolume => 'Volume por sessão';
+
+  @override
+  String get trendsMetricBodyWeight => 'Peso';
+
+  @override
+  String get trendsEmptyTitle => 'Ainda sem tendências';
+
+  @override
+  String get trendsEmptyMessage => 'Registre comida, água, sono, treinos ou peso por alguns dias e a sua história aparece aqui.';
+
+  @override
+  String get trendsEmptyAction => 'Começar a registrar';
 }
