@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/general/vt_water_fill.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
@@ -23,7 +22,7 @@ Future<void> pumpCard(WidgetTester tester, {required DailyWater dailyWater, doub
         body: WaterProgressCard(
           dailyWater: dailyWater,
           dailyGoalMl: goalMl,
-          unitSystem: UnitSystem.metric,
+          unitSystem: .metric,
           onQuickAdd: (_) {},
           onEditGoal: () {},
         ),

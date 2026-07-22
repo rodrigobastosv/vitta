@@ -25,7 +25,7 @@ class LoggedExerciseTile extends StatelessWidget {
       child: Row(
         children: [
           VTRemoteImage(imageUrl: exercise.imageUrl, placeholderIcon: Icons.fitness_center_outlined, size: 56, borderRadius: VTRadius.borderRadiusM),
-          const SizedBox(width: VTSpacing.m),
+          const VTGap.m(),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

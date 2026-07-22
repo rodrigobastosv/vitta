@@ -165,7 +165,7 @@ void main() {
 
   test('unitSystem reads the current app settings', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: UnitSystem.imperial));
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: .imperial));
     final cubit = CubitsFactories.buildDietCubit(getAppSettingsUseCase: getAppSettingsUseCase);
 
     expect(cubit.unitSystem, UnitSystem.imperial);

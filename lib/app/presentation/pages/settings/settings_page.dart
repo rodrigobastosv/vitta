@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
@@ -55,18 +54,18 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   SettingsOptionTile(
                     label: l10n.themeSystemDefault,
-                    isSelected: state.themeMode == ThemeMode.system,
-                    onSelected: () => cubit.changeThemeMode(ThemeMode.system),
+                    isSelected: state.themeMode == .system,
+                    onSelected: () => cubit.changeThemeMode(.system),
                   ),
                   SettingsOptionTile(
                     label: l10n.themeLight,
-                    isSelected: state.themeMode == ThemeMode.light,
-                    onSelected: () => cubit.changeThemeMode(ThemeMode.light),
+                    isSelected: state.themeMode == .light,
+                    onSelected: () => cubit.changeThemeMode(.light),
                   ),
                   SettingsOptionTile(
                     label: l10n.themeDark,
-                    isSelected: state.themeMode == ThemeMode.dark,
-                    onSelected: () => cubit.changeThemeMode(ThemeMode.dark),
+                    isSelected: state.themeMode == .dark,
+                    onSelected: () => cubit.changeThemeMode(.dark),
                   ),
                 ],
               ),
@@ -80,13 +79,13 @@ class SettingsPage extends StatelessWidget {
                 children: [
                   SettingsOptionTile(
                     label: l10n.unitSystemMetric,
-                    isSelected: state.unitSystem == UnitSystem.metric,
-                    onSelected: () => cubit.changeUnitSystem(UnitSystem.metric),
+                    isSelected: state.unitSystem == .metric,
+                    onSelected: () => cubit.changeUnitSystem(.metric),
                   ),
                   SettingsOptionTile(
                     label: l10n.unitSystemImperial,
-                    isSelected: state.unitSystem == UnitSystem.imperial,
-                    onSelected: () => cubit.changeUnitSystem(UnitSystem.imperial),
+                    isSelected: state.unitSystem == .imperial,
+                    onSelected: () => cubit.changeUnitSystem(.imperial),
                   ),
                 ],
               ),

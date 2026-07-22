@@ -4,7 +4,6 @@ import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/data/sleep/datasources/supabase/requests/create_sleep_log_request.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_import.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
-import 'package:vitta/app/domain/sleep/entities/sleep_log_source.dart';
 
 class SupabaseSleepDataSource {
   SupabaseSleepDataSource({required this._supabaseService});
@@ -64,7 +63,7 @@ class SupabaseSleepDataSource {
             userId: userId,
             bedTime: import.start,
             wakeTime: import.end,
-            source: SleepLogSource.health,
+            source: .health,
             externalId: import.externalId,
           ).toJson(),
       ];

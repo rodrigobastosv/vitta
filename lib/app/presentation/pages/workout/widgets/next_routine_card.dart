@@ -27,7 +27,7 @@ class NextRoutineCard extends StatelessWidget {
                 backgroundColor: colorScheme.primary.withValues(alpha: 0.16),
                 child: Icon(Icons.repeat, color: colorScheme.primary, size: 20),
               ),
-              const SizedBox(width: VTSpacing.m),
+              const VTGap.m(),
               Expanded(
                 child: Column(
                   crossAxisAlignment: .start,

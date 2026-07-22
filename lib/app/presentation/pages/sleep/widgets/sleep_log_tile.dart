@@ -7,7 +7,6 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
-import 'package:vitta/app/domain/sleep/entities/sleep_log_source.dart';
 
 class SleepLogTile extends StatelessWidget {
   const SleepLogTile({required this.log, required this.onDelete, super.key});
@@ -41,7 +40,7 @@ class SleepLogTile extends StatelessWidget {
                 Row(
                   children: [
                     Flexible(child: Text(l10n.sleepDurationLabel(duration.inHours, duration.inMinutes.remainder(60)), style: VTTextStyles.bodyStrong(context))),
-                    if (log.source == SleepLogSource.health) ...[const VTGap.s(), VTBadge(label: l10n.sleepSourceHealth, color: VTColors.sleep)],
+                    if (log.source == .health) ...[const VTGap.s(), VTBadge(label: l10n.sleepSourceHealth, color: VTColors.sleep)],
                   ],
                 ),
                 const VTGap.xs(),

@@ -3,7 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class WorkoutFinishedCard extends StatelessWidget {
@@ -19,7 +18,7 @@ class WorkoutFinishedCard extends StatelessWidget {
             backgroundColor: VTColors.success.withValues(alpha: 0.16),
             child: const Icon(Icons.emoji_events_outlined, color: VTColors.success, size: 22),
           ),
-          const SizedBox(width: VTSpacing.m),
+          const VTGap.m(),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

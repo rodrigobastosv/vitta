@@ -178,7 +178,7 @@ class _MonthGrid extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 2),
                   width: 4,
                   height: 4,
-                  decoration: BoxDecoration(color: dayMacros.adherenceTo(macroGoals).color, shape: BoxShape.circle),
+                  decoration: BoxDecoration(color: dayMacros.adherenceTo(macroGoals).color, shape: .circle),
                 )
               else
                 const SizedBox(height: 6),

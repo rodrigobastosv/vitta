@@ -68,7 +68,7 @@ abstract class VTAvatarCatalog {
     height: size,
     alignment: Alignment.center,
     decoration: BoxDecoration(
-      shape: BoxShape.circle,
+      shape: .circle,
       gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: option.colors),
     ),
     child: Text(option.emoji, style: TextStyle(fontSize: size * 0.56)),

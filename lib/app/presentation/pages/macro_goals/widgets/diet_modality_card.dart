@@ -24,7 +24,7 @@ class DietModalityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
-    final isDark = colorScheme.brightness == Brightness.dark;
+    final isDark = colorScheme.brightness == .dark;
     return SizedBox(
       width: _width,
       child: DecoratedBox(
@@ -37,7 +37,7 @@ class DietModalityCard extends StatelessWidget {
           ),
         ),
         child: Material(
-          type: MaterialType.transparency,
+          type: .transparency,
           borderRadius: VTRadius.borderRadiusL,
           child: InkWell(
             onTap: onTap,
@@ -93,7 +93,7 @@ class DietModalityCard extends StatelessWidget {
     child: Text(
       '${(ratio * 100).round()}%',
       textAlign: align,
-      style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: FontWeight.w600),
+      style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w600),
     ),
   );
 }

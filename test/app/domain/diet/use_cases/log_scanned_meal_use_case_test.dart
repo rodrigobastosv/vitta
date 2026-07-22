@@ -31,17 +31,17 @@ void main() {
       () => dietRepository.logFood(
         foodId: 'food-9',
         loggedDate: loggedDate,
-        mealType: MealType.dinner,
+        mealType: .dinner,
         quantityGrams: any(named: 'quantityGrams'),
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
 
-    final loggedResult = await useCase(items: [_logItem('Rice', 200), _logItem('Chicken', 150)], loggedDate: loggedDate, mealType: MealType.dinner);
+    final loggedResult = await useCase(items: [_logItem('Rice', 200), _logItem('Chicken', 150)], loggedDate: loggedDate, mealType: .dinner);
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => dietRepository.saveFood(food: any(named: 'food'))).called(2);
-    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: MealType.dinner, quantityGrams: 200)).called(1);
-    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: MealType.dinner, quantityGrams: 150)).called(1);
+    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantityGrams: 200)).called(1);
+    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantityGrams: 150)).called(1);
   });
 
   test('aborts without logging when saving a food fails', () async {
@@ -49,7 +49,7 @@ void main() {
     final useCase = UseCasesFactories.buildLogScannedMealUseCase(dietRepository: dietRepository);
     when(() => dietRepository.saveFood(food: any(named: 'food'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
 
-    final loggedResult = await useCase(items: [_logItem('Rice', 200)], loggedDate: DateTime(2026, 7, 19), mealType: MealType.lunch);
+    final loggedResult = await useCase(items: [_logItem('Rice', 200)], loggedDate: DateTime(2026, 7, 19), mealType: .lunch);
 
     loggedResult.when((error) => expect(error.message, 'boom'), (_) => fail('expected Failure'));
     verifyNever(

@@ -6,7 +6,6 @@ import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/cubit/premium_state.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
-import 'package:vitta/app/domain/premium/entities/subscription_status.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
 
 // A plain Cubit provided once at the root, like AppCubit, rather than a
@@ -109,7 +108,7 @@ class PremiumCubit extends Cubit<PremiumState> {
   void _entitleOptimistically() {
     emit(
       state.copyWith(
-        status: PremiumStatus(status: SubscriptionStatus.active, productId: state.offer?.productId),
+        status: PremiumStatus(status: .active, productId: state.offer?.productId),
       ),
     );
     unawaited(refresh());

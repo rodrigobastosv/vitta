@@ -3,7 +3,6 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/http/vt_http_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
-import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 class OpenFoodFactsDataSource {
@@ -54,7 +53,7 @@ class OpenFoodFactsDataSource {
       name: name,
       brand: product['brands'] as String?,
       barcode: product['code'] as String?,
-      source: FoodSource.openFoodFacts,
+      source: .openFoodFacts,
       caloriesPer100g: calories,
       proteinPer100g: protein,
       carbsPer100g: carbs,

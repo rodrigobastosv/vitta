@@ -3,7 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_remote_image.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 
@@ -23,7 +22,7 @@ class ExerciseSearchResultTile extends StatelessWidget {
       child: Row(
         children: [
           VTRemoteImage(imageUrl: exercise.imageUrl, placeholderIcon: Icons.fitness_center_outlined, size: 56),
-          const SizedBox(width: VTSpacing.m),
+          const VTGap.m(),
           Expanded(
             child: Column(
               crossAxisAlignment: .start,

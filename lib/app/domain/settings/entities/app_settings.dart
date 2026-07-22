@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 
 class AppSettings extends Equatable {
-  const AppSettings({this.locale, this.themeMode = ThemeMode.system, this.unitSystem = UnitSystem.metric});
+  const AppSettings({this.locale, this.themeMode = .system, this.unitSystem = .metric});
 
   final Locale? locale;
   final ThemeMode themeMode;

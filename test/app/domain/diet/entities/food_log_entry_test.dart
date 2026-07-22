@@ -2,8 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
-import 'package:vitta/app/domain/diet/entities/food_source.dart';
-import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 import '../../../../factories/entities/food_factory.dart';
@@ -57,11 +55,11 @@ void main() {
     expect(
       entry,
       FoodLogEntry(
-        log: FoodLog(id: 'log-1', foodId: 'food-1', loggedDate: DateTime(2026, 7, 11), mealType: MealType.lunch, quantityGrams: 150),
+        log: FoodLog(id: 'log-1', foodId: 'food-1', loggedDate: DateTime(2026, 7, 11), mealType: .lunch, quantityGrams: 150),
         food: const Food(
           id: 'food-1',
           name: 'Banana',
-          source: FoodSource.openFoodFacts,
+          source: .openFoodFacts,
           caloriesPer100g: 89,
           proteinPer100g: 1.1,
           carbsPer100g: 22.8,

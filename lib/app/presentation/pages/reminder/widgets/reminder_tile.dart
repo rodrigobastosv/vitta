@@ -58,7 +58,7 @@ class ReminderTile extends StatelessWidget {
         children: [
           VTCelebration(
             trigger: completed,
-            size: VTCelebrationSize.small,
+            size: .small,
             child: VTCheckCircle(value: completed, onChanged: onToggle == null ? null : _onChanged),
           ),
           const VTGap.s(),

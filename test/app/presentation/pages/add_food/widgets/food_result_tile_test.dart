@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/components/general/vt_food_image.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
-import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_tile.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -44,7 +43,7 @@ void main() {
   });
 
   testWidgets('tags a generic whole food as Common on the meta line, leaving the name its own line', (tester) async {
-    await pumpTile(tester, food: FoodFactory.build(name: 'Ovo inteiro', source: FoodSource.generic));
+    await pumpTile(tester, food: FoodFactory.build(name: 'Ovo inteiro', source: .generic));
 
     // The name is its own single-line Text, and the Common tag rides on the
     // meta line's rich text below it (see issue #180) rather than beside the name.
@@ -54,7 +53,7 @@ void main() {
   });
 
   testWidgets('a branded search result shows no source tag on its meta line', (tester) async {
-    await pumpTile(tester, food: FoodFactory.build(source: FoodSource.openFoodFacts, brand: 'Chiquita'));
+    await pumpTile(tester, food: FoodFactory.build(source: .openFoodFacts, brand: 'Chiquita'));
 
     final metaLine = tester.widget<Text>(find.byType(Text).at(1));
     expect(metaLine.textSpan!.toPlainText(), isNot(contains('Common')));

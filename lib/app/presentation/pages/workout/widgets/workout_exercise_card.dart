@@ -57,7 +57,7 @@ class WorkoutExerciseCard extends StatelessWidget {
     return VTCard(
       color: isCompleted ? Color.alphaBlend(VTColors.success.withValues(alpha: 0.10), colorScheme.surface) : null,
       child: Column(
-        crossAxisAlignment: .start,
+        crossAxisAlignment: .stretch,
         children: [
           Row(
             children: [
@@ -66,7 +66,7 @@ class WorkoutExerciseCard extends StatelessWidget {
                 borderRadius: VTRadius.borderRadiusM,
                 child: WorkoutExerciseThumbnail(imageUrl: exercise.imageUrl, isCompleted: isCompleted),
               ),
-              const SizedBox(width: VTSpacing.m),
+              const VTGap.m(),
               Expanded(
                 child: InkWell(
                   onTap: onTap,
@@ -126,7 +126,7 @@ class WorkoutExerciseCard extends StatelessWidget {
             curve: VTMotion.curve,
             alignment: .topCenter,
             child: isCompleted
-                ? const SizedBox(width: double.infinity)
+                ? const SizedBox.shrink()
                 : Column(
                     crossAxisAlignment: .start,
                     children: [

@@ -87,11 +87,11 @@ class _VTLineChartState extends State<VTLineChart> {
                 height: widget.height,
                 width: double.infinity,
                 child: Stack(
-                  clipBehavior: Clip.none,
+                  clipBehavior: .none,
                   children: [
                     if (isInteractive)
                       GestureDetector(
-                        behavior: HitTestBehavior.opaque,
+                        behavior: .opaque,
                         onTapDown: (details) => _handleTapAt(details.localPosition.dx, geometry),
                         child: chart,
                       )
@@ -271,18 +271,18 @@ class _LineChartPainter extends CustomPainter {
     canvas
       ..drawLine(Offset.zero, Offset(plotWidth, 0), grid)
       ..drawLine(Offset(0, plotHeight), Offset(plotWidth, plotHeight), grid);
-    _paintText(canvas, maxValue.round().toString(), Offset(plotWidth + 6, -2), align: TextAlign.left);
-    _paintText(canvas, minValue.round().toString(), Offset(plotWidth + 6, plotHeight - 12), align: TextAlign.left);
+    _paintText(canvas, maxValue.round().toString(), Offset(plotWidth + 6, -2), align: .left);
+    _paintText(canvas, minValue.round().toString(), Offset(plotWidth + 6, plotHeight - 12), align: .left);
   }
 
   void _paintXLabels(Canvas canvas, {required double plotWidth, required double plotHeight}) {
     final firstLabel = points.first.label;
     final lastLabel = points.last.label;
     if (firstLabel != null) {
-      _paintText(canvas, firstLabel, Offset(0, plotHeight + 4), align: TextAlign.left);
+      _paintText(canvas, firstLabel, Offset(0, plotHeight + 4), align: .left);
     }
     if (lastLabel != null && points.length > 1) {
-      _paintText(canvas, lastLabel, Offset(plotWidth, plotHeight + 4), align: TextAlign.right, width: plotWidth);
+      _paintText(canvas, lastLabel, Offset(plotWidth, plotHeight + 4), align: .right, width: plotWidth);
     }
   }
 
@@ -293,7 +293,7 @@ class _LineChartPainter extends CustomPainter {
         style: TextStyle(color: labelColor, fontSize: 11),
       ),
       textAlign: align,
-      textDirection: TextDirection.ltr,
+      textDirection: .ltr,
     )..layout(maxWidth: width ?? _LineChartGeometry.yLabelWidth);
     final dx = align == TextAlign.right ? offset.dx - painter.width : offset.dx;
     painter.paint(canvas, Offset(dx, offset.dy));

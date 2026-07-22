@@ -8,7 +8,7 @@ class SleepLog extends Equatable {
     required this.bedTime,
     required this.wakeTime,
     this.qualityRating,
-    this.source = SleepLogSource.manual,
+    this.source = .manual,
   });
 
   factory SleepLog.fromMap(Map<String, dynamic> row) => SleepLog(

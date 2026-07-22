@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
-import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_thumbnail.dart';
@@ -26,7 +24,7 @@ Future<void> pumpCard(
     home: Scaffold(
       body: WorkoutExerciseCard(
         workoutExercise: workoutExercise,
-        unitSystem: UnitSystem.metric,
+        unitSystem: .metric,
         onAddSet: () {},
         onRepeatSet: onRepeatSet,
         onToggleCompleted: onToggleCompleted,
@@ -37,7 +35,7 @@ Future<void> pumpCard(
 
 void main() {
   testWidgets('a cardio exercise is one effort - once it is logged there is nothing to add or repeat', (tester) async {
-    final treadmill = ExerciseFactory.build(names: const {'en': 'Treadmill', 'pt': 'Esteira'}, category: ExerciseCategory.cardio);
+    final treadmill = ExerciseFactory.build(names: const {'en': 'Treadmill', 'pt': 'Esteira'}, category: .cardio);
 
     await pumpCard(
       tester,
@@ -59,7 +57,7 @@ void main() {
   });
 
   testWidgets('a cardio effort is not numbered, since there is never a second one', (tester) async {
-    final treadmill = ExerciseFactory.build(category: ExerciseCategory.cardio);
+    final treadmill = ExerciseFactory.build(category: .cardio);
 
     await pumpCard(
       tester,

@@ -3,7 +3,6 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
-import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/progress_photos/entities/progress_photo.dart';
 
@@ -36,7 +35,7 @@ class ProgressPhotoCompareSummary extends StatelessWidget {
               children: [
                 Text(l10n.progressPhotosCompareDaysApart(daysApart), style: VTTextStyles.title(context)),
                 if (notes.isNotEmpty) ...[
-                  const SizedBox(height: VTSpacing.xs),
+                  const VTGap.xs(),
                   Text(notes.join(' · '), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
                 ],
               ],

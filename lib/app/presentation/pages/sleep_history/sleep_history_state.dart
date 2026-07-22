@@ -8,7 +8,7 @@ class SleepHistoryState extends Equatable {
     required this.durationGoalHours,
     this.sleepInMonth = const {},
     this.sleepInTrendRange = const {},
-    this.trendRange = TrendRange.month,
+    this.trendRange = .month,
     this.isLoaded = true,
   });
 

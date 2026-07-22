@@ -40,7 +40,7 @@ class VTPhotoHeader extends StatelessWidget {
   Widget? _photo() {
     final bytes = imageBytes;
     if (bytes != null) {
-      return Image.memory(bytes, key: ValueKey(bytes.length), fit: BoxFit.cover, width: double.infinity);
+      return Image.memory(bytes, key: ValueKey(bytes.length), fit: .cover, width: double.infinity);
     }
     final url = imageUrl;
     if (url == null) {
@@ -49,7 +49,7 @@ class VTPhotoHeader extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: url,
       key: ValueKey(url),
-      fit: BoxFit.cover,
+      fit: .cover,
       width: double.infinity,
       errorBuilder: (context, error, stackTrace) => _placeholder(context),
     );

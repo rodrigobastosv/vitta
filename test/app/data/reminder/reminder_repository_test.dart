@@ -44,7 +44,7 @@ void main() {
 
     test('completing a monthly reminder spawns the next month occurrence', () async {
       final dataSource = MockSupabaseReminderDataSource();
-      final reminder = ReminderFactory.build(dueDate: DateTime(2026, 7, 18), remindAt: DateTime(2026, 7, 18, 9), recurrence: ReminderRecurrence.monthly);
+      final reminder = ReminderFactory.build(dueDate: DateTime(2026, 7, 18), remindAt: DateTime(2026, 7, 18, 9), recurrence: .monthly);
       when(
         () => dataSource.setCompleted(
           reminderId: 'reminder-1',
@@ -72,7 +72,7 @@ void main() {
           dueDate: captureAny(named: 'dueDate'),
           notes: any(named: 'notes'),
           remindAt: captureAny(named: 'remindAt'),
-          recurrence: ReminderRecurrence.monthly,
+          recurrence: .monthly,
         ),
       ).captured;
       expect(capturedDueDate.first, DateTime(2026, 8, 18));
@@ -81,7 +81,7 @@ void main() {
 
     test('un-completing a recurring reminder does not spawn an occurrence', () async {
       final dataSource = MockSupabaseReminderDataSource();
-      final reminder = ReminderFactory.build(recurrence: ReminderRecurrence.monthly, completedAt: DateTime(2026, 7, 18, 10));
+      final reminder = ReminderFactory.build(recurrence: .monthly, completedAt: DateTime(2026, 7, 18, 10));
       when(() => dataSource.setCompleted(reminderId: 'reminder-1', completedAt: null)).thenAnswer((_) async => Success(ReminderFactory.build()));
 
       await ReminderRepository(supabaseReminderDataSource: dataSource).completeReminder(reminder: reminder, completed: false);

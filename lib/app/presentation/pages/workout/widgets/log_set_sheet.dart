@@ -200,7 +200,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
           child: VTStepper(controller: _repsController),
         ),
       ),
-      const SizedBox(width: VTSpacing.m),
+      const VTGap.m(),
       Expanded(
         child: LabelledField(
           label: l10n.workoutLoadLabel(widget.unitSystem.loadUnitLabel),
@@ -227,7 +227,7 @@ class _LogSetSheetState extends State<LogSetSheet> {
               child: TextField(controller: _minutesController, keyboardType: TextInputType.number, textInputAction: .next),
             ),
           ),
-          const SizedBox(width: VTSpacing.m),
+          const VTGap.m(),
           Expanded(
             child: LabelledField(
               label: l10n.workoutDurationSecondsLabel,

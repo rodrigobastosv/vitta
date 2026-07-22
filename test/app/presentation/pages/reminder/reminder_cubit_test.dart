@@ -72,7 +72,7 @@ void main() {
         ReminderFactory.build(id: 'a'),
         ReminderFactory.build(id: 'b', completedAt: DateTime(2026, 7, 18, 9)),
       ],
-      filter: ReminderFilter.all,
+      filter: .all,
     ),
     act: (cubit) => cubit.changeFilter(ReminderFilter.completed),
     expect: () => [
@@ -96,7 +96,7 @@ void main() {
       ).thenAnswer((_) async => Success(ReminderFactory.build(id: 'new', dueDate: today)));
       return CubitsFactories.buildReminderCubit(createReminderUseCase: createReminder, notificationService: _permissiveNotifications());
     },
-    seed: () => ReminderState(date: today, reminders: const [], filter: ReminderFilter.all),
+    seed: () => ReminderState(date: today, reminders: const [], filter: .all),
     act: (cubit) => cubit.createReminder(title: 'Pay rent', dueDate: today),
     expect: () => [isA<ReminderState>().having((state) => state.reminders.single.id, 'saved id', 'new')],
   );
@@ -115,11 +115,11 @@ void main() {
     },
     seed: () => ReminderState(
       date: today,
-      reminders: [ReminderFactory.build(id: 'a', recurrence: ReminderRecurrence.monthly)],
-      filter: ReminderFilter.all,
+      reminders: [ReminderFactory.build(id: 'a', recurrence: .monthly)],
+      filter: .all,
     ),
     act: (cubit) => cubit.setCompleted(
-      reminder: ReminderFactory.build(id: 'a', recurrence: ReminderRecurrence.monthly),
+      reminder: ReminderFactory.build(id: 'a', recurrence: .monthly),
       completed: true,
     ),
     expect: () => [
@@ -142,7 +142,7 @@ void main() {
     seed: () => ReminderState(
       date: today,
       reminders: [ReminderFactory.build(id: 'a')],
-      filter: ReminderFilter.all,
+      filter: .all,
     ),
     act: (cubit) => cubit.deleteReminder(reminder: ReminderFactory.build(id: 'a')),
     expect: () => [

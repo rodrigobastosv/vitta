@@ -34,7 +34,7 @@ class _LogRecipeSheetState extends State<_LogRecipeSheet> {
   late final UnitSystem _unitSystem = context.read<RecipesCubit>().unitSystem;
   late final double _initialGrams = widget.recipe.totalGrams;
   late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: _initialGrams);
-  MealType _mealType = MealType.breakfast;
+  MealType _mealType = .breakfast;
   bool _isSaving = false;
   String? _errorMessage;
 

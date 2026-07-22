@@ -53,7 +53,7 @@ void main() {
       return CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase, saveAppSettingsUseCase: saveAppSettingsUseCase);
     },
     act: (cubit) => cubit.changeThemeMode(ThemeMode.dark),
-    expect: () => [const AppSettings(themeMode: ThemeMode.dark)],
+    expect: () => [const AppSettings(themeMode: .dark)],
   );
 
   blocTest<AppCubit, AppSettings>(
@@ -66,16 +66,16 @@ void main() {
       return CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase, saveAppSettingsUseCase: saveAppSettingsUseCase);
     },
     act: (cubit) => cubit.changeUnitSystem(UnitSystem.imperial),
-    expect: () => [const AppSettings(unitSystem: UnitSystem.imperial)],
+    expect: () => [const AppSettings(unitSystem: .imperial)],
   );
 
   test('loads the persisted settings on construction', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
-    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(locale: Locale('pt'), themeMode: ThemeMode.dark, unitSystem: UnitSystem.imperial));
+    when(getAppSettingsUseCase.call).thenReturn(const AppSettings(locale: Locale('pt'), themeMode: .dark, unitSystem: .imperial));
 
     final cubit = CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase);
 
-    expect(cubit.state, const AppSettings(locale: Locale('pt'), themeMode: ThemeMode.dark, unitSystem: UnitSystem.imperial));
+    expect(cubit.state, const AppSettings(locale: Locale('pt'), themeMode: .dark, unitSystem: .imperial));
   });
 
   test('persists the new settings when changeLocale is called', () {
@@ -111,7 +111,7 @@ void main() {
 
     CubitsFactories.buildAppCubit(getAppSettingsUseCase: getAppSettingsUseCase, saveAppSettingsUseCase: saveAppSettingsUseCase).changeThemeMode(ThemeMode.dark);
 
-    verify(() => saveAppSettingsUseCase(const AppSettings(themeMode: ThemeMode.dark))).called(1);
+    verify(() => saveAppSettingsUseCase(const AppSettings(themeMode: .dark))).called(1);
   });
 
   test('persists the new settings when changeUnitSystem is called', () {
@@ -125,6 +125,6 @@ void main() {
       saveAppSettingsUseCase: saveAppSettingsUseCase,
     ).changeUnitSystem(UnitSystem.imperial);
 
-    verify(() => saveAppSettingsUseCase(const AppSettings(unitSystem: UnitSystem.imperial))).called(1);
+    verify(() => saveAppSettingsUseCase(const AppSettings(unitSystem: .imperial))).called(1);
   });
 }

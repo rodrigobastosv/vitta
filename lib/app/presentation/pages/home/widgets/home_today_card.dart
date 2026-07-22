@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vitta/app/core/goals/goal_adherence.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
@@ -33,7 +32,7 @@ class HomeTodayCard extends StatelessWidget {
       child: Row(
         children: [
           VTCelebration(
-            trigger: hasEntries && dailyMacros.adherenceTo(macroGoals) == GoalAdherence.met,
+            trigger: hasEntries && dailyMacros.adherenceTo(macroGoals) == .met,
             child: VTMacroRing(
               value: goal <= 0 ? 0 : consumed / goal,
               color: ringColor,

@@ -84,7 +84,7 @@ void main() {
         muscleGroup: any(named: 'muscleGroup'),
         category: any(named: 'category'),
       ),
-    ).thenAnswer((_) async => Success([ExerciseFactory.build(category: ExerciseCategory.cardio)]));
+    ).thenAnswer((_) async => Success([ExerciseFactory.build(category: .cardio)]));
     final cubit = CubitsFactories.buildExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase);
 
     await cubit.changeCategory(ExerciseCategory.cardio);
@@ -94,7 +94,7 @@ void main() {
       () => searchExercisesUseCase(
         query: '',
         muscleGroup: any(named: 'muscleGroup', that: isNull),
-        category: ExerciseCategory.cardio,
+        category: .cardio,
       ),
     ).called(1);
     await cubit.close();
