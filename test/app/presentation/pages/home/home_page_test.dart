@@ -7,17 +7,21 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/general/vt_skeleton.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
+import 'package:vitta/app/domain/body_weight/entities/body_weight_log.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_page.dart';
+import 'package:vitta/app/presentation/pages/home/widgets/home_body_weight_hero.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_skeleton.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_today_card.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../factories/cubits_factories.dart';
+import '../../../../factories/entities/body_weight_log_factory.dart';
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_entry_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
@@ -33,6 +37,8 @@ void main() {
     Size size = const Size(390, 844),
     DailyMacros dailyMacros = const DailyMacros(entries: []),
     List<Reminder> reminders = const [],
+    List<BodyWeightLog> weightLogs = const [],
+    HomeLayout layout = HomeLayout.shipped,
     bool settle = true,
   }) async {
     tester.view.physicalSize = size;
@@ -69,8 +75,14 @@ void main() {
     when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
     final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
     when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
+    final getSleepGoalUseCase = MockGetSleepGoalUseCase();
+    when(getSleepGoalUseCase.call).thenReturn(8);
     final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
-    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Success(null));
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => Success(weightLogs.firstOrNull));
+    final getRecentBodyWeightLogsUseCase = MockGetRecentBodyWeightLogsUseCase();
+    when(() => getRecentBodyWeightLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => Success(weightLogs));
+    final getHomeLayoutUseCase = MockGetHomeLayoutUseCase();
+    when(getHomeLayoutUseCase.call).thenReturn(layout);
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
     when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
 
@@ -87,7 +99,10 @@ void main() {
         getRemindersInRangeUseCase: getRemindersInRangeUseCase,
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
         getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+        getSleepGoalUseCase: getSleepGoalUseCase,
         getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+        getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
+        getHomeLayoutUseCase: getHomeLayoutUseCase,
         getAppSettingsUseCase: getAppSettingsUseCase,
       ),
     );
@@ -172,4 +187,34 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('the default layout is the shipped hierarchy: a diet hero over the supporting rows', (tester) async {
+    await pumpHome(tester, user: const AnonymousUser(), dailyMacros: buildDayWithMeals(400));
+
+    expect(find.byType(HomeTodayCard), findsOneWidget);
+    expect(find.byType(HomeBodyWeightHero), findsNothing);
+    expect(find.text('Water'), findsOneWidget);
+  });
+
+  testWidgets('a body weight hero is a trend, not the diet ring', (tester) async {
+    await pumpHome(
+      tester,
+      user: const AnonymousUser(),
+      weightLogs: [
+        BodyWeightLogFactory.build(id: 'log-2', weightKg: 73, loggedDate: DateTime(2026, 7, 20)),
+        BodyWeightLogFactory.build(id: 'log-1', weightKg: 76, loggedDate: DateTime(2026, 7)),
+      ],
+      layout: HomeLayout.shipped.withSlot(feature: .bodyWeight, slot: .hero),
+    );
+
+    expect(find.byType(HomeBodyWeightHero), findsOneWidget);
+    expect(find.byType(HomeTodayCard), findsNothing);
+  });
+
+  testWidgets('a hidden feature stops taking space on home', (tester) async {
+    await pumpHome(tester, user: const AnonymousUser(), layout: HomeLayout.shipped.withSlot(feature: .water, slot: .hidden));
+
+    expect(find.text('Water'), findsNothing);
+    expect(find.text('Reminders'), findsOneWidget);
+  });
 }

@@ -632,6 +632,102 @@ abstract class AppLocalizations {
   /// **'Not tracked yet'**
   String get homeNotTrackedYet;
 
+  /// No description provided for @homeSleepGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal {hours}h'**
+  String homeSleepGoal(String hours);
+
+  /// No description provided for @homeWorkoutHeroTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today\'s session'**
+  String get homeWorkoutHeroTitle;
+
+  /// No description provided for @homeRemindersOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{All done for today} =1{1 still to do} other{{count} still to do}}'**
+  String homeRemindersOpen(int count);
+
+  /// No description provided for @homeRemindersMore.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String homeRemindersMore(int count);
+
+  /// No description provided for @homeWeightTrendTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight trend'**
+  String get homeWeightTrendTitle;
+
+  /// No description provided for @homeLayoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Home screen'**
+  String get homeLayoutTitle;
+
+  /// No description provided for @homeLayoutMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag to reorder. Tap a feature to choose where it shows up.'**
+  String get homeLayoutMessage;
+
+  /// No description provided for @homeLayoutSlotQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Where should {feature} appear?'**
+  String homeLayoutSlotQuestion(String feature);
+
+  /// No description provided for @homeLayoutResetMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your home screen is back to the default order.'**
+  String get homeLayoutResetMessage;
+
+  /// No description provided for @homeLayoutResetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset to default'**
+  String get homeLayoutResetAction;
+
+  /// No description provided for @homeSlotHero.
+  ///
+  /// In en, this message translates to:
+  /// **'Headline'**
+  String get homeSlotHero;
+
+  /// No description provided for @homeSlotSupporting.
+  ///
+  /// In en, this message translates to:
+  /// **'Supporting row'**
+  String get homeSlotSupporting;
+
+  /// No description provided for @homeSlotTile.
+  ///
+  /// In en, this message translates to:
+  /// **'Tile'**
+  String get homeSlotTile;
+
+  /// No description provided for @homeSlotHidden.
+  ///
+  /// In en, this message translates to:
+  /// **'Hidden'**
+  String get homeSlotHidden;
+
+  /// No description provided for @settingsHomeLayoutLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Home screen'**
+  String get settingsHomeLayoutLabel;
+
+  /// No description provided for @settingsHomeLayoutHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick what leads, what supports it and what stays hidden'**
+  String get settingsHomeLayoutHint;
+
   /// No description provided for @onboardingFeaturesTitle.
   ///
   /// In en, this message translates to:

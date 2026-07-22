@@ -37,6 +37,9 @@ void main() {
     await pumpSettings(tester, buildAppCubit());
 
     expect(find.text('Settings'), findsOneWidget);
+    expect(find.text('Home screen'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Imperial (oz/lb)'), 200);
+
     // 3 language + 3 theme + 2 unit-system options.
     expect(find.byType(SettingsOptionTile), findsNWidgets(8));
   });

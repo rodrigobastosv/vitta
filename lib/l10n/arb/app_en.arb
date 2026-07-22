@@ -117,6 +117,50 @@
   "homeSleepLastNight": "Last night",
   "homeWeightLatest": "Latest",
   "homeNotTrackedYet": "Not tracked yet",
+  "homeSleepGoal": "Goal {hours}h",
+  "@homeSleepGoal": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "homeWorkoutHeroTitle": "Today's session",
+  "homeRemindersOpen": "{count, plural, =0{All done for today} =1{1 still to do} other{{count} still to do}}",
+  "@homeRemindersOpen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeRemindersMore": "+{count} more",
+  "@homeRemindersMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeWeightTrendTitle": "Weight trend",
+  "homeLayoutTitle": "Home screen",
+  "homeLayoutMessage": "Drag to reorder. Tap a feature to choose where it shows up.",
+  "homeLayoutSlotQuestion": "Where should {feature} appear?",
+  "@homeLayoutSlotQuestion": {
+    "placeholders": {
+      "feature": {
+        "type": "String"
+      }
+    }
+  },
+  "homeLayoutResetMessage": "Your home screen is back to the default order.",
+  "homeLayoutResetAction": "Reset to default",
+  "homeSlotHero": "Headline",
+  "homeSlotSupporting": "Supporting row",
+  "homeSlotTile": "Tile",
+  "homeSlotHidden": "Hidden",
+  "settingsHomeLayoutLabel": "Home screen",
+  "settingsHomeLayoutHint": "Pick what leads, what supports it and what stays hidden",
   "onboardingFeaturesTitle": "Many things, one app",
   "onboardingGoalsTitle": "Set a daily calorie target",
   "onboardingGoalsMessage": "You can change this any time, and we'll split it into protein, carbs and fat for you.",

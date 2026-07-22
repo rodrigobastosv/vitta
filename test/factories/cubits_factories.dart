@@ -11,6 +11,7 @@ import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
+import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
@@ -70,7 +71,10 @@ abstract class CubitsFactories {
     MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase,
     MockGetWorkoutsForDateUseCase? getWorkoutsForDateUseCase,
     MockGetRecentSleepLogsUseCase? getRecentSleepLogsUseCase,
+    MockGetSleepGoalUseCase? getSleepGoalUseCase,
     MockGetLatestBodyWeightUseCase? getLatestBodyWeightUseCase,
+    MockGetRecentBodyWeightLogsUseCase? getRecentBodyWeightLogsUseCase,
+    MockGetHomeLayoutUseCase? getHomeLayoutUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
   }) => HomeCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
@@ -81,7 +85,10 @@ abstract class CubitsFactories {
     getRemindersInRangeUseCase: getRemindersInRangeUseCase ?? MockGetRemindersInRangeUseCase(),
     getWorkoutsForDateUseCase: getWorkoutsForDateUseCase ?? MockGetWorkoutsForDateUseCase(),
     getRecentSleepLogsUseCase: getRecentSleepLogsUseCase ?? MockGetRecentSleepLogsUseCase(),
+    getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
     getLatestBodyWeightUseCase: getLatestBodyWeightUseCase ?? MockGetLatestBodyWeightUseCase(),
+    getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase ?? MockGetRecentBodyWeightLogsUseCase(),
+    getHomeLayoutUseCase: getHomeLayoutUseCase ?? MockGetHomeLayoutUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 
@@ -399,4 +406,10 @@ abstract class CubitsFactories {
 
   static ReminderHistoryCubit buildReminderHistoryCubit({MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase}) =>
       ReminderHistoryCubit(getRemindersInRangeUseCase: getRemindersInRangeUseCase ?? MockGetRemindersInRangeUseCase());
+
+  static HomeLayoutCubit buildHomeLayoutCubit({MockGetHomeLayoutUseCase? getHomeLayoutUseCase, MockSaveHomeLayoutUseCase? saveHomeLayoutUseCase}) =>
+      HomeLayoutCubit(
+        getHomeLayoutUseCase: getHomeLayoutUseCase ?? MockGetHomeLayoutUseCase(),
+        saveHomeLayoutUseCase: saveHomeLayoutUseCase ?? MockSaveHomeLayoutUseCase(),
+      );
 }
