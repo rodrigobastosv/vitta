@@ -51,7 +51,7 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
       emitPresentation(RecipesError(message: error.message));
       return;
     }
-    Log.action('recipe_deleted');
+    Log.action(.recipeDeleted);
     await loadRecipes();
   }
 
@@ -68,7 +68,7 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
       quantityGrams: quantityGrams,
     );
     loggedResult.when((_) {}, (_) {
-      Log.action('food_logged', data: {'food': recipeFood.name, 'meal': mealType.wireValue, 'source': 'recipe'});
+      Log.action(.foodLogged, data: {'food': recipeFood.name, 'meal': mealType.wireValue, 'source': 'recipe'});
       emitPresentation(RecipeLogged(recipeName: recipeFood.name, mealType: mealType));
     });
     return loggedResult;

@@ -68,7 +68,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
   Future<void> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) async {
     final loggedResult = await _logSleepUseCase(bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
     await loggedResult.when((error) => Future.sync(() => emitPresentation(SleepError(message: error.message))), (_) {
-      Log.action('sleep_logged', data: {'quality': qualityRating});
+      Log.action(.sleepLogged, data: {'quality': qualityRating});
       return loadRecent();
     });
   }
@@ -87,7 +87,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     deletedResult.when((error) {
       emit(state.copyWith(logs: previous));
       emitPresentation(SleepError(message: error.message));
-    }, (_) => Log.action('sleep_log_deleted'));
+    }, (_) => Log.action(.sleepLogDeleted));
   }
 
   Future<void> importFromHealth() async {
@@ -103,7 +103,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
       }
       final importedResult = await _readAndImportFromHealth();
       await importedResult.when((error) => Future.sync(() => emitPresentation(SleepError(message: error.message))), (count) {
-        Log.action('sleep_imported_from_health', data: {'count': count});
+        Log.action(.sleepImportedFromHealth, data: {'count': count});
         emitPresentation(SleepImported(count: count));
         return loadRecent();
       });
@@ -134,7 +134,7 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
         if (count == 0) {
           return;
         }
-        Log.action('sleep_imported_from_health', data: {'count': count, 'auto': true});
+        Log.action(.sleepImportedFromHealth, data: {'count': count, 'auto': true});
         emitPresentation(SleepImported(count: count));
         await loadRecent();
       });

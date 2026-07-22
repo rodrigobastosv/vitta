@@ -13,6 +13,6 @@ class MacroGoalsCubit extends PresentationCubit<MacroGoals, MacroGoalsPresentati
   Future<void> saveGoals(MacroGoals goals) async {
     emit(goals);
     await _saveMacroGoalsUseCase(goals);
-    Log.action('macro_goals_saved');
+    Log.action(.macroGoalsSaved);
   }
 }

@@ -4,6 +4,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
+import 'package:vitta/app/core/services/logging/app_event.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/auth/use_cases/delete_account_use_case.dart';
@@ -69,7 +70,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     emitPresentation(AuthShowLoading());
     final statusResult = await _signInUseCase(email: email, password: password);
     emitPresentation(AuthHideLoading());
-    _onAuthResult(statusResult, action: 'sign_in');
+    _onAuthResult(statusResult, event: .signIn);
   }
 
   Future<void> signUp({required String email, required String password, String? displayName}) async {
@@ -90,12 +91,12 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
       avatarUrl: avatar.url,
     );
     emitPresentation(AuthHideLoading());
-    _onAuthResult(statusResult, action: 'sign_up');
+    _onAuthResult(statusResult, event: .signUp);
   }
 
-  void _onAuthResult(Result<VTError, User> statusResult, {required String action}) {
+  void _onAuthResult(Result<VTError, User> statusResult, {required AppEvent event}) {
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (value) {
-      Log.action(action);
+      Log.action(event);
       _identify(value);
       emit(state.copyWith(user: value));
       emitPresentation(AuthSignedIn());
@@ -115,7 +116,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     final statusResult = await _updateProfileUseCase(displayName: _trimToNull(displayName), avatarId: avatar.id, avatarUrl: avatar.url);
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (value) {
-      Log.action('profile_updated');
+      Log.action(.profileUpdated);
       emit(state.copyWith(user: value));
       emitPresentation(AuthProfileUpdated());
     });
@@ -152,7 +153,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     final statusResult = await _signOutUseCase();
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
-      Log.action('sign_out');
+      Log.action(.signOut);
       _identify(user);
       emit(state.copyWith(user: user));
     });
@@ -163,7 +164,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     final statusResult = await _deleteAccountUseCase();
     emitPresentation(AuthHideLoading());
     statusResult.when((error) => emitPresentation(AuthActionFailed(message: error.message)), (user) {
-      Log.action('account_deleted');
+      Log.action(.accountDeleted);
       _identify(user);
       emit(state.copyWith(user: user));
       emitPresentation(AuthAccountDeleted());

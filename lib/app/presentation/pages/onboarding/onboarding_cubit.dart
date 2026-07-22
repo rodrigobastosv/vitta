@@ -49,10 +49,10 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
     }
     if (state.goalsAccepted) {
       await _saveMacroGoalsUseCase(state.goals);
-      Log.action('onboarding_goals_set', data: {'objective': state.objective.name, 'calories': state.effectiveCalorieGoal.round()});
+      Log.action(.onboardingGoalsSet, data: {'objective': state.objective.name, 'calories': state.effectiveCalorieGoal.round()});
     }
     await _completeOnboardingUseCase();
-    Log.action('onboarding_completed');
+    Log.action(.onboardingCompleted);
   }
 
   // The weight captured here is the app's first body-weight entry, so it goes
@@ -64,6 +64,6 @@ class OnboardingCubit extends PresentationCubit<OnboardingState, OnboardingPrese
   Future<void> _logFirstWeight() async {
     final today = DateTime.now();
     final loggedResult = await _logBodyWeightUseCase(loggedDate: DateTime(today.year, today.month, today.day), weightKg: state.weightKg);
-    loggedResult.when((_) {}, (_) => Log.action('onboarding_weight_logged', data: {'weight_kg': state.weightKg}));
+    loggedResult.when((_) {}, (_) => Log.action(.onboardingWeightLogged, data: {'weight_kg': state.weightKg}));
   }
 }

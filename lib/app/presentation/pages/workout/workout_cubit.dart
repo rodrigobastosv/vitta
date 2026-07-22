@@ -7,7 +7,6 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/entities/set_input.dart';
-import 'package:vitta/app/domain/workout/entities/set_kind.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
@@ -23,6 +22,7 @@ import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_complete
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
+import 'package:vitta/app/presentation/general/set_input_log_data.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
 
@@ -109,7 +109,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     // landed, since the summary reads its progression and its calorie estimate
     // from exactly those.
     if (wasUnfinishedToday && state.isFinished) {
-      Log.action('workout_finished', data: {'exercises': state.exercises.length, 'sets': state.totalSets});
+      Log.action(.workoutFinished, data: {'exercises': state.exercises.length, 'sets': state.totalSets});
       emitPresentation(WorkoutSessionFinished());
     }
   }
@@ -150,7 +150,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     final startedResult = await _startWorkoutFromRoutineUseCase(routine: routine, date: state.date);
     emitPresentation(WorkoutHideLoading());
     await startedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action('workout_started_from_routine', data: {'routine_id': routine.id});
+      Log.action(.workoutStartedFromRoutine, data: {'routine_id': routine.id});
       return loadDate(state.date);
     });
   }
@@ -158,7 +158,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> addExercise(Exercise exercise) async {
     final addedResult = await _addExerciseToWorkoutUseCase(date: state.date, exerciseId: exercise.id, workoutId: state.workout?.id);
     await addedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action('workout_exercise_added', data: {'exercise_id': exercise.id});
+      Log.action(.workoutExerciseAdded, data: {'exercise_id': exercise.id});
       return loadDate(state.date);
     });
   }
@@ -166,7 +166,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> removeExercise({required String workoutExerciseId}) async {
     final removedResult = await _removeWorkoutExerciseUseCase(workoutExerciseId: workoutExerciseId);
     await removedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action('workout_exercise_removed');
+      Log.action(.workoutExerciseRemoved);
       return loadDate(state.date);
     });
   }
@@ -177,7 +177,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (error != null) {
       return Failure(error);
     }
-    Log.action('workout_set_logged', data: _setLogData(input));
+    Log.action(.workoutSetLogged, data: setInputLogData(input));
     await loadDate(state.date);
     return const Success(null);
   }
@@ -188,7 +188,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (error != null) {
       return Failure(error);
     }
-    Log.action('workout_set_updated', data: _setLogData(input));
+    Log.action(.workoutSetUpdated, data: setInputLogData(input));
     await loadDate(state.date);
     return const Success(null);
   }
@@ -205,17 +205,13 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     return loggedResult;
   }
 
-  Map<String, dynamic> _setLogData(SetInput input) => input.kind == SetKind.cardio
-      ? {'duration_seconds': input.durationSeconds, 'distance_meters': input.distanceMeters}
-      : {'reps': input.reps, 'weight_kg': input.weightKg};
-
   Future<void> setExerciseCompleted({required WorkoutExercise workoutExercise, required bool completed}) async {
     if (completed && workoutExercise.sets.isEmpty) {
       return;
     }
     final completedResult = await _setWorkoutExerciseCompletedUseCase(workoutExerciseId: workoutExercise.id, completed: completed);
     await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action(completed ? 'workout_exercise_completed' : 'workout_exercise_reopened');
+      Log.action(completed ? .workoutExerciseCompleted : .workoutExerciseReopened);
       return loadDate(state.date);
     });
   }
@@ -223,7 +219,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> deleteSet({required String setId}) async {
     final deletedResult = await _deleteSetUseCase(setId: setId);
     await deletedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action('workout_set_deleted');
+      Log.action(.workoutSetDeleted);
       return loadDate(state.date);
     });
   }
@@ -231,7 +227,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   Future<void> deleteWorkout({required String workoutId}) async {
     final deletedResult = await _deleteWorkoutUseCase(workoutId: workoutId);
     await deletedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
-      Log.action('workout_deleted');
+      Log.action(.workoutDeleted);
       return loadDate(state.date);
     });
   }

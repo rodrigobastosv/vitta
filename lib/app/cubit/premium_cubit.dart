@@ -56,7 +56,7 @@ class PremiumCubit extends Cubit<PremiumState> {
       }
       emit(state.copyWith(offer: offers.first, isOfferLoaded: true));
     } on Exception catch (error) {
-      Log.action('premium_offer_unavailable', data: {'error': error.toString()});
+      Log.action(.premiumOfferUnavailable, data: {'error': error.toString()});
       emit(state.copyWith(isOfferLoaded: true));
     }
   }
@@ -80,7 +80,7 @@ class PremiumCubit extends Cubit<PremiumState> {
     if (outcome == PurchaseOutcome.cancelled) {
       return false;
     }
-    Log.action('premium_purchased', data: {'product_id': offer.productId});
+    Log.action(.premiumPurchased, data: {'product_id': offer.productId});
     _entitleOptimistically();
     return true;
   }
@@ -94,7 +94,7 @@ class PremiumCubit extends Cubit<PremiumState> {
     if (!isEntitled) {
       return false;
     }
-    Log.action('premium_restored');
+    Log.action(.premiumRestored);
     _entitleOptimistically();
     return true;
   }

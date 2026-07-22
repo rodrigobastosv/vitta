@@ -67,7 +67,7 @@ class RecipeFormCubit extends PresentationCubit<RecipeFormState, RecipeFormPrese
     final savedResult = await _saveRecipeUseCase(draft: draft, recipe: _recipe);
     emitPresentation(RecipeFormHideLoading());
     savedResult.when((error) => emitPresentation(RecipeFormError(message: error.message)), (recipe) {
-      Log.action(isEditing ? 'recipe_updated' : 'recipe_created', data: {'ingredients': draft.ingredients.length});
+      Log.action(isEditing ? .recipeUpdated : .recipeCreated, data: {'ingredients': draft.ingredients.length});
       emitPresentation(RecipeSaved(recipe: recipe));
     });
   }

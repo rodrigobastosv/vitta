@@ -33,7 +33,7 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
   Future<void> deleteRoutine({required String routineId}) async {
     final deletedResult = await _deleteRoutineUseCase(routineId: routineId);
     await deletedResult.when((error) => Future.sync(() => emitPresentation(RoutinesError(message: error.message))), (_) {
-      Log.action('workout_routine_deleted');
+      Log.action(.workoutRoutineDeleted);
       return loadRoutines();
     });
   }
@@ -51,7 +51,7 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
         return Future.sync(() => emitPresentation(RoutinesError(message: error.message)));
       },
       (_) {
-        Log.action('workout_routines_reordered');
+        Log.action(.workoutRoutinesReordered);
         return Future<void>.value();
       },
     );

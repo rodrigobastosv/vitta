@@ -76,7 +76,7 @@ class CopyMealsCubit extends PresentationCubit<CopyMealsState, CopyMealsPresenta
     final copiedResult = await _copyFoodLogsUseCase(entries: entries, targetDate: state.targetDate);
     emitPresentation(CopyMealsHideLoading());
     copiedResult.when((error) => emitPresentation(CopyMealsError(message: error.message)), (_) {
-      Log.action('meals_copied', data: {'meals': state.selectedMealTypes.length, 'entries': entries.length});
+      Log.action(.mealsCopied, data: {'meals': state.selectedMealTypes.length, 'entries': entries.length});
       emitPresentation(MealsCopied(mealCount: state.selectedMealTypes.length));
     });
   }

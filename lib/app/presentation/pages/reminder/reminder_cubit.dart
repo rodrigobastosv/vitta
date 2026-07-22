@@ -76,7 +76,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
     if (created == null) {
       return;
     }
-    Log.action('reminder_created', data: {'recurrence': created.recurrence.name});
+    Log.action(.reminderCreated, data: {'recurrence': created.recurrence.name});
     await _scheduleReminder(created);
     if (_dateOnly(created.dueDate) == state.date) {
       emit(state.copyWith(reminders: [...state.reminders, created]));
@@ -137,7 +137,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
     if (completion == null) {
       return;
     }
-    Log.action('reminder_completed', data: {'completed': completed});
+    Log.action(.reminderCompleted, data: {'completed': completed});
 
     if (completed) {
       await _notificationService.cancel(reminder.notificationId);
@@ -176,7 +176,7 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
       emitPresentation(ReminderError(message: error.message));
       return;
     }
-    Log.action('reminder_deleted');
+    Log.action(.reminderDeleted);
     await _notificationService.cancel(reminder.notificationId);
   }
 

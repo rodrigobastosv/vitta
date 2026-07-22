@@ -142,7 +142,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
       _revert(previousFavorites, favoritedResult.when((error) => error.message, (_) => ''));
       return;
     }
-    Log.action('food_favorited', data: {'food': savedFood.name});
+    Log.action(.foodFavorited, data: {'food': savedFood.name});
     if (!state.favorites.any((favorite) => _sameFood(favorite, food))) {
       await _unfavoriteFoodUseCase(foodId: savedFood.id!);
       return;
@@ -169,7 +169,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
       _revert(previousFavorites, error.message);
       return;
     }
-    Log.action('food_unfavorited', data: {'food': food.name});
+    Log.action(.foodUnfavorited, data: {'food': food.name});
   }
 
   void _revert(List<Food> previousFavorites, String message) {
@@ -203,7 +203,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
       quantityUnits: quantityUnits,
     );
     loggedResult.when((_) {}, (_) {
-      Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});
+      Log.action(.foodLogged, data: {'food': food.name, 'meal': mealType.wireValue});
       emitPresentation(FoodLogged(foodName: food.name, mealType: mealType));
     });
     return loggedResult;

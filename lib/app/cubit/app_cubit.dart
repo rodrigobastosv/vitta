@@ -15,24 +15,24 @@ class AppCubit extends PresentationCubit<AppSettings, AppPresentationEvent> {
   void changeLocale(Locale locale) {
     emit(state.copyWith(locale: locale));
     _saveAppSettingsUseCase(state);
-    Log.action('locale_changed', data: {'locale': locale.toLanguageTag()});
+    Log.action(.localeChanged, data: {'locale': locale.toLanguageTag()});
   }
 
   void useSystemLocale() {
     emit(AppSettings(themeMode: state.themeMode, unitSystem: state.unitSystem));
     _saveAppSettingsUseCase(state);
-    Log.action('locale_changed', data: {'locale': 'system'});
+    Log.action(.localeChanged, data: {'locale': 'system'});
   }
 
   void changeThemeMode(ThemeMode themeMode) {
     emit(state.copyWith(themeMode: themeMode));
     _saveAppSettingsUseCase(state);
-    Log.action('theme_changed', data: {'theme': themeMode.name});
+    Log.action(.themeChanged, data: {'theme': themeMode.name});
   }
 
   void changeUnitSystem(UnitSystem unitSystem) {
     emit(state.copyWith(unitSystem: unitSystem));
     _saveAppSettingsUseCase(state);
-    Log.action('unit_system_changed', data: {'unit_system': unitSystem.name});
+    Log.action(.unitSystemChanged, data: {'unit_system': unitSystem.name});
   }
 }

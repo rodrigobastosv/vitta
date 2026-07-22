@@ -85,7 +85,7 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
     );
     emitPresentation(MealScanHideLoading());
     loggedResult.when((error) => emitPresentation(MealScanError(message: error.message)), (_) {
-      Log.action('meal_logged_from_scan', data: {'meal': state.mealType.wireValue, 'items': includedEntries.length});
+      Log.action(.mealLoggedFromScan, data: {'meal': state.mealType.wireValue, 'items': includedEntries.length});
       emitPresentation(MealScanLogged(mealType: state.mealType, itemCount: includedEntries.length));
     });
   }

@@ -71,7 +71,7 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
         emitPresentation(WaterError(message: error.message));
       },
       (saved) {
-        Log.action('water_logged', data: {'amount_ml': amountMl});
+        Log.action(.waterLogged, data: {'amount_ml': amountMl});
         emit(
           state.copyWith(
             dailyWater: DailyWater(
@@ -93,7 +93,7 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
     deletedResult.when((error) {
       emit(state.copyWith(dailyWater: previous));
       emitPresentation(WaterError(message: error.message));
-    }, (_) => Log.action('water_log_deleted'));
+    }, (_) => Log.action(.waterLogDeleted));
   }
 
   List<WaterLog> _without(String logId) => [
@@ -103,7 +103,7 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
 
   Future<void> changeDailyGoal({required double goalMl}) async {
     await _waterLocalDataSource.saveDailyGoalMl(goalMl);
-    Log.action('water_goal_changed', data: {'goal_ml': goalMl});
+    Log.action(.waterGoalChanged, data: {'goal_ml': goalMl});
     await loadToday();
   }
 }

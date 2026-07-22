@@ -47,7 +47,7 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
   Future<void> logWeight({required DateTime loggedDate, required double weightKg}) async {
     final loggedResult = await _logBodyWeightUseCase(loggedDate: loggedDate, weightKg: weightKg);
     await loggedResult.when((error) => Future.sync(() => emitPresentation(BodyWeightError(message: error.message))), (_) async {
-      Log.action('body_weight_logged', data: {'weight_kg': weightKg});
+      Log.action(.bodyWeightLogged, data: {'weight_kg': weightKg});
       emitPresentation(BodyWeightLogged());
       await loadRecent();
     });
@@ -67,6 +67,6 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
     deletedResult.when((error) {
       emit(state.copyWith(logs: previous));
       emitPresentation(BodyWeightError(message: error.message));
-    }, (_) => Log.action('body_weight_log_deleted'));
+    }, (_) => Log.action(.bodyWeightLogDeleted));
   }
 }

@@ -67,7 +67,7 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
     final goals = objective.goalsFor(weightKg: state.weightKg, heightCm: state.heightCm);
     await _saveBodyProfileUseCase(state.profile);
     await _saveMacroGoalsUseCase(goals);
-    Log.action('objective_changed', data: {'objective': objective.wireValue, 'calories': goals.calorieGoal.round()});
+    Log.action(.objectiveChanged, data: {'objective': objective.wireValue, 'calories': goals.calorieGoal.round()});
     emitPresentation(ObjectiveSaved());
   }
 }

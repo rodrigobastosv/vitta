@@ -71,7 +71,7 @@ class ProgressPhotosCubit extends PresentationCubit<ProgressPhotosState, Progres
     );
     emitPresentation(ProgressPhotosHideLoading());
     await addedResult.when((error) => Future.sync(() => emitPresentation(ProgressPhotosError(message: error.message))), (_) async {
-      Log.action('progress_photo_added', data: {'pose': pose.wireValue});
+      Log.action(.progressPhotoAdded, data: {'pose': pose.wireValue});
       emitPresentation(ProgressPhotoAdded());
       await loadPhotos();
     });
@@ -91,6 +91,6 @@ class ProgressPhotosCubit extends PresentationCubit<ProgressPhotosState, Progres
     deletedResult.when((error) {
       emit(state.copyWith(photos: previous));
       emitPresentation(ProgressPhotosError(message: error.message));
-    }, (_) => Log.action('progress_photo_deleted'));
+    }, (_) => Log.action(.progressPhotoDeleted));
   }
 }

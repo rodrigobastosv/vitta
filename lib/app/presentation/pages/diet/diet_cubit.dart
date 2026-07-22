@@ -105,7 +105,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
     final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
     final error = updatedResult.when((error) => error, (_) => null);
     if (error == null) {
-      Log.action('food_log_updated', data: {'meal': mealType.wireValue});
+      Log.action(.foodLogUpdated, data: {'meal': mealType.wireValue});
       await _loadDate(state.date);
     }
     return updatedResult;
@@ -114,7 +114,7 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   Future<void> deleteLog({required String logId}) async {
     final deletedResult = await _deleteFoodLogUseCase(logId: logId);
     deletedResult.when((error) => emitPresentation(DietError(message: error.message, date: state.date)), (_) {
-      Log.action('food_log_deleted');
+      Log.action(.foodLogDeleted);
       return _loadDate(state.date);
     });
   }
