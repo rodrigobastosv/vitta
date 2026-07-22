@@ -49,7 +49,12 @@ class DietPage extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.menu_book_outlined),
               tooltip: l10n.dietRecipesTitle,
-              onPressed: () => context.pushRoute(.recipes, extra: RecipesExtra(targetDate: state.date)),
+              onPressed: () async {
+                await context.pushRoute(.recipes, extra: RecipesExtra(targetDate: state.date));
+                if (context.mounted) {
+                  await cubit.refresh();
+                }
+              },
             ),
             IconButton(
               icon: const Icon(Icons.copy_all_outlined),
