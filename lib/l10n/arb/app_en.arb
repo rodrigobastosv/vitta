@@ -121,6 +121,25 @@
   "onboardingGoalsTitle": "Set a daily calorie target",
   "onboardingGoalsMessage": "You can change this any time, and we'll split it into protein, carbs and fat for you.",
   "onboardingGoalsSkipAction": "Skip for now",
+  "onboardingGoalsSuggestedFor": "Suggested for {objective}",
+  "@onboardingGoalsSuggestedFor": {
+    "placeholders": {
+      "objective": {
+        "type": "String"
+      }
+    }
+  },
+  "onboardingBodyTitle": "Tell us about you",
+  "onboardingBodyMessage": "Your weight and height let us suggest a calorie target. We'll save this weight as your first entry.",
+  "onboardingWeightLabel": "Current weight",
+  "onboardingHeightLabel": "Height",
+  "onboardingObjectiveTitle": "What are you aiming for?",
+  "onboardingObjectiveLoseWeight": "Lose weight",
+  "onboardingObjectiveLoseWeightMessage": "Eat under maintenance, keep the protein high",
+  "onboardingObjectiveMaintainWeight": "Maintain weight",
+  "onboardingObjectiveMaintainWeightMessage": "Stay where you are, with a balanced split",
+  "onboardingObjectiveGainMuscle": "Gain muscle",
+  "onboardingObjectiveGainMuscleMessage": "Eat a little over maintenance to build",
   "onboardingAccountTitle": "Keep your data safe",
   "onboardingNextAction": "Next",
   "onboardingBackAction": "Back",

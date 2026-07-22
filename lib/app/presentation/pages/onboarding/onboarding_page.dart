@@ -10,6 +10,7 @@ import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_state.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_account_step.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_body_step.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_features_step.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_goals_step.dart';
 import 'package:vitta/app/presentation/pages/onboarding/widgets/onboarding_step_indicator.dart';
@@ -24,7 +25,8 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  static const int _goalsStep = 2;
+  static const int _bodyStep = 2;
+  static const int _goalsStep = 3;
 
   final PageController _controller = PageController();
 
@@ -43,10 +45,28 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  void _acceptGoalsThenNext(OnboardingCubit cubit, int step) {
-    cubit.acceptGoals();
-    _goTo(step + 1);
+  void _acceptBodyThenNext(OnboardingCubit cubit) {
+    cubit.acceptBody();
+    _goTo(_bodyStep + 1);
   }
+
+  void _acceptGoalsThenNext(OnboardingCubit cubit) {
+    cubit.acceptGoals();
+    _goTo(_goalsStep + 1);
+  }
+
+  // Skipping the body skips the goals too: the suggestion is derived from the
+  // weight and height, so a goals step with no body behind it has nothing to
+  // suggest.
+  void _skipToAccount() => _goTo(_goalsStep + 1);
+
+  bool _isSkippableStep(int step) => step == _bodyStep || step == _goalsStep;
+
+  void _next(OnboardingCubit cubit, int step) => switch (step) {
+    _bodyStep => _acceptBodyThenNext(cubit),
+    _goalsStep => _acceptGoalsThenNext(cubit),
+    _ => _goTo(step + 1),
+  };
 
   Future<void> _authenticateThenFinish(BuildContext context, OnboardingCubit cubit, AppRoute route) async {
     final authenticated = await context.pushRoute<bool>(route) ?? false;
@@ -70,7 +90,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   children: [
                     const OnboardingWelcomeStep(),
                     const OnboardingFeaturesStep(),
-                    OnboardingGoalsStep(calorieGoal: state.calorieGoal, goals: state.goals, onChanged: cubit.calorieGoalChanged),
+                    OnboardingBodyStep(
+                      unitSystem: cubit.unitSystem,
+                      weightKg: state.weightKg,
+                      heightCm: state.heightCm,
+                      objective: state.objective,
+                      onWeightChanged: cubit.weightChanged,
+                      onHeightChanged: cubit.heightChanged,
+                      onObjectiveChanged: cubit.objectiveChanged,
+                    ),
+                    OnboardingGoalsStep(
+                      calorieGoal: state.effectiveCalorieGoal,
+                      goals: state.goals,
+                      objective: state.objective,
+                      onChanged: cubit.calorieGoalChanged,
+                    ),
                     const OnboardingAccountStep(),
                   ],
                 ),
@@ -91,16 +125,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       )
                     : Column(
                         children: [
-                          VTPrimaryButton(
-                            label: l10n.onboardingNextAction,
-                            onPressed: state.step == _goalsStep ? () => _acceptGoalsThenNext(cubit, state.step) : () => _goTo(state.step + 1),
-                          ),
+                          VTPrimaryButton(label: l10n.onboardingNextAction, onPressed: () => _next(cubit, state.step)),
                           const VTGap.s(),
                           SizedBox(
                             width: double.infinity,
                             child: TextButton(
-                              onPressed: state.step == _goalsStep ? () => _goTo(state.step + 1) : () => _finish(context, cubit),
-                              child: Text(state.step == _goalsStep ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction),
+                              onPressed: _isSkippableStep(state.step) ? _skipToAccount : () => _finish(context, cubit),
+                              child: Text(_isSkippableStep(state.step) ? l10n.onboardingGoalsSkipAction : l10n.onboardingContinueWithoutAccountAction),
                             ),
                           ),
                         ],

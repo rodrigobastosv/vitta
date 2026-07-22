@@ -8,16 +8,19 @@ import 'package:vitta/app/design_system/components/general/vt_labeled_slider.dar
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
+import 'package:vitta/app/presentation/pages/onboarding/widgets/fitness_objective_label.dart';
 
 class OnboardingGoalsStep extends StatelessWidget {
-  const OnboardingGoalsStep({required this.calorieGoal, required this.goals, required this.onChanged, super.key});
+  const OnboardingGoalsStep({required this.calorieGoal, required this.goals, required this.objective, required this.onChanged, super.key});
 
   static const double minCalories = 1200;
   static const double maxCalories = 4000;
 
   final double calorieGoal;
   final MacroGoals goals;
+  final FitnessObjective objective;
   final ValueChanged<double> onChanged;
 
   @override
@@ -35,7 +38,10 @@ class OnboardingGoalsStep extends StatelessWidget {
           Text(l10n.onboardingGoalsMessage, style: VTTextStyles.body(context).copyWith(color: colorScheme.onSurfaceVariant)),
           const VTGap.xl(),
           Text('${calorieGoal.round()}', style: VTTextStyles.display(context)),
-          Text(l10n.macroGoalsCalorieTargetTitle, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+          Text(
+            l10n.onboardingGoalsSuggestedFor(fitnessObjectiveLabel(l10n, objective)),
+            style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
+          ),
           const VTGap.m(),
           VTLabeledSlider(
             label: l10n.macroGoalsCalorieTargetTitle,

@@ -305,6 +305,45 @@ class AppLocalizationsPt extends AppLocalizations {
   String get onboardingGoalsSkipAction => 'Pular por enquanto';
 
   @override
+  String onboardingGoalsSuggestedFor(String objective) {
+    return 'Sugerido para $objective';
+  }
+
+  @override
+  String get onboardingBodyTitle => 'Conte sobre você';
+
+  @override
+  String get onboardingBodyMessage =>
+      'Seu peso e sua altura permitem sugerir uma meta de calorias. Vamos salvar este peso como seu primeiro registro.';
+
+  @override
+  String get onboardingWeightLabel => 'Peso atual';
+
+  @override
+  String get onboardingHeightLabel => 'Altura';
+
+  @override
+  String get onboardingObjectiveTitle => 'Qual é o seu objetivo?';
+
+  @override
+  String get onboardingObjectiveLoseWeight => 'Perder peso';
+
+  @override
+  String get onboardingObjectiveLoseWeightMessage => 'Comer abaixo da manutenção, mantendo a proteína alta';
+
+  @override
+  String get onboardingObjectiveMaintainWeight => 'Manter o peso';
+
+  @override
+  String get onboardingObjectiveMaintainWeightMessage => 'Ficar onde está, com uma divisão equilibrada';
+
+  @override
+  String get onboardingObjectiveGainMuscle => 'Ganhar músculo';
+
+  @override
+  String get onboardingObjectiveGainMuscleMessage => 'Comer um pouco acima da manutenção para construir';
+
+  @override
   String get onboardingAccountTitle => 'Mantenha seus dados seguros';
 
   @override

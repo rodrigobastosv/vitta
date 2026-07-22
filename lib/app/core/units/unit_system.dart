@@ -45,6 +45,29 @@ extension LoadConversion on UnitSystem {
   };
 }
 
+// Body height, kept in centimetres the same way body weight is kept in kilograms.
+// Separate from DistanceConversion (km/mi, a cardio distance) for the same reason
+// LoadConversion is separate from WeightConversion: they share no unit and are
+// never interchangeable.
+extension HeightConversion on UnitSystem {
+  static const _centimetersPerInch = 2.54;
+
+  String get heightUnitLabel => switch (this) {
+    .metric => 'cm',
+    .imperial => 'in',
+  };
+
+  double centimetersToDisplayHeight(double centimeters) => switch (this) {
+    .metric => centimeters,
+    .imperial => centimeters / _centimetersPerInch,
+  };
+
+  double displayHeightToCentimeters(double value) => switch (this) {
+    .metric => value,
+    .imperial => value * _centimetersPerInch,
+  };
+}
+
 extension DistanceConversion on UnitSystem {
   static const _metersPerMile = 1609.344;
   static const _metersPerKilometer = 1000.0;

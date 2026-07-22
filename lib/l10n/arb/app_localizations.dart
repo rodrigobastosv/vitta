@@ -656,6 +656,78 @@ abstract class AppLocalizations {
   /// **'Skip for now'**
   String get onboardingGoalsSkipAction;
 
+  /// No description provided for @onboardingGoalsSuggestedFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested for {objective}'**
+  String onboardingGoalsSuggestedFor(String objective);
+
+  /// No description provided for @onboardingBodyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about you'**
+  String get onboardingBodyTitle;
+
+  /// No description provided for @onboardingBodyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your weight and height let us suggest a calorie target. We\'ll save this weight as your first entry.'**
+  String get onboardingBodyMessage;
+
+  /// No description provided for @onboardingWeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Current weight'**
+  String get onboardingWeightLabel;
+
+  /// No description provided for @onboardingHeightLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Height'**
+  String get onboardingHeightLabel;
+
+  /// No description provided for @onboardingObjectiveTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you aiming for?'**
+  String get onboardingObjectiveTitle;
+
+  /// No description provided for @onboardingObjectiveLoseWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Lose weight'**
+  String get onboardingObjectiveLoseWeight;
+
+  /// No description provided for @onboardingObjectiveLoseWeightMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Eat under maintenance, keep the protein high'**
+  String get onboardingObjectiveLoseWeightMessage;
+
+  /// No description provided for @onboardingObjectiveMaintainWeight.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain weight'**
+  String get onboardingObjectiveMaintainWeight;
+
+  /// No description provided for @onboardingObjectiveMaintainWeightMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay where you are, with a balanced split'**
+  String get onboardingObjectiveMaintainWeightMessage;
+
+  /// No description provided for @onboardingObjectiveGainMuscle.
+  ///
+  /// In en, this message translates to:
+  /// **'Gain muscle'**
+  String get onboardingObjectiveGainMuscle;
+
+  /// No description provided for @onboardingObjectiveGainMuscleMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Eat a little over maintenance to build'**
+  String get onboardingObjectiveGainMuscleMessage;
+
   /// No description provided for @onboardingAccountTitle.
   ///
   /// In en, this message translates to:
