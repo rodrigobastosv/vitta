@@ -11,7 +11,7 @@ import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_cubit.d
 import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/log_reminders/widgets/log_reminder_tracker_tile.dart';
 import 'package:vitta/app/presentation/pages/log_reminders/widgets/log_reminders_master_card.dart';
-import 'package:vitta/app/presentation/pages/settings/widgets/settings_section.dart';
+import 'package:vitta/app/presentation/pages/log_reminders/widgets/log_reminders_trackers_card.dart';
 
 class LogRemindersPage extends StatelessWidget {
   const LogRemindersPage({super.key});
@@ -40,8 +40,7 @@ class LogRemindersPage extends StatelessWidget {
             const VTGap.m(),
             VTAppearEffect(
               index: 1,
-              child: SettingsSection(
-                icon: Icons.schedule_outlined,
+              child: LogRemindersTrackersCard(
                 title: l10n.logRemindersTrackersLabel,
                 children: [
                   for (final tracker in LogReminderTracker.values)

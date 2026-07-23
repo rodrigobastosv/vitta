@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
+import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_labels.dart';
 import 'package:vitta/app/presentation/pages/settings/widgets/settings_navigation_tile.dart';
-import 'package:vitta/app/presentation/pages/settings/widgets/settings_option_tile.dart';
-import 'package:vitta/app/presentation/pages/settings/widgets/settings_section.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_option.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_option_sheet.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -27,8 +31,9 @@ class SettingsPage extends StatelessWidget {
             VTAppearEffect(
               child: SettingsNavigationTile(
                 icon: Icons.dashboard_customize_outlined,
+                accent: context.colorScheme.primary,
                 title: l10n.settingsHomeLayoutLabel,
-                hint: l10n.settingsHomeLayoutHint,
+                subtitle: l10n.settingsHomeLayoutHint,
                 onTap: () => context.pushRoute(.homeLayout),
               ),
             ),
@@ -37,84 +42,94 @@ class SettingsPage extends StatelessWidget {
               index: 1,
               child: SettingsNavigationTile(
                 icon: Icons.notifications_active_outlined,
+                accent: VTColors.coral,
                 title: l10n.settingsLogRemindersLabel,
-                hint: l10n.settingsLogRemindersHint,
+                subtitle: l10n.settingsLogRemindersHint,
                 onTap: () => context.pushRoute(.logReminders),
               ),
             ),
             const VTGap.m(),
             VTAppearEffect(
               index: 2,
-              child: SettingsSection(
+              child: SettingsNavigationTile(
                 icon: Icons.translate,
+                accent: VTColors.sleep,
                 title: l10n.settingsLanguageLabel,
-                children: [
-                  SettingsOptionTile(
-                    label: l10n.languageSystemDefault,
-                    isSelected: state.locale == null,
-                    onSelected: cubit.useSystemLocale,
-                  ),
-                  SettingsOptionTile(
-                    label: l10n.languageEnglish,
-                    isSelected: state.locale == const Locale('en'),
-                    onSelected: () => cubit.changeLocale(const Locale('en')),
-                  ),
-                  SettingsOptionTile(
-                    label: l10n.languagePortuguese,
-                    isSelected: state.locale == const Locale('pt'),
-                    onSelected: () => cubit.changeLocale(const Locale('pt')),
-                  ),
-                ],
+                subtitle: settingsLocaleLabel(state.locale, l10n),
+                onTap: () => _pickLocale(context, cubit, state, l10n),
               ),
             ),
             const VTGap.m(),
             VTAppearEffect(
               index: 3,
-              child: SettingsSection(
+              child: SettingsNavigationTile(
                 icon: Icons.brightness_6_outlined,
+                accent: VTColors.macroCarbs,
                 title: l10n.settingsThemeLabel,
-                children: [
-                  SettingsOptionTile(
-                    label: l10n.themeSystemDefault,
-                    isSelected: state.themeMode == .system,
-                    onSelected: () => cubit.changeThemeMode(.system),
-                  ),
-                  SettingsOptionTile(
-                    label: l10n.themeLight,
-                    isSelected: state.themeMode == .light,
-                    onSelected: () => cubit.changeThemeMode(.light),
-                  ),
-                  SettingsOptionTile(
-                    label: l10n.themeDark,
-                    isSelected: state.themeMode == .dark,
-                    onSelected: () => cubit.changeThemeMode(.dark),
-                  ),
-                ],
+                subtitle: state.themeMode.label(l10n),
+                onTap: () => _pickThemeMode(context, cubit, state, l10n),
               ),
             ),
             const VTGap.m(),
             VTAppearEffect(
               index: 4,
-              child: SettingsSection(
+              child: SettingsNavigationTile(
                 icon: Icons.straighten,
+                accent: VTColors.macroFat,
                 title: l10n.settingsUnitSystemLabel,
-                children: [
-                  SettingsOptionTile(
-                    label: l10n.unitSystemMetric,
-                    isSelected: state.unitSystem == .metric,
-                    onSelected: () => cubit.changeUnitSystem(.metric),
-                  ),
-                  SettingsOptionTile(
-                    label: l10n.unitSystemImperial,
-                    isSelected: state.unitSystem == .imperial,
-                    onSelected: () => cubit.changeUnitSystem(.imperial),
-                  ),
-                ],
+                subtitle: state.unitSystem.label(l10n),
+                onTap: () => _pickUnitSystem(context, cubit, state, l10n),
               ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _pickLocale(BuildContext context, AppCubit cubit, AppSettings state, AppLocalizations l10n) async {
+    final picked = await showSettingsOptionSheet<Locale?>(
+      context,
+      title: l10n.settingsLanguageLabel,
+      selected: state.locale,
+      options: [
+        SettingsOption(label: l10n.languageSystemDefault, value: null),
+        SettingsOption(label: l10n.languageEnglish, value: const Locale('en')),
+        SettingsOption(label: l10n.languagePortuguese, value: const Locale('pt')),
+      ],
+    );
+    if (picked == null) {
+      return;
+    }
+    final locale = picked.value;
+    if (locale == null) {
+      cubit.useSystemLocale();
+    } else {
+      cubit.changeLocale(locale);
+    }
+  }
+
+  Future<void> _pickThemeMode(BuildContext context, AppCubit cubit, AppSettings state, AppLocalizations l10n) async {
+    final picked = await showSettingsOptionSheet<ThemeMode>(
+      context,
+      title: l10n.settingsThemeLabel,
+      selected: state.themeMode,
+      options: [for (final mode in ThemeMode.values) SettingsOption(label: mode.label(l10n), value: mode)],
+    );
+    if (picked != null) {
+      cubit.changeThemeMode(picked.value);
+    }
+  }
+
+  Future<void> _pickUnitSystem(BuildContext context, AppCubit cubit, AppSettings state, AppLocalizations l10n) async {
+    final picked = await showSettingsOptionSheet<UnitSystem>(
+      context,
+      title: l10n.settingsUnitSystemLabel,
+      selected: state.unitSystem,
+      options: [for (final system in UnitSystem.values) SettingsOption(label: system.label(l10n), value: system)],
+    );
+    if (picked != null) {
+      cubit.changeUnitSystem(picked.value);
+    }
   }
 }
