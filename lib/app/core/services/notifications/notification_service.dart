@@ -29,7 +29,7 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation(await FlutterTimezone.getLocalTimezone()));
 
     await _plugin.initialize(
-      const InitializationSettings(
+      settings: const InitializationSettings(
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(requestAlertPermission: false, requestBadgePermission: false, requestSoundPermission: false),
       ),
@@ -59,11 +59,11 @@ class NotificationService {
       return;
     }
     await _plugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduledDate,
-      const NotificationDetails(
+      id: id,
+      title: title,
+      body: body,
+      scheduledDate: scheduledDate,
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           _channelId,
           _channelName,
@@ -77,7 +77,7 @@ class NotificationService {
     );
   }
 
-  Future<void> cancel(int id) => _plugin.cancel(id);
+  Future<void> cancel(int id) => _plugin.cancel(id: id);
 
   Future<void> cancelAll() => _plugin.cancelAll();
 }
