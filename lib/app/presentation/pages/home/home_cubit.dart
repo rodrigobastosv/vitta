@@ -10,6 +10,8 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/home/entities/home_feature.dart';
 import 'package:vitta/app/domain/home/use_cases/get_home_layout_use_case.dart';
+import 'package:vitta/app/domain/log_reminders/entities/log_reminder_tracker.dart';
+import 'package:vitta/app/domain/log_reminders/use_cases/sync_log_reminders_use_case.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/get_reminders_in_range_use_case.dart';
@@ -46,6 +48,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     required this._completeReminderUseCase,
     required this._logSleepUseCase,
     required this._logBodyWeightUseCase,
+    required this._syncLogRemindersUseCase,
     required this._notificationService,
   }) : _getUserUseCase = getUserUseCase,
        _getMacroGoalsUseCase = getMacroGoalsUseCase,
@@ -80,6 +83,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   final CompleteReminderUseCase _completeReminderUseCase;
   final LogSleepUseCase _logSleepUseCase;
   final LogBodyWeightUseCase _logBodyWeightUseCase;
+  final SyncLogRemindersUseCase _syncLogRemindersUseCase;
   final NotificationService _notificationService;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
@@ -114,8 +118,9 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
         await _loadWater(today);
         await _loadReminders(today);
         await _loadWorkout(today);
-        await _loadSleep();
+        final isSleepLoggedToday = await _loadSleep(today);
         await _loadWeight();
+        await _syncLogReminders(isSleepLoggedToday: isSleepLoggedToday);
       },
       showOverlay: state.isLoaded,
       showLoadingEvent: HomeShowLoading(),
@@ -156,15 +161,24 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     cycleResult.when((_) {}, (value) => emit(state.copyWith(nextRoutine: value.next)));
   }
 
-  Future<void> _loadSleep() async {
+  Future<bool> _loadSleep(DateTime today) async {
     final sleepLogsResult = await _getRecentSleepLogsUseCase(days: 2);
-    sleepLogsResult.when((_) {}, (value) {
+    return sleepLogsResult.when((_) => false, (value) {
       if (value.isEmpty) {
-        return;
+        return false;
       }
       emit(state.copyWith(lastNightHours: value.first.duration.inMinutes / 60));
+      return value.any((log) => _dateOnly(log.loggedDate) == today);
     });
   }
+
+  Future<void> _syncLogReminders({required bool isSleepLoggedToday}) => _syncLogRemindersUseCase(
+    loggedByTracker: {
+      LogReminderTracker.diet: state.dailyMacros.entries.isNotEmpty,
+      LogReminderTracker.water: state.consumedMl > 0,
+      LogReminderTracker.sleep: isSleepLoggedToday,
+    },
+  );
 
   Future<void> _loadWeight() async {
     final latestResult = await _getLatestBodyWeightUseCase();
@@ -221,7 +235,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     final loggedResult = await _logSleepUseCase(bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
     await loggedResult.when((error) => Future.sync(() => emitPresentation(HomeError(message: error.message))), (_) {
       Log.action('sleep_logged', data: {'quality': qualityRating});
-      return _loadSleep();
+      return _loadSleep(_today);
     });
   }
 

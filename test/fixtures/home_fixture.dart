@@ -51,6 +51,8 @@ void registerTestHomeCubit() {
   when(getHomeLayoutUseCase.call).thenReturn(HomeLayout.shipped);
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
+  final syncLogRemindersUseCase = MockSyncLogRemindersUseCase();
+  when(() => syncLogRemindersUseCase(loggedByTracker: any(named: 'loggedByTracker'))).thenAnswer((_) async {});
 
   if (G.isRegistered<HomeCubit>()) {
     G.unregister<HomeCubit>();
@@ -71,6 +73,7 @@ void registerTestHomeCubit() {
       getRecentBodyWeightLogsUseCase: getRecentBodyWeightLogsUseCase,
       getHomeLayoutUseCase: getHomeLayoutUseCase,
       getAppSettingsUseCase: getAppSettingsUseCase,
+      syncLogRemindersUseCase: syncLogRemindersUseCase,
     ),
   );
 }

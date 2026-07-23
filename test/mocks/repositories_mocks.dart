@@ -1,6 +1,7 @@
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/data/auth/auth_repository.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
+import 'package:vitta/app/data/log_reminders/log_reminders_repository.dart';
 import 'package:vitta/app/data/onboarding/onboarding_repository.dart';
 import 'package:vitta/app/data/settings/settings_repository.dart';
 import 'package:vitta/app/data/sleep/sleep_repository.dart';
@@ -20,3 +21,5 @@ class MockOnboardingRepository extends Mock implements OnboardingRepository {}
 class MockSettingsRepository extends Mock implements SettingsRepository {}
 
 class MockWorkoutRepository extends Mock implements WorkoutRepository {}
+
+class MockLogRemindersRepository extends Mock implements LogRemindersRepository {}

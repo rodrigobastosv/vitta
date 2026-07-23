@@ -19,6 +19,7 @@ import 'package:vitta/app/presentation/routing/routes/exercise_search_route.dart
 import 'package:vitta/app/presentation/routing/routes/exercise_workout_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_layout_route.dart';
 import 'package:vitta/app/presentation/routing/routes/home_route.dart';
+import 'package:vitta/app/presentation/routing/routes/log_reminders_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
 import 'package:vitta/app/presentation/routing/routes/objective_route.dart';
@@ -90,6 +91,7 @@ abstract class AppRouter {
     ObjectiveRoute(),
     SettingsRoute(),
     HomeLayoutRoute(),
+    LogRemindersRoute(),
     SignInRoute(),
     SignUpRoute(),
   ];

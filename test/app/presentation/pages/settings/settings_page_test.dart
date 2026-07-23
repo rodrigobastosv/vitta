@@ -38,6 +38,7 @@ void main() {
 
     expect(find.text('Settings'), findsOneWidget);
     expect(find.text('Home screen'), findsOneWidget);
+    expect(find.text('Logging reminders'), findsOneWidget);
     await tester.scrollUntilVisible(find.text('Imperial (oz/lb)'), 200);
 
     // 3 language + 3 theme + 2 unit-system options.
@@ -48,6 +49,8 @@ void main() {
     final appCubit = buildAppCubit();
     await pumpSettings(tester, appCubit);
 
+    await tester.ensureVisible(find.text('Dark'));
+    await tester.pumpAndSettle();
     final darkTile = tester.widget<SettingsOptionTile>(find.widgetWithText(SettingsOptionTile, 'Dark'));
     expect(darkTile.isSelected, isFalse);
 

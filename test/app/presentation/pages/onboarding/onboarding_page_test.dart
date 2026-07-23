@@ -19,6 +19,7 @@ import 'package:vitta/main.dart';
 import '../../../../factories/entities/body_weight_log_factory.dart';
 import '../../../../fixtures/home_fixture.dart';
 import '../../../../fixtures/local_storage_fixture.dart';
+import '../../../../fixtures/notification_fixture.dart';
 import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/repositories_mocks.dart';
 import '../../../../mocks/services_mocks.dart';
@@ -30,6 +31,7 @@ void main() {
     when(() => supabaseService.isAnonymous).thenReturn(true);
     when(() => supabaseService.currentUserEmail).thenReturn(null);
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
+    registerTestNotificationService();
 
     var hasSeenOnboarding = false;
     final onboardingRepository = MockOnboardingRepository();
