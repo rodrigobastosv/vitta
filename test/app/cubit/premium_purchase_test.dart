@@ -6,6 +6,7 @@ import 'package:vitta/app/core/services/purchases/premium_offer.dart';
 import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/cubit/premium_state.dart';
+import 'package:vitta/app/domain/auth/use_cases/watch_user_id_use_case.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
 
 import '../../mocks/services_mocks.dart';
@@ -25,7 +26,7 @@ void main() {
     build: () {
       final purchaseService = MockPurchaseService();
       when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const [_offer]));
-      return PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+      return PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     },
     verify: (cubit) {
       expect(cubit.state.offer, _offer);
@@ -40,7 +41,7 @@ void main() {
     build: () {
       final purchaseService = MockPurchaseService();
       when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
-      return PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+      return PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     },
     verify: (cubit) {
       expect(cubit.state.offer, isNull);
@@ -53,7 +54,7 @@ void main() {
     when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const [_offer]));
     when(() => purchaseService.logIn(any())).thenAnswer((_) => Future.value());
     when(() => purchaseService.purchase(any())).thenAnswer((_) => Future.value(PurchaseOutcome.purchased));
-    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     await Future<void>.delayed(Duration.zero);
 
     await cubit.purchase(userId: 'user-1');
@@ -66,7 +67,7 @@ void main() {
     when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const [_offer]));
     when(() => purchaseService.logIn(any())).thenAnswer((_) => Future.value());
     when(() => purchaseService.purchase(any())).thenAnswer((_) => Future.value(PurchaseOutcome.purchased));
-    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     await Future<void>.delayed(Duration.zero);
 
     final hasPurchased = await cubit.purchase(userId: 'user-1');
@@ -82,7 +83,7 @@ void main() {
     when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const [_offer]));
     when(() => purchaseService.logIn(any())).thenAnswer((_) => Future.value());
     when(() => purchaseService.purchase(any())).thenAnswer((_) => Future.value(PurchaseOutcome.cancelled));
-    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     await Future<void>.delayed(Duration.zero);
 
     final hasPurchased = await cubit.purchase(userId: 'user-1');
@@ -96,7 +97,7 @@ void main() {
     when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
     when(() => purchaseService.logIn(any())).thenAnswer((_) => Future.value());
     when(purchaseService.restore).thenAnswer((_) => Future.value(false));
-    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     await Future<void>.delayed(Duration.zero);
 
     expect(await cubit.restore(userId: 'user-1'), isFalse);
@@ -108,10 +109,16 @@ void main() {
     when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
     when(() => purchaseService.logIn(any())).thenAnswer((_) => Future.value());
     when(purchaseService.restore).thenAnswer((_) => Future.value(true));
-    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService);
+    final cubit = PremiumCubit(getPremiumStatusUseCase: _freeStatusUseCase(), purchaseService: purchaseService, watchUserIdUseCase: _userIdUseCase());
     await Future<void>.delayed(Duration.zero);
 
     expect(await cubit.restore(userId: 'user-1'), isTrue);
     expect(cubit.state.isPremium, isTrue);
   });
+}
+
+WatchUserIdUseCase _userIdUseCase([Stream<String?>? userIds]) {
+  final watchUserIdUseCase = MockWatchUserIdUseCase();
+  when(watchUserIdUseCase.call).thenAnswer((_) => userIds ?? Stream.value('user-1'));
+  return watchUserIdUseCase;
 }

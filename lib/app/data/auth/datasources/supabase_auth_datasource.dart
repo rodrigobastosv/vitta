@@ -15,6 +15,8 @@ class SupabaseAuthDataSource {
   static const _avatarIdKey = 'avatar_id';
   static const _avatarUrlKey = 'avatar_url';
 
+  Stream<String?> get userIdChanges => _supabaseService.currentUserIdChanges;
+
   User get status {
     if (_supabaseService.isAnonymous) {
       return const AnonymousUser();

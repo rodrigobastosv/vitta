@@ -62,6 +62,7 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/watch_user_id_use_case.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
@@ -200,7 +201,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => GetAppSettingsUseCase(settingsRepository: G()));
   G.registerFactory(() => SaveAppSettingsUseCase(settingsRepository: G()));
   G.registerLazySingleton(() => AppCubit(getAppSettingsUseCase: G(), saveAppSettingsUseCase: G()));
-  G.registerLazySingleton(() => PremiumCubit(getPremiumStatusUseCase: G(), purchaseService: G()));
+  G.registerLazySingleton(() => PremiumCubit(getPremiumStatusUseCase: G(), purchaseService: G(), watchUserIdUseCase: G()));
   G.registerFactory(() => GetRestDurationUseCase(workoutRepository: G()));
   G.registerFactory(() => SaveRestDurationUseCase(workoutRepository: G()));
   G.registerLazySingleton(() => RestTimerCubit(getRestDurationUseCase: G(), saveRestDurationUseCase: G()));
@@ -345,6 +346,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => CompleteOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => HasSeenOnboardingUseCase(onboardingRepository: G()));
   G.registerFactory(() => GetUserUseCase(authRepository: G()));
+  G.registerFactory(() => WatchUserIdUseCase(authRepository: G()));
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));
   G.registerFactory(() => SignOutUseCase(authRepository: G(), purchaseService: G()));

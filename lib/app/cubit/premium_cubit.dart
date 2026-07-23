@@ -5,6 +5,7 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/purchases/purchase_outcome.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/cubit/premium_state.dart';
+import 'package:vitta/app/domain/auth/use_cases/watch_user_id_use_case.dart';
 import 'package:vitta/app/domain/premium/entities/premium_status.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
 
@@ -17,8 +18,9 @@ import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.d
 // AuthCubit drives ImagePickerService and ReminderCubit drives
 // NotificationService: buying is a device/store interaction, not persistence.
 class PremiumCubit extends Cubit<PremiumState> {
-  PremiumCubit({required this._getPremiumStatusUseCase, required this._purchaseService}) : super(const PremiumState.free()) {
-    refresh();
+  PremiumCubit({required this._getPremiumStatusUseCase, required this._purchaseService, required WatchUserIdUseCase watchUserIdUseCase})
+    : super(const PremiumState.free()) {
+    _userSubscription = watchUserIdUseCase().distinct().listen(_onUserChanged);
     // Fetched at construction rather than when the paywall opens: the page has
     // no lifecycle hook of its own (VTPage owns onInit, and this cubit is the
     // root singleton), and fetchOffers returns instantly when no API key is
@@ -28,6 +30,31 @@ class PremiumCubit extends Cubit<PremiumState> {
 
   final GetPremiumStatusUseCase _getPremiumStatusUseCase;
   final PurchaseService _purchaseService;
+
+  late final StreamSubscription<String?> _userSubscription;
+
+  // The entitlement belongs to whoever is signed in, so it is read per auth
+  // identity rather than once at construction: this cubit is a root singleton
+  // that outlives every sign-out, and reading only at startup left the previous
+  // user's subscription entitling the next one to sign in on the same device.
+  //
+  // The stream replays the current session on subscribe, so the first event is
+  // what performs the initial read - there is no separate one to keep in sync.
+  // No session means nobody to read a subscription for (and the datasource has
+  // no user id to query by), so it drops straight to free.
+  void _onUserChanged(String? userId) {
+    if (userId == null) {
+      emit(state.copyWith(status: const PremiumStatus.free()));
+      return;
+    }
+    unawaited(refresh());
+  }
+
+  @override
+  Future<void> close() async {
+    await _userSubscription.cancel();
+    return super.close();
+  }
 
   // A failed read leaves the user free, which is the safe direction: it locks a
   // paid feature rather than giving it away, and the Edge Function is the real

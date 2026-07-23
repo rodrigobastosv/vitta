@@ -12,6 +12,8 @@ class AuthRepository {
 
   User get status => _supabaseAuthDataSource.status;
 
+  Stream<String?> get userIdChanges => _supabaseAuthDataSource.userIdChanges;
+
   Future<Result<VTError, User>> signUp({required String email, required String password, String? displayName, String? avatarId, String? avatarUrl}) =>
       _supabaseAuthDataSource.signUp(email: email, password: password, displayName: displayName, avatarId: avatarId, avatarUrl: avatarUrl);
 
