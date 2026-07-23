@@ -12,6 +12,12 @@ class SupabaseService {
 
   bool get hasSession => _client.auth.currentSession != null;
 
+  /// The signed-in auth.uid() over time, null while there is no session. The
+  /// underlying controller replays its latest event to a new listener, so
+  /// subscribing is enough to learn who is signed in right now — no separate
+  /// initial read.
+  Stream<String?> get currentUserIdChanges => _client.auth.onAuthStateChange.map((authState) => authState.session?.user.id);
+
   String get currentUserId => _client.auth.currentUser!.id;
 
   bool get isAnonymous => _client.auth.currentUser?.isAnonymous ?? true;

@@ -6,6 +6,7 @@ import 'package:vitta/app/domain/auth/use_cases/sign_out_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/sign_up_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/update_profile_use_case.dart';
 import 'package:vitta/app/domain/auth/use_cases/upload_avatar_use_case.dart';
+import 'package:vitta/app/domain/auth/use_cases/watch_user_id_use_case.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_profile/use_cases/save_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_use_case.dart';
@@ -144,6 +145,8 @@ class MockImportSleepFromHealthUseCase extends Mock implements ImportSleepFromHe
 class MockCompleteOnboardingUseCase extends Mock implements CompleteOnboardingUseCase {}
 
 class MockGetUserUseCase extends Mock implements GetUserUseCase {}
+
+class MockWatchUserIdUseCase extends Mock implements WatchUserIdUseCase {}
 
 class MockGetAppSettingsUseCase extends Mock implements GetAppSettingsUseCase {}
 

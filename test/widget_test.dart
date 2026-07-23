@@ -21,6 +21,7 @@ void main() {
     when(() => supabaseService.isAnonymous).thenReturn(true);
     when(() => supabaseService.currentUserEmail).thenReturn(null);
     when(() => supabaseService.currentUserId).thenReturn('user-1');
+    when(() => supabaseService.currentUserIdChanges).thenAnswer((_) => Stream.value('user-1'));
     when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
     await G<OnboardingLocalDataSource>().markOnboardingSeen();

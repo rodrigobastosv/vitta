@@ -20,7 +20,9 @@ PremiumCubit buildTestPremiumCubit({bool isPremium = false}) {
   ).thenAnswer((_) => Future.value(Success(isPremium ? const PremiumStatus(status: .active, productId: 'vitta_premium_monthly') : const PremiumStatus.free())));
   final purchaseService = MockPurchaseService();
   when(purchaseService.fetchOffers).thenAnswer((_) => Future.value(const []));
-  return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService);
+  final watchUserIdUseCase = MockWatchUserIdUseCase();
+  when(watchUserIdUseCase.call).thenAnswer((_) => Stream.value('user-1'));
+  return PremiumCubit(getPremiumStatusUseCase: getPremiumStatusUseCase, purchaseService: purchaseService, watchUserIdUseCase: watchUserIdUseCase);
 }
 
 Widget withTestPremium(Widget child, {bool isPremium = false}) => BlocProvider<PremiumCubit>(
