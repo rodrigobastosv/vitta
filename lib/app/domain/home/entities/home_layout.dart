@@ -48,7 +48,7 @@ class HomeLayout extends Equatable {
 
   HomeSlot slotOf(HomeFeature feature) => slots[feature] ?? .hidden;
 
-  HomeFeature? get hero => order.where((feature) => slotOf(feature) == .hero).firstOrNull;
+  List<HomeFeature> get heroes => _featuresIn(.hero);
 
   List<HomeFeature> get supporting => _featuresIn(.supporting);
 
@@ -66,13 +66,7 @@ class HomeLayout extends Equatable {
   List<String> get slotWireValues => [for (final feature in order) slotOf(feature).wireValue];
 
   HomeLayout withSlot({required HomeFeature feature, required HomeSlot slot}) {
-    final updated = {...slots};
-    if (slot == .hero) {
-      for (final current in order.where((other) => other != feature && slotOf(other) == .hero)) {
-        updated[current] = .supporting;
-      }
-    }
-    updated[feature] = slot;
+    final updated = {...slots}..[feature] = slot;
     return HomeLayout(order: order, slots: updated);
   }
 

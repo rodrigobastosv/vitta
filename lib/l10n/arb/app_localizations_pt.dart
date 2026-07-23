@@ -284,6 +284,35 @@ class AppLocalizationsPt extends AppLocalizations {
   String get homeNoWorkout => 'Nada registrado hoje';
 
   @override
+  String get homeWorkoutNotStarted => 'Ainda não começou';
+
+  @override
+  String get homeWorkoutFinished => 'Treino concluído';
+
+  @override
+  String homeWorkoutRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Faltam $count exercícios',
+      one: 'Falta 1 exercício',
+      zero: 'Nada a fazer',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeWorkoutNextUp(String name) {
+    return 'Próximo: $name';
+  }
+
+  @override
+  String homeWorkoutExerciseSets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count séries', one: '1 série', zero: 'Sem séries');
+    return '$_temp0';
+  }
+
+  @override
   String get homeSleepLastNight => 'Noite passada';
 
   @override

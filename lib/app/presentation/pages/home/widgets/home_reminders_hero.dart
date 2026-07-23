@@ -10,12 +10,13 @@ import 'package:vitta/app/presentation/pages/home/widgets/home_reminder_line.dar
 // Reminders are a list, not a metric, so the hero shows the day's open items
 // rather than a ring against a goal.
 class HomeRemindersHero extends StatelessWidget {
-  const HomeRemindersHero({required this.openReminders, required this.onTap, super.key});
+  const HomeRemindersHero({required this.openReminders, required this.onTap, required this.onComplete, super.key});
 
   static const _visibleReminders = 3;
 
   final List<Reminder> openReminders;
   final VoidCallback onTap;
+  final ValueChanged<Reminder> onComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +54,10 @@ class HomeRemindersHero extends StatelessWidget {
             const VTGap.s(),
             Text(l10n.homeNoReminders, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
           ],
-          for (final reminder in visible) ...[const VTGap.s(), HomeReminderLine(reminder: reminder)],
+          for (final reminder in visible) ...[
+            const VTGap.xs(),
+            HomeReminderLine(reminder: reminder, onComplete: () => onComplete(reminder)),
+          ],
           if (remaining > 0) ...[
             const VTGap.s(),
             Text(l10n.homeRemindersMore(remaining), style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),

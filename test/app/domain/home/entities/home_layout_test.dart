@@ -7,17 +7,17 @@ void main() {
   test('the shipped layout is the hierarchy the home screen already had', () {
     const layout = HomeLayout.shipped;
 
-    expect(layout.hero, HomeFeature.diet);
+    expect(layout.heroes, [HomeFeature.diet]);
     expect(layout.supporting, [HomeFeature.water, HomeFeature.reminders, HomeFeature.workout]);
     expect(layout.tiles, [HomeFeature.sleep, HomeFeature.bodyWeight]);
     expect(layout.hidden, isEmpty);
   });
 
-  test('promoting a feature to the hero demotes the previous one to a supporting row', () {
+  test('a second headline joins the first rather than replacing it, in the layout order', () {
     final layout = HomeLayout.shipped.withSlot(feature: HomeFeature.workout, slot: HomeSlot.hero);
 
-    expect(layout.hero, HomeFeature.workout);
-    expect(layout.slotOf(HomeFeature.diet), HomeSlot.supporting);
+    expect(layout.heroes, [HomeFeature.diet, HomeFeature.workout]);
+    expect(layout.slotOf(HomeFeature.diet), HomeSlot.hero);
   });
 
   test('hiding a feature drops it from every visible section', () {
@@ -48,7 +48,7 @@ void main() {
   test('a feature missing from a stored layout is appended with its shipped slot', () {
     final read = HomeLayout.fromWire(featureValues: const ['workout', 'diet'], slotValues: const ['hero', 'hidden']);
 
-    expect(read.hero, HomeFeature.workout);
+    expect(read.heroes, [HomeFeature.workout]);
     expect(read.slotOf(HomeFeature.diet), HomeSlot.hidden);
     expect(read.order.take(2), [HomeFeature.workout, HomeFeature.diet]);
     expect(read.slotOf(HomeFeature.sleep), HomeSlot.tile);
@@ -58,7 +58,7 @@ void main() {
   test('an unknown wire value is ignored rather than crashing the read', () {
     final read = HomeLayout.fromWire(featureValues: const ['meditation', 'water'], slotValues: const ['hero', 'hero']);
 
-    expect(read.hero, HomeFeature.water);
+    expect(read.heroes.first, HomeFeature.water);
     expect(read.order.contains(HomeFeature.water), isTrue);
   });
 }

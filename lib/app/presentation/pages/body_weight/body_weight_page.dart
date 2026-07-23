@@ -52,7 +52,12 @@ class BodyWeightPage extends StatelessWidget {
         floatingActionButton: state.logs.isEmpty
             ? null
             : FloatingActionButton.extended(
-                onPressed: () => showLogBodyWeightSheet(context: context),
+                onPressed: () => showLogBodyWeightSheet(
+                  context: context,
+                  unitSystem: unitSystem,
+                  latestWeightKg: state.latest?.weightKg,
+                  onSubmit: cubit.logWeight,
+                ),
                 icon: const Icon(Icons.add),
                 label: Text(l10n.bodyWeightLogAction),
               ),
@@ -67,7 +72,12 @@ class BodyWeightPage extends StatelessWidget {
             message: l10n.bodyWeightEmptyMessage,
             actionLabel: l10n.bodyWeightLogAction,
             actionIcon: Icons.add,
-            onAction: () => showLogBodyWeightSheet(context: context),
+            onAction: () => showLogBodyWeightSheet(
+              context: context,
+              unitSystem: unitSystem,
+              latestWeightKg: state.latest?.weightKg,
+              onSubmit: cubit.logWeight,
+            ),
           ),
           children: [
             BodyWeightSummaryCard(logs: state.logs, unitSystem: unitSystem),

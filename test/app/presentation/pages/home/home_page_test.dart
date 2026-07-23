@@ -9,10 +9,12 @@ import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/body_weight/entities/body_weight_log.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/home/entities/home_feature.dart';
 import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
+import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_page.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_body_weight_hero.dart';
@@ -73,6 +75,8 @@ void main() {
     ).thenAnswer((_) async => Success(reminders.isEmpty ? const {} : {todayOnly: reminders}));
     final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
     when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+    final getRoutineCycleUseCase = MockGetRoutineCycleUseCase();
+    when(getRoutineCycleUseCase.call).thenAnswer((_) async => const Success(RoutineCycle(routines: [])));
     final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
     when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
     final getSleepGoalUseCase = MockGetSleepGoalUseCase();
@@ -98,6 +102,7 @@ void main() {
         getWaterGoalUseCase: getWaterGoalUseCase,
         getRemindersInRangeUseCase: getRemindersInRangeUseCase,
         getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+        getRoutineCycleUseCase: getRoutineCycleUseCase,
         getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
         getSleepGoalUseCase: getSleepGoalUseCase,
         getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
@@ -204,11 +209,60 @@ void main() {
         BodyWeightLogFactory.build(id: 'log-2', weightKg: 73, loggedDate: DateTime(2026, 7, 20)),
         BodyWeightLogFactory.build(id: 'log-1', weightKg: 76, loggedDate: DateTime(2026, 7)),
       ],
-      layout: HomeLayout.shipped.withSlot(feature: .bodyWeight, slot: .hero),
+      layout: HomeLayout.shipped.withSlot(feature: .diet, slot: .supporting).withSlot(feature: .bodyWeight, slot: .hero),
     );
 
     expect(find.byType(HomeBodyWeightHero), findsOneWidget);
     expect(find.byType(HomeTodayCard), findsNothing);
+  });
+
+  testWidgets('a second headline joins the first instead of replacing it', (tester) async {
+    await pumpHome(
+      tester,
+      user: const AnonymousUser(),
+      dailyMacros: buildDayWithMeals(400),
+      weightLogs: [
+        BodyWeightLogFactory.build(id: 'log-2', weightKg: 73, loggedDate: DateTime(2026, 7, 20)),
+        BodyWeightLogFactory.build(id: 'log-1', weightKg: 76, loggedDate: DateTime(2026, 7)),
+      ],
+      layout: HomeLayout.shipped.withSlot(feature: .bodyWeight, slot: .hero),
+    );
+
+    expect(find.byType(HomeTodayCard), findsOneWidget);
+    expect(find.byType(HomeBodyWeightHero), findsOneWidget);
+  });
+
+  // The water hero's fill ripples forever, so a page carrying one never settles.
+  Future<void> pumpUntilLoaded(WidgetTester tester) async {
+    await tester.pump(const Duration(milliseconds: 400));
+    for (var frame = 0; frame < 5; frame++) {
+      await tester.pump();
+    }
+  }
+
+  testWidgets('a water headline can be topped up without leaving home', (tester) async {
+    await pumpHome(
+      tester,
+      user: const AnonymousUser(),
+      layout: HomeLayout.shipped.withSlot(feature: .diet, slot: .supporting).withSlot(feature: .water, slot: .hero),
+      settle: false,
+    );
+    await pumpUntilLoaded(tester);
+
+    expect(find.text('Quick add'), findsOneWidget);
+    expect(find.text('200 mL'), findsOneWidget);
+  });
+
+  testWidgets('every feature as a headline still fits the narrowest phone', (tester) async {
+    var layout = HomeLayout.shipped;
+    for (final feature in HomeFeature.values) {
+      layout = layout.withSlot(feature: feature, slot: .hero);
+    }
+
+    await pumpHome(tester, user: const AnonymousUser(), size: const Size(320, 568), layout: layout, settle: false);
+    await pumpUntilLoaded(tester);
+
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('a hidden feature stops taking space on home', (tester) async {

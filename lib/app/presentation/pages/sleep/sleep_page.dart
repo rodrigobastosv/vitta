@@ -65,7 +65,7 @@ class SleepPage extends StatelessWidget {
                 message: l10n.sleepEmptyMessage,
                 actionLabel: l10n.sleepLogAction,
                 actionIcon: Icons.add,
-                onAction: () => showLogSleepSheet(context: context),
+                onAction: () => showLogSleepSheet(context: context, onSubmit: cubit.logSleep),
               )
             else ...[
               SleepSummaryCard(
@@ -97,7 +97,7 @@ class SleepPage extends StatelessWidget {
         floatingActionButton: state.logs.isEmpty
             ? null
             : FloatingActionButton.extended(
-                onPressed: () => showLogSleepSheet(context: context),
+                onPressed: () => showLogSleepSheet(context: context, onSubmit: cubit.logSleep),
                 icon: const Icon(Icons.add),
                 label: Text(l10n.sleepLogAction),
               ),

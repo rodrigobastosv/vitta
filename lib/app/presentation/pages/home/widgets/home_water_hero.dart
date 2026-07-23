@@ -7,14 +7,23 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_water_fill.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/pages/water/widgets/water_quick_add_pills.dart';
 
 class HomeWaterHero extends StatelessWidget {
-  const HomeWaterHero({required this.consumedMl, required this.dailyGoalMl, required this.unitSystem, required this.onTap, super.key});
+  const HomeWaterHero({
+    required this.consumedMl,
+    required this.dailyGoalMl,
+    required this.unitSystem,
+    required this.onTap,
+    required this.onAdd,
+    super.key,
+  });
 
   final double consumedMl;
   final double dailyGoalMl;
   final UnitSystem unitSystem;
   final VoidCallback onTap;
+  final ValueChanged<double> onAdd;
 
   @override
   Widget build(BuildContext context) {
@@ -26,27 +35,42 @@ class HomeWaterHero extends StatelessWidget {
     final unit = unitSystem.volumeUnitLabel;
     return VTCard(
       onTap: onTap,
-      child: Row(
+      child: Column(
+        crossAxisAlignment: .start,
         children: [
-          VTCelebration(trigger: reached, child: VTWaterFill(value: progress, color: accent, width: 74, height: 118)),
-          const VTGap.l(),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: .start,
-              mainAxisSize: .min,
-              children: [
-                Text(l10n.waterFeatureTitle, style: VTTextStyles.overline(context)),
-                const VTGap.xs(),
-                Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.display(context)),
-                Text(l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit), style: VTTextStyles.caption(context)),
-                const VTGap.xs(),
-                Text(
-                  reached ? l10n.waterGoalReached : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
-                  style: VTTextStyles.overline(context).copyWith(color: accent, fontWeight: .w700),
+          Row(
+            children: [
+              VTCelebration(
+                trigger: reached,
+                child: VTWaterFill(value: progress, color: accent, width: 74, height: 118),
+              ),
+              const VTGap.l(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: .start,
+                  mainAxisSize: .min,
+                  children: [
+                    Text(l10n.waterFeatureTitle, style: VTTextStyles.overline(context)),
+                    const VTGap.xs(),
+                    Text('${unitSystem.millilitersToDisplayVolume(consumedMl).round()}', style: VTTextStyles.display(context)),
+                    Text(
+                      l10n.waterOfGoal(unitSystem.millilitersToDisplayVolume(dailyGoalMl).round().toString(), unit),
+                      style: VTTextStyles.caption(context),
+                    ),
+                    const VTGap.xs(),
+                    Text(
+                      reached
+                          ? l10n.waterGoalReached
+                          : l10n.waterLeft(unitSystem.millilitersToDisplayVolume(leftMl).round().toString(), unit),
+                      style: VTTextStyles.overline(context).copyWith(color: accent, fontWeight: .w700),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+          const VTGap.m(),
+          WaterQuickAddPills(unitSystem: unitSystem, onAdd: onAdd),
         ],
       ),
     );

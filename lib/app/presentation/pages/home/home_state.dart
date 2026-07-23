@@ -5,7 +5,9 @@ import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
+import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 
 class HomeState extends Equatable {
   const HomeState({
@@ -17,6 +19,7 @@ class HomeState extends Equatable {
     this.dailyGoalMl = 0,
     this.reminders = const [],
     this.workouts = const [],
+    this.nextRoutine,
     this.lastNightHours,
     this.latestWeightKg,
     this.weightLogs = const [],
@@ -31,6 +34,7 @@ class HomeState extends Equatable {
   final double dailyGoalMl;
   final List<Reminder> reminders;
   final List<Workout> workouts;
+  final Routine? nextRoutine;
   final double? lastNightHours;
   final double? latestWeightKg;
   final List<BodyWeightLog> weightLogs;
@@ -41,6 +45,12 @@ class HomeState extends Equatable {
   int get totalExercises => workouts.expand((workout) => workout.exercises).length;
 
   bool get hasWorkoutToday => totalExercises > 0;
+
+  List<WorkoutExercise> get remainingExercises => [
+    for (final workout in workouts)
+      for (final exercise in workout.exercises)
+        if (!exercise.isCompleted) exercise,
+  ];
 
   int get loggedMealCount => dailyMacros.entries.map((entry) => entry.log.mealType).toSet().length;
 
@@ -62,6 +72,7 @@ class HomeState extends Equatable {
     double? dailyGoalMl,
     List<Reminder>? reminders,
     List<Workout>? workouts,
+    Routine? nextRoutine,
     double? lastNightHours,
     double? latestWeightKg,
     List<BodyWeightLog>? weightLogs,
@@ -75,6 +86,7 @@ class HomeState extends Equatable {
     dailyGoalMl: dailyGoalMl ?? this.dailyGoalMl,
     reminders: reminders ?? this.reminders,
     workouts: workouts ?? this.workouts,
+    nextRoutine: nextRoutine ?? this.nextRoutine,
     lastNightHours: lastNightHours ?? this.lastNightHours,
     latestWeightKg: latestWeightKg ?? this.latestWeightKg,
     weightLogs: weightLogs ?? this.weightLogs,
@@ -91,6 +103,7 @@ class HomeState extends Equatable {
     dailyGoalMl,
     reminders,
     workouts,
+    nextRoutine,
     lastNightHours,
     latestWeightKg,
     weightLogs,
