@@ -192,7 +192,13 @@ void main() {
 
     verify(
       () => syncLogRemindersUseCase(
-        loggedByTracker: {LogReminderTracker.diet: false, LogReminderTracker.water: true, LogReminderTracker.sleep: false},
+        loggedByTracker: {
+          LogReminderTracker.breakfast: false,
+          LogReminderTracker.lunch: false,
+          LogReminderTracker.dinner: false,
+          LogReminderTracker.water: true,
+          LogReminderTracker.sleep: false,
+        },
       ),
     ).called(1);
     await cubit.close();

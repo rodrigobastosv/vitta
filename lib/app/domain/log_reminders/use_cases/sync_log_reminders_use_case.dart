@@ -17,16 +17,24 @@ class SyncLogRemindersUseCase {
     final l10n = localizationsFor(_settingsRepository.getSettings().locale);
     for (final entry in loggedByTracker.entries) {
       final tracker = entry.key;
-      if (!settings.isActiveFor(tracker)) {
-        await _notificationService.cancel(tracker.notificationId);
-        continue;
+      final occurrences = settings.isActiveFor(tracker)
+          ? settings
+                .scheduleFor(tracker)
+                .occurrencesFrom(now: moment, isLoggedToday: entry.value, maxOccurrences: LogReminderTracker.slotsPerTracker)
+          : <DateTime>[];
+      for (var slot = 0; slot < LogReminderTracker.slotsPerTracker; slot++) {
+        if (slot >= occurrences.length) {
+          await _notificationService.cancel(tracker.notificationIdFor(slot));
+          continue;
+        }
+        await _notificationService.scheduleReminder(
+          id: tracker.notificationIdFor(slot),
+          title: tracker.getTitle(l10n),
+          body: tracker.getBody(l10n),
+          dateTime: occurrences[slot],
+          payload: tracker.notificationPayload,
+        );
       }
-      await _notificationService.scheduleReminder(
-        id: tracker.notificationId,
-        title: tracker.getTitle(l10n),
-        body: tracker.getBody(l10n),
-        dateTime: settings.scheduleFor(tracker).nextOccurrence(now: moment, isLoggedToday: entry.value),
-      );
     }
   }
 }

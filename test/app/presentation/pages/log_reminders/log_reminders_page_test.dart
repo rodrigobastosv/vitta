@@ -66,6 +66,30 @@ void main() {
     expect(switches.skip(1).every((control) => control.onChanged == null), isTrue);
   });
 
+  testWidgets('only the tracker that repeats offers a frequency', (tester) async {
+    await pumpLogReminders(tester, settings: LogReminderSettings.shipped.withEnabled(isEnabled: true));
+
+    await tester.ensureVisible(find.byIcon(Icons.repeat));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Once a day'), findsOneWidget);
+    expect(find.byIcon(Icons.repeat), findsOneWidget);
+  });
+
+  testWidgets('picking a frequency puts water on that interval', (tester) async {
+    final cubit = await pumpLogReminders(tester, settings: LogReminderSettings.shipped.withEnabled(isEnabled: true));
+
+    await tester.ensureVisible(find.text('Once a day'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Once a day'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Every 3h'));
+    await tester.pumpAndSettle();
+
+    expect(cubit.state.scheduleFor(LogReminderTracker.water).intervalHours, 3);
+    expect(cubit.state.scheduleFor(LogReminderTracker.lunch).intervalHours, isNull);
+  });
+
   testWidgets('turning the master switch on hands the rows back to the user', (tester) async {
     final cubit = await pumpLogReminders(tester, settings: LogReminderSettings.shipped);
 

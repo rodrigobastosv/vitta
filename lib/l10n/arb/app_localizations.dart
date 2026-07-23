@@ -794,11 +794,23 @@ abstract class AppLocalizations {
   /// **'What to be reminded about'**
   String get logRemindersTrackersLabel;
 
-  /// No description provided for @logRemindersDietLabel.
+  /// No description provided for @logRemindersBreakfastLabel.
   ///
   /// In en, this message translates to:
-  /// **'Meals'**
-  String get logRemindersDietLabel;
+  /// **'Breakfast'**
+  String get logRemindersBreakfastLabel;
+
+  /// No description provided for @logRemindersLunchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get logRemindersLunchLabel;
+
+  /// No description provided for @logRemindersDinnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get logRemindersDinnerLabel;
 
   /// No description provided for @logRemindersWaterLabel.
   ///
@@ -818,6 +830,36 @@ abstract class AppLocalizations {
   /// **'Change time'**
   String get logRemindersChangeTimeTooltip;
 
+  /// No description provided for @logRemindersRepeatTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change how often'**
+  String get logRemindersRepeatTooltip;
+
+  /// No description provided for @logRemindersRepeatOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a day'**
+  String get logRemindersRepeatOnce;
+
+  /// No description provided for @logRemindersRepeatEveryHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {hours}h'**
+  String logRemindersRepeatEveryHours(int hours);
+
+  /// No description provided for @logRemindersRepeatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How often'**
+  String get logRemindersRepeatLabel;
+
+  /// No description provided for @logRemindersRepeatWindowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'From {time} until 10 PM'**
+  String logRemindersRepeatWindowHint(String time);
+
   /// No description provided for @logRemindersPermissionDeniedTitle.
   ///
   /// In en, this message translates to:
@@ -830,17 +872,41 @@ abstract class AppLocalizations {
   /// **'Allow notifications for Vitta in your device settings to get nudges.'**
   String get logRemindersPermissionDeniedMessage;
 
-  /// No description provided for @logRemindersDietNotificationTitle.
+  /// No description provided for @logRemindersBreakfastNotificationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Log your meals'**
-  String get logRemindersDietNotificationTitle;
+  /// **'Log your breakfast'**
+  String get logRemindersBreakfastNotificationTitle;
 
-  /// No description provided for @logRemindersDietNotificationBody.
+  /// No description provided for @logRemindersBreakfastNotificationBody.
   ///
   /// In en, this message translates to:
-  /// **'Nothing logged for today yet.'**
-  String get logRemindersDietNotificationBody;
+  /// **'No breakfast logged today yet.'**
+  String get logRemindersBreakfastNotificationBody;
+
+  /// No description provided for @logRemindersLunchNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your lunch'**
+  String get logRemindersLunchNotificationTitle;
+
+  /// No description provided for @logRemindersLunchNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No lunch logged today yet.'**
+  String get logRemindersLunchNotificationBody;
+
+  /// No description provided for @logRemindersDinnerNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your dinner'**
+  String get logRemindersDinnerNotificationTitle;
+
+  /// No description provided for @logRemindersDinnerNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No dinner logged today yet.'**
+  String get logRemindersDinnerNotificationBody;
 
   /// No description provided for @logRemindersWaterNotificationTitle.
   ///

@@ -403,7 +403,13 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logRemindersTrackersLabel => 'Sobre o que lembrar';
 
   @override
-  String get logRemindersDietLabel => 'Refeições';
+  String get logRemindersBreakfastLabel => 'Café da manhã';
+
+  @override
+  String get logRemindersLunchLabel => 'Almoço';
+
+  @override
+  String get logRemindersDinnerLabel => 'Jantar';
 
   @override
   String get logRemindersWaterLabel => 'Água';
@@ -415,16 +421,47 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logRemindersChangeTimeTooltip => 'Alterar horário';
 
   @override
+  String get logRemindersRepeatTooltip => 'Alterar a frequência';
+
+  @override
+  String get logRemindersRepeatOnce => 'Uma vez por dia';
+
+  @override
+  String logRemindersRepeatEveryHours(int hours) {
+    return 'A cada ${hours}h';
+  }
+
+  @override
+  String get logRemindersRepeatLabel => 'Frequência';
+
+  @override
+  String logRemindersRepeatWindowHint(String time) {
+    return 'Das $time às 22h';
+  }
+
+  @override
   String get logRemindersPermissionDeniedTitle => 'Notificações desativadas';
 
   @override
   String get logRemindersPermissionDeniedMessage => 'Permita as notificações do Vitta nos ajustes do aparelho para receber os toques.';
 
   @override
-  String get logRemindersDietNotificationTitle => 'Registre suas refeições';
+  String get logRemindersBreakfastNotificationTitle => 'Registre seu café da manhã';
 
   @override
-  String get logRemindersDietNotificationBody => 'Nada registrado hoje ainda.';
+  String get logRemindersBreakfastNotificationBody => 'Nenhum café da manhã registrado hoje.';
+
+  @override
+  String get logRemindersLunchNotificationTitle => 'Registre seu almoço';
+
+  @override
+  String get logRemindersLunchNotificationBody => 'Nenhum almoço registrado hoje.';
+
+  @override
+  String get logRemindersDinnerNotificationTitle => 'Registre seu jantar';
+
+  @override
+  String get logRemindersDinnerNotificationBody => 'Nenhum jantar registrado hoje.';
 
   @override
   String get logRemindersWaterNotificationTitle => 'Hora da água';

@@ -33,4 +33,20 @@ void main() {
 
     expect(dataSource.getLogReminderSettings(), settings);
   });
+
+  test('a repeating interval survives a restart, and dropping it goes back to once a day', () async {
+    final dataSource = LogRemindersLocalDataSource(localStorageService: await buildTestLocalStorageService());
+    final repeating = LogReminderSettings.shipped.withSchedule(
+      tracker: LogReminderTracker.water,
+      schedule: const LogReminderSchedule(isEnabled: true, minuteOfDay: 9 * 60, intervalHours: 2),
+    );
+
+    await dataSource.saveLogReminderSettings(repeating);
+
+    expect(dataSource.getLogReminderSettings().scheduleFor(LogReminderTracker.water).intervalHours, 2);
+
+    await dataSource.saveLogReminderSettings(LogReminderSettings.shipped);
+
+    expect(dataSource.getLogReminderSettings().scheduleFor(LogReminderTracker.water).intervalHours, isNull);
+  });
 }

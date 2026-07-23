@@ -403,7 +403,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRemindersTrackersLabel => 'What to be reminded about';
 
   @override
-  String get logRemindersDietLabel => 'Meals';
+  String get logRemindersBreakfastLabel => 'Breakfast';
+
+  @override
+  String get logRemindersLunchLabel => 'Lunch';
+
+  @override
+  String get logRemindersDinnerLabel => 'Dinner';
 
   @override
   String get logRemindersWaterLabel => 'Water';
@@ -415,16 +421,47 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRemindersChangeTimeTooltip => 'Change time';
 
   @override
+  String get logRemindersRepeatTooltip => 'Change how often';
+
+  @override
+  String get logRemindersRepeatOnce => 'Once a day';
+
+  @override
+  String logRemindersRepeatEveryHours(int hours) {
+    return 'Every ${hours}h';
+  }
+
+  @override
+  String get logRemindersRepeatLabel => 'How often';
+
+  @override
+  String logRemindersRepeatWindowHint(String time) {
+    return 'From $time until 10 PM';
+  }
+
+  @override
   String get logRemindersPermissionDeniedTitle => 'Notifications are off';
 
   @override
   String get logRemindersPermissionDeniedMessage => 'Allow notifications for Vitta in your device settings to get nudges.';
 
   @override
-  String get logRemindersDietNotificationTitle => 'Log your meals';
+  String get logRemindersBreakfastNotificationTitle => 'Log your breakfast';
 
   @override
-  String get logRemindersDietNotificationBody => 'Nothing logged for today yet.';
+  String get logRemindersBreakfastNotificationBody => 'No breakfast logged today yet.';
+
+  @override
+  String get logRemindersLunchNotificationTitle => 'Log your lunch';
+
+  @override
+  String get logRemindersLunchNotificationBody => 'No lunch logged today yet.';
+
+  @override
+  String get logRemindersDinnerNotificationTitle => 'Log your dinner';
+
+  @override
+  String get logRemindersDinnerNotificationBody => 'No dinner logged today yet.';
 
   @override
   String get logRemindersWaterNotificationTitle => 'Time for water';

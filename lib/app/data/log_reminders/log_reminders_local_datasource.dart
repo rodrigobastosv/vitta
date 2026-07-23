@@ -14,6 +14,8 @@ class LogRemindersLocalDataSource {
 
   static String _trackerMinuteKey(LogReminderTracker tracker) => 'logReminders.${tracker.wireValue}.minuteOfDay';
 
+  static String _trackerIntervalKey(LogReminderTracker tracker) => 'logReminders.${tracker.wireValue}.intervalHours';
+
   LogReminderSettings getLogReminderSettings() {
     final shipped = LogReminderSettings.shipped;
     return LogReminderSettings(
@@ -23,6 +25,7 @@ class LogRemindersLocalDataSource {
           tracker: LogReminderSchedule(
             isEnabled: _localStorageService.get<bool>(_trackerEnabledKey(tracker)) ?? shipped.scheduleFor(tracker).isEnabled,
             minuteOfDay: _localStorageService.get<int>(_trackerMinuteKey(tracker)) ?? shipped.scheduleFor(tracker).minuteOfDay,
+            intervalHours: tracker.supportsInterval ? _localStorageService.get<int>(_trackerIntervalKey(tracker)) : null,
           ),
       },
     );
@@ -34,6 +37,12 @@ class LogRemindersLocalDataSource {
       final schedule = settings.scheduleFor(tracker);
       await _localStorageService.put(_trackerEnabledKey(tracker), schedule.isEnabled);
       await _localStorageService.put(_trackerMinuteKey(tracker), schedule.minuteOfDay);
+      final intervalHours = schedule.intervalHours;
+      if (intervalHours == null) {
+        await _localStorageService.delete(_trackerIntervalKey(tracker));
+      } else {
+        await _localStorageService.put(_trackerIntervalKey(tracker), intervalHours);
+      }
     }
   }
 }

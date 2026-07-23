@@ -50,6 +50,7 @@ class LogRemindersPage extends StatelessWidget {
                       isEditable: state.isEnabled,
                       onEnabledChanged: (isEnabled) => cubit.setTrackerEnabled(tracker: tracker, isEnabled: isEnabled),
                       onTimeChanged: (time) => cubit.setTrackerTime(tracker: tracker, hour: time.hour, minute: time.minute),
+                      onIntervalChanged: (intervalHours) => cubit.setTrackerInterval(tracker: tracker, intervalHours: intervalHours),
                     ),
                 ],
               ),

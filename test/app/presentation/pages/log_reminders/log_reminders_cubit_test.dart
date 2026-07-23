@@ -115,9 +115,9 @@ void main() {
             const LogReminderSchedule(isEnabled: true, minuteOfDay: 11 * 60 + 15),
           )
           .having(
-            (settings) => settings.scheduleFor(LogReminderTracker.diet).minuteOfDay,
-            'diet',
-            LogReminderTracker.diet.defaultMinuteOfDay,
+            (settings) => settings.scheduleFor(LogReminderTracker.lunch).minuteOfDay,
+            'lunch',
+            LogReminderTracker.lunch.defaultMinuteOfDay,
           ),
     ],
   );

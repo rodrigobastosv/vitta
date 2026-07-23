@@ -172,13 +172,19 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     });
   }
 
-  Future<void> _syncLogReminders({required bool isSleepLoggedToday}) => _syncLogRemindersUseCase(
-    loggedByTracker: {
-      LogReminderTracker.diet: state.dailyMacros.entries.isNotEmpty,
-      LogReminderTracker.water: state.consumedMl > 0,
-      LogReminderTracker.sleep: isSleepLoggedToday,
-    },
-  );
+  Future<void> _syncLogReminders({required bool isSleepLoggedToday}) {
+    final loggedMeals = state.dailyMacros.entries.map((entry) => entry.log.mealType).toSet();
+    return _syncLogRemindersUseCase(
+      loggedByTracker: {
+        for (final tracker in LogReminderTracker.values)
+          tracker: switch (tracker) {
+            .water => state.consumedMl > 0,
+            .sleep => isSleepLoggedToday,
+            _ => loggedMeals.contains(tracker.mealType),
+          },
+      },
+    );
+  }
 
   Future<void> _loadWeight() async {
     final latestResult = await _getLatestBodyWeightUseCase();

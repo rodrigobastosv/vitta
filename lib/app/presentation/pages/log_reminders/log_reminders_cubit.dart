@@ -37,6 +37,9 @@ class LogRemindersCubit extends PresentationCubit<LogReminderSettings, LogRemind
   Future<void> setTrackerTime({required LogReminderTracker tracker, required int hour, required int minute}) =>
       _apply(state.withSchedule(tracker: tracker, schedule: state.scheduleFor(tracker).copyWith(minuteOfDay: hour * 60 + minute)));
 
+  Future<void> setTrackerInterval({required LogReminderTracker tracker, required int? intervalHours}) =>
+      _apply(state.withSchedule(tracker: tracker, schedule: state.scheduleFor(tracker).withInterval(intervalHours)));
+
   Future<void> _apply(LogReminderSettings settings) async {
     emit(settings);
     await _saveLogReminderSettingsUseCase(settings);
