@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
+import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 // The full-screen animation shown while an AI scan runs (meal photo, nutrition
@@ -53,8 +54,14 @@ class _VTScanningOverlayState extends State<VTScanningOverlay> with SingleTicker
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
+    // Opaque, not a scrim. At 94% the page underneath still bled through, and on
+    // the meal scan that page is showing its own "take a photo" CTA at exactly
+    // the height of the caption - so the ghost of that button read as a pill the
+    // caption sat crooked inside, with two labels overlapping (issue #235).
+    // Nothing behind is worth reading during a scan: the photo being scanned is
+    // already the hero of this overlay.
     return ColoredBox(
-      color: colorScheme.surface.withValues(alpha: 0.94),
+      color: colorScheme.surface,
       child: Center(
         child: Column(
           mainAxisSize: .min,
@@ -98,13 +105,19 @@ class _VTScanningOverlayState extends State<VTScanningOverlay> with SingleTicker
               ),
             ),
             const VTGap.l(),
-            AnimatedSwitcher(
-              duration: VTMotion.transition,
-              child: Text(
-                widget.captions[_captionIndex],
-                key: ValueKey(_captionIndex),
-                textAlign: .center,
-                style: VTTextStyles.title(context),
+            // The caption is unconstrained otherwise, so it lays out at the full
+            // screen width and the longest one ("Extraindo as informações
+            // nutricionais…") runs into both edges before it agrees to wrap.
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: VTSpacing.l),
+              child: AnimatedSwitcher(
+                duration: VTMotion.transition,
+                child: Text(
+                  widget.captions[_captionIndex],
+                  key: ValueKey(_captionIndex),
+                  textAlign: .center,
+                  style: VTTextStyles.title(context),
+                ),
               ),
             ),
           ],
