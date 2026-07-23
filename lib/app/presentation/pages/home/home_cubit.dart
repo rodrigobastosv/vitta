@@ -1,18 +1,26 @@
+import 'package:vitta/app/core/services/logging/log.dart';
+import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/auth/use_cases/get_user_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_recent_body_weight_logs_use_case.dart';
+import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
+import 'package:vitta/app/domain/home/entities/home_feature.dart';
 import 'package:vitta/app/domain/home/use_cases/get_home_layout_use_case.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
+import 'package:vitta/app/domain/reminder/use_cases/complete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/get_reminders_in_range_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
+import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_presentation_event.dart';
@@ -28,11 +36,17 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     required this._getWaterGoalUseCase,
     required this._getRemindersInRangeUseCase,
     required this._getWorkoutsForDateUseCase,
+    required this._getRoutineCycleUseCase,
     required this._getRecentSleepLogsUseCase,
     required this._getSleepGoalUseCase,
     required this._getLatestBodyWeightUseCase,
     required this._getRecentBodyWeightLogsUseCase,
     required this._getAppSettingsUseCase,
+    required this._logWaterUseCase,
+    required this._completeReminderUseCase,
+    required this._logSleepUseCase,
+    required this._logBodyWeightUseCase,
+    required this._notificationService,
   }) : _getUserUseCase = getUserUseCase,
        _getMacroGoalsUseCase = getMacroGoalsUseCase,
        _getHomeLayoutUseCase = getHomeLayoutUseCase,
@@ -56,20 +70,25 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   final GetWaterGoalUseCase _getWaterGoalUseCase;
   final GetRemindersInRangeUseCase _getRemindersInRangeUseCase;
   final GetWorkoutsForDateUseCase _getWorkoutsForDateUseCase;
+  final GetRoutineCycleUseCase _getRoutineCycleUseCase;
   final GetRecentSleepLogsUseCase _getRecentSleepLogsUseCase;
   final GetSleepGoalUseCase _getSleepGoalUseCase;
   final GetLatestBodyWeightUseCase _getLatestBodyWeightUseCase;
   final GetRecentBodyWeightLogsUseCase _getRecentBodyWeightLogsUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
+  final LogWaterUseCase _logWaterUseCase;
+  final CompleteReminderUseCase _completeReminderUseCase;
+  final LogSleepUseCase _logSleepUseCase;
+  final LogBodyWeightUseCase _logBodyWeightUseCase;
+  final NotificationService _notificationService;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
   double get sleepGoalHours => _getSleepGoalUseCase();
 
-  DateTime get _today {
-    final now = DateTime.now();
-    return DateTime(now.year, now.month, now.day);
-  }
+  DateTime get _today => _dateOnly(DateTime.now());
+
+  static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
   @override
   void onInit() => refresh();
@@ -130,6 +149,11 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   Future<void> _loadWorkout(DateTime today) async {
     final workoutsResult = await _getWorkoutsForDateUseCase(date: today);
     workoutsResult.when((_) {}, (value) => emit(state.copyWith(workouts: value)));
+    if (!state.layout.heroes.contains(HomeFeature.workout) || state.hasWorkoutToday) {
+      return;
+    }
+    final cycleResult = await _getRoutineCycleUseCase();
+    cycleResult.when((_) {}, (value) => emit(state.copyWith(nextRoutine: value.next)));
   }
 
   Future<void> _loadSleep() async {
@@ -145,10 +169,67 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   Future<void> _loadWeight() async {
     final latestResult = await _getLatestBodyWeightUseCase();
     latestResult.when((_) {}, (value) => emit(state.copyWith(latestWeightKg: value?.weightKg)));
-    if (state.layout.hero != .bodyWeight) {
+    if (!state.layout.heroes.contains(HomeFeature.bodyWeight)) {
       return;
     }
     final recentLogsResult = await _getRecentBodyWeightLogsUseCase(days: _weightTrendDays);
     recentLogsResult.when((_) {}, (value) => emit(state.copyWith(weightLogs: value)));
+  }
+
+  Future<void> addWater({required double amountMl}) async {
+    final previousMl = state.consumedMl;
+    emit(state.copyWith(consumedMl: previousMl + amountMl));
+    final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
+    loggedResult.when((error) {
+      emit(state.copyWith(consumedMl: previousMl));
+      emitPresentation(HomeError(message: error.message));
+    }, (_) => Log.action('water_logged', data: {'amount_ml': amountMl}));
+  }
+
+  // The hero only lists open reminders, so ticking one here is one-way: it
+  // leaves the list the moment it is done.
+  Future<void> completeReminder({required Reminder reminder}) async {
+    final previous = state.reminders;
+    emit(
+      state.copyWith(
+        reminders: [
+          for (final item in previous)
+            if (item.id == reminder.id) item.toggledCompletion(completed: true) else item,
+        ],
+      ),
+    );
+    final completionResult = await _completeReminderUseCase(reminder: reminder, completed: true);
+    final completion = completionResult.when((error) {
+      emit(state.copyWith(reminders: previous));
+      emitPresentation(HomeError(message: error.message));
+      return null;
+    }, (value) => value);
+    if (completion == null) {
+      return;
+    }
+    Log.action('reminder_completed', data: {'completed': true});
+    await _notificationService.cancel(reminder.notificationId);
+    final reminders = [
+      for (final item in state.reminders)
+        if (item.id == completion.reminder.id) completion.reminder else item,
+    ];
+    final next = completion.nextOccurrence;
+    emit(state.copyWith(reminders: [...reminders, if (next != null && _dateOnly(next.dueDate) == _today) next]));
+  }
+
+  Future<void> logSleep({required DateTime bedTime, required DateTime wakeTime, int? qualityRating}) async {
+    final loggedResult = await _logSleepUseCase(bedTime: bedTime, wakeTime: wakeTime, qualityRating: qualityRating);
+    await loggedResult.when((error) => Future.sync(() => emitPresentation(HomeError(message: error.message))), (_) {
+      Log.action('sleep_logged', data: {'quality': qualityRating});
+      return _loadSleep();
+    });
+  }
+
+  Future<void> logBodyWeight({required DateTime loggedDate, required double weightKg}) async {
+    final loggedResult = await _logBodyWeightUseCase(loggedDate: loggedDate, weightKg: weightKg);
+    await loggedResult.when((error) => Future.sync(() => emitPresentation(HomeError(message: error.message))), (_) {
+      Log.action('body_weight_logged', data: {'weight_kg': weightKg});
+      return _loadWeight();
+    });
   }
 }

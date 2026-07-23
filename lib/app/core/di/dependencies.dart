@@ -443,12 +443,18 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getWaterGoalUseCase: G(),
       getRemindersInRangeUseCase: G(),
       getWorkoutsForDateUseCase: G(),
+      getRoutineCycleUseCase: G(),
       getRecentSleepLogsUseCase: G(),
       getSleepGoalUseCase: G(),
       getLatestBodyWeightUseCase: G(),
       getRecentBodyWeightLogsUseCase: G(),
       getHomeLayoutUseCase: G(),
       getAppSettingsUseCase: G(),
+      logWaterUseCase: G(),
+      completeReminderUseCase: G(),
+      logSleepUseCase: G(),
+      logBodyWeightUseCase: G(),
+      notificationService: G(),
     ),
   );
   G.registerFactory(() => HomeLayoutCubit(getHomeLayoutUseCase: G(), saveHomeLayoutUseCase: G()));

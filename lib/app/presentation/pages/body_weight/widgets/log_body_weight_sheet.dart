@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
@@ -8,17 +7,29 @@ import 'package:vitta/app/design_system/components/inputs/vt_weight_picker.dart'
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
-import 'package:vitta/app/presentation/pages/body_weight/body_weight_cubit.dart';
 
-Future<void> showLogBodyWeightSheet({required BuildContext context}) => showModalBottomSheet<void>(
+typedef LogBodyWeightSubmit = Future<void> Function({required DateTime loggedDate, required double weightKg});
+
+// The sheet takes what it needs and hands the picked weight back, so whichever
+// cubit owns the write - body weight's own page, or home's - can do the logging.
+Future<void> showLogBodyWeightSheet({
+  required BuildContext context,
+  required UnitSystem unitSystem,
+  required double? latestWeightKg,
+  required LogBodyWeightSubmit onSubmit,
+}) => showModalBottomSheet<void>(
   context: context,
   routeSettings: VTBottomSheet.logBodyWeight.settings,
   isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(value: context.read<BodyWeightCubit>(), child: const _LogBodyWeightSheet()),
+  builder: (sheetContext) => _LogBodyWeightSheet(unitSystem: unitSystem, latestWeightKg: latestWeightKg, onSubmit: onSubmit),
 );
 
 class _LogBodyWeightSheet extends StatefulWidget {
-  const _LogBodyWeightSheet();
+  const _LogBodyWeightSheet({required this.unitSystem, required this.latestWeightKg, required this.onSubmit});
+
+  final UnitSystem unitSystem;
+  final double? latestWeightKg;
+  final LogBodyWeightSubmit onSubmit;
 
   @override
   State<_LogBodyWeightSheet> createState() => _LogBodyWeightSheetState();
@@ -32,8 +43,8 @@ class _LogBodyWeightSheetState extends State<_LogBodyWeightSheet> {
   static const double _minKg = 30;
   static const double _maxKg = 250;
 
-  late final UnitSystem _unitSystem = context.read<BodyWeightCubit>().unitSystem;
-  late double _displayWeight = _unitSystem.kilogramsToDisplayLoad(context.read<BodyWeightCubit>().state.latest?.weightKg ?? _defaultKg);
+  late final UnitSystem _unitSystem = widget.unitSystem;
+  late double _displayWeight = _unitSystem.kilogramsToDisplayLoad(widget.latestWeightKg ?? _defaultKg);
   DateTime _date = DateTime.now();
 
   Future<void> _pickDate() async {
@@ -49,9 +60,8 @@ class _LogBodyWeightSheetState extends State<_LogBodyWeightSheet> {
   }
 
   Future<void> _submit() async {
-    final cubit = context.read<BodyWeightCubit>();
     final loggedDate = DateTime(_date.year, _date.month, _date.day);
-    await cubit.logWeight(loggedDate: loggedDate, weightKg: _unitSystem.displayLoadToKilograms(_displayWeight));
+    await widget.onSubmit(loggedDate: loggedDate, weightKg: _unitSystem.displayLoadToKilograms(_displayWeight));
     if (mounted) {
       Navigator.of(context).pop();
     }

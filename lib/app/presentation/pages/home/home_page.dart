@@ -16,6 +16,7 @@ import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/home/entities/home_feature.dart';
 import 'package:vitta/app/presentation/general/home_feature_labels.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/pages/body_weight/widgets/log_body_weight_sheet.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/home/home_state.dart';
@@ -24,6 +25,7 @@ import 'package:vitta/app/presentation/pages/home/widgets/home_feature_tile.dart
 import 'package:vitta/app/presentation/pages/home/widgets/home_greeting.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_hero.dart';
 import 'package:vitta/app/presentation/pages/home/widgets/home_skeleton.dart';
+import 'package:vitta/app/presentation/pages/sleep/widgets/log_sleep_sheet.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -93,8 +95,23 @@ class HomePage extends StatelessWidget {
             isLoaded: state.isLoaded,
             skeleton: const HomeSkeleton(),
             children: [
-              if (state.layout.hero case final hero?) ...[
-                HomeHero(feature: hero, state: state, unitSystem: cubit.unitSystem, sleepGoalHours: cubit.sleepGoalHours, onOpen: open),
+              for (final hero in state.layout.heroes) ...[
+                HomeHero(
+                  feature: hero,
+                  state: state,
+                  unitSystem: cubit.unitSystem,
+                  sleepGoalHours: cubit.sleepGoalHours,
+                  onOpen: open,
+                  onAddWater: (amountMl) => cubit.addWater(amountMl: amountMl),
+                  onCompleteReminder: (reminder) => cubit.completeReminder(reminder: reminder),
+                  onLogSleep: () => showLogSleepSheet(context: context, onSubmit: cubit.logSleep),
+                  onLogBodyWeight: () => showLogBodyWeightSheet(
+                    context: context,
+                    unitSystem: cubit.unitSystem,
+                    latestWeightKg: state.latestWeightKg,
+                    onSubmit: cubit.logBodyWeight,
+                  ),
+                ),
                 const VTGap.l(),
               ],
               if (supporting.isNotEmpty) ...[

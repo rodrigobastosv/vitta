@@ -114,6 +114,32 @@
     }
   },
   "homeNoWorkout": "Nothing logged today",
+  "homeWorkoutNotStarted": "Not started yet",
+  "homeWorkoutFinished": "Session done",
+  "homeWorkoutRemaining": "{count, plural, =0{Nothing left to do} =1{1 exercise left} other{{count} exercises left}}",
+  "@homeWorkoutRemaining": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "homeWorkoutNextUp": "Next up: {name}",
+  "@homeWorkoutNextUp": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "homeWorkoutExerciseSets": "{count, plural, =0{No sets} =1{1 set} other{{count} sets}}",
+  "@homeWorkoutExerciseSets": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "homeSleepLastNight": "Last night",
   "homeWeightLatest": "Latest",
   "homeNotTrackedYet": "Not tracked yet",

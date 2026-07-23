@@ -284,6 +284,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeNoWorkout => 'Nothing logged today';
 
   @override
+  String get homeWorkoutNotStarted => 'Not started yet';
+
+  @override
+  String get homeWorkoutFinished => 'Session done';
+
+  @override
+  String homeWorkoutRemaining(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count exercises left',
+      one: '1 exercise left',
+      zero: 'Nothing left to do',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String homeWorkoutNextUp(String name) {
+    return 'Next up: $name';
+  }
+
+  @override
+  String homeWorkoutExerciseSets(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count sets', one: '1 set', zero: 'No sets');
+    return '$_temp0';
+  }
+
+  @override
   String get homeSleepLastNight => 'Last night';
 
   @override

@@ -614,6 +614,36 @@ abstract class AppLocalizations {
   /// **'Nothing logged today'**
   String get homeNoWorkout;
 
+  /// No description provided for @homeWorkoutNotStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Not started yet'**
+  String get homeWorkoutNotStarted;
+
+  /// No description provided for @homeWorkoutFinished.
+  ///
+  /// In en, this message translates to:
+  /// **'Session done'**
+  String get homeWorkoutFinished;
+
+  /// No description provided for @homeWorkoutRemaining.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing left to do} =1{1 exercise left} other{{count} exercises left}}'**
+  String homeWorkoutRemaining(int count);
+
+  /// No description provided for @homeWorkoutNextUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Next up: {name}'**
+  String homeWorkoutNextUp(String name);
+
+  /// No description provided for @homeWorkoutExerciseSets.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No sets} =1{1 set} other{{count} sets}}'**
+  String homeWorkoutExerciseSets(int count);
+
   /// No description provided for @homeSleepLastNight.
   ///
   /// In en, this message translates to:

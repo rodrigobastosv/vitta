@@ -6,6 +6,7 @@ import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
+import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 
 import '../factories/cubits_factories.dart';
@@ -36,6 +37,8 @@ void registerTestHomeCubit() {
   ).thenAnswer((_) async => const Success({}));
   final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
   when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success([]));
+  final getRoutineCycleUseCase = MockGetRoutineCycleUseCase();
+  when(getRoutineCycleUseCase.call).thenAnswer((_) async => const Success(RoutineCycle(routines: [])));
   final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
   when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success([]));
   final getSleepGoalUseCase = MockGetSleepGoalUseCase();
@@ -61,6 +64,7 @@ void registerTestHomeCubit() {
       getWaterGoalUseCase: getWaterGoalUseCase,
       getRemindersInRangeUseCase: getRemindersInRangeUseCase,
       getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRoutineCycleUseCase: getRoutineCycleUseCase,
       getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
       getSleepGoalUseCase: getSleepGoalUseCase,
       getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,

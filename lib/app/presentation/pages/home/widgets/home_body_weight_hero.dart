@@ -14,13 +14,21 @@ import 'package:vitta/app/presentation/pages/home/widgets/home_weight_delta_pill
 // Body weight has no daily goal, so its hero is a trend rather than a ring: the
 // latest weight, the change across the loaded window, and the line itself.
 class HomeBodyWeightHero extends StatelessWidget {
-  const HomeBodyWeightHero({required this.logs, required this.latestWeightKg, required this.unitSystem, required this.onTap, super.key});
+  const HomeBodyWeightHero({
+    required this.logs,
+    required this.latestWeightKg,
+    required this.unitSystem,
+    required this.onTap,
+    required this.onLog,
+    super.key,
+  });
 
   // Most recent first, as the cubit holds them.
   final List<BodyWeightLog> logs;
   final double? latestWeightKg;
   final UnitSystem unitSystem;
   final VoidCallback onTap;
+  final VoidCallback onLog;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +75,7 @@ class HomeBodyWeightHero extends StatelessWidget {
             const VTGap.s(),
             VTLineChart(points: [for (final log in chronological) VTLineChartPoint(value: unitSystem.kilogramsToDisplayLoad(log.weightKg))], height: 120),
           ],
+          TextButton.icon(onPressed: onLog, icon: const Icon(Icons.add), label: Text(l10n.bodyWeightLogAction)),
         ],
       ),
     );
