@@ -11,6 +11,7 @@ import 'package:vitta/app/domain/reminder/use_cases/update_reminder_use_case.dar
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_state.dart';
+import 'package:vitta/app/presentation/routing/notification_route.dart';
 
 class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentationEvent> {
   ReminderCubit({
@@ -186,6 +187,12 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
       return;
     }
     await _notificationService.requestPermission();
-    await _notificationService.scheduleReminder(id: reminder.notificationId, title: reminder.title, body: reminder.notes ?? '', dateTime: remindAt);
+    await _notificationService.scheduleReminder(
+      id: reminder.notificationId,
+      title: reminder.title,
+      body: reminder.notes ?? '',
+      dateTime: remindAt,
+      payload: reminderNotificationPayload,
+    );
   }
 }

@@ -42,6 +42,9 @@ import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
 import 'package:vitta/app/domain/home/use_cases/get_home_layout_use_case.dart';
 import 'package:vitta/app/domain/home/use_cases/save_home_layout_use_case.dart';
+import 'package:vitta/app/domain/log_reminders/use_cases/get_log_reminder_settings_use_case.dart';
+import 'package:vitta/app/domain/log_reminders/use_cases/save_log_reminder_settings_use_case.dart';
+import 'package:vitta/app/domain/log_reminders/use_cases/sync_log_reminders_use_case.dart';
 import 'package:vitta/app/domain/onboarding/use_cases/complete_onboarding_use_case.dart';
 import 'package:vitta/app/domain/premium/use_cases/get_premium_status_use_case.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/add_progress_photo_use_case.dart';
@@ -275,3 +278,9 @@ class MockDeleteProgressPhotoUseCase extends Mock implements DeleteProgressPhoto
 class MockGetHomeLayoutUseCase extends Mock implements GetHomeLayoutUseCase {}
 
 class MockSaveHomeLayoutUseCase extends Mock implements SaveHomeLayoutUseCase {}
+
+class MockGetLogReminderSettingsUseCase extends Mock implements GetLogReminderSettingsUseCase {}
+
+class MockSaveLogReminderSettingsUseCase extends Mock implements SaveLogReminderSettingsUseCase {}
+
+class MockSyncLogRemindersUseCase extends Mock implements SyncLogRemindersUseCase {}

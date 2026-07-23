@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,7 +20,21 @@ class NotificationService {
   static const String _channelName = 'Reminders';
   static const String _channelDescription = 'Reminders for your tasks';
 
+  final StreamController<String> _tapController = StreamController<String>.broadcast();
+
   bool _initialized = false;
+
+  /// The payload of every notification the user taps while the app is alive.
+  /// A tap that launched the app cold is reported by [launchPayload] instead.
+  Stream<String> get taps => _tapController.stream;
+
+  Future<String?> launchPayload() async {
+    final launchDetails = await _plugin.getNotificationAppLaunchDetails();
+    if (launchDetails == null || !launchDetails.didNotificationLaunchApp) {
+      return null;
+    }
+    return launchDetails.notificationResponse?.payload;
+  }
 
   Future<void> init() async {
     if (_initialized) {
@@ -34,6 +49,7 @@ class NotificationService {
         android: AndroidInitializationSettings('@mipmap/ic_launcher'),
         iOS: DarwinInitializationSettings(requestAlertPermission: false, requestBadgePermission: false, requestSoundPermission: false),
       ),
+      onDidReceiveNotificationResponse: _onTap,
     );
     await _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(
       const AndroidNotificationChannel(_channelId, _channelName, description: _channelDescription, importance: .high),
@@ -54,7 +70,20 @@ class NotificationService {
     return granted ?? false;
   }
 
-  Future<void> scheduleReminder({required int id, required String title, required String body, required DateTime dateTime}) async {
+  void _onTap(NotificationResponse response) {
+    final payload = response.payload;
+    if (payload != null && payload.isNotEmpty) {
+      _tapController.add(payload);
+    }
+  }
+
+  Future<void> scheduleReminder({
+    required int id,
+    required String title,
+    required String body,
+    required DateTime dateTime,
+    String? payload,
+  }) async {
     final scheduledDate = tz.TZDateTime.from(dateTime, tz.local);
     if (scheduledDate.isBefore(tz.TZDateTime.now(tz.local))) {
       return;
@@ -64,6 +93,7 @@ class NotificationService {
       title: title,
       body: body,
       scheduledDate: scheduledDate,
+      payload: payload,
       notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           _channelId,
@@ -81,4 +111,6 @@ class NotificationService {
   Future<void> cancel(int id) => _plugin.cancel(id: id);
 
   Future<void> cancelAll() => _plugin.cancelAll();
+
+  Future<void> dispose() => _tapController.close();
 }

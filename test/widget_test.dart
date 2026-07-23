@@ -12,6 +12,7 @@ import 'package:vitta/app/presentation/pages/workout/workout_page.dart';
 import 'package:vitta/main.dart';
 
 import 'fixtures/local_storage_fixture.dart';
+import 'fixtures/notification_fixture.dart';
 import 'mocks/services_mocks.dart';
 
 void main() {
@@ -24,6 +25,7 @@ void main() {
     when(() => supabaseService.currentUserIdChanges).thenAnswer((_) => Stream.value('user-1'));
     when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
     setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
+    registerTestNotificationService();
     await G<OnboardingLocalDataSource>().markOnboardingSeen();
     await G<WorkoutLocalDataSource>().markIntroSeen();
   });

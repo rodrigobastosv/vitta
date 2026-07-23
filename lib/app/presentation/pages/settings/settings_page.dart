@@ -41,6 +41,17 @@ class SettingsPage extends StatelessWidget {
             VTAppearEffect(
               index: 1,
               child: SettingsNavigationTile(
+                icon: Icons.notifications_active_outlined,
+                accent: VTColors.coral,
+                title: l10n.settingsLogRemindersLabel,
+                subtitle: l10n.settingsLogRemindersHint,
+                onTap: () => context.pushRoute(.logReminders),
+              ),
+            ),
+            const VTGap.m(),
+            VTAppearEffect(
+              index: 2,
+              child: SettingsNavigationTile(
                 icon: Icons.translate,
                 accent: VTColors.sleep,
                 title: l10n.settingsLanguageLabel,
@@ -50,7 +61,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 2,
+              index: 3,
               child: SettingsNavigationTile(
                 icon: Icons.brightness_6_outlined,
                 accent: VTColors.macroCarbs,
@@ -61,7 +72,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 3,
+              index: 4,
               child: SettingsNavigationTile(
                 icon: Icons.straighten,
                 accent: VTColors.macroFat,

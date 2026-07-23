@@ -40,6 +40,7 @@ enum AppRoute {
   paywall('/paywall'),
   settings('/settings'),
   homeLayout('/settings/home-layout'),
+  logReminders('/settings/log-reminders'),
   signIn('/auth/sign-in'),
   signUp('/auth/sign-up');
 

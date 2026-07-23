@@ -7,8 +7,12 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/home/entities/home_layout.dart';
+import 'package:vitta/app/domain/log_reminders/entities/log_reminder_tracker.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_completion.dart';
+import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
+import 'package:vitta/app/domain/water/entities/daily_water.dart';
+import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/home/home_state.dart';
@@ -149,6 +153,56 @@ void main() {
     expectPresentation: () => [isA<HomeError>()],
     verify: (cubit) => expect(cubit.state.openReminders, hasLength(1)),
   );
+
+  test('refreshing tells the reminder sync which trackers are still empty', () async {
+    final reads = buildConstructorReads();
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => Success(DailyWater(entries: [WaterLogFactory.build(amountMl: 300)])));
+    final getWaterGoalUseCase = MockGetWaterGoalUseCase();
+    when(getWaterGoalUseCase.call).thenReturn(2000);
+    final getRemindersInRangeUseCase = MockGetRemindersInRangeUseCase();
+    when(
+      () => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => const Success(<DateTime, List<Reminder>>{}));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(<Workout>[]));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success(<SleepLog>[]));
+    final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Success(null));
+    final syncLogRemindersUseCase = MockSyncLogRemindersUseCase();
+    when(() => syncLogRemindersUseCase(loggedByTracker: any(named: 'loggedByTracker'))).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildHomeCubit(
+      getUserUseCase: reads.user,
+      getMacroGoalsUseCase: reads.goals,
+      getHomeLayoutUseCase: reads.layout,
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getDailyWaterUseCase: getDailyWaterUseCase,
+      getWaterGoalUseCase: getWaterGoalUseCase,
+      getRemindersInRangeUseCase: getRemindersInRangeUseCase,
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+      getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      syncLogRemindersUseCase: syncLogRemindersUseCase,
+    );
+
+    await cubit.refresh();
+
+    verify(
+      () => syncLogRemindersUseCase(
+        loggedByTracker: {
+          LogReminderTracker.breakfast: false,
+          LogReminderTracker.lunch: false,
+          LogReminderTracker.dinner: false,
+          LogReminderTracker.water: true,
+          LogReminderTracker.sleep: false,
+        },
+      ),
+    ).called(1);
+    await cubit.close();
+  });
 
   blocTest<HomeCubit, HomeState>(
     'logging a weight from the headline reads the new latest back',

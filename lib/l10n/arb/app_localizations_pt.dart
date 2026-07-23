@@ -385,6 +385,97 @@ class AppLocalizationsPt extends AppLocalizations {
   String get settingsHomeLayoutHint => 'Escolha o que lidera, o que apoia e o que fica oculto';
 
   @override
+  String get settingsLogRemindersLabel => 'Lembretes de registro';
+
+  @override
+  String get settingsLogRemindersHint => 'Receba um toque quando algo ainda não foi registrado';
+
+  @override
+  String get logRemindersTitle => 'Lembretes de registro';
+
+  @override
+  String get logRemindersMasterLabel => 'Toques diários';
+
+  @override
+  String get logRemindersMasterHint => 'O toque só chega enquanto o registro do dia continuar vazio.';
+
+  @override
+  String get logRemindersTrackersLabel => 'Sobre o que lembrar';
+
+  @override
+  String get logRemindersBreakfastLabel => 'Café da manhã';
+
+  @override
+  String get logRemindersLunchLabel => 'Almoço';
+
+  @override
+  String get logRemindersDinnerLabel => 'Jantar';
+
+  @override
+  String get logRemindersWaterLabel => 'Água';
+
+  @override
+  String get logRemindersSleepLabel => 'Sono';
+
+  @override
+  String get logRemindersChangeTimeTooltip => 'Alterar horário';
+
+  @override
+  String get logRemindersRepeatTooltip => 'Alterar a frequência';
+
+  @override
+  String get logRemindersRepeatOnce => 'Uma vez por dia';
+
+  @override
+  String logRemindersRepeatEveryHours(int hours) {
+    return 'A cada ${hours}h';
+  }
+
+  @override
+  String get logRemindersRepeatLabel => 'Frequência';
+
+  @override
+  String logRemindersRepeatWindowHint(String time) {
+    return 'Das $time às 22h';
+  }
+
+  @override
+  String get logRemindersPermissionDeniedTitle => 'Notificações desativadas';
+
+  @override
+  String get logRemindersPermissionDeniedMessage => 'Permita as notificações do Vitta nos ajustes do aparelho para receber os toques.';
+
+  @override
+  String get logRemindersBreakfastNotificationTitle => 'Registre seu café da manhã';
+
+  @override
+  String get logRemindersBreakfastNotificationBody => 'Nenhum café da manhã registrado hoje.';
+
+  @override
+  String get logRemindersLunchNotificationTitle => 'Registre seu almoço';
+
+  @override
+  String get logRemindersLunchNotificationBody => 'Nenhum almoço registrado hoje.';
+
+  @override
+  String get logRemindersDinnerNotificationTitle => 'Registre seu jantar';
+
+  @override
+  String get logRemindersDinnerNotificationBody => 'Nenhum jantar registrado hoje.';
+
+  @override
+  String get logRemindersWaterNotificationTitle => 'Hora da água';
+
+  @override
+  String get logRemindersWaterNotificationBody => 'Você ainda não registrou nenhuma bebida hoje.';
+
+  @override
+  String get logRemindersSleepNotificationTitle => 'Como você dormiu?';
+
+  @override
+  String get logRemindersSleepNotificationBody => 'Registre a noite passada antes de esquecer.';
+
+  @override
   String get onboardingFeaturesTitle => 'Muitas coisas, um app';
 
   @override

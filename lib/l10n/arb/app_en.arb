@@ -187,6 +187,49 @@
   "homeSlotHidden": "Hidden",
   "settingsHomeLayoutLabel": "Home screen",
   "settingsHomeLayoutHint": "Pick what leads, what supports it and what stays hidden",
+  "settingsLogRemindersLabel": "Logging reminders",
+  "settingsLogRemindersHint": "Get a nudge when a tracker is still empty",
+  "logRemindersTitle": "Logging reminders",
+  "logRemindersMasterLabel": "Daily nudges",
+  "logRemindersMasterHint": "A nudge only arrives while that tracker is still empty for the day, unless you set it to repeat.",
+  "logRemindersTrackersLabel": "What to be reminded about",
+  "logRemindersBreakfastLabel": "Breakfast",
+  "logRemindersLunchLabel": "Lunch",
+  "logRemindersDinnerLabel": "Dinner",
+  "logRemindersWaterLabel": "Water",
+  "logRemindersSleepLabel": "Sleep",
+  "logRemindersChangeTimeTooltip": "Change time",
+  "logRemindersRepeatTooltip": "Change how often",
+  "logRemindersRepeatOnce": "Once a day",
+  "logRemindersRepeatEveryHours": "Every {hours}h",
+  "@logRemindersRepeatEveryHours": {
+    "placeholders": {
+      "hours": {
+        "type": "int"
+      }
+    }
+  },
+  "logRemindersRepeatLabel": "How often",
+  "logRemindersRepeatWindowHint": "From {time} until 10 PM",
+  "@logRemindersRepeatWindowHint": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "logRemindersPermissionDeniedTitle": "Notifications are off",
+  "logRemindersPermissionDeniedMessage": "Allow notifications for Vitta in your device settings to get nudges.",
+  "logRemindersBreakfastNotificationTitle": "Log your breakfast",
+  "logRemindersBreakfastNotificationBody": "No breakfast logged today yet.",
+  "logRemindersLunchNotificationTitle": "Log your lunch",
+  "logRemindersLunchNotificationBody": "No lunch logged today yet.",
+  "logRemindersDinnerNotificationTitle": "Log your dinner",
+  "logRemindersDinnerNotificationBody": "No dinner logged today yet.",
+  "logRemindersWaterNotificationTitle": "Time for water",
+  "logRemindersWaterNotificationBody": "You haven't logged a drink today.",
+  "logRemindersSleepNotificationTitle": "How did you sleep?",
+  "logRemindersSleepNotificationBody": "Log last night before it slips your mind.",
   "onboardingFeaturesTitle": "Many things, one app",
   "onboardingGoalsTitle": "Set a daily calorie target",
   "onboardingGoalsMessage": "You can change this any time, and we'll split it into protein, carbs and fat for you.",

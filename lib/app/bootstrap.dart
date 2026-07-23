@@ -9,6 +9,7 @@ import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
+import 'package:vitta/app/presentation/routing/notification_navigator.dart';
 
 Future<void> bootstrap({required AppRunner appRunner}) async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,9 @@ Future<void> bootstrap({required AppRunner appRunner}) async {
       await Hive.initFlutter();
       final appBox = await Hive.openBox<dynamic>('app');
       setupDependencies(appBox: appBox, supabaseService: supabaseService);
-      await G<NotificationService>().init();
+      final notificationService = G<NotificationService>();
+      await notificationService.init();
+      await NotificationNavigator.start(notificationService);
       await G<PurchaseService>().init();
       final analyticsService = G<AnalyticsService>();
       await analyticsService.init();

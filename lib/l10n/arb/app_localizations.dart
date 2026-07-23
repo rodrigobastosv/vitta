@@ -758,6 +758,180 @@ abstract class AppLocalizations {
   /// **'Pick what leads, what supports it and what stays hidden'**
   String get settingsHomeLayoutHint;
 
+  /// No description provided for @settingsLogRemindersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging reminders'**
+  String get settingsLogRemindersLabel;
+
+  /// No description provided for @settingsLogRemindersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a nudge when a tracker is still empty'**
+  String get settingsLogRemindersHint;
+
+  /// No description provided for @logRemindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Logging reminders'**
+  String get logRemindersTitle;
+
+  /// No description provided for @logRemindersMasterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily nudges'**
+  String get logRemindersMasterLabel;
+
+  /// No description provided for @logRemindersMasterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A nudge only arrives while that tracker is still empty for the day.'**
+  String get logRemindersMasterHint;
+
+  /// No description provided for @logRemindersTrackersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'What to be reminded about'**
+  String get logRemindersTrackersLabel;
+
+  /// No description provided for @logRemindersBreakfastLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Breakfast'**
+  String get logRemindersBreakfastLabel;
+
+  /// No description provided for @logRemindersLunchLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Lunch'**
+  String get logRemindersLunchLabel;
+
+  /// No description provided for @logRemindersDinnerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Dinner'**
+  String get logRemindersDinnerLabel;
+
+  /// No description provided for @logRemindersWaterLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get logRemindersWaterLabel;
+
+  /// No description provided for @logRemindersSleepLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sleep'**
+  String get logRemindersSleepLabel;
+
+  /// No description provided for @logRemindersChangeTimeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change time'**
+  String get logRemindersChangeTimeTooltip;
+
+  /// No description provided for @logRemindersRepeatTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Change how often'**
+  String get logRemindersRepeatTooltip;
+
+  /// No description provided for @logRemindersRepeatOnce.
+  ///
+  /// In en, this message translates to:
+  /// **'Once a day'**
+  String get logRemindersRepeatOnce;
+
+  /// No description provided for @logRemindersRepeatEveryHours.
+  ///
+  /// In en, this message translates to:
+  /// **'Every {hours}h'**
+  String logRemindersRepeatEveryHours(int hours);
+
+  /// No description provided for @logRemindersRepeatLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'How often'**
+  String get logRemindersRepeatLabel;
+
+  /// No description provided for @logRemindersRepeatWindowHint.
+  ///
+  /// In en, this message translates to:
+  /// **'From {time} until 10 PM'**
+  String logRemindersRepeatWindowHint(String time);
+
+  /// No description provided for @logRemindersPermissionDeniedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications are off'**
+  String get logRemindersPermissionDeniedTitle;
+
+  /// No description provided for @logRemindersPermissionDeniedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow notifications for Vitta in your device settings to get nudges.'**
+  String get logRemindersPermissionDeniedMessage;
+
+  /// No description provided for @logRemindersBreakfastNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your breakfast'**
+  String get logRemindersBreakfastNotificationTitle;
+
+  /// No description provided for @logRemindersBreakfastNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No breakfast logged today yet.'**
+  String get logRemindersBreakfastNotificationBody;
+
+  /// No description provided for @logRemindersLunchNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your lunch'**
+  String get logRemindersLunchNotificationTitle;
+
+  /// No description provided for @logRemindersLunchNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No lunch logged today yet.'**
+  String get logRemindersLunchNotificationBody;
+
+  /// No description provided for @logRemindersDinnerNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Log your dinner'**
+  String get logRemindersDinnerNotificationTitle;
+
+  /// No description provided for @logRemindersDinnerNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'No dinner logged today yet.'**
+  String get logRemindersDinnerNotificationBody;
+
+  /// No description provided for @logRemindersWaterNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time for water'**
+  String get logRemindersWaterNotificationTitle;
+
+  /// No description provided for @logRemindersWaterNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t logged a drink today.'**
+  String get logRemindersWaterNotificationBody;
+
+  /// No description provided for @logRemindersSleepNotificationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How did you sleep?'**
+  String get logRemindersSleepNotificationTitle;
+
+  /// No description provided for @logRemindersSleepNotificationBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Log last night before it slips your mind.'**
+  String get logRemindersSleepNotificationBody;
+
   /// No description provided for @onboardingFeaturesTitle.
   ///
   /// In en, this message translates to:

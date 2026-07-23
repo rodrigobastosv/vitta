@@ -12,6 +12,7 @@ import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dar
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart';
+import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
@@ -81,6 +82,7 @@ abstract class CubitsFactories {
     MockCompleteReminderUseCase? completeReminderUseCase,
     MockLogSleepUseCase? logSleepUseCase,
     MockLogBodyWeightUseCase? logBodyWeightUseCase,
+    MockSyncLogRemindersUseCase? syncLogRemindersUseCase,
     MockNotificationService? notificationService,
   }) => HomeCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
@@ -101,6 +103,19 @@ abstract class CubitsFactories {
     completeReminderUseCase: completeReminderUseCase ?? MockCompleteReminderUseCase(),
     logSleepUseCase: logSleepUseCase ?? MockLogSleepUseCase(),
     logBodyWeightUseCase: logBodyWeightUseCase ?? MockLogBodyWeightUseCase(),
+    syncLogRemindersUseCase: syncLogRemindersUseCase ?? MockSyncLogRemindersUseCase(),
+    notificationService: notificationService ?? MockNotificationService(),
+  );
+
+  static LogRemindersCubit buildLogRemindersCubit({
+    required MockGetLogReminderSettingsUseCase getLogReminderSettingsUseCase,
+    MockSaveLogReminderSettingsUseCase? saveLogReminderSettingsUseCase,
+    MockSyncLogRemindersUseCase? syncLogRemindersUseCase,
+    MockNotificationService? notificationService,
+  }) => LogRemindersCubit(
+    getLogReminderSettingsUseCase: getLogReminderSettingsUseCase,
+    saveLogReminderSettingsUseCase: saveLogReminderSettingsUseCase ?? MockSaveLogReminderSettingsUseCase(),
+    syncLogRemindersUseCase: syncLogRemindersUseCase ?? MockSyncLogRemindersUseCase(),
     notificationService: notificationService ?? MockNotificationService(),
   );
 
