@@ -6,11 +6,19 @@ import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class SettingsNavigationTile extends StatelessWidget {
-  const SettingsNavigationTile({required this.icon, required this.title, required this.hint, required this.onTap, super.key});
+  const SettingsNavigationTile({
+    required this.icon,
+    required this.accent,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    super.key,
+  });
 
   final IconData icon;
+  final Color accent;
   final String title;
-  final String hint;
+  final String subtitle;
   final VoidCallback onTap;
 
   @override
@@ -24,8 +32,8 @@ class SettingsNavigationTile extends StatelessWidget {
             width: 36,
             height: 36,
             alignment: .center,
-            decoration: BoxDecoration(color: colorScheme.primary, shape: .circle),
-            child: Icon(icon, size: 20, color: VTColors.inkOn(colorScheme.primary)),
+            decoration: BoxDecoration(color: accent, shape: .circle),
+            child: Icon(icon, size: 20, color: VTColors.inkOn(accent)),
           ),
           const VTGap.s(),
           Expanded(
@@ -33,7 +41,7 @@ class SettingsNavigationTile extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(title, style: VTTextStyles.bodyStrong(context)),
-                Text(hint, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+                Text(subtitle, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
               ],
             ),
           ),

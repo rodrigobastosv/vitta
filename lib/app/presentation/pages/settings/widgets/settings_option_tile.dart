@@ -16,35 +16,39 @@ class SettingsOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = context.colorScheme;
-    return InkWell(
-      onTap: () {
-        if (!isSelected) {
-          VTHaptics.selection();
-        }
-        onSelected();
-      },
-      borderRadius: VTRadius.borderRadiusM,
-      child: AnimatedContainer(
+    return Semantics(
+      selected: isSelected,
+      inMutuallyExclusiveGroup: true,
+      child: InkWell(
+        onTap: () {
+          if (!isSelected) {
+            VTHaptics.selection();
+          }
+          onSelected();
+        },
+        borderRadius: VTRadius.borderRadiusM,
+        child: AnimatedContainer(
         duration: VTMotion.transition,
         curve: VTMotion.curve,
-        padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m, vertical: VTSpacing.s + VTSpacing.xs),
-        decoration: BoxDecoration(
-          color: isSelected ? colorScheme.primaryContainer : Colors.transparent,
-          borderRadius: VTRadius.borderRadiusM,
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                label,
-                style: VTTextStyles.body(context).copyWith(
-                  color: isSelected ? colorScheme.onPrimaryContainer : colorScheme.onSurface,
-                  fontWeight: isSelected ? .w600 : .w400,
+          padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m, vertical: VTSpacing.s + VTSpacing.xs),
+          decoration: BoxDecoration(
+            color: isSelected ? colorScheme.primaryContainer : Colors.transparent,
+            borderRadius: VTRadius.borderRadiusM,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  label,
+                  style: VTTextStyles.body(context).copyWith(
+                    color: isSelected ? colorScheme.onPrimaryContainer : colorScheme.onSurface,
+                    fontWeight: isSelected ? .w600 : .w400,
+                  ),
                 ),
               ),
-            ),
-            if (isSelected) Icon(Icons.check_rounded, size: 20, color: colorScheme.onPrimaryContainer),
-          ],
+              if (isSelected) Icon(Icons.check_rounded, size: 20, color: colorScheme.onPrimaryContainer),
+            ],
+          ),
         ),
       ),
     );
