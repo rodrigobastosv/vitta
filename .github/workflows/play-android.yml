@@ -1,0 +1,121 @@
+name: Play (Android)
+
+# Same release ritual as TestFlight/Firebase: `git tag v1.2.3 && git push origin v1.2.3`
+# builds a *signed* App Bundle and ships it to the Play internal testing track. This
+# is the Play-billable artifact - signed with the real upload key and delivered
+# through Play - and is deliberately a different build from the Firebase lane's
+# debug-signed APK, which cannot purchase. See docs/play-store-setup.md.
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  internal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # v1.2.3 -> 1.2.3 for the version name, rejecting anything that isn't a version
+      # tag before spending a build on it - the same rule the other two lanes apply.
+      # versionCode is the Play upload's identity and must strictly increase: it is
+      # offset well above the manual first upload's versionCode (1) and made monotonic
+      # off the run number, so every CI drop outranks the last and Play accepts it.
+      - name: Resolve version from tag
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          if [[ ! "$tag" =~ ^v?([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+            echo "::error::Tag '$tag' is not a vX.Y.Z version tag."
+            exit 1
+          fi
+          echo "BUILD_NAME=${BASH_REMATCH[1]}" >> "$GITHUB_ENV"
+          echo "VERSION_CODE=$(( 10000 + GITHUB_RUN_NUMBER ))" >> "$GITHUB_ENV"
+
+      # .env is a bundled asset (see pubspec) and gitignored, so a build without this
+      # step ships an app that talks to nothing. Identical to the Firebase lane's step;
+      # a missing backend secret fails fast here rather than at a tester's launch.
+      - name: Write .env from secrets
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          REVENUECAT_ANDROID_API_KEY: ${{ secrets.REVENUECAT_ANDROID_API_KEY }}
+          FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          FIREBASE_ANDROID_API_KEY: ${{ secrets.FIREBASE_ANDROID_API_KEY }}
+          FIREBASE_ANDROID_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
+        run: |
+          set -euo pipefail
+          for name in SUPABASE_URL SUPABASE_PUBLISHABLE_KEY SENTRY_DSN; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty; the build would ship unable to reach its backend."
+              exit 1
+            fi
+          done
+          cat > .env <<EOF
+          SUPABASE_URL=$SUPABASE_URL
+          SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY
+          SENTRY_DSN=$SENTRY_DSN
+          REVENUECAT_ANDROID_API_KEY=$REVENUECAT_ANDROID_API_KEY
+          FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
+          FIREBASE_MESSAGING_SENDER_ID=$FIREBASE_MESSAGING_SENDER_ID
+          FIREBASE_ANDROID_API_KEY=$FIREBASE_ANDROID_API_KEY
+          FIREBASE_ANDROID_APP_ID=$FIREBASE_ANDROID_APP_ID
+          EOF
+
+      # The upload key never lives in the repo. It is decoded from a base64 secret and
+      # key.properties is written from secrets, exactly the shape build.gradle.kts
+      # already reads locally - so `release` signs with the upload key here (the only
+      # signature Play Billing serves products to) instead of the debug fallback.
+      - name: Write signing config from secrets
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          for name in ANDROID_KEYSTORE_BASE64 ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_PASSWORD ANDROID_KEY_ALIAS; do
+            if [ -z "${!name}" ]; then
+              echo "::error::Secret $name is empty; cannot sign the release with the upload key."
+              exit 1
+            fi
+          done
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/upload-keystore.jks
+          cat > android/key.properties <<EOF
+          storePassword=$ANDROID_KEYSTORE_PASSWORD
+          keyPassword=$ANDROID_KEY_PASSWORD
+          keyAlias=$ANDROID_KEY_ALIAS
+          storeFile=upload-keystore.jks
+          EOF
+
+      - run: flutter pub get
+
+      # Play requires an App Bundle (.aab), not an APK.
+      - name: Build signed App Bundle
+        run: flutter build appbundle --release --build-name="$BUILD_NAME" --build-number="$VERSION_CODE"
+
+      # The service account needs "Release to testing tracks" in Play Console on top
+      # of the financial/orders permissions RevenueCat uses. status: completed pushes
+      # straight to internal testers. The very first release for a new app must be
+      # uploaded by hand once (done - see docs/play-store-setup.md); the API takes it
+      # from there.
+      - name: Upload to Play internal track
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.rodrigobastosv.vitta
+          releaseFiles: build/app/outputs/bundle/release/app-release.aab
+          track: internal
+          status: completed
