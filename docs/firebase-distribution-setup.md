@@ -52,13 +52,17 @@ The CLI authenticates as a service account, not a person.
 
 ## 3. Signing — nothing to do
 
-There's no keystore to generate and no signing secrets. Android builds are signed
-with a **committed** debug keystore (`android/app/debug.keystore`, well-known public
-`android` password) that `android/app/build.gradle.kts` points every build at. That's
-what gives each build the same signature so Firebase can update a tester's install in
-place — a CI-generated debug keystore would change signature every run and force a
-reinstall each drop. It is not a Play Store upload key: if a Play pipeline is ever
-added, generate a real release key then.
+There's no keystore to generate and no signing secrets **for this lane**. Firebase
+builds are signed with a **committed** debug keystore (`android/app/debug.keystore`,
+well-known public `android` password) that `android/app/build.gradle.kts` falls back to
+whenever no `key.properties` is present. That's what gives each Firebase build the same
+signature so it can update a tester's install in place — a CI-generated debug keystore
+would change signature every run and force a reinstall each drop.
+
+It is **not** a Play Store upload key, and Play Billing will not serve products to a
+debug-signed build — so a Firebase-distributed build stays unable to purchase, which is
+fine and stated. The Play-billable build is a separate, upload-signed artifact; see
+[`play-store-setup.md`](play-store-setup.md).
 
 ## 4. GitHub secrets
 
