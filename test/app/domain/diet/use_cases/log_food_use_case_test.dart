@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 import '../../../../factories/entities/food_factory.dart';
@@ -11,6 +12,7 @@ import '../../../../mocks/repositories_mocks.dart';
 
 void main() {
   setUpAll(() {
+    registerFallbackValue(const LoggedQuantity.weight(100));
     registerFallbackValue(FoodFactory.build());
     registerFallbackValue(MealType.breakfast);
     registerFallbackValue(DateTime(2000));
@@ -23,10 +25,10 @@ void main() {
     final loggedDate = DateTime(2026, 7, 11);
     final foodLog = FoodLogFactory.build();
     when(
-      () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: .lunch, quantityGrams: 120),
+      () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: .lunch, quantity: const LoggedQuantity.weight(120)),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await useCase(food: food, loggedDate: loggedDate, mealType: .lunch, quantityGrams: 120);
+    final loggedResult = await useCase(food: food, loggedDate: loggedDate, mealType: .lunch, quantity: const LoggedQuantity.weight(120));
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
     verifyNever(() => dietRepository.saveFood(food: any(named: 'food')));
@@ -39,10 +41,20 @@ void main() {
     final loggedDate = DateTime(2026, 7, 11);
     final foodLog = FoodLogFactory.build(quantityUnits: 2);
     when(
-      () => dietRepository.logFood(foodId: 'food-1', loggedDate: loggedDate, mealType: .breakfast, quantityGrams: 100, quantityUnits: 2),
+      () => dietRepository.logFood(
+        foodId: 'food-1',
+        loggedDate: loggedDate,
+        mealType: .breakfast,
+        quantity: const LoggedQuantity.units(units: 2, grams: 100),
+      ),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await useCase(food: egg, loggedDate: loggedDate, mealType: .breakfast, quantityGrams: 100, quantityUnits: 2);
+    final loggedResult = await useCase(
+      food: egg,
+      loggedDate: loggedDate,
+      mealType: .breakfast,
+      quantity: const LoggedQuantity.units(units: 2, grams: 100),
+    );
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
   });
@@ -56,10 +68,15 @@ void main() {
     final foodLog = FoodLogFactory.build(foodId: 'food-2');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => Success(savedFood));
     when(
-      () => dietRepository.logFood(foodId: 'food-2', loggedDate: loggedDate, mealType: .snack, quantityGrams: 50),
+      () => dietRepository.logFood(foodId: 'food-2', loggedDate: loggedDate, mealType: .snack, quantity: const LoggedQuantity.weight(50)),
     ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await useCase(food: unsavedFood, loggedDate: loggedDate, mealType: .snack, quantityGrams: 50);
+    final loggedResult = await useCase(
+      food: unsavedFood,
+      loggedDate: loggedDate,
+      mealType: .snack,
+      quantity: const LoggedQuantity.weight(50),
+    );
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
   });
@@ -71,7 +88,12 @@ void main() {
     const error = VTError(message: 'could not save food');
     when(() => dietRepository.saveFood(food: unsavedFood)).thenAnswer((_) async => const Failure(error));
 
-    final loggedResult = await useCase(food: unsavedFood, loggedDate: DateTime(2026, 7, 11), mealType: .breakfast, quantityGrams: 100);
+    final loggedResult = await useCase(
+      food: unsavedFood,
+      loggedDate: DateTime(2026, 7, 11),
+      mealType: .breakfast,
+      quantity: const LoggedQuantity.weight(100),
+    );
 
     loggedResult.when((resultError) => expect(resultError, error), (_) => fail('expected Failure, got Success'));
     verifyNever(
@@ -79,7 +101,7 @@ void main() {
         foodId: any(named: 'foodId'),
         loggedDate: any(named: 'loggedDate'),
         mealType: any(named: 'mealType'),
-        quantityGrams: any(named: 'quantityGrams'),
+        quantity: any(named: 'quantity'),
       ),
     );
   });

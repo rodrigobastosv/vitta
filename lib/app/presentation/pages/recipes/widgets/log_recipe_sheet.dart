@@ -7,18 +7,22 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 
-Future<void> showLogRecipeSheet({required BuildContext context, required Recipe recipe, required DateTime loggedDate}) => showModalBottomSheet<void>(
-  context: context,
-  routeSettings: VTBottomSheet.logRecipe.settings,
-  isScrollControlled: true,
-  builder: (sheetContext) => BlocProvider.value(value: context.read<RecipesCubit>(), child: _LogRecipeSheet(recipe: recipe, loggedDate: loggedDate)),
-);
+Future<void> showLogRecipeSheet({required BuildContext context, required Recipe recipe, required DateTime loggedDate}) =>
+    showModalBottomSheet<void>(
+      context: context,
+      routeSettings: VTBottomSheet.logRecipe.settings,
+      isScrollControlled: true,
+      builder: (sheetContext) => BlocProvider.value(
+        value: context.read<RecipesCubit>(),
+        child: _LogRecipeSheet(recipe: recipe, loggedDate: loggedDate),
+      ),
+    );
 
 class _LogRecipeSheet extends StatefulWidget {
   const _LogRecipeSheet({required this.recipe, required this.loggedDate});
@@ -32,16 +36,16 @@ class _LogRecipeSheet extends StatefulWidget {
 
 class _LogRecipeSheetState extends State<_LogRecipeSheet> {
   late final UnitSystem _unitSystem = context.read<RecipesCubit>().unitSystem;
-  late final double _initialGrams = widget.recipe.totalGrams;
-  late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: _initialGrams);
+  late final LoggedQuantity _initialQuantity = LoggedQuantity.weight(widget.recipe.totalGrams);
+  late LoggedQuantity? _quantity = _initialQuantity;
   MealType _mealType = .breakfast;
   bool _isSaving = false;
   String? _errorMessage;
 
   Future<void> _submit() async {
     final l10n = context.l10n;
-    final selection = _selection;
-    if (!selection.isValid) {
+    final quantity = _quantity;
+    if (quantity == null) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -55,7 +59,7 @@ class _LogRecipeSheetState extends State<_LogRecipeSheet> {
       recipeFood: widget.recipe.food,
       loggedDate: widget.loggedDate,
       mealType: _mealType,
-      quantityGrams: selection.quantityGrams!,
+      quantity: quantity,
     );
 
     if (!mounted) {
@@ -74,7 +78,12 @@ class _LogRecipeSheetState extends State<_LogRecipeSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: VTSpacing.m,
+        right: VTSpacing.m,
+        top: VTSpacing.m,
+        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -84,18 +93,25 @@ class _LogRecipeSheetState extends State<_LogRecipeSheet> {
           FoodQuantityInput(
             food: widget.recipe.food,
             unitSystem: _unitSystem,
-            initialGrams: _initialGrams,
-            onChanged: (selection) => _selection = selection,
+            initialQuantity: _initialQuantity,
+            onChanged: (quantity) => _quantity = quantity,
           ),
           const VTGap.m(),
           Wrap(
             spacing: VTSpacing.s,
             children: [
               for (final mealType in MealType.values)
-                ChoiceChip(label: Text(mealType.getLabel(l10n)), selected: _mealType == mealType, onSelected: (_) => setState(() => _mealType = mealType)),
+                ChoiceChip(
+                  label: Text(mealType.getLabel(l10n)),
+                  selected: _mealType == mealType,
+                  onSelected: (_) => setState(() => _mealType = mealType),
+                ),
             ],
           ),
-          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+          if (_errorMessage case final errorMessage?) ...[
+            const VTGap.s(),
+            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietRecipeAddToMealAction, isLoading: _isSaving, onPressed: _submit),
         ],

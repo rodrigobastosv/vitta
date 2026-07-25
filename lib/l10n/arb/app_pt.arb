@@ -193,6 +193,7 @@
   "dietCommonFoodBadge": "Comum",
   "dietQuantityUnits": "{units} un",
   "dietQuantityGrams": "{grams} g",
+  "dietQuantityMilliliters": "{milliliters} mL",
   "dietLogAgainAction": "Registrar de novo",
   "dietRecentlyLoggedTitle": "Registrados recentemente",
   "dietRecentSearchesTitle": "Buscas recentes",
@@ -318,8 +319,16 @@
       }
     }
   },
+  "dietLogSubtitleMilliliters": "{milliliters} mL - {calories} kcal",
   "dietGramsPerUnitLabel": "Peso de uma unidade (g)",
   "dietGramsPerUnitHint": "Opcional. Preencha para registrar este alimento por unidade, como \"2 ovos\".",
+  "dietGramsPer100MlLabel": "Peso de 100 mL (g)",
+  "dietGramsPer100MlHint": "Opcional. Preencha para uma bebida, assim você registra em mL. Perto de 100 para água ou suco.",
+  "dietPreparationTitle": "Cru ou cozido",
+  "dietPreparationHint": "A qual dos dois estes números se referem. 100 g de arroz cru não é 100 g de arroz cozido.",
+  "dietPreparationRaw": "Cru",
+  "dietPreparationCooked": "Cozido",
+  "dietPreparationUnset": "Não informado",
   "dietLogFoodAction": "Adicionar ao dia",
   "dietFoodLoggedToast": "Adicionado a {meal}",
   "@dietFoodLoggedToast": {

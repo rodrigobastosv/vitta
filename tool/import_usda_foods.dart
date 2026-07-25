@@ -65,6 +65,21 @@ const _fiberNumber = '291';
 // SR Legacy taxonomy too, so the same map works for both downloads; an unlisted
 // or mixed category (Restaurant Foods, Snacks, Baby Foods) maps to no category
 // and the app just shows the default placeholder for it.
+// USDA descriptions state the state of the food, and it is the one fact the
+// import can read for free (issue #253): "Rice, white, long-grain, cooked" and
+// "Rice, white, long-grain, raw" are separate fdcIds whose per-100g numbers
+// differ by a factor of three, so foods.preparation is what tells them apart in
+// search. Matched on the whole description rather than only its trailing
+// qualifier, because USDA puts the state in the middle just as often ("Beef,
+// ground, cooked, pan-browned").
+//
+// Only a stated state is recorded: a description that says neither leaves
+// preparation null, which reads as "not stated" rather than as raw. Guessing
+// here would be the one mistake worth avoiding - calling cooked rice raw
+// triples its calories for everyone who logs it.
+const _cookedMarkers = ['cooked', 'boiled', 'roasted', 'baked', 'broiled', 'grilled', 'braised', 'fried', 'steamed', 'stewed', 'toasted'];
+const _rawMarkers = ['raw', 'uncooked'];
+
 const _categoryWireValues = {
   'Fruits and Fruit Juices': 'fruit',
   'Vegetables and Vegetable Products': 'vegetable',
@@ -114,17 +129,19 @@ Future<void> main() async {
 
   final foods = _readFoods(jsonPaths);
   final capped = maxFoods == null ? foods : foods.take(maxFoods).toList();
-  stdout.writeln('Read ${foods.length} usable foods (locale: $locale, translate: $translate)${maxFoods == null ? '' : ', capping at $maxFoods'}.');
+  stdout.writeln(
+    'Read ${foods.length} usable foods (locale: $locale, translate: $translate)${maxFoods == null ? '' : ', capping at $maxFoods'}.',
+  );
 
   final client = http.Client();
   var imported = 0;
   try {
     for (var start = 0; start < capped.length; start += batchSize) {
       final batch = capped.sublist(start, (start + batchSize).clamp(0, capped.length));
-      final translations = translate ? await _translateBatch(client, batch: batch, apiKey: anthropicKey!, model: model) : const <int, String>{};
-      final rows = [
-        for (final food in batch) _toFoodRow(food, locale: locale, translatedName: translations[food.fdcId]),
-      ];
+      final translations = translate
+          ? await _translateBatch(client, batch: batch, apiKey: anthropicKey!, model: model)
+          : const <int, String>{};
+      final rows = [for (final food in batch) _toFoodRow(food, locale: locale, translatedName: translations[food.fdcId])];
       await _upsertRows(client, supabaseUrl: supabaseUrl, serviceRoleKey: serviceRoleKey, rows: rows);
       imported += rows.length;
       stdout.writeln('  imported $imported/${capped.length}');
@@ -186,6 +203,7 @@ Map<String, dynamic> _toFoodRow(_UsdaFood food, {required String locale, require
   'fat_per_100g': food.fat,
   'fiber_per_100g': food.fiber ?? 0,
   'category': food.category,
+  'preparation': food.preparation,
 };
 
 String _rowId(int fdcId, String locale) {
@@ -271,9 +289,7 @@ Future<Map<int, String>> _translateBatch(
   final text = content.firstWhere((block) => block['type'] == 'text')['text'] as String;
   final translations = (jsonDecode(text) as Map<String, dynamic>)['translations'] as List<dynamic>;
 
-  return {
-    for (final translation in translations.cast<Map<String, dynamic>>()) translation['fdcId'] as int: translation['name'] as String,
-  };
+  return {for (final translation in translations.cast<Map<String, dynamic>>()) translation['fdcId'] as int: translation['name'] as String};
 }
 
 Future<void> _upsertRows(
@@ -349,6 +365,7 @@ class _UsdaFood {
     required this.fat,
     required this.fiber,
     required this.category,
+    required this.preparation,
   });
 
   // Keeps only foods with the four mandatory macros: fiber is optional (defaults
@@ -376,7 +393,16 @@ class _UsdaFood {
       fat: fat,
       fiber: amounts[_fiberNumber],
       category: _categoryWireValues[_categoryDescription(json['foodCategory'])],
+      preparation: _preparationOf(description),
     );
+  }
+
+  static String? _preparationOf(String description) {
+    final words = description.toLowerCase().split(RegExp('[^a-z]+')).toSet();
+    if (_cookedMarkers.any(words.contains)) {
+      return 'cooked';
+    }
+    return _rawMarkers.any(words.contains) ? 'raw' : null;
   }
 
   // foodCategory is an object ({description: ...}) in the Foundation/SR Legacy
@@ -410,4 +436,5 @@ class _UsdaFood {
   final double fat;
   final double? fiber;
   final String? category;
+  final String? preparation;
 }

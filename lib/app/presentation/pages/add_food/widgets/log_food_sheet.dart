@@ -4,25 +4,32 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_preparation_labels.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/initial_food_quantity.dart';
 
-Future<void> showLogFoodSheet({required BuildContext context, required Food food, required DateTime loggedDate, MealType? initialMealType}) =>
-    showModalBottomSheet<void>(
-      context: context,
-      routeSettings: VTBottomSheet.logFood.settings,
-      isScrollControlled: true,
-      builder: (sheetContext) => BlocProvider.value(
-        value: context.read<AddFoodCubit>(),
-        child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
-      ),
-    );
+Future<void> showLogFoodSheet({
+  required BuildContext context,
+  required Food food,
+  required DateTime loggedDate,
+  MealType? initialMealType,
+}) => showModalBottomSheet<void>(
+  context: context,
+  routeSettings: VTBottomSheet.logFood.settings,
+  isScrollControlled: true,
+  builder: (sheetContext) => BlocProvider.value(
+    value: context.read<AddFoodCubit>(),
+    child: _LogFoodSheet(food: food, loggedDate: loggedDate, initialMealType: initialMealType ?? MealType.breakfast),
+  ),
+);
 
 class _LogFoodSheet extends StatefulWidget {
   const _LogFoodSheet({required this.food, required this.loggedDate, required this.initialMealType});
@@ -37,17 +44,16 @@ class _LogFoodSheet extends StatefulWidget {
 
 class _LogFoodSheetState extends State<_LogFoodSheet> {
   late final UnitSystem _unitSystem = context.read<AddFoodCubit>().unitSystem;
-  late final double? _initialUnits = widget.food.isCountable ? 1 : null;
-  late final double _initialGrams = widget.food.gramsPerUnit ?? 100;
-  late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: _initialGrams, quantityUnits: _initialUnits);
+  late final LoggedQuantity _initialQuantity = initialFoodQuantityFor(widget.food);
+  late LoggedQuantity? _quantity = _initialQuantity;
   late MealType _mealType = widget.initialMealType;
   bool _isSaving = false;
   String? _errorMessage;
 
   Future<void> _submit() async {
     final l10n = context.l10n;
-    final selection = _selection;
-    if (!selection.isValid) {
+    final quantity = _quantity;
+    if (quantity == null) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -61,8 +67,7 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
       food: widget.food,
       loggedDate: widget.loggedDate,
       mealType: _mealType,
-      quantityGrams: selection.quantityGrams!,
-      quantityUnits: selection.quantityUnits,
+      quantity: quantity,
     );
 
     if (!mounted) {
@@ -81,29 +86,50 @@ class _LogFoodSheetState extends State<_LogFoodSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: VTSpacing.m,
+        right: VTSpacing.m,
+        top: VTSpacing.m,
+        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
         children: [
           Text(widget.food.name, style: VTTextStyles.title(context)),
+          // Restated here because it is the last moment the choice can be
+          // corrected: the number about to be typed means something different for
+          // a raw row than a cooked one.
+          if (widget.food.preparation case final preparation?) ...[
+            const VTGap.xs(),
+            Text(
+              preparation.label(l10n),
+              style: VTTextStyles.caption(context).copyWith(color: VTColors.macroCarbs, fontWeight: .w700),
+            ),
+          ],
           const VTGap.m(),
           FoodQuantityInput(
             food: widget.food,
             unitSystem: _unitSystem,
-            initialGrams: _initialGrams,
-            initialUnits: _initialUnits,
-            onChanged: (selection) => _selection = selection,
+            initialQuantity: _initialQuantity,
+            onChanged: (quantity) => _quantity = quantity,
           ),
           const VTGap.m(),
           Wrap(
             spacing: VTSpacing.s,
             children: [
               for (final mealType in MealType.values)
-                ChoiceChip(label: Text(mealType.getLabel(l10n)), selected: _mealType == mealType, onSelected: (_) => setState(() => _mealType = mealType)),
+                ChoiceChip(
+                  label: Text(mealType.getLabel(l10n)),
+                  selected: _mealType == mealType,
+                  onSelected: (_) => setState(() => _mealType = mealType),
+                ),
             ],
           ),
-          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error))],
+          if (_errorMessage case final errorMessage?) ...[
+            const VTGap.s(),
+            Text(errorMessage, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietLogFoodAction, isLoading: _isSaving, onPressed: _submit),
         ],

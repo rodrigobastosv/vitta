@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_category.dart';
+import 'package:vitta/app/domain/diet/entities/food_preparation.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
@@ -184,5 +185,74 @@ void main() {
 
     expect(food.gramsPerUnit, isNull);
     expect(food.isCountable, isFalse);
+  });
+
+  test('fromMap reads a liquid density, which is what makes the food measurable by volume', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Leite integral',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 61,
+      'protein_per_100g': 3.2,
+      'carbs_per_100g': 4.8,
+      'fat_per_100g': 3.3,
+      'density_g_per_ml': 1.03,
+    });
+
+    expect(food.densityGPerMl, 1.03);
+    expect(food.isMeasuredByVolume, isTrue);
+  });
+
+  test('fromMap leaves a food nobody pours weighed', () {
+    final food = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Arroz',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 130,
+      'protein_per_100g': 2.7,
+      'carbs_per_100g': 28,
+      'fat_per_100g': 0.3,
+    });
+
+    expect(food.densityGPerMl, isNull);
+    expect(food.isMeasuredByVolume, isFalse);
+  });
+
+  test('fromMap reads the raw or cooked state its macros describe', () {
+    final cooked = Food.fromMap(const {
+      'id': 'food-1',
+      'name': 'Arroz branco cozido',
+      'brand': null,
+      'barcode': null,
+      'source': 'generic',
+      'calories_per_100g': 130,
+      'protein_per_100g': 2.7,
+      'carbs_per_100g': 28,
+      'fat_per_100g': 0.3,
+      'preparation': 'cooked',
+    });
+
+    expect(cooked.preparation, FoodPreparation.cooked);
+  });
+
+  test('fromMap leaves preparation unstated when the column is missing or unknown', () {
+    const row = <String, dynamic>{
+      'id': 'food-1',
+      'name': 'Refrigerante',
+      'brand': null,
+      'barcode': null,
+      'source': 'open_food_facts',
+      'calories_per_100g': 42,
+      'protein_per_100g': 0.0,
+      'carbs_per_100g': 10.6,
+      'fat_per_100g': 0.0,
+    };
+
+    expect(Food.fromMap(row).preparation, isNull);
+    expect(Food.fromMap(const {...row, 'preparation': 'steamed'}).preparation, isNull);
   });
 }

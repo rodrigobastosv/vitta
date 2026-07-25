@@ -7,6 +7,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
@@ -63,6 +64,7 @@ void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
     registerFallbackValue(MealType.breakfast);
+    registerFallbackValue(const LoggedQuantity.weight(100));
   });
 
   testWidgets('prefills the food, its quantity and the meal it belongs to', (tester) async {
@@ -84,7 +86,9 @@ void main() {
 
   testWidgets('saving a new quantity and meal updates the log and closes the sheet', (tester) async {
     final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
-    when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantityGrams: 180)).thenAnswer((_) async => Success(FoodLogFactory.build()));
+    when(
+      () => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantity: const LoggedQuantity.weight(180)),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     await pumpEditSheet(
       tester,
       cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase),
@@ -97,7 +101,7 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    verify(() => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantityGrams: 180)).called(1);
+    verify(() => updateFoodLogUseCase(logId: 'log-1', mealType: .lunch, quantity: const LoggedQuantity.weight(180))).called(1);
     expect(find.text('Save'), findsNothing);
   });
 
@@ -119,7 +123,7 @@ void main() {
       () => updateFoodLogUseCase(
         logId: any(named: 'logId'),
         mealType: any(named: 'mealType'),
-        quantityGrams: any(named: 'quantityGrams'),
+        quantity: any(named: 'quantity'),
       ),
     );
   });
@@ -130,7 +134,7 @@ void main() {
       () => updateFoodLogUseCase(
         logId: any(named: 'logId'),
         mealType: any(named: 'mealType'),
-        quantityGrams: any(named: 'quantityGrams'),
+        quantity: any(named: 'quantity'),
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     await pumpEditSheet(
@@ -145,19 +149,23 @@ void main() {
     await tester.tap(find.text('Save'));
     await tester.pumpAndSettle();
 
-    final capturedGrams = verify(
-      () => updateFoodLogUseCase(
-        logId: any(named: 'logId'),
-        mealType: any(named: 'mealType'),
-        quantityGrams: captureAny(named: 'quantityGrams'),
-      ),
-    ).captured.single;
-    expect(capturedGrams, closeTo(56.699, 0.001));
+    final capturedQuantity =
+        verify(
+              () => updateFoodLogUseCase(
+                logId: any(named: 'logId'),
+                mealType: any(named: 'mealType'),
+                quantity: captureAny(named: 'quantity'),
+              ),
+            ).captured.single
+            as LoggedQuantity;
+    expect(capturedQuantity.grams, closeTo(56.699, 0.001));
   });
 
   testWidgets('a failed update keeps the sheet open and shows the error inline', (tester) async {
     final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
-    when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .breakfast, quantityGrams: 100)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+    when(
+      () => updateFoodLogUseCase(logId: 'log-1', mealType: .breakfast, quantity: const LoggedQuantity.weight(100)),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     await pumpEditSheet(
       tester,
       cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase),
@@ -169,5 +177,50 @@ void main() {
 
     expect(find.text('boom'), findsOneWidget);
     expect(find.text('Save'), findsOneWidget);
+  });
+
+  testWidgets('a liquid log opens in millilitres and saves them back', (tester) async {
+    final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
+    when(
+      () => updateFoodLogUseCase(
+        logId: any(named: 'logId'),
+        mealType: any(named: 'mealType'),
+        quantity: any(named: 'quantity'),
+      ),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+    await pumpEditSheet(
+      tester,
+      cubit: buildCubit(updateFoodLogUseCase: updateFoodLogUseCase),
+      entry: FoodLogEntryFactory.build(
+        food: FoodFactory.build(name: 'Leite', densityGPerMl: 1),
+        log: FoodLogFactory.build(quantityGrams: 300, quantityMl: 300),
+      ),
+    );
+
+    expect(find.widgetWithText(TextField, '300'), findsOneWidget);
+
+    await tester.enterText(find.byType(TextField), '250');
+    await tester.tap(find.text('Save'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => updateFoodLogUseCase(logId: 'log-1', mealType: .breakfast, quantity: const LoggedQuantity.volume(milliliters: 250, grams: 250)),
+    ).called(1);
+  });
+
+  // The sheet has to open in a mode whose control is actually rendered: a food
+  // that has lost its unit weight leaves the stepper unbuilt, so a unit-mode seed
+  // would strand the sheet with no way to change the number.
+  testWidgets('a unit log falls back to weight once the food has lost its unit weight', (tester) async {
+    await pumpEditSheet(
+      tester,
+      cubit: buildCubit(updateFoodLogUseCase: MockUpdateFoodLogUseCase()),
+      entry: FoodLogEntryFactory.build(
+        food: FoodFactory.build(name: 'Ovo'),
+        log: FoodLogFactory.build(quantityUnits: 2),
+      ),
+    );
+
+    expect(find.widgetWithText(TextField, '100'), findsOneWidget);
   });
 }

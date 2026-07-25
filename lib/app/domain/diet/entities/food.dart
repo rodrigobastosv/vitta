@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food_category.dart';
+import 'package:vitta/app/domain/diet/entities/food_preparation.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
@@ -18,7 +19,9 @@ class Food extends Equatable {
     this.barcode,
     this.imageUrl,
     this.gramsPerUnit,
+    this.densityGPerMl,
     this.category,
+    this.preparation,
   });
 
   factory Food.fromMap(Map<String, dynamic> row) => Food(
@@ -35,7 +38,9 @@ class Food extends Equatable {
     micronutrientsPer100g: _micronutrientsFromMap(row['micronutrients']),
     imageUrl: row['image_url'] as String?,
     gramsPerUnit: (row['grams_per_unit'] as num?)?.toDouble(),
+    densityGPerMl: (row['density_g_per_ml'] as num?)?.toDouble(),
     category: FoodCategory.fromWireValue(row['category'] as String?),
+    preparation: FoodPreparation.fromWireValue(row['preparation'] as String?),
   );
 
   static Map<Nutrient, double> _micronutrientsFromMap(dynamic raw) {
@@ -63,9 +68,15 @@ class Food extends Equatable {
 
   final double? gramsPerUnit;
 
+  final double? densityGPerMl;
+
   final FoodCategory? category;
 
+  final FoodPreparation? preparation;
+
   bool get isCountable => gramsPerUnit != null;
+
+  bool get isMeasuredByVolume => densityGPerMl != null;
 
   @override
   List<Object?> get props => [
@@ -82,6 +93,8 @@ class Food extends Equatable {
     micronutrientsPer100g,
     imageUrl,
     gramsPerUnit,
+    densityGPerMl,
     category,
+    preparation,
   ];
 }

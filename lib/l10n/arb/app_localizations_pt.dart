@@ -397,7 +397,7 @@ class AppLocalizationsPt extends AppLocalizations {
   String get logRemindersMasterLabel => 'Toques diários';
 
   @override
-  String get logRemindersMasterHint => 'O toque só chega enquanto o registro do dia continuar vazio.';
+  String get logRemindersMasterHint => 'O toque só chega enquanto o registro do dia continuar vazio, a não ser que você peça para repetir.';
 
   @override
   String get logRemindersTrackersLabel => 'Sobre o que lembrar';
@@ -654,6 +654,11 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String dietQuantityMilliliters(int milliliters) {
+    return '$milliliters mL';
+  }
+
+  @override
   String get dietLogAgainAction => 'Registrar de novo';
 
   @override
@@ -845,10 +850,36 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String dietLogSubtitleMilliliters(int milliliters, int calories) {
+    return '$milliliters mL - $calories kcal';
+  }
+
+  @override
   String get dietGramsPerUnitLabel => 'Peso de uma unidade (g)';
 
   @override
   String get dietGramsPerUnitHint => 'Opcional. Preencha para registrar este alimento por unidade, como \"2 ovos\".';
+
+  @override
+  String get dietGramsPer100MlLabel => 'Peso de 100 mL (g)';
+
+  @override
+  String get dietGramsPer100MlHint => 'Opcional. Preencha para uma bebida, assim você registra em mL. Perto de 100 para água ou suco.';
+
+  @override
+  String get dietPreparationTitle => 'Cru ou cozido';
+
+  @override
+  String get dietPreparationHint => 'A qual dos dois estes números se referem. 100 g de arroz cru não é 100 g de arroz cozido.';
+
+  @override
+  String get dietPreparationRaw => 'Cru';
+
+  @override
+  String get dietPreparationCooked => 'Cozido';
+
+  @override
+  String get dietPreparationUnset => 'Não informado';
 
   @override
   String get dietLogFoodAction => 'Adicionar ao dia';

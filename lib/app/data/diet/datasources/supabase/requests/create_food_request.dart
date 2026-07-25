@@ -20,6 +20,8 @@ class CreateFoodRequest {
     'micronutrients': {for (final MapEntry(:key, :value) in food.micronutrientsPer100g.entries) key.wireKey: value},
     'image_url': food.imageUrl,
     'grams_per_unit': food.gramsPerUnit,
+    'density_g_per_ml': food.densityGPerMl,
     'category': food.category?.wireValue,
+    'preparation': food.preparation?.wireValue,
   };
 }

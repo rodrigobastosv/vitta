@@ -43,12 +43,31 @@ create table if not exists foods (
   -- food is not countable - rice and milk are measured, not counted - and the
   -- log sheet then offers no unit mode at all.
   grams_per_unit numeric check (grams_per_unit > 0),
-  -- When tool/populate_food_unit_weights.dart last asked the converter API
-  -- about this row. Null means never asked; non-null alongside a null
-  -- grams_per_unit means "asked, and it is not countable". Without this the
-  -- null above would conflate "unchecked" with "not countable" and every
-  -- re-run would re-ask an LLM about every bulk food forever.
-  grams_per_unit_checked_at timestamptz,
+  -- What one millilitre of this food weighs, so a liquid can be logged as
+  -- "200 mL" rather than "206 g" (see issue #253). A property of the food like
+  -- grams_per_unit above, and read the same way: null means the food is not
+  -- measured by volume - rice is weighed, a steak is weighed - and the log sheet
+  -- then measures it in grams. Capped at 2 because no food is denser than that
+  -- (honey, the heaviest thing in a diary, is ~1.42): a larger number is a
+  -- misread, and a wrong density silently misreports macros for every user who
+  -- logs the food by volume.
+  density_g_per_ml numeric check (density_g_per_ml > 0 and density_g_per_ml <= 2),
+  -- Whether this row's macros describe the food raw or cooked, keyed by
+  -- FoodPreparation.wireValue (see
+  -- lib/app/domain/diet/entities/food_preparation.dart and issue #253). 100 g of
+  -- raw rice and 100 g of cooked rice are wildly different foods, and USDA ships
+  -- both as separate entries, so this is what tells them apart in search.
+  -- Nullable and unconstrained text like category below: a food with no cooking
+  -- step (an apple, a can of soda) simply has none, and an unmapped value is
+  -- read as "not stated" on the app side rather than throwing.
+  preparation text,
+  -- When tool/populate_food_facts.dart last asked Claude about this row. Null
+  -- means never asked; non-null alongside a null grams_per_unit/density_g_per_ml
+  -- means "asked, and it is neither countable nor a liquid". Without this those
+  -- nulls would conflate "unchecked" with "not applicable" and every re-run
+  -- would re-ask an LLM about every bulk food forever. One stamp for all three
+  -- facts because they are one request and one judgement about the food.
+  catalog_facts_checked_at timestamptz,
   created_at timestamptz not null default now()
 );
 
@@ -58,8 +77,18 @@ alter table foods add column if not exists micronutrients jsonb not null default
 alter table foods add column if not exists image_url text;
 alter table foods add column if not exists times_logged integer not null default 0 check (times_logged >= 0);
 alter table foods add column if not exists grams_per_unit numeric check (grams_per_unit > 0);
-alter table foods add column if not exists grams_per_unit_checked_at timestamptz;
 alter table foods alter column user_id drop not null;
+-- Volume and raw/cooked support (issue #253). catalog_facts_checked_at replaces
+-- grams_per_unit_checked_at rather than joining it: the converter now answers
+-- all three facts in one request, so one stamp gates them, and a second stamp
+-- for the same call would only drift. Dropping the old column deliberately
+-- re-opens every already-answered row to one more pass - the questions changed,
+-- so a row stamped when only the unit weight was asked genuinely has not been
+-- asked yet.
+alter table foods add column if not exists density_g_per_ml numeric check (density_g_per_ml > 0 and density_g_per_ml <= 2);
+alter table foods add column if not exists preparation text;
+alter table foods add column if not exists catalog_facts_checked_at timestamptz;
+alter table foods drop column if exists grams_per_unit_checked_at;
 -- Coarse food group (fruit/grain/protein/...), keyed by FoodCategory.wireValue
 -- (see lib/app/domain/diet/entities/food_category.dart). Populated for curated
 -- generic foods from USDA's own foodCategory (issue #206) so a food with no
@@ -108,10 +137,24 @@ create table if not exists food_logs (
   -- recompute grams - a later re-run of the converter that revises a food's
   -- grams_per_unit must not retroactively move yesterday's calories.
   quantity_units numeric check (quantity_units > 0),
+  -- How many millilitres were logged, when the user measured a liquid rather
+  -- than weighing it (see foods.density_g_per_ml). Null means logged by weight or
+  -- by unit, and it is recorded for exactly the reason quantity_units above is:
+  -- quantity_grams stays the source of truth for every calorie, and a later
+  -- re-run of the converter that revises a food's density must not move
+  -- yesterday's numbers - not even the "200 mL" the day view reads back.
+  quantity_ml numeric check (quantity_ml > 0),
   created_at timestamptz not null default now()
 );
 
 alter table food_logs add column if not exists quantity_units numeric check (quantity_units > 0);
+alter table food_logs add column if not exists quantity_ml numeric check (quantity_ml > 0);
+
+-- A quantity was typed one way, so at most one of the two records it: units for
+-- a counted food, millilitres for a measured liquid, neither for a plain weight.
+-- The same nullable-columns-per-mode shape workout_sets_shape enforces.
+alter table food_logs drop constraint if exists food_logs_quantity_shape;
+alter table food_logs add constraint food_logs_quantity_shape check (quantity_units is null or quantity_ml is null);
 
 create index if not exists food_logs_user_id_logged_date_idx on food_logs (user_id, logged_date);
 

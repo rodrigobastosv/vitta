@@ -4,6 +4,7 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
@@ -38,7 +39,10 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
       showLoadingEvent: RecipesShowLoading(),
       hideLoadingEvent: RecipesHideLoading(),
     );
-    recipesResult.when((error) => emitPresentation(RecipesError(message: error.message)), (recipes) => emit(state.copyWith(isLoaded: true, recipes: recipes)));
+    recipesResult.when(
+      (error) => emitPresentation(RecipesError(message: error.message)),
+      (recipes) => emit(state.copyWith(isLoaded: true, recipes: recipes)),
+    );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
     }
@@ -59,13 +63,13 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
     required Food recipeFood,
     required DateTime loggedDate,
     required MealType mealType,
-    required double quantityGrams,
+    required LoggedQuantity quantity,
   }) async {
     final loggedResult = await _logFoodUseCase(
       food: recipeFood,
       loggedDate: DateTime(loggedDate.year, loggedDate.month, loggedDate.day),
       mealType: mealType,
-      quantityGrams: quantityGrams,
+      quantity: quantity,
     );
     loggedResult.when((_) {}, (_) {
       Log.action('food_logged', data: {'food': recipeFood.name, 'meal': mealType.wireValue, 'source': 'recipe'});

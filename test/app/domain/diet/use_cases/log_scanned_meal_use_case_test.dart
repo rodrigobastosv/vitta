@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_meal.dart';
 
@@ -17,6 +18,7 @@ ScannedMealLogItem _logItem(String name, double grams) => ScannedMealLogItem(
 
 void main() {
   setUpAll(() {
+    registerFallbackValue(const LoggedQuantity.weight(100));
     registerFallbackValue(FoodFactory.build());
     registerFallbackValue(MealType.breakfast);
     registerFallbackValue(DateTime(2000));
@@ -32,7 +34,7 @@ void main() {
         foodId: 'food-9',
         loggedDate: loggedDate,
         mealType: .dinner,
-        quantityGrams: any(named: 'quantityGrams'),
+        quantity: any(named: 'quantity'),
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
 
@@ -40,8 +42,12 @@ void main() {
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => dietRepository.saveFood(food: any(named: 'food'))).called(2);
-    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantityGrams: 200)).called(1);
-    verify(() => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantityGrams: 150)).called(1);
+    verify(
+      () => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantity: const LoggedQuantity.weight(200)),
+    ).called(1);
+    verify(
+      () => dietRepository.logFood(foodId: 'food-9', loggedDate: loggedDate, mealType: .dinner, quantity: const LoggedQuantity.weight(150)),
+    ).called(1);
   });
 
   test('aborts without logging when saving a food fails', () async {
@@ -57,7 +63,7 @@ void main() {
         foodId: any(named: 'foodId'),
         loggedDate: any(named: 'loggedDate'),
         mealType: any(named: 'mealType'),
-        quantityGrams: any(named: 'quantityGrams'),
+        quantity: any(named: 'quantity'),
       ),
     );
   });

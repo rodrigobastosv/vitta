@@ -8,11 +8,11 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/general/food_image.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 
 Future<void> showEditFoodLogSheet({required BuildContext context, required FoodLogEntry entry}) => showModalBottomSheet<void>(
   context: context,
@@ -36,16 +36,37 @@ class _EditFoodLogSheet extends StatefulWidget {
 class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   late final UnitSystem _unitSystem = context.read<DietCubit>().unitSystem;
 
-  late final double? _initialUnits = widget.entry.log.isLoggedInUnits && widget.entry.food.isCountable ? widget.entry.log.quantityUnits : null;
-  late FoodQuantitySelection _selection = FoodQuantitySelection(quantityGrams: widget.entry.log.quantityGrams, quantityUnits: _initialUnits);
+  late final LoggedQuantity _initialQuantity = _seedQuantity();
+  late LoggedQuantity? _quantity = _initialQuantity;
   late MealType _mealType = widget.entry.log.mealType;
+
+  // The sheet opens in whatever measure the food is read in *now*, which is not
+  // always how the log was typed: a food that has since lost its unit weight
+  // would otherwise strand the sheet in a mode whose stepper isn't rendered, and
+  // one that has since gained a density is better re-stated in mL than in the
+  // grams nobody typed. The log's own recorded number is preferred wherever it
+  // still applies, so an untouched edit saves back exactly what it showed.
+  LoggedQuantity _seedQuantity() {
+    final FoodLogEntry(:log, :food) = widget.entry;
+    if (log.quantityUnits case final units? when food.isCountable) {
+      return LoggedQuantity.units(units: units, grams: log.quantityGrams);
+    }
+    if (log.quantityMl case final milliliters? when food.isMeasuredByVolume) {
+      return LoggedQuantity.volume(milliliters: milliliters, grams: log.quantityGrams);
+    }
+    return switch (food.densityGPerMl) {
+      final density? => LoggedQuantity.volume(milliliters: log.quantityGrams / density, grams: log.quantityGrams),
+      null => LoggedQuantity.weight(log.quantityGrams),
+    };
+  }
+
   bool _isSaving = false;
   String? _errorMessage;
 
   Future<void> _submit() async {
     final l10n = context.l10n;
-    final selection = _selection;
-    if (!selection.isValid) {
+    final quantity = _quantity;
+    if (quantity == null) {
       setState(() => _errorMessage = l10n.dietInvalidQuantity);
       return;
     }
@@ -55,12 +76,7 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
       _errorMessage = null;
     });
 
-    final updatedResult = await context.read<DietCubit>().updateLog(
-      logId: widget.entry.log.id,
-      mealType: _mealType,
-      quantityGrams: selection.quantityGrams!,
-      quantityUnits: selection.quantityUnits,
-    );
+    final updatedResult = await context.read<DietCubit>().updateLog(logId: widget.entry.log.id, mealType: _mealType, quantity: quantity);
 
     if (!mounted) {
       return;
@@ -78,7 +94,12 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: VTSpacing.m,
+        right: VTSpacing.m,
+        top: VTSpacing.m,
+        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -94,20 +115,26 @@ class _EditFoodLogSheetState extends State<_EditFoodLogSheet> {
           FoodQuantityInput(
             food: widget.entry.food,
             unitSystem: _unitSystem,
-            initialGrams: widget.entry.log.quantityGrams,
-            initialUnits: _initialUnits,
+            initialQuantity: _initialQuantity,
             autofocus: true,
-            onChanged: (selection) => _selection = selection,
+            onChanged: (quantity) => _quantity = quantity,
           ),
           const VTGap.m(),
           Wrap(
             spacing: VTSpacing.s,
             children: [
               for (final mealType in MealType.values)
-                ChoiceChip(label: Text(mealType.getLabel(l10n)), selected: _mealType == mealType, onSelected: (_) => setState(() => _mealType = mealType)),
+                ChoiceChip(
+                  label: Text(mealType.getLabel(l10n)),
+                  selected: _mealType == mealType,
+                  onSelected: (_) => setState(() => _mealType = mealType),
+                ),
             ],
           ),
-          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: context.colorScheme.error))],
+          if (_errorMessage case final errorMessage?) ...[
+            const VTGap.s(),
+            Text(errorMessage, style: TextStyle(color: context.colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.saveAction, isLoading: _isSaving, onPressed: _submit),
         ],

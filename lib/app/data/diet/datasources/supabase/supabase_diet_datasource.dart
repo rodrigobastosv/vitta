@@ -12,6 +12,7 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class SupabaseDietDataSource {
@@ -98,18 +99,10 @@ class SupabaseDietDataSource {
     required String foodId,
     required DateTime loggedDate,
     required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
+    required LoggedQuantity quantity,
   }) async {
     try {
-      final request = CreateFoodLogRequest(
-        userId: _userId,
-        foodId: foodId,
-        loggedDate: loggedDate,
-        mealType: mealType,
-        quantityGrams: quantityGrams,
-        quantityUnits: quantityUnits,
-      );
+      final request = CreateFoodLogRequest(userId: _userId, foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantity: quantity);
       final row = await _supabaseService.from(.foodLogs).insert(request.toJson()).select().single();
       return Success(FoodLog.fromMap(row));
     } on Exception catch (error) {
@@ -126,8 +119,7 @@ class SupabaseDietDataSource {
             foodId: entry.log.foodId,
             loggedDate: targetDate,
             mealType: entry.log.mealType,
-            quantityGrams: entry.log.quantityGrams,
-            quantityUnits: entry.log.quantityUnits,
+            quantity: LoggedQuantity.fromLog(entry.log),
           ).toJson(),
       ];
       await _supabaseService.from(.foodLogs).insert(requests);
@@ -154,11 +146,10 @@ class SupabaseDietDataSource {
   Future<Result<VTError, FoodLog>> updateFoodLog({
     required String logId,
     required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
+    required LoggedQuantity quantity,
   }) async {
     try {
-      final request = UpdateFoodLogRequest(mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+      final request = UpdateFoodLogRequest(mealType: mealType, quantity: quantity);
       final row = await _supabaseService.from(.foodLogs).update(request.toJson()).eq('id', logId).eq('user_id', _userId).select().single();
       return Success(FoodLog.fromMap(row));
     } on Exception catch (error) {

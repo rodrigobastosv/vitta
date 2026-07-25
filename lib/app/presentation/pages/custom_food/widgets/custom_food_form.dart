@@ -14,6 +14,7 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_nutrient.da
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_state.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_energy_split_card.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_nutrient_field.dart';
+import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_preparation_selector.dart';
 import 'package:vitta/app/presentation/pages/custom_food/widgets/custom_food_scan_card.dart';
 import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
 
@@ -30,6 +31,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
   final _nameController = TextEditingController();
   final _brandController = TextEditingController();
   final _gramsPerUnitController = TextEditingController();
+  final _gramsPer100MlController = TextEditingController();
   final _nutrientControllers = {for (final nutrient in CustomFoodNutrient.values) nutrient: TextEditingController()};
 
   @override
@@ -45,6 +47,7 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
     _nameController.dispose();
     _brandController.dispose();
     _gramsPerUnitController.dispose();
+    _gramsPer100MlController.dispose();
     for (final controller in _nutrientControllers.values) {
       controller.dispose();
     }
@@ -115,17 +118,36 @@ class _CustomFoodFormState extends State<CustomFoodForm> {
               decoration: InputDecoration(labelText: l10n.dietGramsPerUnitLabel, helperText: l10n.dietGramsPerUnitHint, helperMaxLines: 2),
             ),
           ),
-          const VTGap.m(),
+          const VTGap.s(),
           VTAppearEffect(
             index: 4,
+            child: TextField(
+              controller: _gramsPer100MlController,
+              onChanged: cubit.gramsPer100MlChanged,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.dietGramsPer100MlLabel,
+                helperText: l10n.dietGramsPer100MlHint,
+                helperMaxLines: 2,
+              ),
+            ),
+          ),
+          const VTGap.m(),
+          VTAppearEffect(
+            index: 5,
+            child: CustomFoodPreparationSelector(preparation: state.preparation, onChanged: cubit.preparationChanged),
+          ),
+          const VTGap.m(),
+          VTAppearEffect(
+            index: 6,
             child: CustomFoodScanCard(onTap: _scanNutritionLabel, isLocked: !context.watch<PremiumCubit>().state.isPremium),
           ),
           const VTGap.l(),
-          VTAppearEffect(index: 5, child: Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.title(context))),
+          VTAppearEffect(index: 7, child: Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.title(context))),
           const VTGap.m(),
           for (final (index, nutrient) in CustomFoodNutrient.values.indexed) ...[
             VTAppearEffect(
-              index: index + 6,
+              index: index + 8,
               child: CustomFoodNutrientField(
                 nutrient: nutrient,
                 controller: _nutrientControllers[nutrient]!,

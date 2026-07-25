@@ -3,6 +3,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class LogFoodUseCase {
@@ -14,8 +15,7 @@ class LogFoodUseCase {
     required Food food,
     required DateTime loggedDate,
     required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
+    required LoggedQuantity quantity,
   }) async {
     final foodIdResult = switch (food.id) {
       final String id => Success<VTError, String>(id),
@@ -23,7 +23,7 @@ class LogFoodUseCase {
     };
     return foodIdResult.when(
       (error) => Future.value(Failure(error)),
-      (value) => _dietRepository.logFood(foodId: value, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits),
+      (value) => _dietRepository.logFood(foodId: value, loggedDate: loggedDate, mealType: mealType, quantity: quantity),
     );
   }
 

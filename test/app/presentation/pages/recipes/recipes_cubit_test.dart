@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_presentation_event.dart';
@@ -90,11 +91,21 @@ void main() {
       final recipe = RecipeFactory.build();
       final logFoodUseCase = MockLogFoodUseCase();
       when(
-        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
+        () => logFoodUseCase(
+          food: recipe.food,
+          loggedDate: DateTime(2026, 7, 22),
+          mealType: .dinner,
+          quantity: const LoggedQuantity.weight(450),
+        ),
       ).thenAnswer((_) async => Success(FoodLogFactory.build()));
       return CubitsFactories.buildRecipesCubit(logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22, 15, 30), mealType: .dinner, quantityGrams: 450),
+    act: (cubit) => cubit.logRecipe(
+      recipeFood: RecipeFactory.build().food,
+      loggedDate: DateTime(2026, 7, 22, 15, 30),
+      mealType: .dinner,
+      quantity: const LoggedQuantity.weight(450),
+    ),
     expectPresentation: () => [isA<RecipeLogged>().having((event) => event.mealType, 'mealType', MealType.dinner)],
   );
 
@@ -104,11 +115,21 @@ void main() {
       final recipe = RecipeFactory.build();
       final logFoodUseCase = MockLogFoodUseCase();
       when(
-        () => logFoodUseCase(food: recipe.food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
+        () => logFoodUseCase(
+          food: recipe.food,
+          loggedDate: DateTime(2026, 7, 22),
+          mealType: .dinner,
+          quantity: const LoggedQuantity.weight(450),
+        ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildRecipesCubit(logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logRecipe(recipeFood: RecipeFactory.build().food, loggedDate: DateTime(2026, 7, 22), mealType: .dinner, quantityGrams: 450),
+    act: (cubit) => cubit.logRecipe(
+      recipeFood: RecipeFactory.build().food,
+      loggedDate: DateTime(2026, 7, 22),
+      mealType: .dinner,
+      quantity: const LoggedQuantity.weight(450),
+    ),
     expectPresentation: () => <RecipesPresentationEvent>[],
   );
 }

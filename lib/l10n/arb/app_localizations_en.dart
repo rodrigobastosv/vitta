@@ -397,7 +397,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get logRemindersMasterLabel => 'Daily nudges';
 
   @override
-  String get logRemindersMasterHint => 'A nudge only arrives while that tracker is still empty for the day.';
+  String get logRemindersMasterHint => 'A nudge only arrives while that tracker is still empty for the day, unless you set it to repeat.';
 
   @override
   String get logRemindersTrackersLabel => 'What to be reminded about';
@@ -653,6 +653,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String dietQuantityMilliliters(int milliliters) {
+    return '$milliliters mL';
+  }
+
+  @override
   String get dietLogAgainAction => 'Log again';
 
   @override
@@ -843,10 +848,36 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String dietLogSubtitleMilliliters(int milliliters, int calories) {
+    return '$milliliters mL - $calories kcal';
+  }
+
+  @override
   String get dietGramsPerUnitLabel => 'Weight of one unit (g)';
 
   @override
   String get dietGramsPerUnitHint => 'Optional. Fill it in to log this food by unit, like \"2 eggs\".';
+
+  @override
+  String get dietGramsPer100MlLabel => 'Weight of 100 mL (g)';
+
+  @override
+  String get dietGramsPer100MlHint => 'Optional. Fill it in for a drink, so you can log it in mL. Around 100 for water or juice.';
+
+  @override
+  String get dietPreparationTitle => 'Raw or cooked';
+
+  @override
+  String get dietPreparationHint => 'Which one these numbers are for. 100 g of raw rice is not 100 g of cooked rice.';
+
+  @override
+  String get dietPreparationRaw => 'Raw';
+
+  @override
+  String get dietPreparationCooked => 'Cooked';
+
+  @override
+  String get dietPreparationUnset => 'Not stated';
 
   @override
   String get dietLogFoodAction => 'Add to day';

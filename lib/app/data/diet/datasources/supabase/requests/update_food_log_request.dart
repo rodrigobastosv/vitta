@@ -1,11 +1,16 @@
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class UpdateFoodLogRequest {
-  UpdateFoodLogRequest({required this.mealType, required this.quantityGrams, this.quantityUnits});
+  UpdateFoodLogRequest({required this.mealType, required this.quantity});
 
   final MealType mealType;
-  final double quantityGrams;
-  final double? quantityUnits;
+  final LoggedQuantity quantity;
 
-  Map<String, dynamic> toJson() => {'meal_type': mealType.wireValue, 'quantity_grams': quantityGrams, 'quantity_units': quantityUnits};
+  Map<String, dynamic> toJson() => {
+    'meal_type': mealType.wireValue,
+    'quantity_grams': quantity.grams,
+    'quantity_units': quantity.units,
+    'quantity_ml': quantity.milliliters,
+  };
 }

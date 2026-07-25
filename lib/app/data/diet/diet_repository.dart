@@ -15,6 +15,7 @@ import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
@@ -82,9 +83,8 @@ class DietRepository {
     required String foodId,
     required DateTime loggedDate,
     required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
-  }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+    required LoggedQuantity quantity,
+  }) => _supabaseDietDataSource.logFood(foodId: foodId, loggedDate: loggedDate, mealType: mealType, quantity: quantity);
 
   Future<Result<VTError, void>> copyFoodLogs({required List<FoodLogEntry> entries, required DateTime targetDate}) =>
       _supabaseDietDataSource.copyFoodLogs(entries: entries, targetDate: targetDate);
@@ -94,8 +94,8 @@ class DietRepository {
     return dailyLogResult.when(Failure.new, (value) => Success(DailyMacros(entries: value)));
   }
 
-  Future<Result<VTError, FoodLog>> updateFoodLog({required String logId, required MealType mealType, required double quantityGrams, double? quantityUnits}) =>
-      _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+  Future<Result<VTError, FoodLog>> updateFoodLog({required String logId, required MealType mealType, required LoggedQuantity quantity}) =>
+      _supabaseDietDataSource.updateFoodLog(logId: logId, mealType: mealType, quantity: quantity);
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 
@@ -103,7 +103,8 @@ class DietRepository {
 
   Future<Result<VTError, void>> addFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);
 
-  Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
+  Future<Result<VTError, void>> removeFavoriteFood({required String foodId}) =>
+      _supabaseFoodFavoritesDataSource.removeFavorite(foodId: foodId);
 
   Future<Result<VTError, List<Recipe>>> getRecipes() => _supabaseRecipeDataSource.getRecipes();
 

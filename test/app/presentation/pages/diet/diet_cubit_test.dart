@@ -6,6 +6,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
@@ -126,7 +127,9 @@ void main() {
     final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
     final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
-    when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantityGrams: 250)).thenAnswer((_) async => Success(FoodLogFactory.build()));
+    when(
+      () => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantity: const LoggedQuantity.weight(250)),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final cubit = CubitsFactories.buildDietCubit(
@@ -136,7 +139,7 @@ void main() {
     );
     await cubit.goToDate(DateTime(2026, 7, 10));
 
-    final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantityGrams: 250);
+    final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantity: const LoggedQuantity.weight(250));
 
     updatedResult.when((error) => fail('expected Success, got Failure($error)'), (_) {});
     verify(() => getDailyMacrosUseCase(date: DateTime(2026, 7, 10))).called(2);
@@ -152,11 +155,16 @@ void main() {
     'updateLog returns the failure without reloading or emitting an error dialog',
     build: () {
       final updateFoodLogUseCase = MockUpdateFoodLogUseCase();
-      when(() => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantityGrams: 250)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCaseUpdateSpy, updateFoodLogUseCase: updateFoodLogUseCase);
+      when(
+        () => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantity: const LoggedQuantity.weight(250)),
+      ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
+      return CubitsFactories.buildDietCubit(
+        getDailyMacrosUseCase: getDailyMacrosUseCaseUpdateSpy,
+        updateFoodLogUseCase: updateFoodLogUseCase,
+      );
     },
     act: (cubit) async {
-      final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantityGrams: 250);
+      final updatedResult = await cubit.updateLog(logId: 'log-1', mealType: .dinner, quantity: const LoggedQuantity.weight(250));
       expect(updatedResult.when((error) => error.message, (_) => null), 'boom');
     },
     expectPresentation: () => <DietPresentationEvent>[],
@@ -184,7 +192,9 @@ void main() {
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
-      when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => Success(DailyMacros(entries: [FoodLogEntryFactory.build()])));
+      when(
+        () => getDailyMacrosUseCase(date: any(named: 'date')),
+      ).thenAnswer((_) async => Success(DailyMacros(entries: [FoodLogEntryFactory.build()])));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
       return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
     },
@@ -193,8 +203,12 @@ void main() {
       final yesterday = DateTime.now();
       final expectedDate = DateTime(yesterday.year, yesterday.month, yesterday.day).subtract(const Duration(days: 1));
       return [
-        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isEmpty),
-        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
+        isA<DietState>()
+            .having((state) => state.date, 'date', expectedDate)
+            .having((state) => state.dailyMacros.entries, 'entries', isEmpty),
+        isA<DietState>()
+            .having((state) => state.date, 'date', expectedDate)
+            .having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
       ];
     },
   );
