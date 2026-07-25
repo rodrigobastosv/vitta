@@ -184,7 +184,12 @@ Future<List<Map<String, dynamic>>> _fetchPendingFoods(
     '?catalog_facts_checked_at=is.null'
     '${source == null ? '' : '&source=eq.$source'}'
     '&select=id,name,brand'
-    '&order=times_logged.desc'
+    // times_logged is tied for almost every row (most of the catalog is at 0), and
+    // `order` on a tied column is not a total order - limit/offset paging over it
+    // returns some rows twice and skips others. Asking about a food twice is
+    // harmless here (the write is idempotent), but silently skipping one is not, so
+    // the primary key breaks every tie.
+    '&order=times_logged.desc&order=id.asc'
     '&limit=$limit&offset=$offset',
   );
   final response = await _send(

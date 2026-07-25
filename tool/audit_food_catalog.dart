@@ -136,13 +136,20 @@ Future<List<_Food>> _fetchAllFoods(
   String? source,
 }) async {
   final foods = <_Food>[];
+  final seenIds = <String>{};
   for (var offset = 0; ; offset += pageSize) {
     final uri = Uri.parse(
       '$supabaseUrl/rest/v1/foods'
       '?select=id,name,brand,barcode,source,times_logged,category,grams_per_unit,density_g_per_ml,preparation,'
       'calories_per_100g,protein_per_100g,carbs_per_100g,fat_per_100g,fiber_per_100g,catalog_facts_checked_at,created_at'
       '${source == null ? '' : '&source=eq.$source'}'
-      '&order=created_at.asc'
+      // Ordered by the primary key, never by created_at: the bulk imports write
+      // thousands of rows sharing a timestamp, and `order` on a tied column is not
+      // a total order - so limit/offset paging returns some rows twice and skips
+      // others entirely. That made this tool report one physical row as a
+      // duplicate *of itself*, and AUDIT_FIX then deleted its only copy. `id` is
+      // unique, so paging over it is stable.
+      '&order=id.asc'
       '&limit=$pageSize&offset=$offset',
     );
     final response = await _send(() => client.get(uri, headers: _restHeaders(serviceRoleKey)), description: 'fetch foods');
@@ -152,7 +159,13 @@ Future<List<_Food>> _fetchAllFoods(
       exit(1);
     }
     final page = (jsonDecode(response.body) as List<dynamic>).cast<Map<String, dynamic>>();
-    foods.addAll(page.map(_Food.fromRow));
+    // Belt and braces on top of the stable order above: a row read twice must
+    // never become its own duplicate group, because the fix deletes those.
+    for (final food in page.map(_Food.fromRow)) {
+      if (seenIds.add(food.id)) {
+        foods.add(food);
+      }
+    }
     if (page.length < pageSize) {
       return foods;
     }
