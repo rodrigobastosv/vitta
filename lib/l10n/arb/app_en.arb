@@ -594,6 +594,14 @@
   "mealScanIncomplete": "Pick at least one item with a valid amount.",
   "mealScanLoggedTitle": "Meal added",
   "mealScanLoggedMessage": "Everything you kept is now in your day.",
+  "dietCaloriesPer100Ml": "{calories} kcal / 100mL",
+  "@dietCaloriesPer100Ml": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
@@ -615,6 +623,7 @@
   "dietSearchPrompt": "Search for a food to log it.",
   "dietSearchNoResults": "No results. Try another search or add it manually.",
   "dietNutritionPer100gTitle": "Nutrition per 100g",
+  "dietNutritionPer100MlTitle": "Nutrition per 100mL",
   "dietMacroGrams": "{grams} g",
   "@dietMacroGrams": {
     "placeholders": {

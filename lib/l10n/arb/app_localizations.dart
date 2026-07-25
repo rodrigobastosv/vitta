@@ -2042,6 +2042,12 @@ abstract class AppLocalizations {
   /// **'Everything you kept is now in your day.'**
   String get mealScanLoggedMessage;
 
+  /// No description provided for @dietCaloriesPer100Ml.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal / 100mL'**
+  String dietCaloriesPer100Ml(int calories);
+
   /// No description provided for @dietCaloriesPer100g.
   ///
   /// In en, this message translates to:
@@ -2125,6 +2131,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nutrition per 100g'**
   String get dietNutritionPer100gTitle;
+
+  /// No description provided for @dietNutritionPer100MlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition per 100mL'**
+  String get dietNutritionPer100MlTitle;
 
   /// No description provided for @dietMacroGrams.
   ///

@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 import 'package:vitta/app/presentation/general/food_image.dart';
+import 'package:vitta/app/presentation/general/food_reference_amount.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/macro_pill.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
 
@@ -63,27 +64,27 @@ class FoodDetailsDialog extends StatelessWidget {
                       ),
                     ],
                     const VTGap.xs(),
-                    Text(l10n.dietCaloriesPer100g(food.caloriesPer100g.round()), style: VTTextStyles.body(context), textAlign: .center),
+                    Text(food.caloriesPerReference(l10n), style: VTTextStyles.body(context), textAlign: .center),
                     const VTGap.m(),
                     Wrap(
                       alignment: .center,
                       spacing: VTSpacing.s,
                       runSpacing: VTSpacing.xs,
                       children: [
-                        MacroPill(label: l10n.dietProteinLabel, grams: food.proteinPer100g, color: VTColors.macroProtein),
-                        MacroPill(label: l10n.dietCarbsLabel, grams: food.carbsPer100g, color: VTColors.macroCarbs),
-                        MacroPill(label: l10n.dietFatLabel, grams: food.fatPer100g, color: VTColors.macroFat),
-                        MacroPill(label: l10n.dietFiberLabel, grams: food.fiberPer100g, color: VTColors.macroFiber),
+                        MacroPill(label: l10n.dietProteinLabel, grams: food.per100Reference(food.proteinPer100g), color: VTColors.macroProtein),
+                        MacroPill(label: l10n.dietCarbsLabel, grams: food.per100Reference(food.carbsPer100g), color: VTColors.macroCarbs),
+                        MacroPill(label: l10n.dietFatLabel, grams: food.per100Reference(food.fatPer100g), color: VTColors.macroFat),
+                        MacroPill(label: l10n.dietFiberLabel, grams: food.per100Reference(food.fiberPer100g), color: VTColors.macroFiber),
                       ],
                     ),
                     if (presentNutrients.isNotEmpty) ...[
                       const VTGap.m(),
                       const Divider(height: 1),
                       const VTGap.s(),
-                      Text(l10n.dietNutritionPer100gTitle, style: VTTextStyles.caption(context)),
+                      Text(food.nutritionReferenceTitle(l10n), style: VTTextStyles.caption(context)),
                       const VTGap.s(),
                       for (final nutrient in presentNutrients) ...[
-                        MicronutrientRow(nutrient: nutrient, gramsPer100g: food.micronutrientsPer100g[nutrient]!),
+                        MicronutrientRow(nutrient: nutrient, gramsPer100g: food.per100Reference(food.micronutrientsPer100g[nutrient]!)),
                         const VTGap.xs(),
                       ],
                     ],

@@ -1087,6 +1087,11 @@ class AppLocalizationsPt extends AppLocalizations {
   String get mealScanLoggedMessage => 'Tudo o que você manteve já está no seu dia.';
 
   @override
+  String dietCaloriesPer100Ml(int calories) {
+    return '$calories kcal / 100mL';
+  }
+
+  @override
   String dietCaloriesPer100g(int calories) {
     return '$calories kcal / 100g';
   }
@@ -1129,6 +1134,9 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get dietNutritionPer100gTitle => 'Informação nutricional por 100g';
+
+  @override
+  String get dietNutritionPer100MlTitle => 'Informação nutricional por 100mL';
 
   @override
   String dietMacroGrams(String grams) {

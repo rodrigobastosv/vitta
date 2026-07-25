@@ -8,6 +8,7 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/presentation/general/food_image.dart';
+import 'package:vitta/app/presentation/general/food_reference_amount.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_preparation_labels.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -31,7 +32,7 @@ class FoodResultTile extends StatelessWidget {
   final VoidCallback? onToggleFavorite;
 
   String subtitle(AppLocalizations l10n) {
-    final calories = l10n.dietCaloriesPer100g(food.caloriesPer100g.round());
+    final calories = food.caloriesPerReference(l10n);
     return switch (food.brand) {
       final brand? when brand.trim().isNotEmpty => '$brand · $calories',
       _ => calories,
