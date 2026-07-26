@@ -82,10 +82,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     emitPresentation(AddFoodShowLoading());
     final favoritesResult = await _getFavoriteFoodsUseCase();
     emitPresentation(AddFoodHideLoading());
-    favoritesResult.when(
-      (error) => emitPresentation(AddFoodError(message: error.message)),
-      (favorites) => emit(state.copyWith(favorites: favorites)),
-    );
+    favoritesResult.when((_) => emitPresentation(const AddFoodError()), (favorites) => emit(state.copyWith(favorites: favorites)));
   }
 
   static const Duration _debounce = Duration(milliseconds: 350);
@@ -124,9 +121,9 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     emitPresentation(AddFoodShowLoading());
     final foodsResult = await _searchFoodsUseCase(query: query);
     emitPresentation(AddFoodHideLoading());
-    final foods = foodsResult.when((_) => null, (value) => value);
+    final foods = foodsResult.when((_) => null, (searchedFoods) => searchedFoods);
     if (foods == null) {
-      emitPresentation(AddFoodError(message: foodsResult.when((error) => error.message, (_) => '')));
+      emitPresentation(const AddFoodError());
       return;
     }
     emit(state.copyWith(results: foods, query: query));
@@ -159,9 +156,9 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
 
   Future<void> _favorite(Food food, List<Food> previousFavorites) async {
     final favoritedResult = await _favoriteFoodUseCase(food: food);
-    final savedFood = favoritedResult.when((_) => null, (value) => value);
+    final savedFood = favoritedResult.when((_) => null, (persistedFood) => persistedFood);
     if (savedFood == null) {
-      _revert(previousFavorites, favoritedResult.when((error) => error.message, (_) => ''));
+      _revert(previousFavorites);
       return;
     }
     Log.action('food_favorited', data: {'food': savedFood.name});
@@ -186,17 +183,17 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
       return;
     }
     final unfavoritedResult = await _unfavoriteFoodUseCase(foodId: foodId);
-    final error = unfavoritedResult.when((error) => error, (_) => null);
-    if (error != null) {
-      _revert(previousFavorites, error.message);
+    final unfavoriteFailed = unfavoritedResult.when((_) => true, (_) => false);
+    if (unfavoriteFailed) {
+      _revert(previousFavorites);
       return;
     }
     Log.action('food_unfavorited', data: {'food': food.name});
   }
 
-  void _revert(List<Food> previousFavorites, String message) {
+  void _revert(List<Food> previousFavorites) {
     emit(state.copyWith(favorites: previousFavorites));
-    emitPresentation(AddFoodError(message: message));
+    emitPresentation(const AddFoodError());
   }
 
   List<Food>? _replaceInResults(Food food, Food savedFood) {

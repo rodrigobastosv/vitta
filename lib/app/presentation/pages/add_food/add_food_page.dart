@@ -51,8 +51,8 @@ class AddFoodPage extends StatelessWidget {
             context.hideLoading();
           case FoodLogged(:final foodName, :final mealType):
             context.showToast(title: foodName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)));
-          case AddFoodError(:final message):
-            context.showErrorToast(message: message);
+          case AddFoodError():
+            context.showErrorToast();
         }
       },
       builder: (context, cubit, state) => Scaffold(

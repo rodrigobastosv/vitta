@@ -721,6 +721,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get errorTitle => 'Something went wrong';
 
   @override
+  String get errorGenericMessage => 'We couldn\'t complete that. Check your connection and try again.';
+
+  @override
   String get warningTitle => 'Almost there';
 
   @override

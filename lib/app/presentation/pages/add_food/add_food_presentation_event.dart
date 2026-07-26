@@ -14,7 +14,5 @@ class FoodLogged implements AddFoodPresentationEvent {
 }
 
 class AddFoodError implements AddFoodPresentationEvent {
-  const AddFoodError({required this.message});
-
-  final String message;
+  const AddFoodError();
 }

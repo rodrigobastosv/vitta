@@ -11,10 +11,10 @@ const _actionableFailureDuration = Duration(seconds: 8);
 extension BuildContextToastExt on BuildContext {
   void showToast({required String title, required String message}) => _showToast(VTToast(title: title, message: message), _successDuration);
 
-  void showErrorToast({required String message, String? title, VoidCallback? onRetry}) => _showToast(
+  void showErrorToast({String? message, String? title, VoidCallback? onRetry}) => _showToast(
     VTToast(
       title: title ?? l10n.errorTitle,
-      message: message,
+      message: message ?? l10n.errorGenericMessage,
       severity: .error,
       actionLabel: onRetry == null ? null : l10n.retry,
       onAction: onRetry == null
