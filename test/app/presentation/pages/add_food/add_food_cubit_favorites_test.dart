@@ -30,6 +30,12 @@ void main() {
     return getFavoriteFoodsUseCase;
   }
 
+  MockGetMyFoodsUseCase stubbedMyFoods() {
+    final getMyFoodsUseCase = MockGetMyFoodsUseCase();
+    when(getMyFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+    return getMyFoodsUseCase;
+  }
+
   MockGetRecentSearchesUseCase stubbedRecents([List<String> recentSearches = const []]) {
     final getRecentSearchesUseCase = MockGetRecentSearchesUseCase();
     when(getRecentSearchesUseCase.call).thenReturn(recentSearches);
@@ -56,6 +62,7 @@ void main() {
       getRecentSearchesUseCase: stubbedRecents(['banana']),
       addRecentSearchUseCase: stubbedAddRecent(),
       getFavoriteFoodsUseCase: stubbedFavorites([FoodFactory.build(name: 'Iogurte')]),
+      getMyFoodsUseCase: stubbedMyFoods(),
     ),
     act: (cubit) => cubit.onInit(),
     expect: () => [

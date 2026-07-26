@@ -104,6 +104,7 @@ class AddFoodPage extends StatelessWidget {
                   AddFoodTab.search => _buildSearchTab(context, cubit, state, l10n),
                   AddFoodTab.recent => _buildRecentTab(context, cubit, state, l10n),
                   AddFoodTab.favorites => _buildFavoritesTab(context, cubit, state, l10n),
+                  AddFoodTab.myFoods => _buildMyFoodsTab(context, cubit, state, l10n),
                 },
               ),
             ),
@@ -182,6 +183,18 @@ class AddFoodPage extends StatelessWidget {
     child: state.favorites.isEmpty
         ? VTEmptyState(icon: Icons.favorite_border, title: l10n.dietFavoritesEmptyTitle, message: l10n.dietFavoritesEmptyMessage)
         : _buildList(context: context, cubit: cubit, state: state, foods: state.favorites, heroPrefix: 'food-favorite'),
+  );
+
+  Widget _buildMyFoodsTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Padding(
+    key: const ValueKey(AddFoodTab.myFoods),
+    padding: const EdgeInsets.only(top: VTSpacing.m),
+    child: state.myFoods.isEmpty
+        ? VTEmptyState(
+            icon: Icons.inventory_2_outlined,
+            title: l10n.dietMyFoodsEmptyTitle,
+            message: l10n.dietMyFoodsEmptyMessage,
+          )
+        : _buildList(context: context, cubit: cubit, state: state, foods: state.myFoods, heroPrefix: 'food-mine'),
   );
 
   Widget _buildList({

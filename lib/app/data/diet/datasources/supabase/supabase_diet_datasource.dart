@@ -95,6 +95,28 @@ class SupabaseDietDataSource {
       .order('name', ascending: true)
       .limit(_catalogSearchLimit);
 
+  static const _myFoodsLimit = 100;
+
+  // Foods this user added to the shared catalog, not every row they own: saving
+  // an Open Food Facts search result stamps it with the logger's user_id too, so
+  // a bare user_id filter would list every packaged product they ever logged.
+  // Recipes are excluded by the same predicate - they are a foods row as well
+  // (source 'recipe'), and they have their own page.
+  Future<Result<VTError, List<Food>>> getMyFoods() async {
+    try {
+      final rows = await _supabaseService
+          .from(.foods)
+          .select()
+          .eq('user_id', _userId)
+          .eq('source', FoodSource.custom.wireValue)
+          .order('created_at', ascending: false)
+          .limit(_myFoodsLimit);
+      return Success(rows.map(Food.fromMap).toList());
+    } on Exception catch (error) {
+      return Failure(VTError(message: 'Failed to load the foods you added', cause: error));
+    }
+  }
+
   Future<Result<VTError, FoodLog>> logFood({
     required String foodId,
     required DateTime loggedDate,

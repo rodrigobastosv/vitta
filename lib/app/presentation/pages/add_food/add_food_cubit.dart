@@ -12,6 +12,7 @@ import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart'
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_my_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -37,6 +38,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     required this._removeRecentSearchUseCase,
     required this._clearRecentSearchesUseCase,
     required this._getRecentlyLoggedFoodsUseCase,
+    required this._getMyFoodsUseCase,
   }) : super(const AddFoodState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
@@ -50,6 +52,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   final RemoveRecentSearchUseCase _removeRecentSearchUseCase;
   final ClearRecentSearchesUseCase _clearRecentSearchesUseCase;
   final GetRecentlyLoggedFoodsUseCase _getRecentlyLoggedFoodsUseCase;
+  final GetMyFoodsUseCase _getMyFoodsUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -59,12 +62,18 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   void onInit() {
     emit(state.copyWith(recentSearches: _getRecentSearchesUseCase()));
     loadRecentFoods();
+    loadMyFoods();
     loadFavorites();
   }
 
   Future<void> loadRecentFoods() async {
     final recentResult = await _getRecentlyLoggedFoodsUseCase();
     recentResult.when((_) {}, (recentFoods) => emit(state.copyWith(recentFoods: recentFoods)));
+  }
+
+  Future<void> loadMyFoods() async {
+    final myFoodsResult = await _getMyFoodsUseCase();
+    myFoodsResult.when((_) {}, (myFoods) => emit(state.copyWith(myFoods: myFoods)));
   }
 
   void changeTab(AddFoodTab tab) => emit(state.copyWith(tab: tab));
@@ -101,7 +110,15 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
 
   Future<void> search({required String query}) async {
     if (query.trim().isEmpty) {
-      emit(AddFoodState(favorites: state.favorites, recentSearches: state.recentSearches, tab: state.tab));
+      emit(
+        AddFoodState(
+          favorites: state.favorites,
+          myFoods: state.myFoods,
+          recentSearches: state.recentSearches,
+          recentFoods: state.recentFoods,
+          tab: state.tab,
+        ),
+      );
       return;
     }
     emitPresentation(AddFoodShowLoading());
@@ -193,6 +210,8 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     ];
   }
 
+  static bool _isNewProduct(Food food) => food.id == null && food.source == .custom;
+
   Future<Result<VTError, FoodLog>> logFood({
     required Food food,
     required DateTime loggedDate,
@@ -205,10 +224,15 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
       mealType: mealType,
       quantity: quantity,
     );
-    loggedResult.when((_) {}, (_) {
-      Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});
-      emitPresentation(FoodLogged(foodName: food.name, mealType: mealType));
-    });
+    final foodLog = loggedResult.when((_) => null, (value) => value);
+    if (foodLog == null) {
+      return loggedResult;
+    }
+    Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});
+    emitPresentation(FoodLogged(foodName: food.name, mealType: mealType));
+    if (_isNewProduct(food)) {
+      await loadMyFoods();
+    }
     return loggedResult;
   }
 }

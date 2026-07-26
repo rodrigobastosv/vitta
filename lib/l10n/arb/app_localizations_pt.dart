@@ -1106,6 +1106,15 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietSearchTabLabel => 'Busca';
 
   @override
+  String get dietMyFoodsTabLabel => 'Meus';
+
+  @override
+  String get dietMyFoodsEmptyTitle => 'Nada cadastrado ainda';
+
+  @override
+  String get dietMyFoodsEmptyMessage => 'Os alimentos que você cadastrar ficam aqui, prontos para registrar de novo quando quiser.';
+
+  @override
   String get dietClearRecentSearchesAction => 'Limpar';
 
   @override

@@ -30,6 +30,8 @@ void main() {
     when(getFavoriteFoodsUseCase.call).thenAnswer((_) async => const Success([]));
     final getRecentSearchesUseCase = MockGetRecentSearchesUseCase();
     when(getRecentSearchesUseCase.call).thenReturn(const []);
+    final getMyFoodsUseCase = MockGetMyFoodsUseCase();
+    when(getMyFoodsUseCase.call).thenAnswer((_) async => const Success([]));
 
     if (G.isRegistered<AddFoodCubit>()) {
       G.unregister<AddFoodCubit>();
@@ -39,6 +41,7 @@ void main() {
         getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase,
         getFavoriteFoodsUseCase: getFavoriteFoodsUseCase,
         getRecentSearchesUseCase: getRecentSearchesUseCase,
+        getMyFoodsUseCase: getMyFoodsUseCase,
       ),
     );
     addTearDown(() => G.unregister<AddFoodCubit>());

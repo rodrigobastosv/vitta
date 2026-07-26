@@ -83,6 +83,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_my_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
@@ -291,6 +292,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => HasSeenDietIntroUseCase(dietRepository: G()));
   G.registerFactory(() => MarkDietIntroSeenUseCase(dietRepository: G()));
   G.registerFactory(() => GetFavoriteFoodsUseCase(dietRepository: G()));
+  G.registerFactory(() => GetMyFoodsUseCase(dietRepository: G()));
   G.registerFactory(() => GetRecentSearchesUseCase(dietRepository: G()));
   G.registerFactory(() => AddRecentSearchUseCase(dietRepository: G()));
   G.registerFactory(() => RemoveRecentSearchUseCase(dietRepository: G()));
@@ -408,6 +410,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       removeRecentSearchUseCase: G(),
       clearRecentSearchesUseCase: G(),
       getRecentlyLoggedFoodsUseCase: G(),
+      getMyFoodsUseCase: G(),
     ),
   );
   G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));

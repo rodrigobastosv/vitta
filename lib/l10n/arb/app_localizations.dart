@@ -2072,6 +2072,24 @@ abstract class AppLocalizations {
   /// **'Search'**
   String get dietSearchTabLabel;
 
+  /// No description provided for @dietMyFoodsTabLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mine'**
+  String get dietMyFoodsTabLabel;
+
+  /// No description provided for @dietMyFoodsEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing added yet'**
+  String get dietMyFoodsEmptyTitle;
+
+  /// No description provided for @dietMyFoodsEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Foods you add yourself land here, ready to log again whenever you want.'**
+  String get dietMyFoodsEmptyMessage;
+
   /// No description provided for @dietClearRecentSearchesAction.
   ///
   /// In en, this message translates to:
