@@ -5,9 +5,14 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
-class MealScanTypeSelector extends StatelessWidget {
-  const MealScanTypeSelector({required this.selected, required this.onSelected, super.key});
+// The meal a batch of food is headed for. Shared by the two pages that log more
+// than one item at a time (the meal scan and the meal suggestion), which is why
+// the caption is the caller's to name - one is saying where the photo lands, the
+// other what to suggest.
+class MealTypeSelector extends StatelessWidget {
+  const MealTypeSelector({required this.title, required this.selected, required this.onSelected, super.key});
 
+  final String title;
   final MealType selected;
   final ValueChanged<MealType> onSelected;
 
@@ -18,7 +23,7 @@ class MealScanTypeSelector extends StatelessWidget {
     return Column(
       crossAxisAlignment: .start,
       children: [
-        Text(l10n.mealScanMealTypeTitle, style: VTTextStyles.bodyStrong(context)),
+        Text(title, style: VTTextStyles.bodyStrong(context)),
         const VTGap.s(),
         Wrap(
           spacing: VTSpacing.s,
