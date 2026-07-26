@@ -99,6 +99,8 @@ class DietRepository {
 
   Future<Result<VTError, void>> deleteFoodLog({required String logId}) => _supabaseDietDataSource.deleteFoodLog(logId: logId);
 
+  Future<Result<VTError, List<Food>>> getMyFoods() => _supabaseDietDataSource.getMyFoods();
+
   Future<Result<VTError, List<Food>>> getFavoriteFoods() => _supabaseFoodFavoritesDataSource.getFavorites();
 
   Future<Result<VTError, void>> addFavoriteFood({required String foodId}) => _supabaseFoodFavoritesDataSource.addFavorite(foodId: foodId);

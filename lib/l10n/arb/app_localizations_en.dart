@@ -1104,6 +1104,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietSearchTabLabel => 'Search';
 
   @override
+  String get dietMyFoodsTabLabel => 'Mine';
+
+  @override
+  String get dietMyFoodsEmptyTitle => 'Nothing added yet';
+
+  @override
+  String get dietMyFoodsEmptyMessage => 'Foods you add yourself land here, ready to log again whenever you want.';
+
+  @override
   String get dietClearRecentSearchesAction => 'Clear';
 
   @override

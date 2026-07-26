@@ -103,7 +103,7 @@ class _Segment<T> extends StatelessWidget {
             mainAxisAlignment: .center,
             children: [
               if (tab.icon != null) ...[Icon(tab.icon, size: 18, color: color), const VTGap.s()],
-              Text(tab.label),
+              Flexible(child: FittedBox(fit: .scaleDown, child: Text(tab.label, maxLines: 1))),
             ],
           ),
         ),

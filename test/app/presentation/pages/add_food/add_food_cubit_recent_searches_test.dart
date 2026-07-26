@@ -22,6 +22,12 @@ void main() {
     return getRecentSearchesUseCase;
   }
 
+  MockGetMyFoodsUseCase stubbedMyFoods() {
+    final getMyFoodsUseCase = MockGetMyFoodsUseCase();
+    when(getMyFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+    return getMyFoodsUseCase;
+  }
+
   MockGetFavoriteFoodsUseCase stubbedFavorites() {
     final getFavoriteFoodsUseCase = MockGetFavoriteFoodsUseCase();
     when(getFavoriteFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
@@ -109,6 +115,7 @@ void main() {
       removeRecentSearchUseCase: removeRecentSearchUseCase,
       getRecentSearchesUseCase: stubbedRecents(['banana', 'frango']),
       getFavoriteFoodsUseCase: stubbedFavorites(),
+      getMyFoodsUseCase: stubbedMyFoods(),
     );
 
     cubit.onInit();
@@ -125,6 +132,7 @@ void main() {
       clearRecentSearchesUseCase: clearRecentSearchesUseCase,
       getRecentSearchesUseCase: stubbedRecents(['banana', 'frango']),
       getFavoriteFoodsUseCase: stubbedFavorites(),
+      getMyFoodsUseCase: stubbedMyFoods(),
     );
 
     cubit.onInit();
