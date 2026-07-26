@@ -215,6 +215,7 @@
   "retry": "Tentar novamente",
   "ok": "OK",
   "errorTitle": "Algo deu errado",
+  "errorGenericMessage": "Não conseguimos concluir. Verifique sua conexão e tente novamente.",
   "warningTitle": "Falta pouco",
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {

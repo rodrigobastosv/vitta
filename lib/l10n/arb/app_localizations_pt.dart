@@ -722,6 +722,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get errorTitle => 'Algo deu errado';
 
   @override
+  String get errorGenericMessage => 'Não conseguimos concluir. Verifique sua conexão e tente novamente.';
+
+  @override
   String get warningTitle => 'Falta pouco';
 
   @override

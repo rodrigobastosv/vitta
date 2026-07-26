@@ -1382,6 +1382,12 @@ abstract class AppLocalizations {
   /// **'Something went wrong'**
   String get errorTitle;
 
+  /// No description provided for @errorGenericMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t complete that. Check your connection and try again.'**
+  String get errorGenericMessage;
+
   /// No description provided for @warningTitle.
   ///
   /// In en, this message translates to:

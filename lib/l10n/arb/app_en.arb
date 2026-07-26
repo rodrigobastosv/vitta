@@ -368,6 +368,7 @@
   "retry": "Retry",
   "ok": "OK",
   "errorTitle": "Something went wrong",
+  "errorGenericMessage": "We couldn't complete that. Check your connection and try again.",
   "warningTitle": "Almost there",
   "progressLabel": "{consumed} / {goal} {unit}",
   "@progressLabel": {
