@@ -9,6 +9,7 @@ abstract class FoodLogFactory {
     MealType mealType = MealType.breakfast,
     double quantityGrams = 100,
     double? quantityUnits,
+    double? quantityMl,
   }) => FoodLog(
     id: id,
     foodId: foodId,
@@ -16,5 +17,6 @@ abstract class FoodLogFactory {
     mealType: mealType,
     quantityGrams: quantityGrams,
     quantityUnits: quantityUnits,
+    quantityMl: quantityMl,
   );
 }

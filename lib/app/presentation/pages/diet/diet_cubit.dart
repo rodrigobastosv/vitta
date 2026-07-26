@@ -4,6 +4,7 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
@@ -97,12 +98,15 @@ class DietCubit extends PresentationCubit<DietState, DietPresentationEvent> {
   }
 
   Future<void> loadMonthMacros(DateTime month) async {
-    final monthlyMacrosResult = await _getMacrosInRangeUseCase(from: DateTime(month.year, month.month), to: DateTime(month.year, month.month + 1, 0));
+    final monthlyMacrosResult = await _getMacrosInRangeUseCase(
+      from: DateTime(month.year, month.month),
+      to: DateTime(month.year, month.month + 1, 0),
+    );
     monthlyMacrosResult.when((_) => null, (macrosByDate) => emit(state.copyWith(loggedMacrosInMonth: macrosByDate)));
   }
 
-  Future<Result<VTError, FoodLog>> updateLog({required String logId, required MealType mealType, required double quantityGrams, double? quantityUnits}) async {
-    final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantityGrams: quantityGrams, quantityUnits: quantityUnits);
+  Future<Result<VTError, FoodLog>> updateLog({required String logId, required MealType mealType, required LoggedQuantity quantity}) async {
+    final updatedResult = await _updateFoodLogUseCase(logId: logId, mealType: mealType, quantity: quantity);
     final error = updatedResult.when((error) => error, (_) => null);
     if (error == null) {
       Log.action('food_log_updated', data: {'meal': mealType.wireValue});

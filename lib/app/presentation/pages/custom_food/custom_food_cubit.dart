@@ -3,6 +3,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_preparation.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
@@ -27,6 +28,10 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
   void brandChanged(String brand) => emit(state.copyWith(brand: brand));
 
   void gramsPerUnitChanged(String text) => emit(state.copyWith(gramsPerUnitText: text));
+
+  void gramsPer100MlChanged(String text) => emit(state.copyWith(gramsPer100MlText: text));
+
+  void preparationChanged(FoodPreparation? preparation) => emit(state.withPreparation(preparation));
 
   void nutrientChanged({required CustomFoodNutrient nutrient, required String text}) {
     final value = double.tryParse(text.replaceAll(',', '.'));
@@ -58,7 +63,8 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     scannedFactsResult.when(_onScanFailed, _applyScannedFacts);
   }
 
-  void _onScanFailed(VTError error) => emitPresentation(error is PremiumRequiredError ? CustomFoodPremiumRequired() : CustomFoodError(message: error.message));
+  void _onScanFailed(VTError error) =>
+      emitPresentation(error is PremiumRequiredError ? CustomFoodPremiumRequired() : CustomFoodError(message: error.message));
 
   void _applyScannedFacts(ScannedNutritionFacts facts) {
     if (!facts.hasAnyValue) {
@@ -105,5 +111,7 @@ class CustomFoodCubit extends PresentationCubit<CustomFoodState, CustomFoodPrese
     fiberPer100g: state.nutrients[CustomFoodNutrient.fiber]!,
     imageUrl: imageUrl,
     gramsPerUnit: state.gramsPerUnit,
+    densityGPerMl: state.densityGPerMl,
+    preparation: state.preparation,
   );
 }

@@ -5,25 +5,23 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_mode.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_selection.dart';
 
 class FoodQuantityInput extends StatefulWidget {
   const FoodQuantityInput({
     required this.food,
     required this.unitSystem,
+    required this.initialQuantity,
     required this.onChanged,
-    this.initialGrams,
-    this.initialUnits,
     this.autofocus = false,
     super.key,
   });
 
   final Food food;
   final UnitSystem unitSystem;
-  final ValueChanged<FoodQuantitySelection> onChanged;
-  final double? initialGrams;
-  final double? initialUnits;
+  final LoggedQuantity initialQuantity;
+  final ValueChanged<LoggedQuantity?> onChanged;
   final bool autofocus;
 
   @override
@@ -31,7 +29,8 @@ class FoodQuantityInput extends StatefulWidget {
 }
 
 class _FoodQuantityInputState extends State<FoodQuantityInput> {
-  late final TextEditingController _weightController;
+  late final FoodQuantityMode _measureMode = FoodQuantityMode.measureFor(widget.food);
+  late final TextEditingController _measureController;
   late final TextEditingController _unitsController;
   bool _syncing = false;
   late FoodQuantityMode _lastEdited;
@@ -41,13 +40,18 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
   @override
   void initState() {
     super.initState();
-    final grams = widget.initialGrams;
-    _weightController = TextEditingController(text: grams == null ? '' : QuantityFormat.format(widget.unitSystem.gramsToDisplayWeight(grams)));
-    final gramsPerUnit = widget.food.gramsPerUnit;
-    final initialUnits = widget.initialUnits ?? (grams != null && gramsPerUnit != null ? grams / gramsPerUnit : null);
-    _unitsController = TextEditingController(text: initialUnits == null ? '' : QuantityFormat.format(initialUnits));
-    _lastEdited = widget.initialUnits != null ? .units : .weight;
-    _weightController.addListener(_onWeightChanged);
+    final grams = widget.initialQuantity.grams;
+    _measureController = TextEditingController(
+      text: _format(_measureMode.displayValueFor(grams: grams, food: widget.food, unitSystem: widget.unitSystem)),
+    );
+    _unitsController = TextEditingController(
+      text: _format(
+        widget.initialQuantity.units ??
+            FoodQuantityMode.units.displayValueFor(grams: grams, food: widget.food, unitSystem: widget.unitSystem),
+      ),
+    );
+    _lastEdited = widget.initialQuantity.units != null ? .units : _measureMode;
+    _measureController.addListener(_onMeasureChanged);
     if (_isCountable) {
       _unitsController.addListener(_onUnitsChanged);
     }
@@ -55,22 +59,22 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
 
   @override
   void dispose() {
-    _weightController.dispose();
+    _measureController.dispose();
     _unitsController.dispose();
     super.dispose();
   }
 
+  String _format(double? value) => value == null ? '' : QuantityFormat.format(value);
+
   double? _parse(TextEditingController controller) => double.tryParse(controller.text.replaceAll(',', '.'));
 
-  void _onWeightChanged() {
+  void _onMeasureChanged() {
     if (_syncing) {
       return;
     }
-    _lastEdited = .weight;
-    final grams = FoodQuantityMode.weight.gramsFor(value: _parse(_weightController) ?? 0, food: widget.food, unitSystem: widget.unitSystem);
-    final gramsPerUnit = widget.food.gramsPerUnit;
-    if (_isCountable && gramsPerUnit != null) {
-      _sync(_unitsController, grams == null ? '' : QuantityFormat.format(grams / gramsPerUnit));
+    _lastEdited = _measureMode;
+    if (_isCountable) {
+      _sync(_unitsController, FoodQuantityMode.units);
     }
     _report();
   }
@@ -80,12 +84,13 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
       return;
     }
     _lastEdited = .units;
-    final grams = FoodQuantityMode.units.gramsFor(value: _parse(_unitsController) ?? 0, food: widget.food, unitSystem: widget.unitSystem);
-    _sync(_weightController, grams == null ? '' : QuantityFormat.format(widget.unitSystem.gramsToDisplayWeight(grams)));
+    _sync(_measureController, _measureMode);
     _report();
   }
 
-  void _sync(TextEditingController controller, String text) {
+  void _sync(TextEditingController controller, FoodQuantityMode mode) {
+    final grams = _enteredQuantity()?.grams;
+    final text = grams == null ? '' : _format(mode.displayValueFor(grams: grams, food: widget.food, unitSystem: widget.unitSystem));
     _syncing = true;
     controller.value = TextEditingValue(
       text: text,
@@ -94,40 +99,40 @@ class _FoodQuantityInputState extends State<FoodQuantityInput> {
     _syncing = false;
   }
 
-  void _report() {
+  LoggedQuantity? _enteredQuantity() {
     final mode = _lastEdited;
-    final entered = _parse(mode == .units ? _unitsController : _weightController);
+    final entered = _parse(mode == .units ? _unitsController : _measureController);
     if (entered == null || entered <= 0) {
-      widget.onChanged(const FoodQuantitySelection());
-      return;
+      return null;
     }
-    widget.onChanged(
-      FoodQuantitySelection(
-        quantityGrams: mode.gramsFor(value: entered, food: widget.food, unitSystem: widget.unitSystem),
-        quantityUnits: mode.unitsFor(entered),
-      ),
-    );
+    return mode.quantityFor(value: entered, food: widget.food, unitSystem: widget.unitSystem);
   }
+
+  void _report() => widget.onChanged(_enteredQuantity());
+
+  String get _measureUnitLabel => switch (_measureMode) {
+    .volume => widget.unitSystem.volumeUnitLabel,
+    _ => widget.unitSystem.weightUnitLabel,
+  };
 
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
     if (!_isCountable) {
-      return _weightField(context, autofocus: widget.autofocus);
+      return _measureField(context, autofocus: widget.autofocus);
     }
     return Row(
       children: [
-        VTStepper(controller: _unitsController, suffixLabel: l10n.dietUnitsUnit),
+        VTStepper(controller: _unitsController, suffixLabel: context.l10n.dietUnitsUnit),
         const VTGap.m(),
-        Expanded(child: _weightField(context, autofocus: widget.autofocus)),
+        Expanded(child: _measureField(context, autofocus: widget.autofocus)),
       ],
     );
   }
 
-  Widget _weightField(BuildContext context, {required bool autofocus}) => TextField(
-    controller: _weightController,
+  Widget _measureField(BuildContext context, {required bool autofocus}) => TextField(
+    controller: _measureController,
     autofocus: autofocus,
     keyboardType: const TextInputType.numberWithOptions(decimal: true),
-    decoration: InputDecoration(labelText: context.l10n.dietQuantityLabel(widget.unitSystem.weightUnitLabel)),
+    decoration: InputDecoration(labelText: context.l10n.dietQuantityLabel(_measureUnitLabel)),
   );
 }

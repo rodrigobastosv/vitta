@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_event.dart';
@@ -105,12 +106,19 @@ void main() {
     final food = FoodFactory.build();
     final foodLog = FoodLogFactory.build();
     final pastDate = DateTime(2026, 7, 10);
-    when(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250)).thenAnswer((_) async => Success(foodLog));
+    when(
+      () => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantity: const LoggedQuantity.weight(250)),
+    ).thenAnswer((_) async => Success(foodLog));
 
-    final loggedResult = await cubit.logFood(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250);
+    final loggedResult = await cubit.logFood(
+      food: food,
+      loggedDate: pastDate,
+      mealType: .dinner,
+      quantity: const LoggedQuantity.weight(250),
+    );
 
     loggedResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, foodLog));
-    verify(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantityGrams: 250)).called(1);
+    verify(() => logFoodUseCase(food: food, loggedDate: pastDate, mealType: .dinner, quantity: const LoggedQuantity.weight(250))).called(1);
   });
 
   test('logFood logs a food_logged user action on success', () async {
@@ -119,10 +127,10 @@ void main() {
     final cubit = CubitsFactories.buildAddFoodCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     final food = FoodFactory.build();
     when(
-      () => logFoodUseCase(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+      () => logFoodUseCase(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantity: const LoggedQuantity.weight(250)),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
 
-    await cubit.logFood(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250);
+    await cubit.logFood(food: food, loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantity: const LoggedQuantity.weight(250));
 
     final captured = verify(() => loggingService.logAction(captureAny(), data: captureAny(named: 'data'))).captured;
     expect(captured, [
@@ -140,14 +148,21 @@ void main() {
           food: FoodFactory.build(),
           loggedDate: any(named: 'loggedDate'),
           mealType: .dinner,
-          quantityGrams: 250,
+          quantity: const LoggedQuantity.weight(250),
         ),
       ).thenAnswer((_) async => Success(FoodLogFactory.build()));
       return CubitsFactories.buildAddFoodCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+    act: (cubit) => cubit.logFood(
+      food: FoodFactory.build(),
+      loggedDate: DateTime(2026, 7, 10),
+      mealType: .dinner,
+      quantity: const LoggedQuantity.weight(250),
+    ),
     expectPresentation: () => [
-      isA<FoodLogged>().having((event) => event.foodName, 'foodName', 'Banana').having((event) => event.mealType, 'mealType', MealType.dinner),
+      isA<FoodLogged>()
+          .having((event) => event.foodName, 'foodName', 'Banana')
+          .having((event) => event.mealType, 'mealType', MealType.dinner),
     ],
   );
 
@@ -160,12 +175,17 @@ void main() {
           food: FoodFactory.build(),
           loggedDate: any(named: 'loggedDate'),
           mealType: .dinner,
-          quantityGrams: 250,
+          quantity: const LoggedQuantity.weight(250),
         ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAddFoodCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), logFoodUseCase: logFoodUseCase);
     },
-    act: (cubit) => cubit.logFood(food: FoodFactory.build(), loggedDate: DateTime(2026, 7, 10), mealType: .dinner, quantityGrams: 250),
+    act: (cubit) => cubit.logFood(
+      food: FoodFactory.build(),
+      loggedDate: DateTime(2026, 7, 10),
+      mealType: .dinner,
+      quantity: const LoggedQuantity.weight(250),
+    ),
     expectPresentation: () => <AddFoodPresentationEvent>[],
   );
 
@@ -193,7 +213,10 @@ void main() {
 
   test('a one-letter query never reaches the network', () async {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
-    final cubit = CubitsFactories.buildAddFoodCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), searchFoodsUseCase: searchFoodsUseCase);
+    final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+      searchFoodsUseCase: searchFoodsUseCase,
+    );
 
     cubit.queryChanged('b');
     await Future<void>.delayed(const Duration(milliseconds: 500));

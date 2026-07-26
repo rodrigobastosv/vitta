@@ -10,6 +10,7 @@ import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
@@ -117,7 +118,12 @@ class AddFoodPage extends StatelessWidget {
       Navigator.of(context).pop(RecipeIngredient(food: entry.food, quantityGrams: entry.log.quantityGrams));
       return;
     }
-    cubit.logFood(food: entry.food, quantityGrams: entry.log.quantityGrams, mealType: initialMealType ?? entry.log.mealType, loggedDate: loggedDate);
+    cubit.logFood(
+      food: entry.food,
+      quantity: LoggedQuantity.fromLog(entry.log),
+      mealType: initialMealType ?? entry.log.mealType,
+      loggedDate: loggedDate,
+    );
   }
 
   Future<void> _addFood(BuildContext context, Food food) async {

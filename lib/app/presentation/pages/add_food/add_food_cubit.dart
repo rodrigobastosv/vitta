@@ -6,6 +6,7 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
@@ -72,7 +73,10 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     emitPresentation(AddFoodShowLoading());
     final favoritesResult = await _getFavoriteFoodsUseCase();
     emitPresentation(AddFoodHideLoading());
-    favoritesResult.when((error) => emitPresentation(AddFoodError(message: error.message)), (favorites) => emit(state.copyWith(favorites: favorites)));
+    favoritesResult.when(
+      (error) => emitPresentation(AddFoodError(message: error.message)),
+      (favorites) => emit(state.copyWith(favorites: favorites)),
+    );
   }
 
   static const Duration _debounce = Duration(milliseconds: 350);
@@ -115,7 +119,8 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     emit(state.copyWith(recentSearches: await _addRecentSearchUseCase(query: query)));
   }
 
-  Future<void> removeRecentSearch({required String query}) async => emit(state.copyWith(recentSearches: await _removeRecentSearchUseCase(query: query)));
+  Future<void> removeRecentSearch({required String query}) async =>
+      emit(state.copyWith(recentSearches: await _removeRecentSearchUseCase(query: query)));
 
   Future<void> clearRecentSearches() async => emit(state.copyWith(recentSearches: await _clearRecentSearchesUseCase()));
 
@@ -192,15 +197,13 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     required Food food,
     required DateTime loggedDate,
     required MealType mealType,
-    required double quantityGrams,
-    double? quantityUnits,
+    required LoggedQuantity quantity,
   }) async {
     final loggedResult = await _logFoodUseCase(
       food: food,
       loggedDate: DateTime(loggedDate.year, loggedDate.month, loggedDate.day),
       mealType: mealType,
-      quantityGrams: quantityGrams,
-      quantityUnits: quantityUnits,
+      quantity: quantity,
     );
     loggedResult.when((_) {}, (_) {
       Log.action('food_logged', data: {'food': food.name, 'meal': mealType.wireValue});

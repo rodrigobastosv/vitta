@@ -5,6 +5,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
@@ -16,7 +17,9 @@ import '../../../../../factories/entities/food_factory.dart';
 import '../../../../../factories/entities/food_log_factory.dart';
 import '../../../../../mocks/use_cases_mocks.dart';
 
-final _weightField = find.byWidgetPredicate((widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false));
+final _measureField = find.byWidgetPredicate(
+  (widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false),
+);
 final _unitsField = find.descendant(of: find.byType(VTStepper), matching: find.byType(TextField));
 
 AddFoodCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
@@ -54,6 +57,7 @@ void main() {
     registerFallbackValue(DateTime(2000));
     registerFallbackValue(MealType.breakfast);
     registerFallbackValue(FoodFactory.build());
+    registerFallbackValue(const LoggedQuantity.weight(100));
   });
 
   testWidgets('a countable food defaults to one unit and shows its equivalent weight', (tester) async {
@@ -64,7 +68,7 @@ void main() {
     );
 
     expect(tester.widget<TextField>(_unitsField).controller?.text, '1');
-    expect(tester.widget<TextField>(_weightField).controller?.text, '50');
+    expect(tester.widget<TextField>(_measureField).controller?.text, '50');
   });
 
   testWidgets('the units stepper sits to the left of the weight field', (tester) async {
@@ -74,7 +78,7 @@ void main() {
       food: FoodFactory.build(name: 'Ovo', gramsPerUnit: 50),
     );
 
-    expect(tester.getTopLeft(find.byType(VTStepper)).dx, lessThan(tester.getTopLeft(_weightField).dx));
+    expect(tester.getTopLeft(find.byType(VTStepper)).dx, lessThan(tester.getTopLeft(_measureField).dx));
   });
 
   testWidgets('a food nobody counts still defaults to one hundred grams', (tester) async {
@@ -85,7 +89,7 @@ void main() {
     );
 
     expect(find.byType(VTStepper), findsNothing);
-    expect(tester.widget<TextField>(_weightField).controller?.text, '100');
+    expect(tester.widget<TextField>(_measureField).controller?.text, '100');
   });
 
   testWidgets('logging the default countable food records one unit', (tester) async {
@@ -95,8 +99,7 @@ void main() {
         food: any(named: 'food'),
         loggedDate: any(named: 'loggedDate'),
         mealType: any(named: 'mealType'),
-        quantityGrams: any(named: 'quantityGrams'),
-        quantityUnits: any(named: 'quantityUnits'),
+        quantity: any(named: 'quantity'),
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
 
@@ -114,9 +117,60 @@ void main() {
         food: any(named: 'food'),
         loggedDate: any(named: 'loggedDate'),
         mealType: any(named: 'mealType'),
-        quantityGrams: 50,
-        quantityUnits: 1,
+        quantity: const LoggedQuantity.units(units: 1, grams: 50),
       ),
     ).called(1);
+  });
+
+  testWidgets('a liquid opens at one glass, measured in millilitres', (tester) async {
+    await _pumpSheet(
+      tester,
+      cubit: _buildCubit(logFoodUseCase: MockLogFoodUseCase()),
+      food: FoodFactory.build(name: 'Leite', densityGPerMl: 1.03),
+    );
+
+    expect(find.byType(VTStepper), findsNothing);
+    expect(tester.widget<TextField>(_measureField).decoration?.labelText, 'Quantity (mL)');
+    expect(tester.widget<TextField>(_measureField).controller?.text, '200');
+  });
+
+  testWidgets('logging a liquid records the millilitres alongside the grams', (tester) async {
+    final logFoodUseCase = MockLogFoodUseCase();
+    when(
+      () => logFoodUseCase(
+        food: any(named: 'food'),
+        loggedDate: any(named: 'loggedDate'),
+        mealType: any(named: 'mealType'),
+        quantity: any(named: 'quantity'),
+      ),
+    ).thenAnswer((_) async => Success(FoodLogFactory.build()));
+
+    await _pumpSheet(
+      tester,
+      cubit: _buildCubit(logFoodUseCase: logFoodUseCase),
+      food: FoodFactory.build(name: 'Leite', densityGPerMl: 1),
+    );
+
+    await tester.tap(find.text('Add to day'));
+    await tester.pumpAndSettle();
+
+    verify(
+      () => logFoodUseCase(
+        food: any(named: 'food'),
+        loggedDate: any(named: 'loggedDate'),
+        mealType: any(named: 'mealType'),
+        quantity: const LoggedQuantity.volume(milliliters: 200, grams: 200),
+      ),
+    ).called(1);
+  });
+
+  testWidgets('a raw or cooked food says which one it is', (tester) async {
+    await _pumpSheet(
+      tester,
+      cubit: _buildCubit(logFoodUseCase: MockLogFoodUseCase()),
+      food: FoodFactory.build(name: 'Arroz branco', preparation: .cooked),
+    );
+
+    expect(find.text('Cooked'), findsOneWidget);
   });
 }

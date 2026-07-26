@@ -7,16 +7,22 @@ import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/design_system/vt_bottom_sheet.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/presentation/general/food_image.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_quantity_input.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/initial_food_quantity.dart';
 
-Future<RecipeIngredient?> showIngredientQuantitySheet({required BuildContext context, required Food food, required UnitSystem unitSystem}) =>
-    showModalBottomSheet<RecipeIngredient>(
-      context: context,
-      routeSettings: VTBottomSheet.ingredientQuantity.settings,
-      isScrollControlled: true,
-      builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
-    );
+Future<RecipeIngredient?> showIngredientQuantitySheet({
+  required BuildContext context,
+  required Food food,
+  required UnitSystem unitSystem,
+}) => showModalBottomSheet<RecipeIngredient>(
+  context: context,
+  routeSettings: VTBottomSheet.ingredientQuantity.settings,
+  isScrollControlled: true,
+  builder: (sheetContext) => IngredientQuantitySheet(food: food, unitSystem: unitSystem),
+);
 
 class IngredientQuantitySheet extends StatefulWidget {
   const IngredientQuantitySheet({required this.food, required this.unitSystem, super.key});
@@ -29,34 +35,33 @@ class IngredientQuantitySheet extends StatefulWidget {
 }
 
 class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
-  late final TextEditingController _quantityController = TextEditingController(text: _formatNumber(widget.unitSystem.gramsToDisplayWeight(100)));
+  late final LoggedQuantity _initialQuantity = initialFoodQuantityFor(widget.food);
+  late LoggedQuantity? _quantity = _initialQuantity;
   String? _errorMessage;
 
-  @override
-  void dispose() {
-    _quantityController.dispose();
-    super.dispose();
-  }
-
-  String _formatNumber(double value) {
-    final rounded = double.parse(value.toStringAsFixed(1));
-    return rounded == rounded.roundToDouble() ? rounded.toInt().toString() : rounded.toString();
-  }
-
+  // Reusing FoodQuantityInput is what gives a recipe "200 mL de leite" and
+  // "2 ovos" for free: an ingredient is grams-only (RecipeIngredient
+  // .quantityGrams), so whatever the cook types, the recipe stores the weight it
+  // resolves to - which is the number the roll-up sums.
   void _submit() {
-    final quantityDisplayValue = double.tryParse(_quantityController.text.replaceAll(',', '.'));
-    if (quantityDisplayValue == null || quantityDisplayValue <= 0) {
+    final quantity = _quantity;
+    if (quantity == null) {
       setState(() => _errorMessage = context.l10n.dietInvalidQuantity);
       return;
     }
-    Navigator.of(context).pop(RecipeIngredient(food: widget.food, quantityGrams: widget.unitSystem.displayWeightToGrams(quantityDisplayValue)));
+    Navigator.of(context).pop(RecipeIngredient(food: widget.food, quantityGrams: quantity.grams));
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return Padding(
-      padding: EdgeInsets.only(left: VTSpacing.m, right: VTSpacing.m, top: VTSpacing.m, bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        left: VTSpacing.m,
+        right: VTSpacing.m,
+        top: VTSpacing.m,
+        bottom: VTSpacing.m + MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Column(
         mainAxisSize: .min,
         crossAxisAlignment: .start,
@@ -69,13 +74,17 @@ class _IngredientQuantitySheetState extends State<IngredientQuantitySheet> {
             ],
           ),
           const VTGap.m(),
-          TextField(
-            controller: _quantityController,
+          FoodQuantityInput(
+            food: widget.food,
+            unitSystem: widget.unitSystem,
+            initialQuantity: _initialQuantity,
             autofocus: true,
-            keyboardType: const TextInputType.numberWithOptions(decimal: true),
-            decoration: InputDecoration(labelText: l10n.dietQuantityLabel(widget.unitSystem.weightUnitLabel)),
+            onChanged: (quantity) => _quantity = quantity,
           ),
-          if (_errorMessage case final errorMessage?) ...[const VTGap.s(), Text(errorMessage, style: TextStyle(color: context.colorScheme.error))],
+          if (_errorMessage case final errorMessage?) ...[
+            const VTGap.s(),
+            Text(errorMessage, style: TextStyle(color: context.colorScheme.error)),
+          ],
           const VTGap.l(),
           VTPrimaryButton(label: l10n.dietRecipeAddIngredientAction, onPressed: _submit),
         ],

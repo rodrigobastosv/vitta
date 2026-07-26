@@ -43,7 +43,10 @@ void main() {
   });
 
   testWidgets('tags a generic whole food as Common on the meta line, leaving the name its own line', (tester) async {
-    await pumpTile(tester, food: FoodFactory.build(name: 'Ovo inteiro', source: .generic));
+    await pumpTile(
+      tester,
+      food: FoodFactory.build(name: 'Ovo inteiro', source: .generic),
+    );
 
     // The name is its own single-line Text, and the Common tag rides on the
     // meta line's rich text below it (see issue #180) rather than beside the name.
@@ -53,7 +56,10 @@ void main() {
   });
 
   testWidgets('a branded search result shows no source tag on its meta line', (tester) async {
-    await pumpTile(tester, food: FoodFactory.build(source: .openFoodFacts, brand: 'Chiquita'));
+    await pumpTile(
+      tester,
+      food: FoodFactory.build(source: .openFoodFacts, brand: 'Chiquita'),
+    );
 
     final metaLine = tester.widget<Text>(find.byType(Text).at(1));
     expect(metaLine.textSpan!.toPlainText(), isNot(contains('Common')));
@@ -78,5 +84,40 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(added, 1);
+  });
+
+  testWidgets('a raw or cooked row says so on its meta line', (tester) async {
+    await pumpTile(
+      tester,
+      food: FoodFactory.build(source: .generic, name: 'Arroz branco', preparation: .cooked),
+    );
+
+    final metaLine = tester.widget<Text>(find.byType(Text).at(1));
+    expect(metaLine.textSpan!.toPlainText(), startsWith('Common · Cooked · '));
+  });
+
+  // The tag rides the meta line rather than sitting beside the name for exactly
+  // this reason (issue #180): a badge word up there shrinks the name to an
+  // ellipsis, and a raw/cooked tag would do it to every rice and chicken row.
+  testWidgets('tagging raw or cooked does not cost the row a second line', (tester) async {
+    await pumpTile(tester, food: FoodFactory.build(name: 'Peito de frango'));
+    final untagged = tester.getSize(find.byType(FoodResultTile)).height;
+
+    await pumpTile(
+      tester,
+      food: FoodFactory.build(source: .generic, name: 'Peito de frango', preparation: .raw),
+    );
+
+    expect(tester.getSize(find.byType(FoodResultTile)).height, untagged);
+  });
+
+  testWidgets('a liquid row states its calories per 100 mL, scaled by density', (tester) async {
+    await pumpTile(
+      tester,
+      food: FoodFactory.build(name: 'Leite integral', caloriesPer100g: 61, densityGPerMl: 1.03),
+    );
+
+    expect(find.textContaining('63 kcal / 100mL'), findsOneWidget);
+    expect(find.textContaining('100g'), findsNothing);
   });
 }

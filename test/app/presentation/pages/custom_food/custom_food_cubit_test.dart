@@ -7,6 +7,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/image_picker/picked_image.dart';
+import 'package:vitta/app/domain/diet/entities/food_preparation.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_nutrition_facts.dart';
 import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart';
@@ -105,7 +106,10 @@ void main() {
       when(
         () => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg'),
       ).thenAnswer((_) async => const Success(ScannedNutritionFacts(caloriesPer100g: 200, proteinPer100g: 10)));
-      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
+      return CubitsFactories.buildCustomFoodCubit(
+        imagePickerService: imagePickerService,
+        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
+      );
     },
     act: (cubit) async {
       cubit.nutrientChanged(nutrient: .fiber, text: '2');
@@ -133,7 +137,10 @@ void main() {
         ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Success(ScannedNutritionFacts()));
-      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
+      return CubitsFactories.buildCustomFoodCubit(
+        imagePickerService: imagePickerService,
+        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
+      );
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
     expectPresentation: () => [isA<CustomFoodScanning>(), isA<CustomFoodHideLoading>(), isA<CustomFoodScanFoundNothing>()],
@@ -151,7 +158,10 @@ void main() {
         ),
       ).thenAnswer((_) async => PickedImage(path: '/tmp/label.jpg', bytes: Uint8List.fromList([1]), fileExtension: 'jpg'));
       when(() => scanNutritionLabelUseCase(imagePath: '/tmp/label.jpg')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildCustomFoodCubit(imagePickerService: imagePickerService, scanNutritionLabelUseCase: scanNutritionLabelUseCase);
+      return CubitsFactories.buildCustomFoodCubit(
+        imagePickerService: imagePickerService,
+        scanNutritionLabelUseCase: scanNutritionLabelUseCase,
+      );
     },
     act: (cubit) => cubit.scanNutritionLabel(source: .camera),
     expectPresentation: () => [
@@ -253,6 +263,90 @@ void main() {
       isA<CustomFoodShowLoading>(),
       isA<CustomFoodHideLoading>(),
       isA<CustomFoodError>().having((event) => event.message, 'message', 'upload failed'),
+    ],
+  );
+
+  group('a custom liquid', () {
+    // The form asks what 100 mL weighs, because that is a number a person can
+    // read off a bottle - a density in g/mL is not.
+    test('turns the weight of 100 mL into a density', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.gramsPer100MlChanged('103');
+
+      expect(cubit.state.densityGPerMl, closeTo(1.03, 0.0001));
+    });
+
+    test('accepts a comma decimal, like every other number on the form', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.gramsPer100MlChanged('92,5');
+
+      expect(cubit.state.densityGPerMl, closeTo(0.925, 0.0001));
+    });
+
+    test('an emptied or zero field leaves the food weighed, not poured', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.gramsPer100MlChanged('103');
+      cubit.gramsPer100MlChanged('');
+
+      expect(cubit.state.densityGPerMl, isNull);
+
+      cubit.gramsPer100MlChanged('0');
+
+      expect(cubit.state.densityGPerMl, isNull);
+    });
+
+    // Mirrors the density_g_per_ml <= 2 check in the schema: dropping a typo here
+    // is what keeps the insert from being rejected outright.
+    test('a density no food could have is dropped rather than saved', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.gramsPer100MlChanged('1000');
+
+      expect(cubit.state.densityGPerMl, isNull);
+    });
+  });
+
+  group('preparation', () {
+    test('is not stated until it is picked', () {
+      expect(CubitsFactories.buildCustomFoodCubit().state.preparation, isNull);
+    });
+
+    test('can be cleared back to not stated, which copyWith could never express', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.preparationChanged(.cooked);
+      expect(cubit.state.preparation, FoodPreparation.cooked);
+
+      cubit.preparationChanged(null);
+      expect(cubit.state.preparation, isNull);
+    });
+
+    test('survives an unrelated edit', () {
+      final cubit = CubitsFactories.buildCustomFoodCubit();
+
+      cubit.preparationChanged(.raw);
+      cubit.nameChanged('Arroz');
+
+      expect(cubit.state.preparation, FoodPreparation.raw);
+    });
+  });
+
+  blocPresentationTest<CustomFoodCubit, CustomFoodState, CustomFoodPresentationEvent>(
+    'the built food carries its density and preparation, so the log sheet can pour it',
+    build: CubitsFactories.buildCustomFoodCubit,
+    act: (cubit) {
+      fillEveryNutrient(cubit);
+      cubit.gramsPer100MlChanged('103');
+      cubit.preparationChanged(.raw);
+      return cubit.submit();
+    },
+    expectPresentation: () => [
+      isA<CustomFoodReady>()
+          .having((event) => event.food.densityGPerMl, 'densityGPerMl', closeTo(1.03, 0.0001))
+          .having((event) => event.food.preparation, 'preparation', FoodPreparation.raw),
     ],
   );
 }

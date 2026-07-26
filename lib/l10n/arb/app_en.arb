@@ -339,6 +339,14 @@
       }
     }
   },
+  "dietQuantityMilliliters": "{milliliters} mL",
+  "@dietQuantityMilliliters": {
+    "placeholders": {
+      "milliliters": {
+        "type": "int"
+      }
+    }
+  },
   "dietLogAgainAction": "Log again",
   "dietRecentlyLoggedTitle": "Recently logged",
   "dietRecentSearchesTitle": "Recent searches",
@@ -464,8 +472,26 @@
       }
     }
   },
+  "dietLogSubtitleMilliliters": "{milliliters} mL - {calories} kcal",
+  "@dietLogSubtitleMilliliters": {
+    "placeholders": {
+      "milliliters": {
+        "type": "int"
+      },
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
   "dietGramsPerUnitLabel": "Weight of one unit (g)",
   "dietGramsPerUnitHint": "Optional. Fill it in to log this food by unit, like \"2 eggs\".",
+  "dietGramsPer100MlLabel": "Weight of 100 mL (g)",
+  "dietGramsPer100MlHint": "Optional. Fill it in for a drink, so you can log it in mL. Around 100 for water or juice.",
+  "dietPreparationTitle": "Raw or cooked",
+  "dietPreparationHint": "Which one these numbers are for. 100 g of raw rice is not 100 g of cooked rice.",
+  "dietPreparationRaw": "Raw",
+  "dietPreparationCooked": "Cooked",
+  "dietPreparationUnset": "Not stated",
   "dietLogFoodAction": "Add to day",
   "dietFoodLoggedToast": "Added to {meal}",
   "@dietFoodLoggedToast": {
@@ -568,6 +594,14 @@
   "mealScanIncomplete": "Pick at least one item with a valid amount.",
   "mealScanLoggedTitle": "Meal added",
   "mealScanLoggedMessage": "Everything you kept is now in your day.",
+  "dietCaloriesPer100Ml": "{calories} kcal / 100mL",
+  "@dietCaloriesPer100Ml": {
+    "placeholders": {
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
   "dietCaloriesPer100g": "{calories} kcal / 100g",
   "@dietCaloriesPer100g": {
     "placeholders": {
@@ -589,6 +623,7 @@
   "dietSearchPrompt": "Search for a food to log it.",
   "dietSearchNoResults": "No results. Try another search or add it manually.",
   "dietNutritionPer100gTitle": "Nutrition per 100g",
+  "dietNutritionPer100MlTitle": "Nutrition per 100mL",
   "dietMacroGrams": "{grams} g",
   "@dietMacroGrams": {
     "placeholders": {

@@ -785,7 +785,7 @@ abstract class AppLocalizations {
   /// No description provided for @logRemindersMasterHint.
   ///
   /// In en, this message translates to:
-  /// **'A nudge only arrives while that tracker is still empty for the day.'**
+  /// **'A nudge only arrives while that tracker is still empty for the day, unless you set it to repeat.'**
   String get logRemindersMasterHint;
 
   /// No description provided for @logRemindersTrackersLabel.
@@ -1250,6 +1250,12 @@ abstract class AppLocalizations {
   /// **'{grams} g'**
   String dietQuantityGrams(int grams);
 
+  /// No description provided for @dietQuantityMilliliters.
+  ///
+  /// In en, this message translates to:
+  /// **'{milliliters} mL'**
+  String dietQuantityMilliliters(int milliliters);
+
   /// No description provided for @dietLogAgainAction.
   ///
   /// In en, this message translates to:
@@ -1592,6 +1598,12 @@ abstract class AppLocalizations {
   /// **'{units} un - {calories} kcal'**
   String dietLogSubtitleUnits(String units, int calories);
 
+  /// No description provided for @dietLogSubtitleMilliliters.
+  ///
+  /// In en, this message translates to:
+  /// **'{milliliters} mL - {calories} kcal'**
+  String dietLogSubtitleMilliliters(int milliliters, int calories);
+
   /// No description provided for @dietGramsPerUnitLabel.
   ///
   /// In en, this message translates to:
@@ -1603,6 +1615,48 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Optional. Fill it in to log this food by unit, like \"2 eggs\".'**
   String get dietGramsPerUnitHint;
+
+  /// No description provided for @dietGramsPer100MlLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight of 100 mL (g)'**
+  String get dietGramsPer100MlLabel;
+
+  /// No description provided for @dietGramsPer100MlHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional. Fill it in for a drink, so you can log it in mL. Around 100 for water or juice.'**
+  String get dietGramsPer100MlHint;
+
+  /// No description provided for @dietPreparationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw or cooked'**
+  String get dietPreparationTitle;
+
+  /// No description provided for @dietPreparationHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Which one these numbers are for. 100 g of raw rice is not 100 g of cooked rice.'**
+  String get dietPreparationHint;
+
+  /// No description provided for @dietPreparationRaw.
+  ///
+  /// In en, this message translates to:
+  /// **'Raw'**
+  String get dietPreparationRaw;
+
+  /// No description provided for @dietPreparationCooked.
+  ///
+  /// In en, this message translates to:
+  /// **'Cooked'**
+  String get dietPreparationCooked;
+
+  /// No description provided for @dietPreparationUnset.
+  ///
+  /// In en, this message translates to:
+  /// **'Not stated'**
+  String get dietPreparationUnset;
 
   /// No description provided for @dietLogFoodAction.
   ///
@@ -1988,6 +2042,12 @@ abstract class AppLocalizations {
   /// **'Everything you kept is now in your day.'**
   String get mealScanLoggedMessage;
 
+  /// No description provided for @dietCaloriesPer100Ml.
+  ///
+  /// In en, this message translates to:
+  /// **'{calories} kcal / 100mL'**
+  String dietCaloriesPer100Ml(int calories);
+
   /// No description provided for @dietCaloriesPer100g.
   ///
   /// In en, this message translates to:
@@ -2071,6 +2131,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nutrition per 100g'**
   String get dietNutritionPer100gTitle;
+
+  /// No description provided for @dietNutritionPer100MlTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition per 100mL'**
+  String get dietNutritionPer100MlTitle;
 
   /// No description provided for @dietMacroGrams.
   ///

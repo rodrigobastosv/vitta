@@ -8,6 +8,8 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_source.dart';
 import 'package:vitta/app/presentation/general/food_image.dart';
+import 'package:vitta/app/presentation/general/food_reference_amount.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/food_preparation_labels.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class FoodResultTile extends StatelessWidget {
@@ -30,17 +32,27 @@ class FoodResultTile extends StatelessWidget {
   final VoidCallback? onToggleFavorite;
 
   String subtitle(AppLocalizations l10n) {
-    final calories = l10n.dietCaloriesPer100g(food.caloriesPer100g.round());
+    final calories = food.caloriesPerReference(l10n);
     return switch (food.brand) {
       final brand? when brand.trim().isNotEmpty => '$brand · $calories',
       _ => calories,
     };
   }
 
-  // The source tag rides on the meta line, not next to the name, so a badge word
-  // ("Common"/"Recipe") can't shrink the name to an ellipsis (see issue #180). It
-  // is inline colored text rather than a padded pill so every row keeps one
-  // meta-line height and the list stays un-ragged.
+  // Tags ride on the meta line, not next to the name, so a badge word
+  // ("Common"/"Recipe"/"Cooked") can't shrink the name to an ellipsis (see issue
+  // #180). They are inline colored text rather than padded pills so every row
+  // keeps one meta-line height and the list stays un-ragged.
+  //
+  // Raw/cooked joins the same slot (issue #253) because it answers the same kind
+  // of question the source tag does - which of these near-identical rows do I
+  // want - and it is the one that decides whether a figure is right: 100 g of
+  // raw rice is not 100 g of cooked rice.
+  List<(String, Color)> _tags(AppLocalizations l10n) => [
+    ?_sourceTag(l10n),
+    if (food.preparation case final preparation?) (preparation.label(l10n), VTColors.macroCarbs),
+  ];
+
   (String, Color)? _sourceTag(AppLocalizations l10n) => switch (food.source) {
     FoodSource.generic => (l10n.dietCommonFoodBadge, VTColors.green),
     FoodSource.recipe => (l10n.dietRecipeBadge, VTColors.macroFiber),
@@ -70,8 +82,11 @@ class FoodResultTile extends StatelessWidget {
                   TextSpan(
                     style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
                     children: [
-                      if (_sourceTag(l10n) case (final label, final color))
-                        TextSpan(text: '$label · ', style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700)),
+                      for (final (label, color) in _tags(l10n))
+                        TextSpan(
+                          text: '$label · ',
+                          style: VTTextStyles.caption(context).copyWith(color: color, fontWeight: .w700),
+                        ),
                       TextSpan(text: subtitle(l10n)),
                     ],
                   ),
