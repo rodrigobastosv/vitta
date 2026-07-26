@@ -5,13 +5,19 @@ macros** and **what has already been logged** to the `suggest-meals` Supabase Ed
 Claude for a few meal options that fit the gap and returns each one's items with per-100g macros. The app
 then lets the user pick an option, tweak the amounts, untick anything they don't want, and log it to the day.
 
-**The function's source is deliberately not in this repo** — it lives only in the Supabase project it is
-deployed to, and is edited there (**Dashboard → Edge Functions**). Nor can its Anthropic API key live here.
+**The function is not deployed from this repo** — it lives in the Supabase project it is deployed to, and is
+edited there (**Dashboard → Edge Functions**); there is no `supabase/functions/` directory and no deploy step
+in CI. Its source is reproduced below so the prompt and schema exist somewhere in version control rather than
+only in a dashboard, but the deployed copy is the one that runs: after editing it there, paste it back here.
+The Anthropic API key cannot live in this repo at all.
+
 **Until the function is deployed and the key is set, suggesting fails** with "Failed to suggest meals" — the
 rest of the diet feature is unaffected, since only this action depends on it.
 
-This is the same client-half-only split the [meal scan](meal-scan-setup.md) and the
-[nutrition label scan](nutrition-scan-setup.md) use. Only the client half is tracked here:
+This follows the same split as the [meal scan](meal-scan-setup.md) and the
+[nutrition label scan](nutrition-scan-setup.md) — no server code is deployed from this repo — except that
+those two runbooks describe their function rather than carrying it, so their prompts exist nowhere but the
+dashboard. Only the client half is *wired* here:
 `SupabaseFunction.suggestMeals` names the deployed function
 (`lib/app/core/services/supabase/supabase_function.dart`) and `SupabaseMealSuggestionDataSource` calls it.
 
@@ -116,6 +122,193 @@ guarantees the response parses into `MealSuggestions` with no defensive parsing 
   sensibly. The app surfaces that as "no meal to suggest" and invites another try, which is a better failure
   than a hallucinated plate — the same "return null rather than guess" rule the scan prompts follow. Every
   logged item joins the shared catalog.
+
+#### The implementation
+
+Paste this as the function's `index.ts`. It is the whole function — JWT verification, the premium gate, the
+Anthropic call, and the response. Nothing in it is a secret: the two keys it uses come from the environment
+(`ANTHROPIC_API_KEY` is the secret you set in step 2; `SUPABASE_URL`/`SUPABASE_ANON_KEY` are injected by the
+platform).
+
+```ts
+import Anthropic from "npm:@anthropic-ai/sdk";
+import { createClient } from "npm:@supabase/supabase-js@2";
+
+// Mirrors PremiumStatus.isActive on the Dart side: `cancelled` still entitles
+// until it lapses (auto-renew off is not a refund), and an `active` row whose
+// expires_at has passed does not. If one moves, move the other.
+const ENTITLING_STATUSES = ["active", "cancelled", "in_grace_period"];
+
+const MODEL = "claude-opus-5";
+
+// Structured outputs reject numeric/length constraints (no minimum, maxItems,
+// minLength), and every object needs additionalProperties:false with every key
+// required. Counts and ranges therefore live in the prompt, not here.
+const SUGGESTIONS_SCHEMA = {
+  type: "object",
+  properties: {
+    meals: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          name: { type: "string", description: "The meal's name, in the requested language." },
+          summary: { type: "string", description: "One short line on why it fits, in the requested language." },
+          items: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                name: { type: "string", description: "The food's name, in the requested language." },
+                suggestedGrams: { type: "number", description: "Portion of this item, in grams." },
+                caloriesPer100g: { type: "number" },
+                proteinPer100g: { type: "number" },
+                carbsPer100g: { type: "number" },
+                fatPer100g: { type: "number" },
+                fiberPer100g: { type: "number" },
+              },
+              required: [
+                "name",
+                "suggestedGrams",
+                "caloriesPer100g",
+                "proteinPer100g",
+                "carbsPer100g",
+                "fatPer100g",
+                "fiberPer100g",
+              ],
+              additionalProperties: false,
+            },
+          },
+        },
+        required: ["name", "summary", "items"],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ["meals"],
+  additionalProperties: false,
+};
+
+const SYSTEM_PROMPT = `You suggest meals that fit what is left of someone's daily macro targets.
+
+You receive the day's goal, what has been consumed, what remains (goal minus consumed), the meal being
+planned, the foods already logged today, and a language code.
+
+Rules:
+- Return two or three ALTERNATIVE options. The user picks ONE and logs it. Never return meals that are
+  meant to be eaten together, and never return a day's worth of eating.
+- Each option should close as much of the remaining gap as one sensible meal of this type reasonably can -
+  not all of it. If nothing has been logged yet the remaining figures are a whole day; still suggest a
+  normal-sized breakfast/lunch/dinner/snack, not a 2000 kcal plate.
+- A NEGATIVE remaining figure means the person is already over on that macro. Suggest options that are low
+  in it. Never try to subtract it.
+- Do not suggest anything already in loggedFoods, and do not repeat a food across the options.
+- Keep each option to 2-5 items. Every item becomes a row in a shared food catalog and a diary entry.
+- Macros are PER 100 g, in grams. suggestedGrams is the portion of that item. The app multiplies the two,
+  so the two figures must be independently correct. Prefer well-known whole foods whose macros you are
+  confident about; give your best estimate rather than 0 for a macro you are unsure of.
+- Write every name and summary in the language named by languageCode ("pt" is Brazilian Portuguese, "en" is
+  English). These strings are shown as-is and become shared catalog rows.
+- If you cannot answer sensibly, return an empty meals array rather than inventing a plate.`;
+
+const json = (body: unknown, status: number) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json" },
+  });
+
+const isEntitled = (subscription: { status: string; expires_at: string | null } | null) => {
+  if (subscription === null || !ENTITLING_STATUSES.includes(subscription.status)) {
+    return false;
+  }
+  return subscription.expires_at === null || new Date(subscription.expires_at) > new Date();
+};
+
+Deno.serve(async (request) => {
+  if (request.method !== "POST") {
+    return json({ error: "method_not_allowed" }, 405);
+  }
+
+  const authorization = request.headers.get("Authorization");
+  if (authorization === null) {
+    return json({ error: "unauthorized" }, 401);
+  }
+
+  // The caller's own client: the uid comes from the verified JWT, never from
+  // the request body, and subscriptions' RLS scopes the read to that uid. No
+  // service-role key is needed - or wanted - in this function.
+  const supabase = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_ANON_KEY")!,
+    { global: { headers: { Authorization: authorization } } },
+  );
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    return json({ error: "unauthorized" }, 401);
+  }
+
+  const { data: subscription } = await supabase
+    .from("subscriptions")
+    .select("status, expires_at")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  // 402 before Anthropic is charged. The app maps this to PremiumRequiredError
+  // and opens the paywall; its own lock is only UX.
+  if (!isEntitled(subscription)) {
+    return json({ error: "premium_required" }, 402);
+  }
+
+  const body = await request.json();
+
+  const anthropic = new Anthropic({ apiKey: Deno.env.get("ANTHROPIC_API_KEY")! });
+
+  const message = await anthropic.beta.messages.create({
+    model: MODEL,
+    max_tokens: 16000,
+    // Delete these two lines if your account rejects the beta: they re-serve a
+    // safety-classifier decline on another model instead of failing, which for
+    // a meal prompt is close to unreachable insurance.
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: {
+      effort: "medium",
+      format: { type: "json_schema", schema: SUGGESTIONS_SCHEMA },
+    },
+    system: SYSTEM_PROMPT,
+    messages: [{ role: "user", content: JSON.stringify(body) }],
+  });
+
+  if (message.stop_reason === "refusal") {
+    return json({ error: "refused" }, 502);
+  }
+
+  const text = message.content.find((block) => block.type === "text");
+  if (!text || text.type !== "text") {
+    return json({ error: "empty_response" }, 502);
+  }
+
+  return json(JSON.parse(text.text), 200);
+});
+```
+
+Four things in it are load-bearing and worth keeping if you edit it:
+
+- **The uid comes from `auth.getUser()`, never from the request body.** Reading it from the body would let
+  any caller ask about any account. It is also why the function needs no service-role key: `subscriptions`'
+  select policy already scopes the read to `auth.uid()`.
+- **The 402 is returned before Anthropic is called**, so an unentitled caller costs nothing.
+- **`ENTITLING_STATUSES` and the expiry check duplicate `PremiumStatus.isActive`** on the Dart side. That
+  duplication is deliberate (the client lock is UX, the function is the gate), but it means a change to one
+  has to be made in the other.
+- **The schema carries no counts or ranges.** Structured outputs reject `minimum`, `maxItems`, `minLength`
+  and friends, so "two or three options" and "2-5 items" are stated in the prompt instead — and are
+  therefore guidance, not a guarantee. The app tolerates any count.
+
+`claude-opus-5` thinks by default, which is what makes it fit macros to a gap rather than pattern-matching a
+meal; `effort: "medium"` is the cost/latency dial. Raise it to `high` if the suggestions feel careless, drop
+it to `low` if they are fine and you want them faster.
 
 The function requires a valid JWT by default, which the app's anonymous session already provides — no extra
 auth wiring needed beyond the premium check in step 3.
