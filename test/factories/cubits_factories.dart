@@ -15,6 +15,7 @@ import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart'
 import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
+import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
@@ -210,6 +211,22 @@ abstract class CubitsFactories {
     scanMealUseCase: scanMealUseCase ?? MockScanMealUseCase(),
     logScannedMealUseCase: logScannedMealUseCase ?? MockLogScannedMealUseCase(),
     imagePickerService: imagePickerService ?? MockImagePickerService(),
+    loggedDate: loggedDate ?? DateTime(2026, 7, 19),
+  );
+
+  static MealSuggestionCubit buildMealSuggestionCubit({
+    MockSuggestMealsUseCase? suggestMealsUseCase,
+    MockLogSuggestedMealUseCase? logSuggestedMealUseCase,
+    MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
+    MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    DateTime? loggedDate,
+  }) => MealSuggestionCubit(
+    suggestMealsUseCase: suggestMealsUseCase ?? MockSuggestMealsUseCase(),
+    logSuggestedMealUseCase: logSuggestedMealUseCase ?? MockLogSuggestedMealUseCase(),
+    getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
+    getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
     loggedDate: loggedDate ?? DateTime(2026, 7, 19),
   );
 

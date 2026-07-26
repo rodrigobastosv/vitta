@@ -1085,6 +1085,72 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mealScanLoggedMessage => 'Everything you kept is now in your day.';
 
   @override
+  String get mealSuggestionTitle => 'Suggest a meal';
+
+  @override
+  String get mealSuggestionGapTitle => 'Left today';
+
+  @override
+  String get mealSuggestionGapMessage => 'What is still missing from your goals for this day.';
+
+  @override
+  String get mealSuggestionGapMet => 'You have already hit your calorie goal for this day.';
+
+  @override
+  String get mealSuggestionMealTypeTitle => 'Suggest a meal for';
+
+  @override
+  String get mealSuggestionIntroMessage =>
+      'We look at what you have logged today and put together a few meals that fit what is left. The macros are estimates you can adjust before adding anything.';
+
+  @override
+  String get mealSuggestionRequestAction => 'Suggest meals';
+
+  @override
+  String get mealSuggestionRetryAction => 'Try again';
+
+  @override
+  String get mealSuggestionThinkingCaptionReading => 'Reading your day…';
+
+  @override
+  String get mealSuggestionThinkingCaptionBalancing => 'Balancing what is left…';
+
+  @override
+  String get mealSuggestionThinkingCaptionPlating => 'Putting the meals together…';
+
+  @override
+  String get mealSuggestionPickTitle => 'Pick a meal';
+
+  @override
+  String get mealSuggestionItemsTitle => 'What goes in';
+
+  @override
+  String get mealSuggestionItemsSubtitle =>
+      'These macros are estimates — adjust the amounts, untick anything you don\'t want, then add it to your day.';
+
+  @override
+  String get mealSuggestionPortionLabel => 'Portion';
+
+  @override
+  String get mealSuggestionNoDataTitle => 'No meal to suggest';
+
+  @override
+  String get mealSuggestionNoData =>
+      'We couldn\'t put a meal together for what is left of this day. Try another meal, or adjust your goals.';
+
+  @override
+  String get mealSuggestionIncomplete => 'Pick at least one item with a valid amount.';
+
+  @override
+  String get mealSuggestionLogAction => 'Add to diary';
+
+  @override
+  String get mealSuggestionLoggedTitle => 'Meal added';
+
+  @override
+  String get mealSuggestionLoggedMessage => 'Everything you kept is now in your day.';
+
+  @override
   String dietCaloriesPer100Ml(int calories) {
     return '$calories kcal / 100mL';
   }
@@ -1720,6 +1786,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumFeatureMealScanSubtitle => 'Photograph a plate and log every item at once';
+
+  @override
+  String get premiumFeatureMealSuggestionTitle => 'Meal suggestions';
+
+  @override
+  String get premiumFeatureMealSuggestionSubtitle => 'Get meals built around the macros you have left today';
 
   @override
   String get premiumFeatureNutritionLabelScanTitle => 'Nutrition label scan';

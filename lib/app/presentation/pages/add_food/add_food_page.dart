@@ -25,6 +25,7 @@ import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_list.d
 import 'package:vitta/app/presentation/pages/add_food/widgets/ingredient_quantity_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/meal_scan_action.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/meal_suggestion_action.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_foods_list.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
@@ -59,7 +60,14 @@ class AddFoodPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(_isPicking ? l10n.dietPickIngredientTitle : l10n.dietFoodSearchTitle),
           actions: [
-            if (!_isPicking)
+            if (!_isPicking) ...[
+              MealSuggestionAction(
+                date: loggedDate,
+                onLogged: () {
+                  context.showToast(title: l10n.mealSuggestionLoggedTitle, message: l10n.mealSuggestionLoggedMessage);
+                  Navigator.of(context).pop();
+                },
+              ),
               MealScanAction(
                 date: loggedDate,
                 onLogged: () {
@@ -67,6 +75,7 @@ class AddFoodPage extends StatelessWidget {
                   Navigator.of(context).pop();
                 },
               ),
+            ],
             IconButton(
               icon: const Icon(Icons.add_circle_outline),
               tooltip: l10n.dietCustomFoodTitle,
