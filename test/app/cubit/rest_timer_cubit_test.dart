@@ -1,4 +1,6 @@
 import 'package:fake_async/fake_async.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
@@ -11,6 +13,14 @@ RestTimerCubit buildCubit({Duration configured = const Duration(seconds: 90)}) {
   final saveRestDurationUseCase = MockSaveRestDurationUseCase();
   when(() => saveRestDurationUseCase(any())).thenAnswer((_) async {});
   return RestTimerCubit(getRestDurationUseCase: getRestDurationUseCase, saveRestDurationUseCase: saveRestDurationUseCase);
+}
+
+void announceLifecycleState(AppLifecycleState lifecycleState) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.handlePlatformMessage(
+    SystemChannels.lifecycle.name,
+    const StringCodec().encodeMessage(lifecycleState.toString()),
+    (_) {},
+  );
 }
 
 void main() {
@@ -99,6 +109,65 @@ void main() {
       async.elapse(const Duration(seconds: 5));
 
       expect(cubit.state.isRunning, isFalse);
+
+      cubit.close();
+    });
+  });
+
+  test('time that passes with no tick still comes off the countdown', () {
+    fakeAsync((async) {
+      final cubit = buildCubit()..start(rest: const Duration(seconds: 60));
+
+      async.elapseBlocking(const Duration(seconds: 20));
+      async.elapse(const Duration(seconds: 1));
+
+      expect(cubit.state.remaining, const Duration(seconds: 39), reason: 'the deadline is what counts down, not how many ticks were serviced');
+
+      cubit.close();
+    });
+  });
+
+  test('a rest whose deadline passed while the app was away is finished on resume', () {
+    fakeAsync((async) {
+      final cubit = buildCubit()..start(rest: const Duration(seconds: 60));
+
+      async
+        ..elapseBlocking(const Duration(minutes: 5))
+        ..flushMicrotasks();
+      announceLifecycleState(.paused);
+      announceLifecycleState(.resumed);
+      async.flushMicrotasks();
+
+      expect(cubit.state.isRunning, isFalse, reason: 'coming back to a countdown that should have ended long ago must not leave it stuck');
+
+      cubit.close();
+    });
+  });
+
+  test('a rest still running when the app comes back shows the time that actually remains', () {
+    fakeAsync((async) {
+      final cubit = buildCubit()..start(rest: const Duration(seconds: 90));
+
+      async.elapseBlocking(const Duration(seconds: 30));
+      announceLifecycleState(.paused);
+      announceLifecycleState(.resumed);
+      async.flushMicrotasks();
+
+      expect(cubit.state.remaining, const Duration(seconds: 60));
+
+      cubit.close();
+    });
+  });
+
+  test('extending after unserviced time grows the rest from what is actually left', () {
+    fakeAsync((async) {
+      final cubit = buildCubit()..start(rest: const Duration(seconds: 60));
+
+      async.elapseBlocking(const Duration(seconds: 20));
+      cubit.extend();
+
+      expect(cubit.state.remaining, const Duration(seconds: 70));
+      expect(cubit.state.total, const Duration(seconds: 90));
 
       cubit.close();
     });
