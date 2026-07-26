@@ -77,9 +77,18 @@ abstract class VTTheme {
         titleTextStyle: GoogleFonts.archivo(fontSize: 22, fontWeight: .w800, letterSpacing: -0.5, color: colorScheme.onSurface),
       ),
       chipTheme: ChipThemeData(
-        selectedColor: colorScheme.primaryContainer,
+        // color, NOT selectedColor: RawChip crossfades the fill between two
+        // separately resolved colours, and only the *end* of that fade reads
+        // selectedColor - the beginning falls back to the M3 default, which for
+        // a selected chip is secondaryContainer. So the fill animated from
+        // coral (brown in dark) to green on every tap. A WidgetStateProperty is
+        // read for both ends, so the two agree and there is nothing to fade
+        // through. Returning null for every other state keeps Material's own
+        // unselected and disabled fills.
+        color: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected) && !states.contains(WidgetState.disabled) ? colorScheme.primaryContainer : null,
+        ),
         checkmarkColor: colorScheme.onPrimaryContainer,
-        secondarySelectedColor: colorScheme.primaryContainer,
         // The fill was moved off secondaryContainer, but the ink was left behind:
         // a selected ChoiceChip still defaults its label to onSecondaryContainer
         // - coral - which then lands on a green fill. The ink is pinned to the
