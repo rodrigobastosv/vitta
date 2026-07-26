@@ -14,10 +14,15 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 // caption rotation are continuous loops, not transitions (see the motion scan's
 // _allowed). Honours reduce-motion by holding still on the first caption.
 class VTScanningOverlay extends StatefulWidget {
-  const VTScanningOverlay({required this.captions, this.imageBytes, super.key});
+  const VTScanningOverlay({required this.captions, this.imageBytes, this.icon = Icons.center_focus_strong_outlined, super.key});
 
   final List<String> captions;
   final Uint8List? imageBytes;
+
+  // What the sweep passes over when there is no photo to show. A meal suggestion
+  // is the same multi-second model call as a scan with nothing captured, so it
+  // reuses this overlay rather than growing a second one under another name.
+  final IconData icon;
 
   @override
   State<VTScanningOverlay> createState() => _VTScanningOverlayState();
@@ -79,7 +84,7 @@ class _VTScanningOverlayState extends State<VTScanningOverlay> with SingleTicker
                     else
                       ColoredBox(
                         color: colorScheme.primary.withValues(alpha: 0.10),
-                        child: Icon(Icons.center_focus_strong_outlined, size: 72, color: colorScheme.primary),
+                        child: Icon(widget.icon, size: 72, color: colorScheme.primary),
                       ),
                     DecoratedBox(
                       decoration: BoxDecoration(

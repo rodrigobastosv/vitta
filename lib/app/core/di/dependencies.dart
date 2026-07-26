@@ -29,6 +29,7 @@ import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_data
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_scan_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_suggestion_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/data/diet/diet_repository.dart';
@@ -90,6 +91,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_scanned_meal_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/log_suggested_meal_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/mark_diet_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -97,6 +99,7 @@ import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_meal_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/suggest_meals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
@@ -175,6 +178,7 @@ import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart'
 import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_cubit.dart';
 import 'package:vitta/app/presentation/pages/macro_goals/macro_goals_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
+import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_cubit.dart';
 import 'package:vitta/app/presentation/pages/onboarding/onboarding_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_cubit.dart';
@@ -240,6 +244,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => DietIntroLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => SupabaseNutritionScanDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseMealScanDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => SupabaseMealSuggestionDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseRecipeDataSource(supabaseService: G()));
   G.registerLazySingleton(() => SupabaseFoodFavoritesDataSource(supabaseService: G()));
   G.registerLazySingleton(
@@ -250,6 +255,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       recentSearchesLocalDataSource: G(),
       supabaseFoodFavoritesDataSource: G(),
       supabaseMealScanDataSource: G(),
+      supabaseMealSuggestionDataSource: G(),
       supabaseNutritionScanDataSource: G(),
       supabaseRecipeDataSource: G(),
       dietIntroLocalDataSource: G(),
@@ -305,6 +311,8 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => ScanNutritionLabelUseCase(dietRepository: G()));
   G.registerFactory(() => ScanMealUseCase(dietRepository: G()));
   G.registerFactory(() => LogScannedMealUseCase(dietRepository: G()));
+  G.registerFactory(() => SuggestMealsUseCase(dietRepository: G()));
+  G.registerFactory(() => LogSuggestedMealUseCase(dietRepository: G()));
   G.registerFactory(() => LogWaterUseCase(waterRepository: G()));
   G.registerFactory(() => GetDailyWaterUseCase(waterRepository: G()));
   G.registerFactory(() => GetWaterInRangeUseCase(waterRepository: G()));
@@ -416,6 +424,16 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => CustomFoodCubit(uploadFoodImageUseCase: G(), scanNutritionLabelUseCase: G(), imagePickerService: G()));
   G.registerFactoryParam<MealScanCubit, DateTime, void>(
     (loggedDate, _) => MealScanCubit(scanMealUseCase: G(), logScannedMealUseCase: G(), imagePickerService: G(), loggedDate: loggedDate),
+  );
+  G.registerFactoryParam<MealSuggestionCubit, DateTime, void>(
+    (loggedDate, _) => MealSuggestionCubit(
+      suggestMealsUseCase: G(),
+      logSuggestedMealUseCase: G(),
+      getDailyMacrosUseCase: G(),
+      getMacroGoalsUseCase: G(),
+      getAppSettingsUseCase: G(),
+      loggedDate: loggedDate,
+    ),
   );
   G.registerFactory(() => RecipesCubit(getRecipesUseCase: G(), deleteRecipeUseCase: G(), logFoodUseCase: G(), getAppSettingsUseCase: G()));
   G.registerFactoryParam<RecipeFormCubit, Recipe?, void>(

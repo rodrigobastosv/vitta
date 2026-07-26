@@ -31,6 +31,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/has_seen_diet_intro_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_scanned_meal_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/log_suggested_meal_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/mark_diet_intro_seen_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/remove_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
@@ -38,6 +39,7 @@ import 'package:vitta/app/domain/diet/use_cases/save_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_meal_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/scan_nutrition_label_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/search_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/suggest_meals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/unfavorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/update_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/upload_food_image_use_case.dart';
@@ -105,6 +107,10 @@ class MockScanNutritionLabelUseCase extends Mock implements ScanNutritionLabelUs
 class MockScanMealUseCase extends Mock implements ScanMealUseCase {}
 
 class MockLogScannedMealUseCase extends Mock implements LogScannedMealUseCase {}
+
+class MockSuggestMealsUseCase extends Mock implements SuggestMealsUseCase {}
+
+class MockLogSuggestedMealUseCase extends Mock implements LogSuggestedMealUseCase {}
 
 class MockLogFoodUseCase extends Mock implements LogFoodUseCase {}
 

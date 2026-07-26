@@ -22,6 +22,7 @@ import 'package:vitta/app/presentation/routing/routes/home_route.dart';
 import 'package:vitta/app/presentation/routing/routes/log_reminders_route.dart';
 import 'package:vitta/app/presentation/routing/routes/macro_goals_route.dart';
 import 'package:vitta/app/presentation/routing/routes/meal_scan_route.dart';
+import 'package:vitta/app/presentation/routing/routes/meal_suggestion_route.dart';
 import 'package:vitta/app/presentation/routing/routes/objective_route.dart';
 import 'package:vitta/app/presentation/routing/routes/onboarding_route.dart';
 import 'package:vitta/app/presentation/routing/routes/paywall_route.dart';
@@ -57,6 +58,7 @@ abstract class AppRouter {
     DietIntroRoute(),
     CopyMealsRoute(),
     MealScanRoute(),
+    MealSuggestionRoute(),
     DietHistoryRoute(),
     DietDayRoute(),
     RecipesRoute(),

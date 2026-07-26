@@ -10,6 +10,21 @@ enum MealType {
 
   static MealType fromWireValue(String value) => MealType.values.firstWhere((mealType) => mealType.wireValue == value);
 
+  // The meal something logged at this hour most likely belongs to, so a sheet
+  // opens on the right one rather than always on lunch.
+  static MealType forTime(DateTime time) {
+    if (time.hour < 11) {
+      return .breakfast;
+    }
+    if (time.hour < 15) {
+      return .lunch;
+    }
+    if (time.hour < 21) {
+      return .dinner;
+    }
+    return .snack;
+  }
+
   String get wireValue => name;
 
   String getLabel(AppLocalizations l10n) => switch (this) {

@@ -14,12 +14,12 @@ import 'package:vitta/app/design_system/components/general/vt_photo_header.dart'
 import 'package:vitta/app/design_system/components/general/vt_scanning_overlay.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/meal_type_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_state.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_result_header.dart';
-import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_type_selector.dart';
 import 'package:vitta/app/presentation/pages/meal_scan/widgets/scanned_meal_item_card.dart';
 import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
 
@@ -145,7 +145,7 @@ class MealScanPage extends StatelessWidget {
           const VTGap.s(),
         ],
         const VTGap.m(),
-        MealScanTypeSelector(selected: state.mealType, onSelected: cubit.mealTypeChanged),
+        MealTypeSelector(title: l10n.mealScanMealTypeTitle, selected: state.mealType, onSelected: cubit.mealTypeChanged),
       ],
     );
   }

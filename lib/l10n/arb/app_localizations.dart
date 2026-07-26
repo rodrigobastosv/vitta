@@ -2048,6 +2048,132 @@ abstract class AppLocalizations {
   /// **'Everything you kept is now in your day.'**
   String get mealScanLoggedMessage;
 
+  /// No description provided for @mealSuggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a meal'**
+  String get mealSuggestionTitle;
+
+  /// No description provided for @mealSuggestionGapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Left today'**
+  String get mealSuggestionGapTitle;
+
+  /// No description provided for @mealSuggestionGapMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'What is still missing from your goals for this day.'**
+  String get mealSuggestionGapMessage;
+
+  /// No description provided for @mealSuggestionGapMet.
+  ///
+  /// In en, this message translates to:
+  /// **'You have already hit your calorie goal for this day.'**
+  String get mealSuggestionGapMet;
+
+  /// No description provided for @mealSuggestionMealTypeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest a meal for'**
+  String get mealSuggestionMealTypeTitle;
+
+  /// No description provided for @mealSuggestionIntroMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'We look at what you have logged today and put together a few meals that fit what is left. The macros are estimates you can adjust before adding anything.'**
+  String get mealSuggestionIntroMessage;
+
+  /// No description provided for @mealSuggestionRequestAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggest meals'**
+  String get mealSuggestionRequestAction;
+
+  /// No description provided for @mealSuggestionRetryAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get mealSuggestionRetryAction;
+
+  /// No description provided for @mealSuggestionThinkingCaptionReading.
+  ///
+  /// In en, this message translates to:
+  /// **'Reading your day…'**
+  String get mealSuggestionThinkingCaptionReading;
+
+  /// No description provided for @mealSuggestionThinkingCaptionBalancing.
+  ///
+  /// In en, this message translates to:
+  /// **'Balancing what is left…'**
+  String get mealSuggestionThinkingCaptionBalancing;
+
+  /// No description provided for @mealSuggestionThinkingCaptionPlating.
+  ///
+  /// In en, this message translates to:
+  /// **'Putting the meals together…'**
+  String get mealSuggestionThinkingCaptionPlating;
+
+  /// No description provided for @mealSuggestionPickTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick a meal'**
+  String get mealSuggestionPickTitle;
+
+  /// No description provided for @mealSuggestionItemsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What goes in'**
+  String get mealSuggestionItemsTitle;
+
+  /// No description provided for @mealSuggestionItemsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'These macros are estimates — adjust the amounts, untick anything you don\'t want, then add it to your day.'**
+  String get mealSuggestionItemsSubtitle;
+
+  /// No description provided for @mealSuggestionPortionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Portion'**
+  String get mealSuggestionPortionLabel;
+
+  /// No description provided for @mealSuggestionNoDataTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No meal to suggest'**
+  String get mealSuggestionNoDataTitle;
+
+  /// No description provided for @mealSuggestionNoData.
+  ///
+  /// In en, this message translates to:
+  /// **'We couldn\'t put a meal together for what is left of this day. Try another meal, or adjust your goals.'**
+  String get mealSuggestionNoData;
+
+  /// No description provided for @mealSuggestionIncomplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one item with a valid amount.'**
+  String get mealSuggestionIncomplete;
+
+  /// No description provided for @mealSuggestionLogAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to diary'**
+  String get mealSuggestionLogAction;
+
+  /// No description provided for @mealSuggestionLoggedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal added'**
+  String get mealSuggestionLoggedTitle;
+
+  /// No description provided for @mealSuggestionLoggedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything you kept is now in your day.'**
+  String get mealSuggestionLoggedMessage;
+
   /// No description provided for @dietCaloriesPer100Ml.
   ///
   /// In en, this message translates to:
@@ -3139,6 +3265,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Photograph a plate and log every item at once'**
   String get premiumFeatureMealScanSubtitle;
+
+  /// No description provided for @premiumFeatureMealSuggestionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Meal suggestions'**
+  String get premiumFeatureMealSuggestionTitle;
+
+  /// No description provided for @premiumFeatureMealSuggestionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Get meals built around the macros you have left today'**
+  String get premiumFeatureMealSuggestionSubtitle;
 
   /// No description provided for @premiumFeatureNutritionLabelScanTitle.
   ///

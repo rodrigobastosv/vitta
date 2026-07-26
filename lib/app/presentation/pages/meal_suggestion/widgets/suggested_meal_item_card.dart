@@ -1,0 +1,91 @@
+import 'package:flutter/material.dart';
+import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/cards/vt_card.dart';
+import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/tokens/vt_radius.dart';
+import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
+import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_entry.dart';
+
+class SuggestedMealItemCard extends StatefulWidget {
+  const SuggestedMealItemCard({required this.entry, required this.onGramsChanged, required this.onToggle, super.key});
+
+  final MealSuggestionEntry entry;
+  final ValueChanged<String> onGramsChanged;
+  final VoidCallback onToggle;
+
+  @override
+  State<SuggestedMealItemCard> createState() => _SuggestedMealItemCardState();
+}
+
+class _SuggestedMealItemCardState extends State<SuggestedMealItemCard> {
+  late final TextEditingController _controller = TextEditingController(text: widget.entry.gramsText);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final colorScheme = context.colorScheme;
+    final entry = widget.entry;
+    final nameColor = entry.isIncluded ? colorScheme.onSurface : colorScheme.onSurfaceVariant;
+    return VTCard(
+      onTap: widget.onToggle,
+      child: Row(
+        crossAxisAlignment: .start,
+        children: [
+          Checkbox(value: entry.isIncluded, onChanged: (_) => widget.onToggle()),
+          const VTGap.s(),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                Text(entry.item.food.name, style: VTTextStyles.bodyStrong(context).copyWith(color: nameColor)),
+                const VTGap.s(),
+                Row(
+                  crossAxisAlignment: .end,
+                  children: [
+                    SizedBox(
+                      width: 116,
+                      child: TextField(
+                        controller: _controller,
+                        enabled: entry.isIncluded,
+                        onChanged: widget.onGramsChanged,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        style: VTTextStyles.bodyStrong(context),
+                        decoration: InputDecoration(
+                          isDense: true,
+                          labelText: l10n.mealSuggestionPortionLabel,
+                          suffixText: l10n.dietGramsUnit,
+                          suffixIcon: Icon(Icons.edit_outlined, size: 16, color: colorScheme.onSurfaceVariant),
+                          suffixIconConstraints: const BoxConstraints(minWidth: 28),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: VTSpacing.s, vertical: VTSpacing.s),
+                          border: const OutlineInputBorder(borderRadius: VTRadius.borderRadiusM),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: VTRadius.borderRadiusM,
+                            borderSide: BorderSide(color: colorScheme.primary, width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    if (entry.isIncluded)
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: VTSpacing.s),
+                        child: VTBadge(label: l10n.dietMealCalories(entry.calories.round()), color: colorScheme.primary),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

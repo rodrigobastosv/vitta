@@ -14,7 +14,7 @@ import 'package:vitta/app/presentation/pages/meal_scan/meal_scan_state.dart';
 
 class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentationEvent> {
   MealScanCubit({required this._scanMealUseCase, required this._logScannedMealUseCase, required this._imagePickerService, required this._loggedDate})
-    : super(MealScanState(mealType: _mealTypeForNow()));
+    : super(MealScanState(mealType: MealType.forTime(DateTime.now())));
 
   final ScanMealUseCase _scanMealUseCase;
   final LogScannedMealUseCase _logScannedMealUseCase;
@@ -88,20 +88,6 @@ class MealScanCubit extends PresentationCubit<MealScanState, MealScanPresentatio
       Log.action('meal_logged_from_scan', data: {'meal': state.mealType.wireValue, 'items': includedEntries.length});
       emitPresentation(MealScanLogged(mealType: state.mealType, itemCount: includedEntries.length));
     });
-  }
-
-  static MealType _mealTypeForNow() {
-    final hour = DateTime.now().hour;
-    if (hour < 11) {
-      return MealType.breakfast;
-    }
-    if (hour < 15) {
-      return MealType.lunch;
-    }
-    if (hour < 21) {
-      return MealType.dinner;
-    }
-    return MealType.snack;
   }
 
   static String _formatGrams(double grams) => grams == grams.roundToDouble() ? grams.toStringAsFixed(0) : grams.toStringAsFixed(1);

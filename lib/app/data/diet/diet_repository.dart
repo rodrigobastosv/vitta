@@ -6,9 +6,11 @@ import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.
 import 'package:vitta/app/data/diet/datasources/local/diet_goals_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/diet_intro_local_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/local/recent_searches_local_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/requests/meal_suggestion_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_diet_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_food_favorites_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_scan_datasource.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/supabase_meal_suggestion_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_nutrition_scan_datasource.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/supabase_recipe_datasource.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
@@ -16,7 +18,9 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
+import 'package:vitta/app/domain/diet/entities/macro_gap.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
+import 'package:vitta/app/domain/diet/entities/meal_suggestions.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
@@ -31,6 +35,7 @@ class DietRepository {
     required this._recentSearchesLocalDataSource,
     required this._supabaseFoodFavoritesDataSource,
     required this._supabaseMealScanDataSource,
+    required this._supabaseMealSuggestionDataSource,
     required this._supabaseNutritionScanDataSource,
     required this._supabaseRecipeDataSource,
     required this._dietIntroLocalDataSource,
@@ -42,6 +47,7 @@ class DietRepository {
   final RecentSearchesLocalDataSource _recentSearchesLocalDataSource;
   final SupabaseFoodFavoritesDataSource _supabaseFoodFavoritesDataSource;
   final SupabaseMealScanDataSource _supabaseMealScanDataSource;
+  final SupabaseMealSuggestionDataSource _supabaseMealSuggestionDataSource;
   final SupabaseNutritionScanDataSource _supabaseNutritionScanDataSource;
   final SupabaseRecipeDataSource _supabaseRecipeDataSource;
   final DietIntroLocalDataSource _dietIntroLocalDataSource;
@@ -188,4 +194,14 @@ class DietRepository {
       _supabaseNutritionScanDataSource.scanLabel(imagePath: imagePath);
 
   Future<Result<VTError, ScannedMeal>> scanMeal({required String imagePath}) => _supabaseMealScanDataSource.scanMeal(imagePath: imagePath);
+
+  Future<Result<VTError, MealSuggestions>> suggestMeals({
+    required MealType mealType,
+    required MacroGap gap,
+    required MacroGoals goals,
+    required DailyMacros loggedToday,
+    required String languageCode,
+  }) => _supabaseMealSuggestionDataSource.suggestMeals(
+    request: MealSuggestionRequest(mealType: mealType, gap: gap, goals: goals, loggedToday: loggedToday, languageCode: languageCode),
+  );
 }

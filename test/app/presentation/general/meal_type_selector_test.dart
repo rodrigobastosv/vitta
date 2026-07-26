@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
-import 'package:vitta/app/presentation/pages/meal_scan/widgets/meal_scan_type_selector.dart';
+import 'package:vitta/app/presentation/general/meal_type_selector.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 Future<void> pumpSelector(WidgetTester tester, {required ThemeData theme, MealType selected = .dinner}) => tester.pumpWidget(
@@ -11,7 +11,7 @@ Future<void> pumpSelector(WidgetTester tester, {required ThemeData theme, MealTy
     localizationsDelegates: AppLocalizations.localizationsDelegates,
     supportedLocales: AppLocalizations.supportedLocales,
     home: Scaffold(
-      body: MealScanTypeSelector(selected: selected, onSelected: (_) {}),
+      body: MealTypeSelector(title: 'Add to meal', selected: selected, onSelected: (_) {}),
     ),
   ),
 );
