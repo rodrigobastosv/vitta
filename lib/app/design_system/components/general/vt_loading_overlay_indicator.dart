@@ -13,7 +13,11 @@ import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 // The rotation is a continuous loop, not a transition (see the motion scan's
 // _allowed). Honours reduce-motion by holding still on the first activity.
 class VTLoadingOverlayIndicator extends StatefulWidget {
-  const VTLoadingOverlayIndicator({super.key});
+  const VTLoadingOverlayIndicator({this.size = defaultSize, super.key});
+
+  static const double defaultSize = 72;
+
+  final double size;
 
   @override
   State<VTLoadingOverlayIndicator> createState() => _VTLoadingOverlayIndicatorState();
@@ -37,7 +41,7 @@ const _activities = <_LoadingActivity>[
 
 class _VTLoadingOverlayIndicatorState extends State<VTLoadingOverlayIndicator> {
   static const _step = Duration(milliseconds: 900);
-  static const _size = 72.0;
+  static const _iconFraction = 32 / VTLoadingOverlayIndicator.defaultSize;
 
   Timer? _timer;
   int _index = 0;
@@ -66,7 +70,7 @@ class _VTLoadingOverlayIndicatorState extends State<VTLoadingOverlayIndicator> {
 
     return Center(
       child: SizedBox.square(
-        dimension: _size,
+        dimension: widget.size,
         child: TweenAnimationBuilder<Color?>(
           tween: ColorTween(begin: _activities.first.color, end: activity.color),
           duration: VTMotion.transition,
@@ -83,7 +87,7 @@ class _VTLoadingOverlayIndicatorState extends State<VTLoadingOverlayIndicator> {
                   opacity: animation,
                   child: ScaleTransition(scale: Tween<double>(begin: 0.6, end: 1).animate(animation), child: child),
                 ),
-                child: Icon(activity.icon, key: ValueKey(index), size: 32, color: color),
+                child: Icon(activity.icon, key: ValueKey(index), size: widget.size * _iconFraction, color: color),
               ),
             ],
           ),

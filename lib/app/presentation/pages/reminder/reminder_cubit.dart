@@ -8,6 +8,7 @@ import 'package:vitta/app/domain/reminder/use_cases/create_reminder_use_case.dar
 import 'package:vitta/app/domain/reminder/use_cases/delete_reminder_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/get_reminders_for_date_use_case.dart';
 import 'package:vitta/app/domain/reminder/use_cases/update_reminder_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_state.dart';
@@ -35,11 +36,11 @@ class ReminderCubit extends PresentationCubit<ReminderState, ReminderPresentatio
   @override
   void onInit() => loadDate(state.date);
 
-  Future<void> loadDate(DateTime date) async {
+  Future<void> loadDate(DateTime date, {LoadTrigger trigger = .replace}) async {
     final day = _dateOnly(date);
     final remindersResult = await withLoadingOverlay(
       () => _getRemindersForDateUseCase(date: day),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: ReminderShowLoading(),
       hideLoadingEvent: ReminderHideLoading(),
     );

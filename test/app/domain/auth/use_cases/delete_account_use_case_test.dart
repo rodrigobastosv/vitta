@@ -16,7 +16,13 @@ void main() {
     when(authRepository.signOut).thenAnswer((_) async => const Success(null));
     when(authRepository.signInAnonymously).thenAnswer((_) async => const Success(AnonymousUser()));
     when(purchaseService.logOut).thenAnswer((_) async {});
-    final useCase = UseCasesFactories.buildDeleteAccountUseCase(authRepository: authRepository, purchaseService: purchaseService);
+    final wireCacheService = MockWireCacheService();
+    when(wireCacheService.clear).thenAnswer((_) async {});
+    final useCase = UseCasesFactories.buildDeleteAccountUseCase(
+      authRepository: authRepository,
+      purchaseService: purchaseService,
+      wireCacheService: wireCacheService,
+    );
 
     final statusResult = await useCase();
 

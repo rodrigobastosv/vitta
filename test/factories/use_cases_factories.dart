@@ -101,9 +101,23 @@ abstract class UseCasesFactories {
 
   static SignInUseCase buildSignInUseCase({MockAuthRepository? authRepository}) => SignInUseCase(authRepository: authRepository ?? MockAuthRepository());
 
-  static SignOutUseCase buildSignOutUseCase({MockAuthRepository? authRepository, MockPurchaseService? purchaseService}) =>
-      SignOutUseCase(authRepository: authRepository ?? MockAuthRepository(), purchaseService: purchaseService ?? MockPurchaseService());
+  static SignOutUseCase buildSignOutUseCase({
+    MockAuthRepository? authRepository,
+    MockPurchaseService? purchaseService,
+    MockWireCacheService? wireCacheService,
+  }) => SignOutUseCase(
+    authRepository: authRepository ?? MockAuthRepository(),
+    purchaseService: purchaseService ?? MockPurchaseService(),
+    wireCacheService: wireCacheService ?? MockWireCacheService(),
+  );
 
-  static DeleteAccountUseCase buildDeleteAccountUseCase({MockAuthRepository? authRepository, MockPurchaseService? purchaseService}) =>
-      DeleteAccountUseCase(authRepository: authRepository ?? MockAuthRepository(), purchaseService: purchaseService ?? MockPurchaseService());
+  static DeleteAccountUseCase buildDeleteAccountUseCase({
+    MockAuthRepository? authRepository,
+    MockPurchaseService? purchaseService,
+    MockWireCacheService? wireCacheService,
+  }) => DeleteAccountUseCase(
+    authRepository: authRepository ?? MockAuthRepository(),
+    purchaseService: purchaseService ?? MockPurchaseService(),
+    wireCacheService: wireCacheService ?? MockWireCacheService(),
+  );
 }

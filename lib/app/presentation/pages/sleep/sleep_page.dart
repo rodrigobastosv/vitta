@@ -54,7 +54,7 @@ class SleepPage extends StatelessWidget {
           ],
         ),
         body: VTRefreshable(
-          onRefresh: cubit.loadRecent,
+          onRefresh: () => cubit.loadRecent(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 240),
           children: [

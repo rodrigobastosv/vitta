@@ -9,6 +9,7 @@ import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_us
 import 'package:vitta/app/domain/diet/entities/fitness_objective.dart';
 import 'package:vitta/app/domain/diet/use_cases/save_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/objective/objective_state.dart';
@@ -33,7 +34,7 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
   @override
   void onInit() => load();
 
-  Future<void> load() => withLoadingOverlay(
+  Future<void> load({LoadTrigger trigger = .replace}) => withLoadingOverlay(
     () async {
       final profile = _getBodyProfileUseCase();
       final latestResult = await _getLatestBodyWeightUseCase();
@@ -51,7 +52,7 @@ class ObjectiveCubit extends PresentationCubit<ObjectiveState, ObjectivePresenta
         ),
       );
     },
-    showOverlay: state.isLoaded,
+    showOverlay: trigger.showsOverlay && state.isLoaded,
     showLoadingEvent: ObjectiveShowLoading(),
     hideLoadingEvent: ObjectiveHideLoading(),
   );

@@ -7,6 +7,7 @@ import 'package:vitta/app/domain/water/entities/water_log.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
@@ -44,11 +45,11 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   @override
   void onInit() => loadToday();
 
-  Future<void> loadToday() async {
+  Future<void> loadToday({LoadTrigger trigger = .replace}) async {
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
     final dailyWaterResult = await withLoadingOverlay(
       () => _getDailyWaterUseCase(date: _today),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: WaterShowLoading(),
       hideLoadingEvent: WaterHideLoading(),
     );

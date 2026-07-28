@@ -73,7 +73,7 @@ class RoutinesPage extends StatelessWidget {
     final routine = routineIndex == null ? null : cubit.state.routines[routineIndex];
     final saved = await context.pushRoute<bool>(.routineForm, extra: RoutineFormExtra(routine: routine));
     if (saved ?? false) {
-      await cubit.loadRoutines();
+      await cubit.loadRoutines(trigger: .quiet);
     }
   }
 }

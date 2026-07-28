@@ -71,7 +71,7 @@ class ProgressPhotosPage extends StatelessWidget {
                 label: Text(l10n.progressPhotosAddAction),
               ),
         body: VTRefreshable(
-          onRefresh: cubit.loadPhotos,
+          onRefresh: () => cubit.loadPhotos(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 200),
           hasData: state.photos.isNotEmpty,

@@ -3,6 +3,7 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_progression.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_state.dart';
@@ -25,10 +26,10 @@ class ExerciseProgressionCubit extends PresentationCubit<ExerciseProgressionStat
   @override
   void onInit() => load();
 
-  Future<void> load() async {
+  Future<void> load({LoadTrigger trigger = .replace}) async {
     final progressionResult = await withLoadingOverlay(
       () => _getExerciseProgressionUseCase(exerciseId: state.exercise.id),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: ExerciseProgressionShowLoading(),
       hideLoadingEvent: ExerciseProgressionHideLoading(),
     );

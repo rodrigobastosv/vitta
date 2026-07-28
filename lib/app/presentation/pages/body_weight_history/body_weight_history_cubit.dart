@@ -1,6 +1,7 @@
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_body_weight_in_range_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/body_weight_history/body_weight_history_presentation_event.dart';
@@ -25,14 +26,14 @@ class BodyWeightHistoryCubit extends PresentationCubit<BodyWeightHistoryState, B
     await _loadTrend(trendRange);
   }
 
-  Future<void> _loadTrend(TrendRange trendRange) async {
+  Future<void> _loadTrend(TrendRange trendRange, {LoadTrigger trigger = .replace}) async {
     final to = _dateOnly(DateTime.now());
     final logsResult = await withLoadingOverlay(
       () => _getBodyWeightInRangeUseCase(
         from: to.subtract(Duration(days: trendRange.days - 1)),
         to: to,
       ),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: BodyWeightHistoryShowLoading(),
       hideLoadingEvent: BodyWeightHistoryHideLoading(),
     );

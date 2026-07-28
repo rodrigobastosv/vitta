@@ -1,6 +1,7 @@
 import 'package:vitta/app/data/sleep/datasources/local/sleep_local_datasource.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_presentation_event.dart';
@@ -27,14 +28,14 @@ class SleepHistoryCubit extends PresentationCubit<SleepHistoryState, SleepHistor
   @override
   void onInit() => refresh();
 
-  Future<void> refresh() async {
+  Future<void> refresh({LoadTrigger trigger = .replace}) async {
     await withLoadingOverlay(
       () async {
         emit(state.copyWith(durationGoalHours: _getSleepGoalUseCase()));
         await _loadMonth(state.month);
         await _loadTrend(state.trendRange);
       },
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: SleepHistoryShowLoading(),
       hideLoadingEvent: SleepHistoryHideLoading(),
     );

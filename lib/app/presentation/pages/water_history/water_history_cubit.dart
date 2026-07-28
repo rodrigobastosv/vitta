@@ -1,6 +1,7 @@
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/water_history/water_history_presentation_event.dart';
@@ -27,14 +28,14 @@ class WaterHistoryCubit extends PresentationCubit<WaterHistoryState, WaterHistor
   @override
   void onInit() => refresh();
 
-  Future<void> refresh() async {
+  Future<void> refresh({LoadTrigger trigger = .replace}) async {
     await withLoadingOverlay(
       () async {
         emit(state.copyWith(dailyGoalMl: _getWaterGoalUseCase()));
         await _loadMonth(state.month);
         await _loadTrend(state.trendRange);
       },
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: WaterHistoryShowLoading(),
       hideLoadingEvent: WaterHistoryHideLoading(),
     );

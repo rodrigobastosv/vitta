@@ -10,6 +10,7 @@ import 'package:vitta/app/domain/sleep/use_cases/get_sleep_last_synced_use_case.
 import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_state.dart';
@@ -52,10 +53,10 @@ class SleepCubit extends PresentationCubit<SleepState, SleepPresentationEvent> {
     await _autoSyncFromHealth();
   }
 
-  Future<void> loadRecent() async {
+  Future<void> loadRecent({LoadTrigger trigger = .replace}) async {
     final recentLogsResult = await withLoadingOverlay(
       () => _getRecentSleepLogsUseCase(days: _recentDays),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: SleepShowLoading(),
       hideLoadingEvent: SleepHideLoading(),
     );

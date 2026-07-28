@@ -42,7 +42,7 @@ class WaterPage extends StatelessWidget {
           ],
         ),
         body: VTRefreshable(
-          onRefresh: cubit.loadToday,
+          onRefresh: () => cubit.loadToday(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 260),
           children: [

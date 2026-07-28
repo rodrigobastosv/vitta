@@ -12,6 +12,7 @@ import 'package:vitta/app/domain/trends/entities/area_trend.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_in_range_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_daily_workouts_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/trends/trends_presentation_event.dart';
@@ -49,10 +50,10 @@ class TrendsCubit extends PresentationCubit<TrendsState, TrendsPresentationEvent
   @override
   void onInit() => refresh();
 
-  Future<void> refresh() async {
+  Future<void> refresh({LoadTrigger trigger = .replace}) async {
     await withLoadingOverlay(
       () => _load(state.trendRange),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: TrendsShowLoading(),
       hideLoadingEvent: TrendsHideLoading(),
     );
