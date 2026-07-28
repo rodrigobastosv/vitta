@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_water_fill.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
@@ -8,7 +9,13 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/water_log_factory.dart';
 
-Future<void> pumpCard(WidgetTester tester, {required DailyWater dailyWater, double goalMl = 2000, Locale locale = const Locale('en')}) {
+Future<void> pumpCard(
+  WidgetTester tester, {
+  required DailyWater dailyWater,
+  double goalMl = 2000,
+  bool isToday = true,
+  Locale locale = const Locale('en'),
+}) {
   tester.view.physicalSize = const Size(320, 800);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -23,6 +30,7 @@ Future<void> pumpCard(WidgetTester tester, {required DailyWater dailyWater, doub
           dailyWater: dailyWater,
           dailyGoalMl: goalMl,
           unitSystem: .metric,
+          isToday: isToday,
           onQuickAdd: (_) {},
           onEditGoal: () {},
         ),
@@ -63,4 +71,18 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+
+  testWidgets('a past day whose goal was met does not burst confetti again', (tester) async {
+    await pumpCard(tester, dailyWater: DailyWater(entries: [WaterLogFactory.build(amountMl: 2500)]), isToday: false);
+    await tester.pump();
+
+    expect(tester.widget<VTCelebration>(find.byType(VTCelebration)).trigger, isFalse);
+  });
+
+  testWidgets('reaching the goal today still celebrates', (tester) async {
+    await pumpCard(tester, dailyWater: DailyWater(entries: [WaterLogFactory.build(amountMl: 2500)]));
+    await tester.pump();
+
+    expect(tester.widget<VTCelebration>(find.byType(VTCelebration)).trigger, isTrue);
+  });
 }

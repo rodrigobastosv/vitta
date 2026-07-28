@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/presentation/general/day_selector.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/diet_calendar_sheet.dart';
 
-class DietDateSelector extends StatelessWidget {
-  const DietDateSelector({
+/// Water's day strip. Unlike diet's it opens the platform date picker rather
+/// than a calendar sheet: there is nothing to dot — a day either has glasses on
+/// it or it does not, and that is already what the page below is showing.
+///
+/// `lastDate` is today, so a day you cannot have drunk on is not offerable —
+/// the same rule the next-day chevron enforces.
+class WaterDateSelector extends StatelessWidget {
+  const WaterDateSelector({
     required this.date,
     required this.canGoToNextDay,
     required this.onPreviousDay,
@@ -11,6 +16,8 @@ class DietDateSelector extends StatelessWidget {
     required this.onPickDate,
     super.key,
   });
+
+  static const _earliestYear = 2020;
 
   final DateTime date;
   final bool canGoToNextDay;
@@ -28,7 +35,13 @@ class DietDateSelector extends StatelessWidget {
   );
 
   Future<void> _pickDate(BuildContext context) async {
-    final picked = await showDietCalendarSheet(context: context);
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: date,
+      firstDate: DateTime(_earliestYear),
+      lastDate: DateTime(now.year, now.month, now.day),
+    );
     if (picked != null) {
       onPickDate(picked);
     }

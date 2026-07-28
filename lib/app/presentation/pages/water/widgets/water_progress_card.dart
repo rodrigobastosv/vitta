@@ -16,6 +16,7 @@ class WaterProgressCard extends StatelessWidget {
     required this.dailyGoalMl,
     required this.unitSystem,
     required this.onQuickAdd,
+    this.isToday = true,
     this.onEditGoal,
     super.key,
   });
@@ -23,6 +24,10 @@ class WaterProgressCard extends StatelessWidget {
   final DailyWater dailyWater;
   final double dailyGoalMl;
   final UnitSystem unitSystem;
+
+  /// A past day's goal was reached long ago, so re-opening it must not burst
+  /// confetti: the celebration marks the moment, never the state.
+  final bool isToday;
   final ValueChanged<double> onQuickAdd;
   final VoidCallback? onEditGoal;
 
@@ -42,7 +47,7 @@ class WaterProgressCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              VTCelebration(trigger: reached, child: VTWaterFill(value: progress, color: accent)),
+              VTCelebration(trigger: reached && isToday, child: VTWaterFill(value: progress, color: accent)),
               const VTGap.l(),
               Expanded(
                 child: Column(

@@ -42,20 +42,37 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
+  bool get isViewingToday => state.date == _today;
+
   @override
   void onInit() => loadToday();
 
-  Future<void> loadToday({LoadTrigger trigger = .replace}) async {
+  Future<void> loadToday({LoadTrigger trigger = .replace}) => _loadDate(_today, trigger: trigger);
+
+  Future<void> refresh({LoadTrigger trigger = .replace}) => _loadDate(state.date, trigger: trigger);
+
+  Future<void> goToPreviousDay() => _goToDate(state.date.subtract(const Duration(days: 1)));
+
+  Future<void> goToNextDay() => _goToDate(state.date.add(const Duration(days: 1)));
+
+  Future<void> goToDate(DateTime date) => _goToDate(_dateOnly(date));
+
+  Future<void> _goToDate(DateTime date) {
+    emit(state.copyWith(date: date));
+    return _loadDate(date);
+  }
+
+  Future<void> _loadDate(DateTime date, {LoadTrigger trigger = .replace}) async {
     final dailyGoalMl = _waterLocalDataSource.getDailyGoalMl();
     final dailyWaterResult = await withLoadingOverlay(
-      () => _getDailyWaterUseCase(date: _today),
+      () => _getDailyWaterUseCase(date: date),
       showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: WaterShowLoading(),
       hideLoadingEvent: WaterHideLoading(),
     );
     dailyWaterResult.when(
       (error) => emitPresentation(WaterError(message: error.message)),
-      (value) => emit(WaterState(date: _today, dailyWater: value, dailyGoalMl: dailyGoalMl)),
+      (value) => emit(WaterState(date: date, dailyWater: value, dailyGoalMl: dailyGoalMl)),
     );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true));
@@ -63,9 +80,10 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   }
 
   Future<void> addWater({required double amountMl}) async {
-    final optimistic = WaterLog(id: 'optimistic-${_optimisticSeq++}', loggedDate: _today, amountMl: amountMl);
+    final loggedDate = state.date;
+    final optimistic = WaterLog(id: 'optimistic-${_optimisticSeq++}', loggedDate: loggedDate, amountMl: amountMl);
     emit(state.copyWith(dailyWater: DailyWater(entries: [...state.dailyWater.entries, optimistic])));
-    final loggedResult = await _logWaterUseCase(loggedDate: _today, amountMl: amountMl);
+    final loggedResult = await _logWaterUseCase(loggedDate: loggedDate, amountMl: amountMl);
     loggedResult.when(
       (error) {
         emit(state.copyWith(dailyWater: DailyWater(entries: _without(optimistic.id))));
@@ -105,6 +123,6 @@ class WaterCubit extends PresentationCubit<WaterState, WaterPresentationEvent> {
   Future<void> changeDailyGoal({required double goalMl}) async {
     await _waterLocalDataSource.saveDailyGoalMl(goalMl);
     Log.action('water_goal_changed', data: {'goal_ml': goalMl});
-    await loadToday();
+    await refresh();
   }
 }

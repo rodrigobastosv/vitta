@@ -814,16 +814,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remove';
 
   @override
-  String get dietToday => 'Today';
+  String get dayToday => 'Today';
 
   @override
-  String get dietYesterday => 'Yesterday';
+  String get dayYesterday => 'Yesterday';
 
   @override
-  String get dietPreviousDayTooltip => 'Previous day';
+  String get previousDayTooltip => 'Previous day';
 
   @override
-  String get dietNextDayTooltip => 'Next day';
+  String get nextDayTooltip => 'Next day';
 
   @override
   String get dietEmptyTitle => 'Nothing logged yet';
@@ -1528,6 +1528,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get waterEmptyMessage => 'Use a quick add above to log your first glass of the day.';
+
+  @override
+  String get waterNotTodayEmptyTitle => 'Nothing logged on that day';
+
+  @override
+  String get waterNotTodayEmptyMessage => 'Nothing was logged on this day. You can still add what you drank.';
 
   @override
   String get bodyWeightFeatureTitle => 'Body weight';

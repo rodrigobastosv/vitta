@@ -816,16 +816,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remover';
 
   @override
-  String get dietToday => 'Hoje';
+  String get dayToday => 'Hoje';
 
   @override
-  String get dietYesterday => 'Ontem';
+  String get dayYesterday => 'Ontem';
 
   @override
-  String get dietPreviousDayTooltip => 'Dia anterior';
+  String get previousDayTooltip => 'Dia anterior';
 
   @override
-  String get dietNextDayTooltip => 'Próximo dia';
+  String get nextDayTooltip => 'Próximo dia';
 
   @override
   String get dietEmptyTitle => 'Nada registrado ainda';
@@ -1531,6 +1531,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get waterEmptyMessage => 'Use uma adição rápida acima para registrar o primeiro copo do dia.';
+
+  @override
+  String get waterNotTodayEmptyTitle => 'Nada registrado nesse dia';
+
+  @override
+  String get waterNotTodayEmptyMessage => 'Nada foi registrado neste dia. Você ainda pode adicionar o que bebeu.';
 
   @override
   String get bodyWeightFeatureTitle => 'Peso corporal';
