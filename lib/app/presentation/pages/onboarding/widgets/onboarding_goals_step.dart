@@ -50,6 +50,7 @@ class OnboardingGoalsStep extends StatelessWidget {
             min: minCalories,
             max: maxCalories,
             step: 50,
+            valueUnit: l10n.dietKcalUnit,
             decreaseTooltip: l10n.adjustDecreaseAction(l10n.macroGoalsCalorieTargetTitle),
             increaseTooltip: l10n.adjustIncreaseAction(l10n.macroGoalsCalorieTargetTitle),
             color: colorScheme.primary,

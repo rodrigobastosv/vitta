@@ -21,6 +21,7 @@ class AgeSlider extends StatelessWidget {
       min: minAgeYears,
       max: maxAgeYears,
       step: 1,
+      valueUnit: l10n.bodyProfileAgeUnit,
       decreaseTooltip: l10n.adjustDecreaseAction(l10n.bodyProfileAgeLabel),
       increaseTooltip: l10n.adjustIncreaseAction(l10n.bodyProfileAgeLabel),
       color: context.colorScheme.primary,

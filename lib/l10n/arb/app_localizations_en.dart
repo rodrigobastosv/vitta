@@ -549,6 +549,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileAgeUnit => 'yrs';
+
+  @override
   String get bodyProfileActivityTitle => 'Activity level';
 
   @override
@@ -1499,6 +1502,16 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String adjustIncreaseAction(String label) {
     return 'Increase $label';
+  }
+
+  @override
+  String adjustTypeValueAction(String label) {
+    return 'Type an exact $label';
+  }
+
+  @override
+  String adjustValueRange(String min, String max) {
+    return 'Between $min and $max';
   }
 
   @override

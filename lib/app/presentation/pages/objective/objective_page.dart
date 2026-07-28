@@ -65,6 +65,7 @@ class ObjectivePage extends StatelessWidget {
                 min: unitSystem.centimetersToDisplayHeight(minHeightCm),
                 max: unitSystem.centimetersToDisplayHeight(maxHeightCm),
                 step: 1,
+                valueUnit: unitSystem.heightUnitLabel,
                 decreaseTooltip: l10n.adjustDecreaseAction(l10n.onboardingHeightLabel),
                 increaseTooltip: l10n.adjustIncreaseAction(l10n.onboardingHeightLabel),
                 color: colorScheme.primary,

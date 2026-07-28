@@ -279,6 +279,7 @@
       }
     }
   },
+  "bodyProfileAgeUnit": "yrs",
   "bodyProfileActivityTitle": "Activity level",
   "bodyProfileActivityHint": "How much you move on an ordinary day, training included.",
   "bodyProfileActivitySedentary": "Sedentary",
@@ -914,6 +915,25 @@
   "@adjustIncreaseAction": {
     "placeholders": {
       "label": {
+        "type": "String"
+      }
+    }
+  },
+  "adjustTypeValueAction": "Type an exact {label}",
+  "@adjustTypeValueAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "adjustValueRange": "Between {min} and {max}",
+  "@adjustValueRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
         "type": "String"
       }
     }
