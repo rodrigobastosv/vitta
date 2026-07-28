@@ -656,6 +656,8 @@
   },
   "cancelAction": "Cancelar",
   "saveAction": "Salvar",
+  "adjustDecreaseAction": "Diminuir {label}",
+  "adjustIncreaseAction": "Aumentar {label}",
   "waterFeatureTitle": "Água",
   "waterFeatureSubtitle": "Acompanhe quanta água você bebe por dia",
   "waterDeleteLogTooltip": "Remover",

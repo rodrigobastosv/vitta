@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_adjustable_slider.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
-import 'package:vitta/app/design_system/components/general/vt_haptics.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 
 class VTLabeledSlider extends StatelessWidget {
@@ -11,8 +11,11 @@ class VTLabeledSlider extends StatelessWidget {
     required this.value,
     required this.min,
     required this.max,
+    required this.step,
     required this.color,
     required this.onChanged,
+    required this.decreaseTooltip,
+    required this.increaseTooltip,
     super.key,
   });
 
@@ -21,19 +24,11 @@ class VTLabeledSlider extends StatelessWidget {
   final double value;
   final double min;
   final double max;
+  final double step;
   final Color color;
   final ValueChanged<double> onChanged;
-
-  static const int _hapticDivisions = 100;
-
-  int _tickFor(double value) => ((value - min) / (max - min) * _hapticDivisions).round();
-
-  void _onChanged(double newValue) {
-    if (_tickFor(newValue) != _tickFor(value)) {
-      VTHaptics.selection();
-    }
-    onChanged(newValue);
-  }
+  final String decreaseTooltip;
+  final String increaseTooltip;
 
   @override
   Widget build(BuildContext context) => Column(
@@ -54,15 +49,15 @@ class VTLabeledSlider extends StatelessWidget {
           VTBadge(label: valueLabel, color: color),
         ],
       ),
-      SliderTheme(
-        data: SliderTheme.of(context).copyWith(
-          activeTrackColor: color,
-          thumbColor: color,
-          overlayColor: color.withValues(alpha: 0.12),
-          inactiveTrackColor: color.withValues(alpha: 0.20),
-          trackHeight: 4,
-        ),
-        child: Slider(value: value.clamp(min, max), min: min, max: max, onChanged: _onChanged),
+      VTAdjustableSlider(
+        value: value,
+        min: min,
+        max: max,
+        step: step,
+        color: color,
+        onChanged: onChanged,
+        decreaseTooltip: decreaseTooltip,
+        increaseTooltip: increaseTooltip,
       ),
     ],
   );

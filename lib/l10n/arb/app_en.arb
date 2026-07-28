@@ -902,6 +902,22 @@
   },
   "cancelAction": "Cancel",
   "saveAction": "Save",
+  "adjustDecreaseAction": "Decrease {label}",
+  "adjustIncreaseAction": "Increase {label}",
+  "@adjustDecreaseAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "@adjustIncreaseAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
   "waterFeatureTitle": "Water",
   "waterFeatureSubtitle": "Track how much water you drink each day",
   "waterDeleteLogTooltip": "Remove",

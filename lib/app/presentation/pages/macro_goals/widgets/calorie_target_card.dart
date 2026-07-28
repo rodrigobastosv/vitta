@@ -4,6 +4,7 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
 import 'package:vitta/app/design_system/components/charts/vt_distribution_bar.dart';
 import 'package:vitta/app/design_system/components/charts/vt_legend_dot.dart';
+import 'package:vitta/app/design_system/components/general/vt_adjustable_slider.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
@@ -18,6 +19,11 @@ class CalorieTargetCard extends StatelessWidget {
 
   static const double _minCalories = 800;
   static const double _maxCalories = 5000;
+
+  // 50 kcal, because a calorie target is read and set in fifties - and because
+  // the derived figure moves the three energy macros with it, so a finer step
+  // would only add precision nobody expressed.
+  static const double _calorieStep = 50;
 
   @override
   Widget build(BuildContext context) {
@@ -54,15 +60,15 @@ class CalorieTargetCard extends StatelessWidget {
             ],
           ),
           const VTGap.s(),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: VTColors.green,
-              thumbColor: VTColors.green,
-              overlayColor: VTColors.green.withValues(alpha: 0.12),
-              inactiveTrackColor: VTColors.green.withValues(alpha: 0.20),
-              trackHeight: 4,
-            ),
-            child: Slider(value: goals.calorieGoal.clamp(_minCalories, _maxCalories), min: _minCalories, max: _maxCalories, onChanged: onCaloriesChanged),
+          VTAdjustableSlider(
+            value: goals.calorieGoal,
+            min: _minCalories,
+            max: _maxCalories,
+            step: _calorieStep,
+            color: VTColors.green,
+            onChanged: onCaloriesChanged,
+            decreaseTooltip: l10n.adjustDecreaseAction(l10n.macroGoalsCalorieTargetTitle),
+            increaseTooltip: l10n.adjustIncreaseAction(l10n.macroGoalsCalorieTargetTitle),
           ),
           Row(
             mainAxisAlignment: .spaceBetween,

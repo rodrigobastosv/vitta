@@ -2738,6 +2738,18 @@ abstract class AppLocalizations {
   /// **'Save'**
   String get saveAction;
 
+  /// No description provided for @adjustDecreaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease {label}'**
+  String adjustDecreaseAction(String label);
+
+  /// No description provided for @adjustIncreaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase {label}'**
+  String adjustIncreaseAction(String label);
+
   /// No description provided for @waterFeatureTitle.
   ///
   /// In en, this message translates to:

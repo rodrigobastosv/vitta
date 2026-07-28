@@ -1495,6 +1495,16 @@ class AppLocalizationsPt extends AppLocalizations {
   String get saveAction => 'Salvar';
 
   @override
+  String adjustDecreaseAction(String label) {
+    return 'Diminuir $label';
+  }
+
+  @override
+  String adjustIncreaseAction(String label) {
+    return 'Aumentar $label';
+  }
+
+  @override
   String get waterFeatureTitle => 'Água';
 
   @override

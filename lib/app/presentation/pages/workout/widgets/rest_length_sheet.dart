@@ -24,6 +24,8 @@ class RestLengthSheet extends StatefulWidget {
 }
 
 class _RestLengthSheetState extends State<RestLengthSheet> {
+  static const double _restStep = 15;
+
   late Duration _rest = widget.current;
 
   String _label(Duration rest) {
@@ -53,8 +55,11 @@ class _RestLengthSheetState extends State<RestLengthSheet> {
               value: _rest.inSeconds.toDouble(),
               min: RestTimerState.minRest.inSeconds.toDouble(),
               max: RestTimerState.maxRest.inSeconds.toDouble(),
+              step: _restStep,
+              decreaseTooltip: l10n.adjustDecreaseAction(l10n.workoutRestTimerLabel),
+              increaseTooltip: l10n.adjustIncreaseAction(l10n.workoutRestTimerLabel),
               color: colorScheme.primary,
-              onChanged: (seconds) => setState(() => _rest = Duration(seconds: (seconds / 15).round() * 15)),
+              onChanged: (seconds) => setState(() => _rest = Duration(seconds: seconds.round())),
             ),
             const VTGap.l(),
             FilledButton(onPressed: () => Navigator.of(context).pop(_rest), child: Text(l10n.saveAction)),
