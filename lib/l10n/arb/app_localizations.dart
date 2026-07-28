@@ -1532,29 +1532,29 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get dietDeleteLogTooltip;
 
-  /// No description provided for @dietToday.
+  /// No description provided for @dayToday.
   ///
   /// In en, this message translates to:
   /// **'Today'**
-  String get dietToday;
+  String get dayToday;
 
-  /// No description provided for @dietYesterday.
+  /// No description provided for @dayYesterday.
   ///
   /// In en, this message translates to:
   /// **'Yesterday'**
-  String get dietYesterday;
+  String get dayYesterday;
 
-  /// No description provided for @dietPreviousDayTooltip.
+  /// No description provided for @previousDayTooltip.
   ///
   /// In en, this message translates to:
   /// **'Previous day'**
-  String get dietPreviousDayTooltip;
+  String get previousDayTooltip;
 
-  /// No description provided for @dietNextDayTooltip.
+  /// No description provided for @nextDayTooltip.
   ///
   /// In en, this message translates to:
   /// **'Next day'**
-  String get dietNextDayTooltip;
+  String get nextDayTooltip;
 
   /// No description provided for @dietEmptyTitle.
   ///
@@ -2767,6 +2767,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Use a quick add above to log your first glass of the day.'**
   String get waterEmptyMessage;
+
+  /// No description provided for @waterNotTodayEmptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing logged on that day'**
+  String get waterNotTodayEmptyTitle;
+
+  /// No description provided for @waterNotTodayEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing was logged on this day. You can still add what you drank.'**
+  String get waterNotTodayEmptyMessage;
 
   /// No description provided for @bodyWeightFeatureTitle.
   ///

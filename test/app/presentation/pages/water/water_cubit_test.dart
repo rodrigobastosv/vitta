@@ -162,4 +162,62 @@ void main() {
     act: (cubit) => cubit.changeDailyGoal(goalMl: 3000),
     expect: () => [isA<WaterState>()],
   );
+
+  test('a glass is logged against the day on screen, not against today', () async {
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    final logWaterUseCase = MockLogWaterUseCase();
+    final waterLocalDataSource = MockWaterLocalDataSource();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
+    when(
+      () => logWaterUseCase(loggedDate: any(named: 'loggedDate'), amountMl: any(named: 'amountMl')),
+    ).thenAnswer((_) async => Success(WaterLogFactory.build(amountMl: 300)));
+    final cubit = CubitsFactories.buildWaterCubit(
+      getDailyWaterUseCase: getDailyWaterUseCase,
+      logWaterUseCase: logWaterUseCase,
+      waterLocalDataSource: waterLocalDataSource,
+    );
+    await cubit.goToDate(DateTime(2026, 7, 20));
+
+    await cubit.addWater(amountMl: 300);
+
+    verify(() => logWaterUseCase(loggedDate: DateTime(2026, 7, 20), amountMl: 300)).called(1);
+    await cubit.close();
+  });
+
+  test('paging back a day reads that day, and today is the latest day reachable', () async {
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    final waterLocalDataSource = MockWaterLocalDataSource();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
+    final cubit = CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
+    await cubit.loadToday();
+    final today = cubit.state.date;
+
+    await cubit.goToPreviousDay();
+
+    expect(cubit.state.date, today.subtract(const Duration(days: 1)));
+    expect(cubit.isViewingToday, isFalse);
+    verify(() => getDailyWaterUseCase(date: today.subtract(const Duration(days: 1)))).called(1);
+
+    await cubit.goToNextDay();
+
+    expect(cubit.isViewingToday, isTrue);
+    await cubit.close();
+  });
+
+  test('changing the goal reloads the day on screen rather than jumping to today', () async {
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    final waterLocalDataSource = MockWaterLocalDataSource();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    when(waterLocalDataSource.getDailyGoalMl).thenReturn(2000);
+    when(() => waterLocalDataSource.saveDailyGoalMl(any())).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildWaterCubit(getDailyWaterUseCase: getDailyWaterUseCase, waterLocalDataSource: waterLocalDataSource);
+    await cubit.goToDate(DateTime(2026, 7, 20));
+
+    await cubit.changeDailyGoal(goalMl: 2500);
+
+    expect(cubit.state.date, DateTime(2026, 7, 20));
+    await cubit.close();
+  });
 }

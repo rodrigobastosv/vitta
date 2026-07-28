@@ -13,6 +13,7 @@ import 'package:vitta/app/presentation/pages/water/water_cubit.dart';
 import 'package:vitta/app/presentation/pages/water/water_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/water/water_state.dart';
 import 'package:vitta/app/presentation/pages/water/widgets/edit_water_goal_dialog.dart';
+import 'package:vitta/app/presentation/pages/water/widgets/water_date_selector.dart';
 import 'package:vitta/app/presentation/pages/water/widgets/water_log_tile.dart';
 import 'package:vitta/app/presentation/pages/water/widgets/water_progress_card.dart';
 
@@ -28,7 +29,7 @@ class WaterPage extends StatelessWidget {
         case WaterHideLoading():
           context.hideLoading();
         case WaterError(:final message):
-          context.showErrorToast(message: message, onRetry: context.read<WaterCubit>().loadToday);
+          context.showErrorToast(message: message, onRetry: context.read<WaterCubit>().refresh);
       }
     },
     builder: (context, cubit, state) {
@@ -42,14 +43,23 @@ class WaterPage extends StatelessWidget {
           ],
         ),
         body: VTRefreshable(
-          onRefresh: () => cubit.loadToday(trigger: .quiet),
+          onRefresh: () => cubit.refresh(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 260),
           children: [
+            WaterDateSelector(
+              date: state.date,
+              canGoToNextDay: !cubit.isViewingToday,
+              onPreviousDay: cubit.goToPreviousDay,
+              onNextDay: cubit.goToNextDay,
+              onPickDate: cubit.goToDate,
+            ),
+            const VTGap.m(),
             WaterProgressCard(
               dailyWater: state.dailyWater,
               dailyGoalMl: state.dailyGoalMl,
               unitSystem: unitSystem,
+              isToday: cubit.isViewingToday,
               onQuickAdd: (amountMl) => cubit.addWater(amountMl: amountMl),
               onEditGoal: () async {
                 final newGoalMl = await showEditWaterGoalDialog(context: context, currentGoalMl: state.dailyGoalMl, unitSystem: unitSystem);
@@ -60,7 +70,11 @@ class WaterPage extends StatelessWidget {
             ),
             const VTGap.l(),
             if (state.dailyWater.entries.isEmpty)
-              VTEmptyState(icon: Icons.water_drop_outlined, title: l10n.waterEmptyTitle, message: l10n.waterEmptyMessage)
+              VTEmptyState(
+                icon: Icons.water_drop_outlined,
+                title: cubit.isViewingToday ? l10n.waterEmptyTitle : l10n.waterNotTodayEmptyTitle,
+                message: cubit.isViewingToday ? l10n.waterEmptyMessage : l10n.waterNotTodayEmptyMessage,
+              )
             else
               for (final log in state.dailyWater.entries) ...[
                 WaterLogTile(
