@@ -18,6 +18,9 @@ class VTTextField extends StatefulWidget {
     this.onSubmitted,
     this.validator,
     this.autofillHints,
+    this.autofocus = false,
+    this.helperText,
+    this.errorText,
     super.key,
   });
 
@@ -35,6 +38,9 @@ class VTTextField extends StatefulWidget {
   final VoidCallback? onSubmitted;
   final FormFieldValidator<String>? validator;
   final List<String>? autofillHints;
+  final bool autofocus;
+  final String? helperText;
+  final String? errorText;
 
   @override
   State<VTTextField> createState() => _VTTextFieldState();
@@ -49,6 +55,7 @@ class _VTTextFieldState extends State<VTTextField> {
     return TextFormField(
       controller: widget.controller,
       focusNode: widget.focusNode,
+      autofocus: widget.autofocus,
       keyboardType: widget.keyboardType,
       textCapitalization: widget.textCapitalization,
       textInputAction: widget.textInputAction,
@@ -58,6 +65,8 @@ class _VTTextFieldState extends State<VTTextField> {
       onFieldSubmitted: widget.onSubmitted == null ? null : (_) => widget.onSubmitted!(),
       decoration: InputDecoration(
         labelText: widget.label,
+        helperText: widget.helperText,
+        errorText: widget.errorText,
         prefixIcon: widget.prefixIcon == null ? null : Icon(widget.prefixIcon),
         suffixIcon: widget.obscurable
             ? IconButton(

@@ -4,8 +4,11 @@ import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart_segment.dart';
 import 'package:vitta/app/design_system/components/charts/vt_distribution_bar.dart';
 import 'package:vitta/app/design_system/components/charts/vt_legend_dot.dart';
+import 'package:vitta/app/design_system/components/general/vt_adjustable_slider.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
+import 'package:vitta/app/design_system/components/inputs/vt_value_input_dialog.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
@@ -18,6 +21,26 @@ class CalorieTargetCard extends StatelessWidget {
 
   static const double _minCalories = 800;
   static const double _maxCalories = 5000;
+
+  // 50 kcal, because a calorie target is read and set in fifties - and because
+  // the derived figure moves the three energy macros with it, so a finer step
+  // would only add precision nobody expressed.
+  static const double _calorieStep = 50;
+
+  Future<void> _typeCalories(BuildContext context) async {
+    final l10n = context.l10n;
+    final typed = await showVTValueInputDialog(
+      context: context,
+      title: l10n.macroGoalsCalorieTargetTitle,
+      value: goals.calorieGoal,
+      min: _minCalories,
+      max: _maxCalories,
+      unitLabel: l10n.dietKcalUnit,
+    );
+    if (typed != null) {
+      onCaloriesChanged(typed);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +73,41 @@ class CalorieTargetCard extends StatelessWidget {
                 ),
               ),
               const VTGap.s(),
-              Text(l10n.macroGoalsKcal(goals.calorieGoal.round()), style: VTTextStyles.headline(context).copyWith(color: VTColors.green)),
+              // The target is tappable for the same reason the macro badges are:
+              // it moves in 50 kcal steps, so an exact figure has nowhere else to
+              // be typed.
+              Tooltip(
+                message: l10n.adjustTypeValueAction(l10n.macroGoalsCalorieTargetTitle),
+                child: InkWell(
+                  onTap: () => _typeCalories(context),
+                  borderRadius: VTRadius.borderRadiusM,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: VTSpacing.minTapTarget),
+                    child: Row(
+                      mainAxisSize: .min,
+                      children: [
+                        Text(l10n.macroGoalsKcal(goals.calorieGoal.round()), style: VTTextStyles.headline(context).copyWith(color: VTColors.green)),
+                        // The glyph rides tight against the figure and stays at 12:
+                        // a 24pt target plus a title and a hint already fills a
+                        // 320px row, and the whole header overflows at 14 with a gap.
+                        const Icon(Icons.edit_outlined, size: 12, color: VTColors.green),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           const VTGap.s(),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: VTColors.green,
-              thumbColor: VTColors.green,
-              overlayColor: VTColors.green.withValues(alpha: 0.12),
-              inactiveTrackColor: VTColors.green.withValues(alpha: 0.20),
-              trackHeight: 4,
-            ),
-            child: Slider(value: goals.calorieGoal.clamp(_minCalories, _maxCalories), min: _minCalories, max: _maxCalories, onChanged: onCaloriesChanged),
+          VTAdjustableSlider(
+            value: goals.calorieGoal,
+            min: _minCalories,
+            max: _maxCalories,
+            step: _calorieStep,
+            color: VTColors.green,
+            onChanged: onCaloriesChanged,
+            decreaseTooltip: l10n.adjustDecreaseAction(l10n.macroGoalsCalorieTargetTitle),
+            increaseTooltip: l10n.adjustIncreaseAction(l10n.macroGoalsCalorieTargetTitle),
           ),
           Row(
             mainAxisAlignment: .spaceBetween,

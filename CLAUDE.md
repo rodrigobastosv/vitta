@@ -392,6 +392,29 @@ Four durations, chosen by **what the motion is doing**, not by how it feels in i
 
 Two things are deliberately **not** motion tokens and are listed in the scan's `_allowed`: `VTHttpClient`'s retry backoff (a network delay) and `VTLoadingOverlayIndicator`'s 900ms activity rotation (a continuous loop, not a transition between two states). Toast dwell times (4s/6s/8s, see Errors) are not motion either — they are how long a message stays readable.
 
+## Sliders: a step, and a way to nudge it
+
+**A bare `Slider` over a wide range cannot express a figure anyone actually means** (issue #263). The macro goals span up to 600 g and the calorie target 4,200 kcal, so on a phone a pixel of thumb travel is worth about 2 g or 25 kcal — landing on 180 g rather than 183.7 g was luck, and there was no way to correct it. Every slider in the app now goes through **`VTAdjustableSlider`**, which fixes it two ways at once:
+
+- **The drag snaps to `step`**, via `Slider.divisions`, so it can only ever emit a figure worth typing. The tick marks a divided `Slider` would otherwise draw are hidden (`activeTickMarkColor`/`inactiveTickMarkColor` transparent) — at 120 divisions they are visual noise, not a scale anyone reads.
+- **Flanking −/+ buttons move it exactly one step**, which is the only way to reach a specific value with a finger. They **disable at the bounds** rather than silently doing nothing, and a value sitting off the step (the calorie goal is derived from the macros, so it often is) snaps *to* the step rather than one step away from where it was.
+
+`step` is required, and chosen per reading rather than shared: 5 g for the three energy macros (20 kcal of protein or carbs, 45 of fat — the smallest difference worth aiming at), 1 g for fibre (whose goal lives in the 25–40 g band, where 5 g is a coarse jump), 50 kcal for a calorie target, 1 year for age, 1 cm/in for height, 15 s for the rest timer. `RestLengthSheet` used to round to 15 s inside its own `onChanged`; that is the component's job now.
+
+**A step is what makes the slider usable and also what puts 181 g out of reach, so the value readout is where you type.** The step was the fix for "a drag lands on 183.7 g by luck", but it turned an imprecise control into an exact one that only speaks multiples of five — and someone aiming at exactly 181 g of protein has nowhere to say so. Making the drag *less* sensitive cannot answer that (181 is not a figure a 5 g step can emit at any sensitivity), and dropping to a 1 g step buys 31 taps from 150 to 181 while a phone pixel is still worth ~1.5 g. So `VTLabeledSlider`'s value badge is **tappable and opens `showVTValueInputDialog`**, which is the same call `VTStepper` already made by keeping an editable field between its −/+ buttons: the slider is for exploring, typing is for meaning it. A typed figure **bypasses the step entirely** — that is the whole point — and the slider paints the thumb wherever the value actually is, since `Slider.divisions` discretizes `onChanged` and not the painted position.
+
+Three rules in it:
+
+- **The unit is what enables typing** (`VTLabeledSlider.valueUnit`, the "pass no callback to disable" convention spelled as data). Every slider whose badge states a plain number in a unit gets it; `RestLengthSheet` deliberately does not, because its badge reads `2:30` and a number field cannot take that shape.
+- **A figure outside the bounds is rejected, not clamped.** Returning 300 to someone who typed 400 teaches them nothing about the bound they just crossed, and silently reports a goal they did not set — the same "return null rather than guess" rule the scan prompts follow. The allowed range is stated as helper text before they type and turns into the error when they cross it, so it is one l10n key (`adjustValueRange`) rather than a hint and a scolding that can disagree.
+- **A tappable badge has to clear the 44px tap-target floor, and the pill is nowhere near it.** `VTBadge`'s `onTap` therefore wraps it in a `minWidth`/`minHeight` box rather than padding the pill itself, which would inflate the badge everywhere it is a plain figure. Pinned by measuring the rendered `getSize`, exactly as the tap-target rule requires.
+
+**`CalorieTargetCard`'s hero figure is tappable too, and its glyph is 12px because the header has no room for 14.** A 24pt target beside a title, a hint and an avatar already fills a 320px row — the pencil at 14 with a gap overflowed it by 1.5px, which is the same pt-is-longer break `WorkoutSummaryCard` pins and is invisible on any wider surface. Pinned by `calorie_target_card_test.dart`'s existing 320px pumps in both locales.
+
+`VTLabeledSlider` is the labelled wrapper (the accent dot, the name, the value `VTBadge`) over the same control, so the two stay in step. **The −/+ buttons take their tooltips from the caller** (`adjustDecreaseAction`/`adjustIncreaseAction`, which name the thing being adjusted) rather than the design system reaching for l10n — and an icon-only button needs a tooltip, which *is* its accessibility label.
+
+**Do not pass `visualDensity: .compact` to reach for horizontal space.** It shipped that way and measured **40×40**, under the `VTSpacing.minTapTarget` floor of 44 — caught by `vt_adjustable_slider_test.dart`, which measures the rendered `getSize` exactly as the tap-target rule requires. The slider is `Expanded`, so the buttons cost it width and nothing else.
+
 ## Accessibility
 
 **An `IconButton`'s `tooltip` *is* its accessibility label** — the framework says so in `icon_button.dart` ("is used for accessibility") and `Tooltip` sets `semanticsTooltip` on the node. It lands in the semantics **`tooltip` field, not `label`**, which is why `find.bySemanticsLabel` won't match it — that's a testing gotcha, not a missing label. So **never wrap a tooltipped `IconButton` in a `Semantics(label:)`**: that double-labels it and VoiceOver reads the button twice. An icon-only button needs a `tooltip`, and that is the whole fix.
@@ -416,7 +439,7 @@ Every physical feedback goes through `VTHaptics` (`design_system/components/gene
 
 Two rules that are easy to get wrong and are pinned by `vt_haptics_test.dart`:
 
-- **A continuous control ticks per division, never per event.** `VTLabeledSlider` is continuous, so firing on every `onChanged` machine-guns; it quantizes the range into `_hapticDivisions` (100) and only ticks when the bucket changes, so one full sweep is a ruler regardless of whether the slider spans 300g or 3000 kcal. `VTWeightPicker` gets this free — `_onScroll` already gated on crossing a step.
+- **A slider ticks per division, never per event.** Firing on every `onChanged` machine-guns. `VTAdjustableSlider` (see Sliders below) ticks only when the *snapped* value changes, so a division is now a real step of the figure rather than an invented 1/100th of the range — one sweep still feels like a ruler, and every tick corresponds to a value the slider can actually emit. `VTWeightPicker` gets this free — `_onScroll` already gated on crossing a step.
 - **A no-op action gets no feedback.** Re-tapping the already-selected segment doesn't tick. Feedback for something that didn't happen is worse than none.
 
 **A toggle is not symmetric**: completing an exercise or ticking a reminder is `.success()`, undoing it is `.selection()` — un-completing is a correction, not an achievement.

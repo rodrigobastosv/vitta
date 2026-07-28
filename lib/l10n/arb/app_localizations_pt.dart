@@ -549,6 +549,9 @@ class AppLocalizationsPt extends AppLocalizations {
   }
 
   @override
+  String get bodyProfileAgeUnit => 'anos';
+
+  @override
   String get bodyProfileActivityTitle => 'Nível de atividade';
 
   @override
@@ -1493,6 +1496,26 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get saveAction => 'Salvar';
+
+  @override
+  String adjustDecreaseAction(String label) {
+    return 'Diminuir $label';
+  }
+
+  @override
+  String adjustIncreaseAction(String label) {
+    return 'Aumentar $label';
+  }
+
+  @override
+  String adjustTypeValueAction(String label) {
+    return 'Digitar um valor exato de $label';
+  }
+
+  @override
+  String adjustValueRange(String min, String max) {
+    return 'Entre $min e $max';
+  }
 
   @override
   String get waterFeatureTitle => 'Água';

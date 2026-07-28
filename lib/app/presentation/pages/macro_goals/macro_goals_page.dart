@@ -46,6 +46,13 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
   static const double _maxFat = 200;
   static const double _maxFiber = 100;
 
+  // The three energy macros move in 5 g steps and fibre in 1 g: a 5 g change is
+  // 20 kcal of protein or carbs and 45 kcal of fat, which is the smallest
+  // difference worth aiming at, while a fibre goal lives in the 25-40 g band
+  // where 5 g would be a coarse jump.
+  static const double _macroStep = 5;
+  static const double _fiberStep = 1;
+
   Future<void> _submit() async {
     await widget.onSave(_goals);
     if (mounted) {
@@ -71,6 +78,10 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
           value: _goals.proteinGoalGrams,
           min: 0,
           max: _maxProtein,
+          step: _macroStep,
+          valueUnit: l10n.dietGramsUnit,
+          decreaseTooltip: l10n.adjustDecreaseAction(l10n.dietProteinLabel),
+          increaseTooltip: l10n.adjustIncreaseAction(l10n.dietProteinLabel),
           color: VTColors.macroProtein,
           onChanged: (grams) => setState(() => _goals = _goals.copyWith(proteinGoalGrams: grams)),
         ),
@@ -81,6 +92,10 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
           value: _goals.carbsGoalGrams,
           min: 0,
           max: _maxCarbs,
+          step: _macroStep,
+          valueUnit: l10n.dietGramsUnit,
+          decreaseTooltip: l10n.adjustDecreaseAction(l10n.dietCarbsLabel),
+          increaseTooltip: l10n.adjustIncreaseAction(l10n.dietCarbsLabel),
           color: VTColors.macroCarbs,
           onChanged: (grams) => setState(() => _goals = _goals.copyWith(carbsGoalGrams: grams)),
         ),
@@ -91,6 +106,10 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
           value: _goals.fatGoalGrams,
           min: 0,
           max: _maxFat,
+          step: _macroStep,
+          valueUnit: l10n.dietGramsUnit,
+          decreaseTooltip: l10n.adjustDecreaseAction(l10n.dietFatLabel),
+          increaseTooltip: l10n.adjustIncreaseAction(l10n.dietFatLabel),
           color: VTColors.macroFat,
           onChanged: (grams) => setState(() => _goals = _goals.copyWith(fatGoalGrams: grams)),
         ),
@@ -101,6 +120,10 @@ class _MacroGoalsFormState extends State<_MacroGoalsForm> {
           value: _goals.fiberGoalGrams,
           min: 0,
           max: _maxFiber,
+          step: _fiberStep,
+          valueUnit: l10n.dietGramsUnit,
+          decreaseTooltip: l10n.adjustDecreaseAction(l10n.dietFiberLabel),
+          increaseTooltip: l10n.adjustIncreaseAction(l10n.dietFiberLabel),
           color: VTColors.macroFiber,
           onChanged: (grams) => setState(() => _goals = _goals.copyWith(fiberGoalGrams: grams)),
         ),

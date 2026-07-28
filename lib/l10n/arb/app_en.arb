@@ -279,6 +279,7 @@
       }
     }
   },
+  "bodyProfileAgeUnit": "yrs",
   "bodyProfileActivityTitle": "Activity level",
   "bodyProfileActivityHint": "How much you move on an ordinary day, training included.",
   "bodyProfileActivitySedentary": "Sedentary",
@@ -902,6 +903,41 @@
   },
   "cancelAction": "Cancel",
   "saveAction": "Save",
+  "adjustDecreaseAction": "Decrease {label}",
+  "adjustIncreaseAction": "Increase {label}",
+  "@adjustDecreaseAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "@adjustIncreaseAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "adjustTypeValueAction": "Type an exact {label}",
+  "@adjustTypeValueAction": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "adjustValueRange": "Between {min} and {max}",
+  "@adjustValueRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
   "waterFeatureTitle": "Water",
   "waterFeatureSubtitle": "Track how much water you drink each day",
   "waterDeleteLogTooltip": "Remove",

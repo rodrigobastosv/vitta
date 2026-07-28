@@ -1058,6 +1058,12 @@ abstract class AppLocalizations {
   /// **'{years} yrs'**
   String bodyProfileAgeValue(int years);
 
+  /// No description provided for @bodyProfileAgeUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'yrs'**
+  String get bodyProfileAgeUnit;
+
   /// No description provided for @bodyProfileActivityTitle.
   ///
   /// In en, this message translates to:
@@ -2737,6 +2743,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get saveAction;
+
+  /// No description provided for @adjustDecreaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease {label}'**
+  String adjustDecreaseAction(String label);
+
+  /// No description provided for @adjustIncreaseAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase {label}'**
+  String adjustIncreaseAction(String label);
+
+  /// No description provided for @adjustTypeValueAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Type an exact {label}'**
+  String adjustTypeValueAction(String label);
+
+  /// No description provided for @adjustValueRange.
+  ///
+  /// In en, this message translates to:
+  /// **'Between {min} and {max}'**
+  String adjustValueRange(String min, String max);
 
   /// No description provided for @waterFeatureTitle.
   ///
