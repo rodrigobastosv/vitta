@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/services/analytics/analytics_service.dart';
+import 'package:vitta/app/core/services/app_info/app_info_service.dart';
 import 'package:vitta/app/core/services/cache/wire_cache_service.dart';
 import 'package:vitta/app/core/services/health/health_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
@@ -240,6 +241,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(NotificationService.new);
   G.registerLazySingleton(PurchaseService.new);
   G.registerLazySingleton(AnalyticsService.new);
+  G.registerLazySingleton(AppInfoService.new);
   Log.service = LoggingService(
     destinations: [const ConsoleLogDestination(), const SentryLogDestination(), AnalyticsLogDestination(analyticsService: G())],
   );
@@ -542,6 +544,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       deleteAccountUseCase: G(),
       imagePickerService: G(),
       analyticsService: G(),
+      appInfoService: G(),
     ),
   );
   G.registerFactory(

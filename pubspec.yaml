@@ -38,6 +38,7 @@ dependencies:
   purchases_flutter: ^10.4.2
   firebase_core: ^4.12.1
   firebase_analytics: ^12.4.5
+  package_info_plus: ^9.0.1
 
 dev_dependencies:
   flutter_test:

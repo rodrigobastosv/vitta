@@ -3230,6 +3230,12 @@ abstract class AppLocalizations {
   /// **'Language, theme and units'**
   String get profileSettingsSubtitle;
 
+  /// No description provided for @profileAppVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Version {version} ({build})'**
+  String profileAppVersion(String version, String build);
+
   /// No description provided for @premiumTitle.
   ///
   /// In en, this message translates to:

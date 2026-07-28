@@ -1080,6 +1080,17 @@
   "profileSignInAction": "Sign in or create account",
   "profileGuestTitle": "Guest",
   "profileSettingsSubtitle": "Language, theme and units",
+  "profileAppVersion": "Version {version} ({build})",
+  "@profileAppVersion": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      },
+      "build": {
+        "type": "String"
+      }
+    }
+  },
   "premiumTitle": "Vitta Premium",
   "premiumTagline": "AI-powered tracking, without the typing",
   "premiumIntro": "Photo scanning uses AI to read your food for you. It costs real money to run, so it lives behind Premium — everything else in Vitta stays free.",
