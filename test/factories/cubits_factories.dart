@@ -68,6 +68,7 @@ abstract class CubitsFactories {
     MockGetUserUseCase? getUserUseCase,
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
     MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
+    MockGetCachedDailyMacrosUseCase? getCachedDailyMacrosUseCase,
     MockGetDailyWaterUseCase? getDailyWaterUseCase,
     MockGetWaterGoalUseCase? getWaterGoalUseCase,
     MockGetRemindersInRangeUseCase? getRemindersInRangeUseCase,
@@ -84,11 +85,13 @@ abstract class CubitsFactories {
     MockLogSleepUseCase? logSleepUseCase,
     MockLogBodyWeightUseCase? logBodyWeightUseCase,
     MockSyncLogRemindersUseCase? syncLogRemindersUseCase,
+    MockWatchDataChangesUseCase? watchDataChangesUseCase,
     MockNotificationService? notificationService,
   }) => HomeCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
+    getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase ?? MockGetCachedDailyMacrosUseCase(),
     getDailyWaterUseCase: getDailyWaterUseCase ?? MockGetDailyWaterUseCase(),
     getWaterGoalUseCase: getWaterGoalUseCase ?? MockGetWaterGoalUseCase(),
     getRemindersInRangeUseCase: getRemindersInRangeUseCase ?? MockGetRemindersInRangeUseCase(),
@@ -105,6 +108,7 @@ abstract class CubitsFactories {
     logSleepUseCase: logSleepUseCase ?? MockLogSleepUseCase(),
     logBodyWeightUseCase: logBodyWeightUseCase ?? MockLogBodyWeightUseCase(),
     syncLogRemindersUseCase: syncLogRemindersUseCase ?? MockSyncLogRemindersUseCase(),
+    watchDataChangesUseCase: watchDataChangesUseCase ?? MockWatchDataChangesUseCase(),
     notificationService: notificationService ?? MockNotificationService(),
   );
 
@@ -122,6 +126,7 @@ abstract class CubitsFactories {
 
   static DietCubit buildDietCubit({
     MockGetDailyMacrosUseCase? getDailyMacrosUseCase,
+    MockGetCachedDailyMacrosUseCase? getCachedDailyMacrosUseCase,
     MockDeleteFoodLogUseCase? deleteFoodLogUseCase,
     MockUpdateFoodLogUseCase? updateFoodLogUseCase,
     MockGetMacroGoalsUseCase? getMacroGoalsUseCase,
@@ -129,8 +134,10 @@ abstract class CubitsFactories {
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
     MockHasSeenDietIntroUseCase? hasSeenDietIntroUseCase,
     MockMarkDietIntroSeenUseCase? markDietIntroSeenUseCase,
+    MockWatchDataChangesUseCase? watchDataChangesUseCase,
   }) => DietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase ?? MockGetDailyMacrosUseCase(),
+    getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase ?? MockGetCachedDailyMacrosUseCase(),
     deleteFoodLogUseCase: deleteFoodLogUseCase ?? MockDeleteFoodLogUseCase(),
     updateFoodLogUseCase: updateFoodLogUseCase ?? MockUpdateFoodLogUseCase(),
     getMacroGoalsUseCase: getMacroGoalsUseCase ?? MockGetMacroGoalsUseCase(),
@@ -138,6 +145,7 @@ abstract class CubitsFactories {
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
     hasSeenDietIntroUseCase: hasSeenDietIntroUseCase ?? MockHasSeenDietIntroUseCase(),
     markDietIntroSeenUseCase: markDietIntroSeenUseCase ?? MockMarkDietIntroSeenUseCase(),
+    watchDataChangesUseCase: watchDataChangesUseCase ?? MockWatchDataChangesUseCase(),
   );
 
   static DietHistoryCubit buildDietHistoryCubit({MockGetMacrosInRangeUseCase? getMacrosInRangeUseCase, MockGetMacroGoalsUseCase? getMacroGoalsUseCase}) =>

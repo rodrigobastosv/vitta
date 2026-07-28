@@ -52,7 +52,7 @@ class DietPage extends StatelessWidget {
               onPressed: () async {
                 await context.pushRoute(.recipes, extra: RecipesExtra(targetDate: state.date));
                 if (context.mounted) {
-                  await cubit.refresh();
+                  await cubit.refresh(trigger: .quiet);
                 }
               },
             ),
@@ -62,7 +62,7 @@ class DietPage extends StatelessWidget {
               onPressed: () async {
                 final hasCopied = await context.pushRoute<bool>(.copyMeals, extra: CopyMealsExtra(targetDate: state.date));
                 if (hasCopied ?? false) {
-                  await cubit.refresh();
+                  await cubit.refresh(trigger: .quiet);
                 }
               },
             ),
@@ -70,7 +70,7 @@ class DietPage extends StatelessWidget {
           ],
         ),
         body: VTRefreshable(
-          onRefresh: cubit.refresh,
+          onRefresh: () => cubit.refresh(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 300),
           children: [
@@ -88,7 +88,7 @@ class DietPage extends StatelessWidget {
               onEditGoals: () async {
                 await context.pushRoute(.macroGoals);
                 if (context.mounted) {
-                  await cubit.refresh();
+                  await cubit.refresh(trigger: .quiet);
                 }
               },
             ),
@@ -102,7 +102,7 @@ class DietPage extends StatelessWidget {
                 actionIcon: Icons.add,
                 onAction: () async {
                   await context.pushRoute(.addFood, extra: AddFoodExtra(loggedDate: state.date));
-                  await cubit.refresh();
+                  await cubit.refresh(trigger: .quiet);
                 },
               )
             else
@@ -117,7 +117,7 @@ class DietPage extends StatelessWidget {
                         .addFood,
                         extra: AddFoodExtra(loggedDate: state.date, initialMealType: section.mealType),
                       );
-                      await cubit.refresh();
+                      await cubit.refresh(trigger: .quiet);
                     },
                     onEditEntry: (entry) => showEditFoodLogSheet(context: context, entry: entry),
                     onDeleteEntry: (entry) => cubit.deleteLog(logId: entry.log.id),
@@ -132,7 +132,7 @@ class DietPage extends StatelessWidget {
             : FloatingActionButton.extended(
                 onPressed: () async {
                   await context.pushRoute(.addFood, extra: AddFoodExtra(loggedDate: state.date));
-                  await cubit.refresh();
+                  await cubit.refresh(trigger: .quiet);
                 },
                 icon: const Icon(Icons.add),
                 label: Text(l10n.dietAddFood),
@@ -150,7 +150,7 @@ class DietPage extends StatelessWidget {
     if (wantsGoals && context.mounted) {
       await context.pushRoute(.macroGoals);
       if (context.mounted) {
-        await cubit.refresh();
+        await cubit.refresh(trigger: .quiet);
       }
     }
   }

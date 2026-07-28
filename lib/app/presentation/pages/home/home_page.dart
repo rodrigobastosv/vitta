@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
         final tiles = state.layout.tiles;
         Future<void> open(HomeFeature feature) async {
           await context.pushRoute(feature.route);
-          await cubit.refresh();
+          await cubit.refresh(trigger: .quiet);
         }
 
         return Scaffold(
@@ -65,7 +65,7 @@ class HomePage extends StatelessWidget {
                     customBorder: const CircleBorder(),
                     onTap: () async {
                       await context.pushRoute(.profile);
-                      await cubit.refresh();
+                      await cubit.refresh(trigger: .quiet);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(VTSpacing.xs),
@@ -91,7 +91,7 @@ class HomePage extends StatelessWidget {
             ],
           ),
           body: VTRefreshable(
-            onRefresh: cubit.refresh,
+            onRefresh: () => cubit.refresh(trigger: .quiet),
             isLoaded: state.isLoaded,
             skeleton: const HomeSkeleton(),
             children: [

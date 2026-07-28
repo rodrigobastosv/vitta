@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +13,7 @@ import 'package:vitta/app/domain/log_reminders/entities/log_reminder_tracker.dar
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_completion.dart';
 import 'package:vitta/app/domain/sleep/entities/sleep_log.dart';
+import 'package:vitta/app/domain/sync/entities/sync_topic.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
@@ -201,6 +204,105 @@ void main() {
         },
       ),
     ).called(1);
+    await cubit.close();
+  });
+
+  test('the day is read in parallel, so a slow section does not hold up the rest', () async {
+    final reads = buildConstructorReads();
+    final macros = Completer<Result<VTError, DailyMacros>>();
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) => macros.future);
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    final getWaterGoalUseCase = MockGetWaterGoalUseCase();
+    when(getWaterGoalUseCase.call).thenReturn(2000);
+    final getRemindersInRangeUseCase = MockGetRemindersInRangeUseCase();
+    when(
+      () => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => const Success(<DateTime, List<Reminder>>{}));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(<Workout>[]));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success(<SleepLog>[]));
+    final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Success(null));
+    final syncLogRemindersUseCase = MockSyncLogRemindersUseCase();
+    when(() => syncLogRemindersUseCase(loggedByTracker: any(named: 'loggedByTracker'))).thenAnswer((_) async {});
+    final cubit = CubitsFactories.buildHomeCubit(
+      getUserUseCase: reads.user,
+      getMacroGoalsUseCase: reads.goals,
+      getHomeLayoutUseCase: reads.layout,
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getDailyWaterUseCase: getDailyWaterUseCase,
+      getWaterGoalUseCase: getWaterGoalUseCase,
+      getRemindersInRangeUseCase: getRemindersInRangeUseCase,
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+      getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      syncLogRemindersUseCase: syncLogRemindersUseCase,
+    );
+
+    unawaited(cubit.refresh());
+    await pumpEventQueue();
+
+    verify(() => getDailyWaterUseCase(date: any(named: 'date'))).called(1);
+    verify(() => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).called(1);
+    verify(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).called(1);
+    verify(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).called(1);
+    verify(getLatestBodyWeightUseCase.call).called(1);
+
+    macros.complete(const Success(DailyMacros(entries: [])));
+    await pumpEventQueue();
+    await cubit.close();
+  });
+
+  test('a change made on another screen re-reads only the section it touched', () async {
+    final reads = buildConstructorReads();
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    final getDailyWaterUseCase = MockGetDailyWaterUseCase();
+    when(() => getDailyWaterUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyWater(entries: [])));
+    final getWaterGoalUseCase = MockGetWaterGoalUseCase();
+    when(getWaterGoalUseCase.call).thenReturn(2000);
+    final getRemindersInRangeUseCase = MockGetRemindersInRangeUseCase();
+    when(
+      () => getRemindersInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+    ).thenAnswer((_) async => const Success(<DateTime, List<Reminder>>{}));
+    final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+    when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(<Workout>[]));
+    final getRecentSleepLogsUseCase = MockGetRecentSleepLogsUseCase();
+    when(() => getRecentSleepLogsUseCase(days: any(named: 'days'))).thenAnswer((_) async => const Success(<SleepLog>[]));
+    final getLatestBodyWeightUseCase = MockGetLatestBodyWeightUseCase();
+    when(getLatestBodyWeightUseCase.call).thenAnswer((_) async => const Success(null));
+    final syncLogRemindersUseCase = MockSyncLogRemindersUseCase();
+    when(() => syncLogRemindersUseCase(loggedByTracker: any(named: 'loggedByTracker'))).thenAnswer((_) async {});
+    final changes = StreamController<SyncTopic>();
+    final watchDataChangesUseCase = MockWatchDataChangesUseCase();
+    when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => changes.stream);
+    final cubit = CubitsFactories.buildHomeCubit(
+      getUserUseCase: reads.user,
+      getMacroGoalsUseCase: reads.goals,
+      getHomeLayoutUseCase: reads.layout,
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getDailyWaterUseCase: getDailyWaterUseCase,
+      getWaterGoalUseCase: getWaterGoalUseCase,
+      getRemindersInRangeUseCase: getRemindersInRangeUseCase,
+      getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+      getRecentSleepLogsUseCase: getRecentSleepLogsUseCase,
+      getLatestBodyWeightUseCase: getLatestBodyWeightUseCase,
+      syncLogRemindersUseCase: syncLogRemindersUseCase,
+      watchDataChangesUseCase: watchDataChangesUseCase,
+    );
+
+    cubit.onInit();
+    await pumpEventQueue();
+    changes.add(SyncTopic.water);
+    await pumpEventQueue();
+
+    verify(() => getDailyWaterUseCase(date: any(named: 'date'))).called(2);
+    verify(() => getDailyMacrosUseCase(date: any(named: 'date'))).called(1);
+
+    await changes.close();
     await cubit.close();
   });
 

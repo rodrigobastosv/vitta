@@ -2,6 +2,7 @@ import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_state.dart';
@@ -17,10 +18,10 @@ class RoutinesCubit extends PresentationCubit<RoutinesState, RoutinesPresentatio
   @override
   void onInit() => loadRoutines();
 
-  Future<void> loadRoutines() async {
+  Future<void> loadRoutines({LoadTrigger trigger = .replace}) async {
     final routinesResult = await withLoadingOverlay(
       _getRoutinesUseCase.call,
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: RoutinesShowLoading(),
       hideLoadingEvent: RoutinesHideLoading(),
     );

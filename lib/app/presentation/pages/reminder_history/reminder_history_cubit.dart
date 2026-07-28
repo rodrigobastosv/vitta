@@ -1,4 +1,5 @@
 import 'package:vitta/app/domain/reminder/use_cases/get_reminders_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_state.dart';
@@ -27,10 +28,10 @@ class ReminderHistoryCubit extends PresentationCubit<ReminderHistoryState, Remin
     return loadMonth(month);
   }
 
-  Future<void> loadMonth(DateTime month) async {
+  Future<void> loadMonth(DateTime month, {LoadTrigger trigger = .replace}) async {
     final remindersResult = await withLoadingOverlay(
       () => _getRemindersInRangeUseCase(from: month, to: DateTime(month.year, month.month + 1, 0)),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: ReminderHistoryShowLoading(),
       hideLoadingEvent: ReminderHistoryHideLoading(),
     );

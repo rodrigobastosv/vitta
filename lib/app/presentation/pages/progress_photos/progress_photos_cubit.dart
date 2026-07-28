@@ -8,6 +8,7 @@ import 'package:vitta/app/domain/progress_photos/entities/progress_photo_pose.da
 import 'package:vitta/app/domain/progress_photos/use_cases/add_progress_photo_use_case.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/delete_progress_photo_use_case.dart';
 import 'package:vitta/app/domain/progress_photos/use_cases/get_progress_photos_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/progress_photos/progress_photos_state.dart';
@@ -30,10 +31,10 @@ class ProgressPhotosCubit extends PresentationCubit<ProgressPhotosState, Progres
   @override
   void onInit() => loadPhotos();
 
-  Future<void> loadPhotos() async {
+  Future<void> loadPhotos({LoadTrigger trigger = .replace}) async {
     final photosResult = await withLoadingOverlay(
       _getProgressPhotosUseCase.call,
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: ProgressPhotosShowLoading(),
       hideLoadingEvent: ProgressPhotosHideLoading(),
     );

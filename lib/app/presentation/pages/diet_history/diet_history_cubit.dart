@@ -1,6 +1,7 @@
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macros_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_presentation_event.dart';
@@ -22,14 +23,14 @@ class DietHistoryCubit extends PresentationCubit<DietHistoryState, DietHistoryPr
   @override
   void onInit() => refresh();
 
-  Future<void> refresh() async {
+  Future<void> refresh({LoadTrigger trigger = .replace}) async {
     await withLoadingOverlay(
       () async {
         emit(state.copyWith(macroGoals: _getMacroGoalsUseCase()));
         await _loadMonth(state.month);
         await _loadTrend(state.trendRange);
       },
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: DietHistoryShowLoading(),
       hideLoadingEvent: DietHistoryHideLoading(),
     );

@@ -22,6 +22,7 @@ import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_c
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
@@ -80,7 +81,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
 
   Future<void> goToDate(DateTime date) => loadDate(date);
 
-  Future<void> loadDate(DateTime date) async {
+  Future<void> loadDate(DateTime date, {LoadTrigger trigger = .replace}) async {
     // Every mutation reloads through here, so this is the one place that can see a
     // workout become finished. It has to be the *transition* rather than
     // state.isFinished: the first load of an already-finished day, and paging back
@@ -91,7 +92,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     final wasUnfinishedToday = state.isLoaded && _isSameDay(state.date, date) && !state.isFinished;
     final workoutsResult = await withLoadingOverlay(
       () => _getWorkoutsForDateUseCase(date: date),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: WorkoutShowLoading(),
       hideLoadingEvent: WorkoutHideLoading(),
     );

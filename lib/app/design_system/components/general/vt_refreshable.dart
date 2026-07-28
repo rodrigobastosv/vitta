@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vitta/app/design_system/components/general/vt_refresh_indicator.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 
 class VTRefreshable extends StatelessWidget {
@@ -23,7 +24,7 @@ class VTRefreshable extends StatelessWidget {
   final EdgeInsetsGeometry padding;
 
   @override
-  Widget build(BuildContext context) => RefreshIndicator(
+  Widget build(BuildContext context) => VTRefreshIndicator(
     onRefresh: onRefresh,
     child: switch ((skeleton, emptyState)) {
       (final skeleton?, _) when !isLoaded => ListView(physics: const AlwaysScrollableScrollPhysics(), padding: padding, children: [skeleton]),

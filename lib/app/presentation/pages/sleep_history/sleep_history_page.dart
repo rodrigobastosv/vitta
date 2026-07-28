@@ -37,7 +37,7 @@ class SleepHistoryPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.sleepHistoryTitle)),
         body: VTRefreshable(
-          onRefresh: cubit.refresh,
+          onRefresh: () => cubit.refresh(trigger: .quiet),
           hasData: state.hasData,
           isLoaded: state.isLoaded,
           skeleton: const HistorySkeleton(),

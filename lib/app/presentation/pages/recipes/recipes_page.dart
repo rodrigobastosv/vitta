@@ -43,7 +43,7 @@ class RecipesPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.dietRecipesTitle)),
         body: VTRefreshable(
-          onRefresh: cubit.loadRecipes,
+          onRefresh: () => cubit.loadRecipes(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(),
           hasData: state.recipes.isNotEmpty,
@@ -83,7 +83,7 @@ class RecipesPage extends StatelessWidget {
   Future<void> _openForm(BuildContext context, RecipesCubit cubit, {Recipe? recipe}) async {
     final saved = await context.pushRoute<bool>(.recipeForm, extra: RecipeFormExtra(recipe: recipe));
     if (saved ?? false) {
-      await cubit.loadRecipes();
+      await cubit.loadRecipes(trigger: .quiet);
     }
   }
 }

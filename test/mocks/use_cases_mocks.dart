@@ -20,6 +20,7 @@ import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_cached_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
@@ -69,6 +70,7 @@ import 'package:vitta/app/domain/sleep/use_cases/get_sleep_last_synced_use_case.
 import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sync/use_cases/watch_data_changes_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
@@ -113,6 +115,8 @@ class MockSuggestMealsUseCase extends Mock implements SuggestMealsUseCase {}
 class MockLogSuggestedMealUseCase extends Mock implements LogSuggestedMealUseCase {}
 
 class MockLogFoodUseCase extends Mock implements LogFoodUseCase {}
+
+class MockGetCachedDailyMacrosUseCase extends Mock implements GetCachedDailyMacrosUseCase {}
 
 class MockGetDailyMacrosUseCase extends Mock implements GetDailyMacrosUseCase {}
 
@@ -293,3 +297,5 @@ class MockGetLogReminderSettingsUseCase extends Mock implements GetLogReminderSe
 class MockSaveLogReminderSettingsUseCase extends Mock implements SaveLogReminderSettingsUseCase {}
 
 class MockSyncLogRemindersUseCase extends Mock implements SyncLogRemindersUseCase {}
+
+class MockWatchDataChangesUseCase extends Mock implements WatchDataChangesUseCase {}

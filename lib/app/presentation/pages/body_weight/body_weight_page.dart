@@ -62,7 +62,7 @@ class BodyWeightPage extends StatelessWidget {
                 label: Text(l10n.bodyWeightLogAction),
               ),
         body: VTRefreshable(
-          onRefresh: cubit.loadRecent,
+          onRefresh: () => cubit.loadRecent(trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 220),
           hasData: state.logs.isNotEmpty,

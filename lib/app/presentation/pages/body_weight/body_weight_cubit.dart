@@ -4,6 +4,7 @@ import 'package:vitta/app/domain/body_weight/use_cases/delete_body_weight_log_us
 import 'package:vitta/app/domain/body_weight/use_cases/get_recent_body_weight_logs_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/body_weight/body_weight_state.dart';
@@ -28,10 +29,10 @@ class BodyWeightCubit extends PresentationCubit<BodyWeightState, BodyWeightPrese
   @override
   void onInit() => loadRecent();
 
-  Future<void> loadRecent() async {
+  Future<void> loadRecent({LoadTrigger trigger = .replace}) async {
     final recentLogsResult = await withLoadingOverlay(
       () => _getRecentBodyWeightLogsUseCase(days: _recentDays),
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: BodyWeightShowLoading(),
       hideLoadingEvent: BodyWeightHideLoading(),
     );

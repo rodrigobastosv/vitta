@@ -91,7 +91,7 @@ class _ReminderList extends StatelessWidget {
     final l10n = context.l10n;
     final reminders = state.visibleReminders;
     return VTRefreshable(
-      onRefresh: () => cubit.loadDate(state.date),
+      onRefresh: () => cubit.loadDate(state.date, trigger: .quiet),
       isLoaded: state.isLoaded,
       skeleton: const ListSkeleton(),
       padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.s, VTSpacing.m, VTSpacing.xxl),

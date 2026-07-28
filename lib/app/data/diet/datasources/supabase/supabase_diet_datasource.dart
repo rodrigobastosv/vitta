@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/core/services/cache/wire_cache_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_log_request.dart';
@@ -16,9 +17,10 @@ import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
 
 class SupabaseDietDataSource {
-  SupabaseDietDataSource({required this._supabaseService});
+  SupabaseDietDataSource({required this._supabaseService, required this._wireCacheService});
 
   final SupabaseService _supabaseService;
+  final WireCacheService _wireCacheService;
 
   String get _userId => _supabaseService.currentUserId;
 
@@ -159,11 +161,19 @@ class SupabaseDietDataSource {
           .eq('user_id', _userId)
           .eq('logged_date', date.toIso8601String().split('T').first)
           .order('created_at', ascending: true);
+      await _wireCacheService.write(_dailyLogCacheKey(date), rows);
       return Success(rows.map(FoodLogEntry.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to load food logs for $date', cause: error));
     }
   }
+
+  List<FoodLogEntry>? cachedDailyLog({required DateTime date}) {
+    final rows = _wireCacheService.read(_dailyLogCacheKey(date));
+    return rows?.map(FoodLogEntry.fromMap).toList();
+  }
+
+  String _dailyLogCacheKey(DateTime date) => 'diet.dailyLog.$_userId.${date.toIso8601String().split('T').first}';
 
   Future<Result<VTError, FoodLog>> updateFoodLog({
     required String logId,

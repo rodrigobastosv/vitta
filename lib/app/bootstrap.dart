@@ -8,6 +8,7 @@ import 'package:vitta/app/core/env/env.dart';
 import 'package:vitta/app/core/services/analytics/analytics_service.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
+import 'package:vitta/app/core/services/supabase/realtime_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/presentation/routing/notification_navigator.dart';
 
@@ -24,7 +25,11 @@ Future<void> bootstrap({required AppRunner appRunner}) async {
       }
       await Hive.initFlutter();
       final appBox = await Hive.openBox<dynamic>('app');
-      setupDependencies(appBox: appBox, supabaseService: supabaseService);
+      setupDependencies(
+        appBox: appBox,
+        supabaseService: supabaseService,
+        realtimeService: RealtimeService(client: Supabase.instance.client),
+      );
       final notificationService = G<NotificationService>();
       await notificationService.init();
       await NotificationNavigator.start(notificationService);

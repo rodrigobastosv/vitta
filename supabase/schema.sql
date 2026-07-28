@@ -900,3 +900,34 @@ drop policy if exists "Users read their own subscription" on subscriptions;
 create policy "Users read their own subscription" on subscriptions
   for select
   using (auth.uid() = user_id);
+
+-- Realtime. A table only broadcasts postgres_changes once it is in this
+-- publication, and Realtime evaluates the subscriber's JWT against the table's
+-- own RLS policies before delivering a row - so every user still only ever hears
+-- about their own. Only the per-user log tables are published: the shared
+-- catalogs (foods, exercises) change during bulk imports and nothing in the app
+-- watches them, and subscriptions is written by the webhook rather than read
+-- live. Adding a table here is what makes it visible to RealtimeService; a table
+-- left out simply never fires, which degrades to the ordinary reads.
+do $$
+declare
+  realtime_table text;
+begin
+  foreach realtime_table in array array[
+    'food_logs',
+    'water_logs',
+    'sleep_logs',
+    'body_weight_logs',
+    'reminders',
+    'workouts',
+    'workout_exercises',
+    'workout_sets'
+  ] loop
+    if not exists (
+      select 1 from pg_publication_tables
+      where pubname = 'supabase_realtime' and schemaname = 'public' and tablename = realtime_table
+    ) then
+      execute format('alter publication supabase_realtime add table public.%I', realtime_table);
+    end if;
+  end loop;
+end $$;

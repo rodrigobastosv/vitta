@@ -35,7 +35,7 @@ class ReminderHistoryPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.reminderHistoryTitle)),
         body: VTRefreshable(
-          onRefresh: () => cubit.loadMonth(state.month),
+          onRefresh: () => cubit.loadMonth(state.month, trigger: .quiet),
           hasData: state.hasData,
           isLoaded: state.isLoaded,
           skeleton: const HistorySkeleton(),

@@ -10,6 +10,7 @@ import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recipes_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_state.dart';
@@ -32,10 +33,10 @@ class RecipesCubit extends PresentationCubit<RecipesState, RecipesPresentationEv
   @override
   void onInit() => loadRecipes();
 
-  Future<void> loadRecipes() async {
+  Future<void> loadRecipes({LoadTrigger trigger = .replace}) async {
     final recipesResult = await withLoadingOverlay(
       _getRecipesUseCase.call,
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: RecipesShowLoading(),
       hideLoadingEvent: RecipesHideLoading(),
     );

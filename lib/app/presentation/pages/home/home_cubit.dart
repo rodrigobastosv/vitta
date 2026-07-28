@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
@@ -6,6 +8,7 @@ import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_us
 import 'package:vitta/app/domain/body_weight/use_cases/get_recent_body_weight_logs_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/log_body_weight_use_case.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_cached_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/home/entities/home_feature.dart';
@@ -19,11 +22,14 @@ import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.da
 import 'package:vitta/app/domain/sleep/use_cases/get_recent_sleep_logs_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/get_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
+import 'package:vitta/app/domain/sync/entities/sync_topic.dart';
+import 'package:vitta/app/domain/sync/use_cases/watch_data_changes_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/log_water_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/home/home_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/home/home_state.dart';
@@ -34,6 +40,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     required GetMacroGoalsUseCase getMacroGoalsUseCase,
     required GetHomeLayoutUseCase getHomeLayoutUseCase,
     required this._getDailyMacrosUseCase,
+    required this._getCachedDailyMacrosUseCase,
     required this._getDailyWaterUseCase,
     required this._getWaterGoalUseCase,
     required this._getRemindersInRangeUseCase,
@@ -49,6 +56,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
     required this._logSleepUseCase,
     required this._logBodyWeightUseCase,
     required this._syncLogRemindersUseCase,
+    required this._watchDataChangesUseCase,
     required this._notificationService,
   }) : _getUserUseCase = getUserUseCase,
        _getMacroGoalsUseCase = getMacroGoalsUseCase,
@@ -69,6 +77,7 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   final GetMacroGoalsUseCase _getMacroGoalsUseCase;
   final GetHomeLayoutUseCase _getHomeLayoutUseCase;
   final GetDailyMacrosUseCase _getDailyMacrosUseCase;
+  final GetCachedDailyMacrosUseCase _getCachedDailyMacrosUseCase;
   final GetDailyWaterUseCase _getDailyWaterUseCase;
   final GetWaterGoalUseCase _getWaterGoalUseCase;
   final GetRemindersInRangeUseCase _getRemindersInRangeUseCase;
@@ -84,7 +93,10 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   final LogSleepUseCase _logSleepUseCase;
   final LogBodyWeightUseCase _logBodyWeightUseCase;
   final SyncLogRemindersUseCase _syncLogRemindersUseCase;
+  final WatchDataChangesUseCase _watchDataChangesUseCase;
   final NotificationService _notificationService;
+
+  StreamSubscription<SyncTopic>? _changes;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -95,40 +107,74 @@ class HomeCubit extends PresentationCubit<HomeState, HomePresentationEvent> {
   static DateTime _dateOnly(DateTime dateTime) => DateTime(dateTime.year, dateTime.month, dateTime.day);
 
   @override
-  void onInit() => refresh();
+  void onInit() {
+    refresh();
+    _changes = _watchDataChangesUseCase(topics: SyncTopic.values.toSet()).listen(_reloadTopic);
+  }
 
-  Future<void> refresh() async {
+  @override
+  Future<void> close() async {
+    await _changes?.cancel();
+    return super.close();
+  }
+
+  /// Home stays mounted under every feature page, so a change made on one of
+  /// them lands here while the user is still over there — which is what makes
+  /// coming back cost nothing. Only the section that changed is re-read.
+  Future<void> _reloadTopic(SyncTopic topic) async {
+    final today = _today;
+    await switch (topic) {
+      SyncTopic.diet => _loadMacros(today),
+      SyncTopic.water => _loadWater(today),
+      SyncTopic.reminders => _loadReminders(today),
+      SyncTopic.sleep => _loadSleep(today),
+      SyncTopic.bodyWeight => _loadWeight(),
+      SyncTopic.workout => _loadWorkout(today),
+    };
+  }
+
+  Future<void> refresh({LoadTrigger trigger = .replace}) async {
     final today = _today;
     await withLoadingOverlay(
       () async {
-        final dailyMacrosResult = await _getDailyMacrosUseCase(date: today);
-        dailyMacrosResult.when(
-          (error) => emitPresentation(HomeError(message: error.message)),
-          (value) => emit(
-            state.copyWith(
-              isLoaded: true,
-              dailyMacros: value,
-              macroGoals: _getMacroGoalsUseCase(),
-              user: _getUserUseCase(),
-              layout: _getHomeLayoutUseCase(),
-            ),
-          ),
-        );
-
-        await _loadWater(today);
-        await _loadReminders(today);
-        await _loadWorkout(today);
-        final isSleepLoggedToday = await _loadSleep(today);
-        await _loadWeight();
-        await _syncLogReminders(isSleepLoggedToday: isSleepLoggedToday);
+        final macros = _loadMacros(today);
+        final water = _loadWater(today);
+        final reminders = _loadReminders(today);
+        final workout = _loadWorkout(today);
+        final weight = _loadWeight();
+        final sleep = _loadSleep(today);
+        await Future.wait([macros, water, reminders, workout, weight]);
+        await _syncLogReminders(isSleepLoggedToday: await sleep);
       },
-      showOverlay: state.isLoaded,
+      showOverlay: trigger.showsOverlay && state.isLoaded,
       showLoadingEvent: HomeShowLoading(),
       hideLoadingEvent: HomeHideLoading(),
     );
     if (!state.isLoaded) {
       emit(state.copyWith(isLoaded: true, layout: _getHomeLayoutUseCase()));
     }
+  }
+
+  Future<void> _loadMacros(DateTime today) async {
+    if (!state.isLoaded) {
+      final cachedMacros = _getCachedDailyMacrosUseCase(date: today);
+      if (cachedMacros != null) {
+        emit(state.copyWith(isLoaded: true, dailyMacros: cachedMacros, macroGoals: _getMacroGoalsUseCase()));
+      }
+    }
+    final dailyMacrosResult = await _getDailyMacrosUseCase(date: today);
+    dailyMacrosResult.when(
+      (error) => emitPresentation(HomeError(message: error.message)),
+      (value) => emit(
+        state.copyWith(
+          isLoaded: true,
+          dailyMacros: value,
+          macroGoals: _getMacroGoalsUseCase(),
+          user: _getUserUseCase(),
+          layout: _getHomeLayoutUseCase(),
+        ),
+      ),
+    );
   }
 
   Future<void> _loadWater(DateTime today) async {

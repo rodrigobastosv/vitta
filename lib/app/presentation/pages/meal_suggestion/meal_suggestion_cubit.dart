@@ -9,6 +9,7 @@ import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_suggested_meal_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/suggest_meals_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
+import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_entry.dart';
 import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_presentation_event.dart';
@@ -34,7 +35,7 @@ class MealSuggestionCubit extends PresentationCubit<MealSuggestionState, MealSug
   @override
   void onInit() => loadDay();
 
-  Future<void> loadDay() => withLoadingOverlay(
+  Future<void> loadDay({LoadTrigger trigger = .replace}) => withLoadingOverlay(
     () async {
       final dailyMacrosResult = await _getDailyMacrosUseCase(date: _loggedDate);
       dailyMacrosResult.when(
@@ -45,7 +46,7 @@ class MealSuggestionCubit extends PresentationCubit<MealSuggestionState, MealSug
         emit(state.copyWith(goals: _getMacroGoalsUseCase(), isLoaded: true));
       }
     },
-    showOverlay: state.isLoaded,
+    showOverlay: trigger.showsOverlay && state.isLoaded,
     showLoadingEvent: MealSuggestionShowLoading(),
     hideLoadingEvent: MealSuggestionHideLoading(),
   );

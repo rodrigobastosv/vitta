@@ -32,12 +32,14 @@ abstract class PresentationCubit<S, P> extends Cubit<S> with BlocPresentationMix
   }
 
   /// Runs [load] bracketed by the loading overlay, but only when [showOverlay] is
-  /// true. Skeleton-backed reads pass `showOverlay: state.isLoaded`: the first
-  /// read (isLoaded == false) shows the skeleton instead of the overlay, while a
-  /// reload over already-known data (retry, paging, a post-write refresh) still
-  /// gets it. Centralised here so the initial-load-vs-reload policy lives in one
-  /// place rather than being copy-pasted into every load method. See CLAUDE.md >
-  /// Skeletons.
+  /// true. Skeleton-backed reads pass
+  /// `showOverlay: trigger.showsOverlay && state.isLoaded`: the first read
+  /// (isLoaded == false) shows the skeleton instead, a pull or a background
+  /// revalidation is already answered for by the gesture's own spinner or by the
+  /// content on screen, and only a [LoadTrigger.replace] — paging, or retrying a
+  /// failed load — has nothing standing in for it. Centralised here so the policy
+  /// lives in one place rather than being copy-pasted into every load method. See
+  /// CLAUDE.md > Skeletons.
   Future<T> withLoadingOverlay<T>(
     Future<T> Function() load, {
     required bool showOverlay,

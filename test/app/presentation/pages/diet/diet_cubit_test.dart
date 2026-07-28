@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +10,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/domain/sync/entities/sync_topic.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
@@ -49,6 +52,59 @@ void main() {
     act: (cubit) => cubit.loadToday(),
     expectPresentation: () => <DietPresentationEvent>[],
   );
+
+  test('a day the device has seen before opens on its cached copy, before the network answers', () async {
+    final cachedEntry = FoodLogEntryFactory.build();
+    final getCachedDailyMacrosUseCase = MockGetCachedDailyMacrosUseCase();
+    when(() => getCachedDailyMacrosUseCase(date: any(named: 'date'))).thenReturn(DailyMacros(entries: [cachedEntry]));
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final networkRead = Completer<Result<VTError, DailyMacros>>();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) => networkRead.future);
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
+
+    unawaited(cubit.loadToday());
+    await pumpEventQueue();
+
+    expect(cubit.state.isLoaded, isTrue);
+    expect(cubit.state.dailyMacros.entries, [cachedEntry]);
+
+    networkRead.complete(const Success(DailyMacros(entries: [])));
+    await pumpEventQueue();
+
+    expect(cubit.state.dailyMacros.entries, isEmpty);
+    await cubit.close();
+  });
+
+  test('refreshing the day on screen never rewinds it to the cached copy', () async {
+    final staleEntry = FoodLogEntryFactory.build();
+    final getCachedDailyMacrosUseCase = MockGetCachedDailyMacrosUseCase();
+    when(() => getCachedDailyMacrosUseCase(date: any(named: 'date'))).thenReturn(DailyMacros(entries: [staleEntry]));
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    final cubit = CubitsFactories.buildDietCubit(
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
+    await cubit.loadToday();
+
+    final states = <DietState>[];
+    final subscription = cubit.stream.listen(states.add);
+    await cubit.refresh();
+    await pumpEventQueue();
+
+    expect(states.where((state) => state.dailyMacros.entries.isNotEmpty), isEmpty);
+    await subscription.cancel();
+    await cubit.close();
+  });
 
   test('loadToday keeps the previous state when it fails', () async {
     final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
@@ -312,10 +368,13 @@ void main() {
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      final watchDataChangesUseCase = MockWatchDataChangesUseCase();
+      when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => const Stream<SyncTopic>.empty());
       return CubitsFactories.buildDietCubit(
         hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
         getDailyMacrosUseCase: getDailyMacrosUseCase,
         getMacroGoalsUseCase: getMacroGoalsUseCase,
+        watchDataChangesUseCase: watchDataChangesUseCase,
       );
     },
     act: (cubit) => cubit.onInit(),
@@ -331,10 +390,13 @@ void main() {
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+      final watchDataChangesUseCase = MockWatchDataChangesUseCase();
+      when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => const Stream<SyncTopic>.empty());
       return CubitsFactories.buildDietCubit(
         hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
         getDailyMacrosUseCase: getDailyMacrosUseCase,
         getMacroGoalsUseCase: getMacroGoalsUseCase,
+        watchDataChangesUseCase: watchDataChangesUseCase,
       );
     },
     act: (cubit) => cubit.onInit(),

@@ -5,6 +5,7 @@ import 'package:vitta/app/domain/auth/entities/user.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/home/entities/home_layout.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/domain/sync/entities/sync_topic.dart';
 import 'package:vitta/app/domain/water/entities/daily_water.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
@@ -53,6 +54,8 @@ void registerTestHomeCubit() {
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
   final syncLogRemindersUseCase = MockSyncLogRemindersUseCase();
   when(() => syncLogRemindersUseCase(loggedByTracker: any(named: 'loggedByTracker'))).thenAnswer((_) async {});
+  final watchDataChangesUseCase = MockWatchDataChangesUseCase();
+  when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => const Stream<SyncTopic>.empty());
 
   if (G.isRegistered<HomeCubit>()) {
     G.unregister<HomeCubit>();
@@ -74,6 +77,7 @@ void registerTestHomeCubit() {
       getHomeLayoutUseCase: getHomeLayoutUseCase,
       getAppSettingsUseCase: getAppSettingsUseCase,
       syncLogRemindersUseCase: syncLogRemindersUseCase,
+      watchDataChangesUseCase: watchDataChangesUseCase,
     ),
   );
 }

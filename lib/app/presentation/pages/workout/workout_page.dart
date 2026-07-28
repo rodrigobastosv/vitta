@@ -90,7 +90,7 @@ class WorkoutPage extends StatelessWidget {
               onPressed: () async {
                 await context.pushRoute(.routines);
                 if (context.mounted) {
-                  await cubit.loadDate(cubit.state.date);
+                  await cubit.loadDate(cubit.state.date, trigger: .quiet);
                 }
               },
             ),
@@ -118,7 +118,7 @@ class WorkoutPage extends StatelessWidget {
               : const SizedBox.shrink(),
         ),
         body: VTRefreshable(
-          onRefresh: () => cubit.loadDate(state.date),
+          onRefresh: () => cubit.loadDate(state.date, trigger: .quiet),
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 260),
           padding: const EdgeInsets.fromLTRB(VTSpacing.m, VTSpacing.m, VTSpacing.m, VTSpacing.xxl * 2),
@@ -207,7 +207,7 @@ class WorkoutPage extends StatelessWidget {
     if (wantsRoutine && context.mounted) {
       await context.pushRoute(.routines);
       if (context.mounted) {
-        await cubit.loadDate(cubit.state.date);
+        await cubit.loadDate(cubit.state.date, trigger: .quiet);
       }
     }
   }

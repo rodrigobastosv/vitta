@@ -24,7 +24,9 @@ void main() {
     when(() => supabaseService.currentUserId).thenReturn('user-1');
     when(() => supabaseService.currentUserIdChanges).thenAnswer((_) => Stream.value('user-1'));
     when(() => supabaseService.from(any())).thenThrow(Exception('no Supabase backend in widget tests'));
-    setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService);
+    final realtimeService = MockRealtimeService();
+    when(() => realtimeService.changes(any())).thenAnswer((_) => const Stream<SupabaseTable>.empty());
+    setupDependencies(appBox: await openTestHiveBox(), supabaseService: supabaseService, realtimeService: realtimeService);
     registerTestNotificationService();
     await G<OnboardingLocalDataSource>().markOnboardingSeen();
     await G<WorkoutLocalDataSource>().markIntroSeen();

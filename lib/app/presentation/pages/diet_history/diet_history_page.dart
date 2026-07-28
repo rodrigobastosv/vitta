@@ -43,7 +43,7 @@ class DietHistoryPage extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(title: Text(l10n.dietHistoryTitle)),
           body: VTRefreshable(
-            onRefresh: cubit.refresh,
+            onRefresh: () => cubit.refresh(trigger: .quiet),
             hasData: state.hasData,
             isLoaded: state.isLoaded,
             skeleton: const HistorySkeleton(),

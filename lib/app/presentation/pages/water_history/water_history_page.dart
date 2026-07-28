@@ -36,7 +36,7 @@ class WaterHistoryPage extends StatelessWidget {
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(title: Text(l10n.waterHistoryTitle)),
         body: VTRefreshable(
-          onRefresh: cubit.refresh,
+          onRefresh: () => cubit.refresh(trigger: .quiet),
           hasData: state.hasData,
           isLoaded: state.isLoaded,
           skeleton: const HistorySkeleton(),

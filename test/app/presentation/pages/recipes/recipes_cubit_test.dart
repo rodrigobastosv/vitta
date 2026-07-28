@@ -40,6 +40,18 @@ void main() {
   );
 
   blocPresentationTest<RecipesCubit, RecipesState, RecipesPresentationEvent>(
+    'a quiet reload shows no overlay - the pull already has its own indicator',
+    build: () {
+      final getRecipesUseCase = MockGetRecipesUseCase();
+      when(getRecipesUseCase.call).thenAnswer((_) async => const Success([]));
+      return CubitsFactories.buildRecipesCubit(getRecipesUseCase: getRecipesUseCase);
+    },
+    seed: RecipesState.new,
+    act: (cubit) => cubit.loadRecipes(trigger: .quiet),
+    expectPresentation: () => <RecipesPresentationEvent>[],
+  );
+
+  blocPresentationTest<RecipesCubit, RecipesState, RecipesPresentationEvent>(
     'the first load shows no overlay - the skeleton covers it',
     build: () {
       final getRecipesUseCase = MockGetRecipesUseCase();

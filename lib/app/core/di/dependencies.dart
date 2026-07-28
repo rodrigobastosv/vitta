@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/services/analytics/analytics_service.dart';
+import 'package:vitta/app/core/services/cache/wire_cache_service.dart';
 import 'package:vitta/app/core/services/health/health_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/logging/analytics_log_destination.dart';
@@ -12,6 +13,7 @@ import 'package:vitta/app/core/services/logging/sentry_log_destination.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
+import 'package:vitta/app/core/services/supabase/realtime_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
@@ -50,6 +52,7 @@ import 'package:vitta/app/data/settings/settings_repository.dart';
 import 'package:vitta/app/data/sleep/datasources/local/sleep_local_datasource.dart';
 import 'package:vitta/app/data/sleep/datasources/supabase/supabase_sleep_datasource.dart';
 import 'package:vitta/app/data/sleep/sleep_repository.dart';
+import 'package:vitta/app/data/sync/sync_repository.dart';
 import 'package:vitta/app/data/water/datasources/local/water_local_datasource.dart';
 import 'package:vitta/app/data/water/datasources/supabase/supabase_water_datasource.dart';
 import 'package:vitta/app/data/water/water_repository.dart';
@@ -80,6 +83,7 @@ import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_food_log_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/delete_recipe_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_cached_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_daily_macros_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_macro_goals_use_case.dart';
@@ -130,6 +134,7 @@ import 'package:vitta/app/domain/sleep/use_cases/get_sleep_last_synced_use_case.
 import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
+import 'package:vitta/app/domain/sync/use_cases/watch_data_changes_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
@@ -198,8 +203,9 @@ import 'package:vitta/app/presentation/pages/workout_history/workout_history_cub
 
 final G = GetIt.instance;
 
-void setupDependencies({required Box<dynamic> appBox, required SupabaseService supabaseService}) {
+void setupDependencies({required Box<dynamic> appBox, required SupabaseService supabaseService, required RealtimeService realtimeService}) {
   G.registerLazySingleton<LocalStorageService>(() => LocalStorageService(box: appBox));
+  G.registerLazySingleton(() => WireCacheService(localStorageService: G()));
   G.registerLazySingleton(() => SettingsLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => WaterLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => OnboardingLocalDataSource(localStorageService: G()));
@@ -226,6 +232,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
 
   G.registerLazySingleton(() => supabaseService);
+  G.registerLazySingleton(() => realtimeService);
+  G.registerLazySingleton(() => SyncRepository(realtimeService: G()));
+  G.registerFactory(() => WatchDataChangesUseCase(syncRepository: G()));
   G.registerLazySingleton(ImagePickerService.new);
   G.registerLazySingleton(HealthService.new);
   G.registerLazySingleton(NotificationService.new);
@@ -236,7 +245,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   );
   G.registerLazySingleton(() => VTHttpClient(baseUrl: 'https://world.openfoodfacts.org'));
   G.registerLazySingleton(() => OpenFoodFactsDataSource(httpClient: G()));
-  G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G()));
+  G.registerLazySingleton(() => SupabaseDietDataSource(supabaseService: G(), wireCacheService: G()));
   G.registerLazySingleton(() => DietGoalsLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => BodyProfileLocalDataSource(localStorageService: G()));
   G.registerLazySingleton(() => BodyProfileRepository(bodyProfileLocalDataSource: G()));
@@ -287,6 +296,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => SearchFoodsUseCase(dietRepository: G()));
   G.registerFactory(() => LogFoodUseCase(dietRepository: G()));
   G.registerFactory(() => GetDailyMacrosUseCase(dietRepository: G()));
+  G.registerFactory(() => GetCachedDailyMacrosUseCase(dietRepository: G()));
   G.registerFactory(() => DeleteFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => UpdateFoodLogUseCase(dietRepository: G()));
   G.registerFactory(() => GetRecipesUseCase(dietRepository: G()));
@@ -370,14 +380,15 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerFactory(() => WatchUserIdUseCase(authRepository: G()));
   G.registerFactory(() => SignUpUseCase(authRepository: G()));
   G.registerFactory(() => SignInUseCase(authRepository: G()));
-  G.registerFactory(() => SignOutUseCase(authRepository: G(), purchaseService: G()));
+  G.registerFactory(() => SignOutUseCase(authRepository: G(), purchaseService: G(), wireCacheService: G()));
   G.registerFactory(() => UpdateProfileUseCase(authRepository: G()));
   G.registerFactory(() => UploadAvatarUseCase(authRepository: G()));
-  G.registerFactory(() => DeleteAccountUseCase(authRepository: G(), purchaseService: G()));
+  G.registerFactory(() => DeleteAccountUseCase(authRepository: G(), purchaseService: G(), wireCacheService: G()));
 
   G.registerFactory(
     () => DietCubit(
       getDailyMacrosUseCase: G(),
+      getCachedDailyMacrosUseCase: G(),
       deleteFoodLogUseCase: G(),
       updateFoodLogUseCase: G(),
       getMacroGoalsUseCase: G(),
@@ -385,6 +396,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getAppSettingsUseCase: G(),
       hasSeenDietIntroUseCase: G(),
       markDietIntroSeenUseCase: G(),
+      watchDataChangesUseCase: G(),
     ),
   );
   G.registerFactory(() => DietHistoryCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G()));
@@ -471,6 +483,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getUserUseCase: G(),
       getMacroGoalsUseCase: G(),
       getDailyMacrosUseCase: G(),
+      getCachedDailyMacrosUseCase: G(),
       getDailyWaterUseCase: G(),
       getWaterGoalUseCase: G(),
       getRemindersInRangeUseCase: G(),
@@ -487,6 +500,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       logSleepUseCase: G(),
       logBodyWeightUseCase: G(),
       syncLogRemindersUseCase: G(),
+      watchDataChangesUseCase: G(),
       notificationService: G(),
     ),
   );
