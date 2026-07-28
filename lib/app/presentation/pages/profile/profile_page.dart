@@ -15,6 +15,7 @@ import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_state.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/delete_account_dialog.dart';
+import 'package:vitta/app/presentation/pages/profile/widgets/profile_app_version.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_header.dart';
 import 'package:vitta/app/presentation/pages/profile/widgets/profile_menu_tile.dart';
 
@@ -98,6 +99,8 @@ class ProfilePage extends StatelessWidget {
                 onTap: () => _confirmDeleteAccount(context, cubit),
               ),
             ],
+            const VTGap.l(),
+            ProfileAppVersion(version: cubit.appInfo.version, buildNumber: cubit.appInfo.buildNumber),
           ],
         ),
       ),

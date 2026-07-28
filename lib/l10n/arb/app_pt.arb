@@ -839,6 +839,7 @@
   "profileSignInAction": "Entrar ou criar conta",
   "profileGuestTitle": "Convidado",
   "profileSettingsSubtitle": "Idioma, tema e unidades",
+  "profileAppVersion": "Versão {version} ({build})",
   "premiumTitle": "Vitta Premium",
   "premiumTagline": "Registro com IA, sem digitar",
   "premiumIntro": "O escaneamento por foto usa IA para ler o alimento por você. Isso custa dinheiro de verdade, então fica no Premium — todo o resto do Vitta continua gratuito.",

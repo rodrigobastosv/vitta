@@ -52,6 +52,7 @@ abstract class CubitsFactories {
     MockDeleteAccountUseCase? deleteAccountUseCase,
     MockImagePickerService? imagePickerService,
     MockAnalyticsService? analyticsService,
+    MockAppInfoService? appInfoService,
   }) => AuthCubit(
     getUserUseCase: getUserUseCase ?? MockGetUserUseCase(),
     signUpUseCase: signUpUseCase ?? MockSignUpUseCase(),
@@ -62,6 +63,7 @@ abstract class CubitsFactories {
     deleteAccountUseCase: deleteAccountUseCase ?? MockDeleteAccountUseCase(),
     imagePickerService: imagePickerService ?? MockImagePickerService(),
     analyticsService: analyticsService ?? MockAnalyticsService(),
+    appInfoService: appInfoService ?? MockAppInfoService(),
   );
 
   static HomeCubit buildHomeCubit({

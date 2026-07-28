@@ -9,13 +9,17 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../fixtures/premium_fixture.dart';
+import '../../../../mocks/services_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 void main() {
   Future<void> pumpProfile(WidgetTester tester, {required User user}) async {
     final getUserUseCase = MockGetUserUseCase();
     when(getUserUseCase.call).thenReturn(user);
-    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase);
+    final appInfoService = MockAppInfoService();
+    when(() => appInfoService.version).thenReturn('1.4.2');
+    when(() => appInfoService.buildNumber).thenReturn('87');
+    final cubit = CubitsFactories.buildAuthCubit(getUserUseCase: getUserUseCase, appInfoService: appInfoService);
     G.registerFactory<AuthCubit>(() => cubit);
     addTearDown(() => G.unregister<AuthCubit>());
 

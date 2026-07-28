@@ -1795,6 +1795,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get profileSettingsSubtitle => 'Language, theme and units';
 
   @override
+  String profileAppVersion(String version, String build) {
+    return 'Version $version ($build)';
+  }
+
+  @override
   String get premiumTitle => 'Vitta Premium';
 
   @override

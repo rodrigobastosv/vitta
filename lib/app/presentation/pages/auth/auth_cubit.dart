@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/analytics/analytics_service.dart';
+import 'package:vitta/app/core/services/app_info/app_info_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_service.dart';
 import 'package:vitta/app/core/services/image_picker/image_picker_source.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
@@ -28,6 +29,7 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
     required this._deleteAccountUseCase,
     required this._imagePickerService,
     required this._analyticsService,
+    required this._appInfoService,
   }) : _getUserUseCase = getUserUseCase,
        super(AuthState(user: getUserUseCase()));
 
@@ -40,8 +42,11 @@ class AuthCubit extends PresentationCubit<AuthState, AuthPresentationEvent> {
   final DeleteAccountUseCase _deleteAccountUseCase;
   final ImagePickerService _imagePickerService;
   final AnalyticsService _analyticsService;
+  final AppInfoService _appInfoService;
 
   static const double _avatarMaxWidth = 512;
+
+  AppInfoService get appInfo => _appInfoService;
 
   void refreshUser() => emit(state.copyWith(user: _getUserUseCase()));
 
