@@ -4,7 +4,7 @@ import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/cubit/premium_cubit.dart';
 import 'package:vitta/app/cubit/premium_state.dart';
-import 'package:vitta/app/design_system/tokens/vt_colors.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/add_food_action_button.dart';
 import 'package:vitta/app/presentation/pages/meal_suggestion/meal_suggestion_extra.dart';
 import 'package:vitta/app/presentation/pages/paywall/paywall_extra.dart';
 
@@ -18,12 +18,11 @@ class MealSuggestionAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => BlocBuilder<PremiumCubit, PremiumState>(
-    builder: (context, state) => IconButton(
-      icon: state.isPremium
-          ? const Icon(Icons.auto_awesome_outlined)
-          : const Badge(backgroundColor: VTColors.premium, smallSize: 8, child: Icon(Icons.auto_awesome_outlined)),
-      tooltip: context.l10n.mealSuggestionTitle,
-      onPressed: () => state.isPremium ? _suggest(context) : _openPaywall(context),
+    builder: (context, state) => AddFoodActionButton(
+      icon: Icons.auto_awesome_outlined,
+      label: context.l10n.mealSuggestionTitle,
+      isLocked: !state.isPremium,
+      onTap: () => state.isPremium ? _suggest(context) : _openPaywall(context),
     ),
   );
 

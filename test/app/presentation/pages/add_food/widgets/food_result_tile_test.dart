@@ -112,10 +112,7 @@ void main() {
   });
 
   testWidgets('a liquid row states its calories per 100 mL, scaled by density', (tester) async {
-    await pumpTile(
-      tester,
-      food: FoodFactory.build(name: 'Leite integral', caloriesPer100g: 61, densityGPerMl: 1.03),
-    );
+    await pumpTile(tester, food: FoodFactory.build(name: 'Leite integral', caloriesPer100g: 61, densityGPerMl: 1.03));
 
     expect(find.textContaining('63 kcal / 100mL'), findsOneWidget);
     expect(find.textContaining('100g'), findsNothing);

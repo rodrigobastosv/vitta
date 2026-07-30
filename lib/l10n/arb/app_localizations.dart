@@ -1538,6 +1538,108 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get dietDeleteLogTooltip;
 
+  /// No description provided for @dietLogMealAgainAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Log this meal again'**
+  String get dietLogMealAgainAction;
+
+  /// No description provided for @dietRecentMealsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent meals'**
+  String get dietRecentMealsTitle;
+
+  /// No description provided for @dietMealLoggedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{Nothing added} =1{1 food added to {meal}} other{{count} foods added to {meal}}}'**
+  String dietMealLoggedToast(int count, String meal);
+
+  /// No description provided for @dietNutritionScoreTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nutrition score'**
+  String get dietNutritionScoreTitle;
+
+  /// No description provided for @dietNutritionScoreSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'How the whole day landed on your targets'**
+  String get dietNutritionScoreSubtitle;
+
+  /// No description provided for @dietNutritionScoreMainNutrients.
+  ///
+  /// In en, this message translates to:
+  /// **'Main nutrients'**
+  String get dietNutritionScoreMainNutrients;
+
+  /// No description provided for @dietNutritionScoreEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Log something and the day gets a score.'**
+  String get dietNutritionScoreEmpty;
+
+  /// No description provided for @nutritionGradePoor.
+  ///
+  /// In en, this message translates to:
+  /// **'Needs work'**
+  String get nutritionGradePoor;
+
+  /// No description provided for @nutritionGradeFair.
+  ///
+  /// In en, this message translates to:
+  /// **'Fair'**
+  String get nutritionGradeFair;
+
+  /// No description provided for @nutritionGradeGood.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get nutritionGradeGood;
+
+  /// No description provided for @nutritionGradeExcellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
+  String get nutritionGradeExcellent;
+
+  /// No description provided for @nutrientVerdictLow.
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get nutrientVerdictLow;
+
+  /// No description provided for @nutrientVerdictOnTrack.
+  ///
+  /// In en, this message translates to:
+  /// **'On track'**
+  String get nutrientVerdictOnTrack;
+
+  /// No description provided for @nutrientVerdictHigh.
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get nutrientVerdictHigh;
+
+  /// No description provided for @dietStreakTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No logging streak yet} =1{1 day streak} other{{count} day streak}}'**
+  String dietStreakTooltip(int count);
+
+  /// No description provided for @dietWeekDayTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, {calories} kcal'**
+  String dietWeekDayTooltip(String date, int calories);
+
+  /// No description provided for @dietWeekDayNothingTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'{date}, nothing logged'**
+  String dietWeekDayNothingTooltip(String date);
+
   /// No description provided for @dayToday.
   ///
   /// In en, this message translates to:

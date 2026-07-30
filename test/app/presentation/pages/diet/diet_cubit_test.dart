@@ -22,6 +22,20 @@ import '../../../../factories/entities/macro_goals_factory.dart';
 import '../../../../fixtures/logging_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
+// Loading a day now also reads the range behind the week strip and the streak,
+// so every test that loads one has to answer it - the same tax stubbing the
+// routine cycle puts on the workout tests.
+MockGetMacrosInRangeUseCase _noRangeUseCase() {
+  final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
+  when(
+    () => getMacrosInRangeUseCase(
+      from: any(named: 'from'),
+      to: any(named: 'to'),
+    ),
+  ).thenAnswer((_) async => const Success(<DateTime, DailyMacros>{}));
+  return getMacrosInRangeUseCase;
+}
+
 void main() {
   setUpAll(() {
     registerFallbackValue(DateTime(2000));
@@ -34,7 +48,11 @@ void main() {
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+      return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
     },
     act: (cubit) => cubit.loadToday(),
     expect: () => [isA<DietState>()],
@@ -47,7 +65,11 @@ void main() {
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+      return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
     },
     act: (cubit) => cubit.loadToday(),
     expectPresentation: () => <DietPresentationEvent>[],
@@ -63,6 +85,7 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
       getDailyMacrosUseCase: getDailyMacrosUseCase,
       getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase,
       getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -90,6 +113,7 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
       getDailyMacrosUseCase: getDailyMacrosUseCase,
       getCachedDailyMacrosUseCase: getCachedDailyMacrosUseCase,
       getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -111,7 +135,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
     final initialState = cubit.state;
 
     await cubit.loadToday();
@@ -124,7 +152,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
 
     expect(cubit.state.isLoaded, isFalse);
 
@@ -140,7 +172,11 @@ void main() {
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+      return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
     },
     act: (cubit) => cubit.loadToday(),
     expectPresentation: () => [isA<DietError>()],
@@ -156,6 +192,7 @@ void main() {
       when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
       return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
         getDailyMacrosUseCase: getDailyMacrosUseCase,
         deleteFoodLogUseCase: deleteFoodLogUseCase,
         getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -171,7 +208,11 @@ void main() {
     build: () {
       final deleteFoodLogUseCase = MockDeleteFoodLogUseCase();
       when(() => deleteFoodLogUseCase(logId: 'log-1')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCaseSpy, deleteFoodLogUseCase: deleteFoodLogUseCase);
+      return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
+        getDailyMacrosUseCase: getDailyMacrosUseCaseSpy,
+        deleteFoodLogUseCase: deleteFoodLogUseCase,
+      );
     },
     act: (cubit) => cubit.deleteLog(logId: 'log-1'),
     expectPresentation: () => [isA<DietError>()],
@@ -189,6 +230,7 @@ void main() {
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
     final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
       getDailyMacrosUseCase: getDailyMacrosUseCase,
       updateFoodLogUseCase: updateFoodLogUseCase,
       getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -215,6 +257,7 @@ void main() {
         () => updateFoodLogUseCase(logId: 'log-1', mealType: .dinner, quantity: const LoggedQuantity.weight(250)),
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
         getDailyMacrosUseCase: getDailyMacrosUseCaseUpdateSpy,
         updateFoodLogUseCase: updateFoodLogUseCase,
       );
@@ -230,13 +273,13 @@ void main() {
   test('unitSystem reads the current app settings', () {
     final getAppSettingsUseCase = MockGetAppSettingsUseCase();
     when(getAppSettingsUseCase.call).thenReturn(const AppSettings(unitSystem: .imperial));
-    final cubit = CubitsFactories.buildDietCubit(getAppSettingsUseCase: getAppSettingsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(getMacrosInRangeUseCase: _noRangeUseCase(), getAppSettingsUseCase: getAppSettingsUseCase);
 
     expect(cubit.unitSystem, UnitSystem.imperial);
   });
 
   test('isViewingToday is true right after construction', () {
-    final cubit = CubitsFactories.buildDietCubit();
+    final cubit = CubitsFactories.buildDietCubit(getMacrosInRangeUseCase: _noRangeUseCase());
     final today = DateTime.now();
 
     expect(cubit.state.date, DateTime(today.year, today.month, today.day));
@@ -248,23 +291,21 @@ void main() {
     build: () {
       final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
       final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
-      when(
-        () => getDailyMacrosUseCase(date: any(named: 'date')),
-      ).thenAnswer((_) async => Success(DailyMacros(entries: [FoodLogEntryFactory.build()])));
+      when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => Success(DailyMacros(entries: [FoodLogEntryFactory.build()])));
       when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-      return CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+      return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
+        getDailyMacrosUseCase: getDailyMacrosUseCase,
+        getMacroGoalsUseCase: getMacroGoalsUseCase,
+      );
     },
     act: (cubit) => cubit.goToPreviousDay(),
     expect: () {
       final yesterday = DateTime.now();
       final expectedDate = DateTime(yesterday.year, yesterday.month, yesterday.day).subtract(const Duration(days: 1));
       return [
-        isA<DietState>()
-            .having((state) => state.date, 'date', expectedDate)
-            .having((state) => state.dailyMacros.entries, 'entries', isEmpty),
-        isA<DietState>()
-            .having((state) => state.date, 'date', expectedDate)
-            .having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
+        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isEmpty),
+        isA<DietState>().having((state) => state.date, 'date', expectedDate).having((state) => state.dailyMacros.entries, 'entries', isNotEmpty),
       ];
     },
   );
@@ -274,7 +315,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
     final today = cubit.state.date;
 
     await cubit.goToPreviousDay();
@@ -288,7 +333,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
     final today = cubit.state.date;
     await cubit.goToPreviousDay();
 
@@ -303,7 +352,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
 
     await cubit.goToDate(DateTime(2026, 1, 5, 13, 30));
 
@@ -315,7 +368,11 @@ void main() {
     final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
     when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
     when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
-    final cubit = CubitsFactories.buildDietCubit(getDailyMacrosUseCase: getDailyMacrosUseCase, getMacroGoalsUseCase: getMacroGoalsUseCase);
+    final cubit = CubitsFactories.buildDietCubit(
+      getMacrosInRangeUseCase: _noRangeUseCase(),
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+    );
     await cubit.goToDate(DateTime(2026, 1, 5));
 
     await cubit.refresh();
@@ -340,7 +397,7 @@ void main() {
 
     await cubit.loadMonthMacros(DateTime(2026, 7));
 
-    expect(cubit.state.loggedMacrosInMonth, macrosByDate);
+    expect(cubit.state.macrosByDate, macrosByDate);
     verify(() => getMacrosInRangeUseCase(from: DateTime(2026, 7), to: DateTime(2026, 7, 31))).called(1);
   });
 
@@ -356,7 +413,69 @@ void main() {
 
     await cubit.loadMonthMacros(DateTime(2026, 7));
 
-    expect(cubit.state.loggedMacrosInMonth, isEmpty);
+    expect(cubit.state.macrosByDate, isEmpty);
+  });
+
+  test('loading a day counts the streak from the days that came back with it', () async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final loggedDays = {
+      for (var offset = 0; offset < 3; offset++) DateTime(today.year, today.month, today.day - offset): DailyMacros(entries: [FoodLogEntryFactory.build()]),
+    };
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer((_) async => Success(loggedDays));
+    final cubit = CubitsFactories.buildDietCubit(
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+      getMacrosInRangeUseCase: getMacrosInRangeUseCase,
+    );
+
+    await cubit.loadToday();
+
+    expect(cubit.state.streak.days, 3);
+    await cubit.close();
+  });
+
+  // A day whose last entry was deleted comes back absent from the range, and
+  // merging over the map would leave its dot on the strip and its link in the
+  // streak forever.
+  test('a day that lost its last entry is dropped from the map, not merged over', () async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final yesterday = DateTime(today.year, today.month, today.day - 1);
+    final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
+    final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+    final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
+    when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
+    when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+    when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
+      (_) async => Success({
+        today: DailyMacros(entries: [FoodLogEntryFactory.build()]),
+        yesterday: DailyMacros(entries: [FoodLogEntryFactory.build()]),
+      }),
+    );
+    final cubit = CubitsFactories.buildDietCubit(
+      getDailyMacrosUseCase: getDailyMacrosUseCase,
+      getMacroGoalsUseCase: getMacroGoalsUseCase,
+      getMacrosInRangeUseCase: getMacrosInRangeUseCase,
+    );
+    await cubit.loadToday();
+    expect(cubit.state.macrosByDate.keys, contains(yesterday));
+
+    when(() => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to'))).thenAnswer(
+      (_) async => Success({
+        today: DailyMacros(entries: [FoodLogEntryFactory.build()]),
+      }),
+    );
+    await cubit.refresh();
+
+    expect(cubit.state.macrosByDate.keys, isNot(contains(yesterday)));
+    expect(cubit.state.streak.days, 1);
+    await cubit.close();
   });
 
   blocPresentationTest<DietCubit, DietState, DietPresentationEvent>(
@@ -371,6 +490,7 @@ void main() {
       final watchDataChangesUseCase = MockWatchDataChangesUseCase();
       when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => const Stream<SyncTopic>.empty());
       return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
         hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
         getDailyMacrosUseCase: getDailyMacrosUseCase,
         getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -393,6 +513,7 @@ void main() {
       final watchDataChangesUseCase = MockWatchDataChangesUseCase();
       when(() => watchDataChangesUseCase(topics: any(named: 'topics'))).thenAnswer((_) => const Stream<SyncTopic>.empty());
       return CubitsFactories.buildDietCubit(
+        getMacrosInRangeUseCase: _noRangeUseCase(),
         hasSeenDietIntroUseCase: hasSeenDietIntroUseCase,
         getDailyMacrosUseCase: getDailyMacrosUseCase,
         getMacroGoalsUseCase: getMacroGoalsUseCase,
@@ -406,7 +527,7 @@ void main() {
   test('markIntroSeen records that the intro was seen', () async {
     final markDietIntroSeenUseCase = MockMarkDietIntroSeenUseCase();
     when(markDietIntroSeenUseCase.call).thenAnswer((_) async {});
-    final cubit = CubitsFactories.buildDietCubit(markDietIntroSeenUseCase: markDietIntroSeenUseCase);
+    final cubit = CubitsFactories.buildDietCubit(getMacrosInRangeUseCase: _noRangeUseCase(), markDietIntroSeenUseCase: markDietIntroSeenUseCase);
 
     await cubit.markIntroSeen();
 

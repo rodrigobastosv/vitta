@@ -49,13 +49,18 @@ DietCubit buildCubit({required MockUpdateFoodLogUseCase updateFoodLogUseCase, Un
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   final getDailyMacrosUseCase = MockGetDailyMacrosUseCase();
   final getMacroGoalsUseCase = MockGetMacroGoalsUseCase();
+  final getMacrosInRangeUseCase = MockGetMacrosInRangeUseCase();
   when(getAppSettingsUseCase.call).thenReturn(AppSettings(unitSystem: unitSystem));
   when(() => getDailyMacrosUseCase(date: any(named: 'date'))).thenAnswer((_) async => const Success(DailyMacros(entries: [])));
   when(getMacroGoalsUseCase.call).thenReturn(MacroGoalsFactory.build());
+  when(
+    () => getMacrosInRangeUseCase(from: any(named: 'from'), to: any(named: 'to')),
+  ).thenAnswer((_) async => const Success(<DateTime, DailyMacros>{}));
   return CubitsFactories.buildDietCubit(
     getDailyMacrosUseCase: getDailyMacrosUseCase,
     updateFoodLogUseCase: updateFoodLogUseCase,
     getMacroGoalsUseCase: getMacroGoalsUseCase,
+    getMacrosInRangeUseCase: getMacrosInRangeUseCase,
     getAppSettingsUseCase: getAppSettingsUseCase,
   );
 }

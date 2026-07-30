@@ -81,7 +81,7 @@ class _DietCalendarSheetState extends State<_DietCalendarSheet> {
                 builder: (context, state) => _MonthGrid(
                   month: _displayedMonth,
                   selectedDate: state.date,
-                  loggedMacros: state.loggedMacrosInMonth,
+                  loggedMacros: state.macrosByDate,
                   macroGoals: state.macroGoals,
                   firstDayOfWeekIndex: materialLocalizations.firstDayOfWeekIndex,
                   onDaySelected: (day) => Navigator.of(context).pop(day),

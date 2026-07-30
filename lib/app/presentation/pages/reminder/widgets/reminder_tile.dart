@@ -95,16 +95,16 @@ class ReminderTile extends StatelessWidget {
     final overdue = reminder.isOverdue();
     final remindAt = reminder.remindAt;
     return [
-      if (overdue) VTBadge(label: l10n.reminderOverdueBadge, color: VTColors.error),
+      if (overdue) VTBadge(label: l10n.reminderOverdueBadge, color: colorScheme.error),
       if (remindAt != null)
         Row(
           mainAxisSize: .min,
           children: [
-            Icon(Icons.notifications_none_rounded, size: 14, color: overdue ? VTColors.error : colorScheme.onSurfaceVariant),
+            Icon(Icons.notifications_none_rounded, size: 14, color: overdue ? colorScheme.error : colorScheme.onSurfaceVariant),
             const VTGap.xs(),
             Text(
               context.materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(remindAt)),
-              style: VTTextStyles.caption(context).copyWith(color: overdue ? VTColors.error : null, fontWeight: overdue ? .w700 : null),
+              style: VTTextStyles.caption(context).copyWith(color: overdue ? colorScheme.error : null, fontWeight: overdue ? .w700 : null),
             ),
           ],
         ),

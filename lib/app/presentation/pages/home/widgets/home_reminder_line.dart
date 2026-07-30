@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/inputs/vt_check_circle.dart';
-import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 
@@ -25,7 +24,7 @@ class HomeReminderLine extends StatelessWidget {
           const VTGap.s(),
           Text(
             context.materialLocalizations.formatTimeOfDay(TimeOfDay.fromDateTime(remindAt)),
-            style: VTTextStyles.caption(context).copyWith(color: isOverdue ? VTColors.error : colorScheme.onSurfaceVariant, fontWeight: .w600),
+            style: VTTextStyles.caption(context).copyWith(color: isOverdue ? colorScheme.error : colorScheme.onSurfaceVariant, fontWeight: .w600),
           ),
         ],
       ],

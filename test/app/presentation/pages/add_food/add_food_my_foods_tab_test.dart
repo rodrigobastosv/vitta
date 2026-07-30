@@ -7,6 +7,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_extra.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_page.dart';
@@ -36,6 +37,7 @@ Future<void> pumpAddFood(WidgetTester tester, {List<Food> myFoods = const [], Lo
   }
   G.registerFactory<AddFoodCubit>(
     () => CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase,
       getFavoriteFoodsUseCase: getFavoriteFoodsUseCase,
       getRecentSearchesUseCase: getRecentSearchesUseCase,
@@ -57,9 +59,21 @@ Future<void> pumpAddFood(WidgetTester tester, {List<Food> myFoods = const [], Lo
   await tester.pumpAndSettle();
 }
 
+// onInit now also reads the recent meals behind the Recent tab, so any test that
+// builds the cubit has to answer it - the tax the routine cycle already puts on
+// the workout tests.
+MockGetRecentMealsUseCase _noRecentMealsUseCase() {
+  final getRecentMealsUseCase = MockGetRecentMealsUseCase();
+  when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
+  return getRecentMealsUseCase;
+}
+
 void main() {
   testWidgets('the foods this user added are one tap away, in their own tab', (tester) async {
-    await pumpAddFood(tester, myFoods: [FoodFactory.build(id: 'mine-1', name: 'Granola caseira')]);
+    await pumpAddFood(
+      tester,
+      myFoods: [FoodFactory.build(id: 'mine-1', name: 'Granola caseira')],
+    );
 
     expect(find.text('Granola caseira'), findsNothing, reason: 'the search tab is what opens');
 

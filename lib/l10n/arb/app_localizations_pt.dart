@@ -816,6 +816,79 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remover';
 
   @override
+  String get dietLogMealAgainAction => 'Registrar esta refeição de novo';
+
+  @override
+  String get dietRecentMealsTitle => 'Refeições recentes';
+
+  @override
+  String dietMealLoggedToast(int count, String meal) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count alimentos adicionados em $meal',
+      one: '1 alimento adicionado em $meal',
+      zero: 'Nada adicionado',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dietNutritionScoreTitle => 'Nota nutricional';
+
+  @override
+  String get dietNutritionScoreSubtitle => 'Como o dia inteiro ficou em relação às suas metas';
+
+  @override
+  String get dietNutritionScoreMainNutrients => 'Principais nutrientes';
+
+  @override
+  String get dietNutritionScoreEmpty => 'Registre algo e o dia ganha uma nota.';
+
+  @override
+  String get nutritionGradePoor => 'Precisa melhorar';
+
+  @override
+  String get nutritionGradeFair => 'Razoável';
+
+  @override
+  String get nutritionGradeGood => 'Bom';
+
+  @override
+  String get nutritionGradeExcellent => 'Excelente';
+
+  @override
+  String get nutrientVerdictLow => 'Abaixo';
+
+  @override
+  String get nutrientVerdictOnTrack => 'No alvo';
+
+  @override
+  String get nutrientVerdictHigh => 'Acima';
+
+  @override
+  String dietStreakTooltip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Sequência de $count dias',
+      one: 'Sequência de 1 dia',
+      zero: 'Nenhuma sequência ainda',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dietWeekDayTooltip(String date, int calories) {
+    return '$date, $calories kcal';
+  }
+
+  @override
+  String dietWeekDayNothingTooltip(String date) {
+    return '$date, nada registrado';
+  }
+
+  @override
   String get dayToday => 'Hoje';
 
   @override

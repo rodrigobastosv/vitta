@@ -5,6 +5,7 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
@@ -12,6 +13,15 @@ import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
+
+// onInit now also reads the recent meals behind the Recent tab, so any test that
+// builds the cubit has to answer it - the tax the routine cycle already puts on
+// the workout tests.
+MockGetRecentMealsUseCase _noRecentMealsUseCase() {
+  final getRecentMealsUseCase = MockGetRecentMealsUseCase();
+  when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
+  return getRecentMealsUseCase;
+}
 
 void main() {
   MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
@@ -49,7 +59,11 @@ void main() {
   }
 
   test('starts with no search and no favorites', () {
-    final cubit = CubitsFactories.buildAddFoodCubit(getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(), getRecentSearchesUseCase: stubbedRecents());
+    final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
+      getRecentSearchesUseCase: stubbedRecents(),
+    );
 
     expect(cubit.state.results, isNull);
     expect(cubit.state.favorites, isEmpty);
@@ -58,6 +72,7 @@ void main() {
   blocTest<AddFoodCubit, AddFoodState>(
     'onInit lands the recent searches immediately, then the favorites once they are fetched',
     build: () => CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(['banana']),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -77,6 +92,7 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -100,6 +116,7 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -123,6 +140,7 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => Success(food));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -145,6 +163,7 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: offFood)).thenAnswer((_) async => Success(savedFood));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -173,6 +192,7 @@ void main() {
     final unfavoriteFoodUseCase = MockUnfavoriteFoodUseCase();
     when(() => unfavoriteFoodUseCase(foodId: 'saved-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -199,6 +219,7 @@ void main() {
     final unfavoriteFoodUseCase = MockUnfavoriteFoodUseCase();
     when(() => unfavoriteFoodUseCase(foodId: 'food-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -220,6 +241,7 @@ void main() {
     final favoriteFoodUseCase = MockFavoriteFoodUseCase();
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),

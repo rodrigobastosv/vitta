@@ -62,4 +62,40 @@ void main() {
   test('premium is not a text colour on a card', () {
     expect(contrast(VTColors.premium, VTColors.cardLight), lessThan(4.5));
   });
+
+  // Error is the one pair that had no dark-theme variant: the brand red served
+  // both schemes, so "66 kcal over" measured 2.41:1 on a dark card - and so did
+  // every inline sheet error message. Both directions are asserted because a
+  // single value cannot satisfy them, which is the whole reason there are two.
+  group('error as ink on a surface', () {
+    const lightSurfaces = {
+      'surfaceLight': VTColors.surfaceLight,
+      'cardLight': VTColors.cardLight,
+      'surfaceContainerLight': VTColors.surfaceContainerLight,
+    };
+    const darkSurfaces = {'surfaceDark': VTColors.surfaceDark, 'cardDark': VTColors.cardDark, 'surfaceContainerDark': VTColors.surfaceContainerDark};
+
+    test('errorLight clears AA on every light surface', () {
+      for (final entry in lightSurfaces.entries) {
+        final ratio = contrast(VTColors.errorLight, entry.value);
+        expect(ratio, greaterThanOrEqualTo(4.5), reason: 'errorLight on ${entry.key} is only ${ratio.toStringAsFixed(2)}:1');
+      }
+    });
+
+    test('errorDark clears AA on every dark surface', () {
+      for (final entry in darkSurfaces.entries) {
+        final ratio = contrast(VTColors.errorDark, entry.value);
+        expect(ratio, greaterThanOrEqualTo(4.5), reason: 'errorDark on ${entry.key} is only ${ratio.toStringAsFixed(2)}:1');
+      }
+    });
+
+    test('the brand red is what the dark variant exists to replace', () {
+      expect(contrast(VTColors.error, VTColors.cardDark), lessThan(4.5));
+    });
+
+    test('each error tone carries its own ink', () {
+      expect(contrast(VTColors.errorLight, VTColors.onErrorLight), greaterThanOrEqualTo(4.5));
+      expect(contrast(VTColors.errorDark, VTColors.onErrorDark), greaterThanOrEqualTo(4.5));
+    });
+  });
 }

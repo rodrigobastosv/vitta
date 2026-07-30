@@ -64,8 +64,24 @@ abstract class VTColors {
   // white ink. warning itself is only 2.17:1 against white and cannot.
   static const Color warningStrong = Color(0xFFA85F00);
 
+  // The brand red, for anything error is a *fill* of: a calendar dot, the swipe
+  // background, a chart bar, the rest timer's ramp. It is dark, so it carries
+  // white ink and reads on a light surface.
   static const Color error = Color(0xFFBA1A1A);
   static const Color onError = Color(0xFFFFFFFF);
+
+  // Error as *ink on a surface*, which is a different job and needs a value per
+  // theme - errorLight/errorDark are named for the theme they belong to, like
+  // onSurfaceVariantLight/Dark. The dark one exists because the brand red is
+  // only 2.41:1 on a dark card and misses AA badly; every other pair in the dark
+  // scheme already had a dark-theme variant and error was the one that did not.
+  // It is deliberately in the coralLight family rather than Material's pinker
+  // default, so it still reads as this app's red.
+  static const Color errorLight = Color(0xFFBA1A1A);
+  static const Color errorDark = Color(0xFFF2867B);
+  static const Color onErrorLight = Color(0xFFFFFFFF);
+  static const Color onErrorDark = Color(0xFF690005);
+
   static const Color errorContainerLight = Color(0xFFFFDAD6);
   static const Color errorContainerDark = Color(0xFF93000A);
   static const Color onErrorContainerLight = Color(0xFF410002);

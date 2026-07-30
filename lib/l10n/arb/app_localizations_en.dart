@@ -814,6 +814,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietDeleteLogTooltip => 'Remove';
 
   @override
+  String get dietLogMealAgainAction => 'Log this meal again';
+
+  @override
+  String get dietRecentMealsTitle => 'Recent meals';
+
+  @override
+  String dietMealLoggedToast(int count, String meal) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count foods added to $meal',
+      one: '1 food added to $meal',
+      zero: 'Nothing added',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get dietNutritionScoreTitle => 'Nutrition score';
+
+  @override
+  String get dietNutritionScoreSubtitle => 'How the whole day landed on your targets';
+
+  @override
+  String get dietNutritionScoreMainNutrients => 'Main nutrients';
+
+  @override
+  String get dietNutritionScoreEmpty => 'Log something and the day gets a score.';
+
+  @override
+  String get nutritionGradePoor => 'Needs work';
+
+  @override
+  String get nutritionGradeFair => 'Fair';
+
+  @override
+  String get nutritionGradeGood => 'Good';
+
+  @override
+  String get nutritionGradeExcellent => 'Excellent';
+
+  @override
+  String get nutrientVerdictLow => 'Low';
+
+  @override
+  String get nutrientVerdictOnTrack => 'On track';
+
+  @override
+  String get nutrientVerdictHigh => 'High';
+
+  @override
+  String dietStreakTooltip(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count day streak',
+      one: '1 day streak',
+      zero: 'No logging streak yet',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String dietWeekDayTooltip(String date, int calories) {
+    return '$date, $calories kcal';
+  }
+
+  @override
+  String dietWeekDayNothingTooltip(String date) {
+    return '$date, nothing logged';
+  }
+
+  @override
   String get dayToday => 'Today';
 
   @override

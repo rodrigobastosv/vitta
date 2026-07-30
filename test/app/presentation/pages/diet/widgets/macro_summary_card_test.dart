@@ -6,6 +6,7 @@ import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/nutrition_score_row.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../../factories/entities/food_factory.dart';
@@ -13,12 +14,14 @@ import '../../../../../factories/entities/food_log_entry_factory.dart';
 import '../../../../../factories/entities/food_log_factory.dart';
 
 void main() {
-  Future<void> pumpMacroSummaryCard(WidgetTester tester, {required DailyMacros dailyMacros}) => tester.pumpWidget(
+  Future<void> pumpMacroSummaryCard(WidgetTester tester, {required DailyMacros dailyMacros, VoidCallback? onOpenScore}) => tester.pumpWidget(
     MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: MacroSummaryCard(dailyMacros: dailyMacros, macroGoals: MacroGoals.defaultGoals),
+        body: SingleChildScrollView(
+          child: MacroSummaryCard(dailyMacros: dailyMacros, macroGoals: MacroGoals.defaultGoals, onOpenScore: onOpenScore),
+        ),
       ),
     ),
   );
@@ -74,5 +77,29 @@ void main() {
     await pumpMacroSummaryCard(tester, dailyMacros: metDay);
 
     expect(tester.widget<VTMacroRing>(find.byType(VTMacroRing)).color, VTColors.green);
+  });
+
+  testWidgets('the score opens from the card once the day has something in it', (tester) async {
+    var opened = false;
+    await pumpMacroSummaryCard(tester, dailyMacros: buildDailyMacros(const {}), onOpenScore: () => opened = true);
+
+    await tester.tap(find.byType(NutritionScoreRow));
+    await tester.pumpAndSettle();
+
+    expect(opened, isTrue);
+  });
+
+  // A day nobody has logged anything on would score 0 out of 100, which is a
+  // verdict on a day that has not happened yet.
+  testWidgets('an empty day is not scored at all', (tester) async {
+    await pumpMacroSummaryCard(tester, dailyMacros: const DailyMacros(entries: []), onOpenScore: () {});
+
+    expect(find.byType(NutritionScoreRow), findsNothing);
+  });
+
+  testWidgets('passing no callback leaves the score off the card', (tester) async {
+    await pumpMacroSummaryCard(tester, dailyMacros: buildDailyMacros(const {}));
+
+    expect(find.byType(NutritionScoreRow), findsNothing);
   });
 }

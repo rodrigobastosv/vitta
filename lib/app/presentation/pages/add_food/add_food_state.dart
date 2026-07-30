@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 
 class AddFoodState extends Equatable {
@@ -10,6 +11,7 @@ class AddFoodState extends Equatable {
     this.myFoods = const [],
     this.recentSearches = const [],
     this.recentFoods = const [],
+    this.recentMeals = const [],
     this.query = '',
     this.tab = AddFoodTab.search,
   });
@@ -23,6 +25,8 @@ class AddFoodState extends Equatable {
   final List<String> recentSearches;
 
   final List<FoodLogEntry> recentFoods;
+
+  final List<RecentMeal> recentMeals;
 
   final String query;
 
@@ -38,6 +42,7 @@ class AddFoodState extends Equatable {
     List<Food>? myFoods,
     List<String>? recentSearches,
     List<FoodLogEntry>? recentFoods,
+    List<RecentMeal>? recentMeals,
     String? query,
     AddFoodTab? tab,
   }) => AddFoodState(
@@ -46,10 +51,11 @@ class AddFoodState extends Equatable {
     myFoods: myFoods ?? this.myFoods,
     recentSearches: recentSearches ?? this.recentSearches,
     recentFoods: recentFoods ?? this.recentFoods,
+    recentMeals: recentMeals ?? this.recentMeals,
     query: query ?? this.query,
     tab: tab ?? this.tab,
   );
 
   @override
-  List<Object?> get props => [results, favorites, myFoods, recentSearches, recentFoods, query, tab];
+  List<Object?> get props => [results, favorites, myFoods, recentSearches, recentFoods, recentMeals, query, tab];
 }

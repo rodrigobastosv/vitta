@@ -11,14 +11,16 @@ import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_progress_row.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/micronutrient_row.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/nutrition_score_row.dart';
 
 class MacroSummaryCard extends StatefulWidget {
-  const MacroSummaryCard({required this.dailyMacros, required this.macroGoals, this.onEditGoals, super.key});
+  const MacroSummaryCard({required this.dailyMacros, required this.macroGoals, this.onEditGoals, this.onOpenScore, super.key});
 
   final DailyMacros dailyMacros;
   final MacroGoals macroGoals;
 
   final VoidCallback? onEditGoals;
+  final VoidCallback? onOpenScore;
 
   @override
   State<MacroSummaryCard> createState() => _MacroSummaryCardState();
@@ -59,7 +61,7 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
                       const VTGap.xs(),
                       Text(
                         difference >= 0 ? l10n.dietCaloriesLeft(difference) : l10n.dietCaloriesOver(-difference),
-                        style: VTTextStyles.overline(context).copyWith(color: difference >= 0 ? colorScheme.primary : VTColors.error, fontWeight: .w700),
+                        style: VTTextStyles.overline(context).copyWith(color: difference >= 0 ? colorScheme.primary : colorScheme.error, fontWeight: .w700),
                       ),
                     ],
                   ),
@@ -99,6 +101,10 @@ class _MacroSummaryCardState extends State<MacroSummaryCard> {
               ),
             ],
           ),
+          // A score for a day with nothing in it would read 0 / Poor, which is a
+          // verdict on a day that has not happened yet.
+          if (dailyMacros.entries.isNotEmpty && widget.onOpenScore != null)
+            NutritionScoreRow(dailyMacros: dailyMacros, macroGoals: macroGoals, onTap: widget.onOpenScore!),
           if (hasMicronutrients) ...[
             const VTGap.m(),
             const Divider(height: 1),

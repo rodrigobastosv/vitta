@@ -7,6 +7,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
@@ -15,6 +16,15 @@ import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../factories/entities/food_log_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
+
+// onInit now also reads the recent meals behind the Recent tab, so any test that
+// builds the cubit has to answer it - the tax the routine cycle already puts on
+// the workout tests.
+MockGetRecentMealsUseCase _noRecentMealsUseCase() {
+  final getRecentMealsUseCase = MockGetRecentMealsUseCase();
+  when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
+  return getRecentMealsUseCase;
+}
 
 void main() {
   MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
@@ -44,6 +54,7 @@ void main() {
   blocTest<AddFoodCubit, AddFoodState>(
     'onInit loads the foods this user added',
     build: () => CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       getFavoriteFoodsUseCase: stubbedFavorites(),
@@ -62,6 +73,7 @@ void main() {
       final getMyFoodsUseCase = MockGetMyFoodsUseCase();
       when(getMyFoodsUseCase.call).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
       return CubitsFactories.buildAddFoodCubit(
+        getRecentMealsUseCase: _noRecentMealsUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         getRecentSearchesUseCase: stubbedRecents(),
         getFavoriteFoodsUseCase: stubbedFavorites(),
@@ -88,18 +100,14 @@ void main() {
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
       getMyFoodsUseCase: getMyFoodsUseCase,
     );
 
     when(getMyFoodsUseCase.call).thenAnswer((_) async => Success([savedProduct]));
-    await cubit.logFood(
-      food: newProduct,
-      loggedDate: DateTime(2026, 7, 26),
-      mealType: .breakfast,
-      quantity: const LoggedQuantity.weight(40),
-    );
+    await cubit.logFood(food: newProduct, loggedDate: DateTime(2026, 7, 26), mealType: .breakfast, quantity: const LoggedQuantity.weight(40));
 
     expect(cubit.state.myFoods, [savedProduct]);
   });
@@ -118,17 +126,13 @@ void main() {
       ),
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
       getMyFoodsUseCase: getMyFoodsUseCase,
     );
 
-    await cubit.logFood(
-      food: catalogFood,
-      loggedDate: DateTime(2026, 7, 26),
-      mealType: .lunch,
-      quantity: const LoggedQuantity.weight(100),
-    );
+    await cubit.logFood(food: catalogFood, loggedDate: DateTime(2026, 7, 26), mealType: .lunch, quantity: const LoggedQuantity.weight(100));
 
     verifyNever(getMyFoodsUseCase.call);
   });

@@ -17,9 +17,11 @@ void main() {
         GoRoute(
           path: AppRoute.addFood.path,
           name: AppRoute.addFood.name,
+          // It is a labelled bar item now, not an app-bar glyph, so it is
+          // pumped in the Row it actually lives in.
           builder: (context, state) => Scaffold(
-            appBar: AppBar(
-              actions: [MealSuggestionAction(date: DateTime(2026, 7, 19), onLogged: () {})],
+            bottomNavigationBar: Row(
+              children: [MealSuggestionAction(date: DateTime(2026, 7, 19), onLogged: () {})],
             ),
           ),
         ),
@@ -48,7 +50,7 @@ void main() {
   }
 
   Future<String?> tapAction(WidgetTester tester) async {
-    await tester.tap(find.byType(IconButton));
+    await tester.tap(find.byType(InkWell));
     await tester.pumpAndSettle();
     return pushedRoutes.isEmpty ? null : pushedRoutes.last;
   }

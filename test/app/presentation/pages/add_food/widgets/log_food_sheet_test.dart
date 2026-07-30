@@ -7,6 +7,7 @@ import 'package:vitta/app/design_system/components/general/vt_stepper.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
@@ -17,15 +18,17 @@ import '../../../../../factories/entities/food_factory.dart';
 import '../../../../../factories/entities/food_log_factory.dart';
 import '../../../../../mocks/use_cases_mocks.dart';
 
-final _measureField = find.byWidgetPredicate(
-  (widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false),
-);
+final _measureField = find.byWidgetPredicate((widget) => widget is TextField && (widget.decoration?.labelText?.startsWith('Quantity') ?? false));
 final _unitsField = find.descendant(of: find.byType(VTStepper), matching: find.byType(TextField));
 
 AddFoodCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
   final getAppSettingsUseCase = MockGetAppSettingsUseCase();
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
-  return CubitsFactories.buildAddFoodCubit(logFoodUseCase: logFoodUseCase, getAppSettingsUseCase: getAppSettingsUseCase);
+  return CubitsFactories.buildAddFoodCubit(
+    getRecentMealsUseCase: _noRecentMealsUseCase(),
+    logFoodUseCase: logFoodUseCase,
+    getAppSettingsUseCase: getAppSettingsUseCase,
+  );
 }
 
 Future<void> _pumpSheet(WidgetTester tester, {required AddFoodCubit cubit, required Food food}) async {
@@ -50,6 +53,15 @@ Future<void> _pumpSheet(WidgetTester tester, {required AddFoodCubit cubit, requi
   );
   await tester.tap(find.text('open'));
   await tester.pumpAndSettle();
+}
+
+// onInit now also reads the recent meals behind the Recent tab, so any test that
+// builds the cubit has to answer it - the tax the routine cycle already puts on
+// the workout tests.
+MockGetRecentMealsUseCase _noRecentMealsUseCase() {
+  final getRecentMealsUseCase = MockGetRecentMealsUseCase();
+  when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
+  return getRecentMealsUseCase;
 }
 
 void main() {

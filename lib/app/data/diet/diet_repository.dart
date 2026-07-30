@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:clock/clock.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/data/diet/datasources/http/open_food_facts_datasource.dart';
@@ -22,6 +23,7 @@ import 'package:vitta/app/domain/diet/entities/macro_gap.dart';
 import 'package:vitta/app/domain/diet/entities/macro_goals.dart';
 import 'package:vitta/app/domain/diet/entities/meal_suggestions.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/domain/diet/entities/scanned_meal.dart';
@@ -175,6 +177,27 @@ class DietRepository {
         }
       }
       return Success(distinct);
+    });
+  }
+
+  static const int _recentMealLookbackDays = 14;
+
+  // Read by date range rather than through getRecentEntries, which caps at a row
+  // count: a cap can land mid-meal, and offering to re-log three of a breakfast's
+  // four foods without saying so is worse than not offering it at all.
+  Future<Result<VTError, List<RecentMeal>>> getRecentMeals({required int limit}) async {
+    final now = clock.now();
+    final to = DateTime(now.year, now.month, now.day);
+    final from = DateTime(to.year, to.month, to.day - _recentMealLookbackDays);
+    final entriesResult = await _supabaseDietDataSource.getLogsInRange(from: from, to: to);
+    return entriesResult.when(Failure.new, (entries) {
+      final entriesByMeal = <(DateTime, MealType), List<FoodLogEntry>>{};
+      for (final entry in entries) {
+        entriesByMeal.putIfAbsent((entry.log.loggedDate, entry.log.mealType), () => []).add(entry);
+      }
+      final meals = entriesByMeal.entries.map((group) => RecentMeal(date: group.key.$1, mealType: group.key.$2, entries: group.value)).toList()
+        ..sort((first, second) => first.date == second.date ? second.mealType.index.compareTo(first.mealType.index) : second.date.compareTo(first.date));
+      return Success(meals.take(limit).toList());
     });
   }
 

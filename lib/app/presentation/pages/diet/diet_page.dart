@@ -17,10 +17,11 @@ import 'package:vitta/app/presentation/pages/copy_meals/copy_meals_extra.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/diet/diet_state.dart';
-import 'package:vitta/app/presentation/pages/diet/widgets/diet_date_selector.dart';
+import 'package:vitta/app/presentation/pages/diet/widgets/diet_week_strip.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/edit_food_log_sheet.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/macro_summary_card.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_section_card.dart';
+import 'package:vitta/app/presentation/pages/nutrition_score/nutrition_score_extra.dart';
 import 'package:vitta/app/presentation/pages/recipes/recipes_extra.dart';
 
 class DietPage extends StatelessWidget {
@@ -74,11 +75,11 @@ class DietPage extends StatelessWidget {
           isLoaded: state.isLoaded,
           skeleton: const ListSkeleton(headerHeight: 300),
           children: [
-            DietDateSelector(
+            DietWeekStrip(
               date: state.date,
-              canGoToNextDay: !cubit.isViewingToday,
-              onPreviousDay: cubit.goToPreviousDay,
-              onNextDay: cubit.goToNextDay,
+              macrosByDate: state.macrosByDate,
+              macroGoals: state.macroGoals,
+              streak: state.streak,
               onPickDate: cubit.goToDate,
             ),
             const VTGap.m(),
@@ -91,6 +92,10 @@ class DietPage extends StatelessWidget {
                   await cubit.refresh(trigger: .quiet);
                 }
               },
+              onOpenScore: () => context.pushRoute(
+                .nutritionScore,
+                extra: NutritionScoreExtra(date: state.date, dailyMacros: state.dailyMacros, macroGoals: state.macroGoals),
+              ),
             ),
             const VTGap.l(),
             if (state.dailyMacros.entries.isEmpty)

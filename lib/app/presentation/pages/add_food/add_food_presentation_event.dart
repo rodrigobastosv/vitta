@@ -13,6 +13,13 @@ class FoodLogged implements AddFoodPresentationEvent {
   final MealType mealType;
 }
 
+class MealLogged implements AddFoodPresentationEvent {
+  const MealLogged({required this.mealType, required this.foodCount});
+
+  final MealType mealType;
+  final int foodCount;
+}
+
 class AddFoodError implements AddFoodPresentationEvent {
   const AddFoodError();
 }

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
-import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
+import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
 import 'package:vitta/app/design_system/components/general/vt_segmented_tabs.dart';
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
@@ -20,13 +21,13 @@ import 'package:vitta/app/presentation/pages/add_food/add_food_mode.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/add_food_action_bar.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_list.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/ingredient_quantity_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
-import 'package:vitta/app/presentation/pages/add_food/widgets/meal_scan_action.dart';
-import 'package:vitta/app/presentation/pages/add_food/widgets/meal_suggestion_action.dart';
-import 'package:vitta/app/presentation/pages/add_food/widgets/recent_foods_list.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/recent_food_tile.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/recent_meals_list.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -52,42 +53,27 @@ class AddFoodPage extends StatelessWidget {
             context.hideLoading();
           case FoodLogged(:final foodName, :final mealType):
             context.showToast(title: foodName, message: l10n.dietFoodLoggedToast(mealType.getLabel(l10n)));
+          case MealLogged(:final mealType, :final foodCount):
+            context.showToast(title: mealType.getLabel(l10n), message: l10n.dietMealLoggedToast(foodCount, mealType.getLabel(l10n)));
           case AddFoodError():
             context.showErrorToast();
         }
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(
-          title: Text(_isPicking ? l10n.dietPickIngredientTitle : l10n.dietFoodSearchTitle),
-          actions: [
-            if (!_isPicking) ...[
-              MealSuggestionAction(
-                date: loggedDate,
-                onLogged: () {
-                  context.showToast(title: l10n.mealSuggestionLoggedTitle, message: l10n.mealSuggestionLoggedMessage);
-                  Navigator.of(context).pop();
-                },
-              ),
-              MealScanAction(
+        appBar: AppBar(title: Text(_isPicking ? l10n.dietPickIngredientTitle : l10n.dietFoodSearchTitle)),
+        // Picking an ingredient for a recipe has no use for any of these: a
+        // photographed plate, a suggested meal and a brand-new custom food are
+        // all ways to add food to a *day*.
+        bottomNavigationBar: _isPicking
+            ? null
+            : AddFoodActionBar(
                 date: loggedDate,
                 onLogged: () {
                   context.showToast(title: l10n.mealScanLoggedTitle, message: l10n.mealScanLoggedMessage);
                   Navigator.of(context).pop();
                 },
+                onFoodCreated: (food) => _addFood(context, food),
               ),
-            ],
-            IconButton(
-              icon: const Icon(Icons.add_circle_outline),
-              tooltip: l10n.dietCustomFoodTitle,
-              onPressed: () async {
-                final food = await context.pushRoute<Food>(.customFood);
-                if (food != null && context.mounted) {
-                  await _addFood(context, food);
-                }
-              },
-            ),
-          ],
-        ),
         body: Column(
           children: [
             Padding(
@@ -176,14 +162,39 @@ class AddFoodPage extends StatelessWidget {
     ],
   );
 
+  // Foods first, then whole meals: a single food is the finer-grained answer and
+  // the one most taps are after, while re-logging a whole breakfast is the
+  // shortcut worth scrolling to.
   Widget _buildRecentTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Padding(
     key: const ValueKey(AddFoodTab.recent),
     padding: const EdgeInsets.only(top: VTSpacing.m),
-    child: RecentFoodsList(
-      entries: state.recentFoods,
-      onOpenFood: (entry) => _addFood(context, entry.food),
-      onQuickAdd: (entry) => _quickAdd(context, cubit, entry),
-    ),
+    child: state.recentFoods.isEmpty && (_isPicking || state.recentMeals.isEmpty)
+        ? VTEmptyState(icon: Icons.history, title: l10n.dietRecentEmptyTitle, message: l10n.dietRecentEmptyMessage)
+        : ListView(
+            padding: const EdgeInsets.only(bottom: VTSpacing.xxl),
+            children: [
+              for (final (index, entry) in state.recentFoods.indexed) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
+                  child: VTAppearEffect(
+                    index: index,
+                    child: RecentFoodTile(entry: entry, onTap: () => _addFood(context, entry.food), onQuickAdd: () => _quickAdd(context, cubit, entry)),
+                  ),
+                ),
+                const VTGap.s(),
+              ],
+              // A whole meal cannot stand in for one recipe ingredient, so the
+              // section is search-and-log only.
+              if (!_isPicking && state.recentMeals.isNotEmpty) ...[
+                const VTGap.m(),
+                RecentMealsList(
+                  title: l10n.dietRecentMealsTitle,
+                  meals: state.recentMeals,
+                  onLogAgain: (meal) => cubit.logMeal(meal: meal, loggedDate: loggedDate),
+                ),
+              ],
+            ],
+          ),
   );
 
   Widget _buildFavoritesTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Padding(

@@ -8,11 +8,14 @@ import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/domain/diet/use_cases/add_recent_search_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/clear_recent_searches_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_my_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_recent_meals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/log_food_use_case.dart';
@@ -39,6 +42,8 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     required this._clearRecentSearchesUseCase,
     required this._getRecentlyLoggedFoodsUseCase,
     required this._getMyFoodsUseCase,
+    required this._getRecentMealsUseCase,
+    required this._copyFoodLogsUseCase,
   }) : super(const AddFoodState());
 
   final SearchFoodsUseCase _searchFoodsUseCase;
@@ -53,6 +58,8 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   final ClearRecentSearchesUseCase _clearRecentSearchesUseCase;
   final GetRecentlyLoggedFoodsUseCase _getRecentlyLoggedFoodsUseCase;
   final GetMyFoodsUseCase _getMyFoodsUseCase;
+  final GetRecentMealsUseCase _getRecentMealsUseCase;
+  final CopyFoodLogsUseCase _copyFoodLogsUseCase;
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
 
@@ -62,6 +69,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   void onInit() {
     emit(state.copyWith(recentSearches: _getRecentSearchesUseCase()));
     loadRecentFoods();
+    loadRecentMeals();
     loadMyFoods();
     loadFavorites();
   }
@@ -69,6 +77,30 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   Future<void> loadRecentFoods() async {
     final recentResult = await _getRecentlyLoggedFoodsUseCase();
     recentResult.when((_) {}, (recentFoods) => emit(state.copyWith(recentFoods: recentFoods)));
+  }
+
+  Future<void> loadRecentMeals() async {
+    final recentMealsResult = await _getRecentMealsUseCase();
+    recentMealsResult.when((_) {}, (recentMeals) => emit(state.copyWith(recentMeals: recentMeals)));
+  }
+
+  // A whole meal goes back in through the copy path rather than a loop of
+  // LogFoodUseCase: it rebuilds one request per entry against the target date,
+  // keeping each entry's own quantity and meal, and inserts them in a single
+  // round trip. Nothing new was needed in the data layer.
+  Future<void> logMeal({required RecentMeal meal, required DateTime loggedDate}) async {
+    final copiedResult = await withLoadingOverlay(
+      () => _copyFoodLogsUseCase(entries: meal.entries, targetDate: loggedDate),
+      // A write, so the overlay is right here - the skeleton policy is only
+      // about first reads.
+      showOverlay: true,
+      showLoadingEvent: AddFoodShowLoading(),
+      hideLoadingEvent: AddFoodHideLoading(),
+    );
+    copiedResult.when((_) => emitPresentation(const AddFoodError()), (_) {
+      Log.action('recent_meal_logged', data: {'meal': meal.mealType.wireValue, 'foods': meal.entries.length});
+      emitPresentation(MealLogged(mealType: meal.mealType, foodCount: meal.entries.length));
+    });
   }
 
   Future<void> loadMyFoods() async {
@@ -113,6 +145,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
           myFoods: state.myFoods,
           recentSearches: state.recentSearches,
           recentFoods: state.recentFoods,
+          recentMeals: state.recentMeals,
           tab: state.tab,
         ),
       );

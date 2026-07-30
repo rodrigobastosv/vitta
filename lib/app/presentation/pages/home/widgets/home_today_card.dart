@@ -45,7 +45,7 @@ class HomeTodayCard extends StatelessWidget {
                     difference >= 0 ? l10n.dietCaloriesLeft(difference) : l10n.dietCaloriesOver(-difference),
                     style: VTTextStyles.overline(
                       context,
-                    ).copyWith(color: difference >= 0 ? colorScheme.onSurfaceVariant : VTColors.error, fontWeight: .w700),
+                    ).copyWith(color: difference >= 0 ? colorScheme.onSurfaceVariant : colorScheme.error, fontWeight: .w700),
                   ),
                 ],
               ),

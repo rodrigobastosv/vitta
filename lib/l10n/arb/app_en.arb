@@ -445,6 +445,57 @@
     }
   },
   "dietDeleteLogTooltip": "Remove",
+  "dietLogMealAgainAction": "Log this meal again",
+  "dietRecentMealsTitle": "Recent meals",
+  "dietMealLoggedToast": "{count, plural, =0{Nothing added} =1{1 food added to {meal}} other{{count} foods added to {meal}}}",
+  "@dietMealLoggedToast": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "meal": {
+        "type": "String"
+      }
+    }
+  },
+  "dietNutritionScoreTitle": "Nutrition score",
+  "dietNutritionScoreSubtitle": "How the whole day landed on your targets",
+  "dietNutritionScoreMainNutrients": "Main nutrients",
+  "dietNutritionScoreEmpty": "Log something and the day gets a score.",
+  "nutritionGradePoor": "Needs work",
+  "nutritionGradeFair": "Fair",
+  "nutritionGradeGood": "Good",
+  "nutritionGradeExcellent": "Excellent",
+  "nutrientVerdictLow": "Low",
+  "nutrientVerdictOnTrack": "On track",
+  "nutrientVerdictHigh": "High",
+  "dietStreakTooltip": "{count, plural, =0{No logging streak yet} =1{1 day streak} other{{count} day streak}}",
+  "@dietStreakTooltip": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "dietWeekDayTooltip": "{date}, {calories} kcal",
+  "@dietWeekDayTooltip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      },
+      "calories": {
+        "type": "int"
+      }
+    }
+  },
+  "dietWeekDayNothingTooltip": "{date}, nothing logged",
+  "@dietWeekDayNothingTooltip": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
   "dayToday": "Today",
   "dayYesterday": "Yesterday",
   "previousDayTooltip": "Previous day",

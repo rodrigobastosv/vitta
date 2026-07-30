@@ -47,6 +47,7 @@ void main() {
     await tester.pumpAndSettle();
 
     await tester.ensureVisible(find.text('Workout'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Workout'));
     await tester.pumpAndSettle();
 

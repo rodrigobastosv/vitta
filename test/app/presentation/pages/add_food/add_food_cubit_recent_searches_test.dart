@@ -4,10 +4,20 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
+import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 
 import '../../../../factories/cubits_factories.dart';
 import '../../../../factories/entities/food_factory.dart';
 import '../../../../mocks/use_cases_mocks.dart';
+
+// onInit now also reads the recent meals behind the Recent tab, so any test that
+// builds the cubit has to answer it - the tax the routine cycle already puts on
+// the workout tests.
+MockGetRecentMealsUseCase _noRecentMealsUseCase() {
+  final getRecentMealsUseCase = MockGetRecentMealsUseCase();
+  when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
+  return getRecentMealsUseCase;
+}
 
 void main() {
   MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
@@ -40,6 +50,7 @@ void main() {
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     when(() => addRecentSearchUseCase(query: 'banana')).thenAnswer((_) async => ['banana', 'frango']);
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: addRecentSearchUseCase,
@@ -58,6 +69,7 @@ void main() {
     when(() => searchFoodsUseCase(query: 'bananna')).thenAnswer((_) async => const Success([]));
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: addRecentSearchUseCase,
@@ -76,6 +88,7 @@ void main() {
     when(() => searchFoodsUseCase(query: 'frango')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: addRecentSearchUseCase,
@@ -94,6 +107,7 @@ void main() {
     final addRecentSearchUseCase = MockAddRecentSearchUseCase();
     when(() => addRecentSearchUseCase(query: 'banana')).thenAnswer((_) async => ['banana']);
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: addRecentSearchUseCase,
@@ -111,6 +125,7 @@ void main() {
     final removeRecentSearchUseCase = MockRemoveRecentSearchUseCase();
     when(() => removeRecentSearchUseCase(query: 'frango')).thenAnswer((_) async => ['banana']);
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       removeRecentSearchUseCase: removeRecentSearchUseCase,
       getRecentSearchesUseCase: stubbedRecents(['banana', 'frango']),
@@ -128,6 +143,7 @@ void main() {
     final clearRecentSearchesUseCase = MockClearRecentSearchesUseCase();
     when(clearRecentSearchesUseCase.call).thenAnswer((_) async => const []);
     final cubit = CubitsFactories.buildAddFoodCubit(
+      getRecentMealsUseCase: _noRecentMealsUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       clearRecentSearchesUseCase: clearRecentSearchesUseCase,
       getRecentSearchesUseCase: stubbedRecents(['banana', 'frango']),
