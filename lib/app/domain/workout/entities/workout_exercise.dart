@@ -51,6 +51,9 @@ class WorkoutExercise extends Equatable with WorkoutVolume {
   // the MET figure for resistance training already assumes is included.
   int get estimatedActiveSeconds => isCardio ? totalDurationSeconds : sets.length * _secondsPerStrengthSet;
 
+  WorkoutExercise withSets(List<WorkoutSet> sets) =>
+      WorkoutExercise(id: id, exercise: exercise, position: position, sets: sets, completedAt: completedAt);
+
   double estimatedCalories({required double bodyWeightKg}) =>
       exercise.category.metValue * bodyWeightKg * estimatedActiveSeconds / Duration.secondsPerHour;
 
