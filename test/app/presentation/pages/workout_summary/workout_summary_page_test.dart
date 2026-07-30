@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
+import 'package:vitta/app/presentation/general/workout_body_map_card.dart';
 import 'package:vitta/app/presentation/pages/workout_summary/widgets/session_progress_row.dart';
 import 'package:vitta/app/presentation/pages/workout_summary/widgets/workout_summary_exercise_row.dart';
 import 'package:vitta/app/presentation/pages/workout_summary/workout_summary_extra.dart';
@@ -68,6 +70,15 @@ void main() {
 
     expect(find.text('Estimated burn'), findsOneWidget);
     expect(find.byType(WorkoutSummaryExerciseRow), findsOneWidget);
+  });
+
+  testWidgets('maps the body regions the session worked', (tester) async {
+    await pumpSummary(tester);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(WorkoutBodyMapCard), findsOneWidget);
+    expect(find.byType(VTBodyMap), findsNWidgets(2));
+    expect(find.text('Chest'), findsOneWidget);
   });
 
   testWidgets('reports one row per exercise against the last session', (tester) async {

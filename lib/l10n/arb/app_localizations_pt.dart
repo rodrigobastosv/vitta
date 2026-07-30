@@ -2789,6 +2789,18 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
 
   @override
+  String get workoutBodyMapTitle => 'Músculos trabalhados';
+
+  @override
+  String get workoutBodyMapFrontView => 'Vista frontal';
+
+  @override
+  String get workoutBodyMapBackView => 'Vista posterior';
+
+  @override
+  String get workoutBodyMapHint => 'Cor mais forte significa mais séries naquela região.';
+
+  @override
   String get premiumCancelAnytime => 'Cancele quando quiser nos ajustes da App Store.';
 
   @override
