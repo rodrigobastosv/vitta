@@ -479,6 +479,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getLastSetsByExerciseUseCase: G(),
       getLatestBodyWeightUseCase: G(),
       getAppSettingsUseCase: G(),
+      getBodyProfileUseCase: G(),
       hasSeenWorkoutIntroUseCase: G(),
       markWorkoutIntroSeenUseCase: G(),
     ),
@@ -488,7 +489,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     (exercise, _) => ExerciseProgressionCubit(getExerciseProgressionUseCase: G(), getAppSettingsUseCase: G(), exercise: exercise),
   );
   G.registerFactory(() => ExerciseProgressionListCubit(getLoggedExercisesUseCase: G()));
-  G.registerFactory(() => WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: G(), getAppSettingsUseCase: G()));
+  G.registerFactory(() => WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: G(), getAppSettingsUseCase: G(), getBodyProfileUseCase: G()));
   G.registerFactory(() => RoutinesCubit(getRoutinesUseCase: G(), deleteRoutineUseCase: G(), reorderRoutinesUseCase: G()));
   G.registerFactoryParam<RoutineFormCubit, Routine?, void>((routine, _) => RoutineFormCubit(saveRoutineUseCase: G(), routine: routine));
   G.registerFactory(

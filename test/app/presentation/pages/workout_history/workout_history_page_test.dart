@@ -7,9 +7,12 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/workout/entities/daily_workout.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
+import 'package:vitta/app/presentation/general/workout_body_map_card.dart';
+import 'package:vitta/app/presentation/pages/workout_history/widgets/muscle_region_split_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/workout_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout_history/workout_history_page.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
@@ -45,13 +48,19 @@ Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyWorkout> w
     ),
   ).thenAnswer((_) async => Success(workoutsByDate));
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
+  final getBodyProfileUseCase = MockGetBodyProfileUseCase();
+  when(getBodyProfileUseCase.call).thenReturn(const BodyProfile());
   await tester.binding.setSurfaceSize(const Size(500, 1800));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   if (G.isRegistered<WorkoutHistoryCubit>()) {
     G.unregister<WorkoutHistoryCubit>();
   }
   G.registerFactory<WorkoutHistoryCubit>(
-    () => WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: getAppSettingsUseCase),
+    () => WorkoutHistoryCubit(
+      getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase,
+      getAppSettingsUseCase: getAppSettingsUseCase,
+      getBodyProfileUseCase: getBodyProfileUseCase,
+    ),
   );
 
   await tester.pumpWidget(
@@ -96,6 +105,21 @@ void main() {
     await pumpHistoryPage(tester, workoutsByDate: {today: buildTrainedDay(today)});
 
     expect(find.byType(VTBarChart), findsOneWidget);
-    expect(find.text('Legs'), findsOneWidget);
+    expect(find.descendant(of: find.byType(MuscleRegionSplitCard), matching: find.text('Legs')), findsOneWidget);
+  });
+
+  testWidgets('maps the muscles the trend range worked', (tester) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    await pumpHistoryPage(tester, workoutsByDate: {today: buildTrainedDay(today)});
+
+    expect(find.byType(WorkoutBodyMapCard), findsOneWidget);
+    expect(find.descendant(of: find.byType(WorkoutBodyMapCard), matching: find.text('Legs')), findsOneWidget);
+  });
+
+  testWidgets('leaves the map out of a range with nothing trained', (tester) async {
+    await pumpHistoryPage(tester, workoutsByDate: {DateTime(2020): buildTrainedDay(DateTime(2020))});
+
+    expect(find.byType(WorkoutBodyMapCard), findsNothing);
   });
 }

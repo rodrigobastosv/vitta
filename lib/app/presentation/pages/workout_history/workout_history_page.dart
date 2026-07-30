@@ -7,9 +7,12 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
+import 'package:vitta/app/domain/workout/entities/workout_region_volume.dart';
 import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
+import 'package:vitta/app/presentation/general/workout_body_map_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/muscle_region_split_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/workout_cardio_trend_card.dart';
 import 'package:vitta/app/presentation/pages/workout_history/widgets/workout_history_calendar_card.dart';
@@ -35,35 +38,44 @@ class WorkoutHistoryPage extends StatelessWidget {
             context.showErrorToast(message: message, onRetry: context.read<WorkoutHistoryCubit>().refresh);
         }
       },
-      builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.workoutHistoryTitle)),
-        body: VTRefreshable(
-          onRefresh: () => cubit.refresh(trigger: .quiet),
-          hasData: state.hasData,
-          isLoaded: state.isLoaded,
-          skeleton: const HistorySkeleton(),
-          emptyState: VTEmptyState(
-            icon: Icons.fitness_center_outlined,
-            title: l10n.workoutHistoryEmptyTitle,
-            message: l10n.workoutHistoryEmptyMessage,
-            actionLabel: l10n.workoutHistoryEmptyAction,
-            onAction: () => Navigator.of(context).pop(),
+      builder: (context, cubit, state) {
+        final workoutsInRange = [
+          for (final day in cubit.trendDays)
+            if (state.workoutsInTrendRange[day] case final workout?) ...workout.workouts,
+        ];
+        final regionVolume = WorkoutRegionVolume.fromWorkouts(workoutsInRange);
+        final muscleWork = WorkoutMuscleWork.fromWorkouts(workoutsInRange);
+        return Scaffold(
+          appBar: AppBar(title: Text(l10n.workoutHistoryTitle)),
+          body: VTRefreshable(
+            onRefresh: () => cubit.refresh(trigger: .quiet),
+            hasData: state.hasData,
+            isLoaded: state.isLoaded,
+            skeleton: const HistorySkeleton(),
+            emptyState: VTEmptyState(
+              icon: Icons.fitness_center_outlined,
+              title: l10n.workoutHistoryEmptyTitle,
+              message: l10n.workoutHistoryEmptyMessage,
+              actionLabel: l10n.workoutHistoryEmptyAction,
+              onAction: () => Navigator.of(context).pop(),
+            ),
+            children: [
+              WorkoutHistoryCalendarCard(cubit: cubit, state: state),
+              const VTGap.l(),
+              Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
+              const VTGap.m(),
+              TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
+              const VTGap.m(),
+              WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
+              const VTGap.m(),
+              WorkoutCardioTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
+              if (muscleWork.hasData) ...[const VTGap.m(), WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint, figure: cubit.bodyFigure)],
+              const VTGap.m(),
+              MuscleRegionSplitCard(split: regionVolume),
+            ],
           ),
-          children: [
-            WorkoutHistoryCalendarCard(cubit: cubit, state: state),
-            const VTGap.l(),
-            Text(l10n.dietHistoryTrendsTitle, style: VTTextStyles.title(context)),
-            const VTGap.m(),
-            TrendRangeSelector(selected: state.trendRange, onSelected: cubit.changeTrendRange),
-            const VTGap.m(),
-            WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
-            const VTGap.m(),
-            WorkoutCardioTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
-            const VTGap.m(),
-            MuscleRegionSplitCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
-          ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

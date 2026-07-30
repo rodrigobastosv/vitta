@@ -1677,6 +1677,20 @@
   },
   "workoutMuscleSplitTitle": "Volume by muscle group",
   "workoutMuscleSplitEmptyMessage": "No load lifted in this period. Weighted sets show their muscle-group split here.",
+  "workoutBodyMapTitle": "Muscles worked",
+  "workoutBodyMapFrontView": "Front view",
+  "workoutBodyMapBackView": "Rear view",
+  "workoutBodyMapHint": "A deeper colour means more work landed on that muscle.",
+  "workoutBodyMapProgressHint": "Fills in as you complete each exercise.",
+  "workoutBodyMapSemantics": "Muscles worked: {muscles}",
+  "@workoutBodyMapSemantics": {
+    "placeholders": {
+      "muscles": {
+        "type": "String"
+      }
+    }
+  },
+  "workoutBodyMapSemanticsEmpty": "No muscles worked yet",
   "premiumCancelAnytime": "Cancel anytime in your App Store settings.",
   "premiumOfferRetryAction": "Try again",
   "premiumPeriodWeekly": "per week",

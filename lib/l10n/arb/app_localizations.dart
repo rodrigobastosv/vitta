@@ -4976,6 +4976,48 @@ abstract class AppLocalizations {
   /// **'No load lifted in this period. Weighted sets show their muscle-group split here.'**
   String get workoutMuscleSplitEmptyMessage;
 
+  /// No description provided for @workoutBodyMapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscles worked'**
+  String get workoutBodyMapTitle;
+
+  /// No description provided for @workoutBodyMapFrontView.
+  ///
+  /// In en, this message translates to:
+  /// **'Front view'**
+  String get workoutBodyMapFrontView;
+
+  /// No description provided for @workoutBodyMapBackView.
+  ///
+  /// In en, this message translates to:
+  /// **'Rear view'**
+  String get workoutBodyMapBackView;
+
+  /// No description provided for @workoutBodyMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A deeper colour means more work landed on that muscle.'**
+  String get workoutBodyMapHint;
+
+  /// No description provided for @workoutBodyMapProgressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Fills in as you complete each exercise.'**
+  String get workoutBodyMapProgressHint;
+
+  /// No description provided for @workoutBodyMapSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscles worked: {muscles}'**
+  String workoutBodyMapSemantics(String muscles);
+
+  /// No description provided for @workoutBodyMapSemanticsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No muscles worked yet'**
+  String get workoutBodyMapSemanticsEmpty;
+
   /// No description provided for @premiumCancelAnytime.
   ///
   /// In en, this message translates to:

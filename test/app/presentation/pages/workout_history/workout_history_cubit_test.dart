@@ -30,7 +30,7 @@ void main() {
           day: DailyWorkout(date: day, workouts: [WorkoutFactory.build()]),
         }),
       );
-      return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase());
+      return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase(), getBodyProfileUseCase: MockGetBodyProfileUseCase());
     },
     act: (cubit) => cubit.refresh(),
     expect: () => [
@@ -49,7 +49,7 @@ void main() {
           to: any(named: 'to'),
         ),
       ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
-      return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase());
+      return WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: MockGetAppSettingsUseCase(), getBodyProfileUseCase: MockGetBodyProfileUseCase());
     },
     act: (cubit) => cubit.refresh(),
     expectPresentation: () => [

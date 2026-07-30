@@ -4,11 +4,12 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
 import 'package:vitta/app/design_system/components/cards/vt_card.dart';
 import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
-import 'package:vitta/app/design_system/components/general/vt_badge.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
+import 'package:vitta/app/presentation/general/workout_body_map_card.dart';
 import 'package:vitta/app/presentation/general/workout_duration_format.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_metric.dart';
 import 'package:vitta/app/presentation/pages/workout_summary/widgets/session_progress_card.dart';
@@ -24,7 +25,7 @@ class WorkoutSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final regions = {for (final workout in extra.workouts) ...workout.regions}.toList();
+    final muscleWork = WorkoutMuscleWork.fromWorkouts(extra.workouts);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.workoutSummaryTitle)),
       body: ListView(
@@ -42,16 +43,9 @@ class WorkoutSummaryPage extends StatelessWidget {
           ),
           const VTGap.m(),
           VTAppearEffect(index: 1, child: VTCard(child: Column(children: _metrics(context)))),
-          if (regions.isNotEmpty) ...[
+          if (muscleWork.hasData) ...[
             const VTGap.m(),
-            VTAppearEffect(
-              index: 2,
-              child: Wrap(
-                spacing: VTSpacing.s,
-                runSpacing: VTSpacing.s,
-                children: [for (final region in regions) VTBadge(label: region.getLabel(l10n), color: region.color)],
-              ),
-            ),
+            VTAppearEffect(index: 2, child: WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint, figure: extra.bodyFigure)),
           ],
           const VTGap.m(),
           VTAppearEffect(index: 3, child: SessionProgressCard(progress: extra.progress, unitSystem: extra.unitSystem)),

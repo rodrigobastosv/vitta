@@ -1,0 +1,17 @@
+enum VTBodyPart {
+  lowerBack,
+  upperBack,
+  trapezius,
+  neck,
+  deltoids,
+  chest,
+  abs,
+  biceps,
+  triceps,
+  forearm,
+  gluteal,
+  adductors,
+  quadriceps,
+  hamstring,
+  calves,
+}

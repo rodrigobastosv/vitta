@@ -2765,6 +2765,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutMuscleSplitEmptyMessage => 'No load lifted in this period. Weighted sets show their muscle-group split here.';
 
   @override
+  String get workoutBodyMapTitle => 'Muscles worked';
+
+  @override
+  String get workoutBodyMapFrontView => 'Front view';
+
+  @override
+  String get workoutBodyMapBackView => 'Rear view';
+
+  @override
+  String get workoutBodyMapHint => 'A deeper colour means more work landed on that muscle.';
+
+  @override
+  String get workoutBodyMapProgressHint => 'Fills in as you complete each exercise.';
+
+  @override
+  String workoutBodyMapSemantics(String muscles) {
+    return 'Muscles worked: $muscles';
+  }
+
+  @override
+  String get workoutBodyMapSemanticsEmpty => 'No muscles worked yet';
+
+  @override
   String get premiumCancelAnytime => 'Cancel anytime in your App Store settings.';
 
   @override

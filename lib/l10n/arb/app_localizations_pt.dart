@@ -2789,6 +2789,29 @@ class AppLocalizationsPt extends AppLocalizations {
       'Nenhuma carga levantada neste período. Séries com peso mostram aqui a divisão por grupo muscular.';
 
   @override
+  String get workoutBodyMapTitle => 'Músculos trabalhados';
+
+  @override
+  String get workoutBodyMapFrontView => 'Vista frontal';
+
+  @override
+  String get workoutBodyMapBackView => 'Vista posterior';
+
+  @override
+  String get workoutBodyMapHint => 'Cor mais forte significa mais trabalho naquele músculo.';
+
+  @override
+  String get workoutBodyMapProgressHint => 'Vai preenchendo conforme você conclui cada exercício.';
+
+  @override
+  String workoutBodyMapSemantics(String muscles) {
+    return 'Músculos trabalhados: $muscles';
+  }
+
+  @override
+  String get workoutBodyMapSemanticsEmpty => 'Nenhum músculo trabalhado ainda';
+
+  @override
   String get premiumCancelAnytime => 'Cancele quando quiser nos ajustes da App Store.';
 
   @override

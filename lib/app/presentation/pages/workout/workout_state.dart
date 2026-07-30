@@ -3,6 +3,7 @@ import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_energy.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
+import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/entities/workout_volume.dart';
 
@@ -36,6 +37,12 @@ class WorkoutState extends Equatable with WorkoutVolume, WorkoutEnergy {
   List<WorkoutExercise> get exercises => [for (final workout in workouts) ...workout.exercises];
 
   bool get isBodyWeightKnown => latestBodyWeightKg != null;
+
+  // Only finished exercises count, so the body map fills in as the session is
+  // ticked off (issue #274). Planned work is deliberately not drawn at a lower
+  // alpha: alpha already means how hard a muscle was worked, and spending it on
+  // "not done yet" too would make a heavily worked muscle and a planned one alike.
+  WorkoutMuscleWork get completedMuscleWork => WorkoutMuscleWork.fromExercises(exercises.where((exercise) => exercise.isCompleted));
 
   int get completedExercises => exercises.where((exercise) => exercise.isCompleted).length;
 
