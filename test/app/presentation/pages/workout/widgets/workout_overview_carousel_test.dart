@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/charts/vt_legend_dot.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
@@ -114,13 +115,23 @@ void main() {
     expect(find.byType(VTBodyMap), findsNWidgets(2));
   });
 
-  testWidgets('is exactly as tall as its tallest page, so neither can overflow', (tester) async {
+  testWidgets('both pages are the same height, so swiping never resizes the card', (tester) async {
     await pumpCarousel(tester, state: _busyState());
 
     final stripHeight = tester.getSize(_strip()).height;
-    expect(stripHeight, tester.getSize(find.byType(WorkoutSummaryCard)).height);
-    expect(stripHeight, greaterThanOrEqualTo(tester.getSize(find.byType(WorkoutBodyMapCard)).height));
+    expect(tester.getSize(find.byType(WorkoutSummaryCard)).height, stripHeight);
+    expect(tester.getSize(find.byType(WorkoutBodyMapCard)).height, stripHeight);
     expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('keeps the legend, so the tints on the workout page have a key', (tester) async {
+    await pumpCarousel(tester, state: _busyState());
+    await swipeToBodyMap(tester);
+
+    final legend = find.descendant(of: find.byType(WorkoutBodyMapCard), matching: find.byType(VTLegendDot));
+
+    expect(legend, findsWidgets);
+    expect(find.descendant(of: find.byType(WorkoutBodyMapCard), matching: find.text('Chest')), findsOneWidget);
   });
 
   testWidgets('the body map counts finished exercises only', (tester) async {

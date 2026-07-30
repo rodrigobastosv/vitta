@@ -26,6 +26,12 @@ class WorkoutOverviewCarousel extends StatefulWidget {
 // one session overflows another. A Row inside a horizontal scroll view takes the
 // unbounded height the vertical list already gives it, so the strip is as tall as
 // its tallest page and can never overflow; PageScrollPhysics keeps the snap.
+//
+// IntrinsicHeight is what makes the two cards the *same* height. Without it the
+// Row sizes to the tallest child while each card keeps its own, so swiping
+// between a short page and a tall one visibly resizes the card under the finger.
+// CrossAxisAlignment.stretch alone cannot do it here - it forces the incoming
+// cross-axis constraint onto its children, which in a vertical list is unbounded.
 class _WorkoutOverviewCarouselState extends State<WorkoutOverviewCarousel> {
   final ScrollController _controller = ScrollController();
 
@@ -55,11 +61,13 @@ class _WorkoutOverviewCarouselState extends State<WorkoutOverviewCarousel> {
             controller: _controller,
             scrollDirection: .horizontal,
             physics: const PageScrollPhysics(),
-            child: Row(
-              crossAxisAlignment: .start,
-              children: [
-                for (final page in pages) SizedBox(width: constraints.maxWidth, child: page),
-              ],
+            child: IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: .stretch,
+                children: [
+                  for (final page in pages) SizedBox(width: constraints.maxWidth, child: page),
+                ],
+              ),
             ),
           ),
           const VTGap.s(),

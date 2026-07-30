@@ -90,13 +90,14 @@ void main() {
     expect(find.text('Chest'), findsNothing);
   });
 
-  testWidgets('a compact surface keeps the figures but drops the legend and the captions', (tester) async {
+  testWidgets('a compact surface drops the view captions but never the legend', (tester) async {
     await pumpCard(tester, muscleWork: _chestAndQuads, isCompact: true);
 
     expect(find.byType(VTBodyMap), findsNWidgets(2));
-    expect(find.text('Chest'), findsNothing);
     expect(find.text('Front view'), findsNothing);
     expect(find.text('Rear view'), findsNothing);
+    expect(find.text('Chest'), findsOneWidget);
+    expect(find.text('Legs'), findsOneWidget);
   });
 
   for (final locale in [const Locale('en'), const Locale('pt')]) {

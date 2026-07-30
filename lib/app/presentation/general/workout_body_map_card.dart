@@ -29,12 +29,11 @@ class WorkoutBodyMapCard extends StatelessWidget {
   final String hint;
   final VTBodyFigure figure;
 
-  // A surface with a fixed height gives up the legend and the two view captions
-  // (the workout page's carousel). The legend is what costs the most: six region
-  // names wrap to three runs at 320px, taller than the figures they explain. The
-  // accents are the app's fixed bodyRegion* vocabulary and the summary page states
-  // them in full; front-versus-back is legible from the drawing itself, and the
-  // muscles are named to VoiceOver either way.
+  // Shrinks the figures and drops the two view captions where vertical room is
+  // shared with another card (the workout page's carousel). The legend stays: it
+  // is the only thing that says what the accents mean, and dropping it there left
+  // the workout page with tinted muscles and no key. Front-versus-back is legible
+  // from the drawing itself, and the muscles are named to VoiceOver either way.
   final bool isCompact;
 
   @override
@@ -88,7 +87,7 @@ class WorkoutBodyMapCard extends StatelessWidget {
               ],
             ),
           ),
-          if (!isCompact && regions.isNotEmpty) ...[
+          if (regions.isNotEmpty) ...[
             const VTGap.m(),
             Wrap(
               spacing: VTSpacing.m,
