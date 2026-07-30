@@ -13,6 +13,7 @@ import 'package:vitta/app/core/services/logging/logging_service.dart';
 import 'package:vitta/app/core/services/logging/sentry_log_destination.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
+import 'package:vitta/app/core/services/share/share_service.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/realtime_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
@@ -137,6 +138,7 @@ import 'package:vitta/app/domain/sleep/use_cases/import_sleep_from_health_use_ca
 import 'package:vitta/app/domain/sleep/use_cases/log_sleep_use_case.dart';
 import 'package:vitta/app/domain/sleep/use_cases/save_sleep_goal_use_case.dart';
 import 'package:vitta/app/domain/sync/use_cases/watch_data_changes_use_case.dart';
+import 'package:vitta/app/domain/trends/entities/progress_story.dart';
 import 'package:vitta/app/domain/water/use_cases/delete_water_log_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_daily_water_use_case.dart';
 import 'package:vitta/app/domain/water/use_cases/get_water_goal_use_case.dart';
@@ -195,6 +197,7 @@ import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
+import 'package:vitta/app/presentation/pages/share_progress/share_progress_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/trends/trends_cubit.dart';
@@ -241,6 +244,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(HealthService.new);
   G.registerLazySingleton(NotificationService.new);
   G.registerLazySingleton(PurchaseService.new);
+  G.registerLazySingleton(ShareService.new);
   G.registerLazySingleton(AnalyticsService.new);
   G.registerLazySingleton(AppInfoService.new);
   Log.service = LoggingService(
@@ -416,6 +420,9 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       getBodyWeightInRangeUseCase: G(),
       getAppSettingsUseCase: G(),
     ),
+  );
+  G.registerFactoryParam<ShareProgressCubit, ProgressStory, void>(
+    (story, _) => ShareProgressCubit(story: story, shareService: G(), getAppSettingsUseCase: G()),
   );
   G.registerFactoryParam<CopyMealsCubit, DateTime, void>(
     (targetDate, _) => CopyMealsCubit(getMacrosInRangeUseCase: G(), getMacroGoalsUseCase: G(), copyFoodLogsUseCase: G(), targetDate: targetDate),

@@ -5377,6 +5377,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Start tracking'**
   String get trendsEmptyAction;
+
+  /// No description provided for @trendsShareAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Share progress'**
+  String get trendsShareAction;
+
+  /// No description provided for @shareProgressTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share progress'**
+  String get shareProgressTitle;
+
+  /// No description provided for @shareProgressStoryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My progress'**
+  String get shareProgressStoryTitle;
+
+  /// No description provided for @shareProgressAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get shareProgressAction;
+
+  /// No description provided for @shareProgressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Every figure here comes from what you tracked.'**
+  String get shareProgressHint;
+
+  /// No description provided for @shareProgressPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {days} days'**
+  String shareProgressPeriod(int days);
+
+  /// No description provided for @shareProgressGoals.
+  ///
+  /// In en, this message translates to:
+  /// **'{onTrack} of {total} goals on target'**
+  String shareProgressGoals(int onTrack, int total);
+
+  /// No description provided for @shareProgressFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Change measured against the previous {days} days'**
+  String shareProgressFootnote(int days);
+
+  /// No description provided for @shareProgressMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'My last {days} days on Vitta.'**
+  String shareProgressMessage(int days);
+
+  /// No description provided for @shareProgressFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Couldn\'t share your progress. Try again.'**
+  String get shareProgressFailed;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

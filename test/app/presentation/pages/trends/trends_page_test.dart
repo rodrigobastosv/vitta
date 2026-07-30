@@ -9,6 +9,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/diet/entities/daily_macros.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
+import 'package:vitta/app/domain/trends/entities/progress_story.dart';
 import 'package:vitta/app/presentation/pages/trends/trends_cubit.dart';
 import 'package:vitta/app/presentation/pages/trends/trends_page.dart';
 import 'package:vitta/app/presentation/pages/trends/widgets/trend_area_card.dart';
@@ -110,6 +111,11 @@ Future<void> pumpTrendsPage(WidgetTester tester, {required MockGetMacrosInRangeU
         routes: [
           GoRoute(path: '/', builder: (context, state) => const TrendsPage()),
           GoRoute(path: '/diet/history', name: 'dietHistory', builder: (context, state) => const Scaffold(body: Text('diet history'))),
+          GoRoute(
+            path: '/trends/share',
+            name: 'shareProgress',
+            builder: (context, state) => Scaffold(body: Text('share ${(state.extra! as ProgressStory).days} days')),
+          ),
         ],
       ),
       builder: (context, child) => LoaderOverlay(child: child!),
@@ -153,6 +159,21 @@ void main() {
 
     expect(find.byType(VTEmptyState), findsOneWidget);
     expect(find.byType(TrendAreaCard), findsNothing);
+  });
+
+  testWidgets('hands the story it already holds to the share page', (tester) async {
+    await pumpTrendsPage(tester, getMacrosInRangeUseCase: stubbedMacros({today(): macrosOf(2185)}));
+
+    await tester.tap(find.byIcon(Icons.ios_share));
+    await tester.pumpAndSettle();
+
+    expect(find.text('share 30 days'), findsOneWidget);
+  });
+
+  testWidgets('offers no share action over a period with nothing tracked', (tester) async {
+    await pumpTrendsPage(tester, getMacrosInRangeUseCase: stubbedMacros(const {}));
+
+    expect(find.byIcon(Icons.ios_share), findsNothing);
   });
 
   testWidgets('the first read shows the skeleton rather than the empty state', (tester) async {

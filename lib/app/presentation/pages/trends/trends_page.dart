@@ -38,7 +38,19 @@ class TrendsPage extends StatelessWidget {
         }
       },
       builder: (context, cubit, state) => Scaffold(
-        appBar: AppBar(title: Text(l10n.trendsTitle)),
+        appBar: AppBar(
+          title: Text(l10n.trendsTitle),
+          // Only offered once there is something to show: a story card of a
+          // period nobody tracked is a picture of an empty screen.
+          actions: [
+            if (state.hasData)
+              IconButton(
+                icon: const Icon(Icons.ios_share),
+                tooltip: l10n.trendsShareAction,
+                onPressed: () => context.pushRoute(.shareProgress, extra: state.story),
+              ),
+          ],
+        ),
         body: VTRefreshable(
           onRefresh: () => cubit.refresh(trigger: .quiet),
           hasData: state.hasData,

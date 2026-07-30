@@ -1383,6 +1383,47 @@
   "trendsEmptyTitle": "Ainda sem tendências",
   "trendsEmptyMessage": "Registre comida, água, sono, treinos ou peso por alguns dias e a sua história aparece aqui.",
   "trendsEmptyAction": "Começar a registrar",
+  "trendsShareAction": "Compartilhar progresso",
+  "shareProgressTitle": "Compartilhar progresso",
+  "shareProgressStoryTitle": "Meu progresso",
+  "shareProgressAction": "Compartilhar",
+  "shareProgressHint": "Todo número daqui vem do que você registrou.",
+  "shareProgressPeriod": "Últimos {days} dias",
+  "shareProgressGoals": "{onTrack} de {total} metas em dia",
+  "shareProgressFootnote": "Variação em relação aos {days} dias anteriores",
+  "shareProgressMessage": "Meus últimos {days} dias no Vitta.",
+  "shareProgressFailed": "Não deu para compartilhar seu progresso. Tente de novo.",
+  "@shareProgressPeriod": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressGoals": {
+    "placeholders": {
+      "onTrack": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressFootnote": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressMessage": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "@trendsVerdictSummary": {
     "placeholders": {
       "onTrack": {
