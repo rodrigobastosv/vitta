@@ -37,6 +37,9 @@ class Workout extends Equatable with WorkoutVolume, WorkoutEnergy {
 
   bool get isComplete => exercises.isNotEmpty && exercises.every((exercise) => exercise.isCompleted);
 
+  Workout withExercises(List<WorkoutExercise> exercises) =>
+      Workout(id: id, performedDate: performedDate, exercises: exercises, notes: notes, routineId: routineId);
+
   Set<BodyRegion> get regions => {
     for (final exercise in exercises)
       for (final muscle in exercise.exercise.primaryMuscles) muscle.region,

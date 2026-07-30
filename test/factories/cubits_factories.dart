@@ -10,6 +10,8 @@ import 'package:vitta/app/presentation/pages/custom_food/custom_food_cubit.dart'
 import 'package:vitta/app/presentation/pages/diet/diet_cubit.dart';
 import 'package:vitta/app/presentation/pages/diet_history/diet_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_search/exercise_search_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
+import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/home/home_cubit.dart';
 import 'package:vitta/app/presentation/pages/home_layout/home_layout_cubit.dart';
 import 'package:vitta/app/presentation/pages/log_reminders/log_reminders_cubit.dart';
@@ -408,6 +410,20 @@ abstract class CubitsFactories {
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
     hasSeenWorkoutIntroUseCase: hasSeenWorkoutIntroUseCase ?? MockHasSeenWorkoutIntroUseCase(),
     markWorkoutIntroSeenUseCase: markWorkoutIntroSeenUseCase ?? MockMarkWorkoutIntroSeenUseCase(),
+  );
+
+  static ExerciseWorkoutCubit buildExerciseWorkoutCubit({
+    required ExerciseWorkoutExtra extra,
+    MockLogSetUseCase? logSetUseCase,
+    MockUpdateSetUseCase? updateSetUseCase,
+    MockDeleteSetUseCase? deleteSetUseCase,
+    MockSetWorkoutExerciseCompletedUseCase? setWorkoutExerciseCompletedUseCase,
+  }) => ExerciseWorkoutCubit(
+    extra: extra,
+    logSetUseCase: logSetUseCase ?? MockLogSetUseCase(),
+    updateSetUseCase: updateSetUseCase ?? MockUpdateSetUseCase(),
+    deleteSetUseCase: deleteSetUseCase ?? MockDeleteSetUseCase(),
+    setWorkoutExerciseCompletedUseCase: setWorkoutExerciseCompletedUseCase ?? MockSetWorkoutExerciseCompletedUseCase(),
   );
 
   static ExerciseSearchCubit buildExerciseSearchCubit({MockSearchExercisesUseCase? searchExercisesUseCase}) =>

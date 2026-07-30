@@ -8,7 +8,9 @@ import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/entities/set_kind.dart';
+import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
+import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/domain/workout/use_cases/add_exercise_to_workout_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_workout_use_case.dart';
@@ -61,6 +63,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final GetAppSettingsUseCase _getAppSettingsUseCase;
   final HasSeenWorkoutIntroUseCase _hasSeenWorkoutIntroUseCase;
   final MarkWorkoutIntroSeenUseCase _markWorkoutIntroSeenUseCase;
+
+  int _pendingSets = 0;
 
   static DateTime _today() {
     final now = DateTime.now();
@@ -194,17 +198,50 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     return const Success(null);
   }
 
-  Future<Result<VTError, void>> repeatLastSet({required WorkoutExercise workoutExercise}) async {
+  // Optimistic (issue #275): the repeated set lands in state before the write is
+  // sent, so the most repeated action on the screen costs no round trip, and the
+  // previous workouts are put back if the write fails. The rest timer is
+  // deliberately *not* optimistic - WorkoutSetRepeated still fires only once the
+  // row exists (issue #228), so the set shows instantly and the rest starts a beat
+  // later, rather than a countdown appearing for a set that turns out to fail.
+  Future<void> repeatLastSet({required WorkoutExercise workoutExercise}) async {
     final last = workoutExercise.sets.lastOrNull;
     if (last == null || workoutExercise.isCardio) {
-      return const Success(null);
+      return;
     }
-    final loggedResult = await logSet(workoutExerciseId: workoutExercise.id, input: SetInput.fromSet(last));
-    // Announced here rather than at the tap, so a repeat that no-op'd or failed
-    // cannot start a rest for a set that was never written (issue #228).
-    loggedResult.when((_) {}, (_) => emitPresentation(WorkoutSetRepeated(workoutExercise: workoutExercise)));
-    return loggedResult;
+    final input = SetInput.fromSet(last);
+    final previousWorkouts = state.workouts;
+    final pendingSet = input.asPendingSet(sequence: _pendingSets++, position: last.position + 1);
+    emit(state.copyWith(workouts: _workoutsWithSets(workoutExerciseId: workoutExercise.id, update: (sets) => [...sets, pendingSet])));
+    final loggedResult = await _logSetUseCase(workoutExerciseId: workoutExercise.id, input: input);
+    final loggedSet = loggedResult.when((_) => null, (set) => set);
+    if (loggedSet == null) {
+      emit(state.copyWith(workouts: previousWorkouts));
+      loggedResult.when(_emitError, (_) {});
+      return;
+    }
+    Log.action('workout_set_logged', data: _setLogData(input));
+    emit(
+      state.copyWith(
+        workouts: _workoutsWithSets(
+          workoutExerciseId: workoutExercise.id,
+          update: (sets) => [
+            for (final set in sets)
+              if (set.id == pendingSet.id) loggedSet else set,
+          ],
+        ),
+      ),
+    );
+    emitPresentation(WorkoutSetRepeated(workoutExercise: workoutExercise));
   }
+
+  List<Workout> _workoutsWithSets({required String workoutExerciseId, required List<WorkoutSet> Function(List<WorkoutSet> sets) update}) => [
+    for (final workout in state.workouts)
+      workout.withExercises([
+        for (final exercise in workout.exercises)
+          if (exercise.id == workoutExerciseId) exercise.withSets(update(exercise.sets)) else exercise,
+      ]),
+  ];
 
   Map<String, dynamic> _setLogData(SetInput input) => input.kind == SetKind.cardio
       ? {'duration_seconds': input.durationSeconds, 'distance_meters': input.distanceMeters}

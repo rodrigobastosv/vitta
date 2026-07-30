@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_presentation_test/bloc_presentation_test.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8,6 +10,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/domain/workout/entities/set_input.dart';
+import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
@@ -43,6 +46,31 @@ MockGetLatestBodyWeightUseCase _noBodyWeightUseCase() {
   final useCase = MockGetLatestBodyWeightUseCase();
   when(useCase.call).thenAnswer((_) async => const Success(null));
   return useCase;
+}
+
+Future<WorkoutCubit> _cubitOnADayWithOneSet({required MockLogSetUseCase logSetUseCase}) async {
+  final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
+  when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
+    (_) async => Success([
+      WorkoutFactory.build(
+        exercises: [
+          WorkoutExerciseFactory.build(
+            id: 'we-1',
+            sets: [WorkoutSetFactory.build(id: 's1', reps: 8, weightKg: 50)],
+          ),
+        ],
+      ),
+    ]),
+  );
+  final cubit = CubitsFactories.buildWorkoutCubit(
+    getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
+    logSetUseCase: logSetUseCase,
+    getRoutineCycleUseCase: _emptyCycleUseCase(),
+    getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
+    getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
+  );
+  await cubit.loadDate(cubit.state.date);
+  return cubit;
 }
 
 void main() {
@@ -729,5 +757,84 @@ void main() {
 
     expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
     verifyNever(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')));
+  });
+
+  test('the repeated set is on screen before the write comes back', () async {
+    useMockLog();
+    final writing = Completer<Result<VTError, WorkoutSet>>();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) => writing.future);
+    final cubit = await _cubitOnADayWithOneSet(logSetUseCase: logSetUseCase);
+
+    final repeating = cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state.exercises.single.sets, hasLength(2));
+    expect(cubit.state.totalSets, 2);
+    expect(cubit.state.totalReps, 16);
+    expect(cubit.state.volumeKg, 800);
+
+    writing.complete(Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    await repeating;
+  });
+
+  test('the settled day carries the persisted set, not the placeholder', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    final cubit = await _cubitOnADayWithOneSet(logSetUseCase: logSetUseCase);
+
+    await cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+
+    expect([for (final set in cubit.state.exercises.single.sets) set.id], ['s1', 's2']);
+  });
+
+  test('a failed repeat puts the day back exactly as it was', () async {
+    useMockLog();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
+    final cubit = await _cubitOnADayWithOneSet(logSetUseCase: logSetUseCase);
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+    final workoutsBeforeRepeat = cubit.state.workouts;
+
+    await cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state.workouts, workoutsBeforeRepeat);
+    expect(events.whereType<WorkoutError>(), hasLength(1));
+  });
+
+  // The set shows instantly; the rest starts a beat later, once the row exists
+  // (issue #275 on top of #228). A rest that vanishes with a failed write would be
+  // worse than one that starts late.
+  test('the rest is announced only once the write lands, never at the optimistic emit', () async {
+    useMockLog();
+    final writing = Completer<Result<VTError, WorkoutSet>>();
+    final logSetUseCase = MockLogSetUseCase();
+    when(
+      () => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input')),
+    ).thenAnswer((_) => writing.future);
+    final cubit = await _cubitOnADayWithOneSet(logSetUseCase: logSetUseCase);
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    final repeating = cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state.exercises.single.sets, hasLength(2));
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
+
+    writing.complete(Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    await repeating;
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), hasLength(1));
   });
 }

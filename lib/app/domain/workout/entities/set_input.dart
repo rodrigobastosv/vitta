@@ -11,12 +11,26 @@ class SetInput extends Equatable {
       ? SetInput.cardio(durationSeconds: set.durationSeconds, distanceMeters: set.distanceMeters)
       : SetInput.strength(reps: set.reps ?? 0, weightKg: set.weightKg);
 
+  static const String _pendingIdPrefix = 'pending-set';
+
   final int? reps;
   final double weightKg;
   final int? durationSeconds;
   final double? distanceMeters;
 
   SetKind get kind => durationSeconds != null ? SetKind.cardio : SetKind.strength;
+
+  // The set an optimistic write shows before the server answers. Its id is a
+  // sequence rather than the real row's, so a settle can find exactly the
+  // placeholder it wrote even when two identical repeats are in flight.
+  WorkoutSet asPendingSet({required int sequence, required int position}) => WorkoutSet(
+    id: '$_pendingIdPrefix:$sequence',
+    position: position,
+    reps: reps,
+    weightKg: weightKg,
+    durationSeconds: durationSeconds,
+    distanceMeters: distanceMeters,
+  );
 
   @override
   List<Object?> get props => [reps, weightKg, durationSeconds, distanceMeters];
