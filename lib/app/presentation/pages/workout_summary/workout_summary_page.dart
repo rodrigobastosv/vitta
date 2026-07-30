@@ -45,7 +45,7 @@ class WorkoutSummaryPage extends StatelessWidget {
           VTAppearEffect(index: 1, child: VTCard(child: Column(children: _metrics(context)))),
           if (muscleWork.hasData) ...[
             const VTGap.m(),
-            VTAppearEffect(index: 2, child: WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint)),
+            VTAppearEffect(index: 2, child: WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint, figure: extra.bodyFigure)),
           ],
           const VTGap.m(),
           VTAppearEffect(index: 3, child: SessionProgressCard(progress: extra.progress, unitSystem: extra.unitSystem)),

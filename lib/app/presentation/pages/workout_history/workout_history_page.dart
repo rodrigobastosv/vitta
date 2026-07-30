@@ -69,7 +69,7 @@ class WorkoutHistoryPage extends StatelessWidget {
               WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
               const VTGap.m(),
               WorkoutCardioTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
-              if (muscleWork.hasData) ...[const VTGap.m(), WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint)],
+              if (muscleWork.hasData) ...[const VTGap.m(), WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint, figure: cubit.bodyFigure)],
               const VTGap.m(),
               MuscleRegionSplitCard(split: regionVolume),
             ],

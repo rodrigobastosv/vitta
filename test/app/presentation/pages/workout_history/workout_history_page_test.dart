@@ -7,6 +7,7 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/components/charts/vt_bar_chart.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/workout/entities/daily_workout.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
@@ -47,13 +48,19 @@ Future<void> pumpHistoryPage(WidgetTester tester, {Map<DateTime, DailyWorkout> w
     ),
   ).thenAnswer((_) async => Success(workoutsByDate));
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
+  final getBodyProfileUseCase = MockGetBodyProfileUseCase();
+  when(getBodyProfileUseCase.call).thenReturn(const BodyProfile());
   await tester.binding.setSurfaceSize(const Size(500, 1800));
   addTearDown(() => tester.binding.setSurfaceSize(null));
   if (G.isRegistered<WorkoutHistoryCubit>()) {
     G.unregister<WorkoutHistoryCubit>();
   }
   G.registerFactory<WorkoutHistoryCubit>(
-    () => WorkoutHistoryCubit(getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase, getAppSettingsUseCase: getAppSettingsUseCase),
+    () => WorkoutHistoryCubit(
+      getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase,
+      getAppSettingsUseCase: getAppSettingsUseCase,
+      getBodyProfileUseCase: getBodyProfileUseCase,
+    ),
   );
 
   await tester.pumpWidget(

@@ -2,6 +2,8 @@ import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/logging/log.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/body_weight/use_cases/get_latest_body_weight_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
@@ -24,6 +26,7 @@ import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_c
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/start_workout_from_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
+import 'package:vitta/app/presentation/general/body_profile_body_figure.dart';
 import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
@@ -44,6 +47,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     required this._getLastSetsByExerciseUseCase,
     required this._getLatestBodyWeightUseCase,
     required this._getAppSettingsUseCase,
+    required this._getBodyProfileUseCase,
     required this._hasSeenWorkoutIntroUseCase,
     required this._markWorkoutIntroSeenUseCase,
   }) : super(WorkoutState(isLoaded: false, date: _today(), workouts: const []));
@@ -60,6 +64,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final StartWorkoutFromRoutineUseCase _startWorkoutFromRoutineUseCase;
   final GetLastSetsByExerciseUseCase _getLastSetsByExerciseUseCase;
   final GetLatestBodyWeightUseCase _getLatestBodyWeightUseCase;
+  final GetBodyProfileUseCase _getBodyProfileUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
   final HasSeenWorkoutIntroUseCase _hasSeenWorkoutIntroUseCase;
   final MarkWorkoutIntroSeenUseCase _markWorkoutIntroSeenUseCase;
@@ -72,6 +77,8 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   }
 
   UnitSystem get unitSystem => _getAppSettingsUseCase().unitSystem;
+
+  VTBodyFigure get bodyFigure => _getBodyProfileUseCase().bodyFigure;
 
   @override
   void onInit() {

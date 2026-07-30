@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_geometry.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_highlight.dart';
@@ -80,7 +81,7 @@ void main() {
     final drawnUnworked = strokedPathCount(tester);
 
     final showable = [
-      for (final part in VTBodyPart.values) ...VTBodyMapGeometry.partsOf(part, .front),
+      for (final part in VTBodyPart.values) ...VTBodyMapGeometry.partsOf(part, .front, VTBodyFigure.male),
     ];
 
     expect(showable, isNotEmpty);
@@ -112,8 +113,8 @@ void main() {
     expect(find.byType(VTBodyMap), isNot(paintsShadeOf(VTColors.bodyRegionChest)));
   });
 
-  testWidgets('the back view paints the lats the front cannot show', (tester) async {
-    const lats = [VTBodyMapHighlight(part: .lats, color: VTColors.bodyRegionBack, intensity: 1)];
+  testWidgets('the back view paints the upper back the front cannot show', (tester) async {
+    const lats = [VTBodyMapHighlight(part: .upperBack, color: VTColors.bodyRegionBack, intensity: 1)];
 
     await pumpBodyMap(tester, view: .back, highlights: lats);
     expect(find.byType(VTBodyMap), paintsShadeOf(VTColors.bodyRegionBack));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_highlight.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_view.dart';
@@ -11,6 +12,7 @@ class WorkoutBodyMapFigure extends StatelessWidget {
     required this.view,
     required this.caption,
     required this.highlights,
+    this.figure = VTBodyFigure.male,
     this.figureHeight = 168,
     super.key,
   });
@@ -21,6 +23,7 @@ class WorkoutBodyMapFigure extends StatelessWidget {
   // from the drawing, and the card names the muscles to VoiceOver regardless.
   final String? caption;
   final List<VTBodyMapHighlight> highlights;
+  final VTBodyFigure figure;
   final double figureHeight;
 
   @override
@@ -28,7 +31,7 @@ class WorkoutBodyMapFigure extends StatelessWidget {
     final colorScheme = context.colorScheme;
     return Column(
       children: [
-        VTBodyMap(view: view, highlights: highlights, height: figureHeight),
+        VTBodyMap(view: view, highlights: highlights, figure: figure, height: figureHeight),
         if (caption case final caption?) ...[
           const VTGap.s(),
           Text(caption, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant), textAlign: .center),

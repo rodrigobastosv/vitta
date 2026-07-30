@@ -59,6 +59,7 @@ class WorkoutPage extends StatelessWidget {
       lastSetsByExercise: cubit.state.lastSetsByExercise,
       latestBodyWeightKg: cubit.state.latestBodyWeightKg,
       unitSystem: cubit.unitSystem,
+      bodyFigure: cubit.bodyFigure,
     ),
   );
 
@@ -140,7 +141,7 @@ class WorkoutPage extends StatelessWidget {
                 ],
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
-              VTAppearEffect(child: WorkoutOverviewCarousel(state: state, unitSystem: cubit.unitSystem)),
+              VTAppearEffect(child: WorkoutOverviewCarousel(state: state, unitSystem: cubit.unitSystem, bodyFigure: cubit.bodyFigure)),
               const VTGap.m(),
               if (state.isFinished) ...[
                 VTAppearEffect(

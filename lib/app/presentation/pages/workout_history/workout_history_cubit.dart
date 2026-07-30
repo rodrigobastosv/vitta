@@ -1,6 +1,9 @@
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/settings/use_cases/get_app_settings_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_daily_workouts_in_range_use_case.dart';
+import 'package:vitta/app/presentation/general/body_profile_body_figure.dart';
 import 'package:vitta/app/presentation/general/load_trigger.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
@@ -8,11 +11,18 @@ import 'package:vitta/app/presentation/pages/workout_history/workout_history_pre
 import 'package:vitta/app/presentation/pages/workout_history/workout_history_state.dart';
 
 class WorkoutHistoryCubit extends PresentationCubit<WorkoutHistoryState, WorkoutHistoryPresentationEvent> {
-  WorkoutHistoryCubit({required this._getDailyWorkoutsInRangeUseCase, required this._getAppSettingsUseCase})
+  WorkoutHistoryCubit({
+    required this._getDailyWorkoutsInRangeUseCase,
+    required this._getAppSettingsUseCase,
+    required this._getBodyProfileUseCase,
+  })
     : super(WorkoutHistoryState(isLoaded: false, month: _monthOf(DateTime.now())));
 
   final GetDailyWorkoutsInRangeUseCase _getDailyWorkoutsInRangeUseCase;
   final GetAppSettingsUseCase _getAppSettingsUseCase;
+  final GetBodyProfileUseCase _getBodyProfileUseCase;
+
+  VTBodyFigure get bodyFigure => _getBodyProfileUseCase().bodyFigure;
 
   static DateTime _monthOf(DateTime date) => DateTime(date.year, date.month);
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_motion.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
@@ -9,10 +10,11 @@ import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_car
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
 
 class WorkoutOverviewCarousel extends StatefulWidget {
-  const WorkoutOverviewCarousel({required this.state, required this.unitSystem, super.key});
+  const WorkoutOverviewCarousel({required this.state, required this.unitSystem, required this.bodyFigure, super.key});
 
   final WorkoutState state;
   final UnitSystem unitSystem;
+  final VTBodyFigure bodyFigure;
 
   @override
   State<WorkoutOverviewCarousel> createState() => _WorkoutOverviewCarouselState();
@@ -42,6 +44,7 @@ class _WorkoutOverviewCarouselState extends State<WorkoutOverviewCarousel> {
       WorkoutBodyMapCard(
         muscleWork: widget.state.completedMuscleWork,
         hint: widget.state.isFinished ? l10n.workoutBodyMapHint : l10n.workoutBodyMapProgressHint,
+        figure: widget.bodyFigure,
         isCompact: true,
       ),
     ];

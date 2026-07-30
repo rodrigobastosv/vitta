@@ -1,4 +1,5 @@
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/domain/workout/entities/session_progress.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_energy.dart';
@@ -20,6 +21,7 @@ class WorkoutSummaryExtra with WorkoutVolume, WorkoutEnergy {
     required this.lastSetsByExercise,
     required this.latestBodyWeightKg,
     required this.unitSystem,
+    required this.bodyFigure,
   });
 
   final DateTime date;
@@ -27,6 +29,7 @@ class WorkoutSummaryExtra with WorkoutVolume, WorkoutEnergy {
   final Map<String, List<WorkoutSet>> lastSetsByExercise;
   final double? latestBodyWeightKg;
   final UnitSystem unitSystem;
+  final VTBodyFigure bodyFigure;
 
   @override
   List<WorkoutExercise> get exercises => [for (final workout in workouts) ...workout.exercises];

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
@@ -48,6 +49,7 @@ Future<void> pumpSummary(
           lastSetsByExercise: lastSetsByExercise,
           latestBodyWeightKg: latestBodyWeightKg,
           unitSystem: UnitSystem.metric,
+          bodyFigure: VTBodyFigure.male,
         ),
       ),
     ),

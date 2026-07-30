@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/workout/entities/exercise_category.dart';
@@ -87,7 +88,7 @@ Future<void> pumpCarousel(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(
-        body: ListView(children: [WorkoutOverviewCarousel(state: state, unitSystem: unitSystem)]),
+        body: ListView(children: [WorkoutOverviewCarousel(state: state, unitSystem: unitSystem, bodyFigure: VTBodyFigure.male)]),
       ),
     ),
   );

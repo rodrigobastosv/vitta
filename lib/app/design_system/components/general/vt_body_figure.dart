@@ -1,0 +1,1 @@
+enum VTBodyFigure { male, female }

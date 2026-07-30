@@ -394,6 +394,7 @@ abstract class CubitsFactories {
     MockGetLastSetsByExerciseUseCase? getLastSetsByExerciseUseCase,
     MockGetLatestBodyWeightUseCase? getLatestBodyWeightUseCase,
     MockGetAppSettingsUseCase? getAppSettingsUseCase,
+    MockGetBodyProfileUseCase? getBodyProfileUseCase,
     MockHasSeenWorkoutIntroUseCase? hasSeenWorkoutIntroUseCase,
     MockMarkWorkoutIntroSeenUseCase? markWorkoutIntroSeenUseCase,
   }) => WorkoutCubit(
@@ -410,6 +411,7 @@ abstract class CubitsFactories {
     getLastSetsByExerciseUseCase: getLastSetsByExerciseUseCase ?? MockGetLastSetsByExerciseUseCase(),
     getLatestBodyWeightUseCase: getLatestBodyWeightUseCase ?? MockGetLatestBodyWeightUseCase(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+    getBodyProfileUseCase: getBodyProfileUseCase ?? MockGetBodyProfileUseCase(),
     hasSeenWorkoutIntroUseCase: hasSeenWorkoutIntroUseCase ?? MockHasSeenWorkoutIntroUseCase(),
     markWorkoutIntroSeenUseCase: markWorkoutIntroSeenUseCase ?? MockMarkWorkoutIntroSeenUseCase(),
   );
