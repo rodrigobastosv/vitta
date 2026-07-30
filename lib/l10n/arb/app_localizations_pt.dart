@@ -2798,7 +2798,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutBodyMapBackView => 'Vista posterior';
 
   @override
-  String get workoutBodyMapHint => 'Cor mais forte significa mais séries naquela região.';
+  String get workoutBodyMapHint => 'Cor mais forte significa mais trabalho naquele músculo.';
+
+  @override
+  String get workoutBodyMapProgressHint => 'Vai preenchendo conforme você conclui cada exercício.';
+
+  @override
+  String workoutBodyMapSemantics(String muscles) {
+    return 'Músculos trabalhados: $muscles';
+  }
+
+  @override
+  String get workoutBodyMapSemanticsEmpty => 'Nenhum músculo trabalhado ainda';
 
   @override
   String get premiumCancelAnytime => 'Cancele quando quiser nos ajustes da App Store.';

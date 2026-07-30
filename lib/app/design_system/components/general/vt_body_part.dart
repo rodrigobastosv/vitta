@@ -1,1 +1,19 @@
-enum VTBodyPart { chest, back, shoulders, arms, core, legs }
+enum VTBodyPart {
+  lowerBack,
+  middleBack,
+  lats,
+  traps,
+  neck,
+  shoulders,
+  chest,
+  abdominals,
+  biceps,
+  triceps,
+  forearms,
+  glutes,
+  abductors,
+  quadriceps,
+  hamstrings,
+  adductors,
+  calves,
+}

@@ -7,6 +7,7 @@ import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_refreshable.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
 import 'package:vitta/app/domain/workout/entities/workout_region_volume.dart';
 import 'package:vitta/app/presentation/general/history_skeleton.dart';
 import 'package:vitta/app/presentation/general/trend_range_selector.dart';
@@ -38,10 +39,12 @@ class WorkoutHistoryPage extends StatelessWidget {
         }
       },
       builder: (context, cubit, state) {
-        final regionVolume = WorkoutRegionVolume.fromWorkouts([
+        final workoutsInRange = [
           for (final day in cubit.trendDays)
             if (state.workoutsInTrendRange[day] case final workout?) ...workout.workouts,
-        ]);
+        ];
+        final regionVolume = WorkoutRegionVolume.fromWorkouts(workoutsInRange);
+        final muscleWork = WorkoutMuscleWork.fromWorkouts(workoutsInRange);
         return Scaffold(
           appBar: AppBar(title: Text(l10n.workoutHistoryTitle)),
           body: VTRefreshable(
@@ -66,7 +69,7 @@ class WorkoutHistoryPage extends StatelessWidget {
               WorkoutVolumeTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange, unitSystem: cubit.unitSystem),
               const VTGap.m(),
               WorkoutCardioTrendCard(days: cubit.trendDays, workoutsByDate: state.workoutsInTrendRange),
-              if (regionVolume.workedRegions.isNotEmpty) ...[const VTGap.m(), WorkoutBodyMapCard(regionVolume: regionVolume)],
+              if (muscleWork.hasData) ...[const VTGap.m(), WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint)],
               const VTGap.m(),
               MuscleRegionSplitCard(split: regionVolume),
             ],

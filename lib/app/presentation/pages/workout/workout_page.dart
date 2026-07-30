@@ -26,7 +26,7 @@ import 'package:vitta/app/presentation/pages/workout/widgets/rest_length_sheet.d
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_date_selector.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_exercise_card.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_finished_card.dart';
-import 'package:vitta/app/presentation/pages/workout/widgets/workout_summary_card.dart';
+import 'package:vitta/app/presentation/pages/workout/widgets/workout_overview_carousel.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_state.dart';
@@ -140,7 +140,7 @@ class WorkoutPage extends StatelessWidget {
                 ],
               VTEmptyState(icon: Icons.fitness_center_outlined, title: l10n.workoutEmptyTitle, message: l10n.workoutEmptyMessage),
             ] else ...[
-              VTAppearEffect(child: WorkoutSummaryCard(state: state, unitSystem: cubit.unitSystem)),
+              VTAppearEffect(child: WorkoutOverviewCarousel(state: state, unitSystem: cubit.unitSystem)),
               const VTGap.m(),
               if (state.isFinished) ...[
                 VTAppearEffect(

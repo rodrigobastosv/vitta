@@ -8,7 +8,7 @@ import 'package:vitta/app/design_system/components/general/vt_celebration.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
-import 'package:vitta/app/domain/workout/entities/workout_region_volume.dart';
+import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
 import 'package:vitta/app/presentation/general/workout_body_map_card.dart';
 import 'package:vitta/app/presentation/general/workout_duration_format.dart';
 import 'package:vitta/app/presentation/pages/workout/widgets/workout_metric.dart';
@@ -25,7 +25,7 @@ class WorkoutSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
-    final regionVolume = WorkoutRegionVolume.fromWorkouts(extra.workouts);
+    final muscleWork = WorkoutMuscleWork.fromWorkouts(extra.workouts);
     return Scaffold(
       appBar: AppBar(title: Text(l10n.workoutSummaryTitle)),
       body: ListView(
@@ -43,9 +43,9 @@ class WorkoutSummaryPage extends StatelessWidget {
           ),
           const VTGap.m(),
           VTAppearEffect(index: 1, child: VTCard(child: Column(children: _metrics(context)))),
-          if (regionVolume.workedRegions.isNotEmpty) ...[
+          if (muscleWork.hasData) ...[
             const VTGap.m(),
-            VTAppearEffect(index: 2, child: WorkoutBodyMapCard(regionVolume: regionVolume)),
+            VTAppearEffect(index: 2, child: WorkoutBodyMapCard(muscleWork: muscleWork, hint: l10n.workoutBodyMapHint)),
           ],
           const VTGap.m(),
           VTAppearEffect(index: 3, child: SessionProgressCard(progress: extra.progress, unitSystem: extra.unitSystem)),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_map_geometry.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_highlight.dart';
 import 'package:vitta/app/design_system/components/general/vt_body_map_view.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_part.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 
@@ -44,8 +46,22 @@ double paintedAlphaOf(WidgetTester tester, Color accent) {
   return alphas.first;
 }
 
+int strokedPathCount(WidgetTester tester) {
+  var stroked = 0;
+  expect(
+    find.byType(VTBodyMap),
+    paints..everything((symbol, arguments) {
+      if (symbol == #drawPath && (arguments[1] as Paint).style == PaintingStyle.stroke) {
+        stroked++;
+      }
+      return true;
+    }),
+  );
+  return stroked;
+}
+
 void main() {
-  testWidgets('paints a worked region in its accent and leaves an unworked one untinted', (tester) async {
+  testWidgets('paints a worked muscle in its accent and leaves an unworked one untinted', (tester) async {
     await pumpBodyMap(tester, highlights: const [VTBodyMapHighlight(part: .chest, color: VTColors.bodyRegionChest, intensity: 1)]);
 
     expect(find.byType(VTBodyMap), paintsShadeOf(VTColors.bodyRegionChest));
@@ -59,16 +75,34 @@ void main() {
     expect(find.byType(VTBodyMap), isNot(paintsShadeOf(VTColors.bodyRegionBack)));
   });
 
-  testWidgets('a harder-worked region paints more opaquely than a lighter one', (tester) async {
-    await pumpBodyMap(tester, highlights: const [VTBodyMapHighlight(part: .legs, color: VTColors.bodyRegionLegs, intensity: 1)]);
+  testWidgets('outlines every muscle the view can show, worked or not', (tester) async {
+    await pumpBodyMap(tester);
+    final drawnUnworked = strokedPathCount(tester);
+
+    final showable = [
+      for (final part in VTBodyPart.values) ...VTBodyMapGeometry.partsOf(part, .front),
+    ];
+
+    expect(showable, isNotEmpty);
+    expect(drawnUnworked, showable.length + 1);
+  });
+
+  testWidgets('a harder-worked muscle paints more opaquely than a lighter one', (tester) async {
+    await pumpBodyMap(
+      tester,
+      highlights: const [VTBodyMapHighlight(part: .quadriceps, color: VTColors.bodyRegionLegs, intensity: 1)],
+    );
     final hardest = paintedAlphaOf(tester, VTColors.bodyRegionLegs);
 
-    await pumpBodyMap(tester, highlights: const [VTBodyMapHighlight(part: .legs, color: VTColors.bodyRegionLegs, intensity: 0.2)]);
+    await pumpBodyMap(
+      tester,
+      highlights: const [VTBodyMapHighlight(part: .quadriceps, color: VTColors.bodyRegionLegs, intensity: 0.2)],
+    );
 
     expect(paintedAlphaOf(tester, VTColors.bodyRegionLegs), lessThan(hardest));
   });
 
-  testWidgets('a region the view cannot show is not painted on it', (tester) async {
+  testWidgets('a muscle the view cannot show is not painted on it', (tester) async {
     const chest = [VTBodyMapHighlight(part: .chest, color: VTColors.bodyRegionChest, intensity: 1)];
 
     await pumpBodyMap(tester, highlights: chest);
@@ -78,14 +112,24 @@ void main() {
     expect(find.byType(VTBodyMap), isNot(paintsShadeOf(VTColors.bodyRegionChest)));
   });
 
-  testWidgets('the back view paints the back region the front cannot show', (tester) async {
-    const back = [VTBodyMapHighlight(part: .back, color: VTColors.bodyRegionBack, intensity: 1)];
+  testWidgets('the back view paints the lats the front cannot show', (tester) async {
+    const lats = [VTBodyMapHighlight(part: .lats, color: VTColors.bodyRegionBack, intensity: 1)];
 
-    await pumpBodyMap(tester, view: .back, highlights: back);
+    await pumpBodyMap(tester, view: .back, highlights: lats);
     expect(find.byType(VTBodyMap), paintsShadeOf(VTColors.bodyRegionBack));
 
-    await pumpBodyMap(tester, highlights: back);
+    await pumpBodyMap(tester, highlights: lats);
     expect(find.byType(VTBodyMap), isNot(paintsShadeOf(VTColors.bodyRegionBack)));
+  });
+
+  testWidgets('tells the biceps and the triceps apart by view', (tester) async {
+    const biceps = [VTBodyMapHighlight(part: .biceps, color: VTColors.bodyRegionArms, intensity: 1)];
+
+    await pumpBodyMap(tester, highlights: biceps);
+    expect(find.byType(VTBodyMap), paintsShadeOf(VTColors.bodyRegionArms));
+
+    await pumpBodyMap(tester, view: .back, highlights: biceps);
+    expect(find.byType(VTBodyMap), isNot(paintsShadeOf(VTColors.bodyRegionArms)));
   });
 
   testWidgets('exposes an accessibility label when given one', (tester) async {

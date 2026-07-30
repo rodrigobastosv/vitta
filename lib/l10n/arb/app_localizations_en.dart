@@ -2774,7 +2774,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutBodyMapBackView => 'Rear view';
 
   @override
-  String get workoutBodyMapHint => 'A deeper colour means more sets landed there.';
+  String get workoutBodyMapHint => 'A deeper colour means more work landed on that muscle.';
+
+  @override
+  String get workoutBodyMapProgressHint => 'Fills in as you complete each exercise.';
+
+  @override
+  String workoutBodyMapSemantics(String muscles) {
+    return 'Muscles worked: $muscles';
+  }
+
+  @override
+  String get workoutBodyMapSemanticsEmpty => 'No muscles worked yet';
 
   @override
   String get premiumCancelAnytime => 'Cancel anytime in your App Store settings.';
