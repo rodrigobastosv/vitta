@@ -1,5 +1,6 @@
 import 'package:vitta/app/cubit/app_cubit.dart';
 import 'package:vitta/app/domain/diet/entities/recipe.dart';
+import 'package:vitta/app/domain/trends/entities/progress_story.dart';
 import 'package:vitta/app/domain/workout/entities/routine.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
 import 'package:vitta/app/presentation/pages/auth/auth_cubit.dart';
@@ -25,6 +26,7 @@ import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder_history/reminder_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/routine_form/routine_form_cubit.dart';
 import 'package:vitta/app/presentation/pages/routines/routines_cubit.dart';
+import 'package:vitta/app/presentation/pages/share_progress/share_progress_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep/sleep_cubit.dart';
 import 'package:vitta/app/presentation/pages/sleep_history/sleep_history_cubit.dart';
 import 'package:vitta/app/presentation/pages/trends/trends_cubit.dart';
@@ -461,6 +463,16 @@ abstract class CubitsFactories {
     getSleepGoalUseCase: getSleepGoalUseCase ?? MockGetSleepGoalUseCase(),
     getDailyWorkoutsInRangeUseCase: getDailyWorkoutsInRangeUseCase ?? MockGetDailyWorkoutsInRangeUseCase(),
     getBodyWeightInRangeUseCase: getBodyWeightInRangeUseCase ?? MockGetBodyWeightInRangeUseCase(),
+    getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
+  );
+
+  static ShareProgressCubit buildShareProgressCubit({
+    ProgressStory story = const ProgressStory(days: 30),
+    MockShareService? shareService,
+    MockGetAppSettingsUseCase? getAppSettingsUseCase,
+  }) => ShareProgressCubit(
+    story: story,
+    shareService: shareService ?? MockShareService(),
     getAppSettingsUseCase: getAppSettingsUseCase ?? MockGetAppSettingsUseCase(),
   );
 

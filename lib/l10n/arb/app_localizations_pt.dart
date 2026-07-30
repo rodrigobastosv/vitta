@@ -3014,4 +3014,42 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get trendsEmptyAction => 'Começar a registrar';
+
+  @override
+  String get trendsShareAction => 'Compartilhar progresso';
+
+  @override
+  String get shareProgressTitle => 'Compartilhar progresso';
+
+  @override
+  String get shareProgressStoryTitle => 'Meu progresso';
+
+  @override
+  String get shareProgressAction => 'Compartilhar';
+
+  @override
+  String get shareProgressHint => 'Todo número daqui vem do que você registrou.';
+
+  @override
+  String shareProgressPeriod(int days) {
+    return 'Últimos $days dias';
+  }
+
+  @override
+  String shareProgressGoals(int onTrack, int total) {
+    return '$onTrack de $total metas em dia';
+  }
+
+  @override
+  String shareProgressFootnote(int days) {
+    return 'Variação em relação aos $days dias anteriores';
+  }
+
+  @override
+  String shareProgressMessage(int days) {
+    return 'Meus últimos $days dias no Vitta.';
+  }
+
+  @override
+  String get shareProgressFailed => 'Não deu para compartilhar seu progresso. Tente de novo.';
 }

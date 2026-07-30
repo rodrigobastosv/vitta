@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/trends/entities/area_trend.dart';
+import 'package:vitta/app/domain/trends/entities/progress_story.dart';
 import 'package:vitta/app/domain/trends/entities/trend_area.dart';
 import 'package:vitta/app/domain/trends/entities/trends_verdict.dart';
 import 'package:vitta/app/presentation/general/trend_range.dart';
@@ -11,17 +12,19 @@ class TrendsState extends Equatable {
   final Map<TrendArea, AreaTrend> trends;
   final bool isLoaded;
 
-  AreaTrend trendOf(TrendArea area) => trends[area] ?? const AreaTrend();
+  ProgressStory get story => ProgressStory(days: trendRange.days, trends: trends);
 
-  bool get hasData => trends.values.any((trend) => trend.hasData);
+  AreaTrend trendOf(TrendArea area) => story.trendOf(area);
 
-  Iterable<AreaTrend> get judgedTrends => trends.values.where((trend) => trend.isJudged);
+  bool get hasData => story.hasData;
 
-  int get judgedAreaCount => judgedTrends.length;
+  Iterable<AreaTrend> get judgedTrends => story.judgedTrends;
 
-  int get onTrackAreaCount => judgedTrends.where((trend) => trend.isOnTrack).length;
+  int get judgedAreaCount => story.judgedAreaCount;
 
-  TrendsVerdict? get verdict => judgedAreaCount == 0 ? null : TrendsVerdict.forOnTrackRatio(onTrackAreaCount / judgedAreaCount);
+  int get onTrackAreaCount => story.onTrackAreaCount;
+
+  TrendsVerdict? get verdict => story.verdict;
 
   TrendsState copyWith({TrendRange? trendRange, Map<TrendArea, AreaTrend>? trends, bool? isLoaded}) =>
       TrendsState(trendRange: trendRange ?? this.trendRange, trends: trends ?? this.trends, isLoaded: isLoaded ?? this.isLoaded);

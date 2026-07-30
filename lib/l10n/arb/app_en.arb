@@ -1798,6 +1798,47 @@
   "trendsEmptyTitle": "No trends yet",
   "trendsEmptyMessage": "Track your food, water, sleep, workouts or weight for a few days and your story shows up here.",
   "trendsEmptyAction": "Start tracking",
+  "trendsShareAction": "Share progress",
+  "shareProgressTitle": "Share progress",
+  "shareProgressStoryTitle": "My progress",
+  "shareProgressAction": "Share",
+  "shareProgressHint": "Every figure here comes from what you tracked.",
+  "shareProgressPeriod": "Last {days} days",
+  "shareProgressGoals": "{onTrack} of {total} goals on target",
+  "shareProgressFootnote": "Change measured against the previous {days} days",
+  "shareProgressMessage": "My last {days} days on Vitta.",
+  "shareProgressFailed": "Couldn't share your progress. Try again.",
+  "@shareProgressPeriod": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressGoals": {
+    "placeholders": {
+      "onTrack": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressFootnote": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "@shareProgressMessage": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      }
+    }
+  },
   "@trendsVerdictSummary": {
     "placeholders": {
       "onTrack": {

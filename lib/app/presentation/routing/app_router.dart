@@ -37,6 +37,7 @@ import 'package:vitta/app/presentation/routing/routes/reminder_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routine_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routines_route.dart';
 import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
+import 'package:vitta/app/presentation/routing/routes/share_progress_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sign_in_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sign_up_route.dart';
 import 'package:vitta/app/presentation/routing/routes/sleep_history_route.dart';
@@ -55,6 +56,7 @@ abstract class AppRouter {
     OnboardingRoute(),
     HomeRoute(hasSeenOnboardingUseCase: G()),
     TrendsRoute(),
+    ShareProgressRoute(),
     DietRoute(),
     DietIntroRoute(),
     CopyMealsRoute(),

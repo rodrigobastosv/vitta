@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vitta/app/design_system/tokens/vt_colors.dart';
 import 'package:vitta/app/domain/trends/entities/trend_area.dart';
+import 'package:vitta/app/domain/trends/entities/trend_direction.dart';
 import 'package:vitta/app/presentation/routing/app_route.dart';
 
 IconData trendAreaIcon(TrendArea area) => switch (area) {
@@ -17,6 +18,12 @@ Color trendAreaAccent(TrendArea area) => switch (area) {
   .sleep => VTColors.sleep,
   .workout => VTColors.green,
   .bodyWeight => VTColors.success,
+};
+
+IconData trendDirectionIcon(TrendDirection direction) => switch (direction) {
+  .up => Icons.arrow_upward,
+  .down => Icons.arrow_downward,
+  .flat => Icons.trending_flat,
 };
 
 AppRoute trendAreaHistoryRoute(TrendArea area) => switch (area) {

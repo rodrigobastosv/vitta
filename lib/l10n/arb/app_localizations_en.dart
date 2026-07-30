@@ -2983,4 +2983,42 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trendsEmptyAction => 'Start tracking';
+
+  @override
+  String get trendsShareAction => 'Share progress';
+
+  @override
+  String get shareProgressTitle => 'Share progress';
+
+  @override
+  String get shareProgressStoryTitle => 'My progress';
+
+  @override
+  String get shareProgressAction => 'Share';
+
+  @override
+  String get shareProgressHint => 'Every figure here comes from what you tracked.';
+
+  @override
+  String shareProgressPeriod(int days) {
+    return 'Last $days days';
+  }
+
+  @override
+  String shareProgressGoals(int onTrack, int total) {
+    return '$onTrack of $total goals on target';
+  }
+
+  @override
+  String shareProgressFootnote(int days) {
+    return 'Change measured against the previous $days days';
+  }
+
+  @override
+  String shareProgressMessage(int days) {
+    return 'My last $days days on Vitta.';
+  }
+
+  @override
+  String get shareProgressFailed => 'Couldn\'t share your progress. Try again.';
 }
