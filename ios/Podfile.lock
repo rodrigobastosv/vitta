@@ -112,12 +112,12 @@ PODS:
   - package_info_plus (0.4.5):
     - Flutter
   - PromisesObjC (2.4.1)
-  - purchases_flutter (10.4.2):
+  - purchases_flutter (10.6.0):
     - Flutter
-    - PurchasesHybridCommon (= 18.22.1)
-  - PurchasesHybridCommon (18.22.1):
-    - RevenueCat (= 5.81.0)
-  - RevenueCat (5.81.0)
+    - PurchasesHybridCommon (= 18.26.0)
+  - PurchasesHybridCommon (18.26.0):
+    - RevenueCat (= 5.81.3)
+  - RevenueCat (5.81.3)
   - Sentry/HybridSDK (8.58.4)
   - sentry_flutter (9.25.0):
     - Flutter
@@ -202,7 +202,7 @@ SPEC CHECKSUMS:
   FirebaseCoreInternal: 6ab6a02c94446c026d2cf35cf5383842ebaa4992
   FirebaseInstallations: eb29ccbf64eaedf86fd5b2ccc7fabde567660b52
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
-  flutter_local_notifications: ff50f8405aaa0ccdc7dcfb9022ca192e8ad9688f
+  flutter_local_notifications: eda81afddbf18f8589f6ec069ce593c4c6378769
   flutter_timezone: ac3da59ac941ff1c98a2e1f0293420e020120282
   GoogleAdsOnDeviceConversion: e3b71da24ff4cf01cf520756ac1c2b93c07b86ff
   GoogleAppMeasurement: a6d37949071d456e9147dac6789c4342e0e7a8c5
@@ -212,9 +212,9 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   package_info_plus: c0502532a26c7662a62a356cebe2692ec5fe4ec4
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
-  purchases_flutter: dc0631634f73d8824943cc6ba596c399d43beb79
-  PurchasesHybridCommon: 5759975e7b63c093772fd92d8a9e5edbc6a809a8
-  RevenueCat: c692d9b9d123ce98acea28796abcd81f63e9f34a
+  purchases_flutter: 253d40a5361a8d764871b81fc0bd0faf17f72d0f
+  PurchasesHybridCommon: 81a372811549bddae23d1fc6036b3a2c0210a80d
+  RevenueCat: 228e2b3cd3d6b520bad203d11ae1ad9225f278da
   Sentry: 5321d74bdd28d6f6f8beaa1ca06f1fdc746bff49
   sentry_flutter: 61cb8758af33f065aa8df72d7790dc6f2388f575
   shared_preferences_foundation: 5086985c1d43c5ba4d5e69a4e8083a389e2909e6
