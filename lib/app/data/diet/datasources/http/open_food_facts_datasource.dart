@@ -3,12 +3,20 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/http/vt_http_client.dart';
 import 'package:vitta/app/core/http/vt_http_request.dart';
 import 'package:vitta/app/domain/diet/entities/food.dart';
+import 'package:vitta/app/domain/diet/entities/food_plausibility.dart';
 import 'package:vitta/app/domain/diet/entities/nutrient.dart';
 
 class OpenFoodFactsDataSource {
   OpenFoodFactsDataSource({required this._httpClient});
 
   final VTHttpClient _httpClient;
+
+  // Open Food Facts is worldwide and the search was unfiltered, so a Portuguese
+  // query came back full of products nobody here can buy - a Lithuanian milk
+  // drink and Czech baby purée outranked "Banana" (issue #285). The market tag
+  // is what makes the live fallback usable; a second market would make this a
+  // setting rather than a constant, but the app ships in one.
+  static const _market = 'brazil';
 
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
     final responseResult = await _httpClient.get(
@@ -20,6 +28,13 @@ class OpenFoodFactsDataSource {
           'action': 'process',
           'json': '1',
           'page_size': '20',
+          'tagtype_0': 'countries',
+          'tag_contains_0': 'contains',
+          'tag_0': _market,
+          // OFF's own scan counter. Without it the API returns matches in no
+          // useful order, which is the same "relevance is never considered"
+          // failure the catalog query had.
+          'sort_by': 'unique_scans_n',
           'fields': 'code,product_name,brands,nutriments',
         },
       ),
@@ -46,6 +61,12 @@ class OpenFoodFactsDataSource {
     final carbs = _numOrNull(nutriments['carbohydrates_100g']);
     final fat = _numOrNull(nutriments['fat_100g']);
     if (calories == null || protein == null || carbs == null || fat == null) {
+      return null;
+    }
+    // Dropped rather than shown: a search result is one tap from being saved
+    // into the shared catalog, so an implausible row here becomes everyone's
+    // implausible row.
+    if (!FoodPlausibility.isPlausible(caloriesPer100g: calories, proteinPer100g: protein, carbsPer100g: carbs, fatPer100g: fat)) {
       return null;
     }
 

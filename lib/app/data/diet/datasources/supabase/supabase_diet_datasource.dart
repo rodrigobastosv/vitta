@@ -5,6 +5,7 @@ import 'package:vitta/app/core/error/vt_error.dart';
 import 'package:vitta/app/core/services/cache/wire_cache_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_table.dart';
+import 'package:vitta/app/data/diet/datasources/supabase/food_search_ranking.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_log_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/create_food_request.dart';
 import 'package:vitta/app/data/diet/datasources/supabase/requests/update_food_log_request.dart';
@@ -58,44 +59,57 @@ class SupabaseDietDataSource {
 
   static const _catalogSearchLimit = 20;
 
-  // Curated generic whole foods (source 'generic', see issue #180) rank above
-  // every other source: Open Food Facts is a barcode database of packaged
-  // products, so a plain "banana" or "rice" was absent or buried under brands.
-  // The two queries run in parallel and generic is prepended, rather than one
-  // query ordered by source, because generic rows start at times_logged 0 and a
-  // single `.limit(20)` ordered by popularity would truncate them out before the
-  // app ever saw them. Within each tier the #56 popularity order is preserved.
+  // Search is ranked by RELEVANCE first and popularity only within a relevance
+  // tier (issue #285). It used to be a single `ilike '%query%'` ordered by
+  // times_logged, which failed twice over:
+  //
+  //   * Unanchored matching. '%ovo%' matches prOVOlone and the Czech OVOce, and
+  //     '%leite%' matches every chocolate bar labelled "ao leite", so searching
+  //     for an egg returned cheese.
+  //   * The popularity order was a no-op. Almost nothing in a bulk-imported
+  //     catalog has ever been logged, so `times_logged desc` tied on 0 for
+  //     virtually every row and the real sort was the `name asc` tiebreak -
+  //     which is why "Aussie Bar Banana Walnut" outranked "Banana".
+  //
+  // Each tier is its own query rather than one query ordered by a CASE, because
+  // PostgREST cannot express that. They run in parallel and are concatenated in
+  // tier order, then deduped by id keeping the first (best) tier a row appeared
+  // in - a row matching `equals` necessarily also matches `contains`, so the
+  // dedupe is what makes the tiers exclusive.
+  //
+  // The tiers match on search_text, the accent-folded name (see schema.sql), so
+  // "feijao" finds "feijão" - it found 0 of 15 such rows before. Brand is its
+  // own tier and stays unfolded. The ordering itself lives in FoodSearchRanking,
+  // where it can be tested.
   Future<Result<VTError, List<Food>>> searchCatalog({required String query}) async {
+    final term = FoodSearchRanking.termFor(query);
+    if (term.isEmpty) {
+      return const Success([]);
+    }
     try {
-      final tiers = await Future.wait([_genericCatalogRows(query: query), _nonGenericCatalogRows(query: query)]);
-      final foods = [
-        for (final rows in tiers)
-          for (final row in rows) Food.fromMap(row),
-      ];
-      return Success(foods.take(_catalogSearchLimit).toList());
+      final tiers = await Future.wait([for (final tier in FoodSearchTier.values) _tierRows(tier: tier, term: term)]);
+      final ranked = FoodSearchRanking.rank(tiers, limit: _catalogSearchLimit);
+      return Success(ranked.map(Food.fromMap).toList());
     } on Exception catch (error) {
       return Failure(VTError(message: 'Failed to search food catalog', cause: error));
     }
   }
 
-  Future<List<Map<String, dynamic>>> _genericCatalogRows({required String query}) => _supabaseService
-      .from(.foods)
-      .select()
-      .ilike('name', '%$query%')
-      .eq('source', FoodSource.generic.wireValue)
-      .order('times_logged', ascending: false)
-      .order('name', ascending: true)
-      .limit(_catalogSearchLimit);
-
-  Future<List<Map<String, dynamic>>> _nonGenericCatalogRows({required String query}) => _supabaseService
-      .from(.foods)
-      .select()
-      .ilike('name', '%$query%')
-      .neq('source', FoodSource.generic.wireValue)
-      .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
-      .order('times_logged', ascending: false)
-      .order('name', ascending: true)
-      .limit(_catalogSearchLimit);
+  Future<List<Map<String, dynamic>>> _tierRows({required FoodSearchTier tier, required String term}) {
+    final query = _supabaseService.from(.foods).select();
+    final matched = switch (tier) {
+      FoodSearchTier.equals => query.eq('search_text', term),
+      FoodSearchTier.startsWith => query.like('search_text', '$term%'),
+      FoodSearchTier.word => query.like('search_text', '% $term%'),
+      FoodSearchTier.contains => query.like('search_text', '%$term%'),
+      FoodSearchTier.brand => query.ilike('brand', '%$term%'),
+    };
+    return matched
+        .or('source.neq.${FoodSource.recipe.wireValue},user_id.eq.$_userId')
+        .order('times_logged', ascending: false)
+        .order('name', ascending: true)
+        .limit(_catalogSearchLimit);
+  }
 
   static const _myFoodsLimit = 100;
 
