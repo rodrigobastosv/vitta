@@ -2510,6 +2510,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get exerciseSearchAllFilter => 'Todos';
 
   @override
+  String get exerciseBodyMapTitle => 'Músculos trabalhados';
+
+  @override
+  String get exerciseBodyMapHint => 'Preenchimento forte é músculo treinado diretamente; o mais claro auxilia.';
+
+  @override
+  String exerciseBodyMapSemantics(String primaryMuscles, String secondaryMuscles) {
+    return 'Músculos principais: $primaryMuscles. Também trabalha: $secondaryMuscles';
+  }
+
+  @override
+  String exerciseBodyMapSemanticsPrimaryOnly(String primaryMuscles) {
+    return 'Músculos principais: $primaryMuscles';
+  }
+
+  @override
   String get exerciseDetailInstructionsTitle => 'Como fazer';
 
   @override

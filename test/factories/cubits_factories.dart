@@ -422,16 +422,23 @@ abstract class CubitsFactories {
     MockUpdateSetUseCase? updateSetUseCase,
     MockDeleteSetUseCase? deleteSetUseCase,
     MockSetWorkoutExerciseCompletedUseCase? setWorkoutExerciseCompletedUseCase,
+    MockGetBodyProfileUseCase? getBodyProfileUseCase,
   }) => ExerciseWorkoutCubit(
     extra: extra,
     logSetUseCase: logSetUseCase ?? MockLogSetUseCase(),
     updateSetUseCase: updateSetUseCase ?? MockUpdateSetUseCase(),
     deleteSetUseCase: deleteSetUseCase ?? MockDeleteSetUseCase(),
     setWorkoutExerciseCompletedUseCase: setWorkoutExerciseCompletedUseCase ?? MockSetWorkoutExerciseCompletedUseCase(),
+    getBodyProfileUseCase: getBodyProfileUseCase ?? MockGetBodyProfileUseCase(),
   );
 
-  static ExerciseSearchCubit buildExerciseSearchCubit({MockSearchExercisesUseCase? searchExercisesUseCase}) =>
-      ExerciseSearchCubit(searchExercisesUseCase: searchExercisesUseCase ?? MockSearchExercisesUseCase());
+  static ExerciseSearchCubit buildExerciseSearchCubit({
+    MockSearchExercisesUseCase? searchExercisesUseCase,
+    MockGetBodyProfileUseCase? getBodyProfileUseCase,
+  }) => ExerciseSearchCubit(
+    searchExercisesUseCase: searchExercisesUseCase ?? MockSearchExercisesUseCase(),
+    getBodyProfileUseCase: getBodyProfileUseCase ?? MockGetBodyProfileUseCase(),
+  );
 
   static RoutinesCubit buildRoutinesCubit({
     MockGetRoutinesUseCase? getRoutinesUseCase,

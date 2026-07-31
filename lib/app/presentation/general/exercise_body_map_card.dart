@@ -7,71 +7,57 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_semantic_summary.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_muscle_work.dart';
 import 'package:vitta/app/presentation/general/workout_body_map_figure.dart';
 import 'package:vitta/app/presentation/general/workout_muscle_work_highlights.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
-class WorkoutBodyMapCard extends StatelessWidget {
-  const WorkoutBodyMapCard({
-    required this.muscleWork,
-    required this.hint,
-    this.figure = VTBodyFigure.male,
-    this.isCompact = false,
-    super.key,
-  });
+class ExerciseBodyMapCard extends StatelessWidget {
+  const ExerciseBodyMapCard({required this.exercise, this.figure = VTBodyFigure.male, super.key});
 
-  static const double _figureHeight = 168;
-  static const double _compactFigureHeight = 118;
-
-  final WorkoutMuscleWork muscleWork;
-  final String hint;
+  final Exercise exercise;
   final VTBodyFigure figure;
 
-  // Shrinks the figures and drops the two view captions where vertical room is
-  // shared with another card (the workout page's carousel). The legend stays: it
-  // is the only thing that says what the accents mean, and dropping it there left
-  // the workout page with tinted muscles and no key. Front-versus-back is legible
-  // from the drawing itself, and the muscles are named to VoiceOver either way.
-  final bool isCompact;
+  String? _semanticLabel(AppLocalizations l10n) {
+    final primaryMuscles = [for (final muscle in exercise.primaryMuscles) muscle.getLabel(l10n)];
+    final secondaryMuscles = [for (final muscle in exercise.secondaryMuscles) muscle.getLabel(l10n)];
+    if (primaryMuscles.isEmpty) {
+      return null;
+    }
+    return secondaryMuscles.isEmpty
+        ? l10n.exerciseBodyMapSemanticsPrimaryOnly(primaryMuscles.join(', '))
+        : l10n.exerciseBodyMapSemantics(primaryMuscles.join(', '), secondaryMuscles.join(', '));
+  }
 
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     final colorScheme = context.colorScheme;
-    final muscles = muscleWork.workedMuscles;
-    final regions = muscleWork.workedRegions;
+    final muscleWork = WorkoutMuscleWork.forExercise(exercise);
     final highlights = muscleWork.bodyMapHighlights;
-    final figureHeight = isCompact ? _compactFigureHeight : _figureHeight;
+    final regions = muscleWork.workedRegions;
     return VTCard(
       child: Column(
         crossAxisAlignment: .stretch,
         children: [
-          Text(l10n.workoutBodyMapTitle, style: VTTextStyles.bodyStrong(context)),
+          Text(l10n.exerciseBodyMapTitle, style: VTTextStyles.bodyStrong(context)),
           const VTGap.m(),
           VTSemanticSummary(
-            label: muscles.isEmpty
-                ? l10n.workoutBodyMapSemanticsEmpty
-                : l10n.workoutBodyMapSemantics(muscles.map((muscle) => muscle.getLabel(l10n)).join(', ')),
+            label: _semanticLabel(l10n),
             child: Row(
               crossAxisAlignment: .start,
               children: [
                 Expanded(
                   child: WorkoutBodyMapFigure(
                     view: .front,
-                    caption: isCompact ? null : l10n.workoutBodyMapFrontView,
+                    caption: l10n.workoutBodyMapFrontView,
                     highlights: highlights,
                     figure: figure,
-                    figureHeight: figureHeight,
                   ),
                 ),
                 Expanded(
-                  child: WorkoutBodyMapFigure(
-                    view: .back,
-                    caption: isCompact ? null : l10n.workoutBodyMapBackView,
-                    highlights: highlights,
-                    figure: figure,
-                    figureHeight: figureHeight,
-                  ),
+                  child: WorkoutBodyMapFigure(view: .back, caption: l10n.workoutBodyMapBackView, highlights: highlights, figure: figure),
                 ),
               ],
             ),
@@ -85,7 +71,7 @@ class WorkoutBodyMapCard extends StatelessWidget {
             ),
           ],
           const VTGap.s(),
-          Text(hint, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
+          Text(l10n.exerciseBodyMapHint, style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant)),
         ],
       ),
     );
