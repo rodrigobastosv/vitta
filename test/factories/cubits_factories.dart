@@ -191,6 +191,7 @@ abstract class CubitsFactories {
     MockClearRecentSearchesUseCase? clearRecentSearchesUseCase,
     MockGetRecentlyLoggedFoodsUseCase? getRecentlyLoggedFoodsUseCase,
     MockGetMyFoodsUseCase? getMyFoodsUseCase,
+    MockGetMyRecipeFoodsUseCase? getMyRecipeFoodsUseCase,
     MockGetRecentMealsUseCase? getRecentMealsUseCase,
     MockCopyFoodLogsUseCase? copyFoodLogsUseCase,
   }) => AddFoodCubit(
@@ -206,6 +207,7 @@ abstract class CubitsFactories {
     clearRecentSearchesUseCase: clearRecentSearchesUseCase ?? MockClearRecentSearchesUseCase(),
     getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase ?? MockGetRecentlyLoggedFoodsUseCase(),
     getMyFoodsUseCase: getMyFoodsUseCase ?? MockGetMyFoodsUseCase(),
+    getMyRecipeFoodsUseCase: getMyRecipeFoodsUseCase ?? MockGetMyRecipeFoodsUseCase(),
     getRecentMealsUseCase: getRecentMealsUseCase ?? MockGetRecentMealsUseCase(),
     copyFoodLogsUseCase: copyFoodLogsUseCase ?? MockCopyFoodLogsUseCase(),
   );

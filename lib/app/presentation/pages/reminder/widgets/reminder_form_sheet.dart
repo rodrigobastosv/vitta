@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/design_system/components/buttons/vt_primary_button.dart';
@@ -10,6 +12,8 @@ import 'package:vitta/app/domain/reminder/entities/reminder.dart';
 import 'package:vitta/app/domain/reminder/entities/reminder_recurrence.dart';
 import 'package:vitta/app/presentation/pages/reminder/reminder_cubit.dart';
 import 'package:vitta/app/presentation/pages/reminder/widgets/reminder_labels.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_option.dart';
+import 'package:vitta/app/presentation/pages/settings/widgets/settings_option_sheet.dart';
 
 Future<void> showReminderFormSheet({required BuildContext context, required ReminderCubit cubit, required DateTime date, Reminder? reminder}) =>
     showModalBottomSheet<void>(
@@ -61,6 +65,22 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
     final picked = await showDatePicker(context: context, initialDate: _dueDate, firstDate: DateTime(2020), lastDate: DateTime(2100));
     if (picked != null) {
       setState(() => _dueDate = DateTime(picked.year, picked.month, picked.day));
+    }
+  }
+
+  // An option sheet rather than a chip row: eight recurrences (two of them a
+  // whole phrase long) wrap into a block taller than the rest of the form.
+  Future<void> _pickRecurrence() async {
+    final l10n = context.l10n;
+    final picked = await showSettingsOptionSheet<ReminderRecurrence>(
+      context,
+      title: l10n.reminderRepeatLabel,
+      selected: _recurrence,
+      options: [for (final recurrence in ReminderRecurrence.values) SettingsOption(label: recurrence.label(l10n), value: recurrence)],
+    );
+    if (picked != null) {
+      unawaited(VTHaptics.selection());
+      setState(() => _recurrence = picked.value);
     }
   }
 
@@ -139,30 +159,12 @@ class _ReminderFormSheetState extends State<_ReminderFormSheet> {
                 child: ActionChip(avatar: const Icon(Icons.schedule, size: 18), label: Text(_remindTime.format(context)), onPressed: _pickTime),
               ),
             ),
-          const VTGap.m(),
-          Row(
-            children: [
-              Icon(Icons.repeat_rounded, color: colorScheme.primary),
-              const VTGap.m(),
-              Text(l10n.reminderRepeatLabel, style: VTTextStyles.body(context)),
-            ],
-          ),
-          const VTGap.s(),
-          Wrap(
-            spacing: VTSpacing.s,
-            runSpacing: VTSpacing.xs,
-            children: [
-              for (final recurrence in ReminderRecurrence.values)
-                ChoiceChip(
-                  label: Text(recurrence.label(l10n)),
-                  selected: _recurrence == recurrence,
-                  showCheckmark: false,
-                  onSelected: (_) {
-                    VTHaptics.selection();
-                    setState(() => _recurrence = recurrence);
-                  },
-                ),
-            ],
+          ListTile(
+            contentPadding: EdgeInsets.zero,
+            leading: Icon(Icons.repeat_rounded, color: colorScheme.primary),
+            title: Text(l10n.reminderRepeatLabel, style: VTTextStyles.body(context)),
+            trailing: Text(_recurrence.label(l10n), style: VTTextStyles.bodyStrong(context)),
+            onTap: _pickRecurrence,
           ),
           const VTGap.l(),
           VTPrimaryButton(label: l10n.saveAction, onPressed: _canSave ? _submit : null),

@@ -242,6 +242,12 @@ abstract class AppLocalizations {
   /// **'Daily'**
   String get reminderRepeatDaily;
 
+  /// No description provided for @reminderRepeatWeekdays.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekdays'**
+  String get reminderRepeatWeekdays;
+
   /// No description provided for @reminderRepeatWeekly.
   ///
   /// In en, this message translates to:
@@ -253,6 +259,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Monthly'**
   String get reminderRepeatMonthly;
+
+  /// No description provided for @reminderRepeatFirstDayOfMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'First day of the month'**
+  String get reminderRepeatFirstDayOfMonth;
+
+  /// No description provided for @reminderRepeatLastDayOfMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Last day of the month'**
+  String get reminderRepeatLastDayOfMonth;
+
+  /// No description provided for @reminderRepeatYearly.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get reminderRepeatYearly;
 
   /// No description provided for @reminderDeleteTooltip.
   ///
@@ -1574,6 +1598,12 @@ abstract class AppLocalizations {
   /// **'Recent meals'**
   String get dietRecentMealsTitle;
 
+  /// No description provided for @dietRecentMealFoodCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =0{No foods} =1{1 food} other{{count} foods}}'**
+  String dietRecentMealFoodCount(int count);
+
   /// No description provided for @dietMealLoggedToast.
   ///
   /// In en, this message translates to:
@@ -2342,6 +2372,24 @@ abstract class AppLocalizations {
   /// **'Mine'**
   String get dietMyFoodsTabLabel;
 
+  /// No description provided for @dietMyProductsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Products you added'**
+  String get dietMyProductsSectionTitle;
+
+  /// No description provided for @dietMyRecipesSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recipes you created'**
+  String get dietMyRecipesSectionTitle;
+
+  /// No description provided for @dietRecentlyEnteredTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Recently entered'**
+  String get dietRecentlyEnteredTitle;
+
   /// No description provided for @dietMyFoodsEmptyTitle.
   ///
   /// In en, this message translates to:
@@ -2351,7 +2399,7 @@ abstract class AppLocalizations {
   /// No description provided for @dietMyFoodsEmptyMessage.
   ///
   /// In en, this message translates to:
-  /// **'Foods you add yourself land here, ready to log again whenever you want.'**
+  /// **'The products and recipes you create land here, ready to log again whenever you want.'**
   String get dietMyFoodsEmptyMessage;
 
   /// No description provided for @dietClearRecentSearchesAction.
@@ -2869,6 +2917,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save'**
   String get saveAction;
+
+  /// No description provided for @showMoreAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show more'**
+  String get showMoreAction;
+
+  /// No description provided for @showLessAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Show less'**
+  String get showLessAction;
 
   /// No description provided for @adjustDecreaseAction.
   ///

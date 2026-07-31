@@ -18,7 +18,12 @@ import '../../../../factories/entities/food_factory.dart';
 import '../../../../fixtures/premium_fixture.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
-Future<void> pumpAddFood(WidgetTester tester, {List<Food> myFoods = const [], Locale locale = const Locale('en')}) async {
+Future<void> pumpAddFood(
+  WidgetTester tester, {
+  List<Food> myFoods = const [],
+  List<Food> myRecipes = const [],
+  Locale locale = const Locale('en'),
+}) async {
   tester.view.physicalSize = const Size(320, 800);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.reset);
@@ -31,6 +36,8 @@ Future<void> pumpAddFood(WidgetTester tester, {List<Food> myFoods = const [], Lo
   when(getRecentSearchesUseCase.call).thenReturn(const []);
   final getMyFoodsUseCase = MockGetMyFoodsUseCase();
   when(getMyFoodsUseCase.call).thenAnswer((_) async => Success(myFoods));
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => Success(myRecipes));
 
   if (G.isRegistered<AddFoodCubit>()) {
     G.unregister<AddFoodCubit>();
@@ -38,6 +45,7 @@ Future<void> pumpAddFood(WidgetTester tester, {List<Food> myFoods = const [], Lo
   G.registerFactory<AddFoodCubit>(
     () => CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: getMyRecipeFoodsUseCase,
       getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase,
       getFavoriteFoodsUseCase: getFavoriteFoodsUseCase,
       getRecentSearchesUseCase: getRecentSearchesUseCase,
@@ -81,6 +89,32 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Granola caseira'), findsOneWidget);
+  });
+
+  testWidgets('a product and a recipe are told apart by their own headings', (tester) async {
+    await pumpAddFood(
+      tester,
+      myFoods: [FoodFactory.build(id: 'mine-1', name: 'Granola caseira')],
+      myRecipes: [FoodFactory.build(id: 'recipe-1', name: 'Panqueca de banana', source: .recipe)],
+    );
+
+    await tester.tap(find.text('Mine'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Products you added'), findsOneWidget);
+    expect(find.text('Recipes you created'), findsOneWidget);
+    expect(find.text('Granola caseira'), findsOneWidget);
+    expect(find.text('Panqueca de banana'), findsOneWidget);
+  });
+
+  testWidgets('a half the user has never used is dropped rather than shown empty', (tester) async {
+    await pumpAddFood(tester, myFoods: [FoodFactory.build(id: 'mine-1', name: 'Granola caseira')]);
+
+    await tester.tap(find.text('Mine'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Products you added'), findsOneWidget);
+    expect(find.text('Recipes you created'), findsNothing);
   });
 
   testWidgets('a user who has added nothing is told what the tab is for', (tester) async {

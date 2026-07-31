@@ -553,8 +553,9 @@ create index if not exists workout_sets_workout_exercise_id_idx on workout_sets 
 
 -- Personal to-do list (issue #118). Private per user like water_logs. due_date is
 -- the day the reminder belongs to; remind_at is an optional local-notification time;
--- recurrence (null | daily | weekly | monthly) is carried on each occurrence so
--- completing a recurring reminder can spawn the next one (client-side, no server cron).
+-- recurrence (null | daily | weekdays | weekly | monthly | first_day_of_month |
+-- last_day_of_month | yearly) is carried on each occurrence so completing a
+-- recurring reminder can spawn the next one (client-side, no server cron).
 create table if not exists reminders (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -565,6 +566,11 @@ create table if not exists reminders (
   recurrence text check (recurrence in ('daily', 'weekly', 'monthly')),
   completed_at timestamptz,
   created_at timestamptz not null default now()
+);
+
+alter table reminders drop constraint if exists reminders_recurrence_check;
+alter table reminders add constraint reminders_recurrence_check check (
+  recurrence in ('daily', 'weekdays', 'weekly', 'monthly', 'first_day_of_month', 'last_day_of_month', 'yearly')
 );
 
 create index if not exists reminders_user_id_due_date_idx on reminders (user_id, due_date);

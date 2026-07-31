@@ -6,6 +6,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/domain/diet/entities/recipe_ingredient.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_cubit.dart';
@@ -26,6 +27,14 @@ MockGetRecentMealsUseCase _noRecentMealsUseCase() {
   final getRecentMealsUseCase = MockGetRecentMealsUseCase();
   when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
   return getRecentMealsUseCase;
+}
+
+// onInit also reads the recipes this user created, so any test that builds the
+// cubit has to answer that read too.
+MockGetMyRecipeFoodsUseCase _noMyRecipesUseCase() {
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+  return getMyRecipeFoodsUseCase;
 }
 
 void main() {
@@ -49,6 +58,7 @@ void main() {
     G.registerFactory<AddFoodCubit>(
       () => CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: getRecentlyLoggedFoodsUseCase,
         getFavoriteFoodsUseCase: getFavoriteFoodsUseCase,
         getRecentSearchesUseCase: getRecentSearchesUseCase,

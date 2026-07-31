@@ -23,6 +23,14 @@ MockGetRecentMealsUseCase _noRecentMealsUseCase() {
   return getRecentMealsUseCase;
 }
 
+// onInit also reads the recipes this user created, so any test that builds the
+// cubit has to answer that read too.
+MockGetMyRecipeFoodsUseCase _noMyRecipesUseCase() {
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+  return getMyRecipeFoodsUseCase;
+}
+
 void main() {
   MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
     final getRecentlyLoggedFoodsUseCase = MockGetRecentlyLoggedFoodsUseCase();
@@ -61,6 +69,7 @@ void main() {
   test('starts with no search and no favorites', () {
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
     );
@@ -73,6 +82,7 @@ void main() {
     'onInit lands the recent searches immediately, then the favorites once they are fetched',
     build: () => CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(['banana']),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -93,6 +103,7 @@ void main() {
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -117,6 +128,7 @@ void main() {
     when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -141,6 +153,7 @@ void main() {
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => Success(food));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -164,6 +177,7 @@ void main() {
     when(() => favoriteFoodUseCase(food: offFood)).thenAnswer((_) async => Success(savedFood));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -193,6 +207,7 @@ void main() {
     when(() => unfavoriteFoodUseCase(foodId: 'saved-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -220,6 +235,7 @@ void main() {
     when(() => unfavoriteFoodUseCase(foodId: 'food-1')).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -242,6 +258,7 @@ void main() {
     when(() => favoriteFoodUseCase(food: food)).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       addRecentSearchUseCase: stubbedAddRecent(),

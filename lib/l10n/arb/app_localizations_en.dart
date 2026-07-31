@@ -84,10 +84,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get reminderRepeatDaily => 'Daily';
 
   @override
+  String get reminderRepeatWeekdays => 'Weekdays';
+
+  @override
   String get reminderRepeatWeekly => 'Weekly';
 
   @override
   String get reminderRepeatMonthly => 'Monthly';
+
+  @override
+  String get reminderRepeatFirstDayOfMonth => 'First day of the month';
+
+  @override
+  String get reminderRepeatLastDayOfMonth => 'Last day of the month';
+
+  @override
+  String get reminderRepeatYearly => 'Yearly';
 
   @override
   String get reminderDeleteTooltip => 'Delete';
@@ -832,6 +844,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietRecentMealsTitle => 'Recent meals';
 
   @override
+  String dietRecentMealFoodCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count foods', one: '1 food', zero: 'No foods');
+    return '$_temp0';
+  }
+
+  @override
   String dietMealLoggedToast(int count, String meal) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1264,10 +1282,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dietMyFoodsTabLabel => 'Mine';
 
   @override
+  String get dietMyProductsSectionTitle => 'Products you added';
+
+  @override
+  String get dietMyRecipesSectionTitle => 'Recipes you created';
+
+  @override
+  String get dietRecentlyEnteredTitle => 'Recently entered';
+
+  @override
   String get dietMyFoodsEmptyTitle => 'Nothing added yet';
 
   @override
-  String get dietMyFoodsEmptyMessage => 'Foods you add yourself land here, ready to log again whenever you want.';
+  String get dietMyFoodsEmptyMessage => 'The products and recipes you create land here, ready to log again whenever you want.';
 
   @override
   String get dietClearRecentSearchesAction => 'Clear';
@@ -1578,6 +1605,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get saveAction => 'Save';
+
+  @override
+  String get showMoreAction => 'Show more';
+
+  @override
+  String get showLessAction => 'Show less';
 
   @override
   String adjustDecreaseAction(String label) {

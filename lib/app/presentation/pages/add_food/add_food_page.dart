@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
-import 'package:vitta/app/design_system/components/general/vt_appear_effect.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
@@ -22,12 +21,14 @@ import 'package:vitta/app/presentation/pages/add_food/add_food_presentation_even
 import 'package:vitta/app/presentation/pages/add_food/add_food_state.dart';
 import 'package:vitta/app/presentation/pages/add_food/add_food_tab.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/add_food_action_bar.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/add_food_list_section.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_details_dialog.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_list.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/food_result_tile.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/ingredient_quantity_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/log_food_sheet.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_food_tile.dart';
-import 'package:vitta/app/presentation/pages/add_food/widgets/recent_meals_list.dart';
+import 'package:vitta/app/presentation/pages/add_food/widgets/recent_meal_tile.dart';
 import 'package:vitta/app/presentation/pages/add_food/widgets/recent_searches_list.dart';
 import 'package:vitta/l10n/arb/app_localizations.dart';
 
@@ -164,7 +165,8 @@ class AddFoodPage extends StatelessWidget {
 
   // Foods first, then whole meals: a single food is the finer-grained answer and
   // the one most taps are after, while re-logging a whole breakfast is the
-  // shortcut worth scrolling to.
+  // shortcut worth scrolling to. Both are capped rather than listed in full, so
+  // the meals stay on the first screen instead of below a dozen foods.
   Widget _buildRecentTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Padding(
     key: const ValueKey(AddFoodTab.recent),
     padding: const EdgeInsets.only(top: VTSpacing.m),
@@ -173,24 +175,23 @@ class AddFoodPage extends StatelessWidget {
         : ListView(
             padding: const EdgeInsets.only(bottom: VTSpacing.xxl),
             children: [
-              for (final (index, entry) in state.recentFoods.indexed) ...[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: VTSpacing.m),
-                  child: VTAppearEffect(
-                    index: index,
-                    child: RecentFoodTile(entry: entry, onTap: () => _addFood(context, entry.food), onQuickAdd: () => _quickAdd(context, cubit, entry)),
-                  ),
+              if (state.recentFoods.isNotEmpty)
+                AddFoodListSection(
+                  title: l10n.dietRecentlyEnteredTitle,
+                  rows: [
+                    for (final entry in state.recentFoods)
+                      RecentFoodTile(entry: entry, onTap: () => _addFood(context, entry.food), onQuickAdd: () => _quickAdd(context, cubit, entry)),
+                  ],
                 ),
-                const VTGap.s(),
-              ],
               // A whole meal cannot stand in for one recipe ingredient, so the
               // section is search-and-log only.
               if (!_isPicking && state.recentMeals.isNotEmpty) ...[
                 const VTGap.m(),
-                RecentMealsList(
+                AddFoodListSection(
                   title: l10n.dietRecentMealsTitle,
-                  meals: state.recentMeals,
-                  onLogAgain: (meal) => cubit.logMeal(meal: meal, loggedDate: loggedDate),
+                  rows: [
+                    for (final meal in state.recentMeals) RecentMealTile(meal: meal, onLogAgain: () => cubit.logMeal(meal: meal, loggedDate: loggedDate)),
+                  ],
                 ),
               ],
             ],
@@ -205,17 +206,55 @@ class AddFoodPage extends StatelessWidget {
         : _buildList(context: context, cubit: cubit, state: state, foods: state.favorites, heroPrefix: 'food-favorite'),
   );
 
+  // A product you typed in and a recipe you assembled are both foods rows you
+  // authored, but they answer different questions, so the tab names each half
+  // rather than mixing them into one list ordered by when they happened to be
+  // created. Either section is dropped entirely when it holds nothing.
   Widget _buildMyFoodsTab(BuildContext context, AddFoodCubit cubit, AddFoodState state, AppLocalizations l10n) => Padding(
     key: const ValueKey(AddFoodTab.myFoods),
     padding: const EdgeInsets.only(top: VTSpacing.m),
-    child: state.myFoods.isEmpty
+    child: state.myFoods.isEmpty && state.myRecipes.isEmpty
         ? VTEmptyState(
             icon: Icons.inventory_2_outlined,
             title: l10n.dietMyFoodsEmptyTitle,
             message: l10n.dietMyFoodsEmptyMessage,
           )
-        : _buildList(context: context, cubit: cubit, state: state, foods: state.myFoods, heroPrefix: 'food-mine'),
+        : ListView(
+            padding: const EdgeInsets.only(bottom: VTSpacing.xxl),
+            children: [
+              if (state.myFoods.isNotEmpty)
+                AddFoodListSection(
+                  title: l10n.dietMyProductsSectionTitle,
+                  rows: _buildFoodRows(context: context, cubit: cubit, state: state, foods: state.myFoods, heroPrefix: 'food-mine'),
+                ),
+              if (state.myRecipes.isNotEmpty) ...[
+                if (state.myFoods.isNotEmpty) const VTGap.m(),
+                AddFoodListSection(
+                  title: l10n.dietMyRecipesSectionTitle,
+                  rows: _buildFoodRows(context: context, cubit: cubit, state: state, foods: state.myRecipes, heroPrefix: 'food-my-recipe'),
+                ),
+              ],
+            ],
+          ),
   );
+
+  List<Widget> _buildFoodRows({
+    required BuildContext context,
+    required AddFoodCubit cubit,
+    required AddFoodState state,
+    required List<Food> foods,
+    required String heroPrefix,
+  }) => [
+    for (final (index, food) in foods.indexed)
+      FoodResultTile(
+        food: food,
+        heroTag: '$heroPrefix-$index',
+        isFavorite: state.isFavorite(food),
+        onTap: () => showFoodDetailsDialog(context: context, food: food, heroTag: '$heroPrefix-$index'),
+        onAdd: () => _addFood(context, food),
+        onToggleFavorite: () => cubit.toggleFavorite(food: food),
+      ),
+  ];
 
   Widget _buildList({
     required BuildContext context,
