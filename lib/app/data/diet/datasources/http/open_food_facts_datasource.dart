@@ -64,9 +64,11 @@ class OpenFoodFactsDataSource {
       return null;
     }
     // Dropped rather than shown: a search result is one tap from being saved
-    // into the shared catalog, so an implausible row here becomes everyone's
-    // implausible row.
-    if (!FoodPlausibility.isPlausible(caloriesPer100g: calories, proteinPer100g: protein, carbsPer100g: carbs, fatPer100g: fat)) {
+    // into the shared catalog, so an impossible row here becomes everyone's
+    // impossible row. Only physically impossible figures are dropped - a food
+    // stating no nutrition at all is left alone, because salt, water and black
+    // coffee are exactly that and are real things to log.
+    if (!FoodPlausibility.isPlausible(caloriesPer100g: calories)) {
       return null;
     }
 

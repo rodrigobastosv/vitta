@@ -16,18 +16,29 @@ abstract class FoodPlausibility {
   // food. Anything above it is a unit mix-up (kJ reported as kcal) or a typo.
   static const maxCaloriesPer100g = 900.0;
 
-  static bool isPlausible({
+  // Deliberately the ONLY rule, and the reason is a mistake this nearly made.
+  //
+  // The first cut also called a row of nothing but zeros implausible, on the
+  // grounds that it states no nutrition. Running the audit against the real
+  // catalog before deleting anything showed what is actually in that bucket:
+  // "Salt", "Aquafina", "Apă minerală plată", "Gold Espresso Intense Coffee" -
+  // water, salt and black coffee genuinely ARE zero-calorie, zero-macro foods,
+  // and 1,089 rows would have been deleted to remove some unknown number of
+  // blank records.
+  //
+  // Over 900 kcal is *provably* impossible; all-zero is *indistinguishable* from
+  // a real food, and nothing in the row separates the two. So this rejects only
+  // what physics rejects. statesNoNutrition below is the softer question, and it
+  // is for reporting to a human - never for dropping or deleting.
+  static bool isPlausible({required double caloriesPer100g}) => caloriesPer100g <= maxCaloriesPer100g;
+
+  // Carries no nutrition at all. Suspicious in bulk - most such rows are Open
+  // Food Facts entries whose contributor never filled the panel in - but it is a
+  // question, not a verdict: see above.
+  static bool statesNoNutrition({
     required double caloriesPer100g,
     required double proteinPer100g,
     required double carbsPer100g,
     required double fatPer100g,
-  }) {
-    if (caloriesPer100g > maxCaloriesPer100g) {
-      return false;
-    }
-    // A row of nothing but zeros states no nutrition at all. It is not a
-    // zero-calorie food - water and black coffee still carry a real name and
-    // real (zero) macros deliberately entered; this is an empty record.
-    return caloriesPer100g > 0 || proteinPer100g > 0 || carbsPer100g > 0 || fatPer100g > 0;
-  }
+  }) => caloriesPer100g == 0 && proteinPer100g == 0 && carbsPer100g == 0 && fatPer100g == 0;
 }

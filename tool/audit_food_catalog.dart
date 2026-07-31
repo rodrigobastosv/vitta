@@ -121,11 +121,12 @@ Future<void> main() async {
     _reportDuplicates(duplicates);
     final implausible = _implausibleFoods(foods);
     _reportImplausible(implausible);
+    _reportEmpty(foods);
     _reportNames(foods);
     _reportStaples(foods);
 
     if (!shouldFix) {
-      stdout.writeln('\nReport only. Re-run with AUDIT_FIX=true to delete the never-logged duplicate and implausible rows above.');
+      stdout.writeln('\nReport only. Re-run with AUDIT_FIX=true to delete the never-logged duplicate and impossible rows above.');
       return;
     }
     await _deleteRows(
@@ -284,15 +285,36 @@ void _reportImplausible(List<_Food> implausible) {
     stdout.writeln('  none\n');
     return;
   }
-  final empty = implausible.where((food) => food.caloriesPer100g == 0).length;
-  stdout.writeln('  ${implausible.length} never-logged rows state figures no food can have');
-  stdout.writeln('    $empty carry nothing but zeros');
-  stdout.writeln('    ${implausible.length - empty} exceed ${FoodPlausibility.maxCaloriesPer100g.round()} kcal per 100 g');
+  stdout.writeln('  ${implausible.length} never-logged rows exceed ${FoodPlausibility.maxCaloriesPer100g.round()} kcal per 100 g (pure fat is 900)');
   for (final food in implausible.take(_reportSampleSize)) {
     stdout.writeln('    ${food.source} | ${food.name} | ${food.macros}');
   }
   if (implausible.length > _reportSampleSize) {
     stdout.writeln('    ... and ${implausible.length - _reportSampleSize} more');
+  }
+  stdout.writeln();
+}
+
+// Report only, and deliberately never deleted. Most of these are Open Food Facts
+// rows whose contributor never filled the nutrition panel in - but the bucket
+// also holds "Salt", "Aquafina" and "Gold Espresso Intense Coffee", which are
+// real foods that genuinely carry no calories and no macros. Nothing in the row
+// separates the two, so this is a list for a human to look at, not a rule.
+void _reportEmpty(List<_Food> foods) {
+  final empty = [for (final food in foods) if (food.statesNoNutrition) food];
+  stdout.writeln('NO NUTRITION STATED');
+  if (empty.isEmpty) {
+    stdout.writeln('  none\n');
+    return;
+  }
+  final logged = empty.where((food) => food.timesLogged > 0).length;
+  stdout.writeln('  ${empty.length} rows carry nothing but zeros ($logged of them have been logged)');
+  stdout.writeln('  Not deleted: water, salt and black coffee look exactly like this. Review before removing any.');
+  for (final food in empty.take(_reportSampleSize)) {
+    stdout.writeln('    ${food.source} | ${food.name}');
+  }
+  if (empty.length > _reportSampleSize) {
+    stdout.writeln('    ... and ${empty.length - _reportSampleSize} more');
   }
   stdout.writeln();
 }
@@ -472,10 +494,13 @@ class _Food {
       .map((value) => value.toStringAsFixed(1))
       .join('/');
 
-  /// Whether the figures can describe a real food at all, by the app's own rule
+  /// Whether the figures are physically possible, by the app's own rule
   /// (FoodPlausibility) so the auditor and OpenFoodFactsDataSource cannot
   /// disagree about what junk is.
-  bool get isPlausible => FoodPlausibility.isPlausible(
+  bool get isPlausible => FoodPlausibility.isPlausible(caloriesPer100g: caloriesPer100g);
+
+  /// Carries no nutrition at all. Reported, never deleted - see _reportEmpty.
+  bool get statesNoNutrition => FoodPlausibility.statesNoNutrition(
     caloriesPer100g: caloriesPer100g,
     proteinPer100g: proteinPer100g,
     carbsPer100g: carbsPer100g,

@@ -195,7 +195,7 @@ Future<void> main() async {
       skipped++;
       continue;
     }
-    if (!FoodPlausibility.isPlausible(caloriesPer100g: calories, proteinPer100g: protein, carbsPer100g: carbs, fatPer100g: fat)) {
+    if (!FoodPlausibility.isPlausible(caloriesPer100g: calories)) {
       skipped++;
       continue;
     }
