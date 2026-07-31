@@ -4556,6 +4556,30 @@ abstract class AppLocalizations {
   /// **'All'**
   String get exerciseSearchAllFilter;
 
+  /// No description provided for @exerciseBodyMapTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Muscles this works'**
+  String get exerciseBodyMapTitle;
+
+  /// No description provided for @exerciseBodyMapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'A solid fill is a muscle this exercise trains directly; a lighter one assists.'**
+  String get exerciseBodyMapHint;
+
+  /// No description provided for @exerciseBodyMapSemantics.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary muscles: {primaryMuscles}. Also works: {secondaryMuscles}'**
+  String exerciseBodyMapSemantics(String primaryMuscles, String secondaryMuscles);
+
+  /// No description provided for @exerciseBodyMapSemanticsPrimaryOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Primary muscles: {primaryMuscles}'**
+  String exerciseBodyMapSemanticsPrimaryOnly(String primaryMuscles);
+
   /// No description provided for @exerciseDetailInstructionsTitle.
   ///
   /// In en, this message translates to:

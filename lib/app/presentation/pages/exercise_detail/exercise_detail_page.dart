@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/design_system/components/general/vt_badge.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_remote_image.dart';
 import 'package:vitta/app/design_system/tokens/vt_radius.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/workout/entities/exercise.dart';
+import 'package:vitta/app/presentation/general/exercise_body_map_card.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/widgets/exercise_instruction_step.dart';
 import 'package:vitta/app/presentation/pages/exercise_detail/widgets/exercise_muscle_section.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_extra.dart';
 
 class ExerciseDetailPage extends StatelessWidget {
-  const ExerciseDetailPage({required this.exercise, super.key});
+  const ExerciseDetailPage({required this.exercise, required this.bodyFigure, super.key});
 
   final Exercise exercise;
+  final VTBodyFigure bodyFigure;
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +64,8 @@ class ExerciseDetailPage extends StatelessWidget {
               if (exercise.equipment case final equipment?) VTBadge(label: equipment.getLabel(l10n), color: context.colorScheme.tertiary),
             ],
           ),
+          const VTGap.l(),
+          ExerciseBodyMapCard(exercise: exercise, figure: bodyFigure),
           const VTGap.l(),
           ExerciseMuscleSection(title: l10n.exerciseDetailPrimaryMusclesTitle, muscles: exercise.primaryMuscles),
           if (exercise.secondaryMuscles.isNotEmpty) ...[

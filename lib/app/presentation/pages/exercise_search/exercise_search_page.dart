@@ -3,6 +3,7 @@ import 'package:vitta/app/core/loading/loading_extensions.dart';
 import 'package:vitta/app/core/localization/localization_extensions.dart';
 import 'package:vitta/app/core/navigation/navigation_extensions.dart';
 import 'package:vitta/app/core/toast/toast_extensions.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
 import 'package:vitta/app/design_system/components/general/vt_empty_state.dart';
 import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_search_field.dart';
@@ -44,7 +45,7 @@ class ExerciseSearchPage extends StatelessWidget {
               onClear: cubit.clearFilters,
             ),
             const VTGap.s(),
-            Expanded(child: _Results(state: state)),
+            Expanded(child: _Results(state: state, bodyFigure: cubit.bodyFigure)),
           ],
         ),
       ),
@@ -53,9 +54,10 @@ class ExerciseSearchPage extends StatelessWidget {
 }
 
 class _Results extends StatelessWidget {
-  const _Results({required this.state});
+  const _Results({required this.state, required this.bodyFigure});
 
   final ExerciseSearchState state;
+  final VTBodyFigure bodyFigure;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class _Results extends StatelessWidget {
           final exercise = results[index];
           return ExerciseSearchResultTile(
             exercise: exercise,
-            onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: exercise)),
+            onTap: () => context.pushRoute(.exerciseDetail, extra: ExerciseDetailExtra(exercise: exercise, bodyFigure: bodyFigure)),
             onAdd: () => Navigator.of(context).pop<Exercise>(exercise),
           );
         },

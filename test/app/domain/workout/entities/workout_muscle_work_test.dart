@@ -36,6 +36,26 @@ void main() {
     expect(work.intensityOf(MuscleGroup.triceps), 0.5);
   });
 
+  test('one exercise lights its primary muscles fully and the ones it assists at half', () {
+    final work = WorkoutMuscleWork.forExercise(
+      ExerciseFactory.build(primaryMuscles: const [MuscleGroup.chest, MuscleGroup.shoulders]),
+    );
+
+    expect(work.intensityOf(MuscleGroup.chest), 1);
+    expect(work.intensityOf(MuscleGroup.shoulders), 1);
+    expect(work.intensityOf(MuscleGroup.triceps), WorkoutMuscleWork.secondaryMuscleShare);
+    expect(work.intensityOf(MuscleGroup.calves), 0);
+    expect(work.workedMuscles, [MuscleGroup.chest, MuscleGroup.shoulders, MuscleGroup.triceps]);
+  });
+
+  test('a muscle listed as both primary and secondary stays a primary one', () {
+    final work = WorkoutMuscleWork.forExercise(
+      ExerciseFactory.build(secondaryMuscles: const [MuscleGroup.chest]),
+    );
+
+    expect(work.intensityOf(MuscleGroup.chest), 1);
+  });
+
   test('a muscle nothing worked reads as no work and no intensity', () {
     final work = WorkoutMuscleWork.fromExercises([
       WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]),

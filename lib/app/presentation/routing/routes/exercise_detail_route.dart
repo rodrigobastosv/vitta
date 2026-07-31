@@ -11,6 +11,6 @@ class ExerciseDetailRoute extends VTRoute {
   @override
   GoRouterWidgetBuilder get builder => (context, state) {
     final extra = state.extra! as ExerciseDetailExtra;
-    return ExerciseDetailPage(exercise: extra.exercise);
+    return ExerciseDetailPage(exercise: extra.exercise, bodyFigure: extra.bodyFigure);
   };
 }

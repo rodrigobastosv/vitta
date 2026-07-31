@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:vitta/app/domain/workout/entities/body_region.dart';
+import 'package:vitta/app/domain/workout/entities/exercise.dart';
 import 'package:vitta/app/domain/workout/entities/muscle_group.dart';
 import 'package:vitta/app/domain/workout/entities/workout.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
@@ -27,6 +28,18 @@ class WorkoutMuscleWork extends Equatable {
   factory WorkoutMuscleWork.fromWorkouts(Iterable<Workout> workouts) =>
       WorkoutMuscleWork.fromExercises(workouts.expand((workout) => workout.exercises));
 
+  factory WorkoutMuscleWork.forExercise(Exercise exercise) {
+    final activeSecondsByMuscle = <MuscleGroup, double>{};
+    for (final muscle in exercise.primaryMuscles) {
+      activeSecondsByMuscle[muscle] = primaryMuscleShare;
+    }
+    for (final muscle in exercise.secondaryMuscles) {
+      activeSecondsByMuscle.putIfAbsent(muscle, () => secondaryMuscleShare);
+    }
+    return WorkoutMuscleWork(activeSecondsByMuscle: activeSecondsByMuscle);
+  }
+
+  static const double primaryMuscleShare = 1;
   static const double secondaryMuscleShare = 0.5;
 
   final Map<MuscleGroup, double> activeSecondsByMuscle;

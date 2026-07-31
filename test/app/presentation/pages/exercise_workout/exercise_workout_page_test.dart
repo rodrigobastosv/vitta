@@ -8,8 +8,11 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_map.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
+import 'package:vitta/app/domain/body_profile/entities/body_profile.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
+import 'package:vitta/app/presentation/general/exercise_body_map_card.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_page.dart';
@@ -32,6 +35,8 @@ Future<RestTimerCubit> pumpExerciseWorkoutPage(WidgetTester tester, {required Wo
   when(
     () => setCompleted(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
   ).thenAnswer((_) async => Success(workoutExercise));
+  final getBodyProfileUseCase = MockGetBodyProfileUseCase();
+  when(getBodyProfileUseCase.call).thenReturn(const BodyProfile());
   if (G.isRegistered<ExerciseWorkoutCubit>()) {
     G.unregister<ExerciseWorkoutCubit>();
   }
@@ -42,6 +47,7 @@ Future<RestTimerCubit> pumpExerciseWorkoutPage(WidgetTester tester, {required Wo
       updateSetUseCase: MockUpdateSetUseCase(),
       deleteSetUseCase: MockDeleteSetUseCase(),
       setWorkoutExerciseCompletedUseCase: setCompleted,
+      getBodyProfileUseCase: getBodyProfileUseCase,
     ),
   );
   addTearDown(() => G.unregister<ExerciseWorkoutCubit>());
@@ -83,6 +89,15 @@ Future<RestTimerCubit> pumpExerciseWorkoutPage(WidgetTester tester, {required Wo
 
 void main() {
   setUpAll(() => registerFallbackValue(Duration.zero));
+
+  testWidgets('shows which muscles the exercise being trained works', (tester) async {
+    await pumpExerciseWorkoutPage(tester, workoutExercise: WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]));
+
+    await tester.scrollUntilVisible(find.byType(ExerciseBodyMapCard), 200);
+
+    expect(find.byType(VTBodyMap), findsNWidgets(2));
+    expect(find.bySemanticsLabel('Primary muscles: Chest. Also works: Triceps'), findsOneWidget);
+  });
 
   testWidgets('finishing an exercise ends its rest, so it does not run on into the next one', (tester) async {
     final workoutExercise = WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]);
