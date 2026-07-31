@@ -1494,6 +1494,27 @@
   "exerciseSearchEmptyTitle": "No exercises found",
   "exerciseSearchEmptyMessage": "Try another term or clear the muscle filter.",
   "exerciseSearchAllFilter": "All",
+  "exerciseBodyMapTitle": "Muscles this works",
+  "exerciseBodyMapHint": "A solid fill is a muscle this exercise trains directly; a lighter one assists.",
+  "exerciseBodyMapSemantics": "Primary muscles: {primaryMuscles}. Also works: {secondaryMuscles}",
+  "@exerciseBodyMapSemantics": {
+    "placeholders": {
+      "primaryMuscles": {
+        "type": "String"
+      },
+      "secondaryMuscles": {
+        "type": "String"
+      }
+    }
+  },
+  "exerciseBodyMapSemanticsPrimaryOnly": "Primary muscles: {primaryMuscles}",
+  "@exerciseBodyMapSemanticsPrimaryOnly": {
+    "placeholders": {
+      "primaryMuscles": {
+        "type": "String"
+      }
+    }
+  },
   "exerciseDetailInstructionsTitle": "How to do it",
   "exerciseDetailPrimaryMusclesTitle": "Primary muscles",
   "exerciseDetailSecondaryMusclesTitle": "Also works",

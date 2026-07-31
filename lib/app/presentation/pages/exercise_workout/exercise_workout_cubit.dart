@@ -1,10 +1,13 @@
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/design_system/components/general/vt_body_figure.dart';
+import 'package:vitta/app/domain/body_profile/use_cases/get_body_profile_use_case.dart';
 import 'package:vitta/app/domain/workout/entities/set_input.dart';
 import 'package:vitta/app/domain/workout/use_cases/delete_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/log_set_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/update_set_use_case.dart';
+import 'package:vitta/app/presentation/general/body_profile_body_figure.dart';
 import 'package:vitta/app/presentation/general/presentation_cubit.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_extra.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_presentation_event.dart';
@@ -17,14 +20,18 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
     required this._updateSetUseCase,
     required this._deleteSetUseCase,
     required this._setWorkoutExerciseCompletedUseCase,
+    required this._getBodyProfileUseCase,
   }) : super(ExerciseWorkoutState(workoutExercise: extra.workoutExercise));
 
   final LogSetUseCase _logSetUseCase;
   final UpdateSetUseCase _updateSetUseCase;
   final DeleteSetUseCase _deleteSetUseCase;
   final SetWorkoutExerciseCompletedUseCase _setWorkoutExerciseCompletedUseCase;
+  final GetBodyProfileUseCase _getBodyProfileUseCase;
 
   int _pendingSets = 0;
+
+  VTBodyFigure get bodyFigure => _getBodyProfileUseCase().bodyFigure;
 
   Future<Result<VTError, void>> logSet({required SetInput input}) async {
     final isCardio = state.workoutExercise.isCardio;

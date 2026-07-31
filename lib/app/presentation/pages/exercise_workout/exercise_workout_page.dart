@@ -12,6 +12,7 @@ import 'package:vitta/app/design_system/components/general/vt_gap.dart';
 import 'package:vitta/app/design_system/components/general/vt_rest_timer.dart';
 import 'package:vitta/app/design_system/tokens/vt_spacing.dart';
 import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
+import 'package:vitta/app/presentation/general/exercise_body_map_card.dart';
 import 'package:vitta/app/presentation/general/vt_page.dart';
 import 'package:vitta/app/presentation/pages/exercise_progression/exercise_progression_extra.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
@@ -189,6 +190,8 @@ class ExerciseWorkoutPage extends StatelessWidget {
                           ),
                         ],
                       ),
+                    const VTGap.l(),
+                    ExerciseBodyMapCard(exercise: exercise, figure: cubit.bodyFigure),
                     if (instructions.isNotEmpty) ...[
                       const VTGap.l(),
                       Text(l10n.workoutInstructionsTitle, style: VTTextStyles.overline(context)),

@@ -2517,6 +2517,22 @@ class AppLocalizationsEn extends AppLocalizations {
   String get exerciseSearchAllFilter => 'All';
 
   @override
+  String get exerciseBodyMapTitle => 'Muscles this works';
+
+  @override
+  String get exerciseBodyMapHint => 'A solid fill is a muscle this exercise trains directly; a lighter one assists.';
+
+  @override
+  String exerciseBodyMapSemantics(String primaryMuscles, String secondaryMuscles) {
+    return 'Primary muscles: $primaryMuscles. Also works: $secondaryMuscles';
+  }
+
+  @override
+  String exerciseBodyMapSemanticsPrimaryOnly(String primaryMuscles) {
+    return 'Primary muscles: $primaryMuscles';
+  }
+
+  @override
   String get exerciseDetailInstructionsTitle => 'How to do it';
 
   @override

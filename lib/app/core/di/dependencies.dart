@@ -246,7 +246,14 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
     ),
   );
   G.registerFactoryParam<ExerciseWorkoutCubit, ExerciseWorkoutExtra, void>(
-    (extra, _) => ExerciseWorkoutCubit(extra: extra, logSetUseCase: G(), updateSetUseCase: G(), deleteSetUseCase: G(), setWorkoutExerciseCompletedUseCase: G()),
+    (extra, _) => ExerciseWorkoutCubit(
+      extra: extra,
+      logSetUseCase: G(),
+      updateSetUseCase: G(),
+      deleteSetUseCase: G(),
+      setWorkoutExerciseCompletedUseCase: G(),
+      getBodyProfileUseCase: G(),
+    ),
   );
 
   G.registerLazySingleton(() => supabaseService);
@@ -498,7 +505,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
       markWorkoutIntroSeenUseCase: G(),
     ),
   );
-  G.registerFactory(() => ExerciseSearchCubit(searchExercisesUseCase: G()));
+  G.registerFactory(() => ExerciseSearchCubit(searchExercisesUseCase: G(), getBodyProfileUseCase: G()));
   G.registerFactoryParam<ExerciseProgressionCubit, Exercise, void>(
     (exercise, _) => ExerciseProgressionCubit(getExerciseProgressionUseCase: G(), getAppSettingsUseCase: G(), exercise: exercise),
   );
