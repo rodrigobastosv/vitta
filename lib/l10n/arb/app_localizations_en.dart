@@ -712,6 +712,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workoutRestSettingHint => 'Used every time you log a set.';
 
   @override
+  String get workoutRestSoundLabel => 'Sound alert';
+
+  @override
+  String get workoutRestSoundHint => 'Plays a chime as the rest runs out, so you can hear it with the phone in your pocket.';
+
+  @override
+  String get settingsRestTimerLabel => 'Rest timer';
+
+  @override
+  String get settingsRestTimerHint => 'How long a rest lasts, and how it alerts you';
+
+  @override
   String get workoutLastSetPrefillNote => 'Prefilled from your last set';
 
   @override

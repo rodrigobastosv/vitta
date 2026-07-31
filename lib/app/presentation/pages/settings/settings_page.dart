@@ -52,6 +52,17 @@ class SettingsPage extends StatelessWidget {
             VTAppearEffect(
               index: 2,
               child: SettingsNavigationTile(
+                icon: Icons.timer_outlined,
+                accent: VTColors.green,
+                title: l10n.settingsRestTimerLabel,
+                subtitle: l10n.settingsRestTimerHint,
+                onTap: () => context.pushRoute(.restTimerSettings),
+              ),
+            ),
+            const VTGap.m(),
+            VTAppearEffect(
+              index: 3,
+              child: SettingsNavigationTile(
                 icon: Icons.translate,
                 accent: VTColors.sleep,
                 title: l10n.settingsLanguageLabel,
@@ -61,7 +72,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 3,
+              index: 4,
               child: SettingsNavigationTile(
                 icon: Icons.brightness_6_outlined,
                 accent: VTColors.macroCarbs,
@@ -72,7 +83,7 @@ class SettingsPage extends StatelessWidget {
             ),
             const VTGap.m(),
             VTAppearEffect(
-              index: 4,
+              index: 5,
               child: SettingsNavigationTile(
                 icon: Icons.straighten,
                 accent: VTColors.macroFat,

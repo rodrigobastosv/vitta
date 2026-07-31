@@ -46,7 +46,7 @@ class WorkoutPage extends StatelessWidget {
     required bool completed,
   }) async {
     if (completed) {
-      context.read<RestTimerCubit>().skip();
+      context.read<RestTimerCubit>().endFor(workoutExercise.id);
     }
     await cubit.setExerciseCompleted(workoutExercise: workoutExercise, completed: completed);
   }
@@ -73,7 +73,10 @@ class WorkoutPage extends StatelessWidget {
         WorkoutShowIntro() => unawaited(_showIntro(context, context.read<WorkoutCubit>())),
         WorkoutError(:final message, :final date) => context.showErrorToast(message: message, onRetry: () => context.read<WorkoutCubit>().goToDate(date)),
         WorkoutSessionFinished() => unawaited(_showSummary(context, context.read<WorkoutCubit>())),
-        WorkoutSetRepeated(:final workoutExercise) => context.read<RestTimerCubit>().start(label: workoutExercise.exercise.nameFor(l10n.localeName)),
+        WorkoutSetRepeated(:final workoutExercise) => context.read<RestTimerCubit>().start(
+          exerciseId: workoutExercise.id,
+          label: workoutExercise.exercise.nameFor(l10n.localeName),
+        ),
       },
       builder: (context, cubit, state) => Scaffold(
         appBar: AppBar(

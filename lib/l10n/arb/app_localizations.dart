@@ -1364,6 +1364,30 @@ abstract class AppLocalizations {
   /// **'Used every time you log a set.'**
   String get workoutRestSettingHint;
 
+  /// No description provided for @workoutRestSoundLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Sound alert'**
+  String get workoutRestSoundLabel;
+
+  /// No description provided for @workoutRestSoundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Plays a chime as the rest runs out, so you can hear it with the phone in your pocket.'**
+  String get workoutRestSoundHint;
+
+  /// No description provided for @settingsRestTimerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest timer'**
+  String get settingsRestTimerLabel;
+
+  /// No description provided for @settingsRestTimerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'How long a rest lasts, and how it alerts you'**
+  String get settingsRestTimerHint;
+
   /// No description provided for @workoutLastSetPrefillNote.
   ///
   /// In en, this message translates to:

@@ -40,9 +40,10 @@ void main() {
     await pumpSettings(tester, buildAppCubit());
 
     expect(find.text('Settings'), findsOneWidget);
-    expect(find.byType(SettingsNavigationTile), findsNWidgets(5));
+    expect(find.byType(SettingsNavigationTile), findsNWidgets(6));
     expect(find.text('Home screen'), findsOneWidget);
     expect(find.text('Logging reminders'), findsOneWidget);
+    expect(find.text('Rest timer'), findsOneWidget);
     expect(find.text('Language'), findsOneWidget);
     expect(find.text('Theme'), findsOneWidget);
     expect(find.text('Unit system'), findsOneWidget);

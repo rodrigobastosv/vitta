@@ -40,7 +40,7 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
       emit(state.copyWith(workoutExercise: state.workoutExercise.withSets([...state.workoutExercise.sets, set])));
       // No rest to time after a cardio effort: there is no next set to rest for.
       if (!isCardio) {
-        emitPresentation(ExerciseWorkoutSetLogged());
+        _announceRest();
       }
       return const Success(null);
     });
@@ -75,7 +75,16 @@ class ExerciseWorkoutCubit extends PresentationCubit<ExerciseWorkoutState, Exerc
         ]),
       ),
     );
-    emitPresentation(ExerciseWorkoutSetLogged());
+    _announceRest();
+  }
+
+  // A repeat is optimistic but its rest is not, so the write can land after the
+  // user has already finished the exercise and moved on - and a rest for an
+  // exercise that is done reads as the next exercise's own timer (issue #277).
+  void _announceRest() {
+    if (!state.isCompleted) {
+      emitPresentation(ExerciseWorkoutSetLogged());
+    }
   }
 
   Future<Result<VTError, void>> updateSet({required String setId, required SetInput input}) async {

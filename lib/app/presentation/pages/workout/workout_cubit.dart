@@ -70,6 +70,7 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
   final MarkWorkoutIntroSeenUseCase _markWorkoutIntroSeenUseCase;
 
   int _pendingSets = 0;
+  final Set<String> _finishingExerciseIds = {};
 
   static DateTime _today() {
     final now = DateTime.now();
@@ -239,8 +240,24 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
         ),
       ),
     );
+    _announceRest(workoutExercise);
+  }
+
+  // A repeat is optimistic but its rest is not, so the write can land after the
+  // user has already ticked the exercise off and moved to the next one - and a
+  // rest for an exercise that is done reads as the next exercise's own timer
+  // (issue #277). The in-flight set covers the window before the completion has
+  // made it back into state.
+  void _announceRest(WorkoutExercise workoutExercise) {
+    if (_finishingExerciseIds.contains(workoutExercise.id) || _isCompleted(workoutExercise.id)) {
+      return;
+    }
     emitPresentation(WorkoutSetRepeated(workoutExercise: workoutExercise));
   }
+
+  bool _isCompleted(String workoutExerciseId) => state.workouts
+      .expand((workout) => workout.exercises)
+      .any((exercise) => exercise.id == workoutExerciseId && exercise.isCompleted);
 
   List<Workout> _workoutsWithSets({required String workoutExerciseId, required List<WorkoutSet> Function(List<WorkoutSet> sets) update}) => [
     for (final workout in state.workouts)
@@ -258,11 +275,15 @@ class WorkoutCubit extends PresentationCubit<WorkoutState, WorkoutPresentationEv
     if (completed && workoutExercise.sets.isEmpty) {
       return;
     }
+    if (completed) {
+      _finishingExerciseIds.add(workoutExercise.id);
+    }
     final completedResult = await _setWorkoutExerciseCompletedUseCase(workoutExerciseId: workoutExercise.id, completed: completed);
     await completedResult.when((error) => Future.sync(() => _emitError(error)), (_) {
       Log.action(completed ? 'workout_exercise_completed' : 'workout_exercise_reopened');
       return loadDate(state.date);
     });
+    _finishingExerciseIds.remove(workoutExercise.id);
   }
 
   Future<void> deleteSet({required String setId}) async {

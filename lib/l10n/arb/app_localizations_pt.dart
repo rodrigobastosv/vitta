@@ -713,6 +713,18 @@ class AppLocalizationsPt extends AppLocalizations {
   String get workoutRestSettingHint => 'Usado toda vez que você registra uma série.';
 
   @override
+  String get workoutRestSoundLabel => 'Alerta sonoro';
+
+  @override
+  String get workoutRestSoundHint => 'Toca um aviso quando o descanso está acabando, para você ouvir com o celular no bolso.';
+
+  @override
+  String get settingsRestTimerLabel => 'Cronômetro de descanso';
+
+  @override
+  String get settingsRestTimerHint => 'Quanto dura um descanso e como ele avisa você';
+
+  @override
   String get workoutLastSetPrefillNote => 'Preenchido com sua última série';
 
   @override

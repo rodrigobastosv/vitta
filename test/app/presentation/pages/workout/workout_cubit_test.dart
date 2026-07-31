@@ -10,6 +10,7 @@ import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/domain/settings/entities/app_settings.dart';
 import 'package:vitta/app/domain/workout/entities/routine_cycle.dart';
 import 'package:vitta/app/domain/workout/entities/set_input.dart';
+import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/domain/workout/entities/workout_set.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_cubit.dart';
 import 'package:vitta/app/presentation/pages/workout/workout_presentation_event.dart';
@@ -48,7 +49,11 @@ MockGetLatestBodyWeightUseCase _noBodyWeightUseCase() {
   return useCase;
 }
 
-Future<WorkoutCubit> _cubitOnADayWithOneSet({required MockLogSetUseCase logSetUseCase}) async {
+Future<WorkoutCubit> _cubitOnADayWithOneSet({
+  required MockLogSetUseCase logSetUseCase,
+  MockSetWorkoutExerciseCompletedUseCase? setWorkoutExerciseCompletedUseCase,
+  bool isCompleted = false,
+}) async {
   final getWorkoutsForDateUseCase = MockGetWorkoutsForDateUseCase();
   when(() => getWorkoutsForDateUseCase(date: any(named: 'date'))).thenAnswer(
     (_) async => Success([
@@ -57,6 +62,7 @@ Future<WorkoutCubit> _cubitOnADayWithOneSet({required MockLogSetUseCase logSetUs
           WorkoutExerciseFactory.build(
             id: 'we-1',
             sets: [WorkoutSetFactory.build(id: 's1', reps: 8, weightKg: 50)],
+            completedAt: isCompleted ? DateTime(2026, 7, 31) : null,
           ),
         ],
       ),
@@ -65,6 +71,7 @@ Future<WorkoutCubit> _cubitOnADayWithOneSet({required MockLogSetUseCase logSetUs
   final cubit = CubitsFactories.buildWorkoutCubit(
     getWorkoutsForDateUseCase: getWorkoutsForDateUseCase,
     logSetUseCase: logSetUseCase,
+    setWorkoutExerciseCompletedUseCase: setWorkoutExerciseCompletedUseCase ?? MockSetWorkoutExerciseCompletedUseCase(),
     getRoutineCycleUseCase: _emptyCycleUseCase(),
     getLatestBodyWeightUseCase: _noBodyWeightUseCase(),
     getLastSetsByExerciseUseCase: _emptyLastSetsUseCase(),
@@ -836,5 +843,55 @@ void main() {
     await Future<void>.delayed(Duration.zero);
 
     expect(events.whereType<WorkoutSetRepeated>(), hasLength(1));
+  });
+
+  // Repeating a set and ticking the exercise off before the write lands used to
+  // start a rest for an exercise that was already done, which then read as the
+  // next exercise's own timer (issue #277).
+  test('a repeat that lands while the exercise is being finished announces no rest', () async {
+    useMockLog();
+    final writing = Completer<Result<VTError, WorkoutSet>>();
+    final finishingWrite = Completer<Result<VTError, WorkoutExercise>>();
+    final logSetUseCase = MockLogSetUseCase();
+    when(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input'))).thenAnswer((_) => writing.future);
+    final setWorkoutExerciseCompletedUseCase = MockSetWorkoutExerciseCompletedUseCase();
+    when(
+      () => setWorkoutExerciseCompletedUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed')),
+    ).thenAnswer((_) => finishingWrite.future);
+    final cubit = await _cubitOnADayWithOneSet(
+      logSetUseCase: logSetUseCase,
+      setWorkoutExerciseCompletedUseCase: setWorkoutExerciseCompletedUseCase,
+    );
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    final repeating = cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+    final finishing = cubit.setExerciseCompleted(workoutExercise: cubit.state.exercises.single, completed: true);
+    await Future<void>.delayed(Duration.zero);
+    writing.complete(Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    await repeating;
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty, reason: 'a finished exercise has no next set to rest for');
+
+    finishingWrite.complete(Success(WorkoutExerciseFactory.build(id: 'we-1', completedAt: DateTime(2026, 7, 31))));
+    await finishing;
+  });
+
+  test('a repeat that lands after the exercise reads as finished announces no rest', () async {
+    useMockLog();
+    final writing = Completer<Result<VTError, WorkoutSet>>();
+    final logSetUseCase = MockLogSetUseCase();
+    when(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input'))).thenAnswer((_) => writing.future);
+    final cubit = await _cubitOnADayWithOneSet(logSetUseCase: logSetUseCase, isCompleted: true);
+    final events = <WorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    final repeating = cubit.repeatLastSet(workoutExercise: cubit.state.exercises.single);
+    writing.complete(Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    await repeating;
+    await Future<void>.delayed(Duration.zero);
+
+    expect(events.whereType<WorkoutSetRepeated>(), isEmpty);
   });
 }
