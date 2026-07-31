@@ -187,10 +187,10 @@ Future<void> main() async {
     String cell(int column) => column >= 0 && column < row.length ? row[column].trim() : '';
 
     final name = cell(nameColumn);
-    final calories = _number(cell(energyColumn));
-    final protein = _number(cell(proteinColumn));
-    final carbs = _number(cell(carbsColumn));
-    final fat = _number(cell(fatColumn));
+    final calories = _nonNegative(_number(cell(energyColumn)));
+    final protein = _nonNegative(_number(cell(proteinColumn)));
+    final carbs = _nonNegative(_number(cell(carbsColumn)));
+    final fat = _nonNegative(_number(cell(fatColumn)));
     if (name.isEmpty || calories == null || protein == null || carbs == null || fat == null) {
       skipped++;
       continue;
@@ -206,17 +206,55 @@ Future<void> main() async {
         // rather than duplicating the whole table.
         number: int.tryParse(cell(numberColumn)) ?? index,
         name: _titleCase(name),
-        calories: calories,
-        protein: protein,
-        carbs: carbs,
-        fat: fat,
-        fiber: _number(cell(fiberColumn)) ?? 0,
-        category: _categoryByGroup[_fold(cell(groupColumn))],
+        calories: _rounded(calories),
+        protein: _rounded(protein),
+        carbs: _rounded(carbs),
+        fat: _rounded(fat),
+        fiber: _rounded(_nonNegative(_number(cell(fiberColumn))) ?? 0),
+        category: _categoryOf(cell(groupColumn)),
         preparation: _preparationOf(name),
       ),
     );
   }
   return (foods: foods, skipped: skipped);
+}
+
+// Matched on the group's leading words rather than the whole string, because
+// TACO qualifies some of its own groups ("Bebidas (alcoólicas e não
+// alcoólicas)") and an exact key would silently leave those uncategorised.
+FoodCategory? _categoryOf(String group) {
+  final folded = _fold(group);
+  if (folded.isEmpty) {
+    return null;
+  }
+  for (final MapEntry(key: prefix, value: category) in _categoryByGroup.entries) {
+    if (folded.startsWith(prefix)) {
+      return category;
+    }
+  }
+  return null;
+}
+
+// TACO carries its figures to full floating-point precision (123.53489250000001
+// kcal), which is spurious - the published table states one decimal. Rounded so
+// the stored row reads like the source rather than like an artefact of the
+// spreadsheet.
+double _rounded(double value) => double.parse(value.toStringAsFixed(2));
+
+// How negative a macro may be before the row is rejected rather than clamped.
+// TACO derives carbohydrate *by difference* (100 minus water, protein, fat, ash
+// and fibre), so a food with almost none of it lands just below zero on
+// measurement error alone - "Corimba, cru" states -0.03 g. That is honestly
+// zero, and the schema's `>= 0` check rejects it, so it is clamped. A figure
+// further below zero than this is not noise, it is a misparse, and the row is
+// dropped rather than silently corrected into something plausible-looking.
+const _macroNoiseFloor = -1.0;
+
+double? _nonNegative(double? value) {
+  if (value == null || value < _macroNoiseFloor) {
+    return null;
+  }
+  return value < 0 ? 0 : value;
 }
 
 // TACO states a raw and a cooked entry as separate foods, exactly as USDA does,
@@ -411,7 +449,10 @@ class _TacoFood {
     'carbs_per_100g': carbs,
     'fat_per_100g': fat,
     'fiber_per_100g': fiber,
-    if (category != null) 'category': category!.wireValue,
-    if (preparation != null) 'preparation': preparation!.wireValue,
+    // Always present, even when null: PostgREST rejects a bulk insert whose
+    // objects do not all carry the same keys ("All object keys must match"), so
+    // omitting an absent category would break any batch that mixed the two.
+    'category': category?.wireValue,
+    'preparation': preparation?.wireValue,
   };
 }
