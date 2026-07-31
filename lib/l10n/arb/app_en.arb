@@ -25,8 +25,12 @@
   "reminderRepeatLabel": "Repeat",
   "reminderRepeatNever": "Never",
   "reminderRepeatDaily": "Daily",
+  "reminderRepeatWeekdays": "Weekdays",
   "reminderRepeatWeekly": "Weekly",
   "reminderRepeatMonthly": "Monthly",
+  "reminderRepeatFirstDayOfMonth": "First day of the month",
+  "reminderRepeatLastDayOfMonth": "Last day of the month",
+  "reminderRepeatYearly": "Yearly",
   "reminderDeleteTooltip": "Delete",
   "reminderCompleteAction": "Complete",
   "reminderOverdueBadge": "Overdue",
@@ -451,6 +455,14 @@
   "dietDeleteLogTooltip": "Remove",
   "dietLogMealAgainAction": "Log this meal again",
   "dietRecentMealsTitle": "Recent meals",
+  "dietRecentMealFoodCount": "{count, plural, =0{No foods} =1{1 food} other{{count} foods}}",
+  "@dietRecentMealFoodCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "dietMealLoggedToast": "{count, plural, =0{Nothing added} =1{1 food added to {meal}} other{{count} foods added to {meal}}}",
   "@dietMealLoggedToast": {
     "placeholders": {
@@ -692,8 +704,11 @@
   "dietFavoritesTitle": "Favorites",
   "dietSearchTabLabel": "Search",
   "dietMyFoodsTabLabel": "Mine",
+  "dietMyProductsSectionTitle": "Products you added",
+  "dietMyRecipesSectionTitle": "Recipes you created",
+  "dietRecentlyEnteredTitle": "Recently entered",
   "dietMyFoodsEmptyTitle": "Nothing added yet",
-  "dietMyFoodsEmptyMessage": "Foods you add yourself land here, ready to log again whenever you want.",
+  "dietMyFoodsEmptyMessage": "The products and recipes you create land here, ready to log again whenever you want.",
   "dietClearRecentSearchesAction": "Clear",
   "dietRemoveRecentSearchTooltip": "Remove from recent searches",
   "dietFavoritesEmptyTitle": "No favorites yet",
@@ -958,6 +973,8 @@
   },
   "cancelAction": "Cancel",
   "saveAction": "Save",
+  "showMoreAction": "Show more",
+  "showLessAction": "Show less",
   "adjustDecreaseAction": "Decrease {label}",
   "adjustIncreaseAction": "Increase {label}",
   "@adjustDecreaseAction": {

@@ -23,6 +23,17 @@ class RecentFoodTile extends StatelessWidget {
     _ => l10n.dietQuantityGrams(entry.log.quantityGrams.round()),
   };
 
+  // Brand first, exactly as FoodResultTile states it, so the same food reads the
+  // same whether it was found by searching or by having been eaten before - and
+  // it stays one meta line tall, which is what keeps the list un-ragged.
+  String _meta(AppLocalizations l10n) {
+    final amountAndCalories = '${_lastAmount(l10n)} · ${l10n.dietCaloriesLabel(entry.calories.round())}';
+    return switch (entry.food.brand) {
+      final brand? when brand.trim().isNotEmpty => '$brand · $amountAndCalories',
+      _ => amountAndCalories,
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = context.l10n;
@@ -40,7 +51,7 @@ class RecentFoodTile extends StatelessWidget {
               children: [
                 Text(entry.food.name, style: VTTextStyles.bodyStrong(context), maxLines: 1, overflow: .ellipsis),
                 Text(
-                  '${_lastAmount(l10n)} · ${l10n.dietCaloriesLabel(entry.calories.round())}',
+                  _meta(l10n),
                   style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
                   maxLines: 1,
                   overflow: .ellipsis,

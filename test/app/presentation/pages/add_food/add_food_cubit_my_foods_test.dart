@@ -26,6 +26,14 @@ MockGetRecentMealsUseCase _noRecentMealsUseCase() {
   return getRecentMealsUseCase;
 }
 
+// onInit also reads the recipes this user created, so any test that builds the
+// cubit has to answer that read too.
+MockGetMyRecipeFoodsUseCase _noMyRecipesUseCase() {
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+  return getMyRecipeFoodsUseCase;
+}
+
 void main() {
   MockGetRecentlyLoggedFoodsUseCase stubbedRecentFoods() {
     final getRecentlyLoggedFoodsUseCase = MockGetRecentlyLoggedFoodsUseCase();
@@ -55,6 +63,7 @@ void main() {
     'onInit loads the foods this user added',
     build: () => CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       getRecentSearchesUseCase: stubbedRecents(),
       getFavoriteFoodsUseCase: stubbedFavorites(),
@@ -74,6 +83,7 @@ void main() {
       when(getMyFoodsUseCase.call).thenAnswer((_) async => const Failure(VTError(message: 'offline')));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         getRecentSearchesUseCase: stubbedRecents(),
         getFavoriteFoodsUseCase: stubbedFavorites(),
@@ -101,6 +111,7 @@ void main() {
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
       getMyFoodsUseCase: getMyFoodsUseCase,
@@ -127,6 +138,7 @@ void main() {
     ).thenAnswer((_) async => Success(FoodLogFactory.build()));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
       getMyFoodsUseCase: getMyFoodsUseCase,

@@ -84,10 +84,22 @@ class AppLocalizationsPt extends AppLocalizations {
   String get reminderRepeatDaily => 'Diariamente';
 
   @override
+  String get reminderRepeatWeekdays => 'Dias úteis';
+
+  @override
   String get reminderRepeatWeekly => 'Semanalmente';
 
   @override
   String get reminderRepeatMonthly => 'Mensalmente';
+
+  @override
+  String get reminderRepeatFirstDayOfMonth => 'Primeiro dia do mês';
+
+  @override
+  String get reminderRepeatLastDayOfMonth => 'Último dia do mês';
+
+  @override
+  String get reminderRepeatYearly => 'Anualmente';
 
   @override
   String get reminderDeleteTooltip => 'Remover';
@@ -834,6 +846,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietRecentMealsTitle => 'Refeições recentes';
 
   @override
+  String dietRecentMealFoodCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(count, locale: localeName, other: '$count alimentos', one: '1 alimento', zero: 'Nenhum alimento');
+    return '$_temp0';
+  }
+
+  @override
   String dietMealLoggedToast(int count, String meal) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1266,10 +1284,19 @@ class AppLocalizationsPt extends AppLocalizations {
   String get dietMyFoodsTabLabel => 'Meus';
 
   @override
+  String get dietMyProductsSectionTitle => 'Produtos que você adicionou';
+
+  @override
+  String get dietMyRecipesSectionTitle => 'Receitas que você criou';
+
+  @override
+  String get dietRecentlyEnteredTitle => 'Registrados recentemente';
+
+  @override
   String get dietMyFoodsEmptyTitle => 'Nada cadastrado ainda';
 
   @override
-  String get dietMyFoodsEmptyMessage => 'Os alimentos que você cadastrar ficam aqui, prontos para registrar de novo quando quiser.';
+  String get dietMyFoodsEmptyMessage => 'Os produtos e as receitas que você cria ficam aqui, prontos para registrar de novo quando quiser.';
 
   @override
   String get dietClearRecentSearchesAction => 'Limpar';
@@ -1581,6 +1608,12 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get saveAction => 'Salvar';
+
+  @override
+  String get showMoreAction => 'Ver mais';
+
+  @override
+  String get showLessAction => 'Ver menos';
 
   @override
   String adjustDecreaseAction(String label) {

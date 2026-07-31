@@ -8,8 +8,12 @@ extension ReminderRecurrenceLabel on ReminderRecurrence {
   String label(AppLocalizations l10n) => switch (this) {
     .none => l10n.reminderRepeatNever,
     .daily => l10n.reminderRepeatDaily,
+    .weekdays => l10n.reminderRepeatWeekdays,
     .weekly => l10n.reminderRepeatWeekly,
     .monthly => l10n.reminderRepeatMonthly,
+    .firstDayOfMonth => l10n.reminderRepeatFirstDayOfMonth,
+    .lastDayOfMonth => l10n.reminderRepeatLastDayOfMonth,
+    .yearly => l10n.reminderRepeatYearly,
   };
 }
 

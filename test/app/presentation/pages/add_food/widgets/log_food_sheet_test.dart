@@ -26,6 +26,7 @@ AddFoodCubit _buildCubit({required MockLogFoodUseCase logFoodUseCase}) {
   when(getAppSettingsUseCase.call).thenReturn(const AppSettings());
   return CubitsFactories.buildAddFoodCubit(
     getRecentMealsUseCase: _noRecentMealsUseCase(),
+    getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
     logFoodUseCase: logFoodUseCase,
     getAppSettingsUseCase: getAppSettingsUseCase,
   );
@@ -62,6 +63,14 @@ MockGetRecentMealsUseCase _noRecentMealsUseCase() {
   final getRecentMealsUseCase = MockGetRecentMealsUseCase();
   when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
   return getRecentMealsUseCase;
+}
+
+// onInit also reads the recipes this user created, so any test that builds the
+// cubit has to answer that read too.
+MockGetMyRecipeFoodsUseCase _noMyRecipesUseCase() {
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+  return getMyRecipeFoodsUseCase;
 }
 
 void main() {

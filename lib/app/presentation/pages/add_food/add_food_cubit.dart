@@ -15,6 +15,7 @@ import 'package:vitta/app/domain/diet/use_cases/copy_food_logs_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/favorite_food_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_favorite_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_my_foods_use_case.dart';
+import 'package:vitta/app/domain/diet/use_cases/get_my_recipe_foods_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_meals_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recent_searches_use_case.dart';
 import 'package:vitta/app/domain/diet/use_cases/get_recently_logged_foods_use_case.dart';
@@ -42,6 +43,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     required this._clearRecentSearchesUseCase,
     required this._getRecentlyLoggedFoodsUseCase,
     required this._getMyFoodsUseCase,
+    required this._getMyRecipeFoodsUseCase,
     required this._getRecentMealsUseCase,
     required this._copyFoodLogsUseCase,
   }) : super(const AddFoodState());
@@ -58,6 +60,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
   final ClearRecentSearchesUseCase _clearRecentSearchesUseCase;
   final GetRecentlyLoggedFoodsUseCase _getRecentlyLoggedFoodsUseCase;
   final GetMyFoodsUseCase _getMyFoodsUseCase;
+  final GetMyRecipeFoodsUseCase _getMyRecipeFoodsUseCase;
   final GetRecentMealsUseCase _getRecentMealsUseCase;
   final CopyFoodLogsUseCase _copyFoodLogsUseCase;
 
@@ -71,6 +74,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     loadRecentFoods();
     loadRecentMeals();
     loadMyFoods();
+    loadMyRecipes();
     loadFavorites();
   }
 
@@ -108,6 +112,11 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
     myFoodsResult.when((_) {}, (myFoods) => emit(state.copyWith(myFoods: myFoods)));
   }
 
+  Future<void> loadMyRecipes() async {
+    final myRecipesResult = await _getMyRecipeFoodsUseCase();
+    myRecipesResult.when((_) {}, (myRecipes) => emit(state.copyWith(myRecipes: myRecipes)));
+  }
+
   void changeTab(AddFoodTab tab) => emit(state.copyWith(tab: tab));
 
   Future<void> loadFavorites() async {
@@ -143,6 +152,7 @@ class AddFoodCubit extends PresentationCubit<AddFoodState, AddFoodPresentationEv
         AddFoodState(
           favorites: state.favorites,
           myFoods: state.myFoods,
+          myRecipes: state.myRecipes,
           recentSearches: state.recentSearches,
           recentFoods: state.recentFoods,
           recentMeals: state.recentMeals,

@@ -7,12 +7,19 @@ import 'package:vitta/app/design_system/tokens/vt_text_styles.dart';
 import 'package:vitta/app/domain/diet/entities/recent_meal.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/calorie_pill.dart';
 import 'package:vitta/app/presentation/pages/diet/widgets/meal_avatar.dart';
+import 'package:vitta/l10n/arb/app_localizations.dart';
 
 class RecentMealTile extends StatelessWidget {
   const RecentMealTile({required this.meal, required this.onLogAgain, super.key});
 
   final RecentMeal meal;
   final VoidCallback onLogAgain;
+
+  // The count leads, because a bare list of food names reads as a list of
+  // individual foods - which is exactly what this row is not. It says how many
+  // foods one tap is about to add before it says which.
+  String _meta(AppLocalizations l10n) =>
+      '${l10n.dietRecentMealFoodCount(meal.entries.length)} · ${meal.entries.map((entry) => entry.food.name).join(' · ')}';
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +43,7 @@ class RecentMealTile extends StatelessWidget {
                   overflow: .ellipsis,
                 ),
                 Text(
-                  meal.entries.map((entry) => entry.food.name).join(' · '),
+                  _meta(l10n),
                   style: VTTextStyles.caption(context).copyWith(color: colorScheme.onSurfaceVariant),
                   maxLines: 1,
                   overflow: .ellipsis,

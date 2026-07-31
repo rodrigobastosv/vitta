@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/error/vt_error.dart';
+import 'package:vitta/app/domain/diet/entities/food.dart';
 import 'package:vitta/app/domain/diet/entities/food_log_entry.dart';
 import 'package:vitta/app/domain/diet/entities/logged_quantity.dart';
 import 'package:vitta/app/domain/diet/entities/meal_type.dart';
@@ -26,6 +27,14 @@ MockGetRecentMealsUseCase _noRecentMealsUseCase() {
   final getRecentMealsUseCase = MockGetRecentMealsUseCase();
   when(() => getRecentMealsUseCase(limit: any(named: 'limit'))).thenAnswer((_) async => const Success(<RecentMeal>[]));
   return getRecentMealsUseCase;
+}
+
+// onInit also reads the recipes this user created, so any test that builds the
+// cubit has to answer that read too.
+MockGetMyRecipeFoodsUseCase _noMyRecipesUseCase() {
+  final getMyRecipeFoodsUseCase = MockGetMyRecipeFoodsUseCase();
+  when(getMyRecipeFoodsUseCase.call).thenAnswer((_) async => const Success(<Food>[]));
+  return getMyRecipeFoodsUseCase;
 }
 
 void main() {
@@ -56,6 +65,7 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: stubbedAddRecent(),
@@ -74,6 +84,7 @@ void main() {
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         searchFoodsUseCase: searchFoodsUseCase,
         addRecentSearchUseCase: stubbedAddRecent(),
@@ -90,6 +101,7 @@ void main() {
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => Success([FoodFactory.build()]));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         searchFoodsUseCase: searchFoodsUseCase,
         addRecentSearchUseCase: stubbedAddRecent(),
@@ -106,6 +118,7 @@ void main() {
       when(() => searchFoodsUseCase(query: 'banana')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         searchFoodsUseCase: searchFoodsUseCase,
         addRecentSearchUseCase: stubbedAddRecent(),
@@ -119,6 +132,7 @@ void main() {
     final logFoodUseCase = MockLogFoodUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
     );
@@ -140,6 +154,7 @@ void main() {
     final logFoodUseCase = MockLogFoodUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       logFoodUseCase: logFoodUseCase,
     );
@@ -171,6 +186,7 @@ void main() {
       ).thenAnswer((_) async => Success(FoodLogFactory.build()));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         logFoodUseCase: logFoodUseCase,
       );
@@ -195,6 +211,7 @@ void main() {
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         logFoodUseCase: logFoodUseCase,
       );
@@ -208,6 +225,7 @@ void main() {
     when(() => searchFoodsUseCase(query: any(named: 'query'))).thenAnswer((_) async => Success([FoodFactory.build()]));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
       addRecentSearchUseCase: stubbedAddRecentSearch(),
@@ -230,6 +248,7 @@ void main() {
     final searchFoodsUseCase = MockSearchFoodsUseCase();
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       searchFoodsUseCase: searchFoodsUseCase,
     );
@@ -253,6 +272,7 @@ void main() {
     when(() => copyFoodLogsUseCase(entries: any(named: 'entries'), targetDate: any(named: 'targetDate'))).thenAnswer((_) async => const Success(null));
     final cubit = CubitsFactories.buildAddFoodCubit(
       getRecentMealsUseCase: _noRecentMealsUseCase(),
+      getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
       getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
       copyFoodLogsUseCase: copyFoodLogsUseCase,
     );
@@ -272,6 +292,7 @@ void main() {
       ).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
       return CubitsFactories.buildAddFoodCubit(
         getRecentMealsUseCase: _noRecentMealsUseCase(),
+        getMyRecipeFoodsUseCase: _noMyRecipesUseCase(),
         getRecentlyLoggedFoodsUseCase: stubbedRecentFoods(),
         copyFoodLogsUseCase: copyFoodLogsUseCase,
       );

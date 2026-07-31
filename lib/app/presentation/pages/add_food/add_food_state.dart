@@ -9,6 +9,7 @@ class AddFoodState extends Equatable {
     this.results,
     this.favorites = const [],
     this.myFoods = const [],
+    this.myRecipes = const [],
     this.recentSearches = const [],
     this.recentFoods = const [],
     this.recentMeals = const [],
@@ -21,6 +22,8 @@ class AddFoodState extends Equatable {
   final List<Food> favorites;
 
   final List<Food> myFoods;
+
+  final List<Food> myRecipes;
 
   final List<String> recentSearches;
 
@@ -40,6 +43,7 @@ class AddFoodState extends Equatable {
     List<Food>? results,
     List<Food>? favorites,
     List<Food>? myFoods,
+    List<Food>? myRecipes,
     List<String>? recentSearches,
     List<FoodLogEntry>? recentFoods,
     List<RecentMeal>? recentMeals,
@@ -49,6 +53,7 @@ class AddFoodState extends Equatable {
     results: results ?? this.results,
     favorites: favorites ?? this.favorites,
     myFoods: myFoods ?? this.myFoods,
+    myRecipes: myRecipes ?? this.myRecipes,
     recentSearches: recentSearches ?? this.recentSearches,
     recentFoods: recentFoods ?? this.recentFoods,
     recentMeals: recentMeals ?? this.recentMeals,
@@ -57,5 +62,5 @@ class AddFoodState extends Equatable {
   );
 
   @override
-  List<Object?> get props => [results, favorites, myFoods, recentSearches, recentFoods, recentMeals, query, tab];
+  List<Object?> get props => [results, favorites, myFoods, myRecipes, recentSearches, recentFoods, recentMeals, query, tab];
 }
