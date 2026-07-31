@@ -135,13 +135,28 @@ Future<void> main() async {
 
   final client = http.Client();
   var imported = 0;
+  var untranslated = 0;
   try {
     for (var start = 0; start < capped.length; start += batchSize) {
       final batch = capped.sublist(start, (start + batchSize).clamp(0, capped.length));
       final translations = translate
           ? await _translateBatch(client, batch: batch, apiKey: anthropicKey!, model: model)
           : const <int, String>{};
-      final rows = [for (final food in batch) _toFoodRow(food, locale: locale, translatedName: translations[food.fdcId])];
+      // A whole batch failing aborts the run (see _translateBatch), but the
+      // model can also just omit a food from an otherwise fine response. That
+      // used to fall back to food.description, which writes the raw USDA English
+      // ("Cheese, provolone, sliced") into a Portuguese catalog - and it is
+      // exactly what left 118 rows ending in "raw" and 17 starting "Cheese,"
+      // for real users to search through. Skipping is the same call
+      // populate_food_facts.dart makes for a food it got no answer about: the
+      // row keeps whatever it already had, and the next run retries it, because
+      // the id is derived from fdcId + locale so a re-run upserts in place.
+      final translated = translate ? batch.where((food) => translations[food.fdcId] != null).toList() : batch;
+      untranslated += batch.length - translated.length;
+      if (translated.isEmpty) {
+        continue;
+      }
+      final rows = [for (final food in translated) _toFoodRow(food, locale: locale, translatedName: translations[food.fdcId])];
       await _upsertRows(client, supabaseUrl: supabaseUrl, serviceRoleKey: serviceRoleKey, rows: rows);
       imported += rows.length;
       stdout.writeln('  imported $imported/${capped.length}');
@@ -151,6 +166,9 @@ Future<void> main() async {
   }
 
   stdout.writeln('Done. Imported $imported generic foods.');
+  if (untranslated > 0) {
+    stdout.writeln('Skipped $untranslated food(s) the model returned no "$locale" name for. Re-run to retry them.');
+  }
 }
 
 List<String> _jsonPathsFromEnv() {

@@ -122,6 +122,60 @@ create index if not exists foods_user_id_idx on foods (user_id);
 drop index if exists foods_barcode_unique_idx;
 create unique index if not exists foods_barcode_unique_idx on foods (barcode);
 
+-- Shared by foods.search_text and exercises.search_text below. A generated
+-- column can only call immutable functions, and unaccent() is merely stable (it
+-- depends on a dictionary that could in principle be redefined), so it needs a
+-- wrapper that promises immutability.
+create extension if not exists unaccent;
+
+create or replace function immutable_unaccent(value text)
+returns text
+language sql
+immutable
+strict
+set search_path = public, extensions
+as $$
+  select unaccent('unaccent', value);
+$$;
+
+-- What catalog search actually matches on (issue #285). Two separate problems
+-- made the old `ilike '%query%'` on `name` return the wrong rows:
+--
+--   1. No accent folding. Typing "feijao" found 0 of the 15 "feijão" rows,
+--      "requeijao" 0 of 14, "mamao" 0 of 2 - and a phone keyboard is exactly
+--      where nobody types the accent. exercises solved this years earlier; foods
+--      never got it.
+--   2. An unanchored substring match. '%ovo%' matches prOVOlone, sOJOVO and the
+--      Czech OVOce, and '%leite%' matches every chocolate bar labelled "ao
+--      leite", so the noise drowned the food actually being searched for.
+--
+-- This column fixes (1). (2) is fixed in SupabaseDietDataSource.searchCatalog,
+-- which anchors its relevance tiers against this column (equals, then starts
+-- with, then at a word boundary) instead of matching anywhere inside it.
+--
+-- It folds the NAME only, deliberately, because those anchors have to mean
+-- something: with the brand appended, "banana dole" would make `like 'banana%'`
+-- true for a row whose name is merely "Banana bread", and the tiers would stop
+-- discriminating. Searching by brand is served by the widest tier, which ors in
+-- a plain ilike on brand - brands are near-universally unaccented, so they lose
+-- nothing by not being folded.
+create or replace function food_search_text(name text)
+returns text
+language sql
+immutable
+strict
+set search_path = public
+as $$
+  select immutable_unaccent(lower(name));
+$$;
+
+alter table foods add column if not exists search_text text generated always as (food_search_text(name)) stored;
+
+-- text_pattern_ops is what makes a prefix match (search_text like 'banana%')
+-- index-scannable; the default opclass only serves equality here, because the
+-- database is not guaranteed to be in the C collation.
+create index if not exists foods_search_text_idx on foods (search_text text_pattern_ops);
+
 create table if not exists food_logs (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users (id) on delete cascade,
@@ -345,22 +399,9 @@ create table if not exists exercises (
 --
 -- It reads every value of the blob rather than named locales, so adding a
 -- locale stays an import re-run with no migration - the whole point of keying
--- names by locale. That needs the two immutable wrappers below: a generated
--- column can only call immutable functions, and unaccent() is merely stable
--- (it depends on a dictionary that could in principle be redefined), while
--- jsonb_each_text is set-returning and can't be inlined into the expression.
-create extension if not exists unaccent;
-
-create or replace function immutable_unaccent(value text)
-returns text
-language sql
-immutable
-strict
-set search_path = public, extensions
-as $$
-  select unaccent('unaccent', value);
-$$;
-
+-- names by locale. That needs the wrapper below on top of the shared
+-- immutable_unaccent defined above the foods table: jsonb_each_text is
+-- set-returning and can't be inlined into a generated column's expression.
 create or replace function exercise_search_text(names jsonb)
 returns text
 language sql

@@ -58,29 +58,23 @@ class DietRepository {
 
   Future<void> markIntroSeen() => _dietIntroLocalDataSource.markIntroSeen();
 
-  static const _sparseCatalogThreshold = 5;
-
+  // The live Open Food Facts search is now a last resort, not an augmentation
+  // (issue #285). It used to fire whenever the catalog returned fewer than five
+  // hits, which - once relevance ranking made the catalog return the few rows
+  // that actually matched instead of twenty that merely contained the letters -
+  // meant a good, short, precise result set was routinely padded out with
+  // worldwide packaged products. "Way less results but perfect quality" is the
+  // point, so OFF is asked only when the catalog can answer nothing at all.
   Future<Result<VTError, List<Food>>> searchFoods({required String query}) async {
     final catalogResult = await _supabaseDietDataSource.searchCatalog(query: query);
     final catalogFoods = catalogResult.when((_) => null, (foods) => foods);
-    if (catalogFoods != null && catalogFoods.length >= _sparseCatalogThreshold) {
+    if (catalogFoods != null && catalogFoods.isNotEmpty) {
       return Success(catalogFoods);
     }
-    final offResult = await _openFoodFactsDataSource.searchFoods(query: query);
-    if (catalogFoods == null || catalogFoods.isEmpty) {
-      return offResult;
-    }
-    final offFoods = offResult.when((_) => null, (foods) => foods);
-    return Success(offFoods == null ? catalogFoods : _mergeByBarcode(catalogFoods, offFoods));
-  }
-
-  List<Food> _mergeByBarcode(List<Food> catalogFoods, List<Food> offFoods) {
-    final catalogBarcodes = catalogFoods.map((food) => food.barcode).whereType<String>().toSet();
-    return [
-      ...catalogFoods,
-      for (final food in offFoods)
-        if (food.barcode == null || !catalogBarcodes.contains(food.barcode)) food,
-    ];
+    // Nothing to merge against any more, so the barcode dedupe that used to
+    // guard the catalog+OFF union went with the sparse threshold: by here the
+    // catalog has returned nothing, and OFF's answer is the whole answer.
+    return _openFoodFactsDataSource.searchFoods(query: query);
   }
 
   Future<Result<VTError, Food>> saveFood({required Food food}) => _supabaseDietDataSource.saveFood(food: food);

@@ -87,30 +87,11 @@ void main() {
     foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, offFoods));
   });
 
-  test('searchFoods merges Open Food Facts results when the catalog is sparse, deduping by barcode', () async {
-    final supabaseDietDataSource = MockSupabaseDietDataSource();
-    final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
-    final catalogFood = FoodFactory.build(id: 'catalog', name: 'Carne Moída Patinho', barcode: 'shared');
-    final duplicateOffFood = FoodFactory.build(id: null, name: 'Patinho', barcode: 'shared');
-    final newOffFood = FoodFactory.build(id: null, name: 'Patinho Bovino', barcode: 'other');
-    when(() => supabaseDietDataSource.searchCatalog(query: 'patinho')).thenAnswer((_) async => Success([catalogFood]));
-    when(() => openFoodFactsDataSource.searchFoods(query: 'patinho')).thenAnswer((_) async => Success([duplicateOffFood, newOffFood]));
-    final repository = RepositoriesFactories.buildDietRepository(
-      supabaseDietDataSource: supabaseDietDataSource,
-      openFoodFactsDataSource: openFoodFactsDataSource,
-    );
-
-    final foodsResult = await repository.searchFoods(query: 'patinho');
-
-    foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, [catalogFood, newOffFood]));
-  });
-
-  test('searchFoods keeps the sparse catalog matches when Open Food Facts fails', () async {
+  test('searchFoods does not pad a thin catalog answer with Open Food Facts', () async {
     final supabaseDietDataSource = MockSupabaseDietDataSource();
     final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
     final catalogFoods = [FoodFactory.build(id: 'catalog', name: 'Carne Moída Patinho')];
     when(() => supabaseDietDataSource.searchCatalog(query: 'patinho')).thenAnswer((_) async => Success(catalogFoods));
-    when(() => openFoodFactsDataSource.searchFoods(query: 'patinho')).thenAnswer((_) async => const Failure(VTError(message: 'boom')));
     final repository = RepositoriesFactories.buildDietRepository(
       supabaseDietDataSource: supabaseDietDataSource,
       openFoodFactsDataSource: openFoodFactsDataSource,
@@ -119,6 +100,23 @@ void main() {
     final foodsResult = await repository.searchFoods(query: 'patinho');
 
     foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, catalogFoods));
+    verifyNever(() => openFoodFactsDataSource.searchFoods(query: any(named: 'query')));
+  });
+
+  test('searchFoods falls back to Open Food Facts only when the catalog answers nothing', () async {
+    final supabaseDietDataSource = MockSupabaseDietDataSource();
+    final openFoodFactsDataSource = MockOpenFoodFactsDataSource();
+    final offFoods = [FoodFactory.build(id: null, name: 'Patinho Bovino', barcode: 'other')];
+    when(() => supabaseDietDataSource.searchCatalog(query: 'patinho')).thenAnswer((_) async => const Success([]));
+    when(() => openFoodFactsDataSource.searchFoods(query: 'patinho')).thenAnswer((_) async => Success(offFoods));
+    final repository = RepositoriesFactories.buildDietRepository(
+      supabaseDietDataSource: supabaseDietDataSource,
+      openFoodFactsDataSource: openFoodFactsDataSource,
+    );
+
+    final foodsResult = await repository.searchFoods(query: 'patinho');
+
+    foodsResult.when((error) => fail('expected Success, got Failure($error)'), (value) => expect(value, offFoods));
   });
 
   test('getRecentMeals groups a range of entries into one meal per day and meal type', () async {

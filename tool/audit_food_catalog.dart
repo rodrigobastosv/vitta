@@ -41,6 +41,7 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:vitta/app/core/text/accent_folding.dart';
+import 'package:vitta/app/domain/diet/entities/food_plausibility.dart';
 
 const _requestTimeout = Duration(seconds: 45);
 const _maxAttempts = 4;
@@ -50,6 +51,9 @@ const _defaultPageSize = 1000;
 /// any proxy's length limit, large enough that a few thousand rows is a handful of
 /// round trips rather than a few thousand.
 const _deleteBatchSize = 100;
+
+// How many example rows a report prints before summarising the rest.
+const _reportSampleSize = 20;
 
 /// Substrings that only ever appear in a catalogue entry, never in something a
 /// person would type into a food diary. "nfs" is USDA's "not further specified".
@@ -115,14 +119,27 @@ Future<void> main() async {
     _reportCoverage(foods);
     final duplicates = _duplicateGroups(foods);
     _reportDuplicates(duplicates);
+    final implausible = _implausibleFoods(foods);
+    _reportImplausible(implausible);
+    _reportEmpty(foods);
     _reportNames(foods);
     _reportStaples(foods);
 
     if (!shouldFix) {
-      stdout.writeln('\nReport only. Re-run with AUDIT_FIX=true to delete the never-logged duplicates above.');
+      stdout.writeln('\nReport only. Re-run with AUDIT_FIX=true to delete the never-logged duplicate and impossible rows above.');
       return;
     }
-    await _deleteDuplicates(client, supabaseUrl: supabaseUrl, serviceRoleKey: serviceRoleKey, duplicates: duplicates);
+    await _deleteRows(
+      client,
+      supabaseUrl: supabaseUrl,
+      serviceRoleKey: serviceRoleKey,
+      ids: {
+        for (final group in duplicates)
+          for (final food in group)
+            if (food != _survivorOf(group) && food.timesLogged == 0) food.id,
+        for (final food in implausible) food.id,
+      }.toList(),
+    );
   } finally {
     client.close();
   }
@@ -251,6 +268,57 @@ bool _beats(_Food food, _Food survivor) => switch (food.timesLogged.compareTo(su
   },
 };
 
+// Rows whose figures cannot describe a real food, and that nobody has logged.
+//
+// The never-logged filter is the same safety rule the duplicate delete follows,
+// and for the same reason: food_logs.food_id cascades on delete, so removing a
+// row someone has logged would silently delete their diary entries with it. A
+// junk row that HAS been logged is reported and deliberately left alone - the
+// user's history is worth more than the tidy catalog, and fixing it is a
+// judgement (correct the macros? which figures are right?) rather than a rule.
+List<_Food> _implausibleFoods(List<_Food> foods) =>
+    [for (final food in foods) if (!food.isPlausible && food.timesLogged == 0) food];
+
+void _reportImplausible(List<_Food> implausible) {
+  stdout.writeln('IMPLAUSIBLE');
+  if (implausible.isEmpty) {
+    stdout.writeln('  none\n');
+    return;
+  }
+  stdout.writeln('  ${implausible.length} never-logged rows exceed ${FoodPlausibility.maxCaloriesPer100g.round()} kcal per 100 g (pure fat is 900)');
+  for (final food in implausible.take(_reportSampleSize)) {
+    stdout.writeln('    ${food.source} | ${food.name} | ${food.macros}');
+  }
+  if (implausible.length > _reportSampleSize) {
+    stdout.writeln('    ... and ${implausible.length - _reportSampleSize} more');
+  }
+  stdout.writeln();
+}
+
+// Report only, and deliberately never deleted. Most of these are Open Food Facts
+// rows whose contributor never filled the nutrition panel in - but the bucket
+// also holds "Salt", "Aquafina" and "Gold Espresso Intense Coffee", which are
+// real foods that genuinely carry no calories and no macros. Nothing in the row
+// separates the two, so this is a list for a human to look at, not a rule.
+void _reportEmpty(List<_Food> foods) {
+  final empty = [for (final food in foods) if (food.statesNoNutrition) food];
+  stdout.writeln('NO NUTRITION STATED');
+  if (empty.isEmpty) {
+    stdout.writeln('  none\n');
+    return;
+  }
+  final logged = empty.where((food) => food.timesLogged > 0).length;
+  stdout.writeln('  ${empty.length} rows carry nothing but zeros ($logged of them have been logged)');
+  stdout.writeln('  Not deleted: water, salt and black coffee look exactly like this. Review before removing any.');
+  for (final food in empty.take(_reportSampleSize)) {
+    stdout.writeln('    ${food.source} | ${food.name}');
+  }
+  if (empty.length > _reportSampleSize) {
+    stdout.writeln('    ... and ${empty.length - _reportSampleSize} more');
+  }
+  stdout.writeln();
+}
+
 void _reportNames(List<_Food> foods) {
   stdout.writeln('\nNAMES');
   final suspicious = foods.where((food) => food.nameArtefact != null).toList();
@@ -282,22 +350,17 @@ void _reportStaples(List<_Food> foods) {
   stdout.writeln('  These need macros from a real source (TACO/UNICAMP or USDA), not numbers written by hand.');
 }
 
-Future<void> _deleteDuplicates(
+Future<void> _deleteRows(
   http.Client client, {
   required String supabaseUrl,
   required String serviceRoleKey,
-  required List<List<_Food>> duplicates,
+  required List<String> ids,
 }) async {
-  final ids = [
-    for (final group in duplicates)
-      for (final food in group)
-        if (food != _survivorOf(group) && food.timesLogged == 0) food.id,
-  ];
   if (ids.isEmpty) {
     stdout.writeln('\nNothing safe to delete.');
     return;
   }
-  stdout.writeln('\nDeleting ${ids.length} never-logged duplicate rows...');
+  stdout.writeln('\nDeleting ${ids.length} never-logged rows...');
   // Batched through `id=in.(...)` rather than one request per row: a few thousand
   // sequential round trips is minutes of waiting for a delete Postgres does in one.
   var deleted = 0;
@@ -377,7 +440,11 @@ class _Food {
     required this.gramsPerUnit,
     required this.densityGPerMl,
     required this.preparation,
-    required this.macros,
+    required this.caloriesPer100g,
+    required this.proteinPer100g,
+    required this.carbsPer100g,
+    required this.fatPer100g,
+    required this.fiberPer100g,
     required this.isFactChecked,
     required this.createdAt,
   });
@@ -393,18 +460,16 @@ class _Food {
     gramsPerUnit: (row['grams_per_unit'] as num?)?.toDouble(),
     densityGPerMl: (row['density_g_per_ml'] as num?)?.toDouble(),
     preparation: row['preparation'] as String?,
-    macros: _macrosOf(row),
+    caloriesPer100g: _numberOf(row, 'calories_per_100g'),
+    proteinPer100g: _numberOf(row, 'protein_per_100g'),
+    carbsPer100g: _numberOf(row, 'carbs_per_100g'),
+    fatPer100g: _numberOf(row, 'fat_per_100g'),
+    fiberPer100g: _numberOf(row, 'fiber_per_100g'),
     isFactChecked: row['catalog_facts_checked_at'] != null,
     createdAt: DateTime.parse(row['created_at'] as String),
   );
 
-  static String _macrosOf(Map<String, dynamic> row) => [
-    'calories_per_100g',
-    'protein_per_100g',
-    'carbs_per_100g',
-    'fat_per_100g',
-    'fiber_per_100g',
-  ].map((column) => ((row[column] as num?)?.toDouble() ?? 0).toStringAsFixed(1)).join('/');
+  static double _numberOf(Map<String, dynamic> row, String column) => (row[column] as num?)?.toDouble() ?? 0;
 
   final String id;
   final String name;
@@ -416,8 +481,31 @@ class _Food {
   final double? gramsPerUnit;
   final double? densityGPerMl;
   final String? preparation;
-  final String macros;
+  final double caloriesPer100g;
+  final double proteinPer100g;
+  final double carbsPer100g;
+  final double fatPer100g;
+  final double fiberPer100g;
   final bool isFactChecked;
+
+  /// The macros as they appear in the duplicate key: two rows only count as the
+  /// same food if they also say the same thing about it (see _duplicateGroups).
+  String get macros => [caloriesPer100g, proteinPer100g, carbsPer100g, fatPer100g, fiberPer100g]
+      .map((value) => value.toStringAsFixed(1))
+      .join('/');
+
+  /// Whether the figures are physically possible, by the app's own rule
+  /// (FoodPlausibility) so the auditor and OpenFoodFactsDataSource cannot
+  /// disagree about what junk is.
+  bool get isPlausible => FoodPlausibility.isPlausible(caloriesPer100g: caloriesPer100g);
+
+  /// Carries no nutrition at all. Reported, never deleted - see _reportEmpty.
+  bool get statesNoNutrition => FoodPlausibility.statesNoNutrition(
+    caloriesPer100g: caloriesPer100g,
+    proteinPer100g: proteinPer100g,
+    carbsPer100g: carbsPer100g,
+    fatPer100g: fatPer100g,
+  );
   final DateTime createdAt;
 
   bool get hasBarcode => (barcode ?? '').trim().isNotEmpty;
