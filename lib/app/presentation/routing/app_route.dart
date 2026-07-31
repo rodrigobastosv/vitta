@@ -44,6 +44,7 @@ enum AppRoute {
   settings('/settings'),
   homeLayout('/settings/home-layout'),
   logReminders('/settings/log-reminders'),
+  restTimerSettings('/settings/rest-timer'),
   signIn('/auth/sign-in'),
   signUp('/auth/sign-up');
 

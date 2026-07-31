@@ -14,6 +14,7 @@ import 'package:vitta/app/core/services/logging/sentry_log_destination.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/share/share_service.dart';
+import 'package:vitta/app/core/services/sound/sound_service.dart';
 import 'package:vitta/app/core/services/storage/local_storage_service.dart';
 import 'package:vitta/app/core/services/supabase/realtime_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
@@ -155,6 +156,7 @@ import 'package:vitta/app/domain/workout/use_cases/get_exercise_progression_use_
 import 'package:vitta/app/domain/workout/use_cases/get_last_sets_by_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_logged_exercises_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_rest_duration_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/get_rest_sound_enabled_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routine_cycle_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/get_workouts_for_date_use_case.dart';
@@ -164,6 +166,7 @@ import 'package:vitta/app/domain/workout/use_cases/mark_workout_intro_seen_use_c
 import 'package:vitta/app/domain/workout/use_cases/remove_workout_exercise_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/reorder_routines_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_rest_duration_use_case.dart';
+import 'package:vitta/app/domain/workout/use_cases/save_rest_sound_enabled_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/save_routine_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/search_exercises_use_case.dart';
 import 'package:vitta/app/domain/workout/use_cases/set_workout_exercise_completed_use_case.dart';
@@ -231,7 +234,17 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(() => PremiumCubit(getPremiumStatusUseCase: G(), purchaseService: G(), watchUserIdUseCase: G()));
   G.registerFactory(() => GetRestDurationUseCase(workoutRepository: G()));
   G.registerFactory(() => SaveRestDurationUseCase(workoutRepository: G()));
-  G.registerLazySingleton(() => RestTimerCubit(getRestDurationUseCase: G(), saveRestDurationUseCase: G()));
+  G.registerFactory(() => GetRestSoundEnabledUseCase(workoutRepository: G()));
+  G.registerFactory(() => SaveRestSoundEnabledUseCase(workoutRepository: G()));
+  G.registerLazySingleton(
+    () => RestTimerCubit(
+      getRestDurationUseCase: G(),
+      saveRestDurationUseCase: G(),
+      getRestSoundEnabledUseCase: G(),
+      saveRestSoundEnabledUseCase: G(),
+      soundService: G(),
+    ),
+  );
   G.registerFactoryParam<ExerciseWorkoutCubit, ExerciseWorkoutExtra, void>(
     (extra, _) => ExerciseWorkoutCubit(extra: extra, logSetUseCase: G(), updateSetUseCase: G(), deleteSetUseCase: G(), setWorkoutExerciseCompletedUseCase: G()),
   );
@@ -245,6 +258,7 @@ void setupDependencies({required Box<dynamic> appBox, required SupabaseService s
   G.registerLazySingleton(NotificationService.new);
   G.registerLazySingleton(PurchaseService.new);
   G.registerLazySingleton(ShareService.new);
+  G.registerLazySingleton(SoundService.new);
   G.registerLazySingleton(AnalyticsService.new);
   G.registerLazySingleton(AppInfoService.new);
   Log.service = LoggingService(

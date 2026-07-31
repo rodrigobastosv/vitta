@@ -34,6 +34,7 @@ import 'package:vitta/app/presentation/routing/routes/recipe_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/recipes_route.dart';
 import 'package:vitta/app/presentation/routing/routes/reminder_history_route.dart';
 import 'package:vitta/app/presentation/routing/routes/reminder_route.dart';
+import 'package:vitta/app/presentation/routing/routes/rest_timer_settings_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routine_form_route.dart';
 import 'package:vitta/app/presentation/routing/routes/routines_route.dart';
 import 'package:vitta/app/presentation/routing/routes/settings_route.dart';
@@ -98,6 +99,7 @@ abstract class AppRouter {
     SettingsRoute(),
     HomeLayoutRoute(),
     LogRemindersRoute(),
+    RestTimerSettingsRoute(),
     SignInRoute(),
     SignUpRoute(),
   ];

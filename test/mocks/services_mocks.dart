@@ -9,6 +9,7 @@ import 'package:vitta/app/core/services/logging/logging_service.dart';
 import 'package:vitta/app/core/services/notifications/notification_service.dart';
 import 'package:vitta/app/core/services/purchases/purchase_service.dart';
 import 'package:vitta/app/core/services/share/share_service.dart';
+import 'package:vitta/app/core/services/sound/sound_service.dart';
 import 'package:vitta/app/core/services/supabase/realtime_service.dart';
 import 'package:vitta/app/core/services/supabase/supabase_service.dart';
 
@@ -35,3 +36,5 @@ class MockLogDestination extends Mock implements LogDestination {}
 class MockPurchaseService extends Mock implements PurchaseService {}
 
 class MockShareService extends Mock implements ShareService {}
+
+class MockSoundService extends Mock implements SoundService {}

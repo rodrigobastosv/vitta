@@ -40,7 +40,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
       // A rest times the gap before the next set of this exercise, and there is
       // no next set once it is finished - leaving it running would count down
       // over the next exercise the user opens (issue #228).
-      timer.skip();
+      timer.endFor(state.workoutExercise.id);
       navigator.pop();
     }
   }
@@ -61,7 +61,10 @@ class ExerciseWorkoutPage extends StatelessWidget {
       onPresentation: (context, event) => switch (event) {
         ExerciseWorkoutShowLoading() => context.showLoading(),
         ExerciseWorkoutHideLoading() => context.hideLoading(),
-        ExerciseWorkoutSetLogged() => context.read<RestTimerCubit>().start(label: extra.workoutExercise.exercise.nameFor(l10n.localeName)),
+        ExerciseWorkoutSetLogged() => context.read<RestTimerCubit>().start(
+          exerciseId: extra.workoutExercise.id,
+          label: extra.workoutExercise.exercise.nameFor(l10n.localeName),
+        ),
         ExerciseWorkoutError(:final message) => context.showErrorToast(message: message),
       },
       builder: (context, cubit, state) {
@@ -104,7 +107,7 @@ class ExerciseWorkoutPage extends StatelessWidget {
                 sliver: SliverList.list(
                   children: [
                     BlocBuilder<RestTimerCubit, RestTimerState>(
-                      builder: (context, timer) => timer.isRunning
+                      builder: (context, timer) => timer.isRunning && timer.belongsTo(state.workoutExercise.id)
                           ? Padding(
                               padding: const EdgeInsets.only(bottom: VTSpacing.m),
                               child: VTRestTimer(

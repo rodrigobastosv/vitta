@@ -36,6 +36,10 @@ class WorkoutRepository {
 
   Future<void> saveRestSeconds(int seconds) => _workoutLocalDataSource.saveRestSeconds(seconds);
 
+  bool isRestSoundEnabled() => _workoutLocalDataSource.isRestSoundEnabled();
+
+  Future<void> saveRestSoundEnabled({required bool isEnabled}) => _workoutLocalDataSource.saveRestSoundEnabled(isEnabled: isEnabled);
+
   Future<void> markIntroSeen() => _workoutLocalDataSource.markIntroSeen();
 
   Future<Result<VTError, List<Exercise>>> searchExercises({required String query, MuscleGroup? muscleGroup, ExerciseCategory? category}) =>

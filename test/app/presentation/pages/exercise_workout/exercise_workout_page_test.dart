@@ -8,6 +8,7 @@ import 'package:vitta/app/core/di/dependencies.dart';
 import 'package:vitta/app/core/error/result.dart';
 import 'package:vitta/app/core/units/unit_system.dart';
 import 'package:vitta/app/cubit/rest_timer_cubit.dart';
+import 'package:vitta/app/design_system/components/general/vt_rest_timer.dart';
 import 'package:vitta/app/design_system/themes/vt_theme.dart';
 import 'package:vitta/app/domain/workout/entities/workout_exercise.dart';
 import 'package:vitta/app/presentation/pages/exercise_workout/exercise_workout_cubit.dart';
@@ -17,14 +18,25 @@ import 'package:vitta/l10n/arb/app_localizations.dart';
 
 import '../../../../factories/entities/workout_exercise_factory.dart';
 import '../../../../factories/entities/workout_set_factory.dart';
+import '../../../../mocks/services_mocks.dart';
 import '../../../../mocks/use_cases_mocks.dart';
 
 RestTimerCubit buildRestTimer() {
   final getRestDurationUseCase = MockGetRestDurationUseCase();
   final saveRestDurationUseCase = MockSaveRestDurationUseCase();
+  final getRestSoundEnabledUseCase = MockGetRestSoundEnabledUseCase();
+  final saveRestSoundEnabledUseCase = MockSaveRestSoundEnabledUseCase();
   when(getRestDurationUseCase.call).thenReturn(const Duration(seconds: 90));
   when(() => saveRestDurationUseCase(any())).thenAnswer((_) async {});
-  return RestTimerCubit(getRestDurationUseCase: getRestDurationUseCase, saveRestDurationUseCase: saveRestDurationUseCase);
+  when(getRestSoundEnabledUseCase.call).thenReturn(false);
+  when(() => saveRestSoundEnabledUseCase(isEnabled: any(named: 'isEnabled'))).thenAnswer((_) async {});
+  return RestTimerCubit(
+    getRestDurationUseCase: getRestDurationUseCase,
+    saveRestDurationUseCase: saveRestDurationUseCase,
+    getRestSoundEnabledUseCase: getRestSoundEnabledUseCase,
+    saveRestSoundEnabledUseCase: saveRestSoundEnabledUseCase,
+    soundService: MockSoundService(),
+  );
 }
 
 Future<RestTimerCubit> pumpExerciseWorkoutPage(WidgetTester tester, {required WorkoutExercise workoutExercise}) async {
@@ -88,7 +100,7 @@ void main() {
     final workoutExercise = WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]);
     final timer = await pumpExerciseWorkoutPage(tester, workoutExercise: workoutExercise);
 
-    timer.start(label: 'Incline Dumbbell Press');
+    timer.start(exerciseId: workoutExercise.id, label: 'Incline Dumbbell Press');
     await tester.pump();
     expect(timer.state.isRunning, isTrue);
 
@@ -96,5 +108,34 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(timer.state.isRunning, isFalse);
+  });
+
+  testWidgets('a rest left running by another exercise is not shown as this one is', (tester) async {
+    final workoutExercise = WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]);
+    final timer = await pumpExerciseWorkoutPage(tester, workoutExercise: workoutExercise);
+
+    timer.start(exerciseId: 'the-exercise-before-this-one', label: 'Barbell Bench Press');
+    await tester.pump();
+
+    await tester.pump();
+
+    expect(timer.state.isRunning, isTrue);
+    expect(find.byType(VTRestTimer), findsNothing, reason: 'a rest belongs to the exercise it was started from, never to whatever is open now');
+
+    timer.skip();
+  });
+
+  testWidgets('its own rest is shown', (tester) async {
+    final workoutExercise = WorkoutExerciseFactory.build(sets: [WorkoutSetFactory.build()]);
+    final timer = await pumpExerciseWorkoutPage(tester, workoutExercise: workoutExercise);
+
+    timer.start(exerciseId: workoutExercise.id, label: 'Incline Dumbbell Press');
+    await tester.pump();
+
+    await tester.pump();
+
+    expect(find.byType(VTRestTimer), findsOneWidget);
+
+    timer.skip();
   });
 }

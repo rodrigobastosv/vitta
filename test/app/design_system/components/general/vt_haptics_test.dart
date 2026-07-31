@@ -37,6 +37,20 @@ void main() {
     expect(fired, ['HapticFeedbackType.selectionClick', 'HapticFeedbackType.lightImpact', 'HapticFeedbackType.mediumImpact', 'HapticFeedbackType.heavyImpact']);
   });
 
+  testWidgets('the end of a countdown escalates past the tick that leads into it', (tester) async {
+    final fired = recordHaptics(tester);
+
+    await VTHaptics.countdown();
+    // The burst spaces its pulses with a real delay, which a widget test's fake
+    // clock never advances on its own.
+    await tester.runAsync(VTHaptics.alarm);
+
+    expect(fired, [
+      'HapticFeedbackType.mediumImpact',
+      ...List.filled(VTHaptics.alarmPulses, 'HapticFeedbackType.heavyImpact'),
+    ], reason: 'a rest running out has to be felt through a pocket, so it hits harder than a selection tick and repeats');
+  });
+
   testWidgets('a segmented tab ticks on a real change but not on re-tapping the current tab', (tester) async {
     final fired = recordHaptics(tester);
     await pumpInApp(

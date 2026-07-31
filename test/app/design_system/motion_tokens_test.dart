@@ -20,6 +20,12 @@ const _allowed = {
   // A continuous scan-line sweep and caption rotation while an AI scan runs,
   // not a transition between two states - same category as the spinner.
   'lib/app/design_system/components/general/vt_scanning_overlay.dart',
+  // A continuous colour sweep across the countdown card, not a transition -
+  // the colour it sweeps still changes through the tick, only the travel loops.
+  'lib/app/design_system/components/general/vt_rest_timer.dart',
+  // The gap between the pulses of one haptic burst is a physical rhythm, not a
+  // transition between two states.
+  'lib/app/design_system/components/general/vt_haptics.dart',
 };
 
 void main() {

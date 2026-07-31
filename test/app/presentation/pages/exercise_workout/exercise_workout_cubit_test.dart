@@ -107,6 +107,47 @@ void main() {
     expect(events.whereType<ExerciseWorkoutSetLogged>(), hasLength(1));
   });
 
+  // Repeating a set and finishing the exercise before the write lands used to
+  // start a rest for an exercise that was already done - which then read as the
+  // next exercise's own timer (issue #277).
+  test('a repeat that lands after the exercise was finished announces no rest', () async {
+    final writing = Completer<Result<VTError, WorkoutSet>>();
+    final logSetUseCase = MockLogSetUseCase();
+    when(() => logSetUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), input: any(named: 'input'))).thenAnswer((_) => writing.future);
+    final setWorkoutExerciseCompletedUseCase = MockSetWorkoutExerciseCompletedUseCase();
+    when(() => setWorkoutExerciseCompletedUseCase(workoutExerciseId: any(named: 'workoutExerciseId'), completed: any(named: 'completed'))).thenAnswer(
+      (_) async => Success(
+        WorkoutExerciseFactory.build(
+          id: 'we-1',
+          sets: [WorkoutSetFactory.build(id: 's1', reps: 8, weightKg: 50)],
+          completedAt: DateTime(2026, 7, 31),
+        ),
+      ),
+    );
+    final cubit = CubitsFactories.buildExerciseWorkoutCubit(
+      logSetUseCase: logSetUseCase,
+      setWorkoutExerciseCompletedUseCase: setWorkoutExerciseCompletedUseCase,
+      extra: ExerciseWorkoutExtra(
+        unitSystem: UnitSystem.metric,
+        workoutExercise: WorkoutExerciseFactory.build(
+          id: 'we-1',
+          sets: [WorkoutSetFactory.build(id: 's1', reps: 8, weightKg: 50)],
+        ),
+      ),
+    );
+    final events = <ExerciseWorkoutPresentationEvent>[];
+    cubit.presentation.listen(events.add);
+
+    final repeating = cubit.repeatLastSet();
+    await cubit.setCompleted(completed: true);
+    writing.complete(Success(WorkoutSetFactory.build(id: 's2', position: 1, reps: 8, weightKg: 50)));
+    await repeating;
+    await Future<void>.delayed(Duration.zero);
+
+    expect(cubit.state.isCompleted, isTrue);
+    expect(events.whereType<ExerciseWorkoutSetLogged>(), isEmpty, reason: 'a finished exercise has no next set to rest for');
+  });
+
   test('a cardio effort is never repeated, so a second one cannot be written', () async {
     final logSetUseCase = MockLogSetUseCase();
     final cubit = CubitsFactories.buildExerciseWorkoutCubit(
